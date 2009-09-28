@@ -3,11 +3,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>local.ddom</groupId>
+    <groupId>com.google.code.ddom</groupId>
     <artifactId>ddom</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>DDOM</name>
     <packaging>pom</packaging>
+    
+    <url>http://code.google.com/p/ddom/</url>
+    <inceptionYear>2009</inceptionYear>
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/ddom/issues/</url>
+    </issueManagement>
+    <scm>
+        <url>http://code.google.com/p/ddom/source/browse/</url>
+        <connection>scm:svn:http://ddom.googlecode.com/svn/trunk</connection>
+        <developerConnection>scm:svn:https://ddom.googlecode.com/svn/trunk</developerConnection>
+    </scm>
     
     <modules>
         <module>modules/api</module>

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>local.ddom</groupId>
+        <groupId>com.google.code.ddom</groupId>
         <artifactId>ddom</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
@@ -14,12 +14,12 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>local.ddom</groupId>
+            <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-api</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>local.ddom</groupId>
+            <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-dom-utils</artifactId>
             <version>${pom.version}</version>
         </dependency>
