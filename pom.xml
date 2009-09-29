@@ -26,6 +26,7 @@
         <module>modules/core</module>
         <module>modules/dom-utils</module>
         <module>modules/jaxp</module>
+        <module>modules/test-utils</module>
         <module>tests/wss4j</module>
     </modules>
 
