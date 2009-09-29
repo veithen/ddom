@@ -108,4 +108,14 @@ public class NSUtil {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
         }
     }
+    
+    public static String getDeclaredPrefix(String localName, String prefix) {
+        if (prefix != null && prefix.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
+            return localName;
+        } else if (prefix == null && localName.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
+            return null;
+        } else {
+            throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+        }
+    }
 }

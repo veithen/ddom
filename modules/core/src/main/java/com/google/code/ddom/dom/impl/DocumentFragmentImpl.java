@@ -121,4 +121,12 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements DocumentFrag
         DocumentImpl document = getDocument();
         return document.getNodeFactory().createDocumentFragment(document);
     }
+
+    public final String lookupNamespaceURI(String prefix) {
+        return null;
+    }
+
+    public final String lookupPrefix(String namespaceURI) {
+        return null;
+    }
 }

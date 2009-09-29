@@ -121,4 +121,12 @@ public abstract class LeafNode extends NodeImpl implements ChildNode {
     public final String getLocalName() {
         return null;
     }
+
+    public final String lookupNamespaceURI(String prefix) {
+        return parent == null ? null : parent.lookupNamespaceURI(prefix);
+    }
+    
+    public final String lookupPrefix(String namespaceURI) {
+        return parent == null ? null : parent.lookupPrefix(namespaceURI);
+    }
 }

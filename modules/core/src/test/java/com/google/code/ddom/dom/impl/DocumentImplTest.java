@@ -17,14 +17,17 @@ package com.google.code.ddom.dom.impl;
 
 import java.io.StringReader;
 
+import javax.xml.XMLConstants;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.w3c.dom.DOMException;
+import org.junit.runner.RunWith;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.dom.DeferredParsingException;
@@ -34,6 +37,7 @@ import com.google.code.ddom.utils.test.InvocationCounter;
 /**
  * @author Andreas Veithen
  */
+@RunWith(DOMTestRunner.class)
 public class DocumentImplTest {
     /**
      * Test that the implementation behaves gracefully after a parse error. In particular, after
@@ -71,5 +75,19 @@ public class DocumentImplTest {
         }
         // ... but without any invocation of the underlying StAX parser
         Assert.assertEquals(0, cter.getInvocationCount());
+    }
+
+    /**
+     * @see ElementImplTest#testSetAttributeNSNamespaceDeclaration()
+     */
+    @Validated @Test
+    public void testCreateAttributeNSNamespaceDeclaration() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        Attr attr = doc.createAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p");
+        attr.setValue("urn:ns");
+        element.setAttributeNodeNS(attr);
+        Assert.assertEquals("urn:ns", element.lookupNamespaceURI("p"));
+        Assert.assertEquals("p", element.lookupPrefix("urn:ns"));
     }
 }

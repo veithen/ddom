@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import javax.xml.XMLConstants;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -90,6 +92,10 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
             }
         }
     }
+    
+    private static final int ATTR_DOM1 = 1;
+    private static final int ATTR_DOM2 = 2;
+    private static final int ATTR_NSDECL = 3;
     
     private final DocumentImpl document;
     private Object content;
@@ -205,28 +211,36 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
         return new Attributes();
     }
     
-    private boolean testAttribute(Attr attr, String namespaceURI, String localName, boolean namespaceAware) {
-        if (namespaceAware) {
-            return (namespaceURI == null && attr.getNamespaceURI() == null
-                    || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
-                    && localName.equals(attr.getLocalName());
-        } else {
-            // TODO: inefficient because getName may build a new String
-            return localName.equals(attr.getName());
+    private boolean testAttribute(Attr attr, String namespaceURI, String localName, int mode) {
+        switch (mode) {
+            case ATTR_DOM1:
+                // TODO: not sure about the instanceof test
+                return attr instanceof AttrImpl
+                        && localName.equals(attr.getName());
+            case ATTR_DOM2:
+                return attr instanceof AttrImpl
+                        && (namespaceURI == null && attr.getNamespaceURI() == null
+                                || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
+                        && localName.equals(attr.getLocalName());
+            case ATTR_NSDECL:
+                return attr instanceof NSDecl
+                        && localName.equals(((NSDecl)attr).getDeclaredPrefix());
+            default:
+                throw new IllegalArgumentException();
         }
     }
     
     public final Attr getAttributeNode(String name) {
-        return getAttributeNode(null, name, false);
+        return getAttributeNode(null, name, ATTR_DOM1);
     }
 
     public final Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
-        return getAttributeNode(namespaceURI, localName, true);
+        return getAttributeNode(namespaceURI, localName, ATTR_DOM2);
     }
     
-    private Attr getAttributeNode(String namespaceURI, String localName, boolean namespaceAware) throws DOMException {
+    private Attr getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
         AbstractAttrImpl attr = firstAttribute;
-        while (attr != null && !testAttribute(attr, namespaceURI, localName, namespaceAware)) {
+        while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             attr = attr.internalGetNextAttribute();
         }
         return attr;
@@ -256,7 +270,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
 
     public final void setAttribute(String name, String value) throws DOMException {
         NSUtil.validateName(name);
-        setAttribute(null, name, null, false, value);
+        setAttribute(null, name, null, ATTR_DOM1, value);
     }
 
     public final void setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
@@ -270,20 +284,39 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
             prefix = qualifiedName.substring(0, i);
             localName = qualifiedName.substring(i+1);
         }
-        NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-        setAttribute(namespaceURI, localName, prefix, true, value);
+        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+            setAttribute(null, NSUtil.getDeclaredPrefix(localName, prefix), null, ATTR_NSDECL, value);
+        } else {
+            NSUtil.validateAttributeName(namespaceURI, localName, prefix);
+            setAttribute(namespaceURI, localName, prefix, ATTR_DOM2, value);
+        }
     }
     
-    private void setAttribute(String namespaceURI, String localName, String prefix, boolean namespaceAware, String value) throws DOMException {
+    private void setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
         AbstractAttrImpl attr = firstAttribute;
         AbstractAttrImpl previousAttr = null;
-        while (attr != null && !testAttribute(attr, namespaceURI, localName, namespaceAware)) {
+        while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             previousAttr = attr;
             attr = attr.internalGetNextAttribute();
         }
         if (attr == null) {
             DocumentImpl document = getDocument();
-            AttrImpl newAttr = document.getNodeFactory().createAttribute(document, namespaceURI, localName, prefix, value, null);
+            NodeFactory factory = document.getNodeFactory();
+            AbstractAttrImpl newAttr;
+            switch (mode) {
+                case ATTR_DOM1:
+                    newAttr = factory.createAttribute(document, localName, value, null);
+                    break;
+                case ATTR_DOM2:
+                    newAttr = factory.createAttribute(document, namespaceURI, localName, prefix, value, null);
+                    break;
+                case ATTR_NSDECL:
+                    // TODO: documentation here (localName instead of prefix is not a mistake...)
+                    newAttr = factory.createNSDecl(document, localName, value);
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
             newAttr.internalSetOwnerElement(this);
             if (previousAttr == null) {
                 firstAttribute = newAttr;
@@ -292,7 +325,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
             }
         } else {
             attr.setValue(value);
-            if (namespaceAware) {
+            if (mode == ATTR_DOM2) {
                 attr.setPrefix(prefix);
             }
         }
@@ -304,7 +337,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     
     public final Attr setAttributeNodeNS(Attr _newAttr) throws DOMException {
         validateOwnerDocument(_newAttr);
-        AttrImpl newAttr = (AttrImpl)_newAttr;
+        AbstractAttrImpl newAttr = (AbstractAttrImpl)_newAttr;
         ElementImpl owner = newAttr.getOwnerElement();
         if (owner == this) {
             // This means that the "new" attribute is already linked to the element
@@ -317,16 +350,17 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
             AbstractAttrImpl previousAttr = null;
             String localName = newAttr.getLocalName();
             String namespaceURI;
-            boolean namespaceAware;
+            int mode;
+            // TODO: ATTR_NSDECL case missing here
             if (localName == null) {
                 namespaceURI = null;
                 localName = newAttr.getName();
-                namespaceAware = false;
+                mode = ATTR_DOM1;
             } else {
                 namespaceURI = newAttr.getNamespaceURI();
-                namespaceAware = true;
+                mode = ATTR_DOM2;
             }
-            while (existingAttr != null && !testAttribute(existingAttr, namespaceURI, localName, namespaceAware)) {
+            while (existingAttr != null && !testAttribute(existingAttr, namespaceURI, localName, mode)) {
                 previousAttr = existingAttr;
                 existingAttr = existingAttr.internalGetNextAttribute();
             }
@@ -420,5 +454,30 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     public final void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final String lookupNamespaceURI(String prefix) {
+        for (AbstractAttrImpl attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
+            if (attr instanceof NSDecl) {
+                NSDecl decl = (NSDecl)attr;
+                if (decl.getDeclaredPrefix().equals(prefix)) {
+                    return decl.getDeclaredNamespaceURI();
+                }
+            }
+        }
+        return parent == null ? null : parent.lookupNamespaceURI(prefix);
+    }
+
+    public final String lookupPrefix(String namespaceURI) {
+        // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
+        for (AbstractAttrImpl attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
+            if (attr instanceof NSDecl) {
+                NSDecl decl = (NSDecl)attr;
+                if (decl.getDeclaredNamespaceURI().equals(namespaceURI)) {
+                    return decl.getDeclaredPrefix();
+                }
+            }
+        }
+        return parent == null ? null : parent.lookupPrefix(namespaceURI);
     }
 }

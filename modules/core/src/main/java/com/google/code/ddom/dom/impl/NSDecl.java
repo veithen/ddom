@@ -21,19 +21,27 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
 public class NSDecl extends AbstractAttrImpl {
-    private String prefix;
+    private String declaredPrefix;
 
     public NSDecl(DocumentImpl document, String prefix, String namespaceURI) {
         super(document, namespaceURI);
-        this.prefix = prefix;
+        this.declaredPrefix = prefix;
     }
 
+    public final String getDeclaredPrefix() {
+        return declaredPrefix;
+    }
+    
+    public final String getDeclaredNamespaceURI() {
+        return getValue();
+    }
+    
     public final String getNamespaceURI() {
         return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
     }
 
     public final String getPrefix() {
-        return prefix == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
+        return declaredPrefix == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
     }
 
     public void setPrefix(String prefix) throws DOMException {
@@ -43,14 +51,14 @@ public class NSDecl extends AbstractAttrImpl {
     }
 
     public final String getLocalName() {
-        return prefix == null ? XMLConstants.XMLNS_ATTRIBUTE : prefix;
+        return declaredPrefix == null ? XMLConstants.XMLNS_ATTRIBUTE : declaredPrefix;
     }
 
     public final String getName() {
-        if (prefix == null) {
+        if (declaredPrefix == null) {
             return XMLConstants.XMLNS_ATTRIBUTE;
         } else {
-            return XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix;
+            return XMLConstants.XMLNS_ATTRIBUTE + ":" + declaredPrefix;
         }
     }
 

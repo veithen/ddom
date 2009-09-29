@@ -43,16 +43,6 @@ public abstract class NodeImpl implements AbstractNode {
         return this;
     }
 
-    public final String lookupNamespaceURI(String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final String lookupPrefix(String namespaceURI) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public final boolean isDefaultNamespace(String namespaceURI) {
         // TODO
         throw new UnsupportedOperationException();

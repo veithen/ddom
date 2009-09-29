@@ -126,6 +126,9 @@ public class ElementImplTest {
         Assert.assertEquals("", element.getAttributeNS("urn:ns", "test"));
     }
     
+    /**
+     * @see DocumentImplTest#testCreateAttributeNSNamespaceDeclaration()
+     */
     @Validated @Test
     public void testSetAttributeNSNamespaceDeclaration() {
         Document doc = DOMUtil.newDocument();

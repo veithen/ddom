@@ -17,6 +17,7 @@ package com.google.code.ddom.dom.impl;
 
 import java.util.Iterator;
 
+import javax.xml.XMLConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -222,9 +223,12 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
             prefix = qualifiedName.substring(0, i);
             localName = qualifiedName.substring(i+1);
         }
-        NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-        // TODO: this might also be an NSDecl
-        return nodeFactory.createAttribute(this, namespaceURI, localName, prefix, null, null);
+        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+            return nodeFactory.createNSDecl(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
+        } else {
+            NSUtil.validateAttributeName(namespaceURI, localName, prefix);
+            return nodeFactory.createAttribute(this, namespaceURI, localName, prefix, null, null);
+        }
     }
 
     public final ProcessingInstruction createProcessingInstruction(String target, String data) throws DOMException {
@@ -522,5 +526,13 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
     public final Node cloneNode(boolean deep) {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final String lookupNamespaceURI(String prefix) {
+        return null;
+    }
+
+    public final String lookupPrefix(String namespaceURI) {
+        return null;
     }
 }

@@ -170,4 +170,14 @@ public abstract class AbstractAttrImpl extends ParentNodeImpl implements Attr, O
         // TODO
         throw new UnsupportedOperationException();
     }
+
+    public final String lookupNamespaceURI(String prefix) {
+        // TODO: needs to be checked
+        return null;
+    }
+
+    public final String lookupPrefix(String namespaceURI) {
+        // TODO: needs to be checked
+        return null;
+    }
 }
