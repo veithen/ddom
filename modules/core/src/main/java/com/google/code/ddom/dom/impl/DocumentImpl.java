@@ -37,6 +37,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
+import com.google.code.ddom.dom.DeferredParsingException;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 
@@ -44,6 +45,7 @@ import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget {
     private final NodeFactory nodeFactory = new NodeFactory();
     private final XMLStreamReader reader;
+    private Throwable parserException;
     private ChildNode firstChild;
     private boolean complete;
     private int children;
@@ -63,10 +65,19 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
         return value == null || value.length() == 0 ? null : value;
     }
     
-    public final boolean next() {
+    private DeferredParsingException newParseError(Throwable ex) {
+        this.parserException = ex;
+        return new DeferredParsingException("Parse error", ex);
+    }
+    
+    public final boolean next() throws DeferredParsingException {
+        if (parserException != null) {
+            throw newParseError(parserException);
+        }
         // TODO: need to take into account namespace unaware parsing
         try {
-            switch (reader.next()) {
+            int eventType = reader.next();
+            switch (eventType) {
                 case XMLStreamReader.START_ELEMENT:
                     ElementImpl element = nodeFactory.createElement(this, emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()), false);
                     appendNode(element);
@@ -121,15 +132,28 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
                     }
                     break;
                 case XMLStreamReader.COMMENT:
-                    appendNode(nodeFactory.createComment(this, reader.getText()));
-                    break;
                 case XMLStreamReader.SPACE:
                 case XMLStreamReader.CHARACTERS:
-                    // TODO: optimize if possible
-                    appendNode(nodeFactory.createText(this, reader.getText()));
-                    break;
                 case XMLStreamReader.CDATA:
-                    appendNode(nodeFactory.createCDATASection(this, reader.getText()));
+                    String text;
+                    try {
+                        // Some StAX implementations may throw a RuntimeException here if an I/O error occurs
+                        text = reader.getText();
+                    } catch (RuntimeException ex) {
+                        throw newParseError(ex);
+                    }
+                    switch (eventType) {
+                        case XMLStreamReader.COMMENT:
+                            appendNode(nodeFactory.createComment(this, text));
+                            break;
+                        case XMLStreamReader.SPACE:
+                        case XMLStreamReader.CHARACTERS:
+                            // TODO: optimize if possible
+                            appendNode(nodeFactory.createText(this, text));
+                            break;
+                        case XMLStreamReader.CDATA:
+                            appendNode(nodeFactory.createCDATASection(this, text));
+                    }
                     break;
                 case XMLStreamReader.ENTITY_REFERENCE:
                     appendNode(nodeFactory.createEntityReference(this, reader.getText()));
@@ -139,7 +163,7 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
             }
             return reader.hasNext();
         } catch (XMLStreamException ex) {
-            throw new DOMException(DOMException.INVALID_STATE_ERR, ""); // TODO
+            throw newParseError(ex);
         }
     }
     

@@ -1,0 +1,75 @@
+/*
+ * Copyright 2009 Andreas Veithen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.google.code.ddom.dom.impl;
+
+import java.io.StringReader;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import com.google.code.ddom.dom.DeferredParsingException;
+import com.google.code.ddom.utils.dom.DOM;
+import com.google.code.ddom.utils.test.InvocationCounter;
+
+/**
+ * @author Andreas Veithen
+ */
+public class DocumentImplTest {
+    /**
+     * Test that the implementation behaves gracefully after a parse error. In particular, after
+     * the first parse error has occurred, the implementation must not try to access the parser
+     * again. The reason is that in some StAX implementations, a parse error leaves the parser in
+     * an inconsistent state.
+     */
+    @Test
+    public void testGracefulBehaviorAfterParseError() throws Exception {
+        InvocationCounter cter = new InvocationCounter();
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<root>This is malformed"));
+        Document doc = new DocumentImpl(cter.createProxy(XMLStreamReader.class, reader));
+        
+        // First loop over the document; this should give an exception
+        try {
+            for (Node node : DOM.descendants(doc)) {
+            }
+            Assert.fail("Expected DOMException");
+        } catch (DeferredParsingException ex) {
+            // Expected
+        }
+        // This exception is a result of an exception thrown by the StAX parser
+        Assert.assertEquals(1, cter.getExceptionCount());
+        
+        cter.reset();
+
+        // Second loop over the document; this should again give an exception...
+        try {
+            for (Node node : DOM.descendants(doc)) {
+            }
+            Assert.fail("Expected DOMException");
+        } catch (DeferredParsingException ex) {
+            // Expected
+        }
+        // ... but without any invocation of the underlying StAX parser
+        Assert.assertEquals(0, cter.getInvocationCount());
+    }
+}
