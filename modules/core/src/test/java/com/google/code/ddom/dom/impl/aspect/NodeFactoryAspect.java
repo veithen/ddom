@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.dom.impl.aspect;
 
+import junit.framework.Assert;
+
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
@@ -29,7 +31,6 @@ public class NodeFactoryAspect {
     		" && !cflow(execution(* com.google.code.ddom.dom.impl.NodeFactory+.*(..)))" +
     		" && !cflow(call(com.google.code.ddom.dom.impl.DocumentImpl.new(..)))")
     public void nodeCreatedOutsideFactory() {
-        System.out.println("Node instance created by code not in a NodeFactory implementation!");
-        new Throwable().printStackTrace(System.out);
+        Assert.fail("Node instance created by code not in a NodeFactory implementation!");
     }
 }
