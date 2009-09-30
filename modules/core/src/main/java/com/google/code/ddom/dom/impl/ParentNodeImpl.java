@@ -28,7 +28,6 @@ import com.google.code.ddom.utils.dom.iterator.ElementNameFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementNamespaceFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.FilterIterator;
 
-
 public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, NodeList {
     public final ChildNode getLastChild() {
         ChildNode previousChild = null;
@@ -99,7 +98,10 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
     }
 
     public final Node appendChild(Node newChild) throws DOMException {
-        return insert(newChild, null);
+        if (newChild == null) {
+            throw new NullPointerException("newChild must not be null");
+        }
+        return merge(newChild, null, false);
     }
 
     public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
@@ -107,7 +109,10 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
         // is null, insert newChild at the end of the list of children". That is, in this
         // case the behavior is identical to appendChild. (This is covered by the DOM 1
         // test suite)
-        return insert(newChild, refChild);
+        if (newChild == null) {
+            throw new NullPointerException("newChild must not be null");
+        }
+        return merge(newChild, refChild, false);
     }
 
     private void prepareNewChild(Node newChild) {
@@ -129,91 +134,49 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
     
     protected abstract void validateChildType(ChildNode newChild);
     
-    private Node insert(Node newChild, Node refChild) throws DOMException {
-        prepareNewChild(newChild);
-        ChildNode previousSibling;
-        ChildNode nextSibling;
-        if (refChild == null) {
+    public final Node removeChild(Node oldChild) throws DOMException {
+        if (oldChild == null) {
+            throw new NullPointerException("oldChild must not be null");
+        }
+        return merge(null, oldChild, true);
+    }
+
+    public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {
+        if (newChild == null) {
+            throw new NullPointerException("newChild must not be null");
+        }
+        if (oldChild == null) {
+            throw new NullPointerException("oldChild must not be null");
+        }
+        return merge(newChild, oldChild, true);
+    }
+
+    // insertBefore: newChild != null, refChild != null, removeRefChild == false
+    // appendChild:  newChild != null, refChild == null, removeRefChild == false
+    // replaceChild: newChild != null, refChild != null, removeRefChild == true
+    // removeChild:  newChild == null, refChild != null, removeRefChild == true
+    private Node merge(Node newChild, Node refChild, boolean removeRefChild) throws DOMException {
+        if (newChild != null) {
+            prepareNewChild(newChild);
+        }
+        ChildNode previousSibling; // The sibling that will precede the new child
+        ChildNode nextSibling; // The sibling that will follow the new child
+        if (refChild == null) { // implies removeRefChild == false
             previousSibling = getLastChild();
             nextSibling = null;
         } else {
             previousSibling = null;
-            nextSibling = getFirstChild();
-            while (nextSibling != null && nextSibling != refChild) {
-                previousSibling = nextSibling;
-                nextSibling = nextSibling.getNextSibling();
+            ChildNode node = getFirstChild();
+            while (node != null && node != refChild) {
+                previousSibling = node;
+                node = node.getNextSibling();
             }
-            if (nextSibling == null) {
+            if (node == null) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
             }
+            nextSibling = removeRefChild ? node.getNextSibling() : node;
         }
-        ChildNode firstNodeToInsert;
-        ChildNode lastNodeToInsert;
-        if (newChild instanceof DocumentFragmentImpl) {
-            DocumentFragmentImpl fragment = (DocumentFragmentImpl)newChild;
-            firstNodeToInsert = fragment.getFirstChild();
-            lastNodeToInsert = null;
-            for (ChildNode node = firstNodeToInsert; node != null; node = node.getNextSibling()) {
-                validateChildType(node);
-                node.internalSetParent(this);
-                lastNodeToInsert = node;
-            }
-            notifyChildrenModified(fragment.getLength());
-            // TODO: need to clear the document fragment?
-        } else if (newChild instanceof ChildNode) {
-            // TODO: what if this is already a child of some container?
-            firstNodeToInsert = lastNodeToInsert = (ChildNode)newChild;
-            validateChildType(firstNodeToInsert);
-            firstNodeToInsert.internalSetParent(this);
-            notifyChildrenModified(1);
-        } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
-        }
-        if (previousSibling == null) {
-            internalSetFirstChild(firstNodeToInsert);
-        } else {
-            previousSibling.internalSetNextSibling(firstNodeToInsert);
-        }
-        if (nextSibling != null) {
-            lastNodeToInsert.internalSetNextSibling(nextSibling);
-        }
-        return newChild; // TODO: correct in the case of a document fragment?
-    }
-    
-    public final Node removeChild(Node oldChild) throws DOMException {
-        return replaceOrRemoveChild(null, oldChild);
-    }
-
-    public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        if (newChild instanceof DocumentFragmentImpl) {
-            // TODO: merge replaceOrRemoveChild and insert
-            Node refChild = oldChild.getNextSibling();
-            removeChild(oldChild);
-            insert(newChild, refChild);
-            return oldChild;
-        } else if (newChild instanceof ChildNode) {
-            return replaceOrRemoveChild((ChildNode)newChild, oldChild);
-        } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
-        }
-    }
-
-    private Node replaceOrRemoveChild(ChildNode newChild, Node oldChild) throws DOMException {
-        if (newChild != null) {
-            prepareNewChild(newChild);
-            validateChildType(newChild);
-        }
-        ChildNode previousSibling = null;
-        ChildNode node = getFirstChild();
-        while (node != null && node != oldChild) {
-            previousSibling = node;
-            node = node.getNextSibling();
-        }
-        if (node == null) {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-        }
-        ChildNode nextSibling = node.getNextSibling();
-        if (newChild == null) {
+        if (newChild == null && removeRefChild) {
             if (previousSibling == null) {
                 internalSetFirstChild(nextSibling);
             } else {
@@ -221,16 +184,49 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
             }
             notifyChildrenModified(-1);
         } else {
-            if (previousSibling == null) {
-                internalSetFirstChild(newChild);
+            ChildNode firstNodeToInsert;
+            ChildNode lastNodeToInsert;
+            int delta; // The difference in number of children before and after the operation
+            if (newChild instanceof DocumentFragmentImpl) {
+                DocumentFragmentImpl fragment = (DocumentFragmentImpl)newChild;
+                firstNodeToInsert = fragment.getFirstChild();
+                lastNodeToInsert = null;
+                for (ChildNode node = firstNodeToInsert; node != null; node = node.getNextSibling()) {
+                    validateChildType(node);
+                    node.internalSetParent(this);
+                    lastNodeToInsert = node;
+                }
+                delta = fragment.getLength();
+                // TODO: need to clear the document fragment?
+            } else if (newChild instanceof ChildNode) {
+                // TODO: what if this is already a child of some container?
+                firstNodeToInsert = lastNodeToInsert = (ChildNode)newChild;
+                validateChildType(firstNodeToInsert);
+                firstNodeToInsert.internalSetParent(this);
+                delta = 1;
             } else {
-                previousSibling.internalSetNextSibling(newChild);
+                // TODO: this will leave the DOM tree in a corrupt state!
+                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
-            newChild.internalSetNextSibling(nextSibling);
-            newChild.internalSetParent(this);
+            if (removeRefChild) {
+                delta--;
+            }
+            if (delta != 0) {
+                notifyChildrenModified(delta);
+            }
+            if (previousSibling == null) {
+                internalSetFirstChild(firstNodeToInsert);
+            } else {
+                previousSibling.internalSetNextSibling(firstNodeToInsert);
+            }
+            if (nextSibling != null) {
+                lastNodeToInsert.internalSetNextSibling(nextSibling);
+            }
         }
-        node.internalSetParent(null);
-        return node;
+        if (removeRefChild) {
+            ((ChildNode)refChild).internalSetParent(null);
+        }
+        return removeRefChild ? refChild : newChild;
     }
     
     protected final Node deepClone() {

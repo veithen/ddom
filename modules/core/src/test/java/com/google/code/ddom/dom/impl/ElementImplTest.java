@@ -157,4 +157,34 @@ public class ElementImplTest {
         element.appendChild(child);
         element.insertBefore(null, child);
     }
+
+    @Validated @Test(expected=NullPointerException.class)
+    public void testAppendChildWithNullArgument() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.appendChild(null);
+    }
+    
+    @Validated @Test(expected=NullPointerException.class)
+    public void testRemoveChildWithNullArgument() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.removeChild(null);
+    }
+
+    @Validated @Test(expected=NullPointerException.class)
+    public void testReplaceChildWithNullNewChild() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        Text child = doc.createTextNode("test");
+        element.appendChild(child);
+        element.replaceChild(null, child);
+    }
+
+    @Validated @Test(expected=NullPointerException.class)
+    public void testReplaceChildWithNullOldChild() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.replaceChild(doc.createTextNode("test"), null);
+    }
 }
