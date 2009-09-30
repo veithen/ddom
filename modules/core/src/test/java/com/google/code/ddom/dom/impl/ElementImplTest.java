@@ -25,6 +25,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 @RunWith(DOMTestRunner.class)
 public class ElementImplTest {
@@ -146,5 +147,14 @@ public class ElementImplTest {
         Attr attr = element.getAttributeNode("attr");
         // Since the attribute has been created using a DOM 1 method, localName must be null
         Assert.assertNull(attr.getLocalName());
+    }
+    
+    @Validated @Test(expected=NullPointerException.class)
+    public void testInsertBeforeWithNullNewChild() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        Text child = doc.createTextNode("test");
+        element.appendChild(child);
+        element.insertBefore(null, child);
     }
 }

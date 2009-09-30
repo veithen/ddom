@@ -103,7 +103,10 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
     }
 
     public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        // TODO: can refChild be null?
+        // Note: The specification of the insertBefore method says that "if refChild
+        // is null, insert newChild at the end of the list of children". That is, in this
+        // case the behavior is identical to appendChild. (This is covered by the DOM 1
+        // test suite)
         return insert(newChild, refChild);
     }
 
