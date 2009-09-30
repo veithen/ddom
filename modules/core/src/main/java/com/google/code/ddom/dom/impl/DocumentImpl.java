@@ -18,6 +18,7 @@ package com.google.code.ddom.dom.impl;
 import java.util.Iterator;
 
 import javax.xml.XMLConstants;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -46,6 +47,7 @@ import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget {
     private final NodeFactory nodeFactory = new DOMNodeFactory();
     private final XMLStreamReader reader;
+    private final boolean parserIsNamespaceAware;
     private Throwable parserException;
     private ChildNode firstChild;
     private boolean complete;
@@ -60,6 +62,11 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
         this.reader = reader;
         parent = this;
         complete = reader == null;
+        if (reader == null) {
+            parserIsNamespaceAware = false; // Value doesn't matter here
+        } else {
+            parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
+        }
     }
 
     private String emptyToNull(String value) {
@@ -75,19 +82,22 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
         if (parserException != null) {
             throw newParseError(parserException);
         }
-        // TODO: need to take into account namespace unaware parsing
         try {
             int eventType = reader.next();
             switch (eventType) {
                 case XMLStreamReader.START_ELEMENT:
-                    ElementImpl element = nodeFactory.createElement(this, emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()), false);
+                    ElementImpl element = parserIsNamespaceAware
+                            ? nodeFactory.createElement(this, emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()), false)
+                            : nodeFactory.createElement(this, reader.getLocalName(), false);
                     appendNode(element);
                     parent = element;
                     lastSibling = null;
                     AbstractAttrImpl firstAttr = null;
                     AbstractAttrImpl previousAttr = null;
                     for (int i=0; i<reader.getAttributeCount(); i++) {
-                        AttrImpl attr = nodeFactory.createAttribute(this, emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
+                        AttrImpl attr = parserIsNamespaceAware
+                                ? nodeFactory.createAttribute(this, emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i))
+                                : nodeFactory.createAttribute(this, reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
                         if (firstAttr == null) {
                             firstAttr = attr;
                         } else {
@@ -96,15 +106,17 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
                         previousAttr = attr;
                         attr.internalSetOwnerElement(element);
                     }
-                    for (int i=0; i<reader.getNamespaceCount(); i++) {
-                        NSDecl attr = nodeFactory.createNSDecl(this, emptyToNull(reader.getNamespacePrefix(i)), reader.getNamespaceURI(i));
-                        if (firstAttr == null) {
-                            firstAttr = attr;
-                        } else {
-                            previousAttr.internalSetNextAttribute(attr);
+                    if (parserIsNamespaceAware) {
+                        for (int i=0; i<reader.getNamespaceCount(); i++) {
+                            NSDecl attr = nodeFactory.createNSDecl(this, emptyToNull(reader.getNamespacePrefix(i)), reader.getNamespaceURI(i));
+                            if (firstAttr == null) {
+                                firstAttr = attr;
+                            } else {
+                                previousAttr.internalSetNextAttribute(attr);
+                            }
+                            previousAttr = attr;
+                            attr.internalSetOwnerElement(element);
                         }
-                        previousAttr = attr;
-                        attr.internalSetOwnerElement(element);
                     }
                     if (firstAttr != null) {
                         element.internalSetFirstAttribute(firstAttr);

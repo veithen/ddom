@@ -39,6 +39,24 @@ import com.google.code.ddom.utils.test.InvocationCounter;
  */
 @RunWith(DOMTestRunner.class)
 public class DocumentImplTest {
+    @Test
+    public void testNamespaceUnawareParsing() throws Exception {
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
+        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<p:root xmlns:p='urn:ns'>"));
+        Document doc = new DocumentImpl(reader);
+        
+        Element element = doc.getDocumentElement();
+        Assert.assertTrue(element instanceof DOM1ElementImpl);
+        Assert.assertNull(element.getLocalName());
+        Assert.assertEquals("p:root", element.getTagName());
+        
+        Attr attr = (Attr)element.getAttributes().item(0);
+        Assert.assertTrue(attr instanceof DOM1AttrImpl);
+        Assert.assertNull(attr.getLocalName());
+        Assert.assertEquals("xmlns:p", attr.getName());
+    }
+    
     /**
      * Test that the implementation behaves gracefully after a parse error. In particular, after
      * the first parse error has occurred, the implementation must not try to access the parser
