@@ -44,7 +44,7 @@ import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 // TODO: need some unit test (or AspectJ) to check that all nodes are created using a NodeFactory
 public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget {
-    private final NodeFactory nodeFactory = new NodeFactory();
+    private final NodeFactory nodeFactory = new DOMNodeFactory();
     private final XMLStreamReader reader;
     private Throwable parserException;
     private ChildNode firstChild;
