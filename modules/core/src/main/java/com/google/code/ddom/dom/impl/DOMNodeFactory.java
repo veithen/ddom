@@ -16,6 +16,10 @@
 package com.google.code.ddom.dom.impl;
 
 public class DOMNodeFactory implements NodeFactory {
+    public DocumentTypeImpl createDocumentType(DocumentImpl document) {
+        return new DocumentTypeImpl(document);
+    }
+
     public DOM1ElementImpl createElement(DocumentImpl document, String tagName, boolean complete) {
         return new DOM1ElementImpl(document, tagName, complete);
     }

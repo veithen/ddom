@@ -31,6 +31,7 @@ import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
+import com.google.code.ddom.dom.impl.DOMNodeFactory;
 import com.google.code.ddom.dom.impl.DocumentImpl;
 
 
@@ -98,7 +99,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
 
     @Override
     public DOMImplementation getDOMImplementation() {
-        return DOMImplementationImpl.INSTANCE;
+        return new DOMImplementationImpl(new DOMNodeFactory());
     }
 
     @Override

@@ -35,8 +35,8 @@ import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.dom.impl.CommentFilterStreamReader;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
+import com.google.code.ddom.dom.impl.DOMNodeFactory;
 import com.google.code.ddom.dom.impl.DocumentImpl;
-
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private final boolean ignoreComments;
@@ -50,7 +50,8 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     
     @Override
     public DOMImplementation getDOMImplementation() {
-        return DOMImplementationImpl.INSTANCE;
+        // TODO: check if this is consistent with the rest of the code
+        return new DOMImplementationImpl(new DOMNodeFactory());
     }
 
     @Override

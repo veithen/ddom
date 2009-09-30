@@ -42,12 +42,11 @@ import org.w3c.dom.Text;
 import com.google.code.ddom.dom.DeferredParsingException;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
-
-// TODO: need some unit test (or AspectJ) to check that all nodes are created using a NodeFactory
 public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget {
     private final NodeFactory nodeFactory = new DOMNodeFactory();
     private final XMLStreamReader reader;
     private final boolean parserIsNamespaceAware;
+    private DOMImplementationImpl domImplementation;
     private Throwable parserException;
     private ChildNode firstChild;
     private boolean complete;
@@ -134,8 +133,7 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
                     appendNode(nodeFactory.createProcessingInstruction(this, reader.getPITarget(), reader.getPIData()));
                     break;
                 case XMLStreamReader.DTD:
-                    // TODO: this should use a factory method
-                    DocumentTypeImpl docType = new DocumentTypeImpl(this);
+                    DocumentTypeImpl docType = nodeFactory.createDocumentType(this);
                     appendNode(docType);
                     if (reader instanceof DTDInfo) {
                         DTDInfo dtdInfo = (DTDInfo)reader;
@@ -196,7 +194,10 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
     }
 
     public final DOMImplementation getImplementation() {
-        return DOMImplementationImpl.INSTANCE;
+        if (domImplementation == null) {
+            domImplementation = new DOMImplementationImpl(nodeFactory);
+        }
+        return domImplementation;
     }
 
     public final Element createElement(String tagName) throws DOMException {

@@ -21,9 +21,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
 public class DOMImplementationImpl implements DOMImplementation {
-    public static final DOMImplementationImpl INSTANCE = new DOMImplementationImpl();
+    private final NodeFactory nodeFactory;
     
-    private DOMImplementationImpl() {}
+    public DOMImplementationImpl(NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
+    }
     
     public Document createDocument(String namespaceURI, String qualifiedName, DocumentType doctype) throws DOMException {
         // TODO: factory here!!!!
@@ -43,8 +45,7 @@ public class DOMImplementationImpl implements DOMImplementation {
     public DocumentType createDocumentType(String qualifiedName, String publicId, String systemId)
             throws DOMException {
         NSUtil.validateQualifiedName(qualifiedName);
-        // TODO: factory here!!!!
-        DocumentTypeImpl docType = new DocumentTypeImpl(null);
+        DocumentTypeImpl docType = nodeFactory.createDocumentType(null);
         docType.setName(qualifiedName);
         docType.setPublicId(publicId);
         docType.setSystemId(systemId);

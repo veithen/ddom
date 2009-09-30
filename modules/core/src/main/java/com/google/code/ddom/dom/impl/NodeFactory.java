@@ -16,6 +16,13 @@
 package com.google.code.ddom.dom.impl;
 
 public interface NodeFactory {
+    /**
+     * 
+     * @param document may be <code>null</code> (if called by {@link org.w3c.dom.DOMImplementation#createDocumentType(String, String, String)})
+     * @return
+     */
+    DocumentTypeImpl createDocumentType(DocumentImpl document);
+    
     DOM1ElementImpl createElement(DocumentImpl document, String tagName, boolean complete);
     
     DOM2ElementImpl createElement(DocumentImpl document, String namespaceURI, String localName, String prefix, boolean complete);
