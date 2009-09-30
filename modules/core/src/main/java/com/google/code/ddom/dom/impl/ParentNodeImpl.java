@@ -192,6 +192,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
                 firstNodeToInsert = fragment.getFirstChild();
                 lastNodeToInsert = null;
                 for (ChildNode node = firstNodeToInsert; node != null; node = node.getNextSibling()) {
+                    // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
                     validateChildType(node);
                     node.internalSetParent(this);
                     lastNodeToInsert = node;
@@ -205,7 +206,6 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
                 firstNodeToInsert.internalSetParent(this);
                 delta = 1;
             } else {
-                // TODO: this will leave the DOM tree in a corrupt state!
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
             if (removeRefChild) {
