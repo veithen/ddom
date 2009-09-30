@@ -214,17 +214,20 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     private boolean testAttribute(Attr attr, String namespaceURI, String localName, int mode) {
         switch (mode) {
             case ATTR_DOM1:
-                // TODO: not sure about the instanceof test
-                return attr instanceof AttrImpl
-                        && localName.equals(attr.getName());
+            	// Note: a lookup using DOM 1 methods may return any kind of attribute, including NSDecl
+                return localName.equals(attr.getName());
             case ATTR_DOM2:
                 return attr instanceof AttrImpl
                         && (namespaceURI == null && attr.getNamespaceURI() == null
                                 || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
                         && localName.equals(attr.getLocalName());
             case ATTR_NSDECL:
-                return attr instanceof NSDecl
-                        && localName.equals(((NSDecl)attr).getDeclaredPrefix());
+            	if (attr instanceof NSDecl) {
+                	String prefix = ((NSDecl)attr).getDeclaredPrefix();
+                    return localName == null && prefix == null || localName != null && localName.equals(prefix);
+            	} else {
+            		return false;
+            	}
             default:
                 throw new IllegalArgumentException();
         }
@@ -235,7 +238,11 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     }
 
     public final Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
-        return getAttributeNode(namespaceURI, localName, ATTR_DOM2);
+        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+            return getAttributeNode(null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : localName, ATTR_NSDECL);
+        } else {
+            return getAttributeNode(namespaceURI, localName, ATTR_DOM2);
+        }
     }
     
     private Attr getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
