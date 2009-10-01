@@ -41,6 +41,8 @@ import com.google.code.ddom.dom.builder.Consumer;
 import com.google.code.ddom.dom.builder.Source;
 import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMElement;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 // TODO: should we implement Consumer directly or use an inner class to do that (containing the parent and lastSibling attributes)?
@@ -89,9 +91,9 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
         }
         parent.notifyChildrenModified(1);
         node.internalSetParent(parent);
-        if (node instanceof ElementImpl) {
+        if (node instanceof DOMElement) {
             // TODO: this assumes that elements are always created as incomplete
-            parent = (ElementImpl)node;
+            parent = (DOMElement)node;
             lastSibling = null;
         } else {
             lastSibling = node;
@@ -387,9 +389,9 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
     }
 
     public final Element getElementById(String elementId) {
-        for (Iterator<ElementImpl> it = new DescendantsIterator<ElementImpl>(ElementImpl.class, this); it.hasNext(); ) {
-            ElementImpl element = it.next();
-            for (AbstractAttrImpl attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
+        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
+            DOMElement element = it.next();
+            for (DOMAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
                 if (attr.isId() && elementId.equals(attr.getValue())) {
                     return element;
                 }

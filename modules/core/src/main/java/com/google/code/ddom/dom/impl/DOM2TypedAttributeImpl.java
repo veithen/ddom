@@ -18,13 +18,14 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.dom.model.DOM2NamedNode;
+import com.google.code.ddom.dom.model.DOM2TypedAttribute;
 
-public class DOM2AttrImpl extends AttrImpl implements DOM2NamedNode {
+public class DOM2TypedAttributeImpl extends TypedAttributeImpl implements DOM2TypedAttribute {
     private final String namespaceURI;
     private final String localName;
     private String prefix;
 
-    public DOM2AttrImpl(DocumentImpl document, String namespaceURI, String localName, String prefix, String value, String type) {
+    public DOM2TypedAttributeImpl(DocumentImpl document, String namespaceURI, String localName, String prefix, String value, String type) {
         super(document, value, type);
         this.namespaceURI = namespaceURI;
         this.localName = localName;

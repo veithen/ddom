@@ -20,7 +20,7 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-public class NSDecl extends AbstractAttrImpl {
+public class NSDecl extends DOMAttributeImpl {
     private String declaredPrefix;
 
     public NSDecl(DocumentImpl document, String prefix, String namespaceURI) {

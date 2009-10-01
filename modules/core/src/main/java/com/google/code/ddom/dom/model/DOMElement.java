@@ -15,7 +15,9 @@
  */
 package com.google.code.ddom.dom.model;
 
+import org.w3c.dom.Element;
 
-public interface DOM1NamedNode extends DOMNode {
-
+public interface DOMElement extends Element, ParentNode, ChildNode, BuilderTarget, OptimizedParentNode {
+    DOMAttribute internalGetFirstAttribute();
+    void internalSetFirstAttribute(DOMAttribute attr);
 }

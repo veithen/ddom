@@ -32,6 +32,7 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.dom.DeferredParsingException;
 import com.google.code.ddom.dom.builder.StAXSource;
+import com.google.code.ddom.dom.model.DOM1Element;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 
@@ -48,12 +49,12 @@ public class DocumentImplTest {
         Document doc = new DocumentImpl(new StAXSource(reader));
         
         Element element = doc.getDocumentElement();
-        Assert.assertTrue(element instanceof DOM1ElementImpl);
+        Assert.assertTrue(element instanceof DOM1Element);
         Assert.assertNull(element.getLocalName());
         Assert.assertEquals("p:root", element.getTagName());
         
         Attr attr = (Attr)element.getAttributes().item(0);
-        Assert.assertTrue(attr instanceof DOM1AttrImpl);
+        Assert.assertTrue(attr instanceof DOM1TypedAttributeImpl);
         Assert.assertNull(attr.getLocalName());
         Assert.assertEquals("xmlns:p", attr.getName());
     }

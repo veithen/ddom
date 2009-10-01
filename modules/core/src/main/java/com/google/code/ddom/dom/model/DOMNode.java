@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.dom.model;
 
-public abstract class AttrImpl extends AbstractAttrImpl {
-    private String type;
+import org.w3c.dom.Node;
 
-    public AttrImpl(DocumentImpl document, String value, String type) {
-        super(document, value);
-        this.type = type;
-    }
+import com.google.code.ddom.dom.impl.DocumentImpl;
 
-    public final String getType() {
-        return type;
-    }
-
-    public final boolean isId() {
-        return "ID".equals(type);
-    }
+public interface DOMNode extends Node {
+    /**
+     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
+     * this method will never return <code>null</code>.
+     * 
+     * @return the document
+     */
+    DocumentImpl getDocument();
+    
+    CharSequence collectTextContent(CharSequence appendTo);
 }

@@ -15,18 +15,6 @@
  */
 package com.google.code.ddom.dom.model;
 
-import org.w3c.dom.Node;
+public interface DOM1Element extends DOMElement, DOM1NamedNode {
 
-import com.google.code.ddom.dom.impl.DocumentImpl;
-
-public interface AbstractNode extends Node {
-    /**
-     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
-     * this method will never return <code>null</code>.
-     * 
-     * @return the document
-     */
-    DocumentImpl getDocument();
-    
-    CharSequence collectTextContent(CharSequence appendTo);
 }

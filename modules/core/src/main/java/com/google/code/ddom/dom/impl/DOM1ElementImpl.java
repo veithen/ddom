@@ -17,9 +17,10 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.dom.model.DOM1NamedNode;
+import com.google.code.ddom.dom.model.DOM1Element;
+import com.google.code.ddom.dom.model.DOMElement;
 
-public class DOM1ElementImpl extends ElementImpl implements DOM1NamedNode {
+public class DOM1ElementImpl extends ElementImpl implements DOM1Element {
     private final String tagName;
 
     public DOM1ElementImpl(DocumentImpl document, String tagName, boolean complete) {
@@ -48,7 +49,7 @@ public class DOM1ElementImpl extends ElementImpl implements DOM1NamedNode {
     }
 
     @Override
-    protected final ElementImpl shallowCloneWithoutAttributes() {
+    protected final DOMElement shallowCloneWithoutAttributes() {
         DocumentImpl document = getDocument();
         NodeFactory factory = document.getNodeFactory();
         return factory.createElement(document, tagName, true);

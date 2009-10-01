@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.dom.model;
 
-
-public interface DOM1NamedNode extends DOMNode {
+public interface TypedAttribute extends DOMAttribute {
 
 }

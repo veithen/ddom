@@ -19,9 +19,9 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.dom.model.AbstractNode;
+import com.google.code.ddom.dom.model.DOMNode;
 
-public abstract class NodeImpl implements AbstractNode {
+public abstract class NodeImpl implements DOMNode {
     protected final void validateOwnerDocument(Node node) {
         if (node.getOwnerDocument() != getDocument()) {
             throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);

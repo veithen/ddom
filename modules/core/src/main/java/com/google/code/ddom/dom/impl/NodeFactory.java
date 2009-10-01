@@ -15,6 +15,11 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.dom.model.DOM1Element;
+import com.google.code.ddom.dom.model.DOM1TypedAttribute;
+import com.google.code.ddom.dom.model.DOM2Element;
+import com.google.code.ddom.dom.model.DOM2TypedAttribute;
+
 public interface NodeFactory {
     /**
      * 
@@ -23,13 +28,13 @@ public interface NodeFactory {
      */
     DocumentTypeImpl createDocumentType(DocumentImpl document);
     
-    DOM1ElementImpl createElement(DocumentImpl document, String tagName, boolean complete);
+    DOM1Element createElement(DocumentImpl document, String tagName, boolean complete);
     
-    DOM2ElementImpl createElement(DocumentImpl document, String namespaceURI, String localName, String prefix, boolean complete);
+    DOM2Element createElement(DocumentImpl document, String namespaceURI, String localName, String prefix, boolean complete);
     
-    DOM1AttrImpl createAttribute(DocumentImpl document, String name, String value, String type);
+    DOM1TypedAttribute createAttribute(DocumentImpl document, String name, String value, String type);
     
-    DOM2AttrImpl createAttribute(DocumentImpl document, String namespaceURI, String localName, String prefix, String value, String type);
+    DOM2TypedAttribute createAttribute(DocumentImpl document, String namespaceURI, String localName, String prefix, String value, String type);
     
     NSDecl createNSDecl(DocumentImpl document, String prefix, String namespaceURI);
     

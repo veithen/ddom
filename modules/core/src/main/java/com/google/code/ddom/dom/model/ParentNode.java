@@ -16,7 +16,7 @@
 package com.google.code.ddom.dom.model;
 
 
-public interface ParentNode extends AbstractNode {
+public interface ParentNode extends DOMNode {
     void internalSetFirstChild(ChildNode child);
     void notifyChildrenModified(int delta);
     ChildNode getFirstChild();

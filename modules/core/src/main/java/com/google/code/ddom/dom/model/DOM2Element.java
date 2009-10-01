@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.dom.model;
 
-
-public interface DOM1NamedNode extends DOMNode {
+public interface DOM2Element extends DOMElement, DOM2NamedNode {
 
 }

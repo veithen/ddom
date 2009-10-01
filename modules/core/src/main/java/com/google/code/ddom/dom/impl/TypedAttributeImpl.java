@@ -13,9 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.dom.model.TypedAttribute;
 
-public interface DOM1NamedNode extends DOMNode {
+public abstract class TypedAttributeImpl extends DOMAttributeImpl implements TypedAttribute {
+    private String type;
 
+    public TypedAttributeImpl(DocumentImpl document, String value, String type) {
+        super(document, value);
+        this.type = type;
+    }
+
+    public final String getType() {
+        return type;
+    }
+
+    public final boolean isId() {
+        return "ID".equals(type);
+    }
 }

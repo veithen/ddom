@@ -15,7 +15,12 @@
  */
 package com.google.code.ddom.dom.model;
 
+import org.w3c.dom.Attr;
 
-public interface DOM1NamedNode extends DOMNode {
+public interface DOMAttribute extends Attr, ParentNode, OptimizedParentNode {
+    DOMAttribute internalGetNextAttribute();
+    void internalSetNextAttribute(DOMAttribute attr);
+    void internalSetOwnerElement(DOMElement newOwner);
 
+    DOMElement getOwnerElement();
 }

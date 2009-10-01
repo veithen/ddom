@@ -16,6 +16,6 @@
 package com.google.code.ddom.dom.model;
 
 
-public interface DOM2NamedNode extends AbstractNode {
+public interface DOM2NamedNode extends DOMNode {
     void internalSetPrefix(String prefix);
 }

@@ -16,7 +16,7 @@
 package com.google.code.ddom.dom.model;
 
 
-public interface ChildNode extends AbstractNode {
+public interface ChildNode extends DOMNode {
     ParentNode getParentNode();
     ChildNode getNextSibling();
     ChildNode getPreviousSibling();

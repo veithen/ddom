@@ -22,13 +22,13 @@ import javax.xml.stream.XMLStreamReader;
 import org.codehaus.stax2.DTDInfo;
 
 import com.google.code.ddom.dom.DeferredParsingException;
-import com.google.code.ddom.dom.impl.AbstractAttrImpl;
-import com.google.code.ddom.dom.impl.AttrImpl;
 import com.google.code.ddom.dom.impl.DocumentImpl;
 import com.google.code.ddom.dom.impl.DocumentTypeImpl;
-import com.google.code.ddom.dom.impl.ElementImpl;
 import com.google.code.ddom.dom.impl.NSDecl;
 import com.google.code.ddom.dom.impl.NodeFactory;
+import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.dom.model.TypedAttribute;
 
 class StAXBuilder extends AbstractBuilder {
     private final XMLStreamReader reader;
@@ -49,14 +49,14 @@ class StAXBuilder extends AbstractBuilder {
             int eventType = reader.next();
             switch (eventType) {
                 case XMLStreamReader.START_ELEMENT:
-                    ElementImpl element = parserIsNamespaceAware
+                    DOMElement element = parserIsNamespaceAware
                             ? nodeFactory.createElement(document, emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()), false)
                             : nodeFactory.createElement(document, reader.getLocalName(), false);
                     consumer.appendNode(element);
-                    AbstractAttrImpl firstAttr = null;
-                    AbstractAttrImpl previousAttr = null;
+                    DOMAttribute firstAttr = null;
+                    DOMAttribute previousAttr = null;
                     for (int i=0; i<reader.getAttributeCount(); i++) {
-                        AttrImpl attr = parserIsNamespaceAware
+                        TypedAttribute attr = parserIsNamespaceAware
                                 ? nodeFactory.createAttribute(document, emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i))
                                 : nodeFactory.createAttribute(document, reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
                         if (firstAttr == null) {

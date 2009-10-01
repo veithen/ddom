@@ -19,11 +19,12 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.dom.model.DOM1NamedNode;
+import com.google.code.ddom.dom.model.DOM1TypedAttribute;
 
-public class DOM1AttrImpl extends AttrImpl implements DOM1NamedNode {
+public class DOM1TypedAttributeImpl extends TypedAttributeImpl implements DOM1TypedAttribute {
     private final String name;
 
-    public DOM1AttrImpl(DocumentImpl document, String name, String value, String type) {
+    public DOM1TypedAttributeImpl(DocumentImpl document, String name, String value, String type) {
         super(document, value, type);
         this.name = name;
     }

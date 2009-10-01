@@ -20,21 +20,21 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
-import com.google.code.ddom.dom.model.OptimizedParentNode;
+import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMElement;
 import com.google.code.ddom.dom.model.ParentNode;
+import com.google.code.ddom.dom.model.TypedAttribute;
 
-public abstract class ElementImpl extends ParentNodeImpl implements Element, ChildNode, BuilderTarget, OptimizedParentNode {
+public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     private class Attributes implements NamedNodeMap {
         public int getLength() {
             int length = 0;
-            AbstractAttrImpl attr = firstAttribute;
+            DOMAttribute attr = firstAttribute;
             while (attr != null) {
                 attr = attr.internalGetNextAttribute();
                 length++;
@@ -44,7 +44,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
         
         public Node item(int index) {
             // TODO: wrong result for negavite indexes
-            AbstractAttrImpl attr = firstAttribute;
+            DOMAttribute attr = firstAttribute;
             for (int i=0; i<index && attr != null; i++) {
                 attr = attr.internalGetNextAttribute();
             }
@@ -60,16 +60,16 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
         }
 
         public Node setNamedItem(Node arg) throws DOMException {
-            if (arg instanceof AttrImpl) {
-                return setAttributeNode((AttrImpl)arg);
+            if (arg instanceof TypedAttribute) {
+                return setAttributeNode((TypedAttribute)arg);
             } else {
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
         }
 
         public Node setNamedItemNS(Node arg) throws DOMException {
-            if (arg instanceof AttrImpl) {
-                return setAttributeNodeNS((AttrImpl)arg);
+            if (arg instanceof TypedAttribute) {
+                return setAttributeNodeNS((TypedAttribute)arg);
             } else {
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
@@ -108,7 +108,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     private int children;
     private ParentNode parent;
     private ChildNode nextSibling;
-    private AbstractAttrImpl firstAttribute;
+    private DOMAttribute firstAttribute;
 
     public ElementImpl(DocumentImpl document, boolean complete) {
         this.document = document;
@@ -168,11 +168,11 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
         return OptimizedParentNodeHelper.getFirstChild(this);
     }
     
-    final AbstractAttrImpl internalGetFirstAttribute() {
+    public final DOMAttribute internalGetFirstAttribute() {
         return firstAttribute;
     }
     
-    public final void internalSetFirstAttribute(AbstractAttrImpl attr) {
+    public final void internalSetFirstAttribute(DOMAttribute attr) {
         firstAttribute = attr;
     }
 
@@ -222,7 +222,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
             	// Note: a lookup using DOM 1 methods may return any kind of attribute, including NSDecl
                 return localName.equals(attr.getName());
             case ATTR_DOM2:
-                return attr instanceof AttrImpl
+                return attr instanceof TypedAttribute
                         && (namespaceURI == null && attr.getNamespaceURI() == null
                                 || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
                         && localName.equals(attr.getLocalName());
@@ -251,7 +251,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     }
     
     private Attr getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
-        AbstractAttrImpl attr = firstAttribute;
+        DOMAttribute attr = firstAttribute;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             attr = attr.internalGetNextAttribute();
         }
@@ -305,8 +305,8 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     }
     
     private void setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
-        AbstractAttrImpl attr = firstAttribute;
-        AbstractAttrImpl previousAttr = null;
+        DOMAttribute attr = firstAttribute;
+        DOMAttribute previousAttr = null;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             previousAttr = attr;
             attr = attr.internalGetNextAttribute();
@@ -314,7 +314,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
         if (attr == null) {
             DocumentImpl document = getDocument();
             NodeFactory factory = document.getNodeFactory();
-            AbstractAttrImpl newAttr;
+            DOMAttribute newAttr;
             switch (mode) {
                 case ATTR_DOM1:
                     newAttr = factory.createAttribute(document, localName, value, null);
@@ -349,8 +349,8 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     
     public final Attr setAttributeNodeNS(Attr _newAttr) throws DOMException {
         validateOwnerDocument(_newAttr);
-        AbstractAttrImpl newAttr = (AbstractAttrImpl)_newAttr;
-        ElementImpl owner = newAttr.getOwnerElement();
+        DOMAttribute newAttr = (DOMAttribute)_newAttr;
+        DOMElement owner = newAttr.getOwnerElement();
         if (owner == this) {
             // This means that the "new" attribute is already linked to the element
             // and replaces itself.
@@ -358,8 +358,8 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
         } else if (owner != null) {
             throw DOMExceptionUtil.newDOMException(DOMException.INUSE_ATTRIBUTE_ERR);
         } else {
-            AbstractAttrImpl existingAttr = firstAttribute;
-            AbstractAttrImpl previousAttr = null;
+            DOMAttribute existingAttr = firstAttribute;
+            DOMAttribute previousAttr = null;
             String localName = newAttr.getLocalName();
             String namespaceURI;
             int mode;
@@ -399,11 +399,11 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     }
 
     public final Attr removeAttributeNode(Attr _oldAttr) throws DOMException {
-        AbstractAttrImpl oldAttr = (AbstractAttrImpl)_oldAttr;
+        DOMAttribute oldAttr = (DOMAttribute)_oldAttr;
         if (oldAttr.getOwnerElement() == this) {
-            AbstractAttrImpl previousAttr = firstAttribute;
+            DOMAttribute previousAttr = firstAttribute;
             while (previousAttr != null) {
-                AbstractAttrImpl nextAttr = previousAttr.internalGetNextAttribute();
+                DOMAttribute nextAttr = previousAttr.internalGetNextAttribute();
                 if (nextAttr == oldAttr) {
                     break;
                 }
@@ -435,17 +435,17 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
 
     @Override
     protected final Node shallowClone() {
-        ElementImpl clone = shallowCloneWithoutAttributes();
-        AbstractAttrImpl attr = firstAttribute;
+        DOMElement clone = shallowCloneWithoutAttributes();
+        DOMAttribute attr = firstAttribute;
         while (attr != null) {
             // TODO: this could be optimized
-            clone.setAttributeNode((AttrImpl)attr.cloneNode(false));
+            clone.setAttributeNode((TypedAttribute)attr.cloneNode(false));
             attr = attr.internalGetNextAttribute();
         }
         return clone;
     }
     
-    protected abstract ElementImpl shallowCloneWithoutAttributes();
+    protected abstract DOMElement shallowCloneWithoutAttributes();
 
     public final TypeInfo getSchemaTypeInfo() {
         // TODO
@@ -469,7 +469,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
     }
 
     public final String lookupNamespaceURI(String prefix) {
-        for (AbstractAttrImpl attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
+        for (DOMAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
             if (attr instanceof NSDecl) {
                 NSDecl decl = (NSDecl)attr;
                 if (decl.getDeclaredPrefix().equals(prefix)) {
@@ -482,7 +482,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
 
     public final String lookupPrefix(String namespaceURI) {
         // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
-        for (AbstractAttrImpl attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
+        for (DOMAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
             if (attr instanceof NSDecl) {
                 NSDecl decl = (NSDecl)attr;
                 if (decl.getDeclaredNamespaceURI().equals(namespaceURI)) {

@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -23,37 +22,38 @@ import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
 import com.google.code.ddom.dom.model.ChildNode;
-import com.google.code.ddom.dom.model.OptimizedParentNode;
+import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMElement;
 
-public abstract class AbstractAttrImpl extends ParentNodeImpl implements Attr, OptimizedParentNode {
+public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttribute {
     /**
      * The owner of the attribute. This is either a {@link DocumentImpl} if the attribute is not linked
-     * to an element, or an {@link ElementImpl} if the attribute has been added to an element.
+     * to an element, or an {@link DOMElement} if the attribute has been added to an element.
      */
     private Object owner;
     
     private Object value;
-    private AbstractAttrImpl nextAttribute;
+    private DOMAttribute nextAttribute;
 
-    public AbstractAttrImpl(DocumentImpl document, String value) {
+    public DOMAttributeImpl(DocumentImpl document, String value) {
         owner = document;
         this.value = value;
     }
     
-    public final void internalSetNextAttribute(AbstractAttrImpl attr) {
+    public final void internalSetNextAttribute(DOMAttribute attr) {
         nextAttribute = attr;
     }
     
-    public final void internalSetOwnerElement(ElementImpl newOwner) {
+    public final void internalSetOwnerElement(DOMElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
-            owner = ((ElementImpl)owner).getOwnerDocument();
+            owner = ((DOMElement)owner).getOwnerDocument();
         } else {
             owner = newOwner;
         }
     }
     
-    final AbstractAttrImpl internalGetNextAttribute() {
+    public final DOMAttribute internalGetNextAttribute() {
         return nextAttribute;
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractAttrImpl extends ParentNodeImpl implements Attr, O
         return OptimizedParentNodeHelper.getFirstChild(this);
     }
     
-    public final ElementImpl getOwnerElement() {
+    public final DOMElement getOwnerElement() {
         return owner instanceof ElementImpl ? (ElementImpl)owner : null;
     }
 

@@ -15,25 +15,30 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.dom.model.DOM1Element;
+import com.google.code.ddom.dom.model.DOM1TypedAttribute;
+import com.google.code.ddom.dom.model.DOM2Element;
+import com.google.code.ddom.dom.model.DOM2TypedAttribute;
+
 public class DOMNodeFactory implements NodeFactory {
     public DocumentTypeImpl createDocumentType(DocumentImpl document) {
         return new DocumentTypeImpl(document);
     }
 
-    public DOM1ElementImpl createElement(DocumentImpl document, String tagName, boolean complete) {
+    public DOM1Element createElement(DocumentImpl document, String tagName, boolean complete) {
         return new DOM1ElementImpl(document, tagName, complete);
     }
     
-    public DOM2ElementImpl createElement(DocumentImpl document, String namespaceURI, String localName, String prefix, boolean complete) {
+    public DOM2Element createElement(DocumentImpl document, String namespaceURI, String localName, String prefix, boolean complete) {
         return new DOM2ElementImpl(document, namespaceURI, localName, prefix, complete);
     }
     
-    public DOM1AttrImpl createAttribute(DocumentImpl document, String name, String value, String type) {
-        return new DOM1AttrImpl(document, name, value, type);
+    public DOM1TypedAttribute createAttribute(DocumentImpl document, String name, String value, String type) {
+        return new DOM1TypedAttributeImpl(document, name, value, type);
     }
     
-    public DOM2AttrImpl createAttribute(DocumentImpl document, String namespaceURI, String localName, String prefix, String value, String type) {
-        return new DOM2AttrImpl(document, namespaceURI, localName, prefix, value, type);
+    public DOM2TypedAttribute createAttribute(DocumentImpl document, String namespaceURI, String localName, String prefix, String value, String type) {
+        return new DOM2TypedAttributeImpl(document, namespaceURI, localName, prefix, value, type);
     }
     
     public NSDecl createNSDecl(DocumentImpl document, String prefix, String namespaceURI) {
