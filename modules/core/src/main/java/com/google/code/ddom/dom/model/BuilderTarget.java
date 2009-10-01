@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.dom.model;
 
-public interface OptimizedParentNode extends ParentNode {
-    /**
-     * 
-     * either a String or a ChildNode
-     * 
-     * @return
-     */
-    Object getContent();
+import com.google.code.ddom.dom.DeferredNode;
+
+public interface BuilderTarget extends ParentNode, DeferredNode {
+    void internalSetComplete();
 }

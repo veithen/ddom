@@ -17,6 +17,8 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.dom.model.DOM2NamedNode;
+
 public class DOM2AttrImpl extends AttrImpl implements DOM2NamedNode {
     private final String namespaceURI;
     private final String localName;

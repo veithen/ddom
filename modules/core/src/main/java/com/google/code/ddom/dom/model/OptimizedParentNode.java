@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.dom.model;
 
-public interface DOM2NamedNode extends AbstractNode {
-    void internalSetPrefix(String prefix);
+public interface OptimizedParentNode extends ParentNode {
+    /**
+     * 
+     * either a String or a ChildNode
+     * 
+     * @return
+     */
+    Object getContent();
 }

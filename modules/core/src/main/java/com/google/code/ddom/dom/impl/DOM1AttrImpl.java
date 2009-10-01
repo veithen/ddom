@@ -18,6 +18,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.dom.model.DOM1NamedNode;
+
 public class DOM1AttrImpl extends AttrImpl implements DOM1NamedNode {
     private final String name;
 

@@ -39,6 +39,8 @@ import com.google.code.ddom.dom.DeferredParsingException;
 import com.google.code.ddom.dom.builder.Builder;
 import com.google.code.ddom.dom.builder.Consumer;
 import com.google.code.ddom.dom.builder.Source;
+import com.google.code.ddom.dom.model.BuilderTarget;
+import com.google.code.ddom.dom.model.ChildNode;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 // TODO: should we implement Consumer directly or use an inner class to do that (containing the parent and lastSibling attributes)?

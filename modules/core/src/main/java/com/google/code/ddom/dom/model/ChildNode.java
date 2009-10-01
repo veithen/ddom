@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.dom.model;
 
-public interface ParentNode extends AbstractNode {
-    void internalSetFirstChild(ChildNode child);
-    void notifyChildrenModified(int delta);
-    ChildNode getFirstChild();
-    ChildNode getLastChild();
+
+public interface ChildNode extends AbstractNode {
+    ParentNode getParentNode();
+    ChildNode getNextSibling();
+    ChildNode getPreviousSibling();
+    void internalSetParent(ParentNode parent);
+    ChildNode internalGetNextSibling();
+    void internalSetNextSibling(ChildNode nextSibling);
 }

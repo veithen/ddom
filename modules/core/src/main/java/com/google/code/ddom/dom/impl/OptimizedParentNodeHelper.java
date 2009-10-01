@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.OptimizedParentNode;
+
 public class OptimizedParentNodeHelper {
     public static ChildNode getFirstChild(OptimizedParentNode node) {
         Object content = node.getContent();

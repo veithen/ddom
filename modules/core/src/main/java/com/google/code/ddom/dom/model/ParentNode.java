@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.dom.model;
 
-import org.w3c.dom.Node;
 
-public interface AbstractNode extends Node {
-    /**
-     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
-     * this method will never return <code>null</code>.
-     * 
-     * @return the document
-     */
-    DocumentImpl getDocument();
-    
-    CharSequence collectTextContent(CharSequence appendTo);
+public interface ParentNode extends AbstractNode {
+    void internalSetFirstChild(ChildNode child);
+    void notifyChildrenModified(int delta);
+    ChildNode getFirstChild();
+    ChildNode getLastChild();
 }

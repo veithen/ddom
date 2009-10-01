@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.dom.builder;
 
-import com.google.code.ddom.dom.impl.ChildNode;
+import com.google.code.ddom.dom.model.ChildNode;
 
 public interface Consumer {
     /**

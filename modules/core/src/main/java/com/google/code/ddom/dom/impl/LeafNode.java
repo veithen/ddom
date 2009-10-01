@@ -21,6 +21,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.ParentNode;
+
 public abstract class LeafNode extends NodeImpl implements ChildNode {
     private DocumentImpl document;
     private ParentNode parent;

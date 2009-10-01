@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.dom.model.DOM2NamedNode;
+
 public class DOM2ElementImpl extends ElementImpl implements DOM2NamedNode {
     private final String namespaceURI;
     private final String localName;

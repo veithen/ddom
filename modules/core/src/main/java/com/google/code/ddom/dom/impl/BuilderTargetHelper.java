@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.dom.model.BuilderTarget;
+
 public class BuilderTargetHelper {
     public static void build(BuilderTarget node) {
         DocumentImpl document = node.getDocument();

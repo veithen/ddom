@@ -21,6 +21,8 @@ import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.dom.model.ChildNode;
+
 public class DocumentFragmentImpl extends ParentNodeImpl implements DocumentFragment {
     private final DocumentImpl document;
     private ChildNode firstChild;

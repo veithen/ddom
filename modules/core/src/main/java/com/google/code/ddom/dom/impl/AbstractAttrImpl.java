@@ -22,6 +22,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
+import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.OptimizedParentNode;
+
 public abstract class AbstractAttrImpl extends ParentNodeImpl implements Attr, OptimizedParentNode {
     /**
      * The owner of the attribute. This is either a {@link DocumentImpl} if the attribute is not linked

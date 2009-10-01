@@ -19,6 +19,8 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import com.google.code.ddom.dom.model.ParentNode;
+
 public abstract class TextNode extends CharacterDataImpl implements Text {
     public TextNode(DocumentImpl document, String data) {
         super(document, data);

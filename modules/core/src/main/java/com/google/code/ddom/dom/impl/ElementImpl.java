@@ -25,6 +25,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
+import com.google.code.ddom.dom.model.BuilderTarget;
+import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.OptimizedParentNode;
+import com.google.code.ddom.dom.model.ParentNode;
+
 public abstract class ElementImpl extends ParentNodeImpl implements Element, ChildNode, BuilderTarget, OptimizedParentNode {
     private class Attributes implements NamedNodeMap {
         public int getLength() {
