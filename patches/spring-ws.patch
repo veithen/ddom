@@ -1,0 +1,185 @@
+Index: modules/core/src/main/java/com/google/code/ddom/dom/impl/ElementImpl.java
+===================================================================
+--- modules/core/src/main/java/com/google/code/ddom/dom/impl/ElementImpl.java	(revision 25)
++++ modules/core/src/main/java/com/google/code/ddom/dom/impl/ElementImpl.java	(working copy)
+@@ -16,6 +16,7 @@
+ package com.google.code.ddom.dom.impl;
+ 
+ import javax.xml.XMLConstants;
++import javax.xml.namespace.QName;
+ 
+ import org.w3c.dom.Attr;
+ import org.w3c.dom.DOMException;
+@@ -163,7 +164,7 @@
+         return OptimizedParentNodeHelper.getFirstChild(this);
+     }
+     
+-    final AbstractAttrImpl internalGetFirstAttribute() {
++    public final AbstractAttrImpl internalGetFirstAttribute() {
+         return firstAttribute;
+     }
+     
+@@ -262,6 +263,11 @@
+         Attr attr = getAttributeNodeNS(namespaceURI, localName);
+         return attr == null ? "" : attr.getValue();
+     }
++    
++    public final String internalGetAttribute(QName qname) {
++        Attr attr = getAttributeNodeNS(qname.getNamespaceURI(), qname.getLocalPart());
++        return attr == null ? null : attr.getValue();
++    }
+ 
+     public final boolean hasAttribute(String name) {
+         return getAttributeNode(name) != null;
+@@ -299,6 +305,16 @@
+         }
+     }
+     
++    protected final void internalSetAttribute(QName qname, String value) {
++        // TODO: potential mismatch between null and empty string for namespaceURI and prefix!
++        setAttribute(qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix(), ATTR_DOM2, value);
++    }
++    
++    // TODO: need to specify nullability of arguments!
++    protected final void internalDeclareNamespace(String prefix, String namespaceURI) {
++        setAttribute(null, prefix, null, ATTR_NSDECL, namespaceURI);
++    }
++    
+     private void setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
+         AbstractAttrImpl attr = firstAttribute;
+         AbstractAttrImpl previousAttr = null;
+@@ -424,6 +440,10 @@
+         removeAttributeNode(getAttributeNodeNS(namespaceURI, localName));
+     }
+ 
++    protected final void internalRemoveAttribute(QName qname) {
++        removeAttributeNS(qname.getNamespaceURI(), qname.getLocalPart());
++    }
++    
+     public final Node cloneNode(boolean deep) {
+         return deep ? deepClone() : shallowClone();
+     }
+Index: modules/core/src/main/java/com/google/code/ddom/dom/impl/AbstractAttrImpl.java
+===================================================================
+--- modules/core/src/main/java/com/google/code/ddom/dom/impl/AbstractAttrImpl.java	(revision 25)
++++ modules/core/src/main/java/com/google/code/ddom/dom/impl/AbstractAttrImpl.java	(working copy)
+@@ -50,7 +50,7 @@
+         }
+     }
+     
+-    final AbstractAttrImpl internalGetNextAttribute() {
++    public final AbstractAttrImpl internalGetNextAttribute() {
+         return nextAttribute;
+     }
+ 
+
+Property changes on: modules/spring-ws
+___________________________________________________________________
+Added: svn:ignore
+   + .settings
+target
+.classpath
+.project
+
+
+Index: modules/spring-ws/src/main/java/com/google/code/ddom/jaxp/springws/SoapElementImpl.java
+===================================================================
+--- modules/spring-ws/src/main/java/com/google/code/ddom/jaxp/springws/SoapElementImpl.java	(revision 0)
++++ modules/spring-ws/src/main/java/com/google/code/ddom/jaxp/springws/SoapElementImpl.java	(revision 0)
+@@ -0,0 +1,90 @@
++package com.google.code.ddom.jaxp.springws;
++
++import java.util.Iterator;
++import java.util.NoSuchElementException;
++
++import javax.xml.namespace.QName;
++import javax.xml.transform.Source;
++import javax.xml.transform.dom.DOMSource;
++
++import org.springframework.ws.soap.SoapElement;
++
++import com.google.code.ddom.dom.impl.AbstractAttrImpl;
++import com.google.code.ddom.dom.impl.AttrImpl;
++import com.google.code.ddom.dom.impl.DOM2ElementImpl;
++import com.google.code.ddom.dom.impl.DocumentImpl;
++
++public class SoapElementImpl extends DOM2ElementImpl implements SoapElement {
++    public SoapElementImpl(DocumentImpl document, String namespaceURI, String localName,
++            String prefix, boolean complete) {
++        super(document, namespaceURI, localName, prefix, complete);
++    }
++
++    public void addAttribute(QName name, String value) {
++        internalSetAttribute(name, value);
++    }
++
++    public void addNamespaceDeclaration(String prefix, String namespaceUri) {
++        internalDeclareNamespace(prefix, namespaceUri);
++    }
++
++    public Iterator<QName> getAllAttributes() {
++        return new Iterator<QName>() {
++            private AttrImpl currentAttribute;
++            private AttrImpl nextAttribute;
++            private boolean noMoreAttributes;
++
++            public boolean hasNext() {
++                if (noMoreAttributes) {
++                    return false;
++                } else if (nextAttribute != null) {
++                    return true;
++                } else {
++                    AbstractAttrImpl attr;
++                    if (currentAttribute == null) {
++                        attr = internalGetFirstAttribute();
++                    } else {
++                        attr = currentAttribute.internalGetNextAttribute();
++                    }
++                    while (attr != null && !(attr instanceof AttrImpl)) {
++                        attr = attr.internalGetNextAttribute();
++                    }
++                    noMoreAttributes = (nextAttribute = (AttrImpl)attr) == null;
++                    return !noMoreAttributes;
++                }
++            }
++
++            public QName next() {
++                if (hasNext()) {
++                    currentAttribute = nextAttribute;
++                    nextAttribute = null;
++                    return new QName(currentAttribute.getNamespaceURI(), currentAttribute.getLocalName(), currentAttribute.getPrefix());
++                } else {
++                    throw new NoSuchElementException();
++                }
++            }
++
++            // TODO: not clear if we need to implement this
++            public void remove() {
++                throw new UnsupportedOperationException();
++            }
++        };
++    }
++
++    public String getAttributeValue(QName name) {
++        return internalGetAttribute(name);
++    }
++
++    public QName getName() {
++        // TODO: there should be a method to take care of DOM2NamedNode -> QName translation (to be used also for attributes; see below)
++        return new QName(getNamespaceURI(), getLocalName(), getPrefix());
++    }
++
++    public Source getSource() {
++        return new DOMSource(this);
++    }
++
++    public void removeAttribute(QName name) {
++        internalRemoveAttribute(name);
++    }
++}
+
+Property changes on: modules/spring-ws/src/main/java/com/google/code/ddom/jaxp/springws/SoapElementImpl.java
+___________________________________________________________________
+Added: svn:eol-style
+   + native
+
