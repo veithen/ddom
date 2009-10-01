@@ -18,11 +18,7 @@ package com.google.code.ddom.dom.impl;
 import java.util.Iterator;
 
 import javax.xml.XMLConstants;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
-import org.codehaus.stax2.DTDInfo;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -40,14 +36,17 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 import com.google.code.ddom.dom.DeferredParsingException;
+import com.google.code.ddom.dom.builder.Builder;
+import com.google.code.ddom.dom.builder.Consumer;
+import com.google.code.ddom.dom.builder.Source;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
-public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget {
+// TODO: should we implement Consumer directly or use an inner class to do that (containing the parent and lastSibling attributes)?
+public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget, Consumer {
     private final NodeFactory nodeFactory = new DOMNodeFactory();
-    private final XMLStreamReader reader;
-    private final boolean parserIsNamespaceAware;
+    private final Builder builder;
     private DOMImplementationImpl domImplementation;
-    private Throwable parserException;
+    private boolean parseError;
     private ChildNode firstChild;
     private boolean complete;
     private int children;
@@ -57,128 +56,30 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
     private BuilderTarget parent;
     private ChildNode lastSibling;
 
-    public DocumentImpl(XMLStreamReader reader) {
-        this.reader = reader;
-        parent = this;
-        complete = reader == null;
-        if (reader == null) {
-            parserIsNamespaceAware = false; // Value doesn't matter here
+    public DocumentImpl(Source source) {
+        if (source == null) {
+            builder = null;
+            complete = true;
         } else {
-            parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
+            builder = source.getBuilder(nodeFactory, this, this);
+            parent = this;
         }
     }
 
-    private String emptyToNull(String value) {
-        return value == null || value.length() == 0 ? null : value;
-    }
-    
-    private DeferredParsingException newParseError(Throwable ex) {
-        this.parserException = ex;
-        return new DeferredParsingException("Parse error", ex);
-    }
-    
-    public final boolean next() throws DeferredParsingException {
-        if (parserException != null) {
-            throw newParseError(parserException);
+    public final void next() throws DeferredParsingException {
+        if (parseError) {
+            // TODO: should we recover somehow the original parser exception? (or maybe we should update the state of the incomplete nodes to reflect the parse error?)
+            throw new DeferredParsingException("Trying to read from a parser that has already thrown an exception", null);
         }
         try {
-            int eventType = reader.next();
-            switch (eventType) {
-                case XMLStreamReader.START_ELEMENT:
-                    ElementImpl element = parserIsNamespaceAware
-                            ? nodeFactory.createElement(this, emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()), false)
-                            : nodeFactory.createElement(this, reader.getLocalName(), false);
-                    appendNode(element);
-                    parent = element;
-                    lastSibling = null;
-                    AbstractAttrImpl firstAttr = null;
-                    AbstractAttrImpl previousAttr = null;
-                    for (int i=0; i<reader.getAttributeCount(); i++) {
-                        AttrImpl attr = parserIsNamespaceAware
-                                ? nodeFactory.createAttribute(this, emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i))
-                                : nodeFactory.createAttribute(this, reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
-                        if (firstAttr == null) {
-                            firstAttr = attr;
-                        } else {
-                            previousAttr.internalSetNextAttribute(attr);
-                        }
-                        previousAttr = attr;
-                        attr.internalSetOwnerElement(element);
-                    }
-                    if (parserIsNamespaceAware) {
-                        for (int i=0; i<reader.getNamespaceCount(); i++) {
-                            NSDecl attr = nodeFactory.createNSDecl(this, emptyToNull(reader.getNamespacePrefix(i)), reader.getNamespaceURI(i));
-                            if (firstAttr == null) {
-                                firstAttr = attr;
-                            } else {
-                                previousAttr.internalSetNextAttribute(attr);
-                            }
-                            previousAttr = attr;
-                            attr.internalSetOwnerElement(element);
-                        }
-                    }
-                    if (firstAttr != null) {
-                        element.internalSetFirstAttribute(firstAttr);
-                    }
-                    break;
-                case XMLStreamReader.END_ELEMENT:
-                    lastSibling = (ChildNode)parent;
-                    // Fall through
-                case XMLStreamReader.END_DOCUMENT:
-                    parent.internalSetComplete();
-                    // TODO: get rid of cast here
-                    parent = (BuilderTarget)parent.getParentNode();
-                    break;
-                case XMLStreamReader.PROCESSING_INSTRUCTION:
-                    appendNode(nodeFactory.createProcessingInstruction(this, reader.getPITarget(), reader.getPIData()));
-                    break;
-                case XMLStreamReader.DTD:
-                    DocumentTypeImpl docType = nodeFactory.createDocumentType(this);
-                    appendNode(docType);
-                    if (reader instanceof DTDInfo) {
-                        DTDInfo dtdInfo = (DTDInfo)reader;
-                        docType.setName(dtdInfo.getDTDRootName());
-                        docType.setPublicId(dtdInfo.getDTDPublicId());
-                        docType.setSystemId(dtdInfo.getDTDSystemId());
-                    }
-                    break;
-                case XMLStreamReader.COMMENT:
-                case XMLStreamReader.SPACE:
-                case XMLStreamReader.CHARACTERS:
-                case XMLStreamReader.CDATA:
-                    String text;
-                    try {
-                        // Some StAX implementations may throw a RuntimeException here if an I/O error occurs
-                        text = reader.getText();
-                    } catch (RuntimeException ex) {
-                        throw newParseError(ex);
-                    }
-                    switch (eventType) {
-                        case XMLStreamReader.COMMENT:
-                            appendNode(nodeFactory.createComment(this, text));
-                            break;
-                        case XMLStreamReader.SPACE:
-                        case XMLStreamReader.CHARACTERS:
-                            // TODO: optimize if possible
-                            appendNode(nodeFactory.createText(this, text));
-                            break;
-                        case XMLStreamReader.CDATA:
-                            appendNode(nodeFactory.createCDATASection(this, text));
-                    }
-                    break;
-                case XMLStreamReader.ENTITY_REFERENCE:
-                    appendNode(nodeFactory.createEntityReference(this, reader.getText()));
-                    break;
-                default:
-                    throw new RuntimeException("Unexpected event " + reader.getEventType()); // TODO
-            }
-            return reader.hasNext();
-        } catch (XMLStreamException ex) {
-            throw newParseError(ex);
+            builder.proceed();
+        } catch (DeferredParsingException ex) {
+            parseError = true;
+            throw ex;
         }
     }
     
-    private void appendNode(ChildNode node) {
+    public final void appendNode(ChildNode node) {
         if (lastSibling == null) {
             parent.internalSetFirstChild(node);
         } else {
@@ -186,7 +87,22 @@ public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTar
         }
         parent.notifyChildrenModified(1);
         node.internalSetParent(parent);
-        lastSibling = node;
+        if (node instanceof ElementImpl) {
+            // TODO: this assumes that elements are always created as incomplete
+            parent = (ElementImpl)node;
+            lastSibling = null;
+        } else {
+            lastSibling = node;
+        }
+    }
+    
+    public final void nodeCompleted() {
+        if (parent instanceof ChildNode) {
+            lastSibling = (ChildNode)parent;
+        }
+        parent.internalSetComplete();
+        // TODO: get rid of cast here
+        parent = (BuilderTarget)parent.getParentNode();
     }
     
     public NodeFactory getNodeFactory() {

@@ -167,7 +167,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements Element, Chi
         return firstAttribute;
     }
     
-    final void internalSetFirstAttribute(AbstractAttrImpl attr) {
+    public final void internalSetFirstAttribute(AbstractAttrImpl attr) {
         firstAttribute = attr;
     }
 

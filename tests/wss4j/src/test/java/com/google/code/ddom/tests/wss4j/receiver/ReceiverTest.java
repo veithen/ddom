@@ -29,6 +29,7 @@ import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.dom.impl.DocumentImpl;
 
 
@@ -36,7 +37,7 @@ public class ReceiverTest {
     @Test
     public void testUsernameToken() throws Exception {
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        Document doc = new DocumentImpl(factory.createXMLStreamReader(ReceiverTest.class.getResourceAsStream("UsernameToken.xml")));
+        Document doc = new DocumentImpl(new StAXSource(factory.createXMLStreamReader(ReceiverTest.class.getResourceAsStream("UsernameToken.xml"))));
         WSSecurityEngine engine = WSSecurityEngine.getInstance();
         CallbackHandler cb = new CallbackHandler() {
             public void handle(Callback[] callbacks) {

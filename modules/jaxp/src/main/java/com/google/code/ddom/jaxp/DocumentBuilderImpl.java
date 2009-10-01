@@ -33,6 +33,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.dom.impl.CommentFilterStreamReader;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
 import com.google.code.ddom.dom.impl.DOMNodeFactory;
@@ -94,7 +95,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             }
             String encoding = reader.getEncoding();
             String xmlEncoding = reader.getCharacterEncodingScheme();
-            DocumentImpl document = new DocumentImpl(reader);
+            DocumentImpl document = new DocumentImpl(new StAXSource(reader));
 //            DocumentImpl document = new DocumentImpl(domImplementation, omDocument/*, namespaceAware */);
             document.setDocumentURI(is.getSystemId());
             String inputEncoding = is.getEncoding();

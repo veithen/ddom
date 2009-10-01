@@ -22,6 +22,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.w3c.dom.Document;
 
+import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.dom.impl.DocumentImpl;
 
 public class DDOMUtilImpl implements DOMUtilImpl {
@@ -36,7 +37,7 @@ public class DDOMUtilImpl implements DOMUtilImpl {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
         try {
-            return new DocumentImpl(factory.createXMLStreamReader(new StringReader(xml)));
+            return new DocumentImpl(new StAXSource(factory.createXMLStreamReader(new StringReader(xml))));
         } catch (XMLStreamException ex) {
             throw new Error(ex);
         }

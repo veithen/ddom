@@ -37,11 +37,11 @@ public abstract class AbstractAttrImpl extends ParentNodeImpl implements Attr, O
         this.value = value;
     }
     
-    final void internalSetNextAttribute(AbstractAttrImpl attr) {
+    public final void internalSetNextAttribute(AbstractAttrImpl attr) {
         nextAttribute = attr;
     }
     
-    final void internalSetOwnerElement(ElementImpl newOwner) {
+    public final void internalSetOwnerElement(ElementImpl newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
             owner = ((ElementImpl)owner).getOwnerDocument();

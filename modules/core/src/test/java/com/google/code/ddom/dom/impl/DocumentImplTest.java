@@ -31,6 +31,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.dom.DeferredParsingException;
+import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 
@@ -44,7 +45,7 @@ public class DocumentImplTest {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<p:root xmlns:p='urn:ns'>"));
-        Document doc = new DocumentImpl(reader);
+        Document doc = new DocumentImpl(new StAXSource(reader));
         
         Element element = doc.getDocumentElement();
         Assert.assertTrue(element instanceof DOM1ElementImpl);
@@ -68,7 +69,7 @@ public class DocumentImplTest {
         InvocationCounter cter = new InvocationCounter();
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<root>This is malformed"));
-        Document doc = new DocumentImpl(cter.createProxy(XMLStreamReader.class, reader));
+        Document doc = new DocumentImpl(new StAXSource(cter.createProxy(XMLStreamReader.class, reader)));
         
         // First loop over the document; this should give an exception
         try {
