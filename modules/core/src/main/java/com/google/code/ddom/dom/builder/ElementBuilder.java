@@ -15,17 +15,8 @@
  */
 package com.google.code.ddom.dom.builder;
 
-import com.google.code.ddom.dom.impl.DocumentImpl;
-import com.google.code.ddom.dom.impl.NodeFactory;
-
-public abstract class AbstractBuilder implements Builder {
-    protected final NodeFactory nodeFactory;
-    protected final DocumentImpl document;
-    protected final Consumer consumer;
-    
-    public AbstractBuilder(NodeFactory nodeFactory, DocumentImpl document, Consumer consumer) {
-        this.nodeFactory = nodeFactory;
-        this.document = document;
-        this.consumer = consumer;
-    }
+public interface ElementBuilder {
+    void newAttribute(String name, String value, String type);
+    void newAttribute(String namespaceURI, String localName, String prefix, String value, String type);
+    void newNSDecl(String prefix, String namespaceURI);
 }

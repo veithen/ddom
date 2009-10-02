@@ -17,13 +17,14 @@ package com.google.code.ddom.dom.builder;
 
 import com.google.code.ddom.dom.DeferredParsingException;
 
-public interface Builder {
+public interface ParserWrapper {
     /**
      * 
      * 
      * Must result in one or more calls to the {@link Consumer}.
      * 
+     * @param listener
      * @throws DeferredParsingException
      */
-    void proceed() throws DeferredParsingException;
+    void proceed(ParserListener listener) throws DeferredParsingException;
 }

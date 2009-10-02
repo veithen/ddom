@@ -15,20 +15,20 @@
  */
 package com.google.code.ddom.dom.builder;
 
-import com.google.code.ddom.dom.model.ChildNode;
-
-public interface Consumer {
-    /**
-     * 
-     * 
-     * TODO: describe how the complete flag must be set when the result is an ElementImpl
-     * 
-     * @param node
-     */
-    void appendNode(ChildNode node);
+public interface ParserListener {
+    void newDocumentType(String rootName, String publicId, String systemId);
+    ElementBuilder newElement(String tagName);
+    ElementBuilder newElement(String namespaceURI, String localName, String prefix);
+    void newProcessingInstruction(String target, String data);
+    void newText(String data);
+    void newComment(String data);
+    void newCDATASection(String data);
+    void newEntityReference(String name);
     
     /**
      * Inform the consumer that the current element or the document is complete.
      */
     void nodeCompleted();
+    
+    void newEvent(Event event);
 }

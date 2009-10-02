@@ -1,0 +1,139 @@
+/*
+ * Copyright 2009 Andreas Veithen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.google.code.ddom.dom.impl;
+
+import com.google.code.ddom.dom.DeferredParsingException;
+import com.google.code.ddom.dom.builder.ElementBuilder;
+import com.google.code.ddom.dom.builder.ParserWrapper;
+import com.google.code.ddom.dom.builder.PushParserListener;
+import com.google.code.ddom.dom.model.BuilderTarget;
+import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMElement;
+
+public class Builder extends PushParserListener implements ElementBuilder {
+    private final ParserWrapper parser;
+    private final NodeFactory nodeFactory;
+    private final DocumentImpl document;
+    private boolean parseError;
+    private BuilderTarget parent;
+    private ChildNode lastSibling;
+    private DOMAttribute lastAttribute;
+
+    public Builder(ParserWrapper parser, NodeFactory nodeFactory, DocumentImpl document, BuilderTarget target) {
+        this.parser = parser;
+        this.nodeFactory = nodeFactory;
+        this.document = document;
+        parent = target;
+    }
+
+    public final void next() throws DeferredParsingException {
+        if (parseError) {
+            // TODO: should we recover somehow the original parser exception? (or maybe we should update the state of the incomplete nodes to reflect the parse error?)
+            throw new DeferredParsingException("Trying to read from a parser that has already thrown an exception", null);
+        }
+        try {
+            parser.proceed(this);
+        } catch (DeferredParsingException ex) {
+            parseError = true;
+            throw ex;
+        }
+    }
+
+    public final void newDocumentType(String rootName, String publicId, String systemId) {
+        appendNode(nodeFactory.createDocumentType(document, rootName, publicId, systemId));
+    }
+    
+    public final ElementBuilder newElement(String tagName) {
+        appendNode(nodeFactory.createElement(document, tagName, false));
+        return this;
+    }
+    
+    public final ElementBuilder newElement(String namespaceURI, String localName, String prefix) {
+        appendNode(nodeFactory.createElement(document, namespaceURI, localName, prefix, false));
+        return this;
+    }
+    
+    public final void newAttribute(String name, String value, String type) {
+        appendAttribute(nodeFactory.createAttribute(document, name, value, type));
+    }
+
+    public final void newAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+        appendAttribute(nodeFactory.createAttribute(document, namespaceURI, localName, prefix, value, type));
+    }
+
+    public final void newNSDecl(String prefix, String namespaceURI) {
+        appendAttribute(nodeFactory.createNSDecl(document, prefix, namespaceURI));
+    }
+
+    public final void newProcessingInstruction(String target, String data) {
+        appendNode(nodeFactory.createProcessingInstruction(document, target, data));
+    }
+    
+    public final void newText(String data) {
+        appendNode(nodeFactory.createText(document, data));
+    }
+    
+    public final void newComment(String data) {
+        appendNode(nodeFactory.createComment(document, data));
+    }
+    
+    public final void newCDATASection(String data) {
+        appendNode(nodeFactory.createCDATASection(document, data));
+    }
+    
+    public final void newEntityReference(String name) {
+        appendNode(nodeFactory.createEntityReference(document, name));
+    }
+    
+    private void appendNode(ChildNode node) {
+        if (lastSibling == null) {
+            parent.internalSetFirstChild(node);
+        } else {
+            lastSibling.internalSetNextSibling(node);
+        }
+        parent.notifyChildrenModified(1);
+        node.internalSetParent(parent);
+        if (node instanceof DOMElement) {
+            // TODO: this assumes that elements are always created as incomplete
+            parent = (DOMElement)node;
+            lastSibling = null;
+        } else {
+            lastSibling = node;
+        }
+        lastAttribute = null;
+    }
+    
+    private void appendAttribute(DOMAttribute attr) {
+        DOMElement element = (DOMElement)parent;
+        if (lastAttribute == null) {
+            element.internalSetFirstAttribute(attr);
+        } else {
+            lastAttribute.internalSetNextAttribute(attr);
+        }
+        attr.internalSetOwnerElement(element);
+        lastAttribute = attr;
+    }
+    
+    public final void nodeCompleted() {
+        if (parent instanceof ChildNode) {
+            lastSibling = (ChildNode)parent;
+        }
+        parent.internalSetComplete();
+        // TODO: get rid of cast here
+        parent = (BuilderTarget)parent.getParentNode();
+    }
+}

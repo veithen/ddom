@@ -15,19 +15,13 @@
  */
 package com.google.code.ddom.dom.builder;
 
-import com.google.code.ddom.dom.impl.DocumentImpl;
-import com.google.code.ddom.dom.impl.NodeFactory;
-
 public interface Source {
     /**
      * 
      * 
-     * may be destructive; in this case, must throw IllegalStateException
-     * @param nodeFactory
-     * @param consumer
+     * may be destructive; in this case, must throw IllegalStateException when called more than once
      * 
      * @return
      */
-    // TODO: these three arguments are somewhat redundant; maybe two (or even a single) interface would be sufficient
-    Builder getBuilder(NodeFactory nodeFactory, DocumentImpl document, Consumer consumer);
+    ParserWrapper getParser();
 }

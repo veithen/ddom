@@ -15,20 +15,26 @@
  */
 package com.google.code.ddom.dom.builder;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-public class StAXSource implements Source {
-    private final XMLStreamReader reader;
-    private boolean consumed;
+import com.google.code.ddom.dom.DeferredParsingException;
 
-    public StAXSource(XMLStreamReader reader) {
+public class StAXParserWrapper implements ParserWrapper {
+    private final XMLStreamReader reader;
+    private final XMLStreamReaderEvent event;
+
+    public StAXParserWrapper(XMLStreamReader reader) {
         this.reader = reader;
+        event = new XMLStreamReaderEvent(reader);
     }
 
-    public ParserWrapper getParser() {
-        if (consumed) {
-            throw new IllegalStateException("This source has already been consumed");
+    public void proceed(ParserListener listener) throws DeferredParsingException {
+        try {
+            reader.next();
+        } catch (XMLStreamException ex) {
+            throw new DeferredParsingException("Parse error", ex);
         }
-        return new StAXParserWrapper(reader);
+        listener.newEvent(event);
     }
 }

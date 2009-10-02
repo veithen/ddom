@@ -36,8 +36,6 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 import com.google.code.ddom.dom.DeferredParsingException;
-import com.google.code.ddom.dom.builder.Builder;
-import com.google.code.ddom.dom.builder.Consumer;
 import com.google.code.ddom.dom.builder.Source;
 import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
@@ -45,68 +43,28 @@ import com.google.code.ddom.dom.model.DOMAttribute;
 import com.google.code.ddom.dom.model.DOMElement;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
-// TODO: should we implement Consumer directly or use an inner class to do that (containing the parent and lastSibling attributes)?
-public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget, Consumer {
+public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget {
     private final NodeFactory nodeFactory = new DOMNodeFactory();
     private final Builder builder;
     private DOMImplementationImpl domImplementation;
-    private boolean parseError;
     private ChildNode firstChild;
-    private boolean complete;
+    private boolean complete; // TODO: maybe we can replace this by builder == null?
     private int children;
     private String inputEncoding;
     private String xmlEncoding;
     private String documentURI;
-    private BuilderTarget parent;
-    private ChildNode lastSibling;
 
     public DocumentImpl(Source source) {
         if (source == null) {
             builder = null;
             complete = true;
         } else {
-            builder = source.getBuilder(nodeFactory, this, this);
-            parent = this;
+            builder = new Builder(source.getParser(), nodeFactory, this, this);
         }
     }
 
     public final void next() throws DeferredParsingException {
-        if (parseError) {
-            // TODO: should we recover somehow the original parser exception? (or maybe we should update the state of the incomplete nodes to reflect the parse error?)
-            throw new DeferredParsingException("Trying to read from a parser that has already thrown an exception", null);
-        }
-        try {
-            builder.proceed();
-        } catch (DeferredParsingException ex) {
-            parseError = true;
-            throw ex;
-        }
-    }
-    
-    public final void appendNode(ChildNode node) {
-        if (lastSibling == null) {
-            parent.internalSetFirstChild(node);
-        } else {
-            lastSibling.internalSetNextSibling(node);
-        }
-        parent.notifyChildrenModified(1);
-        node.internalSetParent(parent);
-        if (node instanceof DOMElement) {
-            // TODO: this assumes that elements are always created as incomplete
-            parent = (DOMElement)node;
-            lastSibling = null;
-        } else {
-            lastSibling = node;
-        }
-    }
-    
-    public final void nodeCompleted() {
-        if (parent instanceof ChildNode) {
-            lastSibling = (ChildNode)parent;
-        }
-        parent.internalSetComplete();
-        // TODO: get rid of cast here
-        parent = (BuilderTarget)parent.getParentNode();
+        builder.next();
     }
     
     public NodeFactory getNodeFactory() {
