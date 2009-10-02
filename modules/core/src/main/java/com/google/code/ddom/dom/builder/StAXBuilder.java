@@ -91,14 +91,9 @@ class StAXBuilder extends AbstractBuilder {
                     consumer.appendNode(nodeFactory.createProcessingInstruction(document, reader.getPITarget(), reader.getPIData()));
                     break;
                 case XMLStreamReader.DTD:
-                    DocumentTypeImpl docType = nodeFactory.createDocumentType(document);
+                    DTDInfo dtdInfo = (DTDInfo)reader;
+                    DocumentTypeImpl docType = nodeFactory.createDocumentType(document, dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
                     consumer.appendNode(docType);
-                    if (reader instanceof DTDInfo) {
-                        DTDInfo dtdInfo = (DTDInfo)reader;
-                        docType.setName(dtdInfo.getDTDRootName());
-                        docType.setPublicId(dtdInfo.getDTDPublicId());
-                        docType.setSystemId(dtdInfo.getDTDSystemId());
-                    }
                     break;
                 case XMLStreamReader.COMMENT:
                 case XMLStreamReader.SPACE:

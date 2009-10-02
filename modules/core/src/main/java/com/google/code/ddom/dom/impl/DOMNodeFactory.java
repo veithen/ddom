@@ -21,8 +21,8 @@ import com.google.code.ddom.dom.model.DOM2Element;
 import com.google.code.ddom.dom.model.DOM2TypedAttribute;
 
 public class DOMNodeFactory implements NodeFactory {
-    public DocumentTypeImpl createDocumentType(DocumentImpl document) {
-        return new DocumentTypeImpl(document);
+    public DocumentTypeImpl createDocumentType(DocumentImpl document, String rootName, String publicId, String systemId) {
+        return new DocumentTypeImpl(document, rootName, publicId, systemId);
     }
 
     public DOM1Element createElement(DocumentImpl document, String tagName, boolean complete) {

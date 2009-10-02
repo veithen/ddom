@@ -45,10 +45,7 @@ public class DOMImplementationImpl implements DOMImplementation {
     public DocumentType createDocumentType(String qualifiedName, String publicId, String systemId)
             throws DOMException {
         NSUtil.validateQualifiedName(qualifiedName);
-        DocumentTypeImpl docType = nodeFactory.createDocumentType(null);
-        docType.setName(qualifiedName);
-        docType.setPublicId(publicId);
-        docType.setSystemId(systemId);
+        DocumentTypeImpl docType = nodeFactory.createDocumentType(null, qualifiedName, publicId, systemId);
         return docType;
     }
 

@@ -26,7 +26,7 @@ public interface NodeFactory {
      * @param document may be <code>null</code> (if called by {@link org.w3c.dom.DOMImplementation#createDocumentType(String, String, String)})
      * @return
      */
-    DocumentTypeImpl createDocumentType(DocumentImpl document);
+    DocumentTypeImpl createDocumentType(DocumentImpl document, String rootName, String publicId, String systemId);
     
     DOM1Element createElement(DocumentImpl document, String tagName, boolean complete);
     

@@ -21,12 +21,15 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class DocumentTypeImpl extends LeafNode implements DocumentType {
-    private String name;
-    private String publicId;
-    private String systemId;
+    private final String rootName;
+    private final String publicId;
+    private final String systemId;
     
-    public DocumentTypeImpl(DocumentImpl document) {
+    public DocumentTypeImpl(DocumentImpl document, String rootName, String publicId, String systemId) {
         super(document);
+        this.rootName = rootName;
+        this.publicId = publicId;
+        this.systemId = systemId;
     }
 
     public final short getNodeType() {
@@ -46,27 +49,15 @@ public class DocumentTypeImpl extends LeafNode implements DocumentType {
     }
 
     public final String getName() {
-        return name;
-    }
-
-    public final void setName(String name) {
-        this.name = name;
+        return rootName;
     }
 
     public final String getPublicId() {
         return publicId;
     }
 
-    public final void setPublicId(String publicId) {
-        this.publicId = publicId;
-    }
-
     public final String getSystemId() {
         return systemId;
-    }
-
-    public final void setSystemId(String systemId) {
-        this.systemId = systemId;
     }
 
     public final NamedNodeMap getEntities() {
@@ -90,10 +81,6 @@ public class DocumentTypeImpl extends LeafNode implements DocumentType {
 
     public final Node cloneNode(boolean deep) {
         // TODO: factory method here!
-        DocumentTypeImpl clone = new DocumentTypeImpl(getDocument());
-        clone.setName(name);
-        clone.setPublicId(publicId);
-        clone.setSystemId(systemId);
-        return clone;
+        return new DocumentTypeImpl(getDocument(), rootName, publicId, systemId);
     }
 }

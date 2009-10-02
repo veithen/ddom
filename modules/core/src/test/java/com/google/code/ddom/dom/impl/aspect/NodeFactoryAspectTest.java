@@ -24,6 +24,6 @@ import com.google.code.ddom.dom.impl.DocumentTypeImpl;
 public class NodeFactoryAspectTest {
     @Test(expected=AssertionFailedError.class)
     public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeImpl(null);
+        new DocumentTypeImpl(null, null, null, null);
     }
 }
