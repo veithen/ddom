@@ -72,13 +72,13 @@
     </dependencyManagement>
     
     <build>
-    	<pluginManagement>
-    		<plugins>
-    			<plugin>
-	                <groupId>org.codehaus.mojo</groupId>
-	                <artifactId>build-helper-maven-plugin</artifactId>
-	                <version>1.4</version>
-    			</plugin>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.4</version>
+                </plugin>
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>2.0</version>
@@ -87,8 +87,8 @@
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <version>2.5</version>
                 </plugin>
-    		</plugins>
-    	</pluginManagement>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
