@@ -15,6 +15,10 @@
  */
 package com.google.code.ddom.dom.builder;
 
+import com.google.code.ddom.spi.parser.ElementBuilder;
+import com.google.code.ddom.spi.parser.Event;
+import com.google.code.ddom.spi.parser.ParserListener;
+
 public abstract class PushParserListener implements ParserListener {
     public final void newEvent(Event event) {
         switch (event.getEventType()) {

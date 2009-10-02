@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom;
+package com.google.code.ddom.spi.parser;
 
-import org.w3c.dom.Node;
-
-// TODO: need to specify which nodes implement this interface (e.g. attributes??)
-public interface DeferredNode extends Node {
-    boolean isComplete();
-    
-    void build();
+public interface ElementBuilder {
+    void newAttribute(String name, String value, String type);
+    void newAttribute(String namespaceURI, String localName, String prefix, String value, String type);
+    void newNSDecl(String prefix, String namespaceURI);
 }

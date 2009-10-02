@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.builder;
+package com.google.code.ddom.spi.parser;
 
-public interface ElementBuilder {
-    void newAttribute(String name, String value, String type);
-    void newAttribute(String namespaceURI, String localName, String prefix, String value, String type);
-    void newNSDecl(String prefix, String namespaceURI);
+public interface Source {
+    /**
+     * 
+     * 
+     * may be destructive; in this case, must throw IllegalStateException when called more than once
+     * 
+     * @return
+     */
+    ParserWrapper getParser();
 }

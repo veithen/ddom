@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom;
+package com.google.code.ddom;
 
 /**
  * Indicates that a parsing error occurred. Since DDOM used deferred parsing, this exception may be

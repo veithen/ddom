@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.builder;
+package com.google.code.ddom.spi.parser;
 
 public interface ParserListener {
     void newDocumentType(String rootName, String publicId, String systemId);

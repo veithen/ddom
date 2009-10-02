@@ -22,8 +22,8 @@ import org.apache.ws.security.message.WSSecUsernameToken;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.dom.impl.DocumentImpl;
+import com.google.code.ddom.stax.StAXSource;
 import com.google.code.ddom.tests.wss4j.receiver.ReceiverTest;
 
 

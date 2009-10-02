@@ -35,12 +35,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.dom.DeferredParsingException;
-import com.google.code.ddom.dom.builder.Source;
+import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
 import com.google.code.ddom.dom.model.DOMAttribute;
 import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.spi.parser.Source;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public class DocumentImpl extends ParentNodeImpl implements Document, BuilderTarget {

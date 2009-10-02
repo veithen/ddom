@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.builder;
+package com.google.code.ddom.stax;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.dom.DeferredParsingException;
+import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.spi.parser.Event;
 
 public class XMLStreamReaderEvent implements Event {
     private final XMLStreamReader reader;

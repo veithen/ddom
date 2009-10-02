@@ -30,10 +30,10 @@ import org.w3c.domts.DOMTestIncompatibleException;
 import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
-import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
 import com.google.code.ddom.dom.impl.DOMNodeFactory;
 import com.google.code.ddom.dom.impl.DocumentImpl;
+import com.google.code.ddom.stax.StAXSource;
 
 
 public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFactory {

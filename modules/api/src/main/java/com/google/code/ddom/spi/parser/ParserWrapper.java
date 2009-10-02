@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.builder;
+package com.google.code.ddom.spi.parser;
 
-import javax.xml.stream.XMLStreamReader;
+import com.google.code.ddom.DeferredParsingException;
 
-public class StAXSource implements Source {
-    private final XMLStreamReader reader;
-    private boolean consumed;
-
-    public StAXSource(XMLStreamReader reader) {
-        this.reader = reader;
-    }
-
-    public ParserWrapper getParser() {
-        if (consumed) {
-            throw new IllegalStateException("This source has already been consumed");
-        }
-        return new StAXParserWrapper(reader);
-    }
+public interface ParserWrapper {
+    /**
+     * 
+     * 
+     * Must result in one or more calls to the {@link Consumer}.
+     * 
+     * @param listener
+     * @throws DeferredParsingException
+     */
+    void proceed(ParserListener listener) throws DeferredParsingException;
 }

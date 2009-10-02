@@ -22,8 +22,8 @@ import javax.xml.stream.XMLStreamException;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.dom.impl.DocumentImpl;
+import com.google.code.ddom.stax.StAXSource;
 
 public class DDOMUtilImpl implements DOMUtilImpl {
     public static final DDOMUtilImpl INSTANCE = new DDOMUtilImpl();

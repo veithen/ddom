@@ -15,14 +15,14 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.DeferredParsingException;
-import com.google.code.ddom.dom.builder.ElementBuilder;
-import com.google.code.ddom.dom.builder.ParserWrapper;
+import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.dom.builder.PushParserListener;
 import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
 import com.google.code.ddom.dom.model.DOMAttribute;
 import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.spi.parser.ElementBuilder;
+import com.google.code.ddom.spi.parser.ParserWrapper;
 
 public class Builder extends PushParserListener implements ElementBuilder {
     private final ParserWrapper parser;

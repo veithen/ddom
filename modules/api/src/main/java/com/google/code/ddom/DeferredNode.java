@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.builder;
+package com.google.code.ddom;
 
-public interface Source {
-    /**
-     * 
-     * 
-     * may be destructive; in this case, must throw IllegalStateException when called more than once
-     * 
-     * @return
-     */
-    ParserWrapper getParser();
+import org.w3c.dom.Node;
+
+// TODO: need to specify which nodes implement this interface (e.g. attributes??)
+public interface DeferredNode extends Node {
+    boolean isComplete();
+    
+    void build();
 }

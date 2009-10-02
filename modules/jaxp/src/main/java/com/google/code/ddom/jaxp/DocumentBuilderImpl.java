@@ -33,11 +33,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.google.code.ddom.dom.builder.StAXSource;
 import com.google.code.ddom.dom.impl.CommentFilterStreamReader;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
 import com.google.code.ddom.dom.impl.DOMNodeFactory;
 import com.google.code.ddom.dom.impl.DocumentImpl;
+import com.google.code.ddom.stax.StAXSource;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private final boolean ignoreComments;
