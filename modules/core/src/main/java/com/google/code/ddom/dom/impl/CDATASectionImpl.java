@@ -15,10 +15,12 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.CDATASection;
+import com.google.code.ddom.dom.model.DOMCDATASection;
+import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.dom.model.TextNode;
 
-public class CDATASectionImpl extends TextNode implements CDATASection {
-    public CDATASectionImpl(DocumentImpl document, String data) {
+public class CDATASectionImpl extends TextNodeImpl implements DOMCDATASection {
+    public CDATASectionImpl(DOMDocument document, String data) {
         super(document, data);
     }
 
@@ -32,7 +34,7 @@ public class CDATASectionImpl extends TextNode implements CDATASection {
 
     @Override
     protected TextNode createNewTextNode(String data) {
-        DocumentImpl document = getDocument();
+        DOMDocument document = getDocument();
         return document.getNodeFactory().createCDATASection(document, data);
     }
 }

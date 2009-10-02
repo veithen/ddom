@@ -16,16 +16,18 @@
 package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class DocumentTypeImpl extends LeafNode implements DocumentType {
+import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.dom.model.DOMDocumentType;
+
+public class DocumentTypeImpl extends LeafNode implements DOMDocumentType {
     private final String rootName;
     private final String publicId;
     private final String systemId;
     
-    public DocumentTypeImpl(DocumentImpl document, String rootName, String publicId, String systemId) {
+    public DocumentTypeImpl(DOMDocument document, String rootName, String publicId, String systemId) {
         super(document);
         this.rootName = rootName;
         this.publicId = publicId;

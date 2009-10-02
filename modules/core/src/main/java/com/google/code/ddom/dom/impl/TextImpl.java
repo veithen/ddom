@@ -15,10 +15,12 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Text;
+import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.dom.model.DOMText;
+import com.google.code.ddom.dom.model.TextNode;
 
-public class TextImpl extends TextNode {
-    public TextImpl(DocumentImpl document, String data) {
+public class TextImpl extends TextNodeImpl implements DOMText {
+    public TextImpl(DOMDocument document, String data) {
         super(document, data);
     }
     
@@ -32,7 +34,7 @@ public class TextImpl extends TextNode {
 
     @Override
     protected TextNode createNewTextNode(String data) {
-        DocumentImpl document = getDocument();
+        DOMDocument document = getDocument();
         return document.getNodeFactory().createText(document, data);
     }
 }

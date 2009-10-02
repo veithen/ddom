@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.dom.model;
 
-import org.w3c.dom.Element;
+import org.w3c.dom.DocumentType;
 
-public interface DOMElement extends Element, ChildNode, BuilderTarget, OptimizedParentNode {
-    DOMAttribute internalGetFirstAttribute();
-    void internalSetFirstAttribute(DOMAttribute attr);
+public interface DOMDocumentType extends DocumentType, ChildNode {
+    // TODO: check if this is actually needed
+    void internalSetDocument(DOMDocument document);
 }

@@ -17,8 +17,6 @@ package com.google.code.ddom.dom.model;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.dom.impl.DocumentImpl;
-
 public interface DOMNode extends Node {
     /**
      * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
@@ -26,7 +24,7 @@ public interface DOMNode extends Node {
      * 
      * @return the document
      */
-    DocumentImpl getDocument();
+    DOMDocument getDocument();
     
     CharSequence collectTextContent(CharSequence appendTo);
 }

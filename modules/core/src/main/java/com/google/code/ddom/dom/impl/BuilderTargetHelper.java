@@ -16,10 +16,11 @@
 package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.dom.model.BuilderTarget;
+import com.google.code.ddom.dom.model.DOMDocument;
 
 public class BuilderTargetHelper {
     public static void build(BuilderTarget node) {
-        DocumentImpl document = node.getDocument();
+        DOMDocument document = node.getDocument();
         while (!node.isComplete()) {
             document.next();
         }

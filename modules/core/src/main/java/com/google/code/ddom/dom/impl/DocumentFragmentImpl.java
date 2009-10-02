@@ -17,18 +17,19 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.dom.model.DOMDocumentFragment;
 
-public class DocumentFragmentImpl extends ParentNodeImpl implements DocumentFragment {
-    private final DocumentImpl document;
+public class DocumentFragmentImpl extends ParentNodeImpl implements DOMDocumentFragment {
+    private final DOMDocument document;
     private ChildNode firstChild;
     private int children;
     
-    public DocumentFragmentImpl(DocumentImpl document) {
+    public DocumentFragmentImpl(DOMDocument document) {
         this.document = document;
     }
 
@@ -93,7 +94,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements DocumentFrag
         return null;
     }
     
-    public final DocumentImpl getDocument() {
+    public final DOMDocument getDocument() {
         return document;
     }
 
@@ -120,7 +121,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements DocumentFrag
 
     @Override
     protected final Node shallowClone() {
-        DocumentImpl document = getDocument();
+        DOMDocument document = getDocument();
         return document.getNodeFactory().createDocumentFragment(document);
     }
 

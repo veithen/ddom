@@ -15,11 +15,13 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Comment;
 import org.w3c.dom.Node;
 
-public class CommentImpl extends CharacterDataImpl implements Comment {
-    public CommentImpl(DocumentImpl document, String data) {
+import com.google.code.ddom.dom.model.DOMComment;
+import com.google.code.ddom.dom.model.DOMDocument;
+
+public class CommentImpl extends CharacterDataImpl implements DOMComment {
+    public CommentImpl(DOMDocument document, String data) {
         super(document, data);
     }
 
@@ -32,7 +34,7 @@ public class CommentImpl extends CharacterDataImpl implements Comment {
     }
 
     public final Node cloneNode(boolean deep) {
-        DocumentImpl document = getDocument();
+        DOMDocument document = getDocument();
         return document.getNodeFactory().createComment(document, getData());
     }
 

@@ -16,6 +16,7 @@
 package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.dom.model.DOM2Element;
+import com.google.code.ddom.dom.model.DOMDocument;
 import com.google.code.ddom.dom.model.DOMElement;
 
 public class DOM2ElementImpl extends ElementImpl implements DOM2Element {
@@ -23,7 +24,7 @@ public class DOM2ElementImpl extends ElementImpl implements DOM2Element {
     private final String localName;
     private String prefix;
 
-    public DOM2ElementImpl(DocumentImpl document, String namespaceURI, String localName, String prefix, boolean complete) {
+    public DOM2ElementImpl(DOMDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
         super(document, complete);
         this.namespaceURI = namespaceURI;
         this.localName = localName;
@@ -56,7 +57,7 @@ public class DOM2ElementImpl extends ElementImpl implements DOM2Element {
 
     @Override
     protected final DOMElement shallowCloneWithoutAttributes() {
-        DocumentImpl document = getDocument();
+        DOMDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
         return factory.createElement(document, namespaceURI, localName, prefix, true);
     }

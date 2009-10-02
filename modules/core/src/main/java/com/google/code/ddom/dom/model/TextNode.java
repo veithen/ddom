@@ -15,9 +15,8 @@
  */
 package com.google.code.ddom.dom.model;
 
-import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
-public interface DOMElement extends Element, ChildNode, BuilderTarget, OptimizedParentNode {
-    DOMAttribute internalGetFirstAttribute();
-    void internalSetFirstAttribute(DOMAttribute attr);
+public interface TextNode extends Text, ChildNode {
+
 }

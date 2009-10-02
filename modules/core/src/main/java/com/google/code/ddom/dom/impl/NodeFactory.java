@@ -19,6 +19,15 @@ import com.google.code.ddom.dom.model.DOM1Element;
 import com.google.code.ddom.dom.model.DOM1TypedAttribute;
 import com.google.code.ddom.dom.model.DOM2Element;
 import com.google.code.ddom.dom.model.DOM2TypedAttribute;
+import com.google.code.ddom.dom.model.DOMCDATASection;
+import com.google.code.ddom.dom.model.DOMComment;
+import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.dom.model.DOMDocumentFragment;
+import com.google.code.ddom.dom.model.DOMDocumentType;
+import com.google.code.ddom.dom.model.DOMEntityReference;
+import com.google.code.ddom.dom.model.DOMProcessingInstruction;
+import com.google.code.ddom.dom.model.DOMText;
+import com.google.code.ddom.dom.model.NamespaceDeclaration;
 
 public interface NodeFactory {
     /**
@@ -26,27 +35,27 @@ public interface NodeFactory {
      * @param document may be <code>null</code> (if called by {@link org.w3c.dom.DOMImplementation#createDocumentType(String, String, String)})
      * @return
      */
-    DocumentTypeImpl createDocumentType(DocumentImpl document, String rootName, String publicId, String systemId);
+    DOMDocumentType createDocumentType(DOMDocument document, String rootName, String publicId, String systemId);
     
-    DOM1Element createElement(DocumentImpl document, String tagName, boolean complete);
+    DOM1Element createElement(DOMDocument document, String tagName, boolean complete);
     
-    DOM2Element createElement(DocumentImpl document, String namespaceURI, String localName, String prefix, boolean complete);
+    DOM2Element createElement(DOMDocument document, String namespaceURI, String localName, String prefix, boolean complete);
     
-    DOM1TypedAttribute createAttribute(DocumentImpl document, String name, String value, String type);
+    DOM1TypedAttribute createAttribute(DOMDocument document, String name, String value, String type);
     
-    DOM2TypedAttribute createAttribute(DocumentImpl document, String namespaceURI, String localName, String prefix, String value, String type);
+    DOM2TypedAttribute createAttribute(DOMDocument document, String namespaceURI, String localName, String prefix, String value, String type);
     
-    NSDecl createNSDecl(DocumentImpl document, String prefix, String namespaceURI);
+    NamespaceDeclaration createNSDecl(DOMDocument document, String prefix, String namespaceURI);
     
-    ProcessingInstructionImpl createProcessingInstruction(DocumentImpl document, String target, String data);
+    DOMProcessingInstruction createProcessingInstruction(DOMDocument document, String target, String data);
     
-    DocumentFragmentImpl createDocumentFragment(DocumentImpl document);
+    DOMDocumentFragment createDocumentFragment(DOMDocument document);
 
-    TextImpl createText(DocumentImpl document, String data);
+    DOMText createText(DOMDocument document, String data);
 
-    CommentImpl createComment(DocumentImpl document, String data);
+    DOMComment createComment(DOMDocument document, String data);
 
-    CDATASectionImpl createCDATASection(DocumentImpl document, String data);
+    DOMCDATASection createCDATASection(DOMDocument document, String data);
 
-    EntityReferenceImpl createEntityReference(DocumentImpl document, String name);
+    DOMEntityReference createEntityReference(DOMDocument document, String name);
 }

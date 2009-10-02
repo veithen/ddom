@@ -16,6 +16,7 @@
 package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.DOMDocument;
 import com.google.code.ddom.dom.model.OptimizedParentNode;
 
 public class OptimizedParentNodeHelper {
@@ -23,7 +24,7 @@ public class OptimizedParentNodeHelper {
         Object content = node.getContent();
         ChildNode firstChild;
         if (content instanceof String) {
-            DocumentImpl document = node.getDocument();
+            DOMDocument document = node.getDocument();
             firstChild = document.getNodeFactory().createText(document, (String)content);
             // TODO: need to set parent
             node.internalSetFirstChild(firstChild);

@@ -15,9 +15,7 @@
  */
 package com.google.code.ddom.dom.model;
 
-import org.w3c.dom.Element;
-
-public interface DOMElement extends Element, ChildNode, BuilderTarget, OptimizedParentNode {
-    DOMAttribute internalGetFirstAttribute();
-    void internalSetFirstAttribute(DOMAttribute attr);
+public interface NamespaceDeclaration extends DOMAttribute {
+    String getDeclaredPrefix();
+    String getDeclaredNamespaceURI();
 }

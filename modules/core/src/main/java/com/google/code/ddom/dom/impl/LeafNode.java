@@ -22,14 +22,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.DOMDocument;
 import com.google.code.ddom.dom.model.ParentNode;
 
 public abstract class LeafNode extends NodeImpl implements ChildNode {
-    private DocumentImpl document;
+    private DOMDocument document;
     private ParentNode parent;
     private ChildNode nextSibling;
     
-    public LeafNode(DocumentImpl document) {
+    public LeafNode(DOMDocument document) {
         this.document = document;
     }
 
@@ -37,7 +38,7 @@ public abstract class LeafNode extends NodeImpl implements ChildNode {
         this.parent = parent;
     }
     
-    public final void internalSetDocument(DocumentImpl document) {
+    public final void internalSetDocument(DOMDocument document) {
         this.document = document;
     }
     
@@ -49,7 +50,7 @@ public abstract class LeafNode extends NodeImpl implements ChildNode {
         this.nextSibling = nextSibling;
     }
     
-    public final DocumentImpl getDocument() {
+    public final DOMDocument getDocument() {
         return document;
     }
 

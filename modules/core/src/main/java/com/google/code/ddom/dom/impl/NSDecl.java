@@ -20,10 +20,13 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-public class NSDecl extends DOMAttributeImpl {
+import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.dom.model.NamespaceDeclaration;
+
+public class NSDecl extends DOMAttributeImpl implements NamespaceDeclaration {
     private String declaredPrefix;
 
-    public NSDecl(DocumentImpl document, String prefix, String namespaceURI) {
+    public NSDecl(DOMDocument document, String prefix, String namespaceURI) {
         super(document, namespaceURI);
         this.declaredPrefix = prefix;
     }

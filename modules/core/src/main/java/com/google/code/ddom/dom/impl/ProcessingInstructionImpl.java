@@ -17,13 +17,15 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
-import org.w3c.dom.ProcessingInstruction;
 
-public class ProcessingInstructionImpl extends LeafNode implements ProcessingInstruction {
+import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.dom.model.DOMProcessingInstruction;
+
+public class ProcessingInstructionImpl extends LeafNode implements DOMProcessingInstruction {
     private final String target;
     private String data;
 
-    public ProcessingInstructionImpl(DocumentImpl document, String target, String data) {
+    public ProcessingInstructionImpl(DOMDocument document, String target, String data) {
         super(document);
         this.target = target;
         this.data = data;
@@ -62,7 +64,7 @@ public class ProcessingInstructionImpl extends LeafNode implements ProcessingIns
     }
 
     public final Node cloneNode(boolean deep) {
-        DocumentImpl document = getDocument();
+        DOMDocument document = getDocument();
         return document.getNodeFactory().createProcessingInstruction(document, target, data);
     }
 }

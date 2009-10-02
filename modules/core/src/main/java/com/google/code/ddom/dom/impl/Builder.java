@@ -20,6 +20,7 @@ import com.google.code.ddom.dom.builder.PushParserListener;
 import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
 import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMDocument;
 import com.google.code.ddom.dom.model.DOMElement;
 import com.google.code.ddom.spi.parser.CharacterDataSource;
 import com.google.code.ddom.spi.parser.ElementBuilder;
@@ -29,13 +30,13 @@ import com.google.code.ddom.spi.parser.ParserWrapper;
 public class Builder extends PushParserListener implements ElementBuilder {
     private final ParserWrapper parser;
     private final NodeFactory nodeFactory;
-    private final DocumentImpl document;
+    private final DOMDocument document;
     private ParseException parseException;
     private BuilderTarget parent;
     private ChildNode lastSibling;
     private DOMAttribute lastAttribute;
 
-    public Builder(ParserWrapper parser, NodeFactory nodeFactory, DocumentImpl document, BuilderTarget target) {
+    public Builder(ParserWrapper parser, NodeFactory nodeFactory, DOMDocument document, BuilderTarget target) {
         this.parser = parser;
         this.nodeFactory = nodeFactory;
         this.document = document;

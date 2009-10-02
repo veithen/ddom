@@ -17,12 +17,13 @@ package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.DOMDocument;
 import com.google.code.ddom.dom.model.ParentNode;
 
 public class ChildNodeHelper {
     public static ChildNode getNextSibling(ChildNode node) {
         ParentNode parent = node.getParentNode();
-        DocumentImpl document = node.getDocument();
+        DOMDocument document = node.getDocument();
         if (parent instanceof BuilderTarget) {
             ChildNode nextSibling;
             while ((nextSibling = node.internalGetNextSibling()) == null && !((BuilderTarget)parent).isComplete()) {

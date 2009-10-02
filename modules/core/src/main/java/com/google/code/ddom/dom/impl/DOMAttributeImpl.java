@@ -23,11 +23,14 @@ import org.w3c.dom.TypeInfo;
 
 import com.google.code.ddom.dom.model.ChildNode;
 import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMDocument;
 import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.dom.model.DOMEntityReference;
+import com.google.code.ddom.dom.model.DOMText;
 
 public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttribute {
     /**
-     * The owner of the attribute. This is either a {@link DocumentImpl} if the attribute is not linked
+     * The owner of the attribute. This is either a {@link DOMDocument} if the attribute is not linked
      * to an element, or an {@link DOMElement} if the attribute has been added to an element.
      */
     private Object owner;
@@ -35,7 +38,7 @@ public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttr
     private Object value;
     private DOMAttribute nextAttribute;
 
-    public DOMAttributeImpl(DocumentImpl document, String value) {
+    public DOMAttributeImpl(DOMDocument document, String value) {
         owner = document;
         this.value = value;
     }
@@ -67,7 +70,7 @@ public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttr
 
     @Override
     protected final void validateChildType(ChildNode newChild) {
-        if (!(newChild instanceof TextImpl || newChild instanceof EntityReferenceImpl)) {
+        if (!(newChild instanceof DOMText || newChild instanceof DOMEntityReference)) {
             throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         }
     }
@@ -93,14 +96,14 @@ public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttr
     }
     
     public final DOMElement getOwnerElement() {
-        return owner instanceof ElementImpl ? (ElementImpl)owner : null;
+        return owner instanceof DOMElement ? (DOMElement)owner : null;
     }
 
-    public final DocumentImpl getDocument() {
-        if (owner instanceof DocumentImpl) {
-            return (DocumentImpl)owner;
+    public final DOMDocument getDocument() {
+        if (owner instanceof DOMDocument) {
+            return (DOMDocument)owner;
         } else {
-            return ((ElementImpl)owner).getDocument();
+            return ((DOMElement)owner).getDocument();
         }
     }
 

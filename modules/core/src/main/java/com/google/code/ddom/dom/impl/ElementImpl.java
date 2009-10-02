@@ -26,6 +26,7 @@ import org.w3c.dom.TypeInfo;
 
 import com.google.code.ddom.dom.model.ChildNode;
 import com.google.code.ddom.dom.model.DOMAttribute;
+import com.google.code.ddom.dom.model.DOMDocument;
 import com.google.code.ddom.dom.model.DOMElement;
 import com.google.code.ddom.dom.model.ParentNode;
 import com.google.code.ddom.dom.model.TypedAttribute;
@@ -102,7 +103,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     private static final int ATTR_DOM2 = 2;
     private static final int ATTR_NSDECL = 3;
     
-    private final DocumentImpl document;
+    private final DOMDocument document;
     private Object content;
     private boolean complete;
     private int children;
@@ -110,7 +111,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     private ChildNode nextSibling;
     private DOMAttribute firstAttribute;
 
-    public ElementImpl(DocumentImpl document, boolean complete) {
+    public ElementImpl(DOMDocument document, boolean complete) {
         this.document = document;
         this.complete = complete;
     }
@@ -176,7 +177,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         firstAttribute = attr;
     }
 
-    public final DocumentImpl getDocument() {
+    public final DOMDocument getDocument() {
         return document;
     }
 
@@ -312,7 +313,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
             attr = attr.internalGetNextAttribute();
         }
         if (attr == null) {
-            DocumentImpl document = getDocument();
+            DOMDocument document = getDocument();
             NodeFactory factory = document.getNodeFactory();
             DOMAttribute newAttr;
             switch (mode) {

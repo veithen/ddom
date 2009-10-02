@@ -24,6 +24,7 @@ import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
+import com.google.code.ddom.dom.model.DOMDocumentFragment;
 import com.google.code.ddom.dom.model.ParentNode;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementLocalNameFilterIterator;
@@ -190,8 +191,8 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
             ChildNode firstNodeToInsert;
             ChildNode lastNodeToInsert;
             int delta; // The difference in number of children before and after the operation
-            if (newChild instanceof DocumentFragmentImpl) {
-                DocumentFragmentImpl fragment = (DocumentFragmentImpl)newChild;
+            if (newChild instanceof DOMDocumentFragment) {
+                DOMDocumentFragment fragment = (DOMDocumentFragment)newChild;
                 firstNodeToInsert = fragment.getFirstChild();
                 lastNodeToInsert = null;
                 for (ChildNode node = firstNodeToInsert; node != null; node = node.getNextSibling()) {
