@@ -19,6 +19,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -55,7 +58,7 @@ public class InvocationCounter {
     /**
      * Create a new proxy. Every invocation of a method on this proxy increases the invocation count
      * by one unit. If the invocation results in an exception, then the exception counter is also
-     * incremented.
+     * incremented. The returned proxy implements all interfaces of the target instance.
      * 
      * @param <T> the interface type
      * @param iface the interface type
@@ -63,10 +66,14 @@ public class InvocationCounter {
      * @return the proxy instance
      */
     public <T> T createProxy(Class<T> iface, T target) {
-        // TODO: probably the proxy should implement ALL interfaces of the target object, not only the one the caller is interested in
-        // TODO: add a note about this to the Javadoc
+        Set<Class> ifaces = new HashSet<Class>();
+        Class clazz = target.getClass();
+        do {
+            ifaces.addAll(Arrays.asList(clazz.getInterfaces()));
+            clazz = clazz.getSuperclass();
+        } while (clazz != null);
         return iface.cast(Proxy.newProxyInstance(InvocationCounter.class.getClassLoader(),
-                new Class<?>[] { iface }, new InvocationHandlerImpl(target)));
+                ifaces.toArray(new Class[ifaces.size()]), new InvocationHandlerImpl(target)));
     }
 
     /**
