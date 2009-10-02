@@ -18,7 +18,7 @@ package com.google.code.ddom.stax;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.spi.parser.ParseException;
 import com.google.code.ddom.spi.parser.ParserListener;
 import com.google.code.ddom.spi.parser.ParserWrapper;
 
@@ -31,11 +31,11 @@ public class StAXParserWrapper implements ParserWrapper {
         event = new XMLStreamReaderEvent(reader);
     }
 
-    public void proceed(ParserListener listener) throws DeferredParsingException {
+    public void proceed(ParserListener listener) throws ParseException {
         try {
             reader.next();
         } catch (XMLStreamException ex) {
-            throw new DeferredParsingException("Parse error", ex);
+            throw new ParseException(ex);
         }
         listener.newEvent(event);
     }

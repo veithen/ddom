@@ -20,9 +20,9 @@ public interface ParserListener {
     ElementBuilder newElement(String tagName);
     ElementBuilder newElement(String namespaceURI, String localName, String prefix);
     void newProcessingInstruction(String target, String data);
-    void newText(String data);
-    void newComment(String data);
-    void newCDATASection(String data);
+    void newText(CharacterDataSource data);
+    void newComment(CharacterDataSource data);
+    void newCDATASection(CharacterDataSource data);
     void newEntityReference(String name);
     
     /**

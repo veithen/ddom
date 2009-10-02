@@ -15,14 +15,21 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface ParserWrapper {
-    /**
-     * 
-     * 
-     * Must result in one or more calls to the {@link Consumer}.
-     * 
-     * @param listener
-     * @throws ParseException
-     */
-    void proceed(ParserListener listener) throws ParseException;
+public class ParseException extends Exception {
+    private static final long serialVersionUID = 3672004958899510615L;
+
+    public ParseException() {
+    }
+
+    public ParseException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ParseException(String message) {
+        super(message);
+    }
+
+    public ParseException(Throwable cause) {
+        super(cause);
+    }
 }

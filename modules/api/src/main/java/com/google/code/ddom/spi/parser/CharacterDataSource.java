@@ -15,14 +15,7 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface ParserWrapper {
-    /**
-     * 
-     * 
-     * Must result in one or more calls to the {@link Consumer}.
-     * 
-     * @param listener
-     * @throws ParseException
-     */
-    void proceed(ParserListener listener) throws ParseException;
+public interface CharacterDataSource {
+    // To be completed with other methods
+    String getString() throws ParseException;
 }

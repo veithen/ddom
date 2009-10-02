@@ -39,16 +39,16 @@ public abstract class PushParserListener implements ParserListener {
                 break;
             case Event.CHARACTERS:
             case Event.SPACE:
-                newText(event.getText());
+                newText(event.getCharacterDataSource());
                 break;
             case Event.CDATA:
-                newCDATASection(event.getText());
+                newCDATASection(event.getCharacterDataSource());
                 break;
             case Event.ENTITY_REFERENCE:
-                newEntityReference(event.getText());
+                newEntityReference(event.getLocalName());
                 break;
             case Event.COMMENT:
-                newComment(event.getText());
+                newComment(event.getCharacterDataSource());
                 break;
             default:
                 throw new RuntimeException("Unexpected event " + event.getEventType()); // TODO

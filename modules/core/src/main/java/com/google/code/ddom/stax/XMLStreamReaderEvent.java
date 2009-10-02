@@ -20,10 +20,11 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.spi.parser.CharacterDataSource;
 import com.google.code.ddom.spi.parser.Event;
+import com.google.code.ddom.spi.parser.ParseException;
 
-public class XMLStreamReaderEvent implements Event {
+public class XMLStreamReaderEvent implements Event, CharacterDataSource {
     private final XMLStreamReader reader;
     private final DTDInfo dtdInfo;
     private final boolean parserIsNamespaceAware;
@@ -98,7 +99,8 @@ public class XMLStreamReaderEvent implements Event {
     }
 
     public String getLocalName() {
-        return reader.getLocalName();
+        // TODO: maybe define a separate method for entity reference name?
+        return reader.getEventType() == XMLStreamReader.ENTITY_REFERENCE ? reader.getText() : reader.getLocalName();
     }
 
     public String getNamespacePrefix(int index) {
@@ -125,13 +127,16 @@ public class XMLStreamReaderEvent implements Event {
         return emptyToNull(reader.getPrefix());
     }
 
-    public String getText() {
+    public CharacterDataSource getCharacterDataSource() {
+        return this;
+    }
+
+    public String getString() throws ParseException {
         try {
             // Some StAX implementations may throw a RuntimeException here if an I/O error occurs
             return reader.getText();
         } catch (RuntimeException ex) {
-            // TODO: we need to document somewhere that we can this type of exception (or maybe define a checked exception?)
-            throw new DeferredParsingException("Parse error", ex);
+            throw new ParseException("Exception while reading character data", ex);
         }
     }
 

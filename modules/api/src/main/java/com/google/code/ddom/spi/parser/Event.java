@@ -61,7 +61,7 @@ public interface Event {
 
     String getPITarget();
 
-    String getText();
+    CharacterDataSource getCharacterDataSource();
 
     String getDTDPublicId();
 

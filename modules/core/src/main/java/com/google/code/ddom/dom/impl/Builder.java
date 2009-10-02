@@ -21,14 +21,16 @@ import com.google.code.ddom.dom.model.BuilderTarget;
 import com.google.code.ddom.dom.model.ChildNode;
 import com.google.code.ddom.dom.model.DOMAttribute;
 import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.spi.parser.CharacterDataSource;
 import com.google.code.ddom.spi.parser.ElementBuilder;
+import com.google.code.ddom.spi.parser.ParseException;
 import com.google.code.ddom.spi.parser.ParserWrapper;
 
 public class Builder extends PushParserListener implements ElementBuilder {
     private final ParserWrapper parser;
     private final NodeFactory nodeFactory;
     private final DocumentImpl document;
-    private boolean parseError;
+    private ParseException parseException;
     private BuilderTarget parent;
     private ChildNode lastSibling;
     private DOMAttribute lastAttribute;
@@ -41,15 +43,15 @@ public class Builder extends PushParserListener implements ElementBuilder {
     }
 
     public final void next() throws DeferredParsingException {
-        if (parseError) {
-            // TODO: should we recover somehow the original parser exception? (or maybe we should update the state of the incomplete nodes to reflect the parse error?)
-            throw new DeferredParsingException("Trying to read from a parser that has already thrown an exception", null);
+        if (parseException == null) {
+            try {
+                parser.proceed(this);
+            } catch (ParseException ex) {
+                parseException = ex;
+            }
         }
-        try {
-            parser.proceed(this);
-        } catch (DeferredParsingException ex) {
-            parseError = true;
-            throw ex;
+        if (parseException != null) {
+            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
         }
     }
 
@@ -83,16 +85,31 @@ public class Builder extends PushParserListener implements ElementBuilder {
         appendNode(nodeFactory.createProcessingInstruction(document, target, data));
     }
     
-    public final void newText(String data) {
-        appendNode(nodeFactory.createText(document, data));
+    public final void newText(CharacterDataSource data) {
+        try {
+            appendNode(nodeFactory.createText(document, data.getString()));
+        } catch (ParseException ex) {
+            parseException = ex;
+            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        }
     }
     
-    public final void newComment(String data) {
-        appendNode(nodeFactory.createComment(document, data));
+    public final void newComment(CharacterDataSource data) {
+        try {
+            appendNode(nodeFactory.createComment(document, data.getString()));
+        } catch (ParseException ex) {
+            parseException = ex;
+            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        }
     }
     
-    public final void newCDATASection(String data) {
-        appendNode(nodeFactory.createCDATASection(document, data));
+    public final void newCDATASection(CharacterDataSource data) {
+        try {
+            appendNode(nodeFactory.createCDATASection(document, data.getString()));
+        } catch (ParseException ex) {
+            parseException = ex;
+            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        }
     }
     
     public final void newEntityReference(String name) {
