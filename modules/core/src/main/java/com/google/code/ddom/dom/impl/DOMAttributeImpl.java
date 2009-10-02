@@ -21,12 +21,12 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.dom.model.ChildNode;
-import com.google.code.ddom.dom.model.DOMAttribute;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMElement;
-import com.google.code.ddom.dom.model.DOMEntityReference;
-import com.google.code.ddom.dom.model.DOMText;
+import com.google.code.ddom.spi.model.ChildNode;
+import com.google.code.ddom.spi.model.DOMAttribute;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.DOMEntityReference;
+import com.google.code.ddom.spi.model.DOMText;
 
 public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttribute {
     /**

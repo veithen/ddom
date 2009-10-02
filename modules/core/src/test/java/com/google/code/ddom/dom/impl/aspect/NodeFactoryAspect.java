@@ -24,11 +24,11 @@ import org.aspectj.lang.annotation.Before;
 public class NodeFactoryAspect {
     /**
      * Advice that checks that all nodes are created using a
-     * {@link com.google.code.ddom.dom.impl.NodeFactory} implementation.
+     * {@link com.google.code.ddom.spi.model.NodeFactory} implementation.
      */
     // TODO: for the moment we create DocumentImpl instances without going through a NodeFactory; this should be changed also
     @Before("execution(com.google.code.ddom.dom.impl.NodeImpl.new(..))" +
-    		" && !cflow(execution(* com.google.code.ddom.dom.impl.NodeFactory+.*(..)))" +
+    		" && !cflow(execution(* com.google.code.ddom.spi.model.NodeFactory+.*(..)))" +
     		" && !cflow(call(com.google.code.ddom.dom.impl.DocumentImpl.new(..)))")
     public void nodeCreatedOutsideFactory() {
         Assert.fail("Node instance created by code not in a NodeFactory implementation!");

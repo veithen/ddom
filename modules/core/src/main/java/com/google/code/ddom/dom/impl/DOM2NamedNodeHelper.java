@@ -19,7 +19,7 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.dom.model.DOM2NamedNode;
+import com.google.code.ddom.spi.model.DOM2NamedNode;
 
 public class DOM2NamedNodeHelper {
     public static void setPrefix(DOM2NamedNode node, String prefix) throws DOMException {

@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-public interface DOM2TypedAttribute extends TypedAttribute, DOM2NamedNode {
-
+public interface OptimizedParentNode extends ParentNode {
+    /**
+     * 
+     * either a String or a ChildNode
+     * 
+     * @return
+     */
+    Object getContent();
 }

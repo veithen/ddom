@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
 
-public interface ParentNode extends DOMNode {
-    void internalSetFirstChild(ChildNode child);
-    void notifyChildrenModified(int delta);
-    ChildNode getFirstChild();
-    ChildNode getLastChild();
+public interface DOM1NamedNode extends DOMNode {
+
 }

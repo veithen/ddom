@@ -17,11 +17,12 @@ package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.dom.builder.PushParserListener;
-import com.google.code.ddom.dom.model.BuilderTarget;
-import com.google.code.ddom.dom.model.ChildNode;
-import com.google.code.ddom.dom.model.DOMAttribute;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.spi.model.BuilderTarget;
+import com.google.code.ddom.spi.model.ChildNode;
+import com.google.code.ddom.spi.model.DOMAttribute;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.parser.CharacterDataSource;
 import com.google.code.ddom.spi.parser.ElementBuilder;
 import com.google.code.ddom.spi.parser.ParseException;

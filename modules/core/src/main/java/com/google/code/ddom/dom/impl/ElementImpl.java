@@ -24,12 +24,13 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.dom.model.ChildNode;
-import com.google.code.ddom.dom.model.DOMAttribute;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMElement;
-import com.google.code.ddom.dom.model.ParentNode;
-import com.google.code.ddom.dom.model.TypedAttribute;
+import com.google.code.ddom.spi.model.ChildNode;
+import com.google.code.ddom.spi.model.DOMAttribute;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.NodeFactory;
+import com.google.code.ddom.spi.model.ParentNode;
+import com.google.code.ddom.spi.model.TypedAttribute;
 
 public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     private class Attributes implements NamedNodeMap {

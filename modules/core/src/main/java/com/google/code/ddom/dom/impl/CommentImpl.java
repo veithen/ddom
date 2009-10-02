@@ -17,8 +17,8 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.dom.model.DOMComment;
-import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMComment;
+import com.google.code.ddom.spi.model.DOMDocument;
 
 public class CommentImpl extends CharacterDataImpl implements DOMComment {
     public CommentImpl(DOMDocument document, String data) {

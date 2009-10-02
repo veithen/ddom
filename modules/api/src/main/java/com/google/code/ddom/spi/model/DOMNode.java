@@ -13,10 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Node;
 
-public interface DOMDocumentFragment extends DocumentFragment, ParentNode {
-    int getLength();
+public interface DOMNode extends Node {
+    /**
+     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
+     * this method will never return <code>null</code>.
+     * 
+     * @return the document
+     */
+    DOMDocument getDocument();
+    
+    CharSequence collectTextContent(CharSequence appendTo);
 }

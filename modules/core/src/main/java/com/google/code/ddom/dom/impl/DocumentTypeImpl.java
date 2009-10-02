@@ -19,8 +19,8 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMDocumentType;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMDocumentType;
 
 public class DocumentTypeImpl extends LeafNode implements DOMDocumentType {
     private final String rootName;

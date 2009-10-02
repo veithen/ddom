@@ -18,7 +18,7 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMDocument;
 
 public abstract class CharacterDataImpl extends LeafNode implements CharacterData {
     private String data;

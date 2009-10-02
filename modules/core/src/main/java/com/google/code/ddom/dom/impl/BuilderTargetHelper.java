@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.model.BuilderTarget;
-import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.spi.model.BuilderTarget;
+import com.google.code.ddom.spi.model.DOMDocument;
 
 public class BuilderTargetHelper {
     public static void build(BuilderTarget node) {

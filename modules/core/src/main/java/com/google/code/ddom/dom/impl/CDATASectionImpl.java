@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.model.DOMCDATASection;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.TextNode;
+import com.google.code.ddom.spi.model.DOMCDATASection;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.TextNode;
 
 public class CDATASectionImpl extends TextNodeImpl implements DOMCDATASection {
     public CDATASectionImpl(DOMDocument document, String data) {

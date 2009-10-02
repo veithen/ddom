@@ -13,21 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.dom.model.DOM1Element;
-import com.google.code.ddom.dom.model.DOM1TypedAttribute;
-import com.google.code.ddom.dom.model.DOM2Element;
-import com.google.code.ddom.dom.model.DOM2TypedAttribute;
-import com.google.code.ddom.dom.model.DOMCDATASection;
-import com.google.code.ddom.dom.model.DOMComment;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMDocumentFragment;
-import com.google.code.ddom.dom.model.DOMDocumentType;
-import com.google.code.ddom.dom.model.DOMEntityReference;
-import com.google.code.ddom.dom.model.DOMProcessingInstruction;
-import com.google.code.ddom.dom.model.DOMText;
-import com.google.code.ddom.dom.model.NamespaceDeclaration;
 
 public interface NodeFactory {
     /**

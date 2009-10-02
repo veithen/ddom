@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.TypedAttribute;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.TypedAttribute;
 
 public abstract class TypedAttributeImpl extends DOMAttributeImpl implements TypedAttribute {
     private String type;

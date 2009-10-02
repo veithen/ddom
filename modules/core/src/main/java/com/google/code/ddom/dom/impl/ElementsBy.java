@@ -22,7 +22,7 @@ import java.util.List;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMDocument;
 
 public abstract class ElementsBy implements NodeList {
     private final DOMDocument document;

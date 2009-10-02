@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.DocumentType;
+import com.google.code.ddom.DeferredNode;
 
-public interface DOMDocumentType extends DocumentType, ChildNode {
-    // TODO: check if this is actually needed
-    void internalSetDocument(DOMDocument document);
+public interface BuilderTarget extends ParentNode, DeferredNode {
+    void internalSetComplete();
 }

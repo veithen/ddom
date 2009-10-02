@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-public interface DOM2Element extends DOMElement, DOM2NamedNode {
 
+public interface DOM2NamedNode extends DOMNode {
+    void internalSetPrefix(String prefix);
 }

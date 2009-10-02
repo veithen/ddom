@@ -31,7 +31,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.DeferredParsingException;
-import com.google.code.ddom.dom.model.DOM1Element;
+import com.google.code.ddom.spi.model.DOM1Element;
 import com.google.code.ddom.stax.StAXSource;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;

@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Attr;
+import org.w3c.dom.ProcessingInstruction;
 
-public interface DOMAttribute extends Attr, ParentNode, OptimizedParentNode {
-    DOMAttribute internalGetNextAttribute();
-    void internalSetNextAttribute(DOMAttribute attr);
-    void internalSetOwnerElement(DOMElement newOwner);
+public interface DOMProcessingInstruction extends ProcessingInstruction, ChildNode {
 
-    DOMElement getOwnerElement();
 }

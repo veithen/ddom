@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Text;
 
-public interface TextNode extends Text, ChildNode {
-
+public interface ChildNode extends DOMNode {
+    ParentNode getParentNode();
+    ChildNode getNextSibling();
+    ChildNode getPreviousSibling();
+    void internalSetParent(ParentNode parent);
+    ChildNode internalGetNextSibling();
+    void internalSetNextSibling(ChildNode nextSibling);
 }

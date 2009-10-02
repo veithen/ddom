@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.EntityReference;
-
-public interface DOMEntityReference extends EntityReference, ChildNode {
+public interface DOM1Element extends DOMElement, DOM1NamedNode {
 
 }

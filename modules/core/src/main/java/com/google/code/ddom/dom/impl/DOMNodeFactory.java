@@ -15,19 +15,20 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.model.DOM1Element;
-import com.google.code.ddom.dom.model.DOM1TypedAttribute;
-import com.google.code.ddom.dom.model.DOM2Element;
-import com.google.code.ddom.dom.model.DOM2TypedAttribute;
-import com.google.code.ddom.dom.model.DOMCDATASection;
-import com.google.code.ddom.dom.model.DOMComment;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMDocumentFragment;
-import com.google.code.ddom.dom.model.DOMDocumentType;
-import com.google.code.ddom.dom.model.DOMEntityReference;
-import com.google.code.ddom.dom.model.DOMProcessingInstruction;
-import com.google.code.ddom.dom.model.DOMText;
-import com.google.code.ddom.dom.model.NamespaceDeclaration;
+import com.google.code.ddom.spi.model.DOM1Element;
+import com.google.code.ddom.spi.model.DOM1TypedAttribute;
+import com.google.code.ddom.spi.model.DOM2Element;
+import com.google.code.ddom.spi.model.DOM2TypedAttribute;
+import com.google.code.ddom.spi.model.DOMCDATASection;
+import com.google.code.ddom.spi.model.DOMComment;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMDocumentFragment;
+import com.google.code.ddom.spi.model.DOMDocumentType;
+import com.google.code.ddom.spi.model.DOMEntityReference;
+import com.google.code.ddom.spi.model.DOMProcessingInstruction;
+import com.google.code.ddom.spi.model.DOMText;
+import com.google.code.ddom.spi.model.NamespaceDeclaration;
+import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DOMNodeFactory implements NodeFactory {
     public DOMDocumentType createDocumentType(DOMDocument document, String rootName, String publicId, String systemId) {

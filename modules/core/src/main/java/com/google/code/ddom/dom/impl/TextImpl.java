@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMText;
-import com.google.code.ddom.dom.model.TextNode;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMText;
+import com.google.code.ddom.spi.model.TextNode;
 
 public class TextImpl extends TextNodeImpl implements DOMText {
     public TextImpl(DOMDocument document, String data) {

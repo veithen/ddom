@@ -18,8 +18,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMProcessingInstruction;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMProcessingInstruction;
 
 public class ProcessingInstructionImpl extends LeafNode implements DOMProcessingInstruction {
     private final String target;

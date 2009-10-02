@@ -20,8 +20,8 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.NamespaceDeclaration;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.NamespaceDeclaration;
 
 public class NSDecl extends DOMAttributeImpl implements NamespaceDeclaration {
     private String declaredPrefix;

@@ -15,9 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.model.DOM2Element;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.spi.model.DOM2Element;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DOM2ElementImpl extends ElementImpl implements DOM2Element {
     private final String namespaceURI;

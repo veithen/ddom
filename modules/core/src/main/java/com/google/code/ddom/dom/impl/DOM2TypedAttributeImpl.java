@@ -17,8 +17,8 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.dom.model.DOM2TypedAttribute;
-import com.google.code.ddom.dom.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOM2TypedAttribute;
+import com.google.code.ddom.spi.model.DOMDocument;
 
 public class DOM2TypedAttributeImpl extends TypedAttributeImpl implements DOM2TypedAttribute {
     private final String namespaceURI;

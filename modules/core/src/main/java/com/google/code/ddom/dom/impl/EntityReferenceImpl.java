@@ -18,8 +18,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMEntityReference;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMEntityReference;
 
 public class EntityReferenceImpl extends LeafNode implements DOMEntityReference {
     private String name;

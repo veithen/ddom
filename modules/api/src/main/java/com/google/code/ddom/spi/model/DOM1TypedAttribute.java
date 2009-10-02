@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.DeferredNode;
+public interface DOM1TypedAttribute extends TypedAttribute, DOM1NamedNode {
 
-public interface BuilderTarget extends ParentNode, DeferredNode {
-    void internalSetComplete();
 }

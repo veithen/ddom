@@ -17,9 +17,10 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.dom.model.DOM1Element;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.DOMElement;
+import com.google.code.ddom.spi.model.DOM1Element;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DOM1ElementImpl extends ElementImpl implements DOM1Element {
     private final String tagName;

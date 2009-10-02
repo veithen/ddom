@@ -19,7 +19,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.dom.model.DOMNode;
+import com.google.code.ddom.spi.model.DOMNode;
 
 public abstract class NodeImpl implements DOMNode {
     protected final void validateOwnerDocument(Node node) {

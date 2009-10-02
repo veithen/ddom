@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.model;
+package com.google.code.ddom.spi.model;
 
+import org.w3c.dom.DocumentFragment;
 
-public interface DOM2NamedNode extends DOMNode {
-    void internalSetPrefix(String prefix);
+public interface DOMDocumentFragment extends DocumentFragment, ParentNode {
+    int getLength();
 }

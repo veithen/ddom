@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.dom.model.BuilderTarget;
-import com.google.code.ddom.dom.model.ChildNode;
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.ParentNode;
+import com.google.code.ddom.spi.model.BuilderTarget;
+import com.google.code.ddom.spi.model.ChildNode;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.ParentNode;
 
 public class ChildNodeHelper {
     public static ChildNode getNextSibling(ChildNode node) {

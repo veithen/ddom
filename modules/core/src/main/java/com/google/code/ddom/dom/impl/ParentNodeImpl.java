@@ -22,10 +22,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.dom.model.BuilderTarget;
-import com.google.code.ddom.dom.model.ChildNode;
-import com.google.code.ddom.dom.model.DOMDocumentFragment;
-import com.google.code.ddom.dom.model.ParentNode;
+import com.google.code.ddom.spi.model.BuilderTarget;
+import com.google.code.ddom.spi.model.ChildNode;
+import com.google.code.ddom.spi.model.DOMDocumentFragment;
+import com.google.code.ddom.spi.model.ParentNode;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementLocalNameFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementNameFilterIterator;

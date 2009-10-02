@@ -19,9 +19,9 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.dom.model.DOMDocument;
-import com.google.code.ddom.dom.model.ParentNode;
-import com.google.code.ddom.dom.model.TextNode;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.ParentNode;
+import com.google.code.ddom.spi.model.TextNode;
 
 public abstract class TextNodeImpl extends CharacterDataImpl implements TextNode {
     public TextNodeImpl(DOMDocument document, String data) {
