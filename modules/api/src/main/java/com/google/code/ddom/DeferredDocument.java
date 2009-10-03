@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DeferredDocument;
-import com.google.code.ddom.DeferredParsingException;
-
-public interface DOMDocument extends Document, DeferredDocument, BuilderTarget {
-    NodeFactory getNodeFactory();
-    void next() throws DeferredParsingException;
-    int getStructureVersion();
+public interface DeferredDocument extends Document, DeferredNode {
+    void dispose();
 }

@@ -155,4 +155,8 @@ public class Builder extends PushParserListener implements ElementBuilder {
         // TODO: get rid of cast here
         parent = (BuilderTarget)parent.getParentNode();
     }
+
+    public final void dispose() {
+        parser.dispose();
+    }
 }

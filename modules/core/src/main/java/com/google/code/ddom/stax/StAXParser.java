@@ -39,4 +39,13 @@ public class StAXParser implements Parser {
         }
         listener.newEvent(event);
     }
+
+    public void dispose() {
+        // TODO: this doesn't close the stream
+        try {
+            reader.close();
+        } catch (XMLStreamException ex) {
+            // Ignore this; we can't do more.
+        }
+    }
 }

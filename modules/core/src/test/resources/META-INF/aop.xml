@@ -17,8 +17,11 @@
 <aspectj>
     <aspects>
         <aspect name="com.google.code.ddom.dom.impl.aspect.NodeFactoryAspect"/>
+        <aspect name="com.google.code.ddom.dom.impl.aspect.StAXResourcesCheckAspect"/>
     </aspects>
     <weaver options="-showWeaveInfo">
-        <include within="com.google.code.ddom.dom.impl..*"/>
+        <include within="com.google.code.ddom..*"/>
+        <include within="org.junit..*"/>
+        <include within="org.w3c.domts..*"/>
     </weaver>
 </aspectj>

@@ -46,10 +46,9 @@ import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     private final NodeFactory nodeFactory;
-    private final Builder builder;
+    private Builder builder;
     private DOMImplementationImpl domImplementation;
     private ChildNode firstChild;
-    private boolean complete; // TODO: maybe we can replace this by builder == null?
     private int children;
     private String inputEncoding;
     private String xmlEncoding;
@@ -59,7 +58,6 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
         this.nodeFactory = nodeFactory;
         if (parser == null) {
             builder = null;
-            complete = true;
         } else {
             builder = new Builder(parser, nodeFactory, this, this);
         }
@@ -158,15 +156,22 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     }
 
     public final boolean isComplete() {
-        return complete;
+        return builder == null;
     }
     
     public final void build() {
         BuilderTargetHelper.build(this);
     }
     
+    public final void dispose() {
+        if (builder != null) {
+            builder.dispose();
+        }
+    }
+
     public final void internalSetComplete() {
-        complete = true;
+        builder.dispose();
+        builder = null;
     }
     
     public final void internalSetFirstChild(ChildNode child) {
@@ -174,7 +179,7 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     }
 
     public final ChildNode getFirstChild() {
-        if (firstChild == null && !complete) {
+        if (firstChild == null && !isComplete()) {
             next();
         }
         return firstChild;

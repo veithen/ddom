@@ -25,4 +25,6 @@ public interface Parser {
      * @throws ParseException
      */
     void proceed(ParserListener listener) throws ParseException;
+    
+    void dispose();
 }
