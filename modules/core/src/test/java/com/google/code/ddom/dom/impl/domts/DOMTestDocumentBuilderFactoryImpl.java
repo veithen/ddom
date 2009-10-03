@@ -30,11 +30,9 @@ import org.w3c.domts.DOMTestIncompatibleException;
 import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
+import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
 import com.google.code.ddom.dom.impl.DOMNodeFactory;
-import com.google.code.ddom.dom.impl.DocumentImpl;
-import com.google.code.ddom.stax.StAXSource;
-
 
 public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFactory {
     private interface Strategy {
@@ -92,7 +90,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
     public Document load(URL url) throws DOMTestLoadException {
         // TODO: need to cleanup somehow
         try {
-            return new DocumentImpl(new StAXSource(factory.createXMLStreamReader(new StreamSource(url.toExternalForm()))));
+            return DeferredDocumentFactory.newInstance().parse("dom", factory.createXMLStreamReader(new StreamSource(url.toExternalForm())));
         } catch (XMLStreamException ex) {
             throw new DOMTestLoadException(ex);
         }
@@ -100,6 +98,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
 
     @Override
     public DOMImplementation getDOMImplementation() {
+        // TODO: check this
         return new DOMImplementationImpl(new DOMNodeFactory());
     }
 

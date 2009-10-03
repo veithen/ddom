@@ -17,29 +17,20 @@ package com.google.code.ddom.dom.impl;
 
 import java.io.StringReader;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.dom.impl.DocumentImpl;
-import com.google.code.ddom.stax.StAXSource;
+import com.google.code.ddom.DeferredDocumentFactory;
 
 public class DDOMUtilImpl implements DOMUtilImpl {
     public static final DDOMUtilImpl INSTANCE = new DDOMUtilImpl();
     
     public Document newDocument() {
-        return new DocumentImpl(null);
+        return DeferredDocumentFactory.newInstance().newDocument("dom");
     }
 
     public Document parse(boolean namespaceAware, String xml) {
         // TODO: need to cleanup somehow
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
-        try {
-            return new DocumentImpl(new StAXSource(factory.createXMLStreamReader(new StringReader(xml))));
-        } catch (XMLStreamException ex) {
-            throw new Error(ex);
-        }
+        // TODO: set namespaceAware flag
+        return DeferredDocumentFactory.newInstance().parse("dom", new StringReader(xml));
     }
 }

@@ -15,13 +15,8 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface Source {
-    /**
-     * 
-     * 
-     * may be destructive; in this case, must throw IllegalStateException when called more than once
-     * 
-     * @return
-     */
-    Parser getParser();
+import java.util.Map;
+
+public interface ParserProvider {
+    Parser getParser(Object source, Map<String,Object> properties) throws ParseException;
 }

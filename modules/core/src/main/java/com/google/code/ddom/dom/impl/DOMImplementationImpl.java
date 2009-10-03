@@ -20,6 +20,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
+import com.google.code.ddom.spi.model.DOMDocument;
 import com.google.code.ddom.spi.model.DOMDocumentType;
 import com.google.code.ddom.spi.model.NodeFactory;
 
@@ -31,8 +32,7 @@ public class DOMImplementationImpl implements DOMImplementation {
     }
     
     public Document createDocument(String namespaceURI, String qualifiedName, DocumentType doctype) throws DOMException {
-        // TODO: factory here!!!!
-        DocumentImpl document = new DocumentImpl(null);
+        DOMDocument document = nodeFactory.createDocument(null);
         if (doctype != null) {
             if (doctype.getOwnerDocument() == null) {
                 ((DOMDocumentType)doctype).internalSetDocument(document);

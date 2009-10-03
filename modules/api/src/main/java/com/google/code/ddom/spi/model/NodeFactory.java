@@ -15,8 +15,11 @@
  */
 package com.google.code.ddom.spi.model;
 
+import com.google.code.ddom.spi.parser.Parser;
 
 public interface NodeFactory {
+    DOMDocument createDocument(Parser parser);
+    
     /**
      * 
      * @param document may be <code>null</code> (if called by {@link org.w3c.dom.DOMImplementation#createDocumentType(String, String, String)})

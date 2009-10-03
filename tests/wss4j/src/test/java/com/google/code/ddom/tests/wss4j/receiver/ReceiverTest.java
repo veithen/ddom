@@ -19,7 +19,6 @@ import java.util.Vector;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
-import javax.xml.stream.XMLInputFactory;
 
 import junit.framework.Assert;
 
@@ -29,15 +28,12 @@ import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.dom.impl.DocumentImpl;
-import com.google.code.ddom.stax.StAXSource;
-
+import com.google.code.ddom.DeferredDocumentFactory;
 
 public class ReceiverTest {
     @Test
     public void testUsernameToken() throws Exception {
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        Document doc = new DocumentImpl(new StAXSource(factory.createXMLStreamReader(ReceiverTest.class.getResourceAsStream("UsernameToken.xml"))));
+        Document doc = DeferredDocumentFactory.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
         WSSecurityEngine engine = WSSecurityEngine.getInstance();
         CallbackHandler cb = new CallbackHandler() {
             public void handle(Callback[] callbacks) {

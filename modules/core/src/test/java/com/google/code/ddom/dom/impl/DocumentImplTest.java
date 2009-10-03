@@ -30,9 +30,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.spi.model.DOM1Element;
-import com.google.code.ddom.stax.StAXSource;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 
@@ -43,10 +43,11 @@ import com.google.code.ddom.utils.test.InvocationCounter;
 public class DocumentImplTest {
     @Test
     public void testNamespaceUnawareParsing() throws Exception {
+        // TODO: do this properly
         XMLInputFactory factory = XMLInputFactory.newInstance();
         factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<p:root xmlns:p='urn:ns'>"));
-        Document doc = new DocumentImpl(new StAXSource(reader));
+        Document doc = DeferredDocumentFactory.newInstance().parse("dom", reader);
         
         Element element = doc.getDocumentElement();
         Assert.assertTrue(element instanceof DOM1Element);
@@ -67,10 +68,11 @@ public class DocumentImplTest {
      */
     @Test
     public void testGracefulBehaviorAfterParseError() throws Exception {
+        // TODO: do this properly (we should not allow passing XMLStreamReader instances to DeferredDocumentFactory, because we don't have control over the properties)
         InvocationCounter cter = new InvocationCounter();
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<root>This is malformed"));
-        Document doc = new DocumentImpl(new StAXSource(cter.createProxy(XMLStreamReader.class, reader)));
+        Document doc = DeferredDocumentFactory.newInstance().parse("dom", cter.createProxy(XMLStreamReader.class, reader));
         
         // First loop over the document; this should give an exception
         try {

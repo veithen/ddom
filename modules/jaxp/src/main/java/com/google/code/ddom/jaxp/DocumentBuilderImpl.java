@@ -33,11 +33,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.dom.impl.CommentFilterStreamReader;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
 import com.google.code.ddom.dom.impl.DOMNodeFactory;
 import com.google.code.ddom.dom.impl.DocumentImpl;
-import com.google.code.ddom.stax.StAXSource;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private final boolean ignoreComments;
@@ -68,12 +68,14 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 
     @Override
     public Document newDocument() {
-        return new DocumentImpl(null);
+        // TODO: do this properly
+        return DeferredDocumentFactory.newInstance().newDocument("dom");
     }
 
     @Override
     public Document parse(InputSource is) throws SAXException, IOException {
         try {
+            // TODO: do this properly
             XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
             for (Map.Entry<String,Object> prop : xmlInputFactoryProperties.entrySet()) {
                 xmlInputFactory.setProperty(prop.getKey(), prop.getValue());
@@ -95,7 +97,8 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             }
             String encoding = reader.getEncoding();
             String xmlEncoding = reader.getCharacterEncodingScheme();
-            DocumentImpl document = new DocumentImpl(new StAXSource(reader));
+            // TODO: we should not refer to DocumentImpl here
+            DocumentImpl document = (DocumentImpl)DeferredDocumentFactory.newInstance().parse("dom", reader);
 //            DocumentImpl document = new DocumentImpl(domImplementation, omDocument/*, namespaceAware */);
             document.setDocumentURI(is.getSystemId());
             String inputEncoding = is.getEncoding();

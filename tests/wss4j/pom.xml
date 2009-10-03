@@ -30,8 +30,14 @@
     <dependencies>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-api</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-core</artifactId>
             <version>${pom.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.ws.security</groupId>

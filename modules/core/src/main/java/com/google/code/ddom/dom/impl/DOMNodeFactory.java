@@ -29,8 +29,13 @@ import com.google.code.ddom.spi.model.DOMProcessingInstruction;
 import com.google.code.ddom.spi.model.DOMText;
 import com.google.code.ddom.spi.model.NamespaceDeclaration;
 import com.google.code.ddom.spi.model.NodeFactory;
+import com.google.code.ddom.spi.parser.Parser;
 
 public class DOMNodeFactory implements NodeFactory {
+    public DOMDocument createDocument(Parser parser) {
+        return new DocumentImpl(this, parser);
+    }
+
     public DOMDocumentType createDocumentType(DOMDocument document, String rootName, String publicId, String systemId) {
         return new DocumentTypeImpl(document, rootName, publicId, systemId);
     }

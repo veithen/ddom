@@ -20,16 +20,15 @@ import junit.framework.Assert;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
+// TODO: implement an aspect that checks that all input streams are properly closed
 @Aspect
 public class NodeFactoryAspect {
     /**
      * Advice that checks that all nodes are created using a
      * {@link com.google.code.ddom.spi.model.NodeFactory} implementation.
      */
-    // TODO: for the moment we create DocumentImpl instances without going through a NodeFactory; this should be changed also
     @Before("execution(com.google.code.ddom.dom.impl.NodeImpl.new(..))" +
-    		" && !cflow(execution(* com.google.code.ddom.spi.model.NodeFactory+.*(..)))" +
-    		" && !cflow(call(com.google.code.ddom.dom.impl.DocumentImpl.new(..)))")
+    		" && !cflow(execution(* com.google.code.ddom.spi.model.NodeFactory+.*(..)))")
     public void nodeCreatedOutsideFactory() {
         Assert.fail("Node instance created by code not in a NodeFactory implementation!");
     }

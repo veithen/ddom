@@ -41,11 +41,11 @@ import com.google.code.ddom.spi.model.DOMAttribute;
 import com.google.code.ddom.spi.model.DOMDocument;
 import com.google.code.ddom.spi.model.DOMElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.Source;
+import com.google.code.ddom.spi.parser.Parser;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
-    private final NodeFactory nodeFactory = new DOMNodeFactory();
+    private final NodeFactory nodeFactory;
     private final Builder builder;
     private DOMImplementationImpl domImplementation;
     private ChildNode firstChild;
@@ -55,12 +55,13 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     private String xmlEncoding;
     private String documentURI;
 
-    public DocumentImpl(Source source) {
-        if (source == null) {
+    public DocumentImpl(NodeFactory nodeFactory, Parser parser) {
+        this.nodeFactory = nodeFactory;
+        if (parser == null) {
             builder = null;
             complete = true;
         } else {
-            builder = new Builder(source.getParser(), nodeFactory, this, this);
+            builder = new Builder(parser, nodeFactory, this, this);
         }
     }
 
