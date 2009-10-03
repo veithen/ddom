@@ -17,7 +17,7 @@ package com.google.code.ddom.stax;
 
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.spi.parser.ParserWrapper;
+import com.google.code.ddom.spi.parser.Parser;
 import com.google.code.ddom.spi.parser.Source;
 
 public class StAXSource implements Source {
@@ -28,10 +28,10 @@ public class StAXSource implements Source {
         this.reader = reader;
     }
 
-    public ParserWrapper getParser() {
+    public Parser getParser() {
         if (consumed) {
             throw new IllegalStateException("This source has already been consumed");
         }
-        return new StAXParserWrapper(reader);
+        return new StAXParser(reader);
     }
 }

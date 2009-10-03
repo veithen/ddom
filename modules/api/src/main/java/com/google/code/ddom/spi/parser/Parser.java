@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface ParserWrapper {
+public interface Parser {
     /**
      * 
      * 

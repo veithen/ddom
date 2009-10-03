@@ -23,5 +23,5 @@ public interface Source {
      * 
      * @return
      */
-    ParserWrapper getParser();
+    Parser getParser();
 }

@@ -20,13 +20,13 @@ import javax.xml.stream.XMLStreamReader;
 
 import com.google.code.ddom.spi.parser.ParseException;
 import com.google.code.ddom.spi.parser.ParserListener;
-import com.google.code.ddom.spi.parser.ParserWrapper;
+import com.google.code.ddom.spi.parser.Parser;
 
-public class StAXParserWrapper implements ParserWrapper {
+public class StAXParser implements Parser {
     private final XMLStreamReader reader;
     private final XMLStreamReaderEvent event;
 
-    public StAXParserWrapper(XMLStreamReader reader) {
+    public StAXParser(XMLStreamReader reader) {
         this.reader = reader;
         event = new XMLStreamReaderEvent(reader);
     }

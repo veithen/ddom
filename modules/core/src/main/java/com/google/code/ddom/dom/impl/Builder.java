@@ -26,10 +26,10 @@ import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.parser.CharacterDataSource;
 import com.google.code.ddom.spi.parser.ElementBuilder;
 import com.google.code.ddom.spi.parser.ParseException;
-import com.google.code.ddom.spi.parser.ParserWrapper;
+import com.google.code.ddom.spi.parser.Parser;
 
 public class Builder extends PushParserListener implements ElementBuilder {
-    private final ParserWrapper parser;
+    private final Parser parser;
     private final NodeFactory nodeFactory;
     private final DOMDocument document;
     private ParseException parseException;
@@ -37,7 +37,7 @@ public class Builder extends PushParserListener implements ElementBuilder {
     private ChildNode lastSibling;
     private DOMAttribute lastAttribute;
 
-    public Builder(ParserWrapper parser, NodeFactory nodeFactory, DOMDocument document, BuilderTarget target) {
+    public Builder(Parser parser, NodeFactory nodeFactory, DOMDocument document, BuilderTarget target) {
         this.parser = parser;
         this.nodeFactory = nodeFactory;
         this.document = document;
