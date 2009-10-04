@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.spi.parser.Parser;
+import com.google.code.ddom.spi.parser.Producer;
 
 public interface NodeFactory {
-    DOMDocument createDocument(Parser parser);
+    DOMDocument createDocument(Producer producer);
     
     /**
      * 

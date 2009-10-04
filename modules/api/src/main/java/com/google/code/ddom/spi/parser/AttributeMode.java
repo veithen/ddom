@@ -16,7 +16,7 @@
 package com.google.code.ddom.spi.parser;
 
 /**
- * Describes how attribute information items should be exchanged between the parser and the consumer.
+ * Describes how attribute information items should be exchanged between the producer and the consumer.
  *  
  * @author Andreas Veithen
  */

@@ -25,12 +25,12 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.spi.parser.ParseException;
-import com.google.code.ddom.spi.parser.Parser;
-import com.google.code.ddom.spi.parser.ParserProvider;
+import com.google.code.ddom.spi.parser.StreamException;
+import com.google.code.ddom.spi.parser.Producer;
+import com.google.code.ddom.spi.parser.StreamProvider;
 
-public class StAXParserProvider implements ParserProvider {
-    public Parser getParser(Object source, Map<String,Object> properties) throws ParseException {
+public class StAXStreamProvider implements StreamProvider {
+    public Producer getProducer(Object source, Map<String,Object> properties) throws StreamException {
         XMLStreamReader reader;
         try {
             if (source instanceof XMLStreamReader) {
@@ -58,7 +58,7 @@ public class StAXParserProvider implements ParserProvider {
                 reader = null;
             }
         } catch (XMLStreamException ex) {
-            throw new ParseException(ex);
+            throw new StreamException(ex);
         }
         if (reader != null) {
             return new StAXParser(reader);

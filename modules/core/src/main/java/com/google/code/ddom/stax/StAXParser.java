@@ -19,11 +19,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import com.google.code.ddom.spi.parser.AttributeMode;
-import com.google.code.ddom.spi.parser.ParseException;
+import com.google.code.ddom.spi.parser.StreamException;
 import com.google.code.ddom.spi.parser.Consumer;
-import com.google.code.ddom.spi.parser.Parser;
+import com.google.code.ddom.spi.parser.Producer;
 
-public class StAXParser implements Parser {
+public class StAXParser implements Producer {
     private final XMLStreamReader reader;
     private final XMLStreamReaderEvent event; // TODO: maybe this should be an inner class
 
@@ -32,7 +32,7 @@ public class StAXParser implements Parser {
         event = new XMLStreamReaderEvent(reader);
     }
 
-    public void proceed(Consumer consumer) throws ParseException {
+    public void proceed(Consumer consumer) throws StreamException {
         XMLStreamReaderEvent.Mode mode = event.getMode();
         if (consumer.getAttributeMode() == AttributeMode.EVENT) {
             int index = event.getIndex();
@@ -69,7 +69,7 @@ public class StAXParser implements Parser {
             try {
                 reader.next();
             } catch (XMLStreamException ex) {
-                throw new ParseException(ex);
+                throw new StreamException(ex);
             }
         }
         consumer.processEvent(event);

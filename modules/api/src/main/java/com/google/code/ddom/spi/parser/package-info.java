@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Defines an abstract contract between a parser and its consumer.
+ * Defines an abstract contract between a producer of XML data and its consumer.
  * The API defined in this package tries to be sufficiently general to take into account
  * the differences that exist between various parsers and between various types of consumers:
  * <ul>

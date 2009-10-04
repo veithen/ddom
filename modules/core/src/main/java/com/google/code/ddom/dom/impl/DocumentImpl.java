@@ -41,7 +41,7 @@ import com.google.code.ddom.spi.model.DOMAttribute;
 import com.google.code.ddom.spi.model.DOMDocument;
 import com.google.code.ddom.spi.model.DOMElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.Parser;
+import com.google.code.ddom.spi.parser.Producer;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
@@ -54,12 +54,12 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     private String xmlEncoding;
     private String documentURI;
 
-    public DocumentImpl(NodeFactory nodeFactory, Parser parser) {
+    public DocumentImpl(NodeFactory nodeFactory, Producer producer) {
         this.nodeFactory = nodeFactory;
-        if (parser == null) {
+        if (producer == null) {
             builder = null;
         } else {
-            builder = new Builder(parser, nodeFactory, this, this);
+            builder = new Builder(producer, nodeFactory, this, this);
         }
     }
 

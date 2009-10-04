@@ -26,9 +26,9 @@ public interface Data {
         
         /**
          * The data is only available until the next invocation of
-         * {@link Parser#proceed(Consumer)}. The consumer MAY store the data for
-         * later use if it can guarantee that the data is consumed before the parser
-         * is invoked again. Note that this is only possible if the work of the parser and the
+         * {@link Producer#proceed(Consumer)}. The consumer MAY store the data for
+         * later use if it can guarantee that the data is consumed before the consumer
+         * is invoked again. Note that this is only possible if the work of the consumer and the
          * consumer is coordinated by some third party that controls both of them.
          */
         PARSER_INVOCATION,

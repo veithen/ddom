@@ -22,27 +22,27 @@ import org.w3c.dom.Document;
 
 import com.google.code.ddom.spi.model.ModelRegistry;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.ParseException;
-import com.google.code.ddom.spi.parser.Parser;
-import com.google.code.ddom.spi.parser.ParserFactory;
+import com.google.code.ddom.spi.parser.StreamException;
+import com.google.code.ddom.spi.parser.Producer;
+import com.google.code.ddom.spi.parser.StreamFactory;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
 public class DeferredDocumentFactory {
     private final ModelRegistry modelRegistry;
-    private final ParserFactory parserFactory;
+    private final StreamFactory streamFactory;
     private final Map<String,Object> properties = new HashMap<String,Object>();
     
-    private DeferredDocumentFactory(ModelRegistry modelRegistry, ParserFactory parserFactory) {
+    private DeferredDocumentFactory(ModelRegistry modelRegistry, StreamFactory streamFactory) {
         this.modelRegistry = modelRegistry;
-        this.parserFactory = parserFactory;
+        this.streamFactory = streamFactory;
     }
     
     public static DeferredDocumentFactory newInstance(ClassLoader classLoader) {
-        return new DeferredDocumentFactory(ModelRegistry.getInstance(classLoader), ParserFactory.getInstance(classLoader));
+        return new DeferredDocumentFactory(ModelRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
     }
     
     public static DeferredDocumentFactory newInstance() {
-        return new DeferredDocumentFactory(ModelRegistry.getInstance(), ParserFactory.getInstance());
+        return new DeferredDocumentFactory(ModelRegistry.getInstance(), StreamFactory.getInstance());
     }
     
     public Document newDocument(String model) {
@@ -54,17 +54,17 @@ public class DeferredDocumentFactory {
     public Document parse(String model, Object source) throws DeferredParsingException {
         // TODO: check for null here!
         NodeFactory nodeFactory = modelRegistry.getNodeFactory(model);
-        Parser parser;
+        Producer producer;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
-            parser = parserFactory.getParser(source, properties);
-        } catch (ParseException ex) {
+            producer = streamFactory.getProducer(source, properties);
+        } catch (StreamException ex) {
             throw new DeferredParsingException(ex.getMessage(), ex.getCause());
         }
-        if (parser == null) {
+        if (producer == null) {
             // TODO: maybe a distinct exception here?
             throw new DeferredParsingException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
-        return nodeFactory.createDocument(parser);
+        return nodeFactory.createDocument(producer);
     }
 }

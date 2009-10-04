@@ -26,41 +26,41 @@ import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.parser.AttributeData;
 import com.google.code.ddom.spi.parser.AttributeMode;
 import com.google.code.ddom.spi.parser.CharacterData;
-import com.google.code.ddom.spi.parser.ParseException;
-import com.google.code.ddom.spi.parser.Parser;
+import com.google.code.ddom.spi.parser.StreamException;
+import com.google.code.ddom.spi.parser.Producer;
 
 // TODO: also allow for deferred building of attributes
 public class Builder extends PushConsumer {
-    private final Parser parser;
+    private final Producer producer;
     private final NodeFactory nodeFactory;
     private final DOMDocument document;
-    private ParseException parseException;
+    private StreamException streamException;
     private BuilderTarget parent;
     private ChildNode lastSibling;
     private DOMAttribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Parser parser, NodeFactory nodeFactory, DOMDocument document, BuilderTarget target) {
+    public Builder(Producer producer, NodeFactory nodeFactory, DOMDocument document, BuilderTarget target) {
         super(AttributeMode.EVENT);
-        this.parser = parser;
+        this.producer = producer;
         this.nodeFactory = nodeFactory;
         this.document = document;
         parent = target;
     }
 
     public final void next() throws DeferredParsingException {
-        if (parseException == null) {
+        if (streamException == null) {
             try {
                 nodeAppended = false; 
                 do {
-                    parser.proceed(this);
+                    producer.proceed(this);
                 } while (parent != null && !nodeAppended);
-            } catch (ParseException ex) {
-                parseException = ex;
+            } catch (StreamException ex) {
+                streamException = ex;
             }
         }
-        if (parseException != null) {
-            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        if (streamException != null) {
+            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
         }
     }
 
@@ -95,36 +95,36 @@ public class Builder extends PushConsumer {
     public final void processProcessingInstruction(String target, CharacterData data) {
         try {
             appendNode(nodeFactory.createProcessingInstruction(document, target, data.getString()));
-        } catch (ParseException ex) {
-            parseException = ex;
-            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        } catch (StreamException ex) {
+            streamException = ex;
+            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
         }
     }
     
     public final void processText(CharacterData data) {
         try {
             appendNode(nodeFactory.createText(document, data.getString()));
-        } catch (ParseException ex) {
-            parseException = ex;
-            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        } catch (StreamException ex) {
+            streamException = ex;
+            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
         }
     }
     
     public final void processComment(CharacterData data) {
         try {
             appendNode(nodeFactory.createComment(document, data.getString()));
-        } catch (ParseException ex) {
-            parseException = ex;
-            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        } catch (StreamException ex) {
+            streamException = ex;
+            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
         }
     }
     
     public final void processCDATASection(CharacterData data) {
         try {
             appendNode(nodeFactory.createCDATASection(document, data.getString()));
-        } catch (ParseException ex) {
-            parseException = ex;
-            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        } catch (StreamException ex) {
+            streamException = ex;
+            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
         }
     }
     
@@ -172,6 +172,6 @@ public class Builder extends PushConsumer {
     }
 
     public final void dispose() {
-        parser.dispose();
+        producer.dispose();
     }
 }

@@ -17,5 +17,5 @@ package com.google.code.ddom.spi.parser;
 
 public interface CharacterData extends Data {
     // To be completed with other methods
-    String getString() throws ParseException;
+    String getString() throws StreamException;
 }

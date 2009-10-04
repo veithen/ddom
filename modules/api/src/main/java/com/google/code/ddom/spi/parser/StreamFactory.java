@@ -22,21 +22,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public final class ParserFactory {
-    private static final Map<ClassLoader,ParserFactory> factories = Collections.synchronizedMap(new WeakHashMap<ClassLoader,ParserFactory>());
+public final class StreamFactory {
+    private static final Map<ClassLoader,StreamFactory> factories = Collections.synchronizedMap(new WeakHashMap<ClassLoader,StreamFactory>());
     
-    private final Map<String,ParserProvider> providers = new LinkedHashMap<String,ParserProvider>();
+    private final Map<String,StreamProvider> providers = new LinkedHashMap<String,StreamProvider>();
     
-    private ParserFactory() {}
+    private StreamFactory() {}
     
-    public static ParserFactory getInstance(ClassLoader classLoader) {
-        ParserFactory factory = factories.get(classLoader);
+    public static StreamFactory getInstance(ClassLoader classLoader) {
+        StreamFactory factory = factories.get(classLoader);
         if (factory == null) {
-            factory = new ParserFactory();
+            factory = new StreamFactory();
             
             // TODO: replace this by a service discovery algorithm
             try {
-                factory.providers.put("stax", (ParserProvider)classLoader.loadClass("com.google.code.ddom.stax.StAXParserProvider").newInstance());
+                factory.providers.put("stax", (StreamProvider)classLoader.loadClass("com.google.code.ddom.stax.StAXStreamProvider").newInstance());
             } catch (InstantiationException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -54,7 +54,7 @@ public final class ParserFactory {
     }
     
     
-    public static ParserFactory getInstance() {
+    public static StreamFactory getInstance() {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
                 return Thread.currentThread().getContextClassLoader();
@@ -62,16 +62,16 @@ public final class ParserFactory {
         }));
     }
     
-    public Parser getParser(String providerName, Object source, Map<String,Object> properties) throws ParseException {
-        ParserProvider provider = providers.get(providerName);
-        return provider == null ? null : provider.getParser(source, properties);
+    public Producer getProducer(String providerName, Object source, Map<String,Object> properties) throws StreamException {
+        StreamProvider provider = providers.get(providerName);
+        return provider == null ? null : provider.getProducer(source, properties);
     }
     
-    public Parser getParser(Object source, Map<String,Object> properties) throws ParseException {
-        for (ParserProvider provider : providers.values()) {
-            Parser parser = provider.getParser(source, properties);
-            if (parser != null) {
-                return parser;
+    public Producer getProducer(Object source, Map<String,Object> properties) throws StreamException {
+        for (StreamProvider provider : providers.values()) {
+            Producer producer = provider.getProducer(source, properties);
+            if (producer != null) {
+                return producer;
             }
         }
         return null;

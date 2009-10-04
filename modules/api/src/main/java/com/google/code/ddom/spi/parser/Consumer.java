@@ -23,7 +23,7 @@ public interface Consumer {
      * Note that the value returned by this method MAY change during the lifecycle
      * of the consumer.
      * <p>
-     * The parser MUST query this value each time it processes
+     * The producer MUST query this value each time it processes
      * an element and MUST deliver the attributes for this element in the way requested
      * by the consumer.
      * <p>

@@ -23,7 +23,7 @@ import org.codehaus.stax2.DTDInfo;
 import com.google.code.ddom.spi.parser.AttributeData;
 import com.google.code.ddom.spi.parser.CharacterData;
 import com.google.code.ddom.spi.parser.Event;
-import com.google.code.ddom.spi.parser.ParseException;
+import com.google.code.ddom.spi.parser.StreamException;
 
 public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData {
     public enum Mode { NODE, ATTRIBUTE, NS_DECL, ATTRIBUTES_COMPLETE }
@@ -195,7 +195,7 @@ public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData
         return reader.getAttributeValue(index);
     }
 
-    public String getString() throws ParseException {
+    public String getString() throws StreamException {
         try {
             // Some StAX implementations may throw a RuntimeException here if an I/O error occurs
             switch (reader.getEventType()) {
@@ -205,7 +205,7 @@ public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData
                     return reader.getText();
             }
         } catch (RuntimeException ex) {
-            throw new ParseException("Exception while reading character data", ex);
+            throw new StreamException("Exception while reading character data", ex);
         }
     }
 

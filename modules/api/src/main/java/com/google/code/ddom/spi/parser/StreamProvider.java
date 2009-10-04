@@ -15,16 +15,8 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface Parser {
-    /**
-     * 
-     * 
-     * Must result in one or more calls to the {@link Consumer}.
-     * 
-     * @param consumer
-     * @throws ParseException
-     */
-    void proceed(Consumer consumer) throws ParseException;
-    
-    void dispose();
+import java.util.Map;
+
+public interface StreamProvider {
+    Producer getProducer(Object source, Map<String,Object> properties) throws StreamException;
 }

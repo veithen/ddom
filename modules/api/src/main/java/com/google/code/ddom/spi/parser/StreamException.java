@@ -15,21 +15,21 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public class ParseException extends Exception {
+public class StreamException extends Exception {
     private static final long serialVersionUID = 3672004958899510615L;
 
-    public ParseException() {
+    public StreamException() {
     }
 
-    public ParseException(String message, Throwable cause) {
+    public StreamException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ParseException(String message) {
+    public StreamException(String message) {
         super(message);
     }
 
-    public ParseException(Throwable cause) {
+    public StreamException(Throwable cause) {
         super(cause);
     }
 }
