@@ -16,6 +16,7 @@
 package com.google.code.ddom.spi.parser;
 
 public interface Data {
+    // TODO: probably a better way is to introduce the concept of an InvalidationListener and have the parser fire an event when the data will be no longer available 
     public enum Scope {
         /**
          * The data is only available during the invocation of the consumer. The consumer
