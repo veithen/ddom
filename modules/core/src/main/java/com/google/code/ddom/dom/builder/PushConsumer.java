@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.dom.builder;
 
-import com.google.code.ddom.spi.parser.AttributeMode;
-import com.google.code.ddom.spi.parser.Consumer;
-import com.google.code.ddom.spi.parser.Event;
+import com.google.code.ddom.spi.stream.AttributeMode;
+import com.google.code.ddom.spi.stream.Consumer;
+import com.google.code.ddom.spi.stream.Event;
 
 public abstract class PushConsumer implements Consumer {
     private final AttributeMode attributeMode;

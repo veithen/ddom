@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.parser;
+package com.google.code.ddom.spi.stream;
 
-/**
- * Describes how attribute information items should be exchanged between the producer and the consumer.
- *  
- * @author Andreas Veithen
- */
-public enum AttributeMode {
+public interface Producer {
     /**
-     * Attributes are expected to be delivered as individual events.
+     * 
+     * 
+     * Must result in one or more calls to the {@link Consumer}.
+     * 
+     * @param consumer
+     * @throws StreamException
      */
-    EVENT,
+    void proceed(Consumer consumer) throws StreamException;
     
-    /**
-     * Attributes are expected to be delivered together with the corresponding element using an
-     * {@link AttributeSource} instance.
-     */
-    ELEMENT
+    void dispose();
 }

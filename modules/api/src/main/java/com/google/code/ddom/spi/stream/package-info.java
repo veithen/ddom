@@ -30,4 +30,4 @@
  * The API gives the parser and consumer some freedom to negotiate the best way to exchange
  * data, so that the incurred overhead is minimal.
  */
-package com.google.code.ddom.spi.parser;
+package com.google.code.ddom.spi.stream;

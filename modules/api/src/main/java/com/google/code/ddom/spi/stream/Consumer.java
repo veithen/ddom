@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.parser;
+package com.google.code.ddom.spi.stream;
 
 // TODO: explain that the preferred way of delivering data to the consumer is
 //       using processEvent with a scope of PARSER_INVOCATION or ETERNAL 

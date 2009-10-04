@@ -23,11 +23,11 @@ import com.google.code.ddom.spi.model.DOMAttribute;
 import com.google.code.ddom.spi.model.DOMDocument;
 import com.google.code.ddom.spi.model.DOMElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.AttributeData;
-import com.google.code.ddom.spi.parser.AttributeMode;
-import com.google.code.ddom.spi.parser.CharacterData;
-import com.google.code.ddom.spi.parser.StreamException;
-import com.google.code.ddom.spi.parser.Producer;
+import com.google.code.ddom.spi.stream.AttributeData;
+import com.google.code.ddom.spi.stream.AttributeMode;
+import com.google.code.ddom.spi.stream.CharacterData;
+import com.google.code.ddom.spi.stream.Producer;
+import com.google.code.ddom.spi.stream.StreamException;
 
 // TODO: also allow for deferred building of attributes
 public class Builder extends PushConsumer {

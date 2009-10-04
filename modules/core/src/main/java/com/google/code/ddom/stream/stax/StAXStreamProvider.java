@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stax;
+package com.google.code.ddom.stream.stax;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -25,9 +25,9 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.spi.parser.StreamException;
-import com.google.code.ddom.spi.parser.Producer;
-import com.google.code.ddom.spi.parser.StreamProvider;
+import com.google.code.ddom.spi.stream.Producer;
+import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.spi.stream.StreamProvider;
 
 public class StAXStreamProvider implements StreamProvider {
     public Producer getProducer(Object source, Map<String,Object> properties) throws StreamException {

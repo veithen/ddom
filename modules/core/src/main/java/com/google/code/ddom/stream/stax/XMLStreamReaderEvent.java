@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stax;
+package com.google.code.ddom.stream.stax;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.spi.parser.AttributeData;
-import com.google.code.ddom.spi.parser.CharacterData;
-import com.google.code.ddom.spi.parser.Event;
-import com.google.code.ddom.spi.parser.StreamException;
+import com.google.code.ddom.spi.stream.AttributeData;
+import com.google.code.ddom.spi.stream.CharacterData;
+import com.google.code.ddom.spi.stream.Event;
+import com.google.code.ddom.spi.stream.StreamException;
 
 public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData {
     public enum Mode { NODE, ATTRIBUTE, NS_DECL, ATTRIBUTES_COMPLETE }

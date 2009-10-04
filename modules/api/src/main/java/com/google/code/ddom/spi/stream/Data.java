@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.parser;
+package com.google.code.ddom.spi.stream;
 
 public interface Data {
     // TODO: probably a better way is to introduce the concept of an InvalidationListener and have the parser fire an event when the data will be no longer available 

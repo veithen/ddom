@@ -22,9 +22,9 @@ import org.w3c.dom.Document;
 
 import com.google.code.ddom.spi.model.ModelRegistry;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.StreamException;
-import com.google.code.ddom.spi.parser.Producer;
-import com.google.code.ddom.spi.parser.StreamFactory;
+import com.google.code.ddom.spi.stream.Producer;
+import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.spi.stream.StreamFactory;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
 public class DeferredDocumentFactory {

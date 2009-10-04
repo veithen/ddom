@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stax;
+package com.google.code.ddom.stream.stax;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.spi.parser.AttributeMode;
-import com.google.code.ddom.spi.parser.StreamException;
-import com.google.code.ddom.spi.parser.Consumer;
-import com.google.code.ddom.spi.parser.Producer;
+import com.google.code.ddom.spi.stream.AttributeMode;
+import com.google.code.ddom.spi.stream.Consumer;
+import com.google.code.ddom.spi.stream.Producer;
+import com.google.code.ddom.spi.stream.StreamException;
 
 public class StAXParser implements Producer {
     private final XMLStreamReader reader;

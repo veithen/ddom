@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.spi.parser.Producer;
+import com.google.code.ddom.spi.stream.Producer;
 
 public interface NodeFactory {
     DOMDocument createDocument(Producer producer);

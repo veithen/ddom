@@ -13,18 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.parser;
+package com.google.code.ddom.spi.stream;
 
-public interface Producer {
-    /**
-     * 
-     * 
-     * Must result in one or more calls to the {@link Consumer}.
-     * 
-     * @param consumer
-     * @throws StreamException
-     */
-    void proceed(Consumer consumer) throws StreamException;
-    
-    void dispose();
+import java.util.Map;
+
+public interface StreamProvider {
+    Producer getProducer(Object source, Map<String,Object> properties) throws StreamException;
 }

@@ -41,7 +41,7 @@ import com.google.code.ddom.spi.model.DOMAttribute;
 import com.google.code.ddom.spi.model.DOMDocument;
 import com.google.code.ddom.spi.model.DOMElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.Producer;
+import com.google.code.ddom.spi.stream.Producer;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public class DocumentImpl extends ParentNodeImpl implements DOMDocument {

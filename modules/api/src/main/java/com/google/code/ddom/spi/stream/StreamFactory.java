@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.parser;
+package com.google.code.ddom.spi.stream;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -36,7 +36,7 @@ public final class StreamFactory {
             
             // TODO: replace this by a service discovery algorithm
             try {
-                factory.providers.put("stax", (StreamProvider)classLoader.loadClass("com.google.code.ddom.stax.StAXStreamProvider").newInstance());
+                factory.providers.put("stax", (StreamProvider)classLoader.loadClass("com.google.code.ddom.stream.stax.StAXStreamProvider").newInstance());
             } catch (InstantiationException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

@@ -29,7 +29,7 @@ import com.google.code.ddom.spi.model.DOMProcessingInstruction;
 import com.google.code.ddom.spi.model.DOMText;
 import com.google.code.ddom.spi.model.NamespaceDeclaration;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.Producer;
+import com.google.code.ddom.spi.stream.Producer;
 
 public class DOMNodeFactory implements NodeFactory {
     public DOMDocument createDocument(Producer producer) {
