@@ -16,19 +16,21 @@
 package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.DeferredParsingException;
-import com.google.code.ddom.dom.builder.PushParserListener;
+import com.google.code.ddom.dom.builder.PushConsumer;
 import com.google.code.ddom.spi.model.BuilderTarget;
 import com.google.code.ddom.spi.model.ChildNode;
 import com.google.code.ddom.spi.model.DOMAttribute;
 import com.google.code.ddom.spi.model.DOMDocument;
 import com.google.code.ddom.spi.model.DOMElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.parser.CharacterDataSource;
-import com.google.code.ddom.spi.parser.ElementBuilder;
+import com.google.code.ddom.spi.parser.AttributeData;
+import com.google.code.ddom.spi.parser.AttributeMode;
+import com.google.code.ddom.spi.parser.CharacterData;
 import com.google.code.ddom.spi.parser.ParseException;
 import com.google.code.ddom.spi.parser.Parser;
 
-public class Builder extends PushParserListener implements ElementBuilder {
+// TODO: also allow for deferred building of attributes
+public class Builder extends PushConsumer {
     private final Parser parser;
     private final NodeFactory nodeFactory;
     private final DOMDocument document;
@@ -36,8 +38,10 @@ public class Builder extends PushParserListener implements ElementBuilder {
     private BuilderTarget parent;
     private ChildNode lastSibling;
     private DOMAttribute lastAttribute;
+    private boolean nodeAppended;
 
     public Builder(Parser parser, NodeFactory nodeFactory, DOMDocument document, BuilderTarget target) {
+        super(AttributeMode.EVENT);
         this.parser = parser;
         this.nodeFactory = nodeFactory;
         this.document = document;
@@ -47,7 +51,10 @@ public class Builder extends PushParserListener implements ElementBuilder {
     public final void next() throws DeferredParsingException {
         if (parseException == null) {
             try {
-                parser.proceed(this);
+                nodeAppended = false; 
+                do {
+                    parser.proceed(this);
+                } while (parent != null && !nodeAppended);
             } catch (ParseException ex) {
                 parseException = ex;
             }
@@ -57,37 +64,44 @@ public class Builder extends PushParserListener implements ElementBuilder {
         }
     }
 
-    public final void newDocumentType(String rootName, String publicId, String systemId) {
+    public final void processDocumentType(String rootName, String publicId, String systemId) {
         appendNode(nodeFactory.createDocumentType(document, rootName, publicId, systemId));
     }
     
-    public final ElementBuilder newElement(String tagName) {
+    public final void processElement(String tagName, AttributeData attributes) {
         appendNode(nodeFactory.createElement(document, tagName, false));
-        return this;
     }
     
-    public final ElementBuilder newElement(String namespaceURI, String localName, String prefix) {
+    public final void processElement(String namespaceURI, String localName, String prefix, AttributeData attributes) {
         appendNode(nodeFactory.createElement(document, namespaceURI, localName, prefix, false));
-        return this;
     }
     
-    public final void newAttribute(String name, String value, String type) {
+    public final void processAttribute(String name, String value, String type) {
         appendAttribute(nodeFactory.createAttribute(document, name, value, type));
     }
 
-    public final void newAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+    public final void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
         appendAttribute(nodeFactory.createAttribute(document, namespaceURI, localName, prefix, value, type));
     }
 
-    public final void newNSDecl(String prefix, String namespaceURI) {
+    public final void processNSDecl(String prefix, String namespaceURI) {
         appendAttribute(nodeFactory.createNSDecl(document, prefix, namespaceURI));
     }
 
-    public final void newProcessingInstruction(String target, String data) {
-        appendNode(nodeFactory.createProcessingInstruction(document, target, data));
+    public void attributesCompleted() {
+        nodeAppended = true;
+    }
+
+    public final void processProcessingInstruction(String target, CharacterData data) {
+        try {
+            appendNode(nodeFactory.createProcessingInstruction(document, target, data.getString()));
+        } catch (ParseException ex) {
+            parseException = ex;
+            throw new DeferredParsingException(parseException.getMessage(), parseException.getCause());
+        }
     }
     
-    public final void newText(CharacterDataSource data) {
+    public final void processText(CharacterData data) {
         try {
             appendNode(nodeFactory.createText(document, data.getString()));
         } catch (ParseException ex) {
@@ -96,7 +110,7 @@ public class Builder extends PushParserListener implements ElementBuilder {
         }
     }
     
-    public final void newComment(CharacterDataSource data) {
+    public final void processComment(CharacterData data) {
         try {
             appendNode(nodeFactory.createComment(document, data.getString()));
         } catch (ParseException ex) {
@@ -105,7 +119,7 @@ public class Builder extends PushParserListener implements ElementBuilder {
         }
     }
     
-    public final void newCDATASection(CharacterDataSource data) {
+    public final void processCDATASection(CharacterData data) {
         try {
             appendNode(nodeFactory.createCDATASection(document, data.getString()));
         } catch (ParseException ex) {
@@ -114,7 +128,7 @@ public class Builder extends PushParserListener implements ElementBuilder {
         }
     }
     
-    public final void newEntityReference(String name) {
+    public final void processEntityReference(String name) {
         appendNode(nodeFactory.createEntityReference(document, name));
     }
     
@@ -132,6 +146,7 @@ public class Builder extends PushParserListener implements ElementBuilder {
             lastSibling = null;
         } else {
             lastSibling = node;
+            nodeAppended = true;
         }
         lastAttribute = null;
     }

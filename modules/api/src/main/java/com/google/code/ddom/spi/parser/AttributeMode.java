@@ -15,7 +15,20 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface CharacterDataSource {
-    // To be completed with other methods
-    String getString() throws ParseException;
+/**
+ * Describes how attribute information items should be exchanged between the parser and the consumer.
+ *  
+ * @author Andreas Veithen
+ */
+public enum AttributeMode {
+    /**
+     * Attributes are expected to be delivered as individual events.
+     */
+    EVENT,
+    
+    /**
+     * Attributes are expected to be delivered together with the corresponding element using an
+     * {@link AttributeSource} instance.
+     */
+    ELEMENT
 }

@@ -15,54 +15,117 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface Event {
-    int DTD = 1;
-    int DOM1_ELEMENT = 2;
-    int DOM2_ELEMENT = 3;
-    int NODE_COMPLETE = 4;
-    int PROCESSING_INSTRUCTION = 5;
-    int CHARACTERS = 6;
-    int SPACE = 7;
-    int CDATA = 8;
-    int ENTITY_REFERENCE = 9;
-    int COMMENT = 10;
+public interface Event extends Data {
+    public enum Type {
+        DTD,
+        
+        DOM1_ELEMENT,
+        
+        DOM2_ELEMENT,
+        
+        DOM1_ATTRIBUTE,
+        
+        DOM2_ATTRIBUTE,
+        
+        NS_DECL,
+        
+        ATTRIBUTES_COMPLETE,
+        
+        NODE_COMPLETE,
+        
+        PROCESSING_INSTRUCTION,
+        
+        CHARACTERS,
+        
+        SPACE,
+        
+        CDATA,
+        
+        ENTITY_REFERENCE,
+        
+        COMMENT
+    }
     
-    int DOM1_ATTRIBUTE = 1;
-    int DOM2_ATTRIBUTE = 2;
-    int NS_DECL = 3;
+    Type getEventType();
     
-    int getEventType();
-
-    int getAttributeCount();
-
-    int getAttributeClass(int index);
+    /**
+     * 
+     * 
+     * Only valid for {@link Type#DOM1_ELEMENT} and {@link Type#DOM2_ELEMENT} and if
+     * {@link AttributeMode#ELEMENT} is used.
+     * 
+     * @return
+     */
+    AttributeData getAttributes();
     
-    String getAttributeLocalName(int index);
+    /**
+     * 
+     * 
+     * @return
+     * <table border="2" rules="all" cellpadding="4" cellspacing="0">
+     * <tr><td>{@link Type#DOM1_ELEMENT}</td><td>the name of the element</td></tr>
+     * <tr><td>{@link Type#DOM2_ELEMENT}</td><td>the local part of the element name</td></tr>
+     * <tr><td>{@link Type#DOM1_ATTRIBUTE}</td><td>the name of the attribute</td></tr>
+     * <tr><td>{@link Type#DOM2_ATTRIBUTE}</td><td>the local part of the attribute name</td></tr>
+     * <tr><td>{@link Type#PROCESSING_INSTRUCTION}</td><td>the target of the processing instruction</td></tr>
+     * <tr><td>{@link Type#ENTITY_REFERENCE}</td><td>the name of the entity reference</td></tr>
+     * </table>
+     */
+    String getName();
 
-    String getAttributeNamespace(int index);
-
-    String getAttributePrefix(int index);
-
-    String getAttributeValue(int index);
-    
-    String getAttributeType(int index);
-
-    String getNamespacePrefix(int index);
-
-    String getNamespaceURI(int index);
-
-    String getLocalName();
-
+    /**
+     * 
+     * 
+     * @return
+     * <table border="2" rules="all" cellpadding="4" cellspacing="0">
+     * <tr><td>{@link Type#DOM2_ELEMENT}</td><td>the namespace URI of the element, or <code>null</code>
+     * if the element has no namespace</td></tr>
+     * <tr><td>{@link Type#DOM2_ATTRIBUTE}</td><td>the namespace URI of the attribute, or <code>null</code>
+     * if the attribute has no namespace</td></tr>
+     * <tr><td>{@link Type#NS_DECL}</td><td>the URI of the namespace that the declaration refers to</td>
+     * </table>
+     */
     String getNamespaceURI();
     
+    /**
+     * 
+     * @return
+     * <table border="2" rules="all" cellpadding="4" cellspacing="0">
+     * <tr><td>{@link Type#DOM2_ELEMENT}</td><td>the prefix of the element, or <code>null</code>
+     * if the element has no prefix</td></tr>
+     * <tr><td>{@link Type#DOM2_ATTRIBUTE}</td><td>the prefix of the attribute, or <code>null</code>
+     * if the attribute has no prefix</td></tr>
+     * <tr><td>{@link Type#NS_DECL}</td><td>the prefix that the declaration refers to, or <code>null</code>
+     * if the declaration declares the default namespace</td>
+     * </table>
+     */
     String getPrefix();
 
-    String getPIData();
+    /**
+     * 
+     * Valid for {@link Type#CHARACTERS}, {@link Type#SPACE}, {@link Type#CDATA}, {@link Type#COMMENT}
+     * and {@link Type#PROCESSING_INSTRUCTION}.
+     * 
+     * @return
+     */
+    CharacterData getData();
 
-    String getPITarget();
+    /**
+     * 
+     * Valid for {@link Type#DOM1_ATTRIBUTE} and {@link Type#DOM2_ATTRIBUTE}.
+     * 
+     * @return
+     */
+    String getValue();
 
-    CharacterDataSource getCharacterDataSource();
-
+    /**
+     * 
+     * Valid for {@link Type#DOM1_ATTRIBUTE} and {@link Type#DOM2_ATTRIBUTE}.
+     * 
+     * @return
+     */
+    String getDataType();
+    
     String getDTDPublicId();
 
     String getDTDRootName();

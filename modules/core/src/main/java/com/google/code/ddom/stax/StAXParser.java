@@ -18,26 +18,61 @@ package com.google.code.ddom.stax;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import com.google.code.ddom.spi.parser.AttributeMode;
 import com.google.code.ddom.spi.parser.ParseException;
-import com.google.code.ddom.spi.parser.ParserListener;
+import com.google.code.ddom.spi.parser.Consumer;
 import com.google.code.ddom.spi.parser.Parser;
 
 public class StAXParser implements Parser {
     private final XMLStreamReader reader;
-    private final XMLStreamReaderEvent event;
+    private final XMLStreamReaderEvent event; // TODO: maybe this should be an inner class
 
     public StAXParser(XMLStreamReader reader) {
         this.reader = reader;
         event = new XMLStreamReaderEvent(reader);
     }
 
-    public void proceed(ParserListener listener) throws ParseException {
-        try {
-            reader.next();
-        } catch (XMLStreamException ex) {
-            throw new ParseException(ex);
+    public void proceed(Consumer consumer) throws ParseException {
+        XMLStreamReaderEvent.Mode mode = event.getMode();
+        if (consumer.getAttributeMode() == AttributeMode.EVENT) {
+            int index = event.getIndex();
+            switch (mode) {
+                case ATTRIBUTES_COMPLETE:
+                    mode = XMLStreamReaderEvent.Mode.NODE;
+                    break;
+                case NODE:
+                    if (!reader.isStartElement()) {
+                        break;
+                    } else {
+                        mode = XMLStreamReaderEvent.Mode.ATTRIBUTE;
+                        index = -1;
+                        // Fall through
+                    }
+                case ATTRIBUTE:
+                    if (++index < reader.getAttributeCount()) {
+                        break;
+                    } else {
+                        mode = XMLStreamReaderEvent.Mode.NS_DECL;
+                        index = -1;
+                        // Fall through
+                    }
+                case NS_DECL:
+                    if (++index < reader.getNamespaceCount()) {
+                        break;
+                    } else {
+                        mode = XMLStreamReaderEvent.Mode.ATTRIBUTES_COMPLETE;
+                    }
+            }
+            event.updateState(mode, index);
         }
-        listener.newEvent(event);
+        if (mode == XMLStreamReaderEvent.Mode.NODE) {
+            try {
+                reader.next();
+            } catch (XMLStreamException ex) {
+                throw new ParseException(ex);
+            }
+        }
+        consumer.processEvent(event);
     }
 
     public void dispose() {

@@ -15,8 +15,7 @@
  */
 package com.google.code.ddom.spi.parser;
 
-public interface ElementBuilder {
-    void newAttribute(String name, String value, String type);
-    void newAttribute(String namespaceURI, String localName, String prefix, String value, String type);
-    void newNSDecl(String prefix, String namespaceURI);
+public interface CharacterData extends Data {
+    // To be completed with other methods
+    String getString() throws ParseException;
 }

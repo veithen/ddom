@@ -20,14 +20,19 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.spi.parser.CharacterDataSource;
+import com.google.code.ddom.spi.parser.AttributeData;
+import com.google.code.ddom.spi.parser.CharacterData;
 import com.google.code.ddom.spi.parser.Event;
 import com.google.code.ddom.spi.parser.ParseException;
 
-public class XMLStreamReaderEvent implements Event, CharacterDataSource {
+public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData {
+    public enum Mode { NODE, ATTRIBUTE, NS_DECL, ATTRIBUTES_COMPLETE }
+    
     private final XMLStreamReader reader;
     private final DTDInfo dtdInfo;
     private final boolean parserIsNamespaceAware;
+    private Mode mode = Mode.NODE;
+    private int index;
     
     public XMLStreamReaderEvent(XMLStreamReader reader) {
         this.reader = reader;
@@ -35,106 +40,170 @@ public class XMLStreamReaderEvent implements Event, CharacterDataSource {
         parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
     }
     
+    public void updateState(Mode mode, int index) {
+        this.mode = mode;
+        this.index = index;
+    }
+    
+    public Mode getMode() {
+        return mode;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
     private String emptyToNull(String value) {
         return value == null || value.length() == 0 ? null : value;
     }
     
-    public int getEventType() {
-        // TODO: probably, mapping using an array would be more efficient
-        switch (reader.getEventType()) {
-            case XMLStreamReader.DTD:
-                return Event.DTD;
-            case XMLStreamReader.START_ELEMENT:
-                return parserIsNamespaceAware ? DOM2_ELEMENT : DOM1_ELEMENT;
-            case XMLStreamReader.END_ELEMENT:
-            case XMLStreamReader.END_DOCUMENT:
-                return NODE_COMPLETE;
-            case XMLStreamReader.PROCESSING_INSTRUCTION:
-                return PROCESSING_INSTRUCTION;
-            case XMLStreamReader.CHARACTERS:
-                return CHARACTERS;
-            case XMLStreamReader.SPACE:
-                return SPACE;
-            case XMLStreamReader.CDATA:
-                return CDATA;
-            case XMLStreamReader.ENTITY_REFERENCE:
-                return ENTITY_REFERENCE;
-            case XMLStreamReader.COMMENT:
-                return COMMENT;
+    public Scope getScope() {
+        return Scope.PARSER_INVOCATION;
+    }
+
+    public Event.Type getEventType() {
+        switch (mode) {
+            case NODE:
+                // TODO: probably, mapping using an array would be more efficient
+                switch (reader.getEventType()) {
+                    case XMLStreamReader.DTD:
+                        return Event.Type.DTD;
+                    case XMLStreamReader.START_ELEMENT:
+                        return parserIsNamespaceAware ? Event.Type.DOM2_ELEMENT : Event.Type.DOM1_ELEMENT;
+                    case XMLStreamReader.END_ELEMENT:
+                    case XMLStreamReader.END_DOCUMENT:
+                        return Event.Type.NODE_COMPLETE;
+                    case XMLStreamReader.PROCESSING_INSTRUCTION:
+                        return Event.Type.PROCESSING_INSTRUCTION;
+                    case XMLStreamReader.CHARACTERS:
+                        return Event.Type.CHARACTERS;
+                    case XMLStreamReader.SPACE:
+                        return Event.Type.SPACE;
+                    case XMLStreamReader.CDATA:
+                        return Event.Type.CDATA;
+                    case XMLStreamReader.ENTITY_REFERENCE:
+                        return Event.Type.ENTITY_REFERENCE;
+                    case XMLStreamReader.COMMENT:
+                        return Event.Type.COMMENT;
+                    default:
+                        throw new RuntimeException("Unexpected event " + reader.getEventType()); // TODO
+                }
+            case ATTRIBUTE:
+                return parserIsNamespaceAware ? Event.Type.DOM2_ATTRIBUTE : Event.Type.DOM1_ATTRIBUTE;
+            case NS_DECL:
+                return Event.Type.NS_DECL;
+            case ATTRIBUTES_COMPLETE:
+                return Event.Type.ATTRIBUTES_COMPLETE;
             default:
-                throw new RuntimeException("Unexpected event " + reader.getEventType()); // TODO
+                return null;
         }
     }
 
-    public int getAttributeCount() {
+    public AttributeData getAttributes() {
+        return this;
+    }
+
+    public int getLength() {
         return reader.getAttributeCount() + reader.getNamespaceCount();
     }
 
-    public int getAttributeClass(int index) {
+    public AttributeData.Type getType(int index) {
         if (index < reader.getAttributeCount()) {
-            return parserIsNamespaceAware ? DOM2_ATTRIBUTE : DOM1_ATTRIBUTE;
+            return parserIsNamespaceAware ? AttributeData.Type.DOM2 : AttributeData.Type.DOM1;
         } else {
-            return NS_DECL;
+            return AttributeData.Type.NS_DECL;
         }
     }
 
-    public String getAttributeLocalName(int index) {
+    public String getName(int index) {
         return reader.getAttributeLocalName(index);
     }
 
-    public String getAttributeNamespace(int index) {
-        return emptyToNull(reader.getAttributeNamespace(index));
+    public String getNamespaceURI(int index) {
+        int c = reader.getAttributeCount();
+        return emptyToNull(index < c ? reader.getAttributeNamespace(index)
+                                     : reader.getNamespaceURI(index-c));
     }
 
-    public String getAttributePrefix(int index) {
-        return emptyToNull(reader.getAttributePrefix(index));
+    public String getPrefix(int index) {
+        int c = reader.getAttributeCount();
+        return emptyToNull(index < c ? reader.getAttributePrefix(index)
+                                     : reader.getNamespacePrefix(index-c));
     }
 
-    public String getAttributeValue(int index) {
+    public String getValue(int index) {
         return reader.getAttributeValue(index);
     }
 
-    public String getAttributeType(int index) {
+    public String getDataType(int index) {
         return reader.getAttributeType(index);
     }
 
-    public String getLocalName() {
-        // TODO: maybe define a separate method for entity reference name?
-        return reader.getEventType() == XMLStreamReader.ENTITY_REFERENCE ? reader.getText() : reader.getLocalName();
-    }
-
-    public String getNamespacePrefix(int index) {
-        return emptyToNull(reader.getNamespacePrefix(index - reader.getAttributeCount()));
-    }
-
-    public String getNamespaceURI(int index) {
-        return emptyToNull(reader.getNamespaceURI(index - reader.getAttributeCount()));
+    public String getName() {
+        switch (mode) {
+            case NODE:
+                switch (reader.getEventType()) {
+                    case XMLStreamReader.ENTITY_REFERENCE:
+                        return reader.getText();
+                    case XMLStreamReader.PROCESSING_INSTRUCTION:
+                        return reader.getPITarget();
+                    default:
+                        return reader.getLocalName();
+                }
+            case ATTRIBUTE:
+                return reader.getAttributeLocalName(index);
+            default:
+                return null;
+        }
     }
 
     public String getNamespaceURI() {
-        return emptyToNull(reader.getNamespaceURI());
-    }
-
-    public String getPIData() {
-        return reader.getPIData();
-    }
-
-    public String getPITarget() {
-        return reader.getPITarget();
+        switch (mode) {
+            case NODE:
+                return emptyToNull(reader.getNamespaceURI());
+            case ATTRIBUTE:
+                return emptyToNull(reader.getAttributeNamespace(index));
+            case NS_DECL:
+                return emptyToNull(reader.getNamespaceURI(index));
+            default:
+                return null;
+        }
     }
 
     public String getPrefix() {
-        return emptyToNull(reader.getPrefix());
+        switch (mode) {
+            case NODE:
+                return emptyToNull(reader.getPrefix());
+            case ATTRIBUTE:
+                return emptyToNull(reader.getAttributePrefix(index));
+            case NS_DECL:
+                return emptyToNull(reader.getNamespacePrefix(index));
+            default:
+                return null;
+        }
     }
 
-    public CharacterDataSource getCharacterDataSource() {
+    public CharacterData getData() {
         return this;
+    }
+
+    public String getDataType() {
+        return reader.getAttributeType(index);
+    }
+
+    public String getValue() {
+        return reader.getAttributeValue(index);
     }
 
     public String getString() throws ParseException {
         try {
             // Some StAX implementations may throw a RuntimeException here if an I/O error occurs
-            return reader.getText();
+            switch (reader.getEventType()) {
+                case XMLStreamReader.PROCESSING_INSTRUCTION:
+                    return reader.getPIData();
+                default:
+                    return reader.getText();
+            }
         } catch (RuntimeException ex) {
             throw new ParseException("Exception while reading character data", ex);
         }

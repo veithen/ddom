@@ -21,10 +21,10 @@ public interface Parser {
      * 
      * Must result in one or more calls to the {@link Consumer}.
      * 
-     * @param listener
+     * @param consumer
      * @throws ParseException
      */
-    void proceed(ParserListener listener) throws ParseException;
+    void proceed(Consumer consumer) throws ParseException;
     
     void dispose();
 }
