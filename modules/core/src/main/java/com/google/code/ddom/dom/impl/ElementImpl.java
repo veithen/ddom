@@ -252,7 +252,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         }
     }
     
-    private Attr getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
+    private DOMAttribute getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
         DOMAttribute attr = firstAttribute;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             attr = attr.internalGetNextAttribute();
@@ -455,14 +455,22 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     }
 
     public final void setIdAttribute(String name, boolean isId) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+        DOMAttribute attr = getAttributeNode(null, name, ATTR_DOM1);
+        if (attr == null) {
+            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        } else {
+            ((TypedAttribute)attr).setType(isId ? "ID" : "CDATA");
+        }
     }
 
-    public final void setIdAttributeNS(String namespaceURI, String localName, boolean isId)
-            throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
+        // Here, we assume that a namespace declaration can never be an ID attribute
+        DOMAttribute attr = getAttributeNode(namespaceURI, localName, ATTR_DOM2);
+        if (attr == null) {
+            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        } else {
+            ((TypedAttribute)attr).setType(isId ? "ID" : "CDATA");
+        }
     }
 
     public final void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {

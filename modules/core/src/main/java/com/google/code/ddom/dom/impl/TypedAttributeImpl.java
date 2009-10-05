@@ -30,6 +30,10 @@ public abstract class TypedAttributeImpl extends DOMAttributeImpl implements Typ
         return type;
     }
 
+    public final void setType(String type) {
+        this.type = type;
+    }
+
     public final boolean isId() {
         return "ID".equals(type);
     }

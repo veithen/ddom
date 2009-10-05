@@ -16,5 +16,6 @@
 package com.google.code.ddom.spi.model;
 
 public interface TypedAttribute extends DOMAttribute {
-
+    String getType();
+    void setType(String type);
 }
