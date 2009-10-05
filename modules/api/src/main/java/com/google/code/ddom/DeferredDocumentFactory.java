@@ -51,13 +51,13 @@ public class DeferredDocumentFactory {
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public Document parse(String model, Object source) throws DeferredParsingException {
+    public Document parse(String model, Object source, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
         NodeFactory nodeFactory = modelRegistry.getNodeFactory(model);
         Producer producer;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
-            producer = streamFactory.getProducer(source, properties);
+            producer = streamFactory.getProducer(source, properties, preserve);
         } catch (StreamException ex) {
             throw new DeferredParsingException(ex.getMessage(), ex.getCause());
         }
@@ -66,5 +66,9 @@ public class DeferredDocumentFactory {
             throw new DeferredParsingException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         return nodeFactory.createDocument(producer);
+    }
+
+    public Document parse(String model, Object source) throws DeferredParsingException {
+        return parse(model, source, true);
     }
 }

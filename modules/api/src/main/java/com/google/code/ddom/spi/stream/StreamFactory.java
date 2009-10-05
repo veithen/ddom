@@ -62,18 +62,20 @@ public final class StreamFactory {
         }));
     }
     
-    public Producer getProducer(String providerName, Object source, Map<String,Object> properties) throws StreamException {
+    public Producer getProducer(String providerName, Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
         StreamProvider provider = providers.get(providerName);
-        return provider == null ? null : provider.getProducer(source, properties);
+        return provider == null ? null : provider.getProducer(source, properties, preserve);
     }
     
-    public Producer getProducer(Object source, Map<String,Object> properties) throws StreamException {
+    public Producer getProducer(Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
         for (StreamProvider provider : providers.values()) {
-            Producer producer = provider.getProducer(source, properties);
+            Producer producer = provider.getProducer(source, properties, preserve);
             if (producer != null) {
                 return producer;
             }
         }
         return null;
     }
+    
+    // TODO: similar methods for getConsumer, getSerializer, etc.
 }

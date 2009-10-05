@@ -25,12 +25,13 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.xml.sax.InputSource;
 
+import com.google.code.ddom.spi.stream.Consumer;
 import com.google.code.ddom.spi.stream.Producer;
 import com.google.code.ddom.spi.stream.StreamException;
 import com.google.code.ddom.spi.stream.StreamProvider;
 
 public class StAXStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, Map<String,Object> properties) throws StreamException {
+    public Producer getProducer(Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
         XMLStreamReader reader;
         try {
             if (source instanceof XMLStreamReader) {
@@ -74,5 +75,15 @@ public class StAXStreamProvider implements StreamProvider {
         // TODO: apply properties
         
         return factory;
+    }
+
+    public Consumer getConsumer(Object destination, Map<String, Object> properties) throws StreamException {
+        // TODO construct Consumer wrapping an XMLStreamWriter
+        return null;
+    }
+
+    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, Map<String, Object> properties) {
+        // TODO support wrapping the consumer in an XMLStreamWriter
+        return null;
     }
 }
