@@ -17,19 +17,14 @@ package com.google.code.ddom.dom.impl.aspect;
 
 import junit.framework.Assert;
 
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import com.google.code.ddom.dom.impl.NodeImpl;
+import com.google.code.ddom.spi.model.NodeFactory;
 
-// TODO: implement an aspect that checks that all input streams are properly closed
-@Aspect
-public class NodeFactoryAspect {
+public aspect NodeFactoryAspect {
     /**
-     * Advice that checks that all nodes are created using a
-     * {@link com.google.code.ddom.spi.model.NodeFactory} implementation.
+     * Advice that checks that all nodes are created using a {@link NodeFactory} implementation.
      */
-    @Before("execution(com.google.code.ddom.dom.impl.NodeImpl.new(..))" +
-    		" && !cflow(execution(* com.google.code.ddom.spi.model.NodeFactory+.*(..)))")
-    public void nodeCreatedOutsideFactory() {
+    before(): execution(NodeImpl.new(..)) && !cflow(execution(* NodeFactory+.*(..))) {
         Assert.fail("Node instance created by code not in a NodeFactory implementation!");
     }
 }
