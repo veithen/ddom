@@ -15,12 +15,9 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
-import org.w3c.dom.Text;
 
 import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.ParentNode;
 import com.google.code.ddom.spi.model.TextNode;
 
 public abstract class TextNodeImpl extends CharacterDataImpl implements TextNode {
@@ -28,23 +25,6 @@ public abstract class TextNodeImpl extends CharacterDataImpl implements TextNode
         super(document, data);
     }
 
-    public final Text splitText(int offset) throws DOMException {
-        String text = getData();
-        if (offset < 0 || offset > text.length()) {
-            throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
-        }
-        setData(text.substring(0, offset));
-        TextNode newNode = createNewTextNode(text.substring(offset));
-        ParentNode parent = getParentNode();
-        if (parent != null) {
-            newNode.internalSetNextSibling(getNextSibling());
-            internalSetNextSibling(newNode);
-            newNode.internalSetParent(parent);
-            parent.notifyChildrenModified(1);
-        }
-        return newNode;
-    }
-    
     protected abstract TextNode createNewTextNode(String data);
 
     public final Node cloneNode(boolean deep) {
@@ -67,20 +47,5 @@ public abstract class TextNodeImpl extends CharacterDataImpl implements TextNode
             builder.append(data);
             return builder;
         }
-    }
-
-    public final boolean isElementContentWhitespace() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final String getWholeText() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final Text replaceWholeText(String content) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 }

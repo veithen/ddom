@@ -132,7 +132,7 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     }
 
     public final Text createTextNode(String data) {
-        return nodeFactory.createText(this, data);
+        return (Text)nodeFactory.createText(this, data);
     }
 
     public final Comment createComment(String data) {

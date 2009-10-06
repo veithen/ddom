@@ -17,7 +17,6 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
-import org.w3c.dom.UserDataHandler;
 
 import com.google.code.ddom.spi.model.DOMNode;
 
@@ -70,16 +69,6 @@ public abstract class NodeImpl implements DOMNode {
     }
 
     public final short compareDocumentPosition(Node other) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final Object getUserData(String key) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final Object setUserData(String key, Object data, UserDataHandler handler) {
         // TODO
         throw new UnsupportedOperationException();
     }
