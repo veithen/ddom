@@ -20,12 +20,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>ddom</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>ddom-spring-ws</artifactId>
-    <name>DDOM :: Spring Web Services</name>
+    <name>DDOM :: Modules :: Spring Web Services</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>

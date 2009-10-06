@@ -31,19 +31,14 @@
         <url>http://code.google.com/p/ddom/issues/</url>
     </issueManagement>
     <scm>
-        <url>http://code.google.com/p/ddom/source/browse/</url>
+        <url>http://code.google.com/p/ddom/source/browse/#svn/trunk/</url>
         <connection>scm:svn:http://ddom.googlecode.com/svn/trunk</connection>
         <developerConnection>scm:svn:https://ddom.googlecode.com/svn/trunk</developerConnection>
     </scm>
     
     <modules>
-        <module>modules/ddom-api</module>
-        <module>modules/ddom-core</module>
-        <module>modules/ddom-dom-utils</module>
-        <module>modules/ddom-jaxp</module>
-        <module>modules/ddom-spring-ws</module>
-        <module>modules/ddom-test-utils</module>
-        <module>tests/ddom-tests-wss4j</module>
+        <module>modules</module>
+        <module>tests</module>
     </modules>
 
     <dependencyManagement>

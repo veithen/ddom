@@ -20,18 +20,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>ddom</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-jaxp</artifactId>
-    <name>DDOM :: Modules :: JAXP</name>
-    <packaging>jar</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-    </dependencies>
+    <artifactId>tests</artifactId>
+    <name>DDOM :: Tests</name>
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>ddom-tests-wss4j</module>
+    </modules>
 </project>

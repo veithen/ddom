@@ -20,12 +20,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>ddom</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>ddom-dom-utils</artifactId>
-    <name>DDOM :: DOM Utilities</name>
+    <name>DDOM :: Modules :: DOM Utilities</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
