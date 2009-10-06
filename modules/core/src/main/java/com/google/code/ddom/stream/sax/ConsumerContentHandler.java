@@ -15,58 +15,21 @@
  */
 package com.google.code.ddom.stream.sax;
 
-import javax.xml.XMLConstants;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import com.google.code.ddom.spi.stream.AttributeData;
 import com.google.code.ddom.spi.stream.AttributeMode;
-import com.google.code.ddom.spi.stream.CharacterData;
 import com.google.code.ddom.spi.stream.Consumer;
-import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.stream.util.CharArrayCharacterData;
+import com.google.code.ddom.stream.util.StringCharacterData;
 
-public class ConsumerContentHandler implements ContentHandler, AttributeData {
-    private static class CharacterDataImpl1 implements CharacterData {
-        public char[] buffer;
-        public int start;
-        public int length;
-        
-        public Scope getScope() {
-            return Scope.CONSUMER_INVOCATION;
-        }
-        
-        public String getString() throws StreamException {
-            return new String(buffer, start, length);
-        }
-        
-        public void clear() {
-            buffer = null;
-        }
-    }
-    
-    private static class CharacterDataImpl2 implements CharacterData {
-        public String data;
-        
-        public Scope getScope() {
-            return Scope.CONSUMER_INVOCATION;
-        }
-        
-        public String getString() throws StreamException {
-            return data;
-        }
-
-        public void clear() {
-            data = null;
-        }
-    }
-    
+public class ConsumerContentHandler implements ContentHandler {
     private final Consumer consumer;
-    private final CharacterDataImpl1 cdata1 = new CharacterDataImpl1();
-    private final CharacterDataImpl2 cdata2 = new CharacterDataImpl2();
-    private Attributes atts;
+    private StringCharacterData stringData;
+    private CharArrayCharacterData charArrayData;
+    private SAXAttributeData attributeData;
 
     public ConsumerContentHandler(Consumer consumer) {
         this.consumer = consumer;
@@ -90,56 +53,24 @@ public class ConsumerContentHandler implements ContentHandler, AttributeData {
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         if (consumer.getAttributeMode() == AttributeMode.EVENT) {
-            
+            int length = atts.getLength();
+            for (int i=0; i<length; i++) {
+                
+                // TODO
+                
+            }
         } else {
-            this.atts = atts;
+            SAXAttributeData data = attributeData;
+            if (attributeData == null) {
+                data = new SAXAttributeData();
+                attributeData = data;
+            }
+            data.setData(atts);
             
+            // TODO
             
-            atts = null;
+            data.clear();
         }
-    }
-
-    public Scope getScope() {
-        return Scope.CONSUMER_INVOCATION;
-    }
-
-    public String getDataType(int index) {
-        return atts.getType(index);
-    }
-
-    public int getLength() {
-        return atts.getLength();
-    }
-
-    public String getName(int index) {
-        String localName = atts.getLocalName(index);
-        return localName.length() == 0 ? atts.getQName(index) : localName;
-    }
-
-    public String getNamespaceURI(int index) {
-        String uri = atts.getURI(index);
-        return uri.length() == 0 ? null : uri;
-    }
-
-    public String getPrefix(int index) {
-        String qName = atts.getQName(index);
-        int i = qName.indexOf(':');
-        return i == -1 ? null : qName.substring(0, i);
-    }
-
-    public Type getType(int index) {
-        if (atts.getLocalName(index).length() == 0) {
-            return Type.DOM1;
-        } else if (atts.getURI(index).equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-            return Type.NS_DECL;
-        } else {
-            return Type.DOM2;
-        }
-    }
-
-    public String getValue(int index) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -148,25 +79,36 @@ public class ConsumerContentHandler implements ContentHandler, AttributeData {
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
-        cdata1.buffer = ch;
-        cdata1.start = start;
-        cdata1.length = length;
-        consumer.processText(cdata1);
-        cdata1.clear();
+        CharArrayCharacterData data = charArrayData;
+        if (data == null) {
+            data = new CharArrayCharacterData();
+            charArrayData = data;
+        }
+        data.setData(ch, start, length);
+        consumer.processText(data);
+        data.clear();
     }
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-        cdata1.buffer = ch;
-        cdata1.start = start;
-        cdata1.length = length;
-        consumer.processText(cdata1);
-        cdata1.clear();
+        CharArrayCharacterData data = charArrayData;
+        if (data == null) {
+            data = new CharArrayCharacterData();
+            charArrayData = data;
+        }
+        data.setData(ch, start, length);
+        consumer.processText(data);
+        data.clear();
     }
 
-    public void processingInstruction(String target, String data) throws SAXException {
-        cdata2.data = data;
-        consumer.processProcessingInstruction(target, cdata2);
-        cdata2.clear();
+    public void processingInstruction(String piTarget, String piData) throws SAXException {
+        StringCharacterData data = stringData;
+        if (data == null) {
+            data = new StringCharacterData();
+            stringData = data;
+        }
+        data.setData(piData);
+        consumer.processProcessingInstruction(piTarget, data);
+        data.clear();
     }
 
     public void skippedEntity(String name) throws SAXException {
