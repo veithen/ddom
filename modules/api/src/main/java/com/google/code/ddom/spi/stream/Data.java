@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.spi.stream;
 
+// TODO: maybe rename this to DataHolder to make it clear that it is not immutable
 public interface Data {
     // TODO: probably a better way is to introduce the concept of an InvalidationListener and have the parser fire an event when the data will be no longer available 
     public enum Scope {
