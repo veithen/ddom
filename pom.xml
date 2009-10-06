@@ -26,6 +26,24 @@
     
     <url>http://code.google.com/p/ddom/</url>
     <inceptionYear>2009</inceptionYear>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Andreas Veithen</name>
+            <id>andreas.veithen</id>
+            <email>andreas.veithen (at) gmail.com</email>
+            <roles>
+                <role>Despot</role>
+            </roles>
+        </developer>
+    </developers>
+    
     <issueManagement>
         <system>Google Code</system>
         <url>http://code.google.com/p/ddom/issues/</url>
@@ -103,4 +121,13 @@
             </plugin>
         </plugins>
     </build>
-</project>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.1.1</version>
+            </plugin>
+        </plugins>
+    </reporting>
+ </project>
