@@ -127,6 +127,36 @@
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.1.1</version>
+                <configuration>
+                    <!-- These features are disabled since they may cause "mvn site" to hang -->
+                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.6</version>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.4</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <tags>
+                        <tag>TODO</tag>
+                        <tag>FIXME</tag>
+                    </tags>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
