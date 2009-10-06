@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Text;
-
-public interface TextNode extends Text, ChildNode {
+public interface TextNode extends ChildNode {
 
 }
