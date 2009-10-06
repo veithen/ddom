@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.stream.sax;
 
+import java.net.ContentHandler;
 import java.util.Map;
 
 import com.google.code.ddom.spi.stream.Consumer;
@@ -34,7 +35,10 @@ public class SAXStreamProvider implements StreamProvider {
     }
 
     public <T> T getSerializer(Class<T> serializerType, Consumer consumer, Map<String, Object> properties) {
-        // TODO support building ContentHandler wrapper around the consumer
-        return null;
+        if (serializerType.equals(ContentHandler.class)) {
+            return serializerType.cast(new ConsumerContentHandler(consumer));
+        } else {
+            return null;
+        }
     }
 }
