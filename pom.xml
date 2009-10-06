@@ -37,13 +37,13 @@
     </scm>
     
     <modules>
-        <module>modules/api</module>
-        <module>modules/core</module>
-        <module>modules/dom-utils</module>
-        <module>modules/jaxp</module>
-        <module>modules/spring-ws</module>
-        <module>modules/test-utils</module>
-        <module>tests/wss4j</module>
+        <module>modules/ddom-api</module>
+        <module>modules/ddom-core</module>
+        <module>modules/ddom-dom-utils</module>
+        <module>modules/ddom-jaxp</module>
+        <module>modules/ddom-spring-ws</module>
+        <module>modules/ddom-test-utils</module>
+        <module>tests/ddom-tests-wss4j</module>
     </modules>
 
     <dependencyManagement>
