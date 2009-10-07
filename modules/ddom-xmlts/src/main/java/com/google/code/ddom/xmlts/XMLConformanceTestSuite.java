@@ -111,6 +111,7 @@ public class XMLConformanceTestSuite {
         reader.require(XMLStreamReader.START_ELEMENT, null, "TEST");
         String uri = reader.getAttributeValue(null, "URI");
         tests.add(new XMLConformanceTest(
+                reader.getAttributeValue(null, "ID"),
                 typeMap.get(reader.getAttributeValue(null, "TYPE")),
                 new URL(base, uri),
                 getElementText(reader)));

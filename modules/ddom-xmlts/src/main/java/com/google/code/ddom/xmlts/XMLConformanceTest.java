@@ -22,16 +22,22 @@ import java.net.URL;
 public class XMLConformanceTest {
     public enum Type { VALID, INVALID, NOT_WELL_FORMED, ERROR }
     
+    private final String id;
     private final Type type;
     private final URL url;
     private final String description;
     
-    XMLConformanceTest(Type type, URL url, String description) {
+    XMLConformanceTest(String id, Type type, URL url, String description) {
+        this.id = id;
         this.type = type;
         this.url = url;
         this.description = description;
     }
 
+    public String getId() {
+        return id;
+    }
+    
     public Type getType() {
         return type;
     }

@@ -16,6 +16,8 @@
 package com.google.code.ddom.xmlts;
 
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,6 +48,15 @@ public class XMLConformanceTestSuiteTest {
     }
     
     @Test
+    public void testIDsAreUnique() {
+        Set<String> ids = new HashSet<String>();
+        for (XMLConformanceTest test : suite.getTests()) {
+            String id = test.getId();
+            Assert.assertTrue("Duplicate ID: " + id, ids.add(test.getId()));
+        }
+    }
+    
+    @Test
     public void testLoadTestFiles() throws Exception {
         byte[] buffer = new byte[4096];
         for (XMLConformanceTest test : suite.getTests()) {
@@ -72,7 +83,7 @@ public class XMLConformanceTestSuiteTest {
                         reader.next();
                     }
                 } catch (XMLStreamException ex) {
-                    System.out.println("Failing test: " + test.getSystemId());
+                    System.out.println("Failing test: " + test.getSystemId() + " [ID: " + test.getId() + "]");
                     throw ex;
                 } finally {
                     reader.close();
@@ -91,7 +102,7 @@ public class XMLConformanceTestSuiteTest {
             try {
                 builder.parse(test.getSystemId());
             } catch (SAXException ex) {
-                System.out.println("Failing test: " + test.getSystemId());
+                System.out.println("Failing test: " + test.getSystemId() + " [ID: " + test.getId() + "]");
                 throw ex;
             }
         }
