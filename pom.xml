@@ -81,6 +81,11 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>1.6.5</version>
             </dependency>
+            <dependency>
+                <groupId>org.codehaus.woodstox</groupId>
+                <artifactId>woodstox-core-asl</artifactId>
+                <version>4.0.5</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     
