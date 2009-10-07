@@ -35,5 +35,6 @@
         <module>ddom-jaxp</module>
         <module>ddom-spring-ws</module>
         <module>ddom-test-utils</module>
+        <module>ddom-xmlts</module>
     </modules>
 </project>
