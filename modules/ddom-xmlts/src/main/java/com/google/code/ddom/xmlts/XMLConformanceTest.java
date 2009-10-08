@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Set;
 
+import org.xml.sax.InputSource;
+
 public class XMLConformanceTest {
     public enum Type {
         VALID,
@@ -76,6 +78,10 @@ public class XMLConformanceTest {
     
     public InputStream getInputStream() throws IOException {
         return url.openStream();
+    }
+    
+    public InputSource getInputSource() {
+        return new InputSource(getSystemId());
     }
     
     public String getDescription() {
