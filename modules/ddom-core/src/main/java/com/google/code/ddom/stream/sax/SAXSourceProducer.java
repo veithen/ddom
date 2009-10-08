@@ -35,7 +35,14 @@ public class SAXSourceProducer implements Producer {
 
     public void proceed(Consumer consumer) throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
-        xmlReader.setContentHandler(new ConsumerContentHandler(consumer));
+        ConsumerContentHandler handler = new ConsumerContentHandler(consumer);
+        xmlReader.setContentHandler(handler);
+        try {
+            xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", handler);
+        } catch (SAXException ex) {
+            // TODO: decide if we should fail here or if it is better to ignore this
+            throw new StreamException(ex);
+        }
         try {
             xmlReader.parse(source.getInputSource());
         } catch (IOException ex) {

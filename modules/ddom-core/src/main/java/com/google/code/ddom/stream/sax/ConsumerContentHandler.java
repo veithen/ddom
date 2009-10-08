@@ -15,18 +15,22 @@
  */
 package com.google.code.ddom.stream.sax;
 
+import javax.xml.XMLConstants;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.ext.LexicalHandler;
 
 import com.google.code.ddom.spi.stream.AttributeMode;
 import com.google.code.ddom.spi.stream.Consumer;
 import com.google.code.ddom.stream.util.CharArrayCharacterData;
 import com.google.code.ddom.stream.util.StringCharacterData;
 
-public class ConsumerContentHandler implements ContentHandler {
+public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
     private final Consumer consumer;
+    private boolean inCDATA;
     private StringCharacterData stringData;
     private CharArrayCharacterData charArrayData;
     private SAXAttributeData attributeData;
@@ -45,6 +49,13 @@ public class ConsumerContentHandler implements ContentHandler {
         consumer.nodeCompleted();
     }
 
+    public void startDTD(String name, String publicId, String systemId) throws SAXException {
+        consumer.processDocumentType(name, publicId, systemId);
+    }
+
+    public void endDTD() throws SAXException {
+    }
+
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
     }
 
@@ -52,30 +63,62 @@ public class ConsumerContentHandler implements ContentHandler {
     }
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        if (consumer.getAttributeMode() == AttributeMode.EVENT) {
-            int length = atts.getLength();
-            for (int i=0; i<length; i++) {
-                
-                // TODO
-                
-            }
-        } else {
-            SAXAttributeData data = attributeData;
+        SAXAttributeData data;
+        if (consumer.getAttributeMode() == AttributeMode.ELEMENT) {
+            data = attributeData;
             if (attributeData == null) {
                 data = new SAXAttributeData();
                 attributeData = data;
             }
             data.setData(atts);
-            
-            // TODO
-            
+        } else {
+            data = null;
+        }
+        
+        if (localName.length() == 0) {
+            consumer.processElement(qName, data);
+        } else {
+            consumer.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName), data);
+        }
+
+        if (data == null) {
+            int length = atts.getLength();
+            for (int i=0; i<length; i++) {
+                String attLocalName = atts.getLocalName(i);
+                if (attLocalName.length() == 0) {
+                    consumer.processAttribute(qName, atts.getValue(i), atts.getType(i));
+                } else {
+                    String attUri = atts.getURI(i);
+                    if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+                        consumer.processNSDecl(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
+                    } else {
+                        consumer.processAttribute(
+                                SAXStreamUtils.normalizeNamespaceURI(attUri),
+                                atts.getLocalName(i),
+                                SAXStreamUtils.getPrefixFromQName(qName),
+                                atts.getValue(i),
+                                atts.getType(i));
+                    }
+                }
+            }
+            consumer.attributesCompleted();
+        }
+        
+        if (data != null) {
             data.clear();
         }
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        // TODO Auto-generated method stub
-        
+        consumer.nodeCompleted();
+    }
+
+    public void startCDATA() throws SAXException {
+        inCDATA = true;
+    }
+
+    public void endCDATA() throws SAXException {
+        inCDATA = false;
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
@@ -85,7 +128,11 @@ public class ConsumerContentHandler implements ContentHandler {
             charArrayData = data;
         }
         data.setData(ch, start, length);
-        consumer.processText(data);
+        if (inCDATA) {
+            consumer.processCDATASection(data);
+        } else {
+            consumer.processText(data);
+        }
         data.clear();
     }
 
@@ -100,6 +147,17 @@ public class ConsumerContentHandler implements ContentHandler {
         data.clear();
     }
 
+    public void comment(char[] ch, int start, int length) throws SAXException {
+        CharArrayCharacterData data = charArrayData;
+        if (data == null) {
+            data = new CharArrayCharacterData();
+            charArrayData = data;
+        }
+        data.setData(ch, start, length);
+        consumer.processComment(data);
+        data.clear();
+    }
+
     public void processingInstruction(String piTarget, String piData) throws SAXException {
         StringCharacterData data = stringData;
         if (data == null) {
@@ -109,6 +167,16 @@ public class ConsumerContentHandler implements ContentHandler {
         data.setData(piData);
         consumer.processProcessingInstruction(piTarget, data);
         data.clear();
+    }
+
+    public void startEntity(String name) throws SAXException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void endEntity(String name) throws SAXException {
+        // TODO Auto-generated method stub
+        
     }
 
     public void skippedEntity(String name) throws SAXException {

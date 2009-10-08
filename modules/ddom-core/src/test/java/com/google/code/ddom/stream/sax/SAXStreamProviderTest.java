@@ -15,17 +15,25 @@
  */
 package com.google.code.ddom.stream.sax;
 
+import java.util.EnumSet;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
 
-import org.apache.xerces.jaxp.SAXParserFactoryImpl;
-
-import com.google.code.ddom.DeferredDocumentFactory;
-import com.google.code.ddom.xmlts.XMLConformanceTest;
-import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
-
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
+import org.apache.xerces.jaxp.SAXParserFactoryImpl;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.w3c.dom.Document;
+
+import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.xmlts.XMLConformanceTest;
+import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
 
 public class SAXStreamProviderTest extends TestCase {
     private final XMLConformanceTest test;
@@ -37,16 +45,21 @@ public class SAXStreamProviderTest extends TestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        SAXParserFactory factory = new SAXParserFactoryImpl();
-        factory.setNamespaceAware(test.isUsingNamespaces());
-        SAXSource source = new SAXSource(factory.newSAXParser().getXMLReader(), test.getInputSource());
-        DeferredDocumentFactory.newInstance().parse("dom", source);
-        // TODO: need to compare the resulting document to something else!
+        SAXParserFactory saxFactory = new SAXParserFactoryImpl();
+        saxFactory.setNamespaceAware(test.isUsingNamespaces());
+        SAXSource source = new SAXSource(saxFactory.newSAXParser().getXMLReader(), test.getInputSource());
+        Document actual = DeferredDocumentFactory.newInstance().parse("dom", source);
+        ((DOMDocument)actual).build();
+        
+        DocumentBuilderFactory domFactory = new DocumentBuilderFactoryImpl();
+        domFactory.setNamespaceAware(test.isUsingNamespaces());
+        Document expected = domFactory.newDocumentBuilder().parse(test.getSystemId());
+        XMLAssert.assertXMLIdentical(XMLUnit.compareXML(expected, actual), true);
     }
     
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests()) {
+        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTestsByType(EnumSet.of(XMLConformanceTest.Type.VALID))) {
             suite.addTest(new SAXStreamProviderTest(test));
         }
         return suite;
