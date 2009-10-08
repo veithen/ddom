@@ -44,7 +44,7 @@ public class XMLConformanceTestSuiteTest {
     
     @Test
     public void testNumberOfTests() {
-        Assert.assertEquals(2570, suite.getTests().size());
+        Assert.assertTrue(suite.getTests().size() > 2000);
     }
     
     @Test
@@ -75,6 +75,7 @@ public class XMLConformanceTestSuiteTest {
     public void testParseWithWoodstox() throws Exception {
         XMLInputFactory factory = new WstxInputFactory();
         for (XMLConformanceTest test : suite.getTestsByType(XMLConformanceTest.Type.VALID)) {
+            factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, test.isUsingNamespaces());
             InputStream in = test.getInputStream();
             try {
                 XMLStreamReader reader = factory.createXMLStreamReader(test.getSystemId(), test.getInputStream());

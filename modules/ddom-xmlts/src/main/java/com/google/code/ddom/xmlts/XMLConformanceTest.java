@@ -18,18 +18,34 @@ package com.google.code.ddom.xmlts;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Set;
 
 public class XMLConformanceTest {
-    public enum Type { VALID, INVALID, NOT_WELL_FORMED, ERROR }
+    public enum Type {
+        VALID,
+        INVALID,
+        NOT_WELL_FORMED,
+        ERROR,
+        
+        /**
+         * The test has been excluded when the test suite was loaded.
+         */
+        EXCLUDED
+    }
     
     private final String id;
     private final Type type;
+    private final Set<XMLVersion> xmlVersions;
+    private final boolean usingNamespaces;
     private final URL url;
     private final String description;
     
-    XMLConformanceTest(String id, Type type, URL url, String description) {
+    XMLConformanceTest(String id, Type type, Set<XMLVersion> xmlVersions, boolean usingNamespaces, URL url, String description) {
         this.id = id;
         this.type = type;
+        this.xmlVersions = Collections.unmodifiableSet(xmlVersions);
+        this.usingNamespaces = usingNamespaces;
         this.url = url;
         this.description = description;
     }
@@ -42,6 +58,14 @@ public class XMLConformanceTest {
         return type;
     }
     
+    public Set<XMLVersion> getXmlVersions() {
+        return xmlVersions;
+    }
+
+    public boolean isUsingNamespaces() {
+        return usingNamespaces;
+    }
+
     public URL getUrl() {
         return url;
     }

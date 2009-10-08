@@ -15,12 +15,17 @@
  */
 package com.google.code.ddom.xmlts;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +39,11 @@ import javax.xml.stream.XMLStreamReader;
 import com.google.code.ddom.xmlts.XMLConformanceTest.Type;
 
 public class XMLConformanceTestSuite {
+    /**
+     * Default set of XML versions for which tests are returned. This is XML 1.0 4th edition and XML 1.1.
+     */
+    public static final Set<XMLVersion> DEFAULT_VERSIONS = Collections.unmodifiableSet(EnumSet.of(XMLVersion.XML_1_0_EDITION_4, XMLVersion.XML_1_1));
+    
     private static final Map<String,Type> typeMap = new HashMap<String,Type>();
     
     static {
@@ -66,7 +76,8 @@ public class XMLConformanceTestSuite {
         if (instance == null) {
             XMLConformanceTestSuite suite = new XMLConformanceTestSuite();
             try {
-                suite.load(XMLConformanceTestSuite.class.getResource("/xmlconf/xmlconf.xml"));
+                suite.load(XMLConformanceTestSuite.class.getResource("/xmlconf/xmlconf.xml"),
+                        loadExclusions(XMLConformanceTestSuite.class.getResource("exclusions")));
             } catch (Exception ex) {
                 throw new RuntimeException("Could not load test suite", ex);
             }
@@ -75,7 +86,23 @@ public class XMLConformanceTestSuite {
         return instance;
     }
     
-    private void load(URL url) throws IOException, XMLStreamException {
+    private static Set<String> loadExclusions(URL url) throws IOException {
+        Set<String> result = new HashSet<String>();
+        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+        try {
+            String line;
+            while ((line = in.readLine()) != null) {
+                if (line.length() != 0 && line.charAt(0) != '#') {
+                    result.add(line);
+                }
+            }
+        } finally {
+            in.close();
+        }
+        return result;
+    }
+    
+    private void load(URL url, Set<String> exclusions) throws IOException, XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         InputStream in = url.openStream();
         try {
@@ -85,14 +112,14 @@ public class XMLConformanceTestSuite {
             }
             reader.require(XMLStreamReader.START_ELEMENT, null, "TESTSUITE");
             while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
-                parseTestCases(reader, url);
+                parseTestCases(reader, url, exclusions);
             }
         } finally {
             in.close();
         }
     }
     
-    private void parseTestCases(XMLStreamReader reader, URL base) throws IOException, XMLStreamException {
+    private void parseTestCases(XMLStreamReader reader, URL base, Set<String> exclusions) throws IOException, XMLStreamException {
         reader.require(XMLStreamReader.START_ELEMENT, null, "TESTCASES");
         String relativeBase = reader.getAttributeValue(XMLConstants.XML_NS_URI, "base");
         if (relativeBase != null) {
@@ -100,38 +127,73 @@ public class XMLConformanceTestSuite {
         }
         while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
             if (reader.getLocalName().equals("TESTCASES")) {
-                parseTestCases(reader, base);
+                parseTestCases(reader, base, exclusions);
             } else {
-                parseTest(reader, base);
+                parseTest(reader, base, exclusions);
             }
         }
     }
     
-    private void parseTest(XMLStreamReader reader, URL base) throws IOException, XMLStreamException {
+    private void parseTest(XMLStreamReader reader, URL base, Set<String> exclusions) throws IOException, XMLStreamException {
         reader.require(XMLStreamReader.START_ELEMENT, null, "TEST");
+        String id = reader.getAttributeValue(null, "ID");
         String uri = reader.getAttributeValue(null, "URI");
+        String version = reader.getAttributeValue(null, "VERSION");
+        String edition = reader.getAttributeValue(null, "EDITION");
+        Set<XMLVersion> versions;
+        if (version == null || version.equals("1.0")) {
+            if (edition == null) {
+                versions = EnumSet.complementOf(EnumSet.of(XMLVersion.XML_1_1));
+            } else {
+                String[] editionArray = edition.split(" ");
+                XMLVersion[] versionArray = new XMLVersion[editionArray.length];
+                for (int i=0; i<editionArray.length; i++) {
+                    versionArray[i] = XMLVersion.valueOf("XML_1_0_EDITION_" + editionArray[i]);
+                }
+                versions = EnumSet.copyOf(Arrays.asList(versionArray));
+            }
+        } else if (version.equals("1.1")) {
+            versions = Collections.singleton(XMLVersion.XML_1_1);
+        } else {
+            throw new RuntimeException("Unrecognized version " + version);
+        }
         tests.add(new XMLConformanceTest(
-                reader.getAttributeValue(null, "ID"),
-                typeMap.get(reader.getAttributeValue(null, "TYPE")),
+                id,
+                exclusions.contains(id) ? Type.EXCLUDED : typeMap.get(reader.getAttributeValue(null, "TYPE")),
+                versions,
+                !"no".equals(reader.getAttributeValue(null, "NAMESPACE")),
                 new URL(base, uri),
                 getElementText(reader)));
     }
     
-    public Collection<XMLConformanceTest> getTests() {
+    public Collection<XMLConformanceTest> getAllTests() {
         return Collections.unmodifiableCollection(tests);
     }
     
-    public Collection<XMLConformanceTest> getTestsByType(Set<Type> types) {
+    public Collection<XMLConformanceTest> getTests(Set<XMLVersion> versions, Set<Type> types) {
         List<XMLConformanceTest> result = new LinkedList<XMLConformanceTest>();
         for (XMLConformanceTest test : tests) {
-            if (types.contains(test.getType())) {
+            if ((versions == null || !Collections.disjoint(test.getXmlVersions(), versions))
+                    && (types == null || types.contains(test.getType()))) {
                 result.add(test);
             }
         }
         return result;
     }
     
+    public Collection<XMLConformanceTest> getTests() {
+        return getTests(DEFAULT_VERSIONS, null);
+    }
+    
+    public Collection<XMLConformanceTest> getTestsForXMLVersions(Set<XMLVersion> versions) {
+        return getTests(versions, null);
+    }
+    
+    public Collection<XMLConformanceTest> getTestsByType(Set<Type> types) {
+        return getTests(DEFAULT_VERSIONS, types);
+    }
+    
     public Collection<XMLConformanceTest> getTestsByType(Type type) {
-        return getTestsByType(Collections.singleton(type));
+        return getTests(DEFAULT_VERSIONS, Collections.singleton(type));
     }
 }
