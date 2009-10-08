@@ -18,42 +18,31 @@ package com.google.code.ddom.spi.model;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import com.google.code.ddom.spi.ProviderFinder;
+import com.google.code.ddom.spi.ProviderFinderException;
 
 public final class ModelRegistry {
     private static final Map<ClassLoader,ModelRegistry> registries = Collections.synchronizedMap(new WeakHashMap<ClassLoader,ModelRegistry>());
     
-    private final Map<String,NodeFactory> nodeFactories = new HashMap<String,NodeFactory>();
+    private final Map<String,NodeFactory> nodeFactories;
     
-    private ModelRegistry() {}
+    private ModelRegistry(Map<String,NodeFactory> nodeFactories) {
+        this.nodeFactories = nodeFactories;
+    }
     
-    public static ModelRegistry getInstance(ClassLoader classLoader) {
+    public static ModelRegistry getInstance(ClassLoader classLoader) throws ProviderFinderException {
         ModelRegistry registry = registries.get(classLoader);
         if (registry == null) {
-            registry = new ModelRegistry();
-
-            // TODO: replace this by a service discovery algorithm
-            try {
-                registry.nodeFactories.put("dom", (NodeFactory)classLoader.loadClass("com.google.code.ddom.dom.impl.DOMNodeFactory").newInstance());
-            } catch (InstantiationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            
+            registry = new ModelRegistry(ProviderFinder.find(classLoader, NodeFactory.class));
             registries.put(classLoader, registry);
         }
         return registry;
     }
     
-    public static ModelRegistry getInstance() {
+    public static ModelRegistry getInstance() throws ProviderFinderException {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
                 return Thread.currentThread().getContextClassLoader();

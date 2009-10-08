@@ -18,11 +18,13 @@ package com.google.code.ddom.stream.sax;
 import java.net.ContentHandler;
 import java.util.Map;
 
+import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.stream.Consumer;
 import com.google.code.ddom.spi.stream.Producer;
 import com.google.code.ddom.spi.stream.StreamException;
 import com.google.code.ddom.spi.stream.StreamProvider;
 
+@Provider(name="sax")
 public class SAXStreamProvider implements StreamProvider {
     public Producer getProducer(Object source, Map<String, Object> properties, boolean preserve) throws StreamException {
         // TODO build Producer for SAXSource here

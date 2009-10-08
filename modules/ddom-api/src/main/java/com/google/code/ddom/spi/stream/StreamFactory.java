@@ -18,43 +18,32 @@ package com.google.code.ddom.spi.stream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import com.google.code.ddom.spi.ProviderFinder;
+import com.google.code.ddom.spi.ProviderFinderException;
 
 public final class StreamFactory {
     private static final Map<ClassLoader,StreamFactory> factories = Collections.synchronizedMap(new WeakHashMap<ClassLoader,StreamFactory>());
     
-    private final Map<String,StreamProvider> providers = new LinkedHashMap<String,StreamProvider>();
+    private final Map<String,StreamProvider> providers;
     
-    private StreamFactory() {}
+    private StreamFactory(Map<String,StreamProvider> providers) {
+        this.providers = providers;
+    }
     
-    public static StreamFactory getInstance(ClassLoader classLoader) {
+    public static StreamFactory getInstance(ClassLoader classLoader) throws ProviderFinderException {
         StreamFactory factory = factories.get(classLoader);
         if (factory == null) {
-            factory = new StreamFactory();
-            
-            // TODO: replace this by a service discovery algorithm
-            try {
-                factory.providers.put("stax", (StreamProvider)classLoader.loadClass("com.google.code.ddom.stream.stax.StAXStreamProvider").newInstance());
-            } catch (InstantiationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            
+            factory = new StreamFactory(ProviderFinder.find(classLoader, StreamProvider.class));
             factories.put(classLoader, factory);
         }
         return factory;
     }
     
     
-    public static StreamFactory getInstance() {
+    public static StreamFactory getInstance() throws ProviderFinderException {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
                 return Thread.currentThread().getContextClassLoader();

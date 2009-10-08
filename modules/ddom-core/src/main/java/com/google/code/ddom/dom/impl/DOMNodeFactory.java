@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.model.DOM1Element;
 import com.google.code.ddom.spi.model.DOM1TypedAttribute;
 import com.google.code.ddom.spi.model.DOM2Element;
@@ -31,6 +32,7 @@ import com.google.code.ddom.spi.model.NamespaceDeclaration;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.stream.Producer;
 
+@Provider(name="dom")
 public class DOMNodeFactory implements NodeFactory {
     public DOMDocument createDocument(Producer producer) {
         return new DocumentImpl(this, producer);
