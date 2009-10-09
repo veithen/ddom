@@ -187,4 +187,13 @@ public class ElementImplTest {
         Element element = doc.createElementNS(null, "test");
         element.replaceChild(doc.createTextNode("test"), null);
     }
+    
+    @Validated @Test
+    public void testGetTextContent() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.appendChild(doc.createTextNode("te"));
+        element.appendChild(doc.createTextNode("st"));
+        Assert.assertEquals("test", element.getTextContent());
+    }
 }

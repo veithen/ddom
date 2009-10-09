@@ -61,10 +61,6 @@ public class DocumentTypeImpl extends LeafNode implements CoreDocumentType {
         throw new UnsupportedOperationException();
     }
 
-    public final CharSequence collectTextContent(CharSequence appendTo) {
-        return appendTo;
-    }
-
     public final Node cloneNode(boolean deep) {
         // TODO: factory method here!
         return new DocumentTypeImpl(getDocument(), rootName, publicId, systemId);

@@ -55,4 +55,13 @@ public class AttrImplTest {
             Assert.assertEquals(DOMException.NAMESPACE_ERR, ex.code);
         }
     }
+    
+    @Validated @Test
+    public void testGetValueWithMultipleChildren() {
+        Document doc = DOMUtil.newDocument();
+        Attr attr = doc.createAttribute("name");
+        attr.setValue("te");
+        attr.appendChild(doc.createTextNode("st"));
+        Assert.assertEquals("test", attr.getValue());
+    }
 }

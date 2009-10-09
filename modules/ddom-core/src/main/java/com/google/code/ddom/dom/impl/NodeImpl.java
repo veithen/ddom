@@ -31,11 +31,6 @@ public abstract class NodeImpl implements CoreNode {
         // TODO Auto-generated method stub
     }
     
-    public final String getTextContent() throws DOMException {
-        CharSequence content = collectTextContent(null);
-        return content == null ? "" : content.toString();
-    }
-    
     public final boolean isSupported(String feature, String version) {
         return getDocument().getImplementation().hasFeature(feature, version);
     }
@@ -54,11 +49,6 @@ public abstract class NodeImpl implements CoreNode {
     }
 
     public final boolean isEqualNode(Node arg) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final void setTextContent(String textContent) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

@@ -43,10 +43,6 @@ public class ProcessingInstructionImpl extends LeafNode implements CoreProcessin
         return target;
     }
 
-    public final CharSequence collectTextContent(CharSequence appendTo) {
-        return appendTo;
-    }
-
     public final Node cloneNode(boolean deep) {
         CoreDocument document = getDocument();
         return document.getNodeFactory().createProcessingInstruction(document, target, data);

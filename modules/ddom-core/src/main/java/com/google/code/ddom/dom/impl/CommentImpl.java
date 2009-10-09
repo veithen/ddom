@@ -29,8 +29,4 @@ public class CommentImpl extends CharacterDataImpl implements CoreComment {
         CoreDocument document = getDocument();
         return document.getNodeFactory().createComment(document, getData());
     }
-
-    public final CharSequence collectTextContent(CharSequence appendTo) {
-        return appendTo;
-    }
 }

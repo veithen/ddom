@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
-public interface CoreNode extends Node {
-    /**
-     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
-     * this method will never return <code>null</code>.
-     * 
-     * @return the document
-     */
-    CoreDocument getDocument();
+import com.google.code.ddom.spi.model.CoreNode;
+
+public interface DOMNode extends CoreNode, Node {
+    CharSequence collectTextContent(CharSequence appendTo);
 }

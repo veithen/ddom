@@ -244,12 +244,4 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode,
     }
     
     protected abstract Node shallowClone();
-
-    public final CharSequence collectTextContent(CharSequence appendTo) {
-        CharSequence content = appendTo;
-        for (CoreChildNode node = getFirstChild(); node != null; node = node.getNextSibling()) {
-            content = node.collectTextContent(content);
-        }
-        return content;
-    }
 }

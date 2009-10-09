@@ -181,8 +181,10 @@
                     <excludes>
                         <exclude>**/DOM3CoreTest.java</exclude>
                         <exclude>**/SAXStreamProviderTest.java</exclude>
+                        <exclude>**/NodeFactoryAspectTest.java</exclude>
                     </excludes>
-                    <argLine>-javaagent:target/lib/aspectjweaver.jar</argLine>
+                    <!-- TODO: doesn't seem to work very well with already woven code -->
+                    <!-- argLine>-javaagent:target/lib/aspectjweaver.jar</argLine -->
                 </configuration>
             </plugin>
         </plugins>

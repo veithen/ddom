@@ -38,11 +38,6 @@ public class EntityReferenceImpl extends LeafNode implements CoreEntityReference
         return document.getNodeFactory().createEntityReference(document, name);
     }
 
-    public final CharSequence collectTextContent(CharSequence appendTo) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public final String getNodeValue() throws DOMException {
         // TODO
         throw new UnsupportedOperationException();

@@ -30,22 +30,4 @@ public abstract class TextNodeImpl extends CharacterDataImpl implements CoreText
     public final Node cloneNode(boolean deep) {
         return createNewTextNode(getData());
     }
-
-    public final CharSequence collectTextContent(CharSequence appendTo) {
-        String data = getData();
-        if (appendTo == null) {
-            return data;
-        } else {
-            StringBuilder builder;
-            if (appendTo instanceof String) {
-                String existing = (String)appendTo;
-                builder = new StringBuilder(existing.length() + data.length());
-                builder.append(existing);
-            } else {
-                builder = (StringBuilder)appendTo;
-            }
-            builder.append(data);
-            return builder;
-        }
-    }
 }
