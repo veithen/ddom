@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-
-public interface DOM1NamedNode extends DOMNode {
+public interface CoreNSAwareElement extends CoreElement, CoreNSAwareNamedNode {
 
 }

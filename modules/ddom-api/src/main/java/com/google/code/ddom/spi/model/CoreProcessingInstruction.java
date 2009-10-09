@@ -15,9 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Element;
+import org.w3c.dom.ProcessingInstruction;
 
-public interface DOMElement extends Element, ChildNode, BuilderTarget, OptimizedParentNode {
-    DOMAttribute internalGetFirstAttribute();
-    void internalSetFirstAttribute(DOMAttribute attr);
+public interface CoreProcessingInstruction extends ProcessingInstruction, CoreChildNode {
+
 }

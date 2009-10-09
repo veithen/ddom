@@ -15,7 +15,9 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface TypedAttribute extends DOMAttribute {
-    String getType();
-    void setType(String type);
+import org.w3c.dom.Element;
+
+public interface CoreElement extends Element, CoreChildNode, BuilderTarget, CoreOptimizedParentNode {
+    CoreAttribute internalGetFirstAttribute();
+    void internalSetFirstAttribute(CoreAttribute attr);
 }

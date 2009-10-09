@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Comment;
-
-public interface DOMComment extends Comment, ChildNode {
+public interface CoreText extends CoreTextNode {
 
 }

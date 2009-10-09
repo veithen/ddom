@@ -20,8 +20,8 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMDocumentType;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreDocumentType;
 import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DOMImplementationImpl implements DOMImplementation {
@@ -32,10 +32,10 @@ public class DOMImplementationImpl implements DOMImplementation {
     }
     
     public Document createDocument(String namespaceURI, String qualifiedName, DocumentType doctype) throws DOMException {
-        DOMDocument document = nodeFactory.createDocument(null);
+        CoreDocument document = nodeFactory.createDocument(null);
         if (doctype != null) {
             if (doctype.getOwnerDocument() == null) {
-                ((DOMDocumentType)doctype).internalSetDocument(document);
+                ((CoreDocumentType)doctype).internalSetDocument(document);
             }
             document.appendChild(doctype);
         }
@@ -48,7 +48,7 @@ public class DOMImplementationImpl implements DOMImplementation {
     public DocumentType createDocumentType(String qualifiedName, String publicId, String systemId)
             throws DOMException {
         NSUtil.validateQualifiedName(qualifiedName);
-        DOMDocumentType docType = nodeFactory.createDocumentType(null, qualifiedName, publicId, systemId);
+        CoreDocumentType docType = nodeFactory.createDocumentType(null, qualifiedName, publicId, systemId);
         return docType;
     }
 

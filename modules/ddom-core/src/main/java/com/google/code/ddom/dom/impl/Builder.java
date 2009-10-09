@@ -18,10 +18,10 @@ package com.google.code.ddom.dom.impl;
 import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.dom.builder.PushConsumer;
 import com.google.code.ddom.spi.model.BuilderTarget;
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMAttribute;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.stream.AttributeData;
 import com.google.code.ddom.spi.stream.AttributeMode;
@@ -33,14 +33,14 @@ import com.google.code.ddom.spi.stream.StreamException;
 public class Builder extends PushConsumer {
     private final Producer producer;
     private final NodeFactory nodeFactory;
-    private final DOMDocument document;
+    private final CoreDocument document;
     private StreamException streamException;
     private BuilderTarget parent;
-    private ChildNode lastSibling;
-    private DOMAttribute lastAttribute;
+    private CoreChildNode lastSibling;
+    private CoreAttribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Producer producer, NodeFactory nodeFactory, DOMDocument document, BuilderTarget target) {
+    public Builder(Producer producer, NodeFactory nodeFactory, CoreDocument document, BuilderTarget target) {
         super(AttributeMode.EVENT);
         this.producer = producer;
         this.nodeFactory = nodeFactory;
@@ -132,7 +132,7 @@ public class Builder extends PushConsumer {
         appendNode(nodeFactory.createEntityReference(document, name));
     }
     
-    private void appendNode(ChildNode node) {
+    private void appendNode(CoreChildNode node) {
         if (lastSibling == null) {
             parent.internalSetFirstChild(node);
         } else {
@@ -140,9 +140,9 @@ public class Builder extends PushConsumer {
         }
         parent.notifyChildrenModified(1);
         node.internalSetParent(parent);
-        if (node instanceof DOMElement) {
+        if (node instanceof CoreElement) {
             // TODO: this assumes that elements are always created as incomplete
-            parent = (DOMElement)node;
+            parent = (CoreElement)node;
             lastSibling = null;
         } else {
             lastSibling = node;
@@ -151,8 +151,8 @@ public class Builder extends PushConsumer {
         lastAttribute = null;
     }
     
-    private void appendAttribute(DOMAttribute attr) {
-        DOMElement element = (DOMElement)parent;
+    private void appendAttribute(CoreAttribute attr) {
+        CoreElement element = (CoreElement)parent;
         if (lastAttribute == null) {
             element.internalSetFirstAttribute(attr);
         } else {
@@ -163,8 +163,8 @@ public class Builder extends PushConsumer {
     }
     
     public final void nodeCompleted() {
-        if (parent instanceof ChildNode) {
-            lastSibling = (ChildNode)parent;
+        if (parent instanceof CoreChildNode) {
+            lastSibling = (CoreChildNode)parent;
         }
         parent.internalSetComplete();
         // TODO: get rid of cast here

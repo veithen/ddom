@@ -21,46 +21,46 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMAttribute;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMElement;
-import com.google.code.ddom.spi.model.DOMEntityReference;
-import com.google.code.ddom.spi.model.DOMText;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreElement;
+import com.google.code.ddom.spi.model.CoreEntityReference;
+import com.google.code.ddom.spi.model.CoreText;
 
-public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttribute {
+public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttribute {
     /**
-     * The owner of the attribute. This is either a {@link DOMDocument} if the attribute is not linked
-     * to an element, or an {@link DOMElement} if the attribute has been added to an element.
+     * The owner of the attribute. This is either a {@link CoreDocument} if the attribute is not linked
+     * to an element, or an {@link CoreElement} if the attribute has been added to an element.
      */
     private Object owner;
     
     private Object value;
-    private DOMAttribute nextAttribute;
+    private CoreAttribute nextAttribute;
 
-    public DOMAttributeImpl(DOMDocument document, String value) {
+    public AttributeImpl(CoreDocument document, String value) {
         owner = document;
         this.value = value;
     }
     
-    public final void internalSetNextAttribute(DOMAttribute attr) {
+    public final void internalSetNextAttribute(CoreAttribute attr) {
         nextAttribute = attr;
     }
     
-    public final void internalSetOwnerElement(DOMElement newOwner) {
+    public final void internalSetOwnerElement(CoreElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
-            owner = ((DOMElement)owner).getOwnerDocument();
+            owner = ((CoreElement)owner).getOwnerDocument();
         } else {
             owner = newOwner;
         }
     }
     
-    public final DOMAttribute internalGetNextAttribute() {
+    public final CoreAttribute internalGetNextAttribute() {
         return nextAttribute;
     }
 
-    public final void internalSetFirstChild(ChildNode child) {
+    public final void internalSetFirstChild(CoreChildNode child) {
         value = child;
     }
 
@@ -69,8 +69,8 @@ public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttr
     }
 
     @Override
-    protected final void validateChildType(ChildNode newChild) {
-        if (!(newChild instanceof DOMText || newChild instanceof DOMEntityReference)) {
+    protected final void validateChildType(CoreChildNode newChild) {
+        if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
             throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         }
     }
@@ -84,26 +84,26 @@ public abstract class DOMAttributeImpl extends ParentNodeImpl implements DOMAttr
             return 1;
         } else {
             int length = 0;
-            for (ChildNode child = (ChildNode)value; child != null; child = child.getNextSibling()) {
+            for (CoreChildNode child = (CoreChildNode)value; child != null; child = child.getNextSibling()) {
                 length++;
             }
             return length;
         }
     }
 
-    public final ChildNode getFirstChild() {
+    public final CoreChildNode getFirstChild() {
         return OptimizedParentNodeHelper.getFirstChild(this);
     }
     
-    public final DOMElement getOwnerElement() {
-        return owner instanceof DOMElement ? (DOMElement)owner : null;
+    public final CoreElement getOwnerElement() {
+        return owner instanceof CoreElement ? (CoreElement)owner : null;
     }
 
-    public final DOMDocument getDocument() {
-        if (owner instanceof DOMDocument) {
-            return (DOMDocument)owner;
+    public final CoreDocument getDocument() {
+        if (owner instanceof CoreDocument) {
+            return (CoreDocument)owner;
         } else {
-            return ((DOMElement)owner).getDocument();
+            return ((CoreElement)owner).getDocument();
         }
     }
 

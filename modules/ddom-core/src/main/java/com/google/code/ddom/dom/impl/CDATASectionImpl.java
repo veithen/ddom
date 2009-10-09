@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.spi.model.DOMCDATASection;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.TextNode;
+import com.google.code.ddom.spi.model.CoreCDATASection;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreTextNode;
 
-public class CDATASectionImpl extends TextNodeImpl implements DOMCDATASection {
-    public CDATASectionImpl(DOMDocument document, String data) {
+public class CDATASectionImpl extends TextNodeImpl implements CoreCDATASection {
+    public CDATASectionImpl(CoreDocument document, String data) {
         super(document, data);
     }
 
@@ -33,8 +33,8 @@ public class CDATASectionImpl extends TextNodeImpl implements DOMCDATASection {
     }
 
     @Override
-    protected TextNode createNewTextNode(String data) {
-        DOMDocument document = getDocument();
+    protected CoreTextNode createNewTextNode(String data) {
+        CoreDocument document = getDocument();
         return document.getNodeFactory().createCDATASection(document, data);
     }
 }

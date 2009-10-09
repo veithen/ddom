@@ -17,15 +17,15 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.spi.model.DOM1Element;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
 
-public class DOM1ElementImpl extends ElementImpl implements DOM1Element {
+public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
     private final String tagName;
 
-    public DOM1ElementImpl(DOMDocument document, String tagName, boolean complete) {
+    public NSUnawareElementImpl(CoreDocument document, String tagName, boolean complete) {
         super(document, complete);
         this.tagName = tagName;
     }
@@ -51,8 +51,8 @@ public class DOM1ElementImpl extends ElementImpl implements DOM1Element {
     }
 
     @Override
-    protected final DOMElement shallowCloneWithoutAttributes() {
-        DOMDocument document = getDocument();
+    protected final CoreElement shallowCloneWithoutAttributes() {
+        CoreDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
         return factory.createElement(document, tagName, true);
     }

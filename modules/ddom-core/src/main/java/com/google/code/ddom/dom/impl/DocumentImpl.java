@@ -36,19 +36,19 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 import com.google.code.ddom.DeferredParsingException;
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMAttribute;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.stream.Producer;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
-public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
+public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
     private final NodeFactory nodeFactory;
     private Builder builder;
     private DOMImplementationImpl domImplementation;
-    private ChildNode firstChild;
+    private CoreChildNode firstChild;
     private int children;
     private String inputEncoding;
     private String xmlEncoding;
@@ -174,11 +174,11 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
         builder = null;
     }
     
-    public final void internalSetFirstChild(ChildNode child) {
+    public final void internalSetFirstChild(CoreChildNode child) {
         firstChild = child;
     }
 
-    public final ChildNode getFirstChild() {
+    public final CoreChildNode getFirstChild() {
         if (firstChild == null && !isComplete()) {
             next();
         }
@@ -190,7 +190,7 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     }
 
     @Override
-    protected void validateChildType(ChildNode newChild) {
+    protected void validateChildType(CoreChildNode newChild) {
         // TODO
     }
 
@@ -354,9 +354,9 @@ public class DocumentImpl extends ParentNodeImpl implements DOMDocument {
     }
 
     public final Element getElementById(String elementId) {
-        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
-            DOMElement element = it.next();
-            for (DOMAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
+        for (Iterator<CoreElement> it = new DescendantsIterator<CoreElement>(CoreElement.class, this); it.hasNext(); ) {
+            CoreElement element = it.next();
+            for (CoreAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
                 if (attr.isId() && elementId.equals(attr.getValue())) {
                     return element;
                 }

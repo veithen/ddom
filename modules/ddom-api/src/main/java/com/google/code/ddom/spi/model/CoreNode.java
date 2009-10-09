@@ -15,13 +15,16 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
-import com.google.code.ddom.DeferredDocument;
-import com.google.code.ddom.DeferredParsingException;
-
-public interface DOMDocument extends Document, DeferredDocument, BuilderTarget {
-    NodeFactory getNodeFactory();
-    void next() throws DeferredParsingException;
-    int getStructureVersion();
+public interface CoreNode extends Node {
+    /**
+     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
+     * this method will never return <code>null</code>.
+     * 
+     * @return the document
+     */
+    CoreDocument getDocument();
+    
+    CharSequence collectTextContent(CharSequence appendTo);
 }

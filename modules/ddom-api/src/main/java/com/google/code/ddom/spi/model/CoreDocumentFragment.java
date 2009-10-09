@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.CDATASection;
+import org.w3c.dom.DocumentFragment;
 
-public interface DOMCDATASection extends CDATASection, TextNode {
-
+public interface CoreDocumentFragment extends DocumentFragment, CoreParentNode {
+    int getLength();
 }

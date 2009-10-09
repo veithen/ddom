@@ -17,11 +17,11 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.DOMComment;
-import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.CoreComment;
+import com.google.code.ddom.spi.model.CoreDocument;
 
-public class CommentImpl extends CharacterDataImpl implements DOMComment {
-    public CommentImpl(DOMDocument document, String data) {
+public class CommentImpl extends CharacterDataImpl implements CoreComment {
+    public CommentImpl(CoreDocument document, String data) {
         super(document, data);
     }
 
@@ -34,7 +34,7 @@ public class CommentImpl extends CharacterDataImpl implements DOMComment {
     }
 
     public final Node cloneNode(boolean deep) {
-        DOMDocument document = getDocument();
+        CoreDocument document = getDocument();
         return document.getNodeFactory().createComment(document, getData());
     }
 

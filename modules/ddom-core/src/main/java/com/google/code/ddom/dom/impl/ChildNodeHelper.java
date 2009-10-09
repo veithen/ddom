@@ -16,16 +16,16 @@
 package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.spi.model.BuilderTarget;
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.ParentNode;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreParentNode;
 
 public class ChildNodeHelper {
-    public static ChildNode getNextSibling(ChildNode node) {
-        ParentNode parent = node.getParentNode();
-        DOMDocument document = node.getDocument();
+    public static CoreChildNode getNextSibling(CoreChildNode node) {
+        CoreParentNode parent = node.getParentNode();
+        CoreDocument document = node.getDocument();
         if (parent instanceof BuilderTarget) {
-            ChildNode nextSibling;
+            CoreChildNode nextSibling;
             while ((nextSibling = node.internalGetNextSibling()) == null && !((BuilderTarget)parent).isComplete()) {
                 document.next();
             }
@@ -35,13 +35,13 @@ public class ChildNodeHelper {
         }
     }
     
-    public static ChildNode getPreviousSibling(ChildNode node) {
-        ParentNode parent = node.getParentNode();
+    public static CoreChildNode getPreviousSibling(CoreChildNode node) {
+        CoreParentNode parent = node.getParentNode();
         if (parent == null) {
             return null;
         } else {
-            ChildNode previousSibling = null;
-            ChildNode sibling = parent.getFirstChild();
+            CoreChildNode previousSibling = null;
+            CoreChildNode sibling = parent.getFirstChild();
             while (sibling != null && sibling != node) {
                 previousSibling = sibling;
                 sibling = sibling.internalGetNextSibling();

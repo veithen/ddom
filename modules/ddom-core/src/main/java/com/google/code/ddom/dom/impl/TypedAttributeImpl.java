@@ -15,13 +15,13 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.TypedAttribute;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreTypedAttribute;
 
-public abstract class TypedAttributeImpl extends DOMAttributeImpl implements TypedAttribute {
+public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTypedAttribute {
     private String type;
 
-    public TypedAttributeImpl(DOMDocument document, String value, String type) {
+    public TypedAttributeImpl(CoreDocument document, String value, String type) {
         super(document, value);
         this.type = type;
     }

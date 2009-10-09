@@ -19,10 +19,10 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.spi.model.DOM2NamedNode;
+import com.google.code.ddom.spi.model.CoreNSAwareNamedNode;
 
-public class DOM2NamedNodeHelper {
-    public static void setPrefix(DOM2NamedNode node, String prefix) throws DOMException {
+public class NSAwareNamedNodeHelper {
+    public static void setPrefix(CoreNSAwareNamedNode node, String prefix) throws DOMException {
         String namespaceURI = node.getNamespaceURI();
         if (namespaceURI == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
@@ -38,7 +38,7 @@ public class DOM2NamedNodeHelper {
         }
     }
     
-    public static String getName(DOM2NamedNode node) {
+    public static String getName(CoreNSAwareNamedNode node) {
         String prefix = node.getPrefix();
         String localName = node.getLocalName();
         if (prefix == null) {

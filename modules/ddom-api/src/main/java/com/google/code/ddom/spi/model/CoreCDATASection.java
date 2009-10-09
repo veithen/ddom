@@ -15,10 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
+import org.w3c.dom.CDATASection;
 
-public interface ParentNode extends DOMNode {
-    void internalSetFirstChild(ChildNode child);
-    void notifyChildrenModified(int delta);
-    ChildNode getFirstChild();
-    ChildNode getLastChild();
+public interface CoreCDATASection extends CDATASection, CoreTextNode {
+
 }

@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.ProcessingInstruction;
+import org.w3c.dom.Comment;
 
-public interface DOMProcessingInstruction extends ProcessingInstruction, ChildNode {
+public interface CoreComment extends Comment, CoreChildNode {
 
 }

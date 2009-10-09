@@ -15,6 +15,12 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface DOM1TypedAttribute extends TypedAttribute, DOM1NamedNode {
+import org.w3c.dom.Attr;
 
+public interface CoreAttribute extends Attr, CoreParentNode, CoreOptimizedParentNode {
+    CoreAttribute internalGetNextAttribute();
+    void internalSetNextAttribute(CoreAttribute attr);
+    void internalSetOwnerElement(CoreElement newOwner);
+
+    CoreElement getOwnerElement();
 }

@@ -16,73 +16,73 @@
 package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.model.DOM1Element;
-import com.google.code.ddom.spi.model.DOM1TypedAttribute;
-import com.google.code.ddom.spi.model.DOM2Element;
-import com.google.code.ddom.spi.model.DOM2TypedAttribute;
-import com.google.code.ddom.spi.model.DOMCDATASection;
-import com.google.code.ddom.spi.model.DOMComment;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMDocumentFragment;
-import com.google.code.ddom.spi.model.DOMDocumentType;
-import com.google.code.ddom.spi.model.DOMEntityReference;
-import com.google.code.ddom.spi.model.DOMProcessingInstruction;
-import com.google.code.ddom.spi.model.DOMText;
-import com.google.code.ddom.spi.model.NamespaceDeclaration;
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
+import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreNSAwareElement;
+import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreCDATASection;
+import com.google.code.ddom.spi.model.CoreComment;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreDocumentFragment;
+import com.google.code.ddom.spi.model.CoreDocumentType;
+import com.google.code.ddom.spi.model.CoreEntityReference;
+import com.google.code.ddom.spi.model.CoreProcessingInstruction;
+import com.google.code.ddom.spi.model.CoreText;
+import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.stream.Producer;
 
 @Provider(name="dom")
 public class DOMNodeFactory implements NodeFactory {
-    public DOMDocument createDocument(Producer producer) {
+    public CoreDocument createDocument(Producer producer) {
         return new DocumentImpl(this, producer);
     }
 
-    public DOMDocumentType createDocumentType(DOMDocument document, String rootName, String publicId, String systemId) {
+    public CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId) {
         return new DocumentTypeImpl(document, rootName, publicId, systemId);
     }
 
-    public DOM1Element createElement(DOMDocument document, String tagName, boolean complete) {
-        return new DOM1ElementImpl(document, tagName, complete);
+    public CoreNSUnawareElement createElement(CoreDocument document, String tagName, boolean complete) {
+        return new NSUnawareElementImpl(document, tagName, complete);
     }
     
-    public DOM2Element createElement(DOMDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
-        return new DOM2ElementImpl(document, namespaceURI, localName, prefix, complete);
+    public CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
+        return new NSAwareElementImpl(document, namespaceURI, localName, prefix, complete);
     }
     
-    public DOM1TypedAttribute createAttribute(DOMDocument document, String name, String value, String type) {
-        return new DOM1TypedAttributeImpl(document, name, value, type);
+    public CoreNSUnawareTypedAttribute createAttribute(CoreDocument document, String name, String value, String type) {
+        return new NSUnawareTypedAttributeImpl(document, name, value, type);
     }
     
-    public DOM2TypedAttribute createAttribute(DOMDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
-        return new DOM2TypedAttributeImpl(document, namespaceURI, localName, prefix, value, type);
+    public CoreNSAwareTypedAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
+        return new NSAwareTypedAttributeImpl(document, namespaceURI, localName, prefix, value, type);
     }
     
-    public NamespaceDeclaration createNSDecl(DOMDocument document, String prefix, String namespaceURI) {
+    public CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI) {
         return new NSDecl(document, prefix, namespaceURI);
     }
     
-    public DOMProcessingInstruction createProcessingInstruction(DOMDocument document, String target, String data) {
+    public CoreProcessingInstruction createProcessingInstruction(CoreDocument document, String target, String data) {
         return new ProcessingInstructionImpl(document, target, data);
     }
     
-    public DOMDocumentFragment createDocumentFragment(DOMDocument document) {
+    public CoreDocumentFragment createDocumentFragment(CoreDocument document) {
         return new DocumentFragmentImpl(document);
     }
 
-    public DOMText createText(DOMDocument document, String data) {
+    public CoreText createText(CoreDocument document, String data) {
         return new TextImpl(document, data);
     }
 
-    public DOMComment createComment(DOMDocument document, String data) {
+    public CoreComment createComment(CoreDocument document, String data) {
         return new CommentImpl(document, data);
     }
 
-    public DOMCDATASection createCDATASection(DOMDocument document, String data) {
+    public CoreCDATASection createCDATASection(CoreDocument document, String data) {
         return new CDATASectionImpl(document, data);
     }
 
-    public DOMEntityReference createEntityReference(DOMDocument document, String name) {
+    public CoreEntityReference createEntityReference(CoreDocument document, String name) {
         return new EntityReferenceImpl(document, name);
     }
 }

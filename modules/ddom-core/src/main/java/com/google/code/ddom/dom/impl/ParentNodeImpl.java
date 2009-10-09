@@ -23,19 +23,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.spi.model.BuilderTarget;
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMDocumentFragment;
-import com.google.code.ddom.spi.model.ParentNode;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreDocumentFragment;
+import com.google.code.ddom.spi.model.CoreParentNode;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementLocalNameFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementNameFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementNamespaceFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.FilterIterator;
 
-public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, NodeList {
-    public final ChildNode getLastChild() {
-        ChildNode previousChild = null;
-        ChildNode child = getFirstChild();
+public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode, NodeList {
+    public final CoreChildNode getLastChild() {
+        CoreChildNode previousChild = null;
+        CoreChildNode child = getFirstChild();
         while (child != null) {
             previousChild = child;
             child = child.getNextSibling();
@@ -55,7 +55,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
     public final Node item(int index) {
         // TODO: need unit test to check that this works when parsing is deferred
         // TODO: wrong result for negavite indexes
-        ChildNode node = getFirstChild();
+        CoreChildNode node = getFirstChild();
         for (int i=0; i<index && node != null; i++) {
             node = node.getNextSibling();
         }
@@ -136,7 +136,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
         }
     }
     
-    protected abstract void validateChildType(ChildNode newChild);
+    protected abstract void validateChildType(CoreChildNode newChild);
     
     public final Node removeChild(Node oldChild) throws DOMException {
         if (oldChild == null) {
@@ -163,14 +163,14 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
         if (newChild != null) {
             prepareNewChild(newChild);
         }
-        ChildNode previousSibling; // The sibling that will precede the new child
-        ChildNode nextSibling; // The sibling that will follow the new child
+        CoreChildNode previousSibling; // The sibling that will precede the new child
+        CoreChildNode nextSibling; // The sibling that will follow the new child
         if (refChild == null) { // implies removeRefChild == false
             previousSibling = getLastChild();
             nextSibling = null;
         } else {
             previousSibling = null;
-            ChildNode node = getFirstChild();
+            CoreChildNode node = getFirstChild();
             while (node != null && node != refChild) {
                 previousSibling = node;
                 node = node.getNextSibling();
@@ -188,14 +188,14 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
             }
             notifyChildrenModified(-1);
         } else {
-            ChildNode firstNodeToInsert;
-            ChildNode lastNodeToInsert;
+            CoreChildNode firstNodeToInsert;
+            CoreChildNode lastNodeToInsert;
             int delta; // The difference in number of children before and after the operation
-            if (newChild instanceof DOMDocumentFragment) {
-                DOMDocumentFragment fragment = (DOMDocumentFragment)newChild;
+            if (newChild instanceof CoreDocumentFragment) {
+                CoreDocumentFragment fragment = (CoreDocumentFragment)newChild;
                 firstNodeToInsert = fragment.getFirstChild();
                 lastNodeToInsert = null;
-                for (ChildNode node = firstNodeToInsert; node != null; node = node.getNextSibling()) {
+                for (CoreChildNode node = firstNodeToInsert; node != null; node = node.getNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
                     validateChildType(node);
                     node.internalSetParent(this);
@@ -203,9 +203,9 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
                 }
                 delta = fragment.getLength();
                 // TODO: need to clear the document fragment?
-            } else if (newChild instanceof ChildNode) {
+            } else if (newChild instanceof CoreChildNode) {
                 // TODO: what if this is already a child of some container?
-                firstNodeToInsert = lastNodeToInsert = (ChildNode)newChild;
+                firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
                 validateChildType(firstNodeToInsert);
                 firstNodeToInsert.internalSetParent(this);
                 delta = 1;
@@ -228,14 +228,14 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
             }
         }
         if (removeRefChild) {
-            ((ChildNode)refChild).internalSetParent(null);
+            ((CoreChildNode)refChild).internalSetParent(null);
         }
         return removeRefChild ? refChild : newChild;
     }
     
     protected final Node deepClone() {
         Node clone = shallowClone();
-        ChildNode child = getFirstChild();
+        CoreChildNode child = getFirstChild();
         while (child != null) {
             clone.appendChild(child.cloneNode(true));
             child = child.getNextSibling();
@@ -247,7 +247,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements ParentNode, Nod
 
     public final CharSequence collectTextContent(CharSequence appendTo) {
         CharSequence content = appendTo;
-        for (ChildNode node = getFirstChild(); node != null; node = node.getNextSibling()) {
+        for (CoreChildNode node = getFirstChild(); node != null; node = node.getNextSibling()) {
             content = node.collectTextContent(content);
         }
         return content;

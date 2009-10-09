@@ -15,8 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.DocumentFragment;
 
-public interface DOMDocumentFragment extends DocumentFragment, ParentNode {
-    int getLength();
+public interface CoreNSAwareNamedNode extends CoreNode {
+    void internalSetPrefix(String prefix);
 }

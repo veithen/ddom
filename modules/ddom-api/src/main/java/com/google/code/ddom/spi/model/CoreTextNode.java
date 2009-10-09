@@ -15,16 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Node;
+public interface CoreTextNode extends CoreChildNode {
 
-public interface DOMNode extends Node {
-    /**
-     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
-     * this method will never return <code>null</code>.
-     * 
-     * @return the document
-     */
-    DOMDocument getDocument();
-    
-    CharSequence collectTextContent(CharSequence appendTo);
 }

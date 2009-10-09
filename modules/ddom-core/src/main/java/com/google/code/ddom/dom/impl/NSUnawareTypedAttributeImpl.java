@@ -18,13 +18,13 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.DOM1TypedAttribute;
-import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreDocument;
 
-public class DOM1TypedAttributeImpl extends TypedAttributeImpl implements DOM1TypedAttribute {
+public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSUnawareTypedAttribute {
     private final String name;
 
-    public DOM1TypedAttributeImpl(DOMDocument document, String name, String value, String type) {
+    public NSUnawareTypedAttributeImpl(CoreDocument document, String name, String value, String type) {
         super(document, value, type);
         this.name = name;
     }
@@ -51,7 +51,7 @@ public class DOM1TypedAttributeImpl extends TypedAttributeImpl implements DOM1Ty
     
     @Override
     protected final Node shallowClone() {
-        DOMDocument document = getDocument();
+        CoreDocument document = getDocument();
         return document.getNodeFactory().createAttribute(document, name, null, getType());
     }
 }

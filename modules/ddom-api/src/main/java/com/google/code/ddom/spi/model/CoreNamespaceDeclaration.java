@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface DOM2Element extends DOMElement, DOM2NamedNode {
-
+public interface CoreNamespaceDeclaration extends CoreAttribute {
+    String getDeclaredPrefix();
+    String getDeclaredNamespaceURI();
 }

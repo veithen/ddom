@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface DOM1Element extends DOMElement, DOM1NamedNode {
-
+public interface CoreTypedAttribute extends CoreAttribute {
+    String getType();
+    void setType(String type);
 }

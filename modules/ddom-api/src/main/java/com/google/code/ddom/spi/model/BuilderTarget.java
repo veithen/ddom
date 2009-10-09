@@ -17,6 +17,6 @@ package com.google.code.ddom.spi.model;
 
 import com.google.code.ddom.DeferredNode;
 
-public interface BuilderTarget extends ParentNode, DeferredNode {
+public interface BuilderTarget extends CoreParentNode, DeferredNode {
     void internalSetComplete();
 }

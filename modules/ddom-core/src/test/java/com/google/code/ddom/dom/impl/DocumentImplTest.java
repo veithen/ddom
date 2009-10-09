@@ -32,7 +32,7 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.DeferredParsingException;
-import com.google.code.ddom.spi.model.DOM1Element;
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 
@@ -50,12 +50,12 @@ public class DocumentImplTest {
         Document doc = DeferredDocumentFactory.newInstance().parse("dom", reader);
         
         Element element = doc.getDocumentElement();
-        Assert.assertTrue(element instanceof DOM1Element);
+        Assert.assertTrue(element instanceof CoreNSUnawareElement);
         Assert.assertNull(element.getLocalName());
         Assert.assertEquals("p:root", element.getTagName());
         
         Attr attr = (Attr)element.getAttributes().item(0);
-        Assert.assertTrue(attr instanceof DOM1TypedAttributeImpl);
+        Assert.assertTrue(attr instanceof NSUnawareTypedAttributeImpl);
         Assert.assertNull(attr.getLocalName());
         Assert.assertEquals("xmlns:p", attr.getName());
     }

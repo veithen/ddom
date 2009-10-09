@@ -16,11 +16,11 @@
 package com.google.code.ddom.spi.model;
 
 
-public interface ChildNode extends DOMNode {
-    ParentNode getParentNode();
-    ChildNode getNextSibling();
-    ChildNode getPreviousSibling();
-    void internalSetParent(ParentNode parent);
-    ChildNode internalGetNextSibling();
-    void internalSetNextSibling(ChildNode nextSibling);
+public interface CoreChildNode extends CoreNode {
+    CoreParentNode getParentNode();
+    CoreChildNode getNextSibling();
+    CoreChildNode getPreviousSibling();
+    void internalSetParent(CoreParentNode parent);
+    CoreChildNode internalGetNextSibling();
+    void internalSetNextSibling(CoreChildNode nextSibling);
 }

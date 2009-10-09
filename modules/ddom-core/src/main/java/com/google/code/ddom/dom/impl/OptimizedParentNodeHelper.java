@@ -15,21 +15,21 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.OptimizedParentNode;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreOptimizedParentNode;
 
 public class OptimizedParentNodeHelper {
-    public static ChildNode getFirstChild(OptimizedParentNode node) {
+    public static CoreChildNode getFirstChild(CoreOptimizedParentNode node) {
         Object content = node.getContent();
-        ChildNode firstChild;
+        CoreChildNode firstChild;
         if (content instanceof String) {
-            DOMDocument document = node.getDocument();
+            CoreDocument document = node.getDocument();
             firstChild = document.getNodeFactory().createText(document, (String)content);
             // TODO: need to set parent
             node.internalSetFirstChild(firstChild);
         } else {
-            firstChild = (ChildNode)content;
+            firstChild = (CoreChildNode)content;
         }
         return firstChild;
     }

@@ -15,8 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.EntityReference;
 
-public interface DOMEntityReference extends EntityReference, ChildNode {
+public interface CoreNSUnawareNamedNode extends CoreNode {
 
 }

@@ -3,8 +3,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.spi.model.ParentNode;
-import com.google.code.ddom.spi.model.TextNode;
+import com.google.code.ddom.spi.model.CoreParentNode;
+import com.google.code.ddom.spi.model.CoreTextNode;
 
 public aspect TextSupport {
     declare parents: TextNodeImpl implements Text;
@@ -15,8 +15,8 @@ public aspect TextSupport {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         setData(text.substring(0, offset));
-        TextNode newNode = createNewTextNode(text.substring(offset));
-        ParentNode parent = getParentNode();
+        CoreTextNode newNode = createNewTextNode(text.substring(offset));
+        CoreParentNode parent = getParentNode();
         if (parent != null) {
             newNode.internalSetNextSibling(getNextSibling());
             internalSetNextSibling(newNode);

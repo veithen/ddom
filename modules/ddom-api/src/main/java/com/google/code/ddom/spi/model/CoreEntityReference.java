@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface DOMText extends TextNode {
+import org.w3c.dom.EntityReference;
+
+public interface CoreEntityReference extends EntityReference, CoreChildNode {
 
 }

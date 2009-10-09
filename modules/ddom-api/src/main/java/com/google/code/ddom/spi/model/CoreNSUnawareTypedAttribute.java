@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface NamespaceDeclaration extends DOMAttribute {
-    String getDeclaredPrefix();
-    String getDeclaredNamespaceURI();
+public interface CoreNSUnawareTypedAttribute extends CoreTypedAttribute, CoreNSUnawareNamedNode {
+
 }

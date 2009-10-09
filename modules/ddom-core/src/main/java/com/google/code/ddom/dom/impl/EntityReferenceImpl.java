@@ -18,13 +18,13 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMEntityReference;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreEntityReference;
 
-public class EntityReferenceImpl extends LeafNode implements DOMEntityReference {
+public class EntityReferenceImpl extends LeafNode implements CoreEntityReference {
     private String name;
     
-    public EntityReferenceImpl(DOMDocument document, String name) {
+    public EntityReferenceImpl(CoreDocument document, String name) {
         super(document);
         this.name = name;
     }
@@ -38,7 +38,7 @@ public class EntityReferenceImpl extends LeafNode implements DOMEntityReference 
     }
 
     public final Node cloneNode(boolean deep) {
-        DOMDocument document = getDocument();
+        CoreDocument document = getDocument();
         return document.getNodeFactory().createEntityReference(document, name);
     }
 

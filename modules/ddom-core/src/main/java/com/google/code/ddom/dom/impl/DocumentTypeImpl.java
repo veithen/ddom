@@ -19,15 +19,15 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMDocumentType;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreDocumentType;
 
-public class DocumentTypeImpl extends LeafNode implements DOMDocumentType {
+public class DocumentTypeImpl extends LeafNode implements CoreDocumentType {
     private final String rootName;
     private final String publicId;
     private final String systemId;
     
-    public DocumentTypeImpl(DOMDocument document, String rootName, String publicId, String systemId) {
+    public DocumentTypeImpl(CoreDocument document, String rootName, String publicId, String systemId) {
         super(document);
         this.rootName = rootName;
         this.publicId = publicId;

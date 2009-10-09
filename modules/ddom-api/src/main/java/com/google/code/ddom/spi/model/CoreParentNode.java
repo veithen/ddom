@@ -15,6 +15,10 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface DOM2TypedAttribute extends TypedAttribute, DOM2NamedNode {
 
+public interface CoreParentNode extends CoreNode {
+    void internalSetFirstChild(CoreChildNode child);
+    void notifyChildrenModified(int delta);
+    CoreChildNode getFirstChild();
+    CoreChildNode getLastChild();
 }

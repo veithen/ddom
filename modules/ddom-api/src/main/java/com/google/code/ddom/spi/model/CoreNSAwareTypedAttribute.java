@@ -15,6 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface TextNode extends ChildNode {
+public interface CoreNSAwareTypedAttribute extends CoreTypedAttribute, CoreNSAwareNamedNode {
 
 }

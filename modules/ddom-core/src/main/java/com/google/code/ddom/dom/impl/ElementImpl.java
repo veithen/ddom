@@ -24,19 +24,19 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMAttribute;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMElement;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.model.ParentNode;
-import com.google.code.ddom.spi.model.TypedAttribute;
+import com.google.code.ddom.spi.model.CoreParentNode;
+import com.google.code.ddom.spi.model.CoreTypedAttribute;
 
-public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
+public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {
     private class Attributes implements NamedNodeMap {
         public int getLength() {
             int length = 0;
-            DOMAttribute attr = firstAttribute;
+            CoreAttribute attr = firstAttribute;
             while (attr != null) {
                 attr = attr.internalGetNextAttribute();
                 length++;
@@ -46,7 +46,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         
         public Node item(int index) {
             // TODO: wrong result for negavite indexes
-            DOMAttribute attr = firstAttribute;
+            CoreAttribute attr = firstAttribute;
             for (int i=0; i<index && attr != null; i++) {
                 attr = attr.internalGetNextAttribute();
             }
@@ -62,16 +62,16 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         }
 
         public Node setNamedItem(Node arg) throws DOMException {
-            if (arg instanceof TypedAttribute) {
-                return setAttributeNode((TypedAttribute)arg);
+            if (arg instanceof CoreTypedAttribute) {
+                return setAttributeNode((CoreTypedAttribute)arg);
             } else {
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
         }
 
         public Node setNamedItemNS(Node arg) throws DOMException {
-            if (arg instanceof TypedAttribute) {
-                return setAttributeNodeNS((TypedAttribute)arg);
+            if (arg instanceof CoreTypedAttribute) {
+                return setAttributeNodeNS((CoreTypedAttribute)arg);
             } else {
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
@@ -104,28 +104,28 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     private static final int ATTR_DOM2 = 2;
     private static final int ATTR_NSDECL = 3;
     
-    private final DOMDocument document;
+    private final CoreDocument document;
     private Object content;
     private boolean complete;
     private int children;
-    private ParentNode parent;
-    private ChildNode nextSibling;
-    private DOMAttribute firstAttribute;
+    private CoreParentNode parent;
+    private CoreChildNode nextSibling;
+    private CoreAttribute firstAttribute;
 
-    public ElementImpl(DOMDocument document, boolean complete) {
+    public ElementImpl(CoreDocument document, boolean complete) {
         this.document = document;
         this.complete = complete;
     }
 
-    public final void internalSetParent(ParentNode parent) {
+    public final void internalSetParent(CoreParentNode parent) {
         this.parent = parent;
     }
     
-    public final ChildNode internalGetNextSibling() {
+    public final CoreChildNode internalGetNextSibling() {
         return nextSibling;
     }
 
-    public final void internalSetNextSibling(ChildNode nextSibling) {
+    public final void internalSetNextSibling(CoreChildNode nextSibling) {
         this.nextSibling = nextSibling;
     }
     
@@ -146,7 +146,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     }
 
     @Override
-    protected void validateChildType(ChildNode newChild) {
+    protected void validateChildType(CoreChildNode newChild) {
         // All node type are allowed
     }
 
@@ -159,26 +159,26 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         return content;
     }
     
-    public final void internalSetFirstChild(ChildNode child) {
+    public final void internalSetFirstChild(CoreChildNode child) {
         content = child;
     }
 
-    public final ChildNode getFirstChild() {
+    public final CoreChildNode getFirstChild() {
         if (content == null && !complete) {
             document.next();
         }
         return OptimizedParentNodeHelper.getFirstChild(this);
     }
     
-    public final DOMAttribute internalGetFirstAttribute() {
+    public final CoreAttribute internalGetFirstAttribute() {
         return firstAttribute;
     }
     
-    public final void internalSetFirstAttribute(DOMAttribute attr) {
+    public final void internalSetFirstAttribute(CoreAttribute attr) {
         firstAttribute = attr;
     }
 
-    public final DOMDocument getDocument() {
+    public final CoreDocument getDocument() {
         return document;
     }
 
@@ -186,15 +186,15 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         return document;
     }
 
-    public final ParentNode getParentNode() {
+    public final CoreParentNode getParentNode() {
         return parent;
     }
     
-    public final ChildNode getNextSibling() {
+    public final CoreChildNode getNextSibling() {
         return ChildNodeHelper.getNextSibling(this);
     }
 
-    public final ChildNode getPreviousSibling() {
+    public final CoreChildNode getPreviousSibling() {
         return ChildNodeHelper.getPreviousSibling(this);
     }
 
@@ -224,7 +224,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
             	// Note: a lookup using DOM 1 methods may return any kind of attribute, including NSDecl
                 return localName.equals(attr.getName());
             case ATTR_DOM2:
-                return attr instanceof TypedAttribute
+                return attr instanceof CoreTypedAttribute
                         && (namespaceURI == null && attr.getNamespaceURI() == null
                                 || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
                         && localName.equals(attr.getLocalName());
@@ -252,8 +252,8 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         }
     }
     
-    private DOMAttribute getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
-        DOMAttribute attr = firstAttribute;
+    private CoreAttribute getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
+        CoreAttribute attr = firstAttribute;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             attr = attr.internalGetNextAttribute();
         }
@@ -307,16 +307,16 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     }
     
     private void setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
-        DOMAttribute attr = firstAttribute;
-        DOMAttribute previousAttr = null;
+        CoreAttribute attr = firstAttribute;
+        CoreAttribute previousAttr = null;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             previousAttr = attr;
             attr = attr.internalGetNextAttribute();
         }
         if (attr == null) {
-            DOMDocument document = getDocument();
+            CoreDocument document = getDocument();
             NodeFactory factory = document.getNodeFactory();
-            DOMAttribute newAttr;
+            CoreAttribute newAttr;
             switch (mode) {
                 case ATTR_DOM1:
                     newAttr = factory.createAttribute(document, localName, value, null);
@@ -351,8 +351,8 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     
     public final Attr setAttributeNodeNS(Attr _newAttr) throws DOMException {
         validateOwnerDocument(_newAttr);
-        DOMAttribute newAttr = (DOMAttribute)_newAttr;
-        DOMElement owner = newAttr.getOwnerElement();
+        CoreAttribute newAttr = (CoreAttribute)_newAttr;
+        CoreElement owner = newAttr.getOwnerElement();
         if (owner == this) {
             // This means that the "new" attribute is already linked to the element
             // and replaces itself.
@@ -360,8 +360,8 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
         } else if (owner != null) {
             throw DOMExceptionUtil.newDOMException(DOMException.INUSE_ATTRIBUTE_ERR);
         } else {
-            DOMAttribute existingAttr = firstAttribute;
-            DOMAttribute previousAttr = null;
+            CoreAttribute existingAttr = firstAttribute;
+            CoreAttribute previousAttr = null;
             String localName = newAttr.getLocalName();
             String namespaceURI;
             int mode;
@@ -401,11 +401,11 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     }
 
     public final Attr removeAttributeNode(Attr _oldAttr) throws DOMException {
-        DOMAttribute oldAttr = (DOMAttribute)_oldAttr;
+        CoreAttribute oldAttr = (CoreAttribute)_oldAttr;
         if (oldAttr.getOwnerElement() == this) {
-            DOMAttribute previousAttr = firstAttribute;
+            CoreAttribute previousAttr = firstAttribute;
             while (previousAttr != null) {
-                DOMAttribute nextAttr = previousAttr.internalGetNextAttribute();
+                CoreAttribute nextAttr = previousAttr.internalGetNextAttribute();
                 if (nextAttr == oldAttr) {
                     break;
                 }
@@ -437,17 +437,17 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
 
     @Override
     protected final Node shallowClone() {
-        DOMElement clone = shallowCloneWithoutAttributes();
-        DOMAttribute attr = firstAttribute;
+        CoreElement clone = shallowCloneWithoutAttributes();
+        CoreAttribute attr = firstAttribute;
         while (attr != null) {
             // TODO: this could be optimized
-            clone.setAttributeNode((TypedAttribute)attr.cloneNode(false));
+            clone.setAttributeNode((CoreTypedAttribute)attr.cloneNode(false));
             attr = attr.internalGetNextAttribute();
         }
         return clone;
     }
     
-    protected abstract DOMElement shallowCloneWithoutAttributes();
+    protected abstract CoreElement shallowCloneWithoutAttributes();
 
     public final TypeInfo getSchemaTypeInfo() {
         // TODO
@@ -455,21 +455,21 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     }
 
     public final void setIdAttribute(String name, boolean isId) throws DOMException {
-        DOMAttribute attr = getAttributeNode(null, name, ATTR_DOM1);
+        CoreAttribute attr = getAttributeNode(null, name, ATTR_DOM1);
         if (attr == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
-            ((TypedAttribute)attr).setType(isId ? "ID" : "CDATA");
+            ((CoreTypedAttribute)attr).setType(isId ? "ID" : "CDATA");
         }
     }
 
     public final void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
         // Here, we assume that a namespace declaration can never be an ID attribute
-        DOMAttribute attr = getAttributeNode(namespaceURI, localName, ATTR_DOM2);
+        CoreAttribute attr = getAttributeNode(namespaceURI, localName, ATTR_DOM2);
         if (attr == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
-            ((TypedAttribute)attr).setType(isId ? "ID" : "CDATA");
+            ((CoreTypedAttribute)attr).setType(isId ? "ID" : "CDATA");
         }
     }
 
@@ -479,7 +479,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
     }
 
     public final String lookupNamespaceURI(String prefix) {
-        for (DOMAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
+        for (CoreAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
             if (attr instanceof NSDecl) {
                 NSDecl decl = (NSDecl)attr;
                 if (decl.getDeclaredPrefix().equals(prefix)) {
@@ -492,7 +492,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements DOMElement {
 
     public final String lookupPrefix(String namespaceURI) {
         // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
-        for (DOMAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
+        for (CoreAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
             if (attr instanceof NSDecl) {
                 NSDecl decl = (NSDecl)attr;
                 if (decl.getDeclaredNamespaceURI().equals(namespaceURI)) {

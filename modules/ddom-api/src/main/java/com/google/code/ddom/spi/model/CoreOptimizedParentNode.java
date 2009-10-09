@@ -15,9 +15,12 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.DocumentType;
-
-public interface DOMDocumentType extends DocumentType, ChildNode {
-    // TODO: check if this is actually needed
-    void internalSetDocument(DOMDocument document);
+public interface CoreOptimizedParentNode extends CoreParentNode {
+    /**
+     * 
+     * either a String or a ChildNode
+     * 
+     * @return
+     */
+    Object getContent();
 }

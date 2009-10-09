@@ -18,34 +18,34 @@ package com.google.code.ddom.spi.model;
 import com.google.code.ddom.spi.stream.Producer;
 
 public interface NodeFactory {
-    DOMDocument createDocument(Producer producer);
+    CoreDocument createDocument(Producer producer);
     
     /**
      * 
      * @param document may be <code>null</code> (if called by {@link org.w3c.dom.DOMImplementation#createDocumentType(String, String, String)})
      * @return
      */
-    DOMDocumentType createDocumentType(DOMDocument document, String rootName, String publicId, String systemId);
+    CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId);
     
-    DOM1Element createElement(DOMDocument document, String tagName, boolean complete);
+    CoreNSUnawareElement createElement(CoreDocument document, String tagName, boolean complete);
     
-    DOM2Element createElement(DOMDocument document, String namespaceURI, String localName, String prefix, boolean complete);
+    CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete);
     
-    DOM1TypedAttribute createAttribute(DOMDocument document, String name, String value, String type);
+    CoreNSUnawareTypedAttribute createAttribute(CoreDocument document, String name, String value, String type);
     
-    DOM2TypedAttribute createAttribute(DOMDocument document, String namespaceURI, String localName, String prefix, String value, String type);
+    CoreNSAwareTypedAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type);
     
-    NamespaceDeclaration createNSDecl(DOMDocument document, String prefix, String namespaceURI);
+    CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI);
     
-    DOMProcessingInstruction createProcessingInstruction(DOMDocument document, String target, String data);
+    CoreProcessingInstruction createProcessingInstruction(CoreDocument document, String target, String data);
     
-    DOMDocumentFragment createDocumentFragment(DOMDocument document);
+    CoreDocumentFragment createDocumentFragment(CoreDocument document);
 
-    DOMText createText(DOMDocument document, String data);
+    CoreText createText(CoreDocument document, String data);
 
-    DOMComment createComment(DOMDocument document, String data);
+    CoreComment createComment(CoreDocument document, String data);
 
-    DOMCDATASection createCDATASection(DOMDocument document, String data);
+    CoreCDATASection createCDATASection(CoreDocument document, String data);
 
-    DOMEntityReference createEntityReference(DOMDocument document, String name);
+    CoreEntityReference createEntityReference(CoreDocument document, String name);
 }

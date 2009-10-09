@@ -15,18 +15,18 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.spi.model.DOM2Element;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMElement;
-import com.google.code.ddom.spi.model.NodeFactory;
+import org.w3c.dom.Node;
 
-public class DOM2ElementImpl extends ElementImpl implements DOM2Element {
+import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreDocument;
+
+public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSAwareTypedAttribute {
     private final String namespaceURI;
     private final String localName;
     private String prefix;
 
-    public DOM2ElementImpl(DOMDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
-        super(document, complete);
+    public NSAwareTypedAttributeImpl(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
+        super(document, value, type);
         this.namespaceURI = namespaceURI;
         this.localName = localName;
         this.prefix = prefix;
@@ -45,21 +45,20 @@ public class DOM2ElementImpl extends ElementImpl implements DOM2Element {
     }
     
     public final void setPrefix(String prefix) {
-        DOM2NamedNodeHelper.setPrefix(this, prefix);
+        NSAwareNamedNodeHelper.setPrefix(this, prefix);
     }
 
     public final String getLocalName() {
         return localName;
     }
-
-    public final String getTagName() {
-        return DOM2NamedNodeHelper.getName(this);
+    
+    public final String getName() {
+        return NSAwareNamedNodeHelper.getName(this);
     }
-
+    
     @Override
-    protected final DOMElement shallowCloneWithoutAttributes() {
-        DOMDocument document = getDocument();
-        NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, namespaceURI, localName, prefix, true);
+    protected final Node shallowClone() {
+        CoreDocument document = getDocument();
+        return document.getNodeFactory().createAttribute(document, namespaceURI, localName, prefix, null, getType());
     }
 }

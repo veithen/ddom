@@ -31,7 +31,7 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.w3c.dom.Document;
 
 import com.google.code.ddom.DeferredDocumentFactory;
-import com.google.code.ddom.spi.model.DOMDocument;
+import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
 
@@ -49,7 +49,7 @@ public class SAXStreamProviderTest extends TestCase {
         saxFactory.setNamespaceAware(test.isUsingNamespaces());
         SAXSource source = new SAXSource(saxFactory.newSAXParser().getXMLReader(), test.getInputSource());
         Document actual = DeferredDocumentFactory.newInstance().parse("dom", source);
-        ((DOMDocument)actual).build();
+        ((CoreDocument)actual).build();
         
         DocumentBuilderFactory domFactory = new DocumentBuilderFactoryImpl();
         domFactory.setNamespaceAware(test.isUsingNamespaces());

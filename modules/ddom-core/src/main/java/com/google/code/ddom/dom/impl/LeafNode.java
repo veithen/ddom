@@ -21,36 +21,36 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.ParentNode;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreParentNode;
 
-public abstract class LeafNode extends NodeImpl implements ChildNode {
-    private DOMDocument document;
-    private ParentNode parent;
-    private ChildNode nextSibling;
+public abstract class LeafNode extends NodeImpl implements CoreChildNode {
+    private CoreDocument document;
+    private CoreParentNode parent;
+    private CoreChildNode nextSibling;
     
-    public LeafNode(DOMDocument document) {
+    public LeafNode(CoreDocument document) {
         this.document = document;
     }
 
-    public final void internalSetParent(ParentNode parent) {
+    public final void internalSetParent(CoreParentNode parent) {
         this.parent = parent;
     }
     
-    public final void internalSetDocument(DOMDocument document) {
+    public final void internalSetDocument(CoreDocument document) {
         this.document = document;
     }
     
-    public final ChildNode internalGetNextSibling() {
+    public final CoreChildNode internalGetNextSibling() {
         return nextSibling;
     }
 
-    public final void internalSetNextSibling(ChildNode nextSibling) {
+    public final void internalSetNextSibling(CoreChildNode nextSibling) {
         this.nextSibling = nextSibling;
     }
     
-    public final DOMDocument getDocument() {
+    public final CoreDocument getDocument() {
         return document;
     }
 
@@ -58,15 +58,15 @@ public abstract class LeafNode extends NodeImpl implements ChildNode {
         return document;
     }
 
-    public final ParentNode getParentNode() {
+    public final CoreParentNode getParentNode() {
         return parent;
     }
     
-    public final ChildNode getNextSibling() {
+    public final CoreChildNode getNextSibling() {
         return ChildNodeHelper.getNextSibling(this);
     }
 
-    public final ChildNode getPreviousSibling() {
+    public final CoreChildNode getPreviousSibling() {
         return ChildNodeHelper.getPreviousSibling(this);
     }
 

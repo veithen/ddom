@@ -20,24 +20,24 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.ChildNode;
-import com.google.code.ddom.spi.model.DOMDocument;
-import com.google.code.ddom.spi.model.DOMDocumentFragment;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreDocumentFragment;
 
-public class DocumentFragmentImpl extends ParentNodeImpl implements DOMDocumentFragment {
-    private final DOMDocument document;
-    private ChildNode firstChild;
+public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocumentFragment {
+    private final CoreDocument document;
+    private CoreChildNode firstChild;
     private int children;
     
-    public DocumentFragmentImpl(DOMDocument document) {
+    public DocumentFragmentImpl(CoreDocument document) {
         this.document = document;
     }
 
-    public final void internalSetFirstChild(ChildNode child) {
+    public final void internalSetFirstChild(CoreChildNode child) {
         this.firstChild = child;
     }
     
-    public final ChildNode getFirstChild() {
+    public final CoreChildNode getFirstChild() {
         return firstChild;
     }
 
@@ -46,7 +46,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements DOMDocumentF
     }
 
     @Override
-    protected void validateChildType(ChildNode newChild) {
+    protected void validateChildType(CoreChildNode newChild) {
         // All node type are allowed
     }
 
@@ -94,7 +94,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements DOMDocumentF
         return null;
     }
     
-    public final DOMDocument getDocument() {
+    public final CoreDocument getDocument() {
         return document;
     }
 
@@ -121,7 +121,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements DOMDocumentF
 
     @Override
     protected final Node shallowClone() {
-        DOMDocument document = getDocument();
+        CoreDocument document = getDocument();
         return document.getNodeFactory().createDocumentFragment(document);
     }
 
