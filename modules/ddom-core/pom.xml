@@ -180,6 +180,7 @@
                     </includes>
                     <excludes>
                         <exclude>**/DOM3CoreTest.java</exclude>
+                        <exclude>**/SAXStreamProviderTest.java</exclude>
                     </excludes>
                     <argLine>-javaagent:target/lib/aspectjweaver.jar</argLine>
                 </configuration>
