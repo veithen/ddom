@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class XMLConformanceTestSuite {
     
     private static XMLConformanceTestSuite instance;
     
-    private final List<XMLConformanceTest> tests = new LinkedList<XMLConformanceTest>();
+    private final Map<String,XMLConformanceTest> tests = new LinkedHashMap<String,XMLConformanceTest>();
     
     private static String getElementText(XMLStreamReader reader) throws XMLStreamException {
         StringBuilder buffer = new StringBuilder();
@@ -157,7 +158,7 @@ public class XMLConformanceTestSuite {
         } else {
             throw new RuntimeException("Unrecognized version " + version);
         }
-        tests.add(new XMLConformanceTest(
+        tests.put(id, new XMLConformanceTest(
                 id,
                 exclusions.contains(id) ? Type.EXCLUDED : typeMap.get(reader.getAttributeValue(null, "TYPE")),
                 versions,
@@ -166,13 +167,17 @@ public class XMLConformanceTestSuite {
                 getElementText(reader)));
     }
     
+    public XMLConformanceTest getTest(String id) {
+        return tests.get(id);
+    }
+    
     public Collection<XMLConformanceTest> getAllTests() {
-        return Collections.unmodifiableCollection(tests);
+        return Collections.unmodifiableCollection(tests.values());
     }
     
     public Collection<XMLConformanceTest> getTests(Set<XMLVersion> versions, Set<Type> types) {
         List<XMLConformanceTest> result = new LinkedList<XMLConformanceTest>();
-        for (XMLConformanceTest test : tests) {
+        for (XMLConformanceTest test : tests.values()) {
             if ((versions == null || !Collections.disjoint(test.getXmlVersions(), versions))
                     && (types == null || types.contains(test.getType()))) {
                 result.add(test);
