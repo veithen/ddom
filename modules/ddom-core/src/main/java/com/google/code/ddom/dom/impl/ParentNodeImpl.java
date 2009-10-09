@@ -32,7 +32,7 @@ import com.google.code.ddom.utils.dom.iterator.ElementNameFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementNamespaceFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.FilterIterator;
 
-public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode, NodeList {
+public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode {
     public final CoreChildNode getLastChild() {
         CoreChildNode previousChild = null;
         CoreChildNode child = getFirstChild();
@@ -43,64 +43,6 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode,
         return previousChild;
     }
     
-    public final boolean hasChildNodes() {
-        // TODO: not the best way if content is optimized
-        return getFirstChild() != null;
-    }
-
-    public final NodeList getChildNodes() {
-        return this;
-    }
-
-    public final Node item(int index) {
-        // TODO: need unit test to check that this works when parsing is deferred
-        // TODO: wrong result for negavite indexes
-        CoreChildNode node = getFirstChild();
-        for (int i=0; i<index && node != null; i++) {
-            node = node.getNextSibling();
-        }
-        return node;
-    }
-
-    public final NodeList getElementsByTagName(final String tagname) {
-        return new ElementsBy(getDocument()) {
-            @Override
-            protected Iterator<Element> createIterator() {
-                Iterator<Element> iterator = new DescendantsIterator<Element>(Element.class, ParentNodeImpl.this);
-                if (tagname.equals("*")) {
-                    return iterator;
-                } else {
-                    return new FilterIterator<Element>(iterator) {
-                        @Override
-                        protected boolean matches(Element element) {
-                            return tagname.equals(element.getTagName());
-                        }
-                    };
-                }
-            }
-        };
-    }
-
-    public final NodeList getElementsByTagNameNS(final String namespaceURI, final String localName) {
-        return new ElementsBy(getDocument()) {
-            @Override
-            protected Iterator<Element> createIterator() {
-                boolean nsWildcard = "*".equals(namespaceURI);
-                boolean localNameWildcard = localName.equals("*");
-                Iterator<Element> iterator = new DescendantsIterator<Element>(Element.class, ParentNodeImpl.this);
-                if (nsWildcard && localNameWildcard) {
-                    return iterator;
-                } else if (nsWildcard) {
-                    return new ElementLocalNameFilterIterator(iterator, localName);
-                } else if (localNameWildcard) {
-                    return new ElementNamespaceFilterIterator(iterator, namespaceURI);
-                } else {
-                    return new ElementNameFilterIterator(iterator, namespaceURI, localName);
-                }
-            }
-        };
-    }
-
     public final Node appendChild(Node newChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");

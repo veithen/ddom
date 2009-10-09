@@ -224,11 +224,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         this.documentURI = documentURI;
     }
 
-    public final int getStructureVersion() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
     public final Node getParentNode() {
         return null;
     }
