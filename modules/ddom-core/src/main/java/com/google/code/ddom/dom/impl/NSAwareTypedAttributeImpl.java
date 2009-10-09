@@ -44,16 +44,8 @@ public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements Cor
         this.prefix = prefix;
     }
     
-    public final void setPrefix(String prefix) {
-        NSAwareNamedNodeHelper.setPrefix(this, prefix);
-    }
-
     public final String getLocalName() {
         return localName;
-    }
-    
-    public final String getName() {
-        return NSAwareNamedNodeHelper.getName(this);
     }
     
     @Override

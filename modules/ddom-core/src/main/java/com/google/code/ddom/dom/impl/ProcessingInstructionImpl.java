@@ -31,22 +31,6 @@ public class ProcessingInstructionImpl extends LeafNode implements CoreProcessin
         this.data = data;
     }
 
-    public final short getNodeType() {
-        return PROCESSING_INSTRUCTION_NODE;
-    }
-
-    public final String getNodeName() {
-        return getTarget();
-    }
-
-    public final String getNodeValue() throws DOMException {
-        return getData();
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        setData(nodeValue);
-    }
-
     public final String getData() {
         return data;
     }

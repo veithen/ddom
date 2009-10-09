@@ -54,22 +54,6 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
         return children;
     }
 
-    public final short getNodeType() {
-        return DOCUMENT_FRAGMENT_NODE;
-    }
-
-    public final String getNodeName() {
-        return "#document-fragment";
-    }
-
-    public final String getNodeValue() throws DOMException {
-        return null;
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // Setting the node value has no effect
-    }
-
     public final boolean hasAttributes() {
         return false;
     }

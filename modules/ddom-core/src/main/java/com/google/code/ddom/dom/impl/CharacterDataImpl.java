@@ -36,14 +36,6 @@ public abstract class CharacterDataImpl extends LeafNode implements CharacterDat
         this.data = data;
     }
 
-    public final String getNodeValue() throws DOMException {
-        return getData();
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        this.setData(nodeValue);
-    }
-
     public final int getLength() {
         return data.length();
     }

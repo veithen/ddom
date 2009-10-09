@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
-public class NSUnawareNamedNodeHelper {
+import com.google.code.ddom.spi.model.CoreNSAwareNamedNode;
+
+public interface DOMNSAwareNamedNode extends CoreNSAwareNamedNode {
 
 }

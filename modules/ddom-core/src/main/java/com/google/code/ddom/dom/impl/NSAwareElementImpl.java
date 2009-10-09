@@ -44,16 +44,8 @@ public class NSAwareElementImpl extends ElementImpl implements CoreNSAwareElemen
         this.prefix = prefix;
     }
     
-    public final void setPrefix(String prefix) {
-        NSAwareNamedNodeHelper.setPrefix(this, prefix);
-    }
-
     public final String getLocalName() {
         return localName;
-    }
-
-    public final String getTagName() {
-        return NSAwareNamedNodeHelper.getName(this);
     }
 
     @Override

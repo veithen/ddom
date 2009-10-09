@@ -198,22 +198,6 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         return ChildNodeHelper.getPreviousSibling(this);
     }
 
-    public final short getNodeType() {
-        return ELEMENT_NODE;
-    }
-
-    public final String getNodeName() {
-        return getTagName();
-    }
-
-    public final String getNodeValue() throws DOMException {
-        return null;
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // Setting the node value has no effect
-    }
-
     public final NamedNodeMap getAttributes() {
         return new Attributes();
     }

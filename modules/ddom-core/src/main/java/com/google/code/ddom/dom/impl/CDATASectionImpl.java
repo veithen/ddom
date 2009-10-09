@@ -24,14 +24,6 @@ public class CDATASectionImpl extends TextNodeImpl implements CoreCDATASection {
         super(document, data);
     }
 
-    public final short getNodeType() {
-        return CDATA_SECTION_NODE;
-    }
-
-    public final String getNodeName() {
-        return "#cdata-section";
-    }
-
     @Override
     protected CoreTextNode createNewTextNode(String data) {
         CoreDocument document = getDocument();

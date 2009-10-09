@@ -15,18 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreText;
-import com.google.code.ddom.spi.model.CoreTextNode;
+import com.google.code.ddom.spi.model.CoreNSUnawareNamedNode;
 
-public class TextImpl extends TextNodeImpl implements CoreText {
-    public TextImpl(CoreDocument document, String data) {
-        super(document, data);
-    }
-    
-    @Override
-    protected CoreTextNode createNewTextNode(String data) {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createText(document, data);
-    }
+public interface DOMNSUnawareNamedNode extends CoreNSUnawareNamedNode {
+
 }

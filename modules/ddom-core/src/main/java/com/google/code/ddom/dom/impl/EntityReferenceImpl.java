@@ -29,14 +29,10 @@ public class EntityReferenceImpl extends LeafNode implements CoreEntityReference
         this.name = name;
     }
 
-    public final short getNodeType() {
-        return ENTITY_REFERENCE_NODE;
-    }
-
-    public final String getNodeName() {
+    public final String coreGetName() {
         return name;
     }
-
+    
     public final Node cloneNode(boolean deep) {
         CoreDocument document = getDocument();
         return document.getNodeFactory().createEntityReference(document, name);

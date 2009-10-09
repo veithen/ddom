@@ -15,11 +15,9 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
-
-import com.google.code.ddom.spi.model.CoreNSUnawareElement;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
 import com.google.code.ddom.spi.model.NodeFactory;
 
 public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
@@ -30,26 +28,10 @@ public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareEl
         this.tagName = tagName;
     }
 
-    public final String getNamespaceURI() {
-        return null;
-    }
-
-    public final String getPrefix() {
-        return null;
-    }
-
-    public final void setPrefix(String prefix) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
-    }
-
-    public final String getLocalName() {
-        return null;
-    }
-
-    public final String getTagName() {
+    public String coreGetName() {
         return tagName;
     }
-
+    
     @Override
     protected final CoreElement shallowCloneWithoutAttributes() {
         CoreDocument document = getDocument();

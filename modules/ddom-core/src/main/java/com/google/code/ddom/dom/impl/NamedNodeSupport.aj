@@ -19,11 +19,28 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.spi.model.CoreNSAwareNamedNode;
+public aspect NamedNodeSupport {
+    declare parents: (NSAwareElementImpl || NSAwareTypedAttributeImpl) implements DOMNSAwareNamedNode;
+    declare parents: (NSUnawareElementImpl || NSUnawareTypedAttributeImpl) implements DOMNSUnawareNamedNode;
+    
+    public final String DOMNSUnawareNamedNode.getNamespaceURI() {
+        return null;
+    }
+    
+    public final String DOMNSUnawareNamedNode.getPrefix() {
+        return null;
+    }
+    
+    public final void DOMNSUnawareNamedNode.setPrefix(String prefix) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+    }
+    
+    public final String DOMNSUnawareNamedNode.getLocalName() {
+        return null;
+    }
 
-public class NSAwareNamedNodeHelper {
-    public static void setPrefix(CoreNSAwareNamedNode node, String prefix) throws DOMException {
-        String namespaceURI = node.getNamespaceURI();
+    public void DOMNSAwareNamedNode.setPrefix(String prefix) throws DOMException {
+        String namespaceURI = getNamespaceURI();
         if (namespaceURI == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
         } else {
@@ -34,17 +51,33 @@ public class NSAwareNamedNodeHelper {
             if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix) && !XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
             }
-            node.internalSetPrefix(prefix);
+            internalSetPrefix(prefix);
         }
     }
     
-    public static String getName(CoreNSAwareNamedNode node) {
-        String prefix = node.getPrefix();
-        String localName = node.getLocalName();
+    public final String NSUnawareElementImpl.getTagName() {
+        return coreGetName();
+    }
+    
+    public final String NSUnawareTypedAttributeImpl.getName() {
+        return coreGetName();
+    }
+
+    private String DOMNSAwareNamedNode.internalGetName() {
+        String prefix = getPrefix();
+        String localName = getLocalName();
         if (prefix == null) {
             return localName;
         } else {
             return prefix + ":" + localName;
         }
+    }
+    
+    public final String NSAwareElementImpl.getTagName() {
+        return internalGetName();
+    }
+    
+    public final String NSAwareTypedAttributeImpl.getName() {
+        return internalGetName();
     }
 }

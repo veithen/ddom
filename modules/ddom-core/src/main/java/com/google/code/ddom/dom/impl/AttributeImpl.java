@@ -129,22 +129,6 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         this.value = value;
     }
 
-    public final String getNodeValue() throws DOMException {
-        return getValue();
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        setValue(nodeValue);
-    }
-    
-    public final short getNodeType() {
-        return ATTRIBUTE_NODE;
-    }
-
-    public final String getNodeName() {
-        return getName();
-    }
-
     public final Node getNextSibling() {
         return null;
     }

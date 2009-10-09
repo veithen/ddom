@@ -15,11 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
 
 public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSUnawareTypedAttribute {
     private final String name;
@@ -29,23 +28,7 @@ public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements C
         this.name = name;
     }
 
-    public final String getNamespaceURI() {
-        return null;
-    }
-
-    public final String getPrefix() {
-        return null;
-    }
-
-    public final void setPrefix(String prefix) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
-    }
-
-    public final String getLocalName() {
-        return null;
-    }
-
-    public final String getName() {
+    public final String coreGetName() {
         return name;
     }
     

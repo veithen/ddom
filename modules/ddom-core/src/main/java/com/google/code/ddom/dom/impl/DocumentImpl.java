@@ -199,22 +199,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         return children;
     }
 
-    public final short getNodeType() {
-        return DOCUMENT_NODE;
-    }
-
-    public final String getNodeName() {
-        return "#document";
-    }
-
-    public final String getNodeValue() throws DOMException {
-        return null;
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // Setting the node value has no effect
-    }
-
     public final String getInputEncoding() {
         return inputEncoding;
     }

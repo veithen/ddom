@@ -34,22 +34,6 @@ public class DocumentTypeImpl extends LeafNode implements CoreDocumentType {
         this.systemId = systemId;
     }
 
-    public final short getNodeType() {
-        return DOCUMENT_TYPE_NODE;
-    }
-
-    public final String getNodeName() {
-        return getName();
-    }
-
-    public final String getNodeValue() throws DOMException {
-        return null;
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // Setting the node value has no effect
-    }
-
     public final String getName() {
         return rootName;
     }
