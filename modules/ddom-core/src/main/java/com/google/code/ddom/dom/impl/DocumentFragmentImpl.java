@@ -98,17 +98,6 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
         return null;
     }
 
-    public final Node cloneNode(boolean deep) {
-        // TODO: check this (maybe a fragment is always deeply cloned?)
-        return deep ? deepClone() : shallowClone();
-    }
-
-    @Override
-    protected final Node shallowClone() {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createDocumentFragment(document);
-    }
-
     public final String lookupNamespaceURI(String prefix) {
         return null;
     }

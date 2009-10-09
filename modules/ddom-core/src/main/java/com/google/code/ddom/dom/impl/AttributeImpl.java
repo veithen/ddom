@@ -145,12 +145,6 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         return null;
     }
 
-    public final Node cloneNode(boolean deep) {
-        // TODO: optimize!
-        // Attributes are always deep cloned
-        return deepClone();
-    }
-
     public final boolean getSpecified() {
         // TODO
         return true;

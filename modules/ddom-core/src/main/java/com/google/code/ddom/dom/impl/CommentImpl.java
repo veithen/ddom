@@ -24,9 +24,4 @@ public class CommentImpl extends CharacterDataImpl implements CoreComment {
     public CommentImpl(CoreDocument document, String data) {
         super(document, data);
     }
-
-    public final Node cloneNode(boolean deep) {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createComment(document, getData());
-    }
 }

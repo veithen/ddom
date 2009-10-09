@@ -15,9 +15,7 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;
@@ -59,10 +57,5 @@ public class DocumentTypeImpl extends LeafNode implements CoreDocumentType {
     public final NamedNodeMap getNotations() {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    public final Node cloneNode(boolean deep) {
-        // TODO: factory method here!
-        return new DocumentTypeImpl(getDocument(), rootName, publicId, systemId);
     }
 }

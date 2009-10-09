@@ -18,7 +18,6 @@ package com.google.code.ddom.dom.impl;
 import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
@@ -67,11 +66,5 @@ public class NSDecl extends AttributeImpl implements CoreNamespaceDeclaration {
 
     public final boolean isId() {
         return false;
-    }
-
-    @Override
-    protected Node shallowClone() {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

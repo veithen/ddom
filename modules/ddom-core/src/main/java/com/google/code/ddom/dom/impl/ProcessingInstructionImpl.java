@@ -42,9 +42,4 @@ public class ProcessingInstructionImpl extends LeafNode implements CoreProcessin
     public final String getTarget() {
         return target;
     }
-
-    public final Node cloneNode(boolean deep) {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createProcessingInstruction(document, target, data);
-    }
 }

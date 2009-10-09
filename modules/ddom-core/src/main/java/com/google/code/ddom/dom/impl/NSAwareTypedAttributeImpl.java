@@ -15,10 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Node;
-
-import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
 
 public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSAwareTypedAttribute {
     private final String namespaceURI;
@@ -46,11 +44,5 @@ public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements Cor
     
     public final String getLocalName() {
         return localName;
-    }
-    
-    @Override
-    protected final Node shallowClone() {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createAttribute(document, namespaceURI, localName, prefix, null, getType());
     }
 }

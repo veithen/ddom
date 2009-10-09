@@ -23,10 +23,4 @@ public class CDATASectionImpl extends TextNodeImpl implements CoreCDATASection {
     public CDATASectionImpl(CoreDocument document, String data) {
         super(document, data);
     }
-
-    @Override
-    protected CoreTextNode createNewTextNode(String data) {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createCDATASection(document, data);
-    }
 }

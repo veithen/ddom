@@ -344,12 +344,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         return null;
     }
 
-    @Override
-    protected final Node shallowClone() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public final Node adoptNode(Node source) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
@@ -396,11 +390,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
     }
 
     public final void setXmlVersion(String xmlVersion) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final Node cloneNode(boolean deep) {
         // TODO
         throw new UnsupportedOperationException();
     }

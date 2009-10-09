@@ -415,24 +415,6 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         removeAttributeNode(getAttributeNodeNS(namespaceURI, localName));
     }
 
-    public final Node cloneNode(boolean deep) {
-        return deep ? deepClone() : shallowClone();
-    }
-
-    @Override
-    protected final Node shallowClone() {
-        CoreElement clone = shallowCloneWithoutAttributes();
-        CoreAttribute attr = firstAttribute;
-        while (attr != null) {
-            // TODO: this could be optimized
-            clone.setAttributeNode((CoreTypedAttribute)attr.cloneNode(false));
-            attr = attr.internalGetNextAttribute();
-        }
-        return clone;
-    }
-    
-    protected abstract CoreElement shallowCloneWithoutAttributes();
-
     public final TypeInfo getSchemaTypeInfo() {
         // TODO
         throw new UnsupportedOperationException();

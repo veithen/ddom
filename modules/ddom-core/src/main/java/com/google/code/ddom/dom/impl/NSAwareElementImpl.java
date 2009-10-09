@@ -47,11 +47,4 @@ public class NSAwareElementImpl extends ElementImpl implements CoreNSAwareElemen
     public final String getLocalName() {
         return localName;
     }
-
-    @Override
-    protected final CoreElement shallowCloneWithoutAttributes() {
-        CoreDocument document = getDocument();
-        NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, namespaceURI, localName, prefix, true);
-    }
 }

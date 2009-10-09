@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Node;
-
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
 
@@ -30,11 +28,5 @@ public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements C
 
     public final String coreGetName() {
         return name;
-    }
-    
-    @Override
-    protected final Node shallowClone() {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createAttribute(document, name, null, getType());
     }
 }

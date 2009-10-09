@@ -16,9 +16,7 @@
 package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.CoreNSUnawareElement;
-import com.google.code.ddom.spi.model.NodeFactory;
 
 public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
     private final String tagName;
@@ -30,12 +28,5 @@ public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareEl
 
     public String coreGetName() {
         return tagName;
-    }
-    
-    @Override
-    protected final CoreElement shallowCloneWithoutAttributes() {
-        CoreDocument document = getDocument();
-        NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, tagName, true);
     }
 }

@@ -15,22 +15,13 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import java.util.Iterator;
-
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.spi.model.BuilderTarget;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
 import com.google.code.ddom.spi.model.CoreParentNode;
-import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementLocalNameFilterIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementNameFilterIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementNamespaceFilterIterator;
-import com.google.code.ddom.utils.dom.iterator.FilterIterator;
 
 public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode {
     public final CoreChildNode getLastChild() {
@@ -174,16 +165,4 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         }
         return removeRefChild ? refChild : newChild;
     }
-    
-    protected final Node deepClone() {
-        Node clone = shallowClone();
-        CoreChildNode child = getFirstChild();
-        while (child != null) {
-            clone.appendChild(child.cloneNode(true));
-            child = child.getNextSibling();
-        }
-        return clone;
-    }
-    
-    protected abstract Node shallowClone();
 }

@@ -33,11 +33,6 @@ public class EntityReferenceImpl extends LeafNode implements CoreEntityReference
         return name;
     }
     
-    public final Node cloneNode(boolean deep) {
-        CoreDocument document = getDocument();
-        return document.getNodeFactory().createEntityReference(document, name);
-    }
-
     public final String getNodeValue() throws DOMException {
         // TODO
         throw new UnsupportedOperationException();

@@ -15,19 +15,11 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Node;
-
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreTextNode;
 
 public abstract class TextNodeImpl extends CharacterDataImpl implements CoreTextNode {
     public TextNodeImpl(CoreDocument document, String data) {
         super(document, data);
-    }
-
-    protected abstract CoreTextNode createNewTextNode(String data);
-
-    public final Node cloneNode(boolean deep) {
-        return createNewTextNode(getData());
     }
 }
