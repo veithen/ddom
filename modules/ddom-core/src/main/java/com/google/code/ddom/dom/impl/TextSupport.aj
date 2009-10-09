@@ -1,5 +1,6 @@
 package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
@@ -8,6 +9,7 @@ import com.google.code.ddom.spi.model.CoreTextNode;
 
 public aspect TextSupport {
     declare parents: TextNodeImpl implements Text;
+    declare parents: CDATASectionImpl implements CDATASection;
     
     public final Text TextNodeImpl.splitText(int offset) throws DOMException {
         String text = getData();

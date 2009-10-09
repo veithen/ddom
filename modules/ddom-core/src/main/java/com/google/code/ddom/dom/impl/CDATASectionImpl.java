@@ -17,7 +17,6 @@ package com.google.code.ddom.dom.impl;
 
 import com.google.code.ddom.spi.model.CoreCDATASection;
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreTextNode;
 
 public class CDATASectionImpl extends TextNodeImpl implements CoreCDATASection {
     public CDATASectionImpl(CoreDocument document, String data) {

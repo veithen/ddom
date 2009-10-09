@@ -15,9 +15,22 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Comment;
 import org.w3c.dom.DOMException;
 
 public aspect CharacterDataSupport {
+    declare parents: CharacterDataImpl implements CharacterData;
+    declare parents: CommentImpl implements Comment;
+    
+    public final String CharacterDataImpl.getData() {
+        return coreGetData();
+    }
+    
+    public final void CharacterDataImpl.setData(String data) throws DOMException {
+        coreSetData(data);
+    }
+    
     public final int CharacterDataImpl.getLength() {
         return getData().length();
     }

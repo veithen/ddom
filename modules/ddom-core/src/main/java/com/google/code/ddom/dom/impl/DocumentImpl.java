@@ -136,11 +136,11 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
     }
 
     public final Comment createComment(String data) {
-        return nodeFactory.createComment(this, data);
+        return (Comment)nodeFactory.createComment(this, data);
     }
 
     public final CDATASection createCDATASection(String data) throws DOMException {
-        return nodeFactory.createCDATASection(this, data);
+        return (CDATASection)nodeFactory.createCDATASection(this, data);
     }
 
     public final EntityReference createEntityReference(String name) throws DOMException {

@@ -15,6 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface CoreTextNode extends CoreChildNode {
+public interface CoreTextNode extends CoreCharacterData {
 
 }

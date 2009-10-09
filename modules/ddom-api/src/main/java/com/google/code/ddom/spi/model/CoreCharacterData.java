@@ -13,24 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.spi.model.CoreCharacterData;
-import com.google.code.ddom.spi.model.CoreDocument;
-
-public abstract class CharacterDataImpl extends LeafNode implements CoreCharacterData {
-    private String data;
-
-    public CharacterDataImpl(CoreDocument document, String data) {
-        super(document);
-        this.data = data;
-    }
-
-    public final String coreGetData() {
-        return data;
-    }
-
-    public final void coreSetData(String data) {
-        this.data = data;
-    }
+public interface CoreCharacterData extends CoreChildNode {
+    String coreGetData();
+    void coreSetData(String data);
 }

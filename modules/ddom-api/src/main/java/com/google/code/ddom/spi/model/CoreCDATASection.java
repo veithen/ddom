@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.CDATASection;
-
-public interface CoreCDATASection extends CDATASection, CoreTextNode {
+public interface CoreCDATASection extends CoreTextNode {
 
 }

@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Node;
-
 import com.google.code.ddom.spi.model.CoreComment;
 import com.google.code.ddom.spi.model.CoreDocument;
 
