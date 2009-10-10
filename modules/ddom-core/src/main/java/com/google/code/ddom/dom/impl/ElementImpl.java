@@ -149,7 +149,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         // All node type are allowed
     }
 
-    public final int getLength() {
+    public final int coreGetChildCount() {
         build();
         return children;
     }
@@ -437,30 +437,5 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
     public final void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    public final String lookupNamespaceURI(String prefix) {
-        for (CoreAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
-            if (attr instanceof NSDecl) {
-                NSDecl decl = (NSDecl)attr;
-                if (decl.getDeclaredPrefix().equals(prefix)) {
-                    return decl.getDeclaredNamespaceURI();
-                }
-            }
-        }
-        return parent == null ? null : parent.lookupNamespaceURI(prefix);
-    }
-
-    public final String lookupPrefix(String namespaceURI) {
-        // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
-        for (CoreAttribute attr = firstAttribute; attr != null; attr = attr.internalGetNextAttribute()) {
-            if (attr instanceof NSDecl) {
-                NSDecl decl = (NSDecl)attr;
-                if (decl.getDeclaredNamespaceURI().equals(namespaceURI)) {
-                    return decl.getDeclaredPrefix();
-                }
-            }
-        }
-        return parent == null ? null : parent.lookupPrefix(namespaceURI);
     }
 }

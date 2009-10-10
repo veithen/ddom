@@ -50,7 +50,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
         // All node type are allowed
     }
 
-    public final int getLength() {
+    public final int coreGetChildCount() {
         return children;
     }
 
@@ -91,14 +91,6 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
     }
 
     public final Node getPreviousSibling() {
-        return null;
-    }
-
-    public final String lookupNamespaceURI(String prefix) {
-        return null;
-    }
-
-    public final String lookupPrefix(String namespaceURI) {
         return null;
     }
 }

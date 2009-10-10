@@ -32,6 +32,10 @@ public aspect ChildNodes {
         return (NodeList)this; // TODO: cast necessary??
     }
     
+    public final int ParentNodeImpl.getLength() {
+        return coreGetChildCount();
+    }
+    
     public final Node ParentNodeImpl.item(int index) {
         // TODO: need unit test to check that this works when parsing is deferred
         // TODO: wrong result for negavite indexes

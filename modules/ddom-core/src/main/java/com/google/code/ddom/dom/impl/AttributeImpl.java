@@ -78,7 +78,7 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         return value;
     }
 
-    public final int getLength() {
+    public final int coreGetChildCount() {
         if (value instanceof String) {
             return 1;
         } else {
@@ -148,15 +148,5 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
     public final TypeInfo getSchemaTypeInfo() {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    public final String lookupNamespaceURI(String prefix) {
-        // TODO: needs to be checked
-        return null;
-    }
-
-    public final String lookupPrefix(String namespaceURI) {
-        // TODO: needs to be checked
-        return null;
     }
 }

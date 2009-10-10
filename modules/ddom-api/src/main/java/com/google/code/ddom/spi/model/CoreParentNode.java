@@ -21,4 +21,5 @@ public interface CoreParentNode extends CoreNode {
     void notifyChildrenModified(int delta);
     CoreChildNode getFirstChild();
     CoreChildNode getLastChild();
+    int coreGetChildCount();
 }

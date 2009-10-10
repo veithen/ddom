@@ -113,7 +113,7 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         // TODO
     }
 
-    public final int getLength() {
+    public final int coreGetChildCount() {
         build();
         return children;
     }
@@ -311,13 +311,5 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
     public final void setXmlVersion(String xmlVersion) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    public final String lookupNamespaceURI(String prefix) {
-        return null;
-    }
-
-    public final String lookupPrefix(String namespaceURI) {
-        return null;
     }
 }
