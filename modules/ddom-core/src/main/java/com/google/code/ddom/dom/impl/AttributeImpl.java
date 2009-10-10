@@ -16,13 +16,12 @@
 package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.CoreEntityReference;
@@ -107,10 +106,6 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         }
     }
 
-    public final Document getOwnerDocument() {
-        return getDocument();
-    }
-    
     public final Node getParentNode() {
         return null;
     }

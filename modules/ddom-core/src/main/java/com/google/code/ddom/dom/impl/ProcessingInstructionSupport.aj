@@ -13,10 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.dom.impl;
 
-public interface CoreProcessingInstruction extends CoreChildNode {
-    String coreGetData();
-    void coreSetData(String data);
-    String coreGetTarget();
+import org.w3c.dom.DOMException;
+import org.w3c.dom.ProcessingInstruction;
+
+public aspect ProcessingInstructionSupport {
+    declare parents: ProcessingInstructionImpl implements ProcessingInstruction;
+    
+    public final String ProcessingInstructionImpl.getData() {
+        return coreGetData();
+    }
+
+    public final void ProcessingInstructionImpl.setData(String data) throws DOMException {
+        coreSetData(data);
+    }
+
+    public final String ProcessingInstructionImpl.getTarget() {
+        return coreGetTarget();
+    }
 }

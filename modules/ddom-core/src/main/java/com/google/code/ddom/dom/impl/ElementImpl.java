@@ -19,18 +19,17 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
-import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.model.CoreParentNode;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
+import com.google.code.ddom.spi.model.NodeFactory;
 
 public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {
     private class Attributes implements NamedNodeMap {
@@ -179,10 +178,6 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
     }
 
     public final CoreDocument getDocument() {
-        return document;
-    }
-
-    public final Document getOwnerDocument() {
         return document;
     }
 

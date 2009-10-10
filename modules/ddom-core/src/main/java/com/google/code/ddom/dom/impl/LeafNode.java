@@ -16,7 +16,6 @@
 package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -51,10 +50,6 @@ public abstract class LeafNode extends NodeImpl implements CoreChildNode {
     }
     
     public final CoreDocument getDocument() {
-        return document;
-    }
-
-    public final Document getOwnerDocument() {
         return document;
     }
 

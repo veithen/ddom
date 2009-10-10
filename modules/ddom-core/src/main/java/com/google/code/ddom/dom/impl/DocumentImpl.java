@@ -17,27 +17,19 @@ package com.google.code.ddom.dom.impl;
 
 import java.util.Iterator;
 
-import javax.xml.XMLConstants;
-
 import org.w3c.dom.Attr;
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Comment;
 import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
-import org.w3c.dom.EntityReference;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
-import org.w3c.dom.Text;
 
 import com.google.code.ddom.DeferredParsingException;
-import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
@@ -78,81 +70,8 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         return domImplementation;
     }
 
-    public final Element createElement(String tagName) throws DOMException {
-        NSUtil.validateName(tagName);
-        return nodeFactory.createElement(this, tagName, true);
-    }
-    
-    public final Element createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
-        int i = NSUtil.validateQualifiedName(qualifiedName);
-        String prefix;
-        String localName;
-        if (i == -1) {
-            prefix = null;
-            localName = qualifiedName;
-        } else {
-            prefix = qualifiedName.substring(0, i);
-            localName = qualifiedName.substring(i+1);
-        }
-        NSUtil.validateNamespace(namespaceURI, prefix);
-        return nodeFactory.createElement(this, namespaceURI, localName, prefix, true);
-    }
-    
-    public final Attr createAttribute(String name) throws DOMException {
-        NSUtil.validateName(name);
-        return nodeFactory.createAttribute(this, name, null, null);
-    }
-
-    public final Attr createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
-        int i = NSUtil.validateQualifiedName(qualifiedName);
-        String prefix;
-        String localName;
-        if (i == -1) {
-            prefix = null;
-            localName = qualifiedName;
-        } else {
-            prefix = qualifiedName.substring(0, i);
-            localName = qualifiedName.substring(i+1);
-        }
-        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return nodeFactory.createNSDecl(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
-        } else {
-            NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-            return nodeFactory.createAttribute(this, namespaceURI, localName, prefix, null, null);
-        }
-    }
-
-    public final ProcessingInstruction createProcessingInstruction(String target, String data) throws DOMException {
-        NSUtil.validateName(target);
-        return nodeFactory.createProcessingInstruction(this, target, data);
-    }
-    
-    public final DocumentFragment createDocumentFragment() {
-        return nodeFactory.createDocumentFragment(this);
-    }
-
-    public final Text createTextNode(String data) {
-        return (Text)nodeFactory.createText(this, data);
-    }
-
-    public final Comment createComment(String data) {
-        return (Comment)nodeFactory.createComment(this, data);
-    }
-
-    public final CDATASection createCDATASection(String data) throws DOMException {
-        return (CDATASection)nodeFactory.createCDATASection(this, data);
-    }
-
-    public final EntityReference createEntityReference(String name) throws DOMException {
-        return nodeFactory.createEntityReference(this, name);
-    }
-
     public final DocumentImpl getDocument() {
         return this;
-    }
-
-    public final Document getOwnerDocument() {
-        return null;
     }
 
     public final boolean isComplete() {

@@ -15,9 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreEntityReference;
 
@@ -31,15 +28,5 @@ public class EntityReferenceImpl extends LeafNode implements CoreEntityReference
 
     public final String coreGetName() {
         return name;
-    }
-    
-    public final String getNodeValue() throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 }

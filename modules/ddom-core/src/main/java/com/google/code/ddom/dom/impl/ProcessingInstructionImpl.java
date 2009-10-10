@@ -31,15 +31,15 @@ public class ProcessingInstructionImpl extends LeafNode implements CoreProcessin
         this.data = data;
     }
 
-    public final String getData() {
+    public final String coreGetData() {
         return data;
     }
 
-    public final void setData(String data) throws DOMException {
+    public final void coreSetData(String data) throws DOMException {
         this.data = data;
     }
 
-    public final String getTarget() {
+    public final String coreGetTarget() {
         return target;
     }
 }

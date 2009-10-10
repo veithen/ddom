@@ -82,10 +82,6 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
         return document;
     }
 
-    public final Document getOwnerDocument() {
-        return document;
-    }
-
     public final Node getParentNode() {
         return null;
     }

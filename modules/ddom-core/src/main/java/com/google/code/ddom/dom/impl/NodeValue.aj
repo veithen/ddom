@@ -65,6 +65,16 @@ public aspect NodeValue {
     public final void ElementImpl.setNodeValue(String nodeValue) throws DOMException {
         // Setting the node value has no effect
     }
+    
+    public final String EntityReferenceImpl.getNodeValue() throws DOMException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final void EntityReferenceImpl.setNodeValue(String nodeValue) throws DOMException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 
     public final String ProcessingInstructionImpl.getNodeValue() throws DOMException {
         return getData();
