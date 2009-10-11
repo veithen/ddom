@@ -172,6 +172,9 @@
                 <artifactId>taglist-maven-plugin</artifactId>
                 <version>2.4</version>
                 <inherited>false</inherited>
+                <!-- TODO: The plugin currently only scans .java files, but not .aj files.
+                           This is not configurable yet; see MTAGLIST-46. Follow up this
+                           issue and upgrade when this is fixed. -->
                 <configuration>
                     <aggregate>true</aggregate>
                     <tags>
