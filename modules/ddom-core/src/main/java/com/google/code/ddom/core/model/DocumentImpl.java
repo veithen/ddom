@@ -16,7 +16,7 @@
 package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.DeferredParsingException;
-import com.google.code.ddom.dom.impl.Builder;
+import com.google.code.ddom.core.builder.Builder;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.builder;
+package com.google.code.ddom.stream.util;
 
 import com.google.code.ddom.spi.stream.AttributeMode;
 import com.google.code.ddom.spi.stream.Consumer;

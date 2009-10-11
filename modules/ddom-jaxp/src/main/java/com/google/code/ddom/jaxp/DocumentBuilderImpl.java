@@ -35,7 +35,6 @@ import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.core.model.DocumentImpl;
-import com.google.code.ddom.dom.impl.CommentFilterStreamReader;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
 import com.google.code.ddom.dom.impl.DOMNodeFactory;
 
