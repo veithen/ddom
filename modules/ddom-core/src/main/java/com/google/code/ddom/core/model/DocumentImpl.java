@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
-
-import org.w3c.dom.DOMImplementation;
+package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.dom.impl.Builder;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;

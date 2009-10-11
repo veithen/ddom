@@ -18,6 +18,7 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;

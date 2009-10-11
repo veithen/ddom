@@ -15,20 +15,33 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.core.model.CDATASectionImpl;
+import com.google.code.ddom.core.model.CommentImpl;
+import com.google.code.ddom.core.model.DocumentFragmentImpl;
+import com.google.code.ddom.core.model.DocumentImpl;
+import com.google.code.ddom.core.model.DocumentTypeImpl;
+import com.google.code.ddom.core.model.EntityReferenceImpl;
+import com.google.code.ddom.core.model.NSAwareElementImpl;
+import com.google.code.ddom.core.model.NSAwareTypedAttributeImpl;
+import com.google.code.ddom.core.model.NSDecl;
+import com.google.code.ddom.core.model.NSUnawareElementImpl;
+import com.google.code.ddom.core.model.NSUnawareTypedAttributeImpl;
+import com.google.code.ddom.core.model.ProcessingInstructionImpl;
+import com.google.code.ddom.core.model.TextImpl;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.model.CoreNSUnawareElement;
-import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
-import com.google.code.ddom.spi.model.CoreNSAwareElement;
-import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
 import com.google.code.ddom.spi.model.CoreCDATASection;
 import com.google.code.ddom.spi.model.CoreComment;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
 import com.google.code.ddom.spi.model.CoreDocumentType;
 import com.google.code.ddom.spi.model.CoreEntityReference;
+import com.google.code.ddom.spi.model.CoreNSAwareElement;
+import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
+import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 import com.google.code.ddom.spi.model.CoreText;
-import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.stream.Producer;
 

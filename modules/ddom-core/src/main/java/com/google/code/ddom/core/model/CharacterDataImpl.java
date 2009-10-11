@@ -13,20 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
+import com.google.code.ddom.spi.model.CoreCharacterData;
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreNSUnawareElement;
 
-public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
-    private final String tagName;
+public abstract class CharacterDataImpl extends LeafNode implements CoreCharacterData {
+    private String data;
 
-    public NSUnawareElementImpl(CoreDocument document, String tagName, boolean complete) {
-        super(document, complete);
-        this.tagName = tagName;
+    public CharacterDataImpl(CoreDocument document, String data) {
+        super(document);
+        this.data = data;
     }
 
-    public String coreGetName() {
-        return tagName;
+    public final String coreGetData() {
+        return data;
+    }
+
+    public final void coreSetData(String data) {
+        this.data = data;
     }
 }

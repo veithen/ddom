@@ -13,20 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreEntityReference;
+import com.google.code.ddom.spi.model.CoreTypedAttribute;
 
-public class EntityReferenceImpl extends LeafNode implements CoreEntityReference {
-    private String name;
-    
-    public EntityReferenceImpl(CoreDocument document, String name) {
-        super(document);
-        this.name = name;
+public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTypedAttribute {
+    private String type;
+
+    public TypedAttributeImpl(CoreDocument document, String value, String type) {
+        super(document, value);
+        this.type = type;
     }
 
-    public final String coreGetName() {
-        return name;
+    public final String getType() {
+        return type;
+    }
+
+    public final void setType(String type) {
+        this.type = type;
     }
 }

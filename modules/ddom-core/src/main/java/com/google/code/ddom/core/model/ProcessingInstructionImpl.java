@@ -13,20 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 
-public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSUnawareTypedAttribute {
-    private final String name;
+public class ProcessingInstructionImpl extends LeafNode implements CoreProcessingInstruction {
+    private final String target;
+    private String data;
 
-    public NSUnawareTypedAttributeImpl(CoreDocument document, String name, String value, String type) {
-        super(document, value, type);
-        this.name = name;
+    public ProcessingInstructionImpl(CoreDocument document, String target, String data) {
+        super(document);
+        this.target = target;
+        this.data = data;
     }
 
-    public final String coreGetName() {
-        return name;
+    public final String coreGetData() {
+        return data;
+    }
+
+    public final void coreSetData(String data) {
+        this.data = data;
+    }
+
+    public final String coreGetTarget() {
+        return target;
     }
 }

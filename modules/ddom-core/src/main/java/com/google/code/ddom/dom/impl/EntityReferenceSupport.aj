@@ -17,6 +17,8 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.EntityReference;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect EntityReferenceSupport {
     declare parents: EntityReferenceImpl implements EntityReference;
 }

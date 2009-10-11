@@ -19,6 +19,8 @@ import org.w3c.dom.CharacterData;
 import org.w3c.dom.Comment;
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect CharacterDataSupport {
     declare parents: CharacterDataImpl implements CharacterData;
     declare parents: CommentImpl implements Comment;

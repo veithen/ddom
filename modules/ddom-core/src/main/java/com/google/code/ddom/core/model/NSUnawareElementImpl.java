@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreText;
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
 
-public class TextImpl extends TextNodeImpl implements CoreText {
-    public TextImpl(CoreDocument document, String data) {
-        super(document, data);
+public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
+    private final String tagName;
+
+    public NSUnawareElementImpl(CoreDocument document, String tagName, boolean complete) {
+        super(document, complete);
+        this.tagName = tagName;
+    }
+
+    public String coreGetName() {
+        return tagName;
     }
 }

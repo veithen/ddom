@@ -18,6 +18,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.core.model.*;
+
 /**
  * Aspect implementing {@link Node#getNodeValue()} and {@link Node#setNodeValue(String)}.
  * 

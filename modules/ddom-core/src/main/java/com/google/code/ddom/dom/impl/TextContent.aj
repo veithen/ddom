@@ -17,6 +17,7 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreChildNode;
 
 public aspect TextContent {

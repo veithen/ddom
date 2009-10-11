@@ -19,6 +19,8 @@ import java.util.Map;
 
 import org.w3c.dom.UserDataHandler;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect UserDataSupport {
     private Map<String,Object> NodeImpl.userData;
     

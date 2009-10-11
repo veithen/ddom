@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import com.google.code.ddom.core.model.*;
+
 /**
  * Aspect implementing {@link org.w3c.dom.Node#normalize()} and
  * {@link org.w3c.dom.Document#normalizeDocument()}.

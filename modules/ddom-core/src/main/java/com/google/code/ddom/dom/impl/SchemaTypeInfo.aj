@@ -17,6 +17,8 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.TypeInfo;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect SchemaTypeInfo {
     public final TypeInfo AttributeImpl.getSchemaTypeInfo() {
         // TODO

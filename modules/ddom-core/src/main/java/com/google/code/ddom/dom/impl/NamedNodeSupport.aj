@@ -19,6 +19,8 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect NamedNodeSupport {
     declare parents: (NSAwareElementImpl || NSAwareTypedAttributeImpl) implements DOMNSAwareNamedNode;
     declare parents: (NSUnawareElementImpl || NSUnawareTypedAttributeImpl) implements DOMNSUnawareNamedNode;

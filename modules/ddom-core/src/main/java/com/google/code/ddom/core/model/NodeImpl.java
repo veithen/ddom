@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
-import com.google.code.ddom.spi.model.CoreCDATASection;
-import com.google.code.ddom.spi.model.CoreDocument;
+import org.w3c.dom.DOMException;
 
-public class CDATASectionImpl extends TextNodeImpl implements CoreCDATASection {
-    public CDATASectionImpl(CoreDocument document, String data) {
-        super(document, data);
+import com.google.code.ddom.dom.impl.DOMExceptionUtil;
+import com.google.code.ddom.spi.model.CoreNode;
+
+public abstract class NodeImpl implements CoreNode {
+    public final void validateOwnerDocument(CoreNode node) {
+        if (node.getDocument() != getDocument()) {
+            // TODO: must not throw DOMException here
+            throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
+        }
     }
 }

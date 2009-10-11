@@ -17,6 +17,8 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect Sibling {
     declare parents: (LeafNode || ElementImpl) implements DOMChildNode;
     

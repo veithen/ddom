@@ -18,6 +18,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.ProcessingInstruction;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect ProcessingInstructionSupport {
     declare parents: ProcessingInstructionImpl implements ProcessingInstruction;
     

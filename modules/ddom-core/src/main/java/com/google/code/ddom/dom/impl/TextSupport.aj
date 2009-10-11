@@ -19,6 +19,7 @@ import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
+import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreParentNode;
 import com.google.code.ddom.spi.model.CoreTextNode;
 

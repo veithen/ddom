@@ -18,6 +18,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.core.model.*;
+
 /**
  * Aspect implementing {@link Node#getOwnerDocument()} and {@link Node#getParentNode()}.
  * 

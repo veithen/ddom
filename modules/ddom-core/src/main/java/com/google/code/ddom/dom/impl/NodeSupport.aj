@@ -18,6 +18,8 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect NodeSupport {
     public final boolean NodeImpl.isSupported(String feature, String version) {
         return ((DOMDocument)getDocument()).getImplementation().hasFeature(feature, version);

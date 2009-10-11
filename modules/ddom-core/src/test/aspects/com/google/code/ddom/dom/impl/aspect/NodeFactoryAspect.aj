@@ -17,7 +17,7 @@ package com.google.code.ddom.dom.impl.aspect;
 
 import junit.framework.Assert;
 
-import com.google.code.ddom.dom.impl.NodeImpl;
+import com.google.code.ddom.core.model.NodeImpl;
 import com.google.code.ddom.spi.model.NodeFactory;
 
 public aspect NodeFactoryAspect {

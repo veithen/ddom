@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.dom.impl.DOMExceptionUtil;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
@@ -66,6 +67,7 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
 
     @Override
     protected final void validateChildType(CoreChildNode newChild) {
+        // TODO: must not throw DOMException here!
         if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
             throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         }

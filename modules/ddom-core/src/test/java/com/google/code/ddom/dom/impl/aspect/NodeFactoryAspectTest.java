@@ -19,7 +19,7 @@ import junit.framework.AssertionFailedError;
 
 import org.junit.Test;
 
-import com.google.code.ddom.dom.impl.DocumentTypeImpl;
+import com.google.code.ddom.core.model.DocumentTypeImpl;
 
 public class NodeFactoryAspectTest {
     @Test(expected=AssertionFailedError.class)

@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
-import com.google.code.ddom.spi.model.CoreComment;
 import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
 
-public class CommentImpl extends CharacterDataImpl implements CoreComment {
-    public CommentImpl(CoreDocument document, String data) {
-        super(document, data);
+public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSUnawareTypedAttribute {
+    private final String name;
+
+    public NSUnawareTypedAttributeImpl(CoreDocument document, String name, String value, String type) {
+        super(document, value, type);
+        this.name = name;
+    }
+
+    public final String coreGetName() {
+        return name;
     }
 }

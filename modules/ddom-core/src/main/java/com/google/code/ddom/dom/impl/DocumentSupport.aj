@@ -26,6 +26,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
+import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;

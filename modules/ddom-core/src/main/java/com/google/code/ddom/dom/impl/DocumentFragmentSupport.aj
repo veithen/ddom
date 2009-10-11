@@ -17,6 +17,8 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DocumentFragment;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect DocumentFragmentSupport {
     declare parents: DocumentFragmentImpl implements DocumentFragment;
 }

@@ -13,24 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreTypedAttribute;
+import com.google.code.ddom.spi.model.CoreTextNode;
 
-public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTypedAttribute {
-    private String type;
-
-    public TypedAttributeImpl(CoreDocument document, String value, String type) {
-        super(document, value);
-        this.type = type;
-    }
-
-    public final String getType() {
-        return type;
-    }
-
-    public final void setType(String type) {
-        this.type = type;
+public abstract class TextNodeImpl extends CharacterDataImpl implements CoreTextNode {
+    public TextNodeImpl(CoreDocument document, String data) {
+        super(document, data);
     }
 }

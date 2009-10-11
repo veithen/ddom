@@ -20,6 +20,7 @@ import java.util.Iterator;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementLocalNameFilterIterator;
 import com.google.code.ddom.utils.dom.iterator.ElementNameFilterIterator;

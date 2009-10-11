@@ -27,6 +27,8 @@ import org.w3c.dom.EntityReference;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
+import com.google.code.ddom.core.model.*;
+
 public aspect Create {
     public final Element DocumentImpl.createElement(String tagName) throws DOMException {
         NSUtil.validateName(tagName);

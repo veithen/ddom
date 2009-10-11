@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
+import com.google.code.ddom.spi.model.CoreEntityReference;
 
-public class NSDecl extends AttributeImpl implements CoreNamespaceDeclaration {
-    private String declaredPrefix;
-
-    public NSDecl(CoreDocument document, String prefix, String namespaceURI) {
-        super(document, namespaceURI);
-        this.declaredPrefix = prefix;
-    }
-
-    public final String getDeclaredPrefix() {
-        return declaredPrefix;
-    }
+public class EntityReferenceImpl extends LeafNode implements CoreEntityReference {
+    private String name;
     
-    public final String getDeclaredNamespaceURI() {
-        return getValue();
+    public EntityReferenceImpl(CoreDocument document, String name) {
+        super(document);
+        this.name = name;
+    }
+
+    public final String coreGetName() {
+        return name;
     }
 }

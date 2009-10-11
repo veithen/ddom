@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
-import org.w3c.dom.DOMException;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 
-import com.google.code.ddom.spi.model.CoreNode;
+public class NSDecl extends AttributeImpl implements CoreNamespaceDeclaration {
+    private String declaredPrefix;
 
-public abstract class NodeImpl implements CoreNode {
-    protected final void validateOwnerDocument(CoreNode node) {
-        if (node.getDocument() != getDocument()) {
-            throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
-        }
+    public NSDecl(CoreDocument document, String prefix, String namespaceURI) {
+        super(document, namespaceURI);
+        this.declaredPrefix = prefix;
+    }
+
+    public final String getDeclaredPrefix() {
+        return declaredPrefix;
+    }
+    
+    public final String getDeclaredNamespaceURI() {
+        return getValue();
     }
 }

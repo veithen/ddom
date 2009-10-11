@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
+import com.google.code.ddom.spi.model.BuilderTarget;
 import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreTextNode;
 
-public abstract class TextNodeImpl extends CharacterDataImpl implements CoreTextNode {
-    public TextNodeImpl(CoreDocument document, String data) {
-        super(document, data);
+public class BuilderTargetHelper {
+    public static void build(BuilderTarget node) {
+        CoreDocument document = node.getDocument();
+        while (!node.isComplete()) {
+            document.next();
+        }
     }
 }

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.dom.impl.DOMExceptionUtil;
 import com.google.code.ddom.spi.model.BuilderTarget;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
@@ -45,6 +46,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         Node current = this;
         do {
             if (current == newChild) {
+                // TODO: must not throw DOMException here!
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
             current = current.getParentNode();

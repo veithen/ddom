@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
-import com.google.code.ddom.spi.model.BuilderTarget;
+import com.google.code.ddom.spi.model.CoreComment;
 import com.google.code.ddom.spi.model.CoreDocument;
 
-public class BuilderTargetHelper {
-    public static void build(BuilderTarget node) {
-        CoreDocument document = node.getDocument();
-        while (!node.isComplete()) {
-            document.next();
-        }
+public class CommentImpl extends CharacterDataImpl implements CoreComment {
+    public CommentImpl(CoreDocument document, String data) {
+        super(document, data);
     }
 }
