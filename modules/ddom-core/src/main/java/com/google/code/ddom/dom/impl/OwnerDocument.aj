@@ -30,19 +30,19 @@ public aspect OwnerDocument {
     }
 
     public final Document AttributeImpl.getOwnerDocument() {
-        return getDocument();
+        return (Document)getDocument();
     }
     
     public final Document DocumentFragmentImpl.getOwnerDocument() {
-        return getDocument();
+        return (Document)getDocument();
     }
 
     public final Document ElementImpl.getOwnerDocument() {
-        return getDocument();
+        return (Document)getDocument();
     }
 
     public final Document LeafNode.getOwnerDocument() {
-        return getDocument();
+        return (Document)getDocument();
     }
     
     public final Node AttributeImpl.getParentNode() {

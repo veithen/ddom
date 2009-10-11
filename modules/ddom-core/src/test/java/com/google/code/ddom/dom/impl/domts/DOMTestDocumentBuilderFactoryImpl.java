@@ -90,7 +90,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
     public Document load(URL url) throws DOMTestLoadException {
         // TODO: need to cleanup somehow
         try {
-            return DeferredDocumentFactory.newInstance().parse("dom", factory.createXMLStreamReader(new StreamSource(url.toExternalForm())));
+            return (Document)DeferredDocumentFactory.newInstance().parse("dom", factory.createXMLStreamReader(new StreamSource(url.toExternalForm())));
         } catch (XMLStreamException ex) {
             throw new DOMTestLoadException(ex);
         }

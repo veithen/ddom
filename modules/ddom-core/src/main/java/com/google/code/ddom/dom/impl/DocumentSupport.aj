@@ -31,6 +31,8 @@ import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public aspect DocumentSupport {
+    declare parents: DocumentImpl implements DOMDocument;
+    
     private DOMImplementationImpl DocumentImpl.domImplementation;
     
     public final DOMImplementation DocumentImpl.getImplementation() {

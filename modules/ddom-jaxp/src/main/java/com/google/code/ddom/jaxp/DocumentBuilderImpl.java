@@ -69,7 +69,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public Document newDocument() {
         // TODO: do this properly
-        return DeferredDocumentFactory.newInstance().newDocument("dom");
+        return (Document)DeferredDocumentFactory.newInstance().newDocument("dom");
     }
 
     @Override
@@ -112,7 +112,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             document.coreSetInputEncoding(inputEncoding);
             document.coreSetXmlEncoding(xmlEncoding);
             // TODO: build the document and close the reader
-            return document;
+            return (Document)document;
         } catch (XMLStreamException ex) {
             throw toSAXParseException(ex);
         }

@@ -45,13 +45,13 @@ public class DeferredDocumentFactory {
         return new DeferredDocumentFactory(ModelRegistry.getInstance(), StreamFactory.getInstance());
     }
     
-    public Document newDocument(String model) {
+    public DeferredDocument newDocument(String model) {
         // TODO: check for null here!
         return modelRegistry.getNodeFactory(model).createDocument(null);
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public Document parse(String model, Object source, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(String model, Object source, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
         NodeFactory nodeFactory = modelRegistry.getNodeFactory(model);
         Producer producer;
@@ -68,7 +68,7 @@ public class DeferredDocumentFactory {
         return nodeFactory.createDocument(producer);
     }
 
-    public Document parse(String model, Object source) throws DeferredParsingException {
+    public DeferredDocument parse(String model, Object source) throws DeferredParsingException {
         return parse(model, source, true);
     }
 }

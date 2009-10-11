@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom;
 
-import org.w3c.dom.Document;
-
-public interface DeferredDocument extends Document, DeferredNode {
+public interface DeferredDocument extends DeferredNode {
     void dispose();
 }

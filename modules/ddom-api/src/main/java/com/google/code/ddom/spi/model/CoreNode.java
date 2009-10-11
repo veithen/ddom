@@ -15,14 +15,11 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Node;
-
 public interface CoreNode {
     /**
-     * Get the document to which this node belongs. In contrast to {@link Node#getOwnerDocument()},
-     * this method will never return <code>null</code>.
+     * Get the document to which this node belongs.
      * 
-     * @return the document
+     * @return the document; this will never be <code>null</code>    TODO: expect for CoreDocumentType??
      */
     CoreDocument getDocument();
 }

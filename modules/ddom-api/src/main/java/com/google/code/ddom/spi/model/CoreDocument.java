@@ -15,12 +15,10 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Document;
-
 import com.google.code.ddom.DeferredDocument;
 import com.google.code.ddom.DeferredParsingException;
 
-public interface CoreDocument extends Document, DeferredDocument, BuilderTarget {
+public interface CoreDocument extends DeferredDocument, BuilderTarget {
     NodeFactory getNodeFactory();
     void next() throws DeferredParsingException;
     int getStructureVersion(); // TODO: DOM specific

@@ -33,7 +33,7 @@ import com.google.code.ddom.DeferredDocumentFactory;
 public class ReceiverTest {
     @Test
     public void testUsernameToken() throws Exception {
-        Document doc = DeferredDocumentFactory.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
+        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
         WSSecurityEngine engine = WSSecurityEngine.getInstance();
         CallbackHandler cb = new CallbackHandler() {
             public void handle(Callback[] callbacks) {

@@ -26,7 +26,7 @@ import com.google.code.ddom.tests.wss4j.receiver.ReceiverTest;
 public class SenderTest {
     @Test
     public void testUsernameToken() throws Exception {
-        Document doc = DeferredDocumentFactory.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
+        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
         WSSecUsernameToken builder = new WSSecUsernameToken();
         builder.setUserInfo("user", "password");
         WSSecHeader secHeader = new WSSecHeader();

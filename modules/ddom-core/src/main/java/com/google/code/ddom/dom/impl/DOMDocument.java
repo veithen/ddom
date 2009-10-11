@@ -15,22 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import java.io.StringReader;
-
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.spi.model.CoreDocument;
 
-public class DDOMUtilImpl implements DOMUtilImpl {
-    public static final DDOMUtilImpl INSTANCE = new DDOMUtilImpl();
-    
-    public Document newDocument() {
-        return (Document)DeferredDocumentFactory.newInstance().newDocument("dom");
-    }
+public interface DOMDocument extends CoreDocument, Document {
 
-    public Document parse(boolean namespaceAware, String xml) {
-        // TODO: need to cleanup somehow
-        // TODO: set namespaceAware flag
-        return (Document)DeferredDocumentFactory.newInstance().parse("dom", new StringReader(xml));
-    }
 }

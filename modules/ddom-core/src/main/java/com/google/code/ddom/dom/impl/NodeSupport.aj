@@ -20,7 +20,7 @@ import org.w3c.dom.Node;
 
 public aspect NodeSupport {
     public final boolean NodeImpl.isSupported(String feature, String version) {
-        return getDocument().getImplementation().hasFeature(feature, version);
+        return ((DOMDocument)getDocument()).getImplementation().hasFeature(feature, version);
     }
 
     public final Object NodeImpl.getFeature(String feature, String version) {

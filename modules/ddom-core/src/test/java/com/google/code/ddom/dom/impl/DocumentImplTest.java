@@ -47,7 +47,7 @@ public class DocumentImplTest {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<p:root xmlns:p='urn:ns'>"));
-        Document doc = DeferredDocumentFactory.newInstance().parse("dom", reader);
+        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", reader);
         
         Element element = doc.getDocumentElement();
         Assert.assertTrue(element instanceof CoreNSUnawareElement);
@@ -72,7 +72,7 @@ public class DocumentImplTest {
         InvocationCounter cter = new InvocationCounter();
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<root>This is malformed"));
-        Document doc = DeferredDocumentFactory.newInstance().parse("dom", cter.createProxy(XMLStreamReader.class, reader));
+        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", cter.createProxy(XMLStreamReader.class, reader));
         
         // First loop over the document; this should give an exception
         try {

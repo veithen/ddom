@@ -48,7 +48,7 @@ public class SAXStreamProviderTest extends TestCase {
         SAXParserFactory saxFactory = new SAXParserFactoryImpl();
         saxFactory.setNamespaceAware(test.isUsingNamespaces());
         SAXSource source = new SAXSource(saxFactory.newSAXParser().getXMLReader(), test.getInputSource());
-        Document actual = DeferredDocumentFactory.newInstance().parse("dom", source);
+        Document actual = (Document)DeferredDocumentFactory.newInstance().parse("dom", source);
         ((CoreDocument)actual).build();
         
         DocumentBuilderFactory domFactory = new DocumentBuilderFactoryImpl();
