@@ -46,7 +46,7 @@ public aspect TextContent {
 
     public final CharSequence ParentNodeImpl.collectTextContent(CharSequence appendTo) {
         CharSequence content = appendTo;
-        for (CoreChildNode node = getFirstChild(); node != null; node = node.getNextSibling()) {
+        for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
             content = ((DOMNode)node).collectTextContent(content);
         }
         return content;

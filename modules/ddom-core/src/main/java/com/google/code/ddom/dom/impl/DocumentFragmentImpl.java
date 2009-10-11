@@ -16,7 +16,6 @@
 package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -37,7 +36,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
         this.firstChild = child;
     }
     
-    public final CoreChildNode getFirstChild() {
+    public final CoreChildNode coreGetFirstChild() {
         return firstChild;
     }
 
@@ -83,14 +82,6 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
     }
 
     public final Node getParentNode() {
-        return null;
-    }
-
-    public final Node getNextSibling() {
-        return null;
-    }
-
-    public final Node getPreviousSibling() {
         return null;
     }
 }

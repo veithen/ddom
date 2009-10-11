@@ -21,7 +21,7 @@ import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreParentNode;
 
 public class ChildNodeHelper {
-    public static CoreChildNode getNextSibling(CoreChildNode node) {
+    public static CoreChildNode coreGetNextSibling(CoreChildNode node) {
         CoreParentNode parent = node.getParentNode();
         CoreDocument document = node.getDocument();
         if (parent instanceof BuilderTarget) {
@@ -35,13 +35,13 @@ public class ChildNodeHelper {
         }
     }
     
-    public static CoreChildNode getPreviousSibling(CoreChildNode node) {
+    public static CoreChildNode coreGetPreviousSibling(CoreChildNode node) {
         CoreParentNode parent = node.getParentNode();
         if (parent == null) {
             return null;
         } else {
             CoreChildNode previousSibling = null;
-            CoreChildNode sibling = parent.getFirstChild();
+            CoreChildNode sibling = parent.coreGetFirstChild();
             while (sibling != null && sibling != node) {
                 previousSibling = sibling;
                 sibling = sibling.internalGetNextSibling();

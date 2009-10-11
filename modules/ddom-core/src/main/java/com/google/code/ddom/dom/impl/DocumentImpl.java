@@ -97,7 +97,7 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         firstChild = child;
     }
 
-    public final CoreChildNode getFirstChild() {
+    public final CoreChildNode coreGetFirstChild() {
         if (firstChild == null && !isComplete()) {
             next();
         }
@@ -144,14 +144,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
     }
 
     public final Node getParentNode() {
-        return null;
-    }
-
-    public final Node getNextSibling() {
-        return null;
-    }
-
-    public final Node getPreviousSibling() {
         return null;
     }
 

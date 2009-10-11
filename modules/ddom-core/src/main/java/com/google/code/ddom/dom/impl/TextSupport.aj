@@ -20,7 +20,7 @@ public aspect TextSupport {
         CoreTextNode newNode = createNewTextNode(text.substring(offset));
         CoreParentNode parent = getParentNode();
         if (parent != null) {
-            newNode.internalSetNextSibling(getNextSibling());
+            newNode.internalSetNextSibling(coreGetNextSibling());
             internalSetNextSibling(newNode);
             newNode.internalSetParent(parent);
             parent.notifyChildrenModified(1);

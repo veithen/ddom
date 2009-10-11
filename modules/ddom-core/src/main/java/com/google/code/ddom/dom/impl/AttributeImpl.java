@@ -18,7 +18,6 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.TypeInfo;
 
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreChildNode;
@@ -83,18 +82,18 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
             return 1;
         } else {
             int length = 0;
-            for (CoreChildNode child = (CoreChildNode)value; child != null; child = child.getNextSibling()) {
+            for (CoreChildNode child = (CoreChildNode)value; child != null; child = child.coreGetNextSibling()) {
                 length++;
             }
             return length;
         }
     }
 
-    public final CoreChildNode getFirstChild() {
+    public final CoreChildNode coreGetFirstChild() {
         return OptimizedParentNodeHelper.getFirstChild(this);
     }
     
-    public final CoreElement getOwnerElement() {
+    public final CoreElement coreGetOwnerElement() {
         return owner instanceof CoreElement ? (CoreElement)owner : null;
     }
 
@@ -110,7 +109,7 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         return null;
     }
 
-    public final String getValue() {
+    public final String coreGetValue() {
         // TODO: this should also be applicable for other OptimizedParentNodes
         if (value instanceof String) {
             return (String)value;
@@ -119,17 +118,9 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         }
     }
 
-    public final void setValue(String value) throws DOMException {
+    public final void coreSetValue(String value) {
         // TODO: what if arg is null?
         this.value = value;
-    }
-
-    public final Node getNextSibling() {
-        return null;
-    }
-
-    public final Node getPreviousSibling() {
-        return null;
     }
 
     public final boolean hasAttributes() {
@@ -138,15 +129,5 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
 
     public final NamedNodeMap getAttributes() {
         return null;
-    }
-
-    public final boolean getSpecified() {
-        // TODO
-        return true;
-    }
-
-    public final TypeInfo getSchemaTypeInfo() {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 }

@@ -49,10 +49,10 @@ public aspect Clone {
     
     public final Node ParentNodeImpl.deepClone() {
         Node clone = shallowClone();
-        CoreChildNode child = getFirstChild();
+        CoreChildNode child = coreGetFirstChild();
         while (child != null) {
             clone.appendChild(child.cloneNode(true));
-            child = child.getNextSibling();
+            child = child.coreGetNextSibling();
         }
         return clone;
     }

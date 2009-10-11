@@ -24,12 +24,12 @@ import com.google.code.ddom.spi.model.CoreDocumentFragment;
 import com.google.code.ddom.spi.model.CoreParentNode;
 
 public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode {
-    public final CoreChildNode getLastChild() {
+    public final CoreChildNode coreGetLastChild() {
         CoreChildNode previousChild = null;
-        CoreChildNode child = getFirstChild();
+        CoreChildNode child = coreGetFirstChild();
         while (child != null) {
             previousChild = child;
-            child = child.getNextSibling();
+            child = child.coreGetNextSibling();
         }
         return previousChild;
     }
@@ -99,19 +99,19 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         CoreChildNode previousSibling; // The sibling that will precede the new child
         CoreChildNode nextSibling; // The sibling that will follow the new child
         if (refChild == null) { // implies removeRefChild == false
-            previousSibling = getLastChild();
+            previousSibling = coreGetLastChild();
             nextSibling = null;
         } else {
             previousSibling = null;
-            CoreChildNode node = getFirstChild();
+            CoreChildNode node = coreGetFirstChild();
             while (node != null && node != refChild) {
                 previousSibling = node;
-                node = node.getNextSibling();
+                node = node.coreGetNextSibling();
             }
             if (node == null) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
             }
-            nextSibling = removeRefChild ? node.getNextSibling() : node;
+            nextSibling = removeRefChild ? node.coreGetNextSibling() : node;
         }
         if (newChild == null && removeRefChild) {
             if (previousSibling == null) {
@@ -126,9 +126,9 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
             int delta; // The difference in number of children before and after the operation
             if (newChild instanceof CoreDocumentFragment) {
                 CoreDocumentFragment fragment = (CoreDocumentFragment)newChild;
-                firstNodeToInsert = fragment.getFirstChild();
+                firstNodeToInsert = fragment.coreGetFirstChild();
                 lastNodeToInsert = null;
-                for (CoreChildNode node = firstNodeToInsert; node != null; node = node.getNextSibling()) {
+                for (CoreChildNode node = firstNodeToInsert; node != null; node = node.coreGetNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
                     validateChildType(node);
                     node.internalSetParent(this);

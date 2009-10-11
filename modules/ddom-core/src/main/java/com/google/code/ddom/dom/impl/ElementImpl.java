@@ -162,7 +162,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         content = child;
     }
 
-    public final CoreChildNode getFirstChild() {
+    public final CoreChildNode coreGetFirstChild() {
         if (content == null && !complete) {
             document.next();
         }
@@ -185,12 +185,12 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         return parent;
     }
     
-    public final CoreChildNode getNextSibling() {
-        return ChildNodeHelper.getNextSibling(this);
+    public final CoreChildNode coreGetNextSibling() {
+        return ChildNodeHelper.coreGetNextSibling(this);
     }
 
-    public final CoreChildNode getPreviousSibling() {
-        return ChildNodeHelper.getPreviousSibling(this);
+    public final CoreChildNode coreGetPreviousSibling() {
+        return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
     public final NamedNodeMap getAttributes() {
@@ -331,7 +331,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
     public final Attr setAttributeNodeNS(Attr _newAttr) throws DOMException {
         validateOwnerDocument(_newAttr);
         CoreAttribute newAttr = (CoreAttribute)_newAttr;
-        CoreElement owner = newAttr.getOwnerElement();
+        CoreElement owner = newAttr.coreGetOwnerElement();
         if (owner == this) {
             // This means that the "new" attribute is already linked to the element
             // and replaces itself.

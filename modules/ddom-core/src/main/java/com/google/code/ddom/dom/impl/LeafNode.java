@@ -18,7 +18,6 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
@@ -57,28 +56,12 @@ public abstract class LeafNode extends NodeImpl implements CoreChildNode {
         return parent;
     }
     
-    public final CoreChildNode getNextSibling() {
-        return ChildNodeHelper.getNextSibling(this);
+    public final CoreChildNode coreGetNextSibling() {
+        return ChildNodeHelper.coreGetNextSibling(this);
     }
 
-    public final CoreChildNode getPreviousSibling() {
-        return ChildNodeHelper.getPreviousSibling(this);
-    }
-
-    public final boolean hasChildNodes() {
-        return false;
-    }
-
-    public final NodeList getChildNodes() {
-        return EmptyNodeList.INSTANCE;
-    }
-
-    public final Node getFirstChild() {
-        return null;
-    }
-
-    public final Node getLastChild() {
-        return null;
+    public final CoreChildNode coreGetPreviousSibling() {
+        return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
     public final Node appendChild(Node newChild) throws DOMException {

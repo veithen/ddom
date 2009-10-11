@@ -23,9 +23,33 @@ import com.google.code.ddom.spi.model.CoreChildNode;
 public aspect ChildNodes {
     declare parents: ParentNodeImpl implements NodeList;
 
+    public final Node LeafNode.getFirstChild() {
+        return null;
+    }
+    
+    public final Node LeafNode.getLastChild() {
+        return null;
+    }
+
+    public final boolean LeafNode.hasChildNodes() {
+        return false;
+    }
+    
+    public final NodeList LeafNode.getChildNodes() {
+        return EmptyNodeList.INSTANCE;
+    }
+
     public final boolean ParentNodeImpl.hasChildNodes() {
         // TODO: not the best way if content is optimized
         return getFirstChild() != null;
+    }
+    
+    public final Node ParentNodeImpl.getFirstChild() {
+        return coreGetFirstChild();
+    }
+    
+    public final Node ParentNodeImpl.getLastChild() {
+        return coreGetLastChild();
     }
     
     public final NodeList ParentNodeImpl.getChildNodes() {
@@ -39,9 +63,9 @@ public aspect ChildNodes {
     public final Node ParentNodeImpl.item(int index) {
         // TODO: need unit test to check that this works when parsing is deferred
         // TODO: wrong result for negavite indexes
-        CoreChildNode node = getFirstChild();
+        CoreChildNode node = coreGetFirstChild();
         for (int i=0; i<index && node != null; i++) {
-            node = node.getNextSibling();
+            node = node.coreGetNextSibling();
         }
         return node;
     }

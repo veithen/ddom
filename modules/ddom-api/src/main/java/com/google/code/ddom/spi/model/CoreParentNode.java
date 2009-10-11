@@ -15,11 +15,10 @@
  */
 package com.google.code.ddom.spi.model;
 
-
 public interface CoreParentNode extends CoreNode {
     void internalSetFirstChild(CoreChildNode child);
     void notifyChildrenModified(int delta);
-    CoreChildNode getFirstChild();
-    CoreChildNode getLastChild();
+    CoreChildNode coreGetFirstChild();
+    CoreChildNode coreGetLastChild();
     int coreGetChildCount();
 }
