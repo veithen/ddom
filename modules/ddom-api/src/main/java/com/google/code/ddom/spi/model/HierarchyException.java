@@ -15,11 +15,13 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface CoreParentNode extends CoreNode {
-    void internalSetFirstChild(CoreChildNode child);
-    void notifyChildrenModified(int delta);
-    CoreChildNode coreGetFirstChild();
-    CoreChildNode coreGetLastChild();
-    int coreGetChildCount();
-    void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException;
+public class HierarchyException extends CoreModelException {
+    private static final long serialVersionUID = -676602453248623826L;
+
+    public HierarchyException() {
+    }
+
+    public HierarchyException(String message) {
+        super(message);
+    }
 }

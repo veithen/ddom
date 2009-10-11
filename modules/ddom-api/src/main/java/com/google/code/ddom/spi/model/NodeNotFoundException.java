@@ -15,11 +15,13 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface CoreParentNode extends CoreNode {
-    void internalSetFirstChild(CoreChildNode child);
-    void notifyChildrenModified(int delta);
-    CoreChildNode coreGetFirstChild();
-    CoreChildNode coreGetLastChild();
-    int coreGetChildCount();
-    void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException;
+public class NodeNotFoundException extends CoreModelException {
+    private static final long serialVersionUID = -7231268467516709733L;
+
+    public NodeNotFoundException() {
+    }
+
+    public NodeNotFoundException(String message) {
+        super(message);
+    }
 }

@@ -21,6 +21,10 @@ import java.util.ResourceBundle;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.spi.model.HierarchyException;
+import com.google.code.ddom.spi.model.NodeNotFoundException;
+
 public class DOMExceptionUtil {
     private static final ResourceBundle messages =
             PropertyResourceBundle.getBundle(DOMExceptionUtil.class.getName());
@@ -59,6 +63,16 @@ public class DOMExceptionUtil {
             return new DOMException(code, key);
         } else {
             return new DOMException(code, key + ": " + message);
+        }
+    }
+    
+    public static DOMException translate(CoreModelException ex) {
+        if (ex instanceof NodeNotFoundException) {
+            return newDOMException(DOMException.NOT_FOUND_ERR);
+        } else if (ex instanceof HierarchyException) {
+            return newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+        } else {
+            throw new IllegalArgumentException("Don't know how to translate " + ex.getClass().getName());
         }
     }
 }

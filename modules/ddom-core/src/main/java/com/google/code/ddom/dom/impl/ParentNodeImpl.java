@@ -21,7 +21,11 @@ import org.w3c.dom.Node;
 import com.google.code.ddom.spi.model.BuilderTarget;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
+import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
+import com.google.code.ddom.spi.model.HierarchyException;
+import com.google.code.ddom.spi.model.NodeNotFoundException;
 
 public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode {
     public final CoreChildNode coreGetLastChild() {
@@ -38,7 +42,12 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
-        return merge(newChild, null, false);
+        try {
+            merge((CoreNode)newChild, null, false);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return newChild;
     }
 
     public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
@@ -49,7 +58,12 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
-        return merge(newChild, refChild, false);
+        try {
+            merge((CoreNode)newChild, (CoreChildNode)refChild, false);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return newChild;
     }
 
     private void prepareNewChild(Node newChild) {
@@ -75,7 +89,12 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
-        return merge(null, oldChild, true);
+        try {
+            merge(null, (CoreChildNode)oldChild, true);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return oldChild;
     }
 
     public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {
@@ -85,14 +104,19 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
-        return merge(newChild, oldChild, true);
+        try {
+            merge((CoreNode)newChild, (CoreChildNode)oldChild, true);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return oldChild;
     }
 
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false
     // replaceChild: newChild != null, refChild != null, removeRefChild == true
     // removeChild:  newChild == null, refChild != null, removeRefChild == true
-    private Node merge(Node newChild, Node refChild, boolean removeRefChild) throws DOMException {
+    public void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException {
         if (newChild != null) {
             prepareNewChild(newChild);
         }
@@ -109,7 +133,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
                 node = node.coreGetNextSibling();
             }
             if (node == null) {
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+                throw new NodeNotFoundException();
             }
             nextSibling = removeRefChild ? node.coreGetNextSibling() : node;
         }
@@ -143,7 +167,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
                 firstNodeToInsert.internalSetParent(this);
                 delta = 1;
             } else {
-                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+                throw new HierarchyException();
             }
             if (removeRefChild) {
                 delta--;
@@ -161,8 +185,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
             }
         }
         if (removeRefChild) {
-            ((CoreChildNode)refChild).internalSetParent(null);
+            refChild.internalSetParent(null);
         }
-        return removeRefChild ? refChild : newChild;
     }
 }
