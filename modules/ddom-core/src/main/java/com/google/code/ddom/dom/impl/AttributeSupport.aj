@@ -19,6 +19,8 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
 public aspect AttributeSupport {
+    declare parents: AttributeImpl implements DOMAttribute;
+    
     public final String AttributeImpl.getValue() {
         return coreGetValue();
     }
@@ -34,5 +36,13 @@ public aspect AttributeSupport {
     public final boolean AttributeImpl.getSpecified() {
         // TODO
         return true;
+    }
+
+    public final boolean TypedAttributeImpl.isId() {
+        return "ID".equals(getType());
+    }
+
+    public final boolean NSDecl.isId() {
+        return false;
     }
 }

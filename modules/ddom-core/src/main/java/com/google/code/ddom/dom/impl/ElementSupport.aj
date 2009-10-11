@@ -34,7 +34,7 @@ public aspect ElementSupport {
     private static final int ATTR_DOM2 = 2;
     private static final int ATTR_NSDECL = 3;
 
-    private boolean ElementImpl.testAttribute(Attr attr, String namespaceURI, String localName, int mode) {
+    private boolean ElementImpl.testAttribute(DOMAttribute attr, String namespaceURI, String localName, int mode) {
         switch (mode) {
             case ATTR_DOM1:
                 // Note: a lookup using DOM 1 methods may return any kind of attribute, including NSDecl
@@ -68,10 +68,10 @@ public aspect ElementSupport {
         }
     }
     
-    private CoreAttribute ElementImpl.getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
-        CoreAttribute attr = internalGetFirstAttribute();
+    private DOMAttribute ElementImpl.getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
+        DOMAttribute attr = (DOMAttribute)internalGetFirstAttribute();
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
-            attr = attr.internalGetNextAttribute();
+            attr = (DOMAttribute)attr.internalGetNextAttribute();
         }
         return attr;
     }
@@ -119,11 +119,11 @@ public aspect ElementSupport {
     }
     
     private void ElementImpl.setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
-        CoreAttribute attr = internalGetFirstAttribute();
+        DOMAttribute attr = (DOMAttribute)internalGetFirstAttribute();
         CoreAttribute previousAttr = null;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             previousAttr = attr;
-            attr = attr.internalGetNextAttribute();
+            attr = (DOMAttribute)attr.internalGetNextAttribute();
         }
         if (attr == null) {
             CoreDocument document = getDocument();
@@ -163,7 +163,7 @@ public aspect ElementSupport {
     
     public final Attr ElementImpl.setAttributeNodeNS(Attr _newAttr) throws DOMException {
         validateOwnerDocument((CoreNode)_newAttr);
-        CoreAttribute newAttr = (CoreAttribute)_newAttr;
+        DOMAttribute newAttr = (DOMAttribute)_newAttr;
         CoreElement owner = newAttr.coreGetOwnerElement();
         if (owner == this) {
             // This means that the "new" attribute is already linked to the element
@@ -172,8 +172,8 @@ public aspect ElementSupport {
         } else if (owner != null) {
             throw DOMExceptionUtil.newDOMException(DOMException.INUSE_ATTRIBUTE_ERR);
         } else {
-            CoreAttribute existingAttr = internalGetFirstAttribute();
-            CoreAttribute previousAttr = null;
+            DOMAttribute existingAttr = (DOMAttribute)internalGetFirstAttribute();
+            DOMAttribute previousAttr = null;
             String localName = newAttr.getLocalName();
             String namespaceURI;
             int mode;
@@ -188,7 +188,7 @@ public aspect ElementSupport {
             }
             while (existingAttr != null && !testAttribute(existingAttr, namespaceURI, localName, mode)) {
                 previousAttr = existingAttr;
-                existingAttr = existingAttr.internalGetNextAttribute();
+                existingAttr = (DOMAttribute)existingAttr.internalGetNextAttribute();
             }
             newAttr.internalSetOwnerElement(this);
             if (existingAttr == null) {
@@ -213,7 +213,7 @@ public aspect ElementSupport {
     }
 
     public final Attr ElementImpl.removeAttributeNode(Attr _oldAttr) throws DOMException {
-        CoreAttribute oldAttr = (CoreAttribute)_oldAttr;
+        DOMAttribute oldAttr = (DOMAttribute)_oldAttr;
         if (oldAttr.getOwnerElement() == this) {
             CoreAttribute previousAttr = internalGetFirstAttribute();
             while (previousAttr != null) {

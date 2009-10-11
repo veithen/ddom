@@ -82,9 +82,9 @@ public aspect DocumentSupport {
                 Attr attr = (Attr)node;
                 String localName = attr.getLocalName();
                 if (localName == null) {
-                    importedNode = getNodeFactory().createAttribute(this, attr.getName(), null, null);
+                    importedNode = (Node)getNodeFactory().createAttribute(this, attr.getName(), null, null);
                 } else {
-                    importedNode = getNodeFactory().createAttribute(this, attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
+                    importedNode = (Node)getNodeFactory().createAttribute(this, attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
                 }
                 importChildren = true;
                 break;
@@ -128,7 +128,7 @@ public aspect DocumentSupport {
         for (Iterator<CoreElement> it = new DescendantsIterator<CoreElement>(CoreElement.class, this); it.hasNext(); ) {
             CoreElement element = it.next();
             for (CoreAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
-                if (attr.isId() && elementId.equals(attr.getValue())) {
+                if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {
                     return (DOMElement)element;
                 }
             }

@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.spi.model.CoreAttribute;
@@ -34,12 +35,12 @@ public aspect Clone {
     
     public final Node NSAwareTypedAttributeImpl.shallowClone() {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createAttribute(document, getNamespaceURI(), getLocalName(), getPrefix(), null, getType());
+        return (Node)document.getNodeFactory().createAttribute(document, getNamespaceURI(), getLocalName(), getPrefix(), null, getType());
     }
     
     public final Node NSUnawareTypedAttributeImpl.shallowClone() {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createAttribute(document, getName(), null, getType());
+        return (Node)document.getNodeFactory().createAttribute(document, getName(), null, getType());
     }
 
     public final Node NSDecl.shallowClone() {
@@ -98,7 +99,7 @@ public aspect Clone {
         CoreAttribute attr = internalGetFirstAttribute();
         while (attr != null) {
             // TODO: this could be optimized
-            ((DOMElement)clone).setAttributeNode((CoreTypedAttribute)attr.cloneNode(false));
+            ((DOMElement)clone).setAttributeNode((Attr)((Attr)attr).cloneNode(false));
             attr = attr.internalGetNextAttribute();
         }
         return clone;

@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.dom.impl;
 
-public interface CoreAttribute extends CoreParentNode, CoreOptimizedParentNode {
-    CoreAttribute internalGetNextAttribute();
-    void internalSetNextAttribute(CoreAttribute attr);
-    void internalSetOwnerElement(CoreElement newOwner);
+import org.w3c.dom.Attr;
 
-    String coreGetValue();
-    void coreSetValue(String value);
-    CoreElement coreGetOwnerElement();
+import com.google.code.ddom.spi.model.CoreAttribute;
+
+public interface DOMAttribute extends CoreAttribute, Attr {
+
 }

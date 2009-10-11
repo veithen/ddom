@@ -33,8 +33,4 @@ public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTy
     public final void setType(String type) {
         this.type = type;
     }
-
-    public final boolean isId() {
-        return "ID".equals(type);
-    }
 }

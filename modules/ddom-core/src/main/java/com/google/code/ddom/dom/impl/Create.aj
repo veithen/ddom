@@ -50,7 +50,7 @@ public aspect Create {
     
     public final Attr DocumentImpl.createAttribute(String name) throws DOMException {
         NSUtil.validateName(name);
-        return getNodeFactory().createAttribute(this, name, null, null);
+        return (Attr)getNodeFactory().createAttribute(this, name, null, null);
     }
 
     public final Attr DocumentImpl.createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
@@ -65,10 +65,10 @@ public aspect Create {
             localName = qualifiedName.substring(i+1);
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return getNodeFactory().createNSDecl(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
+            return (Attr)getNodeFactory().createNSDecl(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
         } else {
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-            return getNodeFactory().createAttribute(this, namespaceURI, localName, prefix, null, null);
+            return (Attr)getNodeFactory().createAttribute(this, namespaceURI, localName, prefix, null, null);
         }
     }
 

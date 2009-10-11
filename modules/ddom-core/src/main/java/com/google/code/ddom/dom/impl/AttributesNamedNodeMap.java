@@ -46,7 +46,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
         for (int i=0; i<index && attr != null; i++) {
             attr = attr.internalGetNextAttribute();
         }
-        return attr;
+        return (Node)attr;
     }
 
     public Node getNamedItem(String name) {
@@ -59,7 +59,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
 
     public Node setNamedItem(Node arg) throws DOMException {
         if (arg instanceof CoreTypedAttribute) {
-            return element.setAttributeNode((CoreTypedAttribute)arg);
+            return element.setAttributeNode((Attr)arg);
         } else {
             throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         }
@@ -67,7 +67,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
 
     public Node setNamedItemNS(Node arg) throws DOMException {
         if (arg instanceof CoreTypedAttribute) {
-            return element.setAttributeNodeNS((CoreTypedAttribute)arg);
+            return element.setAttributeNodeNS((Attr)arg);
         } else {
             throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         }
