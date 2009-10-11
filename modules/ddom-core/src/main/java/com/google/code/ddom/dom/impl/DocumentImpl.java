@@ -219,7 +219,7 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
             CoreElement element = it.next();
             for (CoreAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
                 if (attr.isId() && elementId.equals(attr.getValue())) {
-                    return element;
+                    return (DOMElement)element;
                 }
             }
         }

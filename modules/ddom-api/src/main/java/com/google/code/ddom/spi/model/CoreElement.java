@@ -15,9 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.Element;
-
-public interface CoreElement extends Element, CoreChildNode, BuilderTarget, CoreOptimizedParentNode {
+public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimizedParentNode {
     CoreAttribute internalGetFirstAttribute();
     void internalSetFirstAttribute(CoreAttribute attr);
 }

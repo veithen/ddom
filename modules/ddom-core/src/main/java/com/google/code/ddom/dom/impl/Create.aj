@@ -30,7 +30,7 @@ import org.w3c.dom.Text;
 public aspect Create {
     public final Element DocumentImpl.createElement(String tagName) throws DOMException {
         NSUtil.validateName(tagName);
-        return getNodeFactory().createElement(this, tagName, true);
+        return (Element)getNodeFactory().createElement(this, tagName, true);
     }
     
     public final Element DocumentImpl.createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
@@ -45,7 +45,7 @@ public aspect Create {
             localName = qualifiedName.substring(i+1);
         }
         NSUtil.validateNamespace(namespaceURI, prefix);
-        return getNodeFactory().createElement(this, namespaceURI, localName, prefix, true);
+        return (Element)getNodeFactory().createElement(this, namespaceURI, localName, prefix, true);
     }
     
     public final Attr DocumentImpl.createAttribute(String name) throws DOMException {

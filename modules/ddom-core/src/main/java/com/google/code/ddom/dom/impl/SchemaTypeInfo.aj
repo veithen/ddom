@@ -15,24 +15,16 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Element;
+import org.w3c.dom.TypeInfo;
 
-public aspect AttributeSupport {
-    public final String AttributeImpl.getValue() {
-        return coreGetValue();
-    }
-    
-    public final void AttributeImpl.setValue(String value) throws DOMException {
-        coreSetValue(value);
-    }
-
-    public final Element AttributeImpl.getOwnerElement() {
-        return (Element)coreGetOwnerElement();
-    }
-
-    public final boolean AttributeImpl.getSpecified() {
+public aspect SchemaTypeInfo {
+    public final TypeInfo AttributeImpl.getSchemaTypeInfo() {
         // TODO
-        return true;
+        throw new UnsupportedOperationException();
+    }
+
+    public final TypeInfo ElementImpl.getSchemaTypeInfo() {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

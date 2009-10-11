@@ -98,7 +98,7 @@ public aspect Clone {
         CoreAttribute attr = internalGetFirstAttribute();
         while (attr != null) {
             // TODO: this could be optimized
-            clone.setAttributeNode((CoreTypedAttribute)attr.cloneNode(false));
+            ((DOMElement)clone).setAttributeNode((CoreTypedAttribute)attr.cloneNode(false));
             attr = attr.internalGetNextAttribute();
         }
         return clone;
