@@ -179,28 +179,28 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
                 importChildren = true;
                 break;
             case COMMENT_NODE:
-                importedNode = nodeFactory.createComment(this, node.getNodeValue());
+                importedNode = (Node)nodeFactory.createComment(this, node.getNodeValue());
                 importChildren = false;
                 break;
             case TEXT_NODE:
-                importedNode = nodeFactory.createText(this, node.getNodeValue());
+                importedNode = (Node)nodeFactory.createText(this, node.getNodeValue());
                 importChildren = false;
                 break;
             case CDATA_SECTION_NODE:
-                importedNode = nodeFactory.createCDATASection(this, node.getNodeValue());
+                importedNode = (Node)nodeFactory.createCDATASection(this, node.getNodeValue());
                 importChildren = false;
                 break;
             case PROCESSING_INSTRUCTION_NODE:
                 ProcessingInstruction pi = (ProcessingInstruction)node;
-                importedNode = nodeFactory.createProcessingInstruction(this, pi.getTarget(), pi.getData());
+                importedNode = (Node)nodeFactory.createProcessingInstruction(this, pi.getTarget(), pi.getData());
                 importChildren = false;
                 break;
             case DOCUMENT_FRAGMENT_NODE:
-                importedNode = nodeFactory.createDocumentFragment(this);
+                importedNode = (Node)nodeFactory.createDocumentFragment(this);
                 importChildren = deep;
                 break;
             case ENTITY_REFERENCE_NODE:
-                importedNode = nodeFactory.createEntityReference(this, node.getNodeName());
+                importedNode = (Node)nodeFactory.createEntityReference(this, node.getNodeName());
                 importChildren = false;
                 break;
             default:

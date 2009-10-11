@@ -8,7 +8,7 @@ import com.google.code.ddom.spi.model.CoreParentNode;
 import com.google.code.ddom.spi.model.CoreTextNode;
 
 public aspect TextSupport {
-    declare parents: TextNodeImpl implements Text;
+    declare parents: TextNodeImpl implements DOMTextNode;
     declare parents: CDATASectionImpl implements CDATASection;
     
     public final Text TextNodeImpl.splitText(int offset) throws DOMException {

@@ -23,6 +23,7 @@ import org.w3c.dom.DOMException;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
+import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
 import com.google.code.ddom.spi.model.NodeFactory;
 
@@ -161,7 +162,7 @@ public aspect ElementSupport {
     }
     
     public final Attr ElementImpl.setAttributeNodeNS(Attr _newAttr) throws DOMException {
-        validateOwnerDocument(_newAttr);
+        validateOwnerDocument((CoreNode)_newAttr);
         CoreAttribute newAttr = (CoreAttribute)_newAttr;
         CoreElement owner = newAttr.coreGetOwnerElement();
         if (owner == this) {

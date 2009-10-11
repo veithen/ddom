@@ -49,10 +49,10 @@ public aspect Clone {
     
     public final Node ParentNodeImpl.deepClone() {
         Node clone = shallowClone();
-        CoreChildNode child = coreGetFirstChild();
+        DOMChildNode child = (DOMChildNode)coreGetFirstChild();
         while (child != null) {
             clone.appendChild(child.cloneNode(true));
-            child = child.coreGetNextSibling();
+            child = (DOMChildNode)child.coreGetNextSibling();
         }
         return clone;
     }
@@ -61,7 +61,7 @@ public aspect Clone {
 
     public final Node CommentImpl.cloneNode(boolean deep) {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createComment(document, getData());
+        return (Node)document.getNodeFactory().createComment(document, getData());
     }
 
     public final Node DocumentFragmentImpl.cloneNode(boolean deep) {
@@ -71,7 +71,7 @@ public aspect Clone {
 
     public final Node DocumentFragmentImpl.shallowClone() {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createDocumentFragment(document);
+        return (Node)document.getNodeFactory().createDocumentFragment(document);
     }
     
     public final Node DocumentImpl.cloneNode(boolean deep) {
@@ -120,27 +120,27 @@ public aspect Clone {
 
     public final Node EntityReferenceImpl.cloneNode(boolean deep) {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createEntityReference(document, coreGetName());
+        return (Node)document.getNodeFactory().createEntityReference(document, coreGetName());
     }
 
     public final Node ProcessingInstructionImpl.cloneNode(boolean deep) {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createProcessingInstruction(document, getTarget(), getData());
+        return (Node)document.getNodeFactory().createProcessingInstruction(document, getTarget(), getData());
     }
 
     public final Node TextNodeImpl.cloneNode(boolean deep) {
         return createNewTextNode(getData());
     }
     
-    public abstract CoreTextNode TextNodeImpl.createNewTextNode(String data);
+    public abstract DOMTextNode TextNodeImpl.createNewTextNode(String data);
 
-    public final CoreTextNode TextImpl.createNewTextNode(String data) {
+    public final DOMTextNode TextImpl.createNewTextNode(String data) {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createText(document, data);
+        return (DOMTextNode)document.getNodeFactory().createText(document, data);
     }
 
-    public final CoreTextNode CDATASectionImpl.createNewTextNode(String data) {
+    public final DOMTextNode CDATASectionImpl.createNewTextNode(String data) {
         CoreDocument document = getDocument();
-        return document.getNodeFactory().createCDATASection(document, data);
+        return (DOMTextNode)document.getNodeFactory().createCDATASection(document, data);
     }
 }

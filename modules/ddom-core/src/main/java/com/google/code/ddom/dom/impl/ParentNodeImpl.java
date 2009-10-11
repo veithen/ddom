@@ -38,7 +38,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         return previousChild;
     }
     
-    private void prepareNewChild(Node newChild) {
+    private void prepareNewChild(CoreChildNode newChild) {
         validateOwnerDocument(newChild);
         
         // Check that the new node is not an ancestor of this node
@@ -62,8 +62,8 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
     // replaceChild: newChild != null, refChild != null, removeRefChild == true
     // removeChild:  newChild == null, refChild != null, removeRefChild == true
     public void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException {
-        if (newChild != null) {
-            prepareNewChild(newChild);
+        if (newChild instanceof CoreChildNode) {
+            prepareNewChild((CoreChildNode)newChild);
         }
         CoreChildNode previousSibling; // The sibling that will precede the new child
         CoreChildNode nextSibling; // The sibling that will follow the new child

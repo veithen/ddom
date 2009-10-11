@@ -18,11 +18,12 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreNode;
 
 public abstract class NodeImpl implements CoreNode {
-    protected final void validateOwnerDocument(Node node) {
-        if (node.getOwnerDocument() != getDocument()) {
+    protected final void validateOwnerDocument(CoreNode node) {
+        if (node.getDocument() != getDocument()) {
             throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
         }
     }

@@ -55,11 +55,11 @@ public aspect ChildNodes {
     }
     
     public final Node ParentNodeImpl.getFirstChild() {
-        return coreGetFirstChild();
+        return (Node)coreGetFirstChild();
     }
     
     public final Node ParentNodeImpl.getLastChild() {
-        return coreGetLastChild();
+        return (Node)coreGetLastChild();
     }
     
     public final NodeList ParentNodeImpl.getChildNodes() {
@@ -77,7 +77,7 @@ public aspect ChildNodes {
         for (int i=0; i<index && node != null; i++) {
             node = node.coreGetNextSibling();
         }
-        return node;
+        return (Node)node;
     }
 
     public final Node ParentNodeImpl.appendChild(Node newChild) throws DOMException {

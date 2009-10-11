@@ -45,10 +45,10 @@ public aspect Sibling {
     }
 
     public final Node DOMChildNode.getNextSibling() {
-        return coreGetNextSibling();
+        return (Node)coreGetNextSibling();
     }
 
     public final Node DOMChildNode.getPreviousSibling() {
-        return coreGetPreviousSibling();
+        return (Node)coreGetPreviousSibling();
     }
 }

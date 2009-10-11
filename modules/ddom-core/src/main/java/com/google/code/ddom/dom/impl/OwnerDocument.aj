@@ -51,11 +51,11 @@ public aspect OwnerDocument {
 
     // TODO: should be possible to combine LeafNode and ElementImpl into a single case
     public final Node LeafNode.getParentNode() {
-        return coreGetParent();
+        return (Node)coreGetParent();
     }
 
     public final Node ElementImpl.getParentNode() {
-        return coreGetParent();
+        return (Node)coreGetParent();
     }
 
     public final Node DocumentFragmentImpl.getParentNode() {
