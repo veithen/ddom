@@ -15,14 +15,19 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
-
-import com.google.code.ddom.spi.model.CoreNode;
-
-public abstract class NodeImpl implements CoreNode {
-    protected final void validateOwnerDocument(CoreNode node) {
-        if (node.getDocument() != getDocument()) {
-            throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
-        }
+/**
+ * Aspect implementing {@link org.w3c.dom.Node#normalize()} and
+ * {@link org.w3c.dom.Document#normalizeDocument()}.
+ * 
+ * @author Andreas Veithen
+ */
+public aspect Normalization {
+    public final void NodeImpl.normalize() {
+        // TODO Auto-generated method stub
+    }
+    
+    public final void DocumentImpl.normalizeDocument() {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

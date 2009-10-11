@@ -109,8 +109,8 @@ public class DocumentBuilderImpl extends DocumentBuilder {
                     inputEncoding = "UTF-8";
                 }
             }
-            document.setInputEncoding(inputEncoding);
-            document.setXmlEncoding(xmlEncoding);
+            document.coreSetInputEncoding(inputEncoding);
+            document.coreSetXmlEncoding(xmlEncoding);
             // TODO: build the document and close the reader
             return document;
         } catch (XMLStreamException ex) {

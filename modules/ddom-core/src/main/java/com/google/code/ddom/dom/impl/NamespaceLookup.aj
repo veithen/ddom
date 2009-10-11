@@ -20,6 +20,11 @@ import org.w3c.dom.Node;
 import com.google.code.ddom.spi.model.CoreAttribute;
 
 public aspect NamespaceLookup {
+    public final boolean NodeImpl.isDefaultNamespace(String namespaceURI) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
     public final String AttributeImpl.lookupNamespaceURI(String prefix) {
         // TODO: needs to be checked
         return null;
