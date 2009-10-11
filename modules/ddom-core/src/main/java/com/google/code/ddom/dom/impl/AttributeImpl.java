@@ -46,7 +46,7 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
     public final void internalSetOwnerElement(CoreElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
-            owner = ((CoreElement)owner).getOwnerDocument();
+            owner = ((CoreElement)owner).getDocument();
         } else {
             owner = newOwner;
         }

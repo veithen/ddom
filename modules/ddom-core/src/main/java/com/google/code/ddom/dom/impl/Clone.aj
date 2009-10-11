@@ -19,11 +19,8 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
-import com.google.code.ddom.spi.model.CoreTextNode;
-import com.google.code.ddom.spi.model.CoreTypedAttribute;
 import com.google.code.ddom.spi.model.NodeFactory;
 
 public aspect Clone {
@@ -94,6 +91,7 @@ public aspect Clone {
         return deep ? deepClone() : shallowClone();
     }
 
+    // TODO: review return type (should be DOMNode)
     public final Node ElementImpl.shallowClone() {
         CoreElement clone = shallowCloneWithoutAttributes();
         CoreAttribute attr = internalGetFirstAttribute();
@@ -102,7 +100,7 @@ public aspect Clone {
             ((DOMElement)clone).setAttributeNode((Attr)((Attr)attr).cloneNode(false));
             attr = attr.internalGetNextAttribute();
         }
-        return clone;
+        return (Node)clone;
     }
     
     public abstract CoreElement ElementImpl.shallowCloneWithoutAttributes();

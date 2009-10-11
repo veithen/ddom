@@ -75,7 +75,7 @@ public aspect DocumentSupport {
             case ELEMENT_NODE:
                 Element element = (Element)node;
                 // TODO: detect DOM 1 elements (as with attributes)
-                importedNode = getNodeFactory().createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix(), true);
+                importedNode = (Node)getNodeFactory().createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix(), true);
                 importChildren = deep;
                 break;
             case ATTRIBUTE_NODE:
@@ -125,11 +125,11 @@ public aspect DocumentSupport {
     }
 
     public final Element DocumentImpl.getElementById(String elementId) {
-        for (Iterator<CoreElement> it = new DescendantsIterator<CoreElement>(CoreElement.class, this); it.hasNext(); ) {
-            CoreElement element = it.next();
+        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
+            DOMElement element = it.next();
             for (CoreAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
                 if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {
-                    return (DOMElement)element;
+                    return element;
                 }
             }
         }

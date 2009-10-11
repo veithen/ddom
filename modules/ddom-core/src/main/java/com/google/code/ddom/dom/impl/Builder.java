@@ -163,12 +163,14 @@ public class Builder extends PushConsumer {
     }
     
     public final void nodeCompleted() {
+        parent.internalSetComplete();
         if (parent instanceof CoreChildNode) {
             lastSibling = (CoreChildNode)parent;
+            // TODO: get rid of cast here
+            parent = (BuilderTarget)lastSibling.coreGetParent(); 
+        } else {
+            parent = null;
         }
-        parent.internalSetComplete();
-        // TODO: get rid of cast here
-        parent = (BuilderTarget)parent.getParentNode();
     }
 
     public final void dispose() {

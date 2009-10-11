@@ -15,10 +15,8 @@
  */
 package com.google.code.ddom;
 
-import org.w3c.dom.Node;
-
 // TODO: need to specify which nodes implement this interface (e.g. attributes??)
-public interface DeferredNode extends Node {
+public interface DeferredNode {
     boolean isComplete();
     
     void build();
