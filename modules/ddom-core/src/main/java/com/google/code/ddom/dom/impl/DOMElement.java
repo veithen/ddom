@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.Element;
 
-public interface CoreChildNode extends CoreNode {
-    CoreParentNode coreGetParent();
-    CoreChildNode coreGetNextSibling();
-    CoreChildNode coreGetPreviousSibling();
-    void internalSetParent(CoreParentNode parent);
-    CoreChildNode internalGetNextSibling();
-    void internalSetNextSibling(CoreChildNode nextSibling);
+import com.google.code.ddom.spi.model.CoreElement;
+
+public interface DOMElement extends CoreElement, Element {
+
 }

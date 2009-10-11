@@ -22,7 +22,7 @@ import com.google.code.ddom.spi.model.CoreParentNode;
 
 public class ChildNodeHelper {
     public static CoreChildNode coreGetNextSibling(CoreChildNode node) {
-        CoreParentNode parent = node.getParentNode();
+        CoreParentNode parent = node.coreGetParent();
         CoreDocument document = node.getDocument();
         if (parent instanceof BuilderTarget) {
             CoreChildNode nextSibling;
@@ -36,7 +36,7 @@ public class ChildNodeHelper {
     }
     
     public static CoreChildNode coreGetPreviousSibling(CoreChildNode node) {
-        CoreParentNode parent = node.getParentNode();
+        CoreParentNode parent = node.coreGetParent();
         if (parent == null) {
             return null;
         } else {

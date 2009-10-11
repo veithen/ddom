@@ -38,34 +38,6 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         return previousChild;
     }
     
-    public final Node appendChild(Node newChild) throws DOMException {
-        if (newChild == null) {
-            throw new NullPointerException("newChild must not be null");
-        }
-        try {
-            merge((CoreNode)newChild, null, false);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
-        }
-        return newChild;
-    }
-
-    public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        // Note: The specification of the insertBefore method says that "if refChild
-        // is null, insert newChild at the end of the list of children". That is, in this
-        // case the behavior is identical to appendChild. (This is covered by the DOM 1
-        // test suite)
-        if (newChild == null) {
-            throw new NullPointerException("newChild must not be null");
-        }
-        try {
-            merge((CoreNode)newChild, (CoreChildNode)refChild, false);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
-        }
-        return newChild;
-    }
-
     private void prepareNewChild(Node newChild) {
         validateOwnerDocument(newChild);
         
@@ -85,33 +57,6 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
     
     protected abstract void validateChildType(CoreChildNode newChild);
     
-    public final Node removeChild(Node oldChild) throws DOMException {
-        if (oldChild == null) {
-            throw new NullPointerException("oldChild must not be null");
-        }
-        try {
-            merge(null, (CoreChildNode)oldChild, true);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
-        }
-        return oldChild;
-    }
-
-    public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        if (newChild == null) {
-            throw new NullPointerException("newChild must not be null");
-        }
-        if (oldChild == null) {
-            throw new NullPointerException("oldChild must not be null");
-        }
-        try {
-            merge((CoreNode)newChild, (CoreChildNode)oldChild, true);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
-        }
-        return oldChild;
-    }
-
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false
     // replaceChild: newChild != null, refChild != null, removeRefChild == true

@@ -15,10 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
@@ -53,19 +49,7 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
         return children;
     }
 
-    public final boolean hasAttributes() {
-        return false;
-    }
-
-    public final NamedNodeMap getAttributes() {
-        return null;
-    }
-
     public final CoreDocument getDocument() {
         return document;
-    }
-
-    public final Node getParentNode() {
-        return null;
     }
 }

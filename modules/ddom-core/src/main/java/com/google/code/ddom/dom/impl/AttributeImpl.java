@@ -16,8 +16,6 @@
 package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreChildNode;
@@ -105,10 +103,6 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         }
     }
 
-    public final Node getParentNode() {
-        return null;
-    }
-
     public final String coreGetValue() {
         // TODO: this should also be applicable for other OptimizedParentNodes
         if (value instanceof String) {
@@ -121,13 +115,5 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
     public final void coreSetValue(String value) {
         // TODO: what if arg is null?
         this.value = value;
-    }
-
-    public final boolean hasAttributes() {
-        return false;
-    }
-
-    public final NamedNodeMap getAttributes() {
-        return null;
     }
 }

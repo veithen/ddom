@@ -18,7 +18,7 @@ public aspect TextSupport {
         }
         setData(text.substring(0, offset));
         CoreTextNode newNode = createNewTextNode(text.substring(offset));
-        CoreParentNode parent = getParentNode();
+        CoreParentNode parent = coreGetParent();
         if (parent != null) {
             newNode.internalSetNextSibling(coreGetNextSibling());
             internalSetNextSibling(newNode);

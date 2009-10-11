@@ -15,9 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 
@@ -35,7 +32,7 @@ public class ProcessingInstructionImpl extends LeafNode implements CoreProcessin
         return data;
     }
 
-    public final void coreSetData(String data) throws DOMException {
+    public final void coreSetData(String data) {
         this.data = data;
     }
 

@@ -19,8 +19,6 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
 import com.google.code.ddom.spi.model.CoreAttribute;
@@ -31,74 +29,8 @@ import com.google.code.ddom.spi.model.CoreParentNode;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
 import com.google.code.ddom.spi.model.NodeFactory;
 
-public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {
-    private class Attributes implements NamedNodeMap {
-        public int getLength() {
-            int length = 0;
-            CoreAttribute attr = firstAttribute;
-            while (attr != null) {
-                attr = attr.internalGetNextAttribute();
-                length++;
-            }
-            return length;
-        }
-        
-        public Node item(int index) {
-            // TODO: wrong result for negavite indexes
-            CoreAttribute attr = firstAttribute;
-            for (int i=0; i<index && attr != null; i++) {
-                attr = attr.internalGetNextAttribute();
-            }
-            return attr;
-        }
-
-        public Node getNamedItem(String name) {
-            return getAttributeNode(name);
-        }
-
-        public Node getNamedItemNS(String namespaceURI, String localName) throws DOMException {
-            return getAttributeNodeNS(namespaceURI, localName);
-        }
-
-        public Node setNamedItem(Node arg) throws DOMException {
-            if (arg instanceof CoreTypedAttribute) {
-                return setAttributeNode((CoreTypedAttribute)arg);
-            } else {
-                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
-            }
-        }
-
-        public Node setNamedItemNS(Node arg) throws DOMException {
-            if (arg instanceof CoreTypedAttribute) {
-                return setAttributeNodeNS((CoreTypedAttribute)arg);
-            } else {
-                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
-            }
-        }
-
-        public Node removeNamedItem(String name) throws DOMException {
-            // TODO: try to merge with corresponding method in ElementImpl
-            Attr attr = getAttributeNode(name);
-            if (attr != null) {
-                removeAttributeNode(attr);
-                return attr;
-            } else {
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-            }
-        }
-
-        public Node removeNamedItemNS(String namespaceURI, String localName) throws DOMException {
-            // TODO: try to merge with corresponding method in ElementImpl
-            Attr attr = getAttributeNodeNS(namespaceURI, localName);
-            if (attr != null) {
-                removeAttributeNode(attr);
-                return attr;
-            } else {
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-            }
-        }
-    }
-    
+// TODO: DOMElement should be added by an aspect (declare parents)
+public abstract class ElementImpl extends ParentNodeImpl implements CoreElement, DOMElement {
     private static final int ATTR_DOM1 = 1;
     private static final int ATTR_DOM2 = 2;
     private static final int ATTR_NSDECL = 3;
@@ -181,7 +113,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         return document;
     }
 
-    public final CoreParentNode getParentNode() {
+    public final CoreParentNode coreGetParent() {
         return parent;
     }
     
@@ -193,10 +125,6 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
-    public final NamedNodeMap getAttributes() {
-        return new Attributes();
-    }
-    
     private boolean testAttribute(Attr attr, String namespaceURI, String localName, int mode) {
         switch (mode) {
             case ATTR_DOM1:
@@ -255,10 +183,6 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
 
     public final boolean hasAttributeNS(String namespaceURI, String localName) throws DOMException {
         return getAttributeNodeNS(namespaceURI, localName) != null;
-    }
-
-    public final boolean hasAttributes() {
-        return firstAttribute != null;
     }
 
     public final void setAttribute(String name, String value) throws DOMException {

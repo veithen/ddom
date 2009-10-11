@@ -16,7 +16,14 @@
 package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
+/**
+ * Aspect implementing {@link Node#getOwnerDocument()} and {@link Node#getParentNode()}.
+ * 
+ * @author Andreas Veithen
+ */
+// TODO: find a better name for this aspect
 public aspect OwnerDocument {
     public final Document DocumentImpl.getOwnerDocument() {
         return null;
@@ -36,5 +43,26 @@ public aspect OwnerDocument {
 
     public final Document LeafNode.getOwnerDocument() {
         return getDocument();
+    }
+    
+    public final Node AttributeImpl.getParentNode() {
+        return null;
+    }
+
+    // TODO: should be possible to combine LeafNode and ElementImpl into a single case
+    public final Node LeafNode.getParentNode() {
+        return coreGetParent();
+    }
+
+    public final Node ElementImpl.getParentNode() {
+        return coreGetParent();
+    }
+
+    public final Node DocumentFragmentImpl.getParentNode() {
+        return null;
+    }
+    
+    public final Node DocumentImpl.getParentNode() {
+        return null;
     }
 }

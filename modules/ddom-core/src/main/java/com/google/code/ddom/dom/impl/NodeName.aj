@@ -15,6 +15,13 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.Node;
+
+/**
+ * Aspect implementing {@link Node#getNodeName()}.
+ * 
+ * @author Andreas Veithen
+ */
 public aspect NodeName {
     public final String AttributeImpl.getNodeName() {
         return getName();

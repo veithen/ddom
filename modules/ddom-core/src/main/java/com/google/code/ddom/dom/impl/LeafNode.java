@@ -15,10 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreParentNode;
@@ -52,7 +48,7 @@ public abstract class LeafNode extends NodeImpl implements CoreChildNode {
         return document;
     }
 
-    public final CoreParentNode getParentNode() {
+    public final CoreParentNode coreGetParent() {
         return parent;
     }
     
@@ -62,29 +58,5 @@ public abstract class LeafNode extends NodeImpl implements CoreChildNode {
 
     public final CoreChildNode coreGetPreviousSibling() {
         return ChildNodeHelper.coreGetPreviousSibling(this);
-    }
-
-    public final Node appendChild(Node newChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
-    }
-
-    public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-    }
-
-    public final Node removeChild(Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-    }
-
-    public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-    }
-
-    public final boolean hasAttributes() {
-        return false;
-    }
-
-    public final NamedNodeMap getAttributes() {
-        return null;
     }
 }

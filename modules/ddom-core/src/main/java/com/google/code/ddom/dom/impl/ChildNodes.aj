@@ -15,11 +15,21 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.spi.model.CoreNode;
 
+/**
+ * Aspect implementing {@link Node#getFirstChild()}, {@link Node#getLastChild()}, {@link Node#hasChildNodes()},
+ * {@link Node#getChildNodes()}, {@link Node#appendChild(Node)}, {@link Node#insertBefore(Node, Node)},
+ * {@link Node#removeChild(Node)} and {@link Node#replaceChild(Node, Node)}.
+ * 
+ * @author Andreas Veithen
+ */
 public aspect ChildNodes {
     declare parents: ParentNodeImpl implements NodeList;
 
@@ -68,5 +78,76 @@ public aspect ChildNodes {
             node = node.coreGetNextSibling();
         }
         return node;
+    }
+
+    public final Node ParentNodeImpl.appendChild(Node newChild) throws DOMException {
+        if (newChild == null) {
+            throw new NullPointerException("newChild must not be null");
+        }
+        try {
+            merge((CoreNode)newChild, null, false);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return newChild;
+    }
+
+    public final Node ParentNodeImpl.insertBefore(Node newChild, Node refChild) throws DOMException {
+        // Note: The specification of the insertBefore method says that "if refChild
+        // is null, insert newChild at the end of the list of children". That is, in this
+        // case the behavior is identical to appendChild. (This is covered by the DOM 1
+        // test suite)
+        if (newChild == null) {
+            throw new NullPointerException("newChild must not be null");
+        }
+        try {
+            merge((CoreNode)newChild, (CoreChildNode)refChild, false);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return newChild;
+    }
+
+    public final Node ParentNodeImpl.removeChild(Node oldChild) throws DOMException {
+        if (oldChild == null) {
+            throw new NullPointerException("oldChild must not be null");
+        }
+        try {
+            merge(null, (CoreChildNode)oldChild, true);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return oldChild;
+    }
+
+    public final Node ParentNodeImpl.replaceChild(Node newChild, Node oldChild) throws DOMException {
+        if (newChild == null) {
+            throw new NullPointerException("newChild must not be null");
+        }
+        if (oldChild == null) {
+            throw new NullPointerException("oldChild must not be null");
+        }
+        try {
+            merge((CoreNode)newChild, (CoreChildNode)oldChild, true);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return oldChild;
+    }
+
+    public final Node LeafNode.appendChild(Node newChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+    }
+
+    public final Node LeafNode.insertBefore(Node newChild, Node refChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+    }
+
+    public final Node LeafNode.removeChild(Node oldChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+    }
+
+    public final Node LeafNode.replaceChild(Node newChild, Node oldChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 }

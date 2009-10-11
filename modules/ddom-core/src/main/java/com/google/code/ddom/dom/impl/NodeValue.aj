@@ -16,7 +16,13 @@
 package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
+import org.w3c.dom.Node;
 
+/**
+ * Aspect implementing {@link Node#getNodeValue()} and {@link Node#setNodeValue(String)}.
+ * 
+ * @author Andreas Veithen
+ */
 public aspect NodeValue {
     public final String AttributeImpl.getNodeValue() throws DOMException {
         return getValue();

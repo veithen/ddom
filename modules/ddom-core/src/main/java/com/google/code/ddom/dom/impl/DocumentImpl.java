@@ -23,7 +23,6 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -143,10 +142,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         this.documentURI = documentURI;
     }
 
-    public final Node getParentNode() {
-        return null;
-    }
-
     public final Element getDocumentElement() {
         Node child = getFirstChild();
         while (child != null && !(child instanceof Element)) {
@@ -161,14 +156,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
             child = child.getNextSibling();
         }
         return (DocumentType)child;
-    }
-
-    public final boolean hasAttributes() {
-        return false;
-    }
-
-    public final NamedNodeMap getAttributes() {
-        return null;
     }
 
     public final Node importNode(Node node, boolean deep) throws DOMException {

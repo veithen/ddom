@@ -15,6 +15,13 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.Node;
+
+/**
+ * Aspect implementing {@link Node#getNodeType()}.
+ * 
+ * @author Andreas Veithen
+ */
 public aspect NodeType {
     public final short AttributeImpl.getNodeType() {
         return ATTRIBUTE_NODE;
