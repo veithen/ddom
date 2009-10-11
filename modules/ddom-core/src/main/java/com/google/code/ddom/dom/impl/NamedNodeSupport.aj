@@ -39,7 +39,15 @@ public aspect NamedNodeSupport {
         return null;
     }
 
-    public void DOMNSAwareNamedNode.setPrefix(String prefix) throws DOMException {
+    public final String DOMNSAwareNamedNode.getNamespaceURI() {
+        return coreGetNamespaceURI();
+    }
+    
+    public final String DOMNSAwareNamedNode.getPrefix() {
+        return coreGetPrefix();
+    }
+    
+    public final void DOMNSAwareNamedNode.setPrefix(String prefix) throws DOMException {
         String namespaceURI = getNamespaceURI();
         if (namespaceURI == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
@@ -51,8 +59,12 @@ public aspect NamedNodeSupport {
             if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix) && !XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
             }
-            internalSetPrefix(prefix);
+            coreSetPrefix(prefix);
         }
+    }
+    
+    public final String DOMNSAwareNamedNode.getLocalName() {
+        return coreGetLocalName();
     }
     
     public final String NSUnawareElementImpl.getTagName() {
@@ -79,5 +91,81 @@ public aspect NamedNodeSupport {
     
     public final String NSAwareTypedAttributeImpl.getName() {
         return internalGetName();
+    }
+
+    public final String NSDecl.getNamespaceURI() {
+        return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+    }
+
+    public final String NSDecl.getPrefix() {
+        return getDeclaredPrefix() == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
+    }
+
+    public final void NSDecl.setPrefix(String prefix) throws DOMException {
+        // Other DOM implementations allow changing the prefix, but this means that a namespace
+        // declaration is transformed into a normal attribute. We don't support this.
+        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+    }
+
+    public final String NSDecl.getLocalName() {
+        String declaredPrefix = getDeclaredPrefix();
+        return declaredPrefix == null ? XMLConstants.XMLNS_ATTRIBUTE : declaredPrefix;
+    }
+
+    public final String NSDecl.getName() {
+        String declaredPrefix = getDeclaredPrefix();
+        if (declaredPrefix == null) {
+            return XMLConstants.XMLNS_ATTRIBUTE;
+        } else {
+            return XMLConstants.XMLNS_ATTRIBUTE + ":" + declaredPrefix;
+        }
+    }
+
+    public final String DocumentFragmentImpl.getNamespaceURI() {
+        return null;
+    }
+
+    public final String DocumentFragmentImpl.getPrefix() {
+        return null;
+    }
+
+    public final void DocumentFragmentImpl.setPrefix(String prefix) throws DOMException {
+        // Ignored
+    }
+
+    public final String DocumentFragmentImpl.getLocalName() {
+        return null;
+    }
+    
+    public final String DocumentImpl.getNamespaceURI() {
+        return null;
+    }
+
+    public final String DocumentImpl.getPrefix() {
+        return null;
+    }
+
+    public final void DocumentImpl.setPrefix(String prefix) throws DOMException {
+        // Ignored
+    }
+
+    public final String DocumentImpl.getLocalName() {
+        return null;
+    }
+
+    public final String LeafNode.getNamespaceURI() {
+        return null;
+    }
+
+    public final String LeafNode.getPrefix() {
+        return null;
+    }
+
+    public final void LeafNode.setPrefix(String prefix) throws DOMException {
+        // Ignored
+    }
+
+    public final String LeafNode.getLocalName() {
+        return null;
     }
 }

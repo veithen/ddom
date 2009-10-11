@@ -87,20 +87,4 @@ public abstract class LeafNode extends NodeImpl implements CoreChildNode {
     public final NamedNodeMap getAttributes() {
         return null;
     }
-
-    public final String getNamespaceURI() {
-        return null;
-    }
-
-    public final String getPrefix() {
-        return null;
-    }
-
-    public final void setPrefix(String prefix) throws DOMException {
-        // Ignored
-    }
-
-    public final String getLocalName() {
-        return null;
-    }
 }

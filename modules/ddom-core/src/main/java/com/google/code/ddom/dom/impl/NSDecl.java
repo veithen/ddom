@@ -15,10 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import javax.xml.XMLConstants;
-
-import org.w3c.dom.DOMException;
-
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 
@@ -38,32 +34,6 @@ public class NSDecl extends AttributeImpl implements CoreNamespaceDeclaration {
         return getValue();
     }
     
-    public final String getNamespaceURI() {
-        return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-    }
-
-    public final String getPrefix() {
-        return declaredPrefix == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
-    }
-
-    public void setPrefix(String prefix) throws DOMException {
-        // Other DOM implementations allow changing the prefix, but this means that a namespace
-        // declaration is transformed into a normal attribute. We don't support this.
-        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
-    }
-
-    public final String getLocalName() {
-        return declaredPrefix == null ? XMLConstants.XMLNS_ATTRIBUTE : declaredPrefix;
-    }
-
-    public final String getName() {
-        if (declaredPrefix == null) {
-            return XMLConstants.XMLNS_ATTRIBUTE;
-        } else {
-            return XMLConstants.XMLNS_ATTRIBUTE + ":" + declaredPrefix;
-        }
-    }
-
     public final boolean isId() {
         return false;
     }

@@ -30,19 +30,19 @@ public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements Cor
         this.prefix = prefix;
     }
 
-    public final String getNamespaceURI() {
+    public final String coreGetNamespaceURI() {
         return namespaceURI;
     }
 
-    public final String getPrefix() {
+    public final String coreGetPrefix() {
         return prefix;
     }
 
-    public final void internalSetPrefix(String prefix) {
+    public final void coreSetPrefix(String prefix) {
         this.prefix = prefix;
     }
     
-    public final String getLocalName() {
+    public final String coreGetLocalName() {
         return localName;
     }
 }

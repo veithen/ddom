@@ -171,22 +171,6 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         return null;
     }
 
-    public final String getNamespaceURI() {
-        return null;
-    }
-
-    public final String getPrefix() {
-        return null;
-    }
-
-    public final void setPrefix(String prefix) throws DOMException {
-        // Ignored
-    }
-
-    public final String getLocalName() {
-        return null;
-    }
-    
     public final Node importNode(Node node, boolean deep) throws DOMException {
         Node importedNode;
         boolean importChildren;

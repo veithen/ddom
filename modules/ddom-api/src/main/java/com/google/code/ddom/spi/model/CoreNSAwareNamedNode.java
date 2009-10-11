@@ -15,7 +15,9 @@
  */
 package com.google.code.ddom.spi.model;
 
-
 public interface CoreNSAwareNamedNode extends CoreNode {
-    void internalSetPrefix(String prefix);
+    String coreGetNamespaceURI();
+    String coreGetPrefix();
+    void coreSetPrefix(String prefix);
+    String coreGetLocalName();
 }

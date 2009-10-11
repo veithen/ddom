@@ -61,22 +61,6 @@ public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocument
         return null;
     }
 
-    public final String getNamespaceURI() {
-        return null;
-    }
-
-    public final String getPrefix() {
-        return null;
-    }
-
-    public final void setPrefix(String prefix) throws DOMException {
-        // Ignored
-    }
-
-    public final String getLocalName() {
-        return null;
-    }
-    
     public final CoreDocument getDocument() {
         return document;
     }
