@@ -15,9 +15,11 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.DocumentType;
-
-public interface CoreDocumentType extends DocumentType, CoreChildNode {
+public interface CoreDocumentType extends CoreChildNode {
     // TODO: check if this is actually needed
     void internalSetDocument(CoreDocument document);
+
+    String coreGetRootName();
+    String coreGetPublicId();
+    String coreGetSystemId();
 }

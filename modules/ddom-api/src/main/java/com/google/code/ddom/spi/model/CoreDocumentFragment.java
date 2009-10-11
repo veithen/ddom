@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-import org.w3c.dom.DocumentFragment;
-
-public interface CoreDocumentFragment extends DocumentFragment, CoreParentNode {
+public interface CoreDocumentFragment extends CoreParentNode {
     int getLength(); // TODO: why???
 }

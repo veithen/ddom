@@ -78,7 +78,7 @@ public aspect Create {
     }
     
     public final DocumentFragment DocumentImpl.createDocumentFragment() {
-        return getNodeFactory().createDocumentFragment(this);
+        return (DocumentFragment)getNodeFactory().createDocumentFragment(this);
     }
 
     public final Text DocumentImpl.createTextNode(String data) {

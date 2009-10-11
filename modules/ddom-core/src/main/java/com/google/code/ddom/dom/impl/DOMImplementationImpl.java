@@ -49,7 +49,7 @@ public class DOMImplementationImpl implements DOMImplementation {
             throws DOMException {
         NSUtil.validateQualifiedName(qualifiedName);
         CoreDocumentType docType = nodeFactory.createDocumentType(null, qualifiedName, publicId, systemId);
-        return docType;
+        return (DocumentType)docType;
     }
 
     public Object getFeature(String feature, String version) {

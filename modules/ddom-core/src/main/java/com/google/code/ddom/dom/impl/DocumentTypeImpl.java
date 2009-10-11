@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.NamedNodeMap;
-
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;
 
@@ -32,30 +30,15 @@ public class DocumentTypeImpl extends LeafNode implements CoreDocumentType {
         this.systemId = systemId;
     }
 
-    public final String getName() {
+    public final String coreGetRootName() {
         return rootName;
     }
 
-    public final String getPublicId() {
+    public final String coreGetPublicId() {
         return publicId;
     }
 
-    public final String getSystemId() {
+    public final String coreGetSystemId() {
         return systemId;
-    }
-
-    public final NamedNodeMap getEntities() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final String getInternalSubset() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final NamedNodeMap getNotations() {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 }
