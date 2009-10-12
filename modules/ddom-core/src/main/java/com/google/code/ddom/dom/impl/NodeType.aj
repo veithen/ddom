@@ -26,42 +26,42 @@ import com.google.code.ddom.core.model.*;
  */
 public aspect NodeType {
     public final short AttributeImpl.getNodeType() {
-        return ATTRIBUTE_NODE;
+        return Node.ATTRIBUTE_NODE;
     }
 
     public final short CDATASectionImpl.getNodeType() {
-        return CDATA_SECTION_NODE;
+        return Node.CDATA_SECTION_NODE;
     }
 
     public final short CommentImpl.getNodeType() {
-        return COMMENT_NODE;
+        return Node.COMMENT_NODE;
     }
 
     public final short DocumentFragmentImpl.getNodeType() {
-        return DOCUMENT_FRAGMENT_NODE;
+        return Node.DOCUMENT_FRAGMENT_NODE;
     }
 
     public final short DocumentImpl.getNodeType() {
-        return DOCUMENT_NODE;
+        return Node.DOCUMENT_NODE;
     }
 
     public final short DocumentTypeImpl.getNodeType() {
-        return DOCUMENT_TYPE_NODE;
+        return Node.DOCUMENT_TYPE_NODE;
     }
 
     public final short ElementImpl.getNodeType() {
-        return ELEMENT_NODE;
+        return Node.ELEMENT_NODE;
     }
 
     public final short EntityReferenceImpl.getNodeType() {
-        return ENTITY_REFERENCE_NODE;
+        return Node.ENTITY_REFERENCE_NODE;
     }
 
     public final short ProcessingInstructionImpl.getNodeType() {
-        return PROCESSING_INSTRUCTION_NODE;
+        return Node.PROCESSING_INSTRUCTION_NODE;
     }
 
     public final short TextImpl.getNodeType() {
-        return TEXT_NODE;
+        return Node.TEXT_NODE;
     }
 }

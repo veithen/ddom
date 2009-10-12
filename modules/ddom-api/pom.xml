@@ -27,4 +27,14 @@
     <artifactId>ddom-api</artifactId>
     <name>DDOM :: Modules :: API</name>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+    </dependencies>
 </project>

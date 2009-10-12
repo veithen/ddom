@@ -13,22 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.dom.impl;
+package com.google.code.ddom.core.model;
 
-import com.google.code.ddom.core.model.CDATASectionImpl;
-import com.google.code.ddom.core.model.CommentImpl;
-import com.google.code.ddom.core.model.DocumentFragmentImpl;
-import com.google.code.ddom.core.model.DocumentImpl;
-import com.google.code.ddom.core.model.DocumentTypeImpl;
-import com.google.code.ddom.core.model.EntityReferenceImpl;
-import com.google.code.ddom.core.model.NSAwareElementImpl;
-import com.google.code.ddom.core.model.NSAwareTypedAttributeImpl;
-import com.google.code.ddom.core.model.NSDecl;
-import com.google.code.ddom.core.model.NSUnawareElementImpl;
-import com.google.code.ddom.core.model.NSUnawareTypedAttributeImpl;
-import com.google.code.ddom.core.model.ProcessingInstructionImpl;
-import com.google.code.ddom.core.model.TextImpl;
-import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.model.CoreCDATASection;
 import com.google.code.ddom.spi.model.CoreComment;
 import com.google.code.ddom.spi.model.CoreDocument;
@@ -45,8 +31,7 @@ import com.google.code.ddom.spi.model.CoreText;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.spi.stream.Producer;
 
-@Provider(name="dom")
-public class DOMNodeFactory implements NodeFactory {
+public class NodeFactoryImpl implements NodeFactory {
     public CoreDocument createDocument(Producer producer) {
         return new DocumentImpl(this, producer);
     }

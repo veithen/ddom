@@ -18,11 +18,13 @@ package com.google.code.ddom.spi.model;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
+import com.google.code.ddom.weaver.ModelWeaver;
 
 public final class ModelRegistry {
     private static final Map<ClassLoader,ModelRegistry> registries = Collections.synchronizedMap(new WeakHashMap<ClassLoader,ModelRegistry>());
@@ -36,7 +38,20 @@ public final class ModelRegistry {
     public static ModelRegistry getInstance(ClassLoader classLoader) throws ProviderFinderException {
         ModelRegistry registry = registries.get(classLoader);
         if (registry == null) {
-            registry = new ModelRegistry(ProviderFinder.find(classLoader, NodeFactory.class));
+            Map<String,NodeFactory> factories = new LinkedHashMap<String,NodeFactory>();
+            // TODO: this should be done lazily
+            for (Map.Entry<String,Model> entry : ProviderFinder.find(classLoader, Model.class).entrySet()) {
+                try {
+                    ModelWeaver weaver = new ModelWeaver(classLoader, entry.getValue());
+                    // TODO: clarify this
+                    weaver.loadClass("com.google.code.ddom.core.model.NodeImpl");
+                    weaver.loadClass("com.google.code.ddom.core.model.ParentNodeImpl");
+                    factories.put(entry.getKey(), (NodeFactory)weaver.loadClass("com.google.code.ddom.core.model.NodeFactoryImpl").newInstance());
+                } catch (Exception ex) { // TODO: do this properly
+                    throw new ProviderFinderException(ex);
+                }
+            }
+            registry = new ModelRegistry(factories);
             registries.put(classLoader, registry);
         }
         return registry;

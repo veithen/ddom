@@ -73,13 +73,13 @@ public aspect DocumentSupport {
         Node importedNode;
         boolean importChildren;
         switch (node.getNodeType()) {
-            case ELEMENT_NODE:
+            case Node.ELEMENT_NODE:
                 Element element = (Element)node;
                 // TODO: detect DOM 1 elements (as with attributes)
                 importedNode = (Node)getNodeFactory().createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix(), true);
                 importChildren = deep;
                 break;
-            case ATTRIBUTE_NODE:
+            case Node.ATTRIBUTE_NODE:
                 Attr attr = (Attr)node;
                 String localName = attr.getLocalName();
                 if (localName == null) {
@@ -89,28 +89,28 @@ public aspect DocumentSupport {
                 }
                 importChildren = true;
                 break;
-            case COMMENT_NODE:
+            case Node.COMMENT_NODE:
                 importedNode = (Node)getNodeFactory().createComment(this, node.getNodeValue());
                 importChildren = false;
                 break;
-            case TEXT_NODE:
+            case Node.TEXT_NODE:
                 importedNode = (Node)getNodeFactory().createText(this, node.getNodeValue());
                 importChildren = false;
                 break;
-            case CDATA_SECTION_NODE:
+            case Node.CDATA_SECTION_NODE:
                 importedNode = (Node)getNodeFactory().createCDATASection(this, node.getNodeValue());
                 importChildren = false;
                 break;
-            case PROCESSING_INSTRUCTION_NODE:
+            case Node.PROCESSING_INSTRUCTION_NODE:
                 ProcessingInstruction pi = (ProcessingInstruction)node;
                 importedNode = (Node)getNodeFactory().createProcessingInstruction(this, pi.getTarget(), pi.getData());
                 importChildren = false;
                 break;
-            case DOCUMENT_FRAGMENT_NODE:
+            case Node.DOCUMENT_FRAGMENT_NODE:
                 importedNode = (Node)getNodeFactory().createDocumentFragment(this);
                 importChildren = deep;
                 break;
-            case ENTITY_REFERENCE_NODE:
+            case Node.ENTITY_REFERENCE_NODE:
                 importedNode = (Node)getNodeFactory().createEntityReference(this, node.getNodeName());
                 importChildren = false;
                 break;
@@ -126,7 +126,7 @@ public aspect DocumentSupport {
     }
 
     public final Element DocumentImpl.getElementById(String elementId) {
-        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
+        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, (Node)this); it.hasNext(); ) {
             DOMElement element = it.next();
             for (CoreAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
                 if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {

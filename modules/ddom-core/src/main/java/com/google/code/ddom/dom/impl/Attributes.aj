@@ -31,7 +31,7 @@ public aspect Attributes {
     }
 
     public final NamedNodeMap ElementImpl.getAttributes() {
-        return new AttributesNamedNodeMap(this);
+        return new AttributesNamedNodeMap((DOMElement)this);
     }
     
     public final boolean DocumentFragmentImpl.hasAttributes() {

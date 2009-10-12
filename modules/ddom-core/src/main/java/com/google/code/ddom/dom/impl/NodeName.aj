@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Node;
+import org.w3c.dom.*;
 
 import com.google.code.ddom.core.model.*;
 
@@ -26,7 +26,7 @@ import com.google.code.ddom.core.model.*;
  */
 public aspect NodeName {
     public final String AttributeImpl.getNodeName() {
-        return getName();
+        return ((Attr)this).getName(); // TODO
     }
 
     public final String CDATASectionImpl.getNodeName() {
@@ -46,11 +46,11 @@ public aspect NodeName {
     }
 
     public final String DocumentTypeImpl.getNodeName() {
-        return getName();
+        return ((DocumentType)this).getName(); // TODO
     }
 
     public final String ElementImpl.getNodeName() {
-        return getTagName();
+        return ((Element)this).getTagName(); // TODO
     }
 
     public final String EntityReferenceImpl.getNodeName() {

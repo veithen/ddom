@@ -111,7 +111,7 @@
                     </testExcludes>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <executions>
@@ -120,12 +120,31 @@
                             <goal>compile</goal>
                         </goals>
                     </execution>
-               </executions>
-           </plugin>
+                </executions>
+            </plugin -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>iajc-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"/>
+                                <iajc srcdir="src/main/java"
+                                      source="1.5"
+                                      classpathRef="maven.compile.classpath"
+                                      destDir="${project.build.outputDirectory}">
+                                    <include name="**/*.aj"/>
+                                </iajc>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>iajc-test-compile</id>
                         <phase>test-compile</phase>
                         <goals>
                             <goal>run</goal>

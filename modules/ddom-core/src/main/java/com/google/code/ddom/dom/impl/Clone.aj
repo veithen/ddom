@@ -33,12 +33,12 @@ public aspect Clone {
     
     public final Node NSAwareTypedAttributeImpl.shallowClone() {
         CoreDocument document = getDocument();
-        return (Node)document.getNodeFactory().createAttribute(document, getNamespaceURI(), getLocalName(), getPrefix(), null, getType());
+        return (Node)document.getNodeFactory().createAttribute(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, getType());
     }
     
     public final Node NSUnawareTypedAttributeImpl.shallowClone() {
         CoreDocument document = getDocument();
-        return (Node)document.getNodeFactory().createAttribute(document, getName(), null, getType());
+        return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, getType());
     }
 
     public final Node NSDecl.shallowClone() {
@@ -85,7 +85,7 @@ public aspect Clone {
 
     public final Node DocumentTypeImpl.cloneNode(boolean deep) {
         // TODO: factory method here!
-        return new DocumentTypeImpl(getDocument(), getName(), getPublicId(), getSystemId());
+        return (Node)new DocumentTypeImpl(getDocument(), coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
     
     public final Node ElementImpl.cloneNode(boolean deep) {
@@ -109,13 +109,13 @@ public aspect Clone {
     public final CoreElement NSAwareElementImpl.shallowCloneWithoutAttributes() {
         CoreDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, getNamespaceURI(), getLocalName(), getPrefix(), true);
+        return factory.createElement(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), true);
     }
     
     public final CoreElement NSUnawareElementImpl.shallowCloneWithoutAttributes() {
         CoreDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, getTagName(), true);
+        return factory.createElement(document, coreGetName(), true);
     }
 
     public final Node EntityReferenceImpl.cloneNode(boolean deep) {

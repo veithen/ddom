@@ -88,11 +88,12 @@ public aspect NamedNodeSupport {
     }
     
     public final String NSAwareElementImpl.getTagName() {
-        return internalGetName();
+        // TODO: this is really ugly; is this a bug in AspectJ (it is only necessary when compiling aspects separately)?
+        return ((DOMNSAwareNamedNode)this).internalGetName();
     }
     
     public final String NSAwareTypedAttributeImpl.getName() {
-        return internalGetName();
+        return ((DOMNSAwareNamedNode)this).internalGetName();
     }
 
     public final String NSDecl.getNamespaceURI() {

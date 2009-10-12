@@ -24,7 +24,7 @@ public aspect TextContent {
     declare parents: NodeImpl implements DOMNode;
 
     public final String NodeImpl.getTextContent() throws DOMException {
-        CharSequence content = collectTextContent(null);
+        CharSequence content = ((DOMNode)this).collectTextContent(null);
         return content == null ? "" : content.toString();
     }
 

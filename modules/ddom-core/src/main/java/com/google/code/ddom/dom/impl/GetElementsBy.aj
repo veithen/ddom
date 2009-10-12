@@ -17,6 +17,7 @@ package com.google.code.ddom.dom.impl;
 
 import java.util.Iterator;
 
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.core.model.*;
@@ -28,10 +29,10 @@ public aspect GetElementsBy {
     }
 
     public final NodeList ParentNodeImpl.getElementsByTagName(String tagname) {
-        return new ElementsByTagName((DOMDocument)getDocument(), ParentNodeImpl.this, tagname);
+        return new ElementsByTagName((DOMDocument)getDocument(), (Node)ParentNodeImpl.this, tagname);
     }
 
     public final NodeList ParentNodeImpl.getElementsByTagNameNS(String namespaceURI, String localName) {
-        return new ElementsByTagNameNS((DOMDocument)getDocument(), ParentNodeImpl.this, namespaceURI, localName);
+        return new ElementsByTagNameNS((DOMDocument)getDocument(), (Node)ParentNodeImpl.this, namespaceURI, localName);
     }
 }
