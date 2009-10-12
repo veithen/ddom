@@ -16,7 +16,6 @@
 package com.google.code.ddom.core.model;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
 
 import com.google.code.ddom.dom.impl.DOMExceptionUtil;
 import com.google.code.ddom.spi.model.BuilderTarget;
@@ -43,13 +42,17 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         validateOwnerDocument(newChild);
         
         // Check that the new node is not an ancestor of this node
-        Node current = this;
+        CoreParentNode current = this;
         do {
             if (current == newChild) {
                 // TODO: must not throw DOMException here!
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
-            current = current.getParentNode();
+            if (current instanceof CoreChildNode) {
+                current = ((CoreChildNode)current).coreGetParent();
+            } else {
+                break;
+            }
         } while (current != null);
         
         if (newChild instanceof BuilderTarget) {
@@ -105,7 +108,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
                     node.internalSetParent(this);
                     lastNodeToInsert = node;
                 }
-                delta = fragment.getLength();
+                delta = fragment.coreGetChildCount();
                 // TODO: need to clear the document fragment?
             } else if (newChild instanceof CoreChildNode) {
                 // TODO: what if this is already a child of some container?

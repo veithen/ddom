@@ -19,6 +19,7 @@ import org.w3c.dom.DOMException;
 
 import com.google.code.ddom.dom.impl.DOMExceptionUtil;
 import com.google.code.ddom.spi.model.CoreAttribute;
+import com.google.code.ddom.spi.model.CoreCharacterData;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
@@ -110,7 +111,15 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         if (value instanceof String) {
             return (String)value;
         } else {
-            return getTextContent();
+            // TODO: get the getTextContent feature back into the core model
+            StringBuilder buffer = new StringBuilder();
+            CoreChildNode child = (CoreChildNode)value;
+            while (child != null) {
+                buffer.append(((CoreCharacterData)child).coreGetData());
+                child = child.coreGetNextSibling();
+            }
+            return buffer.toString();
+//            return getTextContent();
         }
     }
 

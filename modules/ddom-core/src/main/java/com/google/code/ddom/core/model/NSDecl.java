@@ -31,6 +31,6 @@ public class NSDecl extends AttributeImpl implements CoreNamespaceDeclaration {
     }
     
     public final String getDeclaredNamespaceURI() {
-        return getValue();
+        return coreGetValue();
     }
 }

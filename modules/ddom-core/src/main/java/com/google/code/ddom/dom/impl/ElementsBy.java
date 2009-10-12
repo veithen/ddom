@@ -22,16 +22,14 @@ import java.util.List;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-
 public abstract class ElementsBy implements NodeList {
-    private final CoreDocument document;
+    private final DOMDocument document;
     private Iterator<? extends Node> iterator;
     private final List<Node> nodes = new ArrayList<Node>();
     private boolean complete;
     private int structureVersion;
     
-    public ElementsBy(CoreDocument document) {
+    public ElementsBy(DOMDocument document) {
         this.document = document;
     }
     

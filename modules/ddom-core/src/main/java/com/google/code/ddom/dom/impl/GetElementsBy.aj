@@ -34,7 +34,7 @@ public aspect GetElementsBy {
     }
 
     public final NodeList ParentNodeImpl.getElementsByTagName(final String tagname) {
-        return new ElementsBy(getDocument()) {
+        return new ElementsBy((DOMDocument)getDocument()) {
             @Override
             protected Iterator<Element> createIterator() {
                 Iterator<Element> iterator = new DescendantsIterator<Element>(Element.class, ParentNodeImpl.this);
@@ -53,7 +53,7 @@ public aspect GetElementsBy {
     }
 
     public final NodeList ParentNodeImpl.getElementsByTagNameNS(final String namespaceURI, final String localName) {
-        return new ElementsBy(getDocument()) {
+        return new ElementsBy((DOMDocument)getDocument()) {
             @Override
             protected Iterator<Element> createIterator() {
                 boolean nsWildcard = "*".equals(namespaceURI);

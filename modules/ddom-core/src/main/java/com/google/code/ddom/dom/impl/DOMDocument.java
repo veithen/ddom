@@ -20,5 +20,5 @@ import org.w3c.dom.Document;
 import com.google.code.ddom.spi.model.CoreDocument;
 
 public interface DOMDocument extends CoreDocument, Document {
-
+    int getStructureVersion();
 }

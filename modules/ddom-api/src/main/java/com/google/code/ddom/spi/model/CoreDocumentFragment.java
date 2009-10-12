@@ -16,5 +16,4 @@
 package com.google.code.ddom.spi.model;
 
 public interface CoreDocumentFragment extends CoreParentNode {
-    int getLength(); // TODO: why???
 }

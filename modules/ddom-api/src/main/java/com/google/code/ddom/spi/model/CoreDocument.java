@@ -21,7 +21,6 @@ import com.google.code.ddom.DeferredParsingException;
 public interface CoreDocument extends DeferredDocument, BuilderTarget {
     NodeFactory getNodeFactory();
     void next() throws DeferredParsingException;
-    int getStructureVersion(); // TODO: DOM specific
     String coreGetInputEncoding();
     void coreSetInputEncoding(String inputEncoding);
     String coreGetXmlEncoding();
