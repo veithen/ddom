@@ -17,15 +17,9 @@ package com.google.code.ddom.dom.impl;
 
 import java.util.Iterator;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.core.model.*;
-import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementLocalNameFilterIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementNameFilterIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementNamespaceFilterIterator;
-import com.google.code.ddom.utils.dom.iterator.FilterIterator;
 
 public aspect GetElementsBy {
     public final int DocumentImpl.getStructureVersion() {
@@ -33,42 +27,11 @@ public aspect GetElementsBy {
         return 0;
     }
 
-    public final NodeList ParentNodeImpl.getElementsByTagName(final String tagname) {
-        return new ElementsBy((DOMDocument)getDocument()) {
-            @Override
-            protected Iterator<Element> createIterator() {
-                Iterator<Element> iterator = new DescendantsIterator<Element>(Element.class, ParentNodeImpl.this);
-                if (tagname.equals("*")) {
-                    return iterator;
-                } else {
-                    return new FilterIterator<Element>(iterator) {
-                        @Override
-                        protected boolean matches(Element element) {
-                            return tagname.equals(element.getTagName());
-                        }
-                    };
-                }
-            }
-        };
+    public final NodeList ParentNodeImpl.getElementsByTagName(String tagname) {
+        return new ElementsByTagName((DOMDocument)getDocument(), ParentNodeImpl.this, tagname);
     }
 
-    public final NodeList ParentNodeImpl.getElementsByTagNameNS(final String namespaceURI, final String localName) {
-        return new ElementsBy((DOMDocument)getDocument()) {
-            @Override
-            protected Iterator<Element> createIterator() {
-                boolean nsWildcard = "*".equals(namespaceURI);
-                boolean localNameWildcard = localName.equals("*");
-                Iterator<Element> iterator = new DescendantsIterator<Element>(Element.class, ParentNodeImpl.this);
-                if (nsWildcard && localNameWildcard) {
-                    return iterator;
-                } else if (nsWildcard) {
-                    return new ElementLocalNameFilterIterator(iterator, localName);
-                } else if (localNameWildcard) {
-                    return new ElementNamespaceFilterIterator(iterator, namespaceURI);
-                } else {
-                    return new ElementNameFilterIterator(iterator, namespaceURI, localName);
-                }
-            }
-        };
+    public final NodeList ParentNodeImpl.getElementsByTagNameNS(String namespaceURI, String localName) {
+        return new ElementsByTagNameNS((DOMDocument)getDocument(), ParentNodeImpl.this, namespaceURI, localName);
     }
 }
