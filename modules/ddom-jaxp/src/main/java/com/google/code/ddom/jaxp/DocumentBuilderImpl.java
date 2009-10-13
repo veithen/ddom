@@ -36,7 +36,7 @@ import org.xml.sax.SAXParseException;
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.core.model.DocumentImpl;
 import com.google.code.ddom.dom.impl.DOMImplementationImpl;
-import com.google.code.ddom.dom.impl.DOMNodeFactory;
+import com.google.code.ddom.spi.model.ModelRegistry;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private final boolean ignoreComments;
@@ -51,7 +51,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public DOMImplementation getDOMImplementation() {
         // TODO: check if this is consistent with the rest of the code
-        return new DOMImplementationImpl(new DOMNodeFactory());
+        return new DOMImplementationImpl(ModelRegistry.getInstance().getNodeFactory("dom"));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             // TODO: we should not refer to DocumentImpl here
             DocumentImpl document = (DocumentImpl)DeferredDocumentFactory.newInstance().parse("dom", reader);
 //            DocumentImpl document = new DocumentImpl(domImplementation, omDocument/*, namespaceAware */);
-            document.setDocumentURI(is.getSystemId());
+            document.coreSetDocumentURI(is.getSystemId());
             String inputEncoding = is.getEncoding();
             if (isByteStream && inputEncoding == null) {
                 if (encoding.equals("UTF-16BE") || encoding.equals("UTF-16LE")) {
