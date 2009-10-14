@@ -45,6 +45,8 @@ import org.w3c.domts.level1.core.nodevalue03;
 import org.w3c.domts.level1.core.nodevalue07;
 import org.w3c.domts.level1.core.nodevalue08;
 
+import com.google.code.ddom.domts.FilteredDOMTestSuite;
+
 public class DOM1CoreTest extends TestSuite {
     public static TestSuite suite() throws Exception {
         DOMTestDocumentBuilderFactory factory = Factories.getFactory();

@@ -29,6 +29,8 @@ import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
 import org.w3c.domts.level3.core.elementsetidattributens05;
 
+import com.google.code.ddom.domts.FilteredDOMTestSuite;
+
 public class DOM3CoreTest extends TestSuite {
     public static TestSuite suite() throws Exception {
         DOMTestDocumentBuilderFactory factory = Factories.getFactory();

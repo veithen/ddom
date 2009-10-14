@@ -44,6 +44,9 @@ import org.w3c.domts.level2.core.setAttributeNS03;
 import org.w3c.domts.level2.core.setAttributeNodeNS02;
 import org.w3c.domts.level2.core.setNamedItemNS04;
 
+import com.google.code.ddom.domts.FilteredDOMTestSuite;
+
+
 public class DOM2CoreTest extends TestSuite {
     public static TestSuite suite() throws Exception {
         DOMTestDocumentBuilderFactory factory = Factories.getFactory();
