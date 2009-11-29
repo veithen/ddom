@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.core.model;
+package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.spi.model.CoreNode;
-import com.google.code.ddom.spi.model.WrongDocumentException;
+public class WrongDocumentException extends CoreModelException {
+    private static final long serialVersionUID = -7135259787609333075L;
 
-public abstract class NodeImpl implements CoreNode {
-    public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
-        if (node.getDocument() != getDocument()) {
-            throw new WrongDocumentException();
-        }
+    public WrongDocumentException() {
+    }
+
+    public WrongDocumentException(String message) {
+        super(message);
     }
 }

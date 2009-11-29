@@ -24,6 +24,7 @@ import org.w3c.dom.DOMException;
 import com.google.code.ddom.spi.model.CoreModelException;
 import com.google.code.ddom.spi.model.HierarchyException;
 import com.google.code.ddom.spi.model.NodeNotFoundException;
+import com.google.code.ddom.spi.model.WrongDocumentException;
 
 public class DOMExceptionUtil {
     private static final ResourceBundle messages =
@@ -71,6 +72,8 @@ public class DOMExceptionUtil {
             return newDOMException(DOMException.NOT_FOUND_ERR);
         } else if (ex instanceof HierarchyException) {
             return newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+        } else if (ex instanceof WrongDocumentException) {
+            return newDOMException(DOMException.WRONG_DOCUMENT_ERR);
         } else {
             throw new IllegalArgumentException("Don't know how to translate " + ex.getClass().getName());
         }

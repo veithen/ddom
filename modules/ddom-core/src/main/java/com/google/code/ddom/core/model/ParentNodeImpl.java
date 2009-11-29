@@ -15,9 +15,6 @@
  */
 package com.google.code.ddom.core.model;
 
-import org.w3c.dom.DOMException;
-
-import com.google.code.ddom.dom.impl.DOMExceptionUtil;
 import com.google.code.ddom.spi.model.BuilderTarget;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
@@ -38,15 +35,14 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         return previousChild;
     }
     
-    private void prepareNewChild(CoreChildNode newChild) {
+    private void prepareNewChild(CoreChildNode newChild) throws CoreModelException {
         validateOwnerDocument(newChild);
         
         // Check that the new node is not an ancestor of this node
         CoreParentNode current = this;
         do {
             if (current == newChild) {
-                // TODO: must not throw DOMException here!
-                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+                throw new HierarchyException();
             }
             if (current instanceof CoreChildNode) {
                 current = ((CoreChildNode)current).coreGetParent();
@@ -60,7 +56,13 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         }
     }
     
-    protected abstract void validateChildType(CoreChildNode newChild);
+    /**
+     * Check if the given node is allowed as a child.
+     * 
+     * @param newChild the child that will be added
+     * @throws HierarchyException if the child is not allowed
+     */
+    protected abstract void validateChildType(CoreChildNode newChild) throws HierarchyException;
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false

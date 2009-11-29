@@ -24,6 +24,7 @@ import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
+import com.google.code.ddom.spi.model.CoreModelException;
 import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
 import com.google.code.ddom.spi.model.NodeFactory;
@@ -163,7 +164,12 @@ public aspect ElementSupport {
     }
     
     public final Attr ElementImpl.setAttributeNodeNS(Attr _newAttr) throws DOMException {
-        validateOwnerDocument((CoreNode)_newAttr);
+        try {
+            // TODO: shouldn't this be handled by the core model?
+            validateOwnerDocument((CoreNode)_newAttr);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
         DOMAttribute newAttr = (DOMAttribute)_newAttr;
         CoreElement owner = newAttr.coreGetOwnerElement();
         if (owner == this) {
