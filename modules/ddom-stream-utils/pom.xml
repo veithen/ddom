@@ -20,23 +20,18 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>ddom</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>modules</artifactId>
-    <name>DDOM :: Modules</name>
-    <packaging>pom</packaging>
-    
-    <modules>
-        <module>ddom-api</module>
-        <module>ddom-core</module>
-        <module>ddom-dom-utils</module>
-        <module>ddom-domts</module>
-        <module>ddom-jaxp</module>
-        <module>ddom-spring-ws</module>
-        <module>ddom-stream-utils</module>
-        <module>ddom-test-utils</module>
-        <module>ddom-xmlts</module>
-    </modules>
+    <artifactId>ddom-stream-utils</artifactId>
+    <name>DDOM :: Modules :: Stream Utilities</name>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-api</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+    </dependencies>
 </project>
