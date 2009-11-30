@@ -19,10 +19,16 @@ import com.google.code.ddom.spi.stream.AttributeMode;
 import com.google.code.ddom.spi.stream.Consumer;
 import com.google.code.ddom.spi.stream.Event;
 
-public abstract class PushConsumer implements Consumer {
+/**
+ * Abstract base class for callback style consumers. This class implements the
+ * {@link Consumer#processEvent(Event)} method so that events are delivered to individual methods.
+ * 
+ * @author Andreas Veithen
+ */
+public abstract class CallbackConsumer implements Consumer {
     private final AttributeMode attributeMode;
     
-    public PushConsumer(AttributeMode attributeMode) {
+    public CallbackConsumer(AttributeMode attributeMode) {
         this.attributeMode = attributeMode;
     }
 

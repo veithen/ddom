@@ -27,10 +27,10 @@ import com.google.code.ddom.spi.stream.AttributeMode;
 import com.google.code.ddom.spi.stream.CharacterData;
 import com.google.code.ddom.spi.stream.Producer;
 import com.google.code.ddom.spi.stream.StreamException;
-import com.google.code.ddom.stream.util.PushConsumer;
+import com.google.code.ddom.stream.util.CallbackConsumer;
 
 // TODO: also allow for deferred building of attributes
-public class Builder extends PushConsumer {
+public class Builder extends CallbackConsumer {
     private final Producer producer;
     private final NodeFactory nodeFactory;
     private final CoreDocument document;
