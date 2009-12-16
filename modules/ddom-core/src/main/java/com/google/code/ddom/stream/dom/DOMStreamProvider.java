@@ -17,6 +17,8 @@ package com.google.code.ddom.stream.dom;
 
 import java.util.Map;
 
+import org.w3c.dom.Document;
+
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.stream.Consumer;
 import com.google.code.ddom.spi.stream.Producer;
@@ -31,8 +33,12 @@ public class DOMStreamProvider implements StreamProvider {
     }
 
     public Consumer getConsumer(Object destination, Map<String, Object> properties) throws StreamException {
-        // TODO build Consumer for DOMResult objects (and Node objects ??)
-        return null;
+        // TODO: support DOMResult objects (and DocumentFragment and Element objects)
+        if (destination instanceof Document) {
+            return new DOMConsumer((Document)destination);
+        } else {
+            return null;
+        }
     }
 
     public <T> T getSerializer(Class<T> serializerType, Consumer consumer, Map<String, Object> properties) {
