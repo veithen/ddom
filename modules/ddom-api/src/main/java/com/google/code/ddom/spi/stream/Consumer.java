@@ -81,7 +81,10 @@ public interface Consumer {
      * Process a namespace declaration.
      * 
      * @param prefix
+     *            the prefix being declared, or <code>null</code> if the declaration sets the
+     *            default namespace
      * @param namespaceURI
+     *            the namespace URI; this value must not be <code>null</code>
      */
     void processNSDecl(String prefix, String namespaceURI);
     
