@@ -17,16 +17,14 @@ package com.google.code.ddom.spi.stream;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Collections;
 import java.util.Map;
-import java.util.WeakHashMap;
 
+import com.google.code.ddom.spi.ClassLoaderLocal;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
 
 public final class StreamFactory {
-    // TODO: WeakHashMap will probably not work as expected in this case, because the value may hold a strong reference to the key (see "Implementation note" of WeakHashMap)
-    private static final Map<ClassLoader,StreamFactory> factories = Collections.synchronizedMap(new WeakHashMap<ClassLoader,StreamFactory>());
+    private static final ClassLoaderLocal<StreamFactory> factories = new ClassLoaderLocal<StreamFactory>();
     
     private final Map<String,StreamProvider> providers;
     

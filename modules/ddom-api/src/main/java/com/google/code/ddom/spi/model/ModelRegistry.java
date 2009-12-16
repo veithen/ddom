@@ -17,18 +17,16 @@ package com.google.code.ddom.spi.model;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
+import com.google.code.ddom.spi.ClassLoaderLocal;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
 import com.google.code.ddom.weaver.ModelWeaver;
 
 public final class ModelRegistry {
-    // TODO: WeakHashMap will probably not work as expected in this case, because the value may hold a strong reference to the key (see "Implementation note" of WeakHashMap)
-    private static final Map<ClassLoader,ModelRegistry> registries = Collections.synchronizedMap(new WeakHashMap<ClassLoader,ModelRegistry>());
+    private static final ClassLoaderLocal<ModelRegistry> registries = new ClassLoaderLocal<ModelRegistry>();
     
     private final Map<String,NodeFactory> nodeFactories;
     
