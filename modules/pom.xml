@@ -35,7 +35,9 @@
         <module>ddom-dom-utils</module>
         <module>ddom-domts</module>
         <module>ddom-jaxp</module>
+        <module>ddom-spi</module>
         <module>ddom-spring-ws</module>
+        <module>ddom-stream</module>
         <module>ddom-stream-utils</module>
         <module>ddom-test-utils</module>
         <module>ddom-xmlts</module>
