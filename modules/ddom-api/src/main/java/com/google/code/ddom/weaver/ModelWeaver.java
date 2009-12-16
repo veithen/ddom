@@ -9,6 +9,7 @@ import org.aspectj.weaver.loadtime.ClassPreProcessor;
 
 import com.google.code.ddom.spi.model.Model;
 
+// TODO: refactor this to use TransformingClassLoader
 public class ModelWeaver extends ClassLoader {
     private final Model model;
     private final ClassPreProcessor preProcessor;
