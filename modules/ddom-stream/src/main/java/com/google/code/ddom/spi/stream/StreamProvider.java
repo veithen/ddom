@@ -17,6 +17,7 @@ package com.google.code.ddom.spi.stream;
 
 import java.util.Map;
 
+// TODO: refer to the @Provider annotation
 public interface StreamProvider {
     /**
      * Create a producer for a given source object.

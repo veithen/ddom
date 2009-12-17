@@ -32,6 +32,15 @@ public final class StreamFactory {
         this.providers = providers;
     }
     
+    /**
+     * Get the {@link StreamFactory} instance for a given class loader.
+     * 
+     * @param classLoader
+     *            the class loader from which to load the providers
+     * @return the {@link StreamFactory} instance
+     * @throws ProviderFinderException
+     *             if there was an issue loading the providers from the class loader
+     */
     public static StreamFactory getInstance(ClassLoader classLoader) throws ProviderFinderException {
         StreamFactory factory = factories.get(classLoader);
         if (factory == null) {
@@ -41,7 +50,13 @@ public final class StreamFactory {
         return factory;
     }
     
-    
+    /**
+     * Get the {@link StreamFactory} instance for the current thread context class loader.
+     * 
+     * @return the {@link StreamFactory} instance for the current thread context class loader
+     * @throws ProviderFinderException
+     *             if there was an issue loading the providers from the class loader
+     */
     public static StreamFactory getInstance() throws ProviderFinderException {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
@@ -49,10 +64,32 @@ public final class StreamFactory {
             }
         }));
     }
-    
+
+    /**
+     * Get a {@link Producer} from a given source object using a given provider.
+     * 
+     * @param providerName
+     * @param source
+     * @param properties
+     * @param preserve
+     * @return the {@link Producer} instance that reads the data from the given <code>source</code>
+     * @throws NoStreamProviderFoundException
+     *             if the provider was not found or if the provider doesn't support the type of
+     *             source object passed as argument
+     * @throws StreamException
+     */
     public Producer getProducer(String providerName, Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
         StreamProvider provider = providers.get(providerName);
-        return provider == null ? null : provider.getProducer(source, properties, preserve);
+        if (provider == null) {
+            throw new NoStreamProviderFoundException("Provider '" + providerName + "' not found");
+        } else {
+            Producer producer = provider.getProducer(source, properties, preserve);
+            if (producer == null) {
+                throw new NoStreamProviderFoundException("Provider '" + providerName + "' doesn't support source objects of type " + source.getClass().getName());
+            } else {
+                return producer;
+            }
+        }
     }
     
     public Producer getProducer(Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
@@ -62,7 +99,7 @@ public final class StreamFactory {
                 return producer;
             }
         }
-        return null;
+        throw new NoStreamProviderFoundException("No provider found for source objects of type " + source.getClass().getName());
     }
     
     // TODO: similar methods for getConsumer, getSerializer, etc.
