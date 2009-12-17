@@ -15,6 +15,17 @@
  */
 package com.google.code.ddom.spi;
 
-public class DummyClass {
-    public final byte[] data = new byte[1024*1024];
+public class ClassLoaderUtils {
+    private ClassLoaderUtils() {}
+    
+    /**
+     * Translate a class name into the resource name of the corresponding <tt>.class</tt> file. E.g.
+     * <tt>java.lang.String</tt> would be translated into <tt>java/lang/String.class</tt>.
+     * 
+     * @param className the class name
+     * @return the resource name of the class file
+     */
+    public static String getResourceNameForClassName(String className) {
+        return className.replace('.', '/') + ".class";
+    }
 }

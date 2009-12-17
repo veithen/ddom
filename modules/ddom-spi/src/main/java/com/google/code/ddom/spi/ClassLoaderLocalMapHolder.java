@@ -15,6 +15,15 @@
  */
 package com.google.code.ddom.spi;
 
-public class DummyClass {
-    public final byte[] data = new byte[1024*1024];
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Class used internally by {@link ClassLoaderLocal}.
+ * 
+ * @author Andreas Veithen
+ */
+public class ClassLoaderLocalMapHolder {
+    // TODO: ensure proper synchronization
+    public static final Map<ClassLoaderLocal<?>,Object> locals = new HashMap<ClassLoaderLocal<?>,Object>();
 }
