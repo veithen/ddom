@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi;
+package com.google.code.ddom.commons.cl;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+
 
 public abstract class TransformingClassLoader extends ClassLoader {
     public TransformingClassLoader(ClassLoader parent) {

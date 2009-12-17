@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi;
+package com.google.code.ddom.commons.cl;
 
 public class DummyClass {
     public final byte[] data = new byte[1024*1024];
