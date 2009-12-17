@@ -1,16 +1,12 @@
 package com.google.code.ddom.weaver;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
 import org.aspectj.weaver.loadtime.Aj;
 import org.aspectj.weaver.loadtime.ClassPreProcessor;
 
+import com.google.code.ddom.commons.cl.TransformingClassLoader;
 import com.google.code.ddom.spi.model.Model;
 
-// TODO: refactor this to use TransformingClassLoader
-public class ModelWeaver extends ClassLoader {
+public class ModelWeaver extends TransformingClassLoader {
     private final Model model;
     private final ClassPreProcessor preProcessor;
     
@@ -25,26 +21,12 @@ public class ModelWeaver extends ClassLoader {
     }
 
     @Override
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
-        if (name.startsWith("com.google.code.ddom.core.model.") || name.startsWith("com.google.code.ddom.dom.impl.")) { // TODO: hardcoded aspects package!!!
-            System.out.println("Weaving " + name + "...");
-            String resourceName = name.replace('.', '/') + ".class";
-            InputStream in = super.getResourceAsStream(resourceName);
-            if (in == null) {
-                throw new ClassNotFoundException(name);
-            }
-            try {
-                try {
-                    byte[] classDef = preProcessor.preProcess(name, IOUtils.toByteArray(in), this);
-                    return defineClass(name, classDef, 0, classDef.length);
-                } finally {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                throw new ClassNotFoundException(name, ex);
-            }
-        } else {
-            return super.loadClass(name);
-        }
+    protected boolean needsTransformation(String className) {
+        return className.startsWith("com.google.code.ddom.core.model.") || className.startsWith("com.google.code.ddom.dom.impl."); // TODO: hardcoded aspects package!!!
+    }
+
+    @Override
+    protected byte[] transformClass(String className, byte[] classDef) {
+        return preProcessor.preProcess(className, classDef, this);
     }
 }
