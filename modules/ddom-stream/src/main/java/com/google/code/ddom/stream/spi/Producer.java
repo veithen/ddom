@@ -22,9 +22,11 @@ public interface Producer {
      * Must result in one or more calls to the {@link Consumer}.
      * 
      * @param consumer
+     * @return <code>true</code> if there are more events to consume; <code>false</code> if the end
+     *         of the document has been reached
      * @throws StreamException
      */
-    void proceed(Consumer consumer) throws StreamException;
+    boolean proceed(Consumer consumer) throws StreamException;
     
     void dispose();
 }

@@ -32,7 +32,7 @@ public class StAXParser implements Producer {
         event = new XMLStreamReaderEvent(reader);
     }
 
-    public void proceed(Consumer consumer) throws StreamException {
+    public boolean proceed(Consumer consumer) throws StreamException {
         XMLStreamReaderEvent.Mode mode = event.getMode();
         if (consumer.getAttributeMode() == AttributeMode.EVENT) {
             int index = event.getIndex();
@@ -65,14 +65,18 @@ public class StAXParser implements Producer {
             }
             event.updateState(mode, index);
         }
+        boolean complete;
         if (mode == XMLStreamReaderEvent.Mode.NODE) {
             try {
-                reader.next();
+                complete = reader.next() == XMLStreamReader.END_DOCUMENT;
             } catch (XMLStreamException ex) {
                 throw new StreamException(ex);
             }
+        } else {
+            complete = false;
         }
         consumer.processEvent(event);
+        return !complete;
     }
 
     public void dispose() {

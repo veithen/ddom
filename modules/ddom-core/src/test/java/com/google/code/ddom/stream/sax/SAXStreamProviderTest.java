@@ -17,6 +17,7 @@ package com.google.code.ddom.stream.sax;
 
 import java.util.EnumSet;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
@@ -30,12 +31,13 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DeferredDocumentFactory;
-import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.stream.Transformer;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
 
 public class SAXStreamProviderTest extends TestCase {
+    private static final Transformer transformer = Transformer.getInstance();
+    
     private final XMLConformanceTest test;
 
     public SAXStreamProviderTest(XMLConformanceTest test) {
@@ -48,12 +50,15 @@ public class SAXStreamProviderTest extends TestCase {
         SAXParserFactory saxFactory = new SAXParserFactoryImpl();
         saxFactory.setNamespaceAware(test.isUsingNamespaces());
         SAXSource source = new SAXSource(saxFactory.newSAXParser().getXMLReader(), test.getInputSource());
-        Document actual = (Document)DeferredDocumentFactory.newInstance().parse("dom", source);
-        ((CoreDocument)actual).build();
-        
+
         DocumentBuilderFactory domFactory = new DocumentBuilderFactoryImpl();
         domFactory.setNamespaceAware(test.isUsingNamespaces());
-        Document expected = domFactory.newDocumentBuilder().parse(test.getSystemId());
+        DocumentBuilder domBuilder = domFactory.newDocumentBuilder();
+        Document actual = domBuilder.newDocument();
+        
+        transformer.from(source).to(actual);
+        
+        Document expected = domBuilder.parse(test.getSystemId());
         XMLAssert.assertXMLIdentical(XMLUnit.compareXML(expected, actual), true);
     }
     

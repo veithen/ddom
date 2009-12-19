@@ -33,7 +33,7 @@ public class SAXSourceProducer implements Producer {
         this.source = source;
     }
 
-    public void proceed(Consumer consumer) throws StreamException {
+    public boolean proceed(Consumer consumer) throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
         ConsumerContentHandler handler = new ConsumerContentHandler(consumer);
         xmlReader.setContentHandler(handler);
@@ -50,6 +50,7 @@ public class SAXSourceProducer implements Producer {
         } catch (SAXException ex) {
             throw new StreamException(ex);
         }
+        return false;
     }
 
     public void dispose() {

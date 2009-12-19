@@ -102,5 +102,15 @@ public final class StreamFactory {
         throw new NoStreamProviderFoundException("No provider found for source objects of type " + source.getClass().getName());
     }
     
+    public Consumer getConsumer(Object destination, Map<String,Object> properties) throws StreamException {
+        for (StreamProvider provider : providers.values()) {
+            Consumer consumer = provider.getConsumer(destination, properties);
+            if (consumer != null) {
+                return consumer;
+            }
+        }
+        throw new NoStreamProviderFoundException("No provider found for destination objects of type " + destination.getClass().getName());
+    }
+    
     // TODO: similar methods for getConsumer, getSerializer, etc.
 }
