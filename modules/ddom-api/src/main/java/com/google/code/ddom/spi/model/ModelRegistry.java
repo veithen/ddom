@@ -42,7 +42,7 @@ public final class ModelRegistry {
             for (Map.Entry<String,Model> entry : ProviderFinder.find(classLoader, Model.class).entrySet()) {
                 try {
                     ModelWeaver weaver = new ModelWeaver(classLoader, entry.getValue());
-                    // TODO: clarify this
+                    // TODO: this is necessary to work around some bug in AspectJ, probably https://bugs.eclipse.org/bugs/show_bug.cgi?id=286473
                     weaver.loadClass("com.google.code.ddom.core.model.NodeImpl");
                     weaver.loadClass("com.google.code.ddom.core.model.ParentNodeImpl");
                     factories.put(entry.getKey(), (NodeFactory)weaver.loadClass("com.google.code.ddom.core.model.NodeFactoryImpl").newInstance());
