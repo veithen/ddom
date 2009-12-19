@@ -28,11 +28,11 @@ public aspect TextContent {
         return content == null ? "" : content.toString();
     }
 
-    public final CharSequence CommentImpl.collectTextContent(CharSequence appendTo) {
+    public final CharSequence DOMComment.collectTextContent(CharSequence appendTo) {
         return appendTo;
     }
 
-    public final CharSequence DocumentTypeImpl.collectTextContent(CharSequence appendTo) {
+    public final CharSequence DOMDocumentType.collectTextContent(CharSequence appendTo) {
         return appendTo;
     }
 
@@ -53,7 +53,7 @@ public aspect TextContent {
         return content;
     }
 
-    public final CharSequence TextNodeImpl.collectTextContent(CharSequence appendTo) {
+    public final CharSequence DOMTextNode.collectTextContent(CharSequence appendTo) {
         String data = getData();
         if (appendTo == null) {
             return data;

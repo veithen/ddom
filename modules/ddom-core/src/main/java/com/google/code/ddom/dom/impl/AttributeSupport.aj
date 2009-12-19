@@ -23,19 +23,19 @@ import com.google.code.ddom.core.model.*;
 public aspect AttributeSupport {
     declare parents: AttributeImpl implements DOMAttribute;
     
-    public final String AttributeImpl.getValue() {
+    public final String DOMAttribute.getValue() {
         return coreGetValue();
     }
     
-    public final void AttributeImpl.setValue(String value) throws DOMException {
+    public final void DOMAttribute.setValue(String value) throws DOMException {
         coreSetValue(value);
     }
 
-    public final Element AttributeImpl.getOwnerElement() {
+    public final Element DOMAttribute.getOwnerElement() {
         return (Element)coreGetOwnerElement();
     }
 
-    public final boolean AttributeImpl.getSpecified() {
+    public final boolean DOMAttribute.getSpecified() {
         // TODO
         return true;
     }

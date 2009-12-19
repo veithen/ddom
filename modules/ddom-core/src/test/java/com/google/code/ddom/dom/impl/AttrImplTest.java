@@ -17,6 +17,7 @@ package com.google.code.ddom.dom.impl;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Attr;

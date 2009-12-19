@@ -15,37 +15,36 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 
-import com.google.code.ddom.core.model.*;
+import com.google.code.ddom.core.model.DocumentTypeImpl;
 
 public aspect DocumentTypeSupport {
-    declare parents: DocumentTypeImpl implements DocumentType;
+    declare parents: DocumentTypeImpl implements DOMDocumentType;
     
-    public final String DocumentTypeImpl.getName() {
+    public final String DOMDocumentType.getName() {
         return coreGetRootName();
     }
 
-    public final String DocumentTypeImpl.getPublicId() {
+    public final String DOMDocumentType.getPublicId() {
         return coreGetPublicId();
     }
 
-    public final String DocumentTypeImpl.getSystemId() {
+    public final String DOMDocumentType.getSystemId() {
         return coreGetSystemId();
     }
 
-    public final NamedNodeMap DocumentTypeImpl.getEntities() {
+    public final NamedNodeMap DOMDocumentType.getEntities() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final String DocumentTypeImpl.getInternalSubset() {
+    public final String DOMDocumentType.getInternalSubset() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final NamedNodeMap DocumentTypeImpl.getNotations() {
+    public final NamedNodeMap DOMDocumentType.getNotations() {
         // TODO
         throw new UnsupportedOperationException();
     }

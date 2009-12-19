@@ -22,26 +22,26 @@ import org.w3c.dom.DOMException;
 import com.google.code.ddom.core.model.*;
 
 public aspect CharacterDataSupport {
-    declare parents: CharacterDataImpl implements CharacterData;
-    declare parents: CommentImpl implements Comment;
+    declare parents: CharacterDataImpl implements DOMCharacterData;
+    declare parents: CommentImpl implements DOMComment;
     
-    public final String CharacterDataImpl.getData() {
+    public final String DOMCharacterData.getData() {
         return coreGetData();
     }
     
-    public final void CharacterDataImpl.setData(String data) throws DOMException {
+    public final void DOMCharacterData.setData(String data) throws DOMException {
         coreSetData(data);
     }
     
-    public final int CharacterDataImpl.getLength() {
+    public final int DOMCharacterData.getLength() {
         return getData().length();
     }
 
-    public final void CharacterDataImpl.appendData(String arg) throws DOMException {
+    public final void DOMCharacterData.appendData(String arg) throws DOMException {
         setData(getData() + arg);
     }
 
-    public final void CharacterDataImpl.deleteData(int offset, int count) throws DOMException {
+    public final void DOMCharacterData.deleteData(int offset, int count) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length() || count < 0) {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
@@ -49,7 +49,7 @@ public aspect CharacterDataSupport {
         setData(data.substring(0, offset) + data.substring(Math.min(offset + count, data.length())));
     }
 
-    public final void CharacterDataImpl.insertData(int offset, String arg) throws DOMException {
+    public final void DOMCharacterData.insertData(int offset, String arg) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length()) {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
@@ -57,7 +57,7 @@ public aspect CharacterDataSupport {
         setData(data.substring(0, offset) + arg + data.substring(offset));
     }
 
-    public final void CharacterDataImpl.replaceData(int offset, int count, String arg) throws DOMException {
+    public final void DOMCharacterData.replaceData(int offset, int count, String arg) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length() || count < 0) {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
@@ -65,7 +65,7 @@ public aspect CharacterDataSupport {
         setData(data.substring(0, offset) + arg + data.substring(Math.min(offset + count, data.length())));
     }
 
-    public final String CharacterDataImpl.substringData(int offset, int count) throws DOMException {
+    public final String DOMCharacterData.substringData(int offset, int count) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length() || count < 0) {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);

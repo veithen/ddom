@@ -26,49 +26,48 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
-import com.google.code.ddom.core.model.*;
+import com.google.code.ddom.core.model.DocumentImpl;
 import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public aspect DocumentSupport {
     declare parents: DocumentImpl implements DOMDocument;
     
-    private DOMImplementationImpl DocumentImpl.domImplementation;
+    private DOMImplementationImpl DOMDocument.domImplementation;
     
-    public final DOMImplementation DocumentImpl.getImplementation() {
+    public final DOMImplementation DOMDocument.getImplementation() {
         if (domImplementation == null) {
             domImplementation = new DOMImplementationImpl(getNodeFactory());
         }
         return domImplementation;
     }
 
-    public final String DocumentImpl.getInputEncoding() {
+    public final String DOMDocument.getInputEncoding() {
         return coreGetInputEncoding();
     }
 
-    public final String DocumentImpl.getXmlEncoding() {
+    public final String DOMDocument.getXmlEncoding() {
         return coreGetXmlEncoding();
     }
 
     // TODO: need test for this
-    public final String DocumentImpl.getDocumentURI() {
+    public final String DOMDocument.getDocumentURI() {
         return coreGetDocumentURI();
     }
 
-    public final void DocumentImpl.setDocumentURI(String documentURI) {
+    public final void DOMDocument.setDocumentURI(String documentURI) {
         coreSetDocumentURI(documentURI);
     }
 
-    public final Element DocumentImpl.getDocumentElement() {
+    public final Element DOMDocument.getDocumentElement() {
         return (Element)coreGetDocumentElement();
     }
     
-    public final DocumentType DocumentImpl.getDoctype() {
+    public final DocumentType DOMDocument.getDoctype() {
         return (DocumentType)coreGetDocumentType();
     }
     
-    public final Node DocumentImpl.importNode(Node node, boolean deep) throws DOMException {
+    public final Node DOMDocument.importNode(Node node, boolean deep) throws DOMException {
         // TODO: do we really need to use getNodeFactory().createXXX, or can we just use createXXX?
         Node importedNode;
         boolean importChildren;
@@ -125,8 +124,8 @@ public aspect DocumentSupport {
         return importedNode;
     }
 
-    public final Element DocumentImpl.getElementById(String elementId) {
-        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, (Node)this); it.hasNext(); ) {
+    public final Element DOMDocument.getElementById(String elementId) {
+        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
             DOMElement element = it.next();
             for (CoreAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
                 if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {
@@ -137,47 +136,47 @@ public aspect DocumentSupport {
         return null;
     }
 
-    public final Node DocumentImpl.adoptNode(Node source) throws DOMException {
+    public final Node DOMDocument.adoptNode(Node source) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final DOMConfiguration DocumentImpl.getDomConfig() {
+    public final DOMConfiguration DOMDocument.getDomConfig() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final boolean DocumentImpl.getStrictErrorChecking() {
+    public final boolean DOMDocument.getStrictErrorChecking() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final boolean DocumentImpl.getXmlStandalone() {
+    public final boolean DOMDocument.getXmlStandalone() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final String DocumentImpl.getXmlVersion() {
+    public final String DOMDocument.getXmlVersion() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final Node DocumentImpl.renameNode(Node n, String namespaceURI, String qualifiedName) throws DOMException {
+    public final Node DOMDocument.renameNode(Node n, String namespaceURI, String qualifiedName) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final void DocumentImpl.setStrictErrorChecking(boolean strictErrorChecking) {
+    public final void DOMDocument.setStrictErrorChecking(boolean strictErrorChecking) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final void DocumentImpl.setXmlStandalone(boolean xmlStandalone) throws DOMException {
+    public final void DOMDocument.setXmlStandalone(boolean xmlStandalone) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final void DocumentImpl.setXmlVersion(String xmlVersion) throws DOMException {
+    public final void DOMDocument.setXmlVersion(String xmlVersion) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

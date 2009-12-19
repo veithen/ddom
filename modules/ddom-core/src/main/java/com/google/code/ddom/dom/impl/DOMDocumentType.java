@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Text;
+import org.w3c.dom.DocumentType;
 
-import com.google.code.ddom.spi.model.CoreTextNode;
+import com.google.code.ddom.spi.model.CoreDocumentType;
 
-public interface DOMTextNode extends CoreTextNode, Text, DOMCharacterData {
+public interface DOMDocumentType extends CoreDocumentType, DocumentType {
 
 }

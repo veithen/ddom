@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Text;
+import org.w3c.dom.Comment;
 
-import com.google.code.ddom.spi.model.CoreTextNode;
+import com.google.code.ddom.spi.model.CoreComment;
 
-public interface DOMTextNode extends CoreTextNode, Text, DOMCharacterData {
+public interface DOMComment extends CoreComment, Comment, DOMCharacterData {
 
 }

@@ -58,7 +58,7 @@ public aspect Clone {
     
     public abstract Node ParentNodeImpl.shallowClone();
 
-    public final Node CommentImpl.cloneNode(boolean deep) {
+    public final Node DOMComment.cloneNode(boolean deep) {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createComment(document, getData());
     }
@@ -128,11 +128,11 @@ public aspect Clone {
         return (Node)document.getNodeFactory().createProcessingInstruction(document, getTarget(), getData());
     }
 
-    public final Node TextNodeImpl.cloneNode(boolean deep) {
+    public final Node DOMTextNode.cloneNode(boolean deep) {
         return createNewTextNode(getData());
     }
     
-    public abstract DOMTextNode TextNodeImpl.createNewTextNode(String data);
+    public abstract DOMTextNode DOMTextNode.createNewTextNode(String data);
 
     public final DOMTextNode TextImpl.createNewTextNode(String data) {
         CoreDocument document = getDocument();

@@ -26,51 +26,51 @@ import com.google.code.ddom.core.model.*;
  * @author Andreas Veithen
  */
 public aspect NodeValue {
-    public final String AttributeImpl.getNodeValue() throws DOMException {
+    public final String DOMAttribute.getNodeValue() throws DOMException {
         return getValue();
     }
 
-    public final void AttributeImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMAttribute.setNodeValue(String nodeValue) throws DOMException {
         setValue(nodeValue);
     }
     
-    public final String CharacterDataImpl.getNodeValue() throws DOMException {
+    public final String DOMCharacterData.getNodeValue() throws DOMException {
         return getData();
     }
 
-    public final void CharacterDataImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMCharacterData.setNodeValue(String nodeValue) throws DOMException {
         this.setData(nodeValue);
     }
 
-    public final String DocumentFragmentImpl.getNodeValue() throws DOMException {
+    public final String DOMDocumentFragment.getNodeValue() throws DOMException {
         return null;
     }
 
-    public final void DocumentFragmentImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMDocumentFragment.setNodeValue(String nodeValue) throws DOMException {
         // Setting the node value has no effect
     }
 
-    public final String DocumentImpl.getNodeValue() throws DOMException {
+    public final String DOMDocument.getNodeValue() throws DOMException {
         return null;
     }
 
-    public final void DocumentImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMDocument.setNodeValue(String nodeValue) throws DOMException {
         // Setting the node value has no effect
     }
 
-    public final String DocumentTypeImpl.getNodeValue() throws DOMException {
+    public final String DOMDocumentType.getNodeValue() throws DOMException {
         return null;
     }
 
-    public final void DocumentTypeImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMDocumentType.setNodeValue(String nodeValue) throws DOMException {
         // Setting the node value has no effect
     }
 
-    public final String ElementImpl.getNodeValue() throws DOMException {
+    public final String DOMElement.getNodeValue() throws DOMException {
         return null;
     }
 
-    public final void ElementImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMElement.setNodeValue(String nodeValue) throws DOMException {
         // Setting the node value has no effect
     }
     

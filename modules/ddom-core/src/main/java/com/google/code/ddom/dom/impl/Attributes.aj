@@ -26,27 +26,27 @@ import com.google.code.ddom.core.model.*;
  * @author Andreas Veithen
  */
 public aspect Attributes {
-    public final boolean ElementImpl.hasAttributes() {
+    public final boolean DOMElement.hasAttributes() {
         return internalGetFirstAttribute() != null;
     }
 
-    public final NamedNodeMap ElementImpl.getAttributes() {
-        return new AttributesNamedNodeMap((DOMElement)this);
+    public final NamedNodeMap DOMElement.getAttributes() {
+        return new AttributesNamedNodeMap(this);
     }
     
-    public final boolean DocumentFragmentImpl.hasAttributes() {
+    public final boolean DOMDocumentFragment.hasAttributes() {
         return false;
     }
 
-    public final NamedNodeMap DocumentFragmentImpl.getAttributes() {
+    public final NamedNodeMap DOMDocumentFragment.getAttributes() {
         return null;
     }
 
-    public final boolean DocumentImpl.hasAttributes() {
+    public final boolean DOMDocument.hasAttributes() {
         return false;
     }
 
-    public final NamedNodeMap DocumentImpl.getAttributes() {
+    public final NamedNodeMap DOMDocument.getAttributes() {
         return null;
     }
 

@@ -27,7 +27,7 @@ public aspect TextSupport {
     declare parents: TextNodeImpl implements DOMTextNode;
     declare parents: CDATASectionImpl implements CDATASection;
     
-    public final Text TextNodeImpl.splitText(int offset) throws DOMException {
+    public final Text DOMTextNode.splitText(int offset) throws DOMException {
         String text = getData();
         if (offset < 0 || offset > text.length()) {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
@@ -44,17 +44,17 @@ public aspect TextSupport {
         return (Text)newNode; // TODO
     }
     
-    public final String TextNodeImpl.getWholeText() {
+    public final String DOMTextNode.getWholeText() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final Text TextNodeImpl.replaceWholeText(String content) throws DOMException {
+    public final Text DOMTextNode.replaceWholeText(String content) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final boolean TextNodeImpl.isElementContentWhitespace() {
+    public final boolean DOMTextNode.isElementContentWhitespace() {
         // TODO
         throw new UnsupportedOperationException();
     }
