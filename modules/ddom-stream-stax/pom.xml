@@ -20,44 +20,22 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>tests</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-tests-wss4j</artifactId>
-    <name>DDOM :: Tests :: WSS4J</name>
+    <artifactId>ddom-stream-stax</artifactId>
+    <name>DDOM :: Modules :: Stream :: StAX support</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>ddom-api</artifactId>
-            <version>${pom.version}</version>
+            <artifactId>ddom-stream</artifactId>
+            <version>${version}</version>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>ddom-core</artifactId>
-            <version>${pom.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>ddom-stream-stax</artifactId>
-            <version>${pom.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ws.security</groupId>
-            <artifactId>wss4j</artifactId>
-            <version>1.5.7</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
         </dependency>
     </dependencies>
 </project>

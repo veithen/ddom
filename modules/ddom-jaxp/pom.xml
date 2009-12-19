@@ -29,9 +29,14 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-core</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-stream-stax</artifactId>
+            <version>${version}</version>
         </dependency>
     </dependencies>
 </project>

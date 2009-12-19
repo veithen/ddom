@@ -66,7 +66,7 @@
         </dependency>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-xmlts</artifactId>
+            <artifactId>ddom-stream-stax</artifactId>
             <version>${pom.version}</version>
             <scope>test</scope>
         </dependency>
@@ -78,16 +78,6 @@
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
-            <version>1.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -181,7 +171,6 @@
                     </includes>
                     <excludes>
                         <exclude>**/DOM3CoreTest.java</exclude>
-                        <exclude>**/SAXStreamProviderTest.java</exclude>
                         <exclude>**/NodeFactoryAspectTest.java</exclude>
                     </excludes>
                     <!-- TODO: doesn't seem to work very well with already woven code -->

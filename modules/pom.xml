@@ -39,6 +39,9 @@
         <module>ddom-spi</module>
         <module>ddom-spring-ws</module>
         <module>ddom-stream</module>
+        <module>ddom-stream-dom</module>
+        <module>ddom-stream-sax</module>
+        <module>ddom-stream-stax</module>
         <module>ddom-stream-utils</module>
         <module>ddom-test-utils</module>
         <module>ddom-xmlts</module>
