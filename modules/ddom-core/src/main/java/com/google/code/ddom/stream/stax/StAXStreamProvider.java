@@ -26,10 +26,10 @@ import javax.xml.stream.XMLStreamReader;
 import org.xml.sax.InputSource;
 
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.stream.Consumer;
-import com.google.code.ddom.spi.stream.Producer;
-import com.google.code.ddom.spi.stream.StreamException;
-import com.google.code.ddom.spi.stream.StreamProvider;
+import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="stax")
 public class StAXStreamProvider implements StreamProvider {

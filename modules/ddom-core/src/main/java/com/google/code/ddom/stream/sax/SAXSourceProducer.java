@@ -22,9 +22,9 @@ import javax.xml.transform.sax.SAXSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.google.code.ddom.spi.stream.Consumer;
-import com.google.code.ddom.spi.stream.Producer;
-import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.StreamException;
 
 public class SAXSourceProducer implements Producer {
     private final SAXSource source;

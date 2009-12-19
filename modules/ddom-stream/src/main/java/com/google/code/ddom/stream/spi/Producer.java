@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.stream;
+package com.google.code.ddom.stream.spi;
 
-public class StreamException extends Exception {
-    private static final long serialVersionUID = 3672004958899510615L;
-
-    public StreamException() {
-    }
-
-    public StreamException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public StreamException(String message) {
-        super(message);
-    }
-
-    public StreamException(Throwable cause) {
-        super(cause);
-    }
+public interface Producer {
+    /**
+     * 
+     * 
+     * Must result in one or more calls to the {@link Consumer}.
+     * 
+     * @param consumer
+     * @throws StreamException
+     */
+    void proceed(Consumer consumer) throws StreamException;
+    
+    void dispose();
 }

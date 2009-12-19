@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.stream;
+package com.google.code.ddom.stream.spi;
 
 // TODO: maybe rename this to DataHolder to make it clear that it is not immutable
 public interface Data {

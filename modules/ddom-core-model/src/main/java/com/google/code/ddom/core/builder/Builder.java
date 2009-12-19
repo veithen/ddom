@@ -22,11 +22,11 @@ import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.stream.AttributeData;
-import com.google.code.ddom.spi.stream.AttributeMode;
-import com.google.code.ddom.spi.stream.CharacterData;
-import com.google.code.ddom.spi.stream.Producer;
-import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.stream.spi.AttributeData;
+import com.google.code.ddom.stream.spi.AttributeMode;
+import com.google.code.ddom.stream.spi.CharacterData;
+import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.util.CallbackConsumer;
 
 // TODO: also allow for deferred building of attributes

@@ -20,10 +20,10 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.spi.stream.AttributeData;
-import com.google.code.ddom.spi.stream.CharacterData;
-import com.google.code.ddom.spi.stream.Event;
-import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.stream.spi.AttributeData;
+import com.google.code.ddom.stream.spi.CharacterData;
+import com.google.code.ddom.stream.spi.Event;
+import com.google.code.ddom.stream.spi.StreamException;
 
 public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData {
     public enum Mode { NODE, ATTRIBUTE, NS_DECL, ATTRIBUTES_COMPLETE }

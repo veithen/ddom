@@ -23,8 +23,8 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 
-import com.google.code.ddom.spi.stream.AttributeMode;
-import com.google.code.ddom.spi.stream.Consumer;
+import com.google.code.ddom.stream.spi.AttributeMode;
+import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.util.CharArrayCharacterData;
 import com.google.code.ddom.stream.util.StringCharacterData;
 

@@ -21,10 +21,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.stream.AttributeData;
-import com.google.code.ddom.spi.stream.AttributeMode;
-import com.google.code.ddom.spi.stream.CharacterData;
-import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.stream.spi.AttributeData;
+import com.google.code.ddom.stream.spi.AttributeMode;
+import com.google.code.ddom.stream.spi.CharacterData;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.util.CallbackConsumer;
 
 /**

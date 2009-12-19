@@ -17,10 +17,10 @@ package com.google.code.ddom.stream.core;
 
 import java.util.Map;
 
-import com.google.code.ddom.spi.stream.Consumer;
-import com.google.code.ddom.spi.stream.Producer;
-import com.google.code.ddom.spi.stream.StreamException;
-import com.google.code.ddom.spi.stream.StreamProvider;
+import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.StreamProvider;
 
 public class CoreStreamProvider implements StreamProvider {
     public Producer getProducer(Object source, Map<String, Object> properties, boolean preserve) throws StreamException {

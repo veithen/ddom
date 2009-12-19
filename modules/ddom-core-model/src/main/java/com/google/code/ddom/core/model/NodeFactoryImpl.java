@@ -29,7 +29,7 @@ import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 import com.google.code.ddom.spi.model.CoreText;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.stream.Producer;
+import com.google.code.ddom.stream.spi.Producer;
 
 public class NodeFactoryImpl implements NodeFactory {
     public CoreDocument createDocument(Producer producer) {

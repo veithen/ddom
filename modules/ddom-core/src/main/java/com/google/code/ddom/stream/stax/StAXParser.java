@@ -18,10 +18,10 @@ package com.google.code.ddom.stream.stax;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.spi.stream.AttributeMode;
-import com.google.code.ddom.spi.stream.Consumer;
-import com.google.code.ddom.spi.stream.Producer;
-import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.stream.spi.AttributeMode;
+import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.StreamException;
 
 public class StAXParser implements Producer {
     private final XMLStreamReader reader;

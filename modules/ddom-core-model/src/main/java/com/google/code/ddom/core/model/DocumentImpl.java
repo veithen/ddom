@@ -22,7 +22,7 @@ import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
-import com.google.code.ddom.spi.stream.Producer;
+import com.google.code.ddom.stream.spi.Producer;
 
 public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
     private final NodeFactory nodeFactory;

@@ -13,9 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.stream;
+package com.google.code.ddom.stream.spi;
 
-public interface CharacterData extends Data {
-    // To be completed with other methods
-    String getString() throws StreamException;
+/**
+ * Describes how attribute information items should be exchanged between the producer and the consumer.
+ *  
+ * @author Andreas Veithen
+ */
+public enum AttributeMode {
+    /**
+     * Attributes are expected to be delivered as individual events.
+     */
+    EVENT,
+    
+    /**
+     * Attributes are expected to be delivered together with the corresponding element using an
+     * {@link AttributeSource} instance.
+     */
+    ELEMENT
 }

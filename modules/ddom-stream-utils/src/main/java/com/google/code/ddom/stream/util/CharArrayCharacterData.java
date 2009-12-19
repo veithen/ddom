@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.stream.util;
 
-import com.google.code.ddom.spi.stream.CharacterData;
-import com.google.code.ddom.spi.stream.StreamException;
+import com.google.code.ddom.stream.spi.CharacterData;
+import com.google.code.ddom.stream.spi.StreamException;
 
 public class CharArrayCharacterData implements CharacterData {
     private char[] buffer;

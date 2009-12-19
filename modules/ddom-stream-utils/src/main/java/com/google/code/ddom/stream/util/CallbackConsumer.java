@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.stream.util;
 
-import com.google.code.ddom.spi.stream.AttributeMode;
-import com.google.code.ddom.spi.stream.Consumer;
-import com.google.code.ddom.spi.stream.Event;
+import com.google.code.ddom.stream.spi.AttributeMode;
+import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Event;
 
 /**
  * Abstract base class for callback style consumers. This class implements the

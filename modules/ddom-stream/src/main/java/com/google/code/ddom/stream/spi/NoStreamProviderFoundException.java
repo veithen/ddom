@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.stream;
+package com.google.code.ddom.stream.spi;
 
 public class NoStreamProviderFoundException extends StreamException {
     private static final long serialVersionUID = -576024908459776789L;

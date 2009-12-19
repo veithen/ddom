@@ -21,7 +21,7 @@ import javax.xml.XMLConstants;
 
 import org.xml.sax.Attributes;
 
-import com.google.code.ddom.spi.stream.AttributeData;
+import com.google.code.ddom.stream.spi.AttributeData;
 
 public class SAXAttributeData implements AttributeData {
     private Type[] attributeTypeCache;
