@@ -27,26 +27,33 @@ public abstract class TransformingClassLoader extends ClassLoader {
     }
 
     @Override
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
-        if (needsTransformation(name)) {
-            String resourceName = ClassLoaderUtils.getResourceNameForClassName(name);
-            InputStream in = super.getResourceAsStream(resourceName);
-            if (in == null) {
-                throw new ClassNotFoundException(name);
-            }
-            try {
-                try {
-                    byte[] classDef = transformClass(name, IOUtils.toByteArray(in));
-                    return defineClass(name, classDef, 0, classDef.length);
-                } finally {
-                    in.close();
+    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        Class<?> clazz = findLoadedClass(name);
+        if (clazz == null) {
+            if (needsTransformation(name)) {
+                String resourceName = ClassLoaderUtils.getResourceNameForClassName(name);
+                InputStream in = super.getResourceAsStream(resourceName);
+                if (in == null) {
+                    throw new ClassNotFoundException(name);
                 }
-            } catch (IOException ex) {
-                throw new ClassNotFoundException(name, ex);
+                try {
+                    try {
+                        byte[] classDef = transformClass(name, IOUtils.toByteArray(in));
+                        clazz = defineClass(name, classDef, 0, classDef.length);
+                    } finally {
+                        in.close();
+                    }
+                } catch (IOException ex) {
+                    throw new ClassNotFoundException(name, ex);
+                }
+            } else {
+                clazz = super.loadClass(name, false);
             }
-        } else {
-            return super.loadClass(name);
         }
+        if (resolve) {
+            resolveClass(clazz);
+        }
+        return clazz;
     }
     
     protected abstract boolean needsTransformation(String className);
