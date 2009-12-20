@@ -18,8 +18,6 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
-
 /**
  * Aspect implementing {@link Node#hasAttributes()} and {@link Node#getAttributes()}.
  * 
@@ -50,11 +48,11 @@ public aspect Attributes {
         return null;
     }
 
-    public final boolean LeafNode.hasAttributes() {
+    public final boolean DOMLeafNode.hasAttributes() {
         return false;
     }
 
-    public final NamedNodeMap LeafNode.getAttributes() {
+    public final NamedNodeMap DOMLeafNode.getAttributes() {
         return null;
     }
 

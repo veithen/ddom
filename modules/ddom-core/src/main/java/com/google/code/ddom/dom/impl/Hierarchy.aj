@@ -27,6 +27,7 @@ import com.google.code.ddom.core.model.*;
  */
 public aspect Hierarchy {
     declare parents: ParentNodeImpl implements DOMParentNode;
+    declare parents: LeafNode implements DOMLeafNode;
 
     public final Document DOMDocument.getOwnerDocument() {
         return null;
@@ -44,7 +45,7 @@ public aspect Hierarchy {
         return (Document)getDocument();
     }
 
-    public final Document LeafNode.getOwnerDocument() {
+    public final Document DOMLeafNode.getOwnerDocument() {
         return (Document)getDocument();
     }
     
@@ -53,7 +54,7 @@ public aspect Hierarchy {
     }
 
     // TODO: should be possible to combine LeafNode and ElementImpl into a single case
-    public final Node LeafNode.getParentNode() {
+    public final Node DOMLeafNode.getParentNode() {
         return (Node)coreGetParent();
     }
 

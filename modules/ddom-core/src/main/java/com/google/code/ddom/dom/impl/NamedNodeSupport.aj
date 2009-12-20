@@ -156,19 +156,19 @@ public aspect NamedNodeSupport {
         return null;
     }
 
-    public final String LeafNode.getNamespaceURI() {
+    public final String DOMLeafNode.getNamespaceURI() {
         return null;
     }
 
-    public final String LeafNode.getPrefix() {
+    public final String DOMLeafNode.getPrefix() {
         return null;
     }
 
-    public final void LeafNode.setPrefix(String prefix) throws DOMException {
+    public final void DOMLeafNode.setPrefix(String prefix) throws DOMException {
         // Ignored
     }
 
-    public final String LeafNode.getLocalName() {
+    public final String DOMLeafNode.getLocalName() {
         return null;
     }
 }

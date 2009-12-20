@@ -80,12 +80,12 @@ public aspect NamespaceLookup {
         return parent == null ? null : parent.lookupPrefix(namespaceURI);
     }
 
-    public final String LeafNode.lookupNamespaceURI(String prefix) {
+    public final String DOMLeafNode.lookupNamespaceURI(String prefix) {
         Node parent = getParentNode();
         return parent == null ? null : parent.lookupNamespaceURI(prefix);
     }
     
-    public final String LeafNode.lookupPrefix(String namespaceURI) {
+    public final String DOMLeafNode.lookupPrefix(String namespaceURI) {
         Node parent = getParentNode();
         return parent == null ? null : parent.lookupPrefix(namespaceURI);
     }

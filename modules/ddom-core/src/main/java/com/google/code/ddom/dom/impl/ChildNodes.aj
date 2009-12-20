@@ -34,19 +34,19 @@ import com.google.code.ddom.spi.model.CoreNode;
 public aspect ChildNodes {
     declare parents: ParentNodeImpl implements NodeList;
 
-    public final Node LeafNode.getFirstChild() {
+    public final Node DOMLeafNode.getFirstChild() {
         return null;
     }
     
-    public final Node LeafNode.getLastChild() {
+    public final Node DOMLeafNode.getLastChild() {
         return null;
     }
 
-    public final boolean LeafNode.hasChildNodes() {
+    public final boolean DOMLeafNode.hasChildNodes() {
         return false;
     }
     
-    public final NodeList LeafNode.getChildNodes() {
+    public final NodeList DOMLeafNode.getChildNodes() {
         return EmptyNodeList.INSTANCE;
     }
 
@@ -136,19 +136,19 @@ public aspect ChildNodes {
         return oldChild;
     }
 
-    public final Node LeafNode.appendChild(Node newChild) throws DOMException {
+    public final Node DOMLeafNode.appendChild(Node newChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
     }
 
-    public final Node LeafNode.insertBefore(Node newChild, Node refChild) throws DOMException {
+    public final Node DOMLeafNode.insertBefore(Node newChild, Node refChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
-    public final Node LeafNode.removeChild(Node oldChild) throws DOMException {
+    public final Node DOMLeafNode.removeChild(Node oldChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
-    public final Node LeafNode.replaceChild(Node newChild, Node oldChild) throws DOMException {
+    public final Node DOMLeafNode.replaceChild(Node newChild, Node oldChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 }
