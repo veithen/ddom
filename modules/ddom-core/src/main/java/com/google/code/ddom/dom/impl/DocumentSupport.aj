@@ -34,6 +34,7 @@ public aspect DocumentSupport {
     declare parents: DocumentImpl implements DOMDocument;
     
     private DOMImplementationImpl DOMDocument.domImplementation;
+    private final DOMConfigurationImpl DOMDocument.domConfig = new DOMConfigurationImpl();
     
     public final DOMImplementation DOMDocument.getImplementation() {
         if (domImplementation == null) {
@@ -142,8 +143,7 @@ public aspect DocumentSupport {
     }
 
     public final DOMConfiguration DOMDocument.getDomConfig() {
-        // TODO
-        throw new UnsupportedOperationException();
+        return domConfig;
     }
 
     public final boolean DOMDocument.getStrictErrorChecking() {
