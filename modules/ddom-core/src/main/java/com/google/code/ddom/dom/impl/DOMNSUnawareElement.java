@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.dom.impl;
 
-public interface CoreNSUnawareNamedNode extends CoreNode {
-    String coreGetName();
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
+
+public interface DOMNSUnawareElement extends CoreNSUnawareElement, DOMElement, DOMNSUnawareNamedNode {
+
 }

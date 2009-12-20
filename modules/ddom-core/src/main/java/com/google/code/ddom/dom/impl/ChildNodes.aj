@@ -19,7 +19,6 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreModelException;
 import com.google.code.ddom.spi.model.CoreNode;
@@ -32,8 +31,6 @@ import com.google.code.ddom.spi.model.CoreNode;
  * @author Andreas Veithen
  */
 public aspect ChildNodes {
-    declare parents: ParentNodeImpl implements NodeList;
-
     public final Node DOMLeafNode.getFirstChild() {
         return null;
     }
@@ -50,28 +47,28 @@ public aspect ChildNodes {
         return EmptyNodeList.INSTANCE;
     }
 
-    public final boolean ParentNodeImpl.hasChildNodes() {
+    public final boolean DOMParentNode.hasChildNodes() {
         // TODO: not the best way if content is optimized
         return getFirstChild() != null;
     }
     
-    public final Node ParentNodeImpl.getFirstChild() {
+    public final Node DOMParentNode.getFirstChild() {
         return (Node)coreGetFirstChild();
     }
     
-    public final Node ParentNodeImpl.getLastChild() {
+    public final Node DOMParentNode.getLastChild() {
         return (Node)coreGetLastChild();
     }
     
-    public final NodeList ParentNodeImpl.getChildNodes() {
+    public final NodeList DOMParentNode.getChildNodes() {
         return (NodeList)this; // TODO: cast necessary??
     }
     
-    public final int ParentNodeImpl.getLength() {
+    public final int DOMParentNode.getLength() {
         return coreGetChildCount();
     }
     
-    public final Node ParentNodeImpl.item(int index) {
+    public final Node DOMParentNode.item(int index) {
         // TODO: need unit test to check that this works when parsing is deferred
         // TODO: wrong result for negavite indexes
         CoreChildNode node = coreGetFirstChild();
@@ -81,7 +78,7 @@ public aspect ChildNodes {
         return (Node)node;
     }
 
-    public final Node ParentNodeImpl.appendChild(Node newChild) throws DOMException {
+    public final Node DOMParentNode.appendChild(Node newChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
@@ -93,7 +90,7 @@ public aspect ChildNodes {
         return newChild;
     }
 
-    public final Node ParentNodeImpl.insertBefore(Node newChild, Node refChild) throws DOMException {
+    public final Node DOMParentNode.insertBefore(Node newChild, Node refChild) throws DOMException {
         // Note: The specification of the insertBefore method says that "if refChild
         // is null, insert newChild at the end of the list of children". That is, in this
         // case the behavior is identical to appendChild. (This is covered by the DOM 1
@@ -109,7 +106,7 @@ public aspect ChildNodes {
         return newChild;
     }
 
-    public final Node ParentNodeImpl.removeChild(Node oldChild) throws DOMException {
+    public final Node DOMParentNode.removeChild(Node oldChild) throws DOMException {
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
@@ -121,7 +118,7 @@ public aspect ChildNodes {
         return oldChild;
     }
 
-    public final Node ParentNodeImpl.replaceChild(Node newChild, Node oldChild) throws DOMException {
+    public final Node DOMParentNode.replaceChild(Node newChild, Node oldChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
@@ -136,19 +133,19 @@ public aspect ChildNodes {
         return oldChild;
     }
 
-    public final Node DOMLeafNode.appendChild(Node newChild) throws DOMException {
+    public final Node DOMLeafNode.appendChild(@SuppressWarnings("unused") Node newChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
     }
 
-    public final Node DOMLeafNode.insertBefore(Node newChild, Node refChild) throws DOMException {
+    public final Node DOMLeafNode.insertBefore(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node refChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
-    public final Node DOMLeafNode.removeChild(Node oldChild) throws DOMException {
+    public final Node DOMLeafNode.removeChild(@SuppressWarnings("unused") Node oldChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
-    public final Node DOMLeafNode.replaceChild(Node newChild, Node oldChild) throws DOMException {
+    public final Node DOMLeafNode.replaceChild(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node oldChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 }

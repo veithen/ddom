@@ -16,5 +16,5 @@
 package com.google.code.ddom.spi.model;
 
 public interface CoreEntityReference extends CoreLeafNode {
-
+    String coreGetName();
 }

@@ -68,22 +68,22 @@ public aspect Clone {
         return deep ? deepClone() : shallowClone();
     }
 
-    public final Node DocumentFragmentImpl.shallowClone() {
+    public final Node DOMDocumentFragment.shallowClone() {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createDocumentFragment(document);
     }
     
-    public final Node DocumentImpl.cloneNode(boolean deep) {
+    public final Node DOMDocument.cloneNode(boolean deep) {
         // TODO
         throw new UnsupportedOperationException();
     }
     
-    public final Node DocumentImpl.shallowClone() {
+    public final Node DOMDocument.shallowClone() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final Node DocumentTypeImpl.cloneNode(boolean deep) {
+    public final Node DOMDocumentType.cloneNode(boolean deep) {
         // TODO: factory method here!
         return (Node)new DocumentTypeImpl(getDocument(), coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
@@ -93,7 +93,7 @@ public aspect Clone {
     }
 
     // TODO: review return type (should be DOMNode)
-    public final Node ElementImpl.shallowClone() {
+    public final Node DOMElement.shallowClone() {
         CoreElement clone = shallowCloneWithoutAttributes();
         CoreAttribute attr = internalGetFirstAttribute();
         while (attr != null) {
@@ -104,21 +104,21 @@ public aspect Clone {
         return (Node)clone;
     }
     
-    public abstract CoreElement ElementImpl.shallowCloneWithoutAttributes();
+    public abstract CoreElement DOMElement.shallowCloneWithoutAttributes();
 
-    public final CoreElement NSAwareElementImpl.shallowCloneWithoutAttributes() {
+    public final CoreElement DOMNSAwareElement.shallowCloneWithoutAttributes() {
         CoreDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
         return factory.createElement(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), true);
     }
     
-    public final CoreElement NSUnawareElementImpl.shallowCloneWithoutAttributes() {
+    public final CoreElement DOMNSUnawareElement.shallowCloneWithoutAttributes() {
         CoreDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
         return factory.createElement(document, coreGetName(), true);
     }
 
-    public final Node EntityReferenceImpl.cloneNode(boolean deep) {
+    public final Node DOMEntityReference.cloneNode(boolean deep) {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createEntityReference(document, coreGetName());
     }

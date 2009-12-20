@@ -15,8 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
+import org.w3c.dom.NodeList;
+
 import com.google.code.ddom.spi.model.CoreParentNode;
 
-public interface DOMParentNode extends CoreParentNode, DOMNode {
+public interface DOMParentNode extends CoreParentNode, NodeList, DOMNode {
 
 }
