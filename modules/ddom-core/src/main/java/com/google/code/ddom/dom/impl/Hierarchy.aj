@@ -25,8 +25,7 @@ import com.google.code.ddom.core.model.*;
  * 
  * @author Andreas Veithen
  */
-// TODO: find a better name for this aspect
-public aspect OwnerDocument {
+public aspect Hierarchy {
     public final Document DOMDocument.getOwnerDocument() {
         return null;
     }
