@@ -19,6 +19,6 @@ import org.w3c.dom.Element;
 
 import com.google.code.ddom.spi.model.CoreElement;
 
-public interface DOMElement extends CoreElement, Element {
+public interface DOMElement extends CoreElement, Element, DOMParentNode {
 
 }

@@ -19,6 +19,6 @@ import org.w3c.dom.Attr;
 
 import com.google.code.ddom.spi.model.CoreAttribute;
 
-public interface DOMAttribute extends CoreAttribute, Attr {
+public interface DOMAttribute extends CoreAttribute, Attr, DOMParentNode {
 
 }

@@ -15,10 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DocumentFragment;
+import com.google.code.ddom.spi.model.CoreParentNode;
 
-import com.google.code.ddom.spi.model.CoreDocumentFragment;
-
-public interface DOMDocumentFragment extends CoreDocumentFragment, DocumentFragment, DOMParentNode {
+public interface DOMParentNode extends CoreParentNode, DOMNode {
 
 }

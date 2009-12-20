@@ -96,26 +96,26 @@ public aspect NamedNodeSupport {
         return ((DOMNSAwareNamedNode)this).internalGetName();
     }
 
-    public final String NSDecl.getNamespaceURI() {
+    public final String DOMNamespaceDeclaration.getNamespaceURI() {
         return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
     }
 
-    public final String NSDecl.getPrefix() {
+    public final String DOMNamespaceDeclaration.getPrefix() {
         return getDeclaredPrefix() == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
     }
 
-    public final void NSDecl.setPrefix(String prefix) throws DOMException {
+    public final void DOMNamespaceDeclaration.setPrefix(String prefix) throws DOMException {
         // Other DOM implementations allow changing the prefix, but this means that a namespace
         // declaration is transformed into a normal attribute. We don't support this.
         throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
     }
 
-    public final String NSDecl.getLocalName() {
+    public final String DOMNamespaceDeclaration.getLocalName() {
         String declaredPrefix = getDeclaredPrefix();
         return declaredPrefix == null ? XMLConstants.XMLNS_ATTRIBUTE : declaredPrefix;
     }
 
-    public final String NSDecl.getName() {
+    public final String DOMNamespaceDeclaration.getName() {
         String declaredPrefix = getDeclaredPrefix();
         if (declaredPrefix == null) {
             return XMLConstants.XMLNS_ATTRIBUTE;

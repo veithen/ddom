@@ -25,6 +25,7 @@ import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
 import com.google.code.ddom.spi.model.NodeFactory;
@@ -47,8 +48,8 @@ public aspect ElementSupport {
                                 || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
                         && localName.equals(attr.getLocalName());
             case ATTR_NSDECL:
-                if (attr instanceof NSDecl) {
-                    String prefix = ((NSDecl)attr).getDeclaredPrefix();
+                if (attr instanceof CoreNamespaceDeclaration) {
+                    String prefix = ((CoreNamespaceDeclaration)attr).getDeclaredPrefix();
                     return localName == null && prefix == null || localName != null && localName.equals(prefix);
                 } else {
                     return false;

@@ -26,6 +26,8 @@ import com.google.code.ddom.core.model.*;
  * @author Andreas Veithen
  */
 public aspect Hierarchy {
+    declare parents: ParentNodeImpl implements DOMParentNode;
+
     public final Document DOMDocument.getOwnerDocument() {
         return null;
     }

@@ -25,7 +25,7 @@ import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
 
 public aspect Clone {
-    public final Node AttributeImpl.cloneNode(boolean deep) {
+    public final Node DOMAttribute.cloneNode(boolean deep) {
         // TODO: optimize!
         // Attributes are always deep cloned
         return deepClone();
@@ -41,12 +41,12 @@ public aspect Clone {
         return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, getType());
     }
 
-    public final Node NSDecl.shallowClone() {
+    public final Node DOMNamespaceDeclaration.shallowClone() {
         // TODO Auto-generated method stub
         return null;
     }
     
-    public final Node ParentNodeImpl.deepClone() {
+    public final Node DOMParentNode.deepClone() {
         Node clone = shallowClone();
         DOMChildNode child = (DOMChildNode)coreGetFirstChild();
         while (child != null) {
@@ -56,14 +56,14 @@ public aspect Clone {
         return clone;
     }
     
-    public abstract Node ParentNodeImpl.shallowClone();
+    public abstract Node DOMParentNode.shallowClone();
 
     public final Node DOMComment.cloneNode(boolean deep) {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createComment(document, getData());
     }
 
-    public final Node DocumentFragmentImpl.cloneNode(boolean deep) {
+    public final Node DOMDocumentFragment.cloneNode(boolean deep) {
         // TODO: check this (maybe a fragment is always deeply cloned?)
         return deep ? deepClone() : shallowClone();
     }
@@ -88,7 +88,7 @@ public aspect Clone {
         return (Node)new DocumentTypeImpl(getDocument(), coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
     
-    public final Node ElementImpl.cloneNode(boolean deep) {
+    public final Node DOMElement.cloneNode(boolean deep) {
         return deep ? deepClone() : shallowClone();
     }
 
