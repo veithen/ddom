@@ -57,7 +57,7 @@ public class NodeFactoryImpl implements NodeFactory {
     }
     
     public CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI) {
-        return new NSDecl(document, prefix, namespaceURI);
+        return new NamespaceDeclarationImpl(document, prefix, namespaceURI);
     }
     
     public CoreProcessingInstruction createProcessingInstruction(CoreDocument document, String target, String data) {

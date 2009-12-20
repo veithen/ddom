@@ -18,10 +18,10 @@ package com.google.code.ddom.core.model;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 
-public class NSDecl extends AttributeImpl implements CoreNamespaceDeclaration {
+public class NamespaceDeclarationImpl extends AttributeImpl implements CoreNamespaceDeclaration {
     private String declaredPrefix;
 
-    public NSDecl(CoreDocument document, String prefix, String namespaceURI) {
+    public NamespaceDeclarationImpl(CoreDocument document, String prefix, String namespaceURI) {
         super(document, namespaceURI);
         this.declaredPrefix = prefix;
     }

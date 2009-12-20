@@ -19,13 +19,13 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
 import com.google.code.ddom.core.model.AttributeImpl;
-import com.google.code.ddom.core.model.NSDecl;
+import com.google.code.ddom.core.model.NamespaceDeclarationImpl;
 import com.google.code.ddom.core.model.TypedAttributeImpl;
 
 public aspect AttributeSupport {
     declare parents: AttributeImpl implements DOMAttribute;
     declare parents: TypedAttributeImpl implements DOMTypedAttribute;
-    declare parents: NSDecl implements DOMNamespaceDeclaration;
+    declare parents: NamespaceDeclarationImpl implements DOMNamespaceDeclaration;
     
     public final String DOMAttribute.getValue() {
         return coreGetValue();
