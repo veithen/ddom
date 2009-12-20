@@ -18,7 +18,7 @@ package com.google.code.ddom.core.model;
 import com.google.code.ddom.spi.model.CoreCharacterData;
 import com.google.code.ddom.spi.model.CoreDocument;
 
-public abstract class CharacterDataImpl extends LeafNode implements CoreCharacterData {
+public abstract class CharacterDataImpl extends LeafNodeImpl implements CoreCharacterData {
     private String data;
 
     public CharacterDataImpl(CoreDocument document, String data) {

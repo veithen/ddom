@@ -18,7 +18,7 @@ package com.google.code.ddom.core.model;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 
-public class ProcessingInstructionImpl extends LeafNode implements CoreProcessingInstruction {
+public class ProcessingInstructionImpl extends LeafNodeImpl implements CoreProcessingInstruction {
     private final String target;
     private String data;
 

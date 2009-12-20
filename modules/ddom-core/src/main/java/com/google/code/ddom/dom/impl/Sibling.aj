@@ -18,10 +18,10 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.core.model.ElementImpl;
-import com.google.code.ddom.core.model.LeafNode;
+import com.google.code.ddom.core.model.LeafNodeImpl;
 
 public aspect Sibling {
-    declare parents: (LeafNode || ElementImpl) implements DOMChildNode;
+    declare parents: (LeafNodeImpl || ElementImpl) implements DOMChildNode;
     
     public final Node DOMAttribute.getNextSibling() {
         return null;

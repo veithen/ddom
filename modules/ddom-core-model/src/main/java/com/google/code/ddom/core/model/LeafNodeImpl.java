@@ -20,12 +20,12 @@ import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreLeafNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
 
-public abstract class LeafNode extends NodeImpl implements CoreLeafNode {
+public abstract class LeafNodeImpl extends NodeImpl implements CoreLeafNode {
     private CoreDocument document;
     private CoreParentNode parent;
     private CoreChildNode nextSibling;
     
-    public LeafNode(CoreDocument document) {
+    public LeafNodeImpl(CoreDocument document) {
         this.document = document;
     }
 
