@@ -17,9 +17,10 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreLeafNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
 
-public abstract class LeafNode extends NodeImpl implements CoreChildNode {
+public abstract class LeafNode extends NodeImpl implements CoreLeafNode {
     private CoreDocument document;
     private CoreParentNode parent;
     private CoreChildNode nextSibling;

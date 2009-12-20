@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface CoreCharacterData extends CoreChildNode {
+public interface CoreCharacterData extends CoreLeafNode {
     String coreGetData();
     void coreSetData(String data);
 }

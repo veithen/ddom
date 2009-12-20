@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface CoreProcessingInstruction extends CoreChildNode {
+public interface CoreProcessingInstruction extends CoreLeafNode {
     String coreGetData();
     void coreSetData(String data);
     String coreGetTarget();

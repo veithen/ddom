@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface CoreDocumentType extends CoreChildNode {
+public interface CoreDocumentType extends CoreLeafNode {
     // TODO: check if this is actually needed
     void internalSetDocument(CoreDocument document);
 
