@@ -32,6 +32,15 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <resources>
@@ -54,6 +63,22 @@
                             <sources>
                                 <source>src/domts/java</source>
                             </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>org/w3c/domts/JUnitRunner.java</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
