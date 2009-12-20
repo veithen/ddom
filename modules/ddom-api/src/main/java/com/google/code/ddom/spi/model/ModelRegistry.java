@@ -17,15 +17,19 @@ package com.google.code.ddom.spi.model;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
+import com.google.code.ddom.commons.cl.ClassLoaderUtils;
+import com.google.code.ddom.commons.cl.ClassUtils;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
 import com.google.code.ddom.weaver.ModelWeaver;
 
 public final class ModelRegistry {
+    private static final String NODE_FACTORY_IMPL_CLASS = "com.google.code.ddom.core.model.NodeFactoryImpl";
     private static final ClassLoaderLocal<ModelRegistry> registries = new ClassLoaderLocal<ModelRegistry>();
     
     private final Map<String,NodeFactory> nodeFactories;
@@ -41,11 +45,7 @@ public final class ModelRegistry {
             // TODO: this should be done lazily
             for (Map.Entry<String,Model> entry : ProviderFinder.find(classLoader, Model.class).entrySet()) {
                 try {
-                    ModelWeaver weaver = new ModelWeaver(classLoader, entry.getValue());
-                    // TODO: this is necessary to work around some bug in AspectJ, probably https://bugs.eclipse.org/bugs/show_bug.cgi?id=286473
-                    weaver.loadClass("com.google.code.ddom.core.model.NodeImpl");
-                    weaver.loadClass("com.google.code.ddom.core.model.ParentNodeImpl");
-                    factories.put(entry.getKey(), (NodeFactory)weaver.loadClass("com.google.code.ddom.core.model.NodeFactoryImpl").newInstance());
+                    factories.put(entry.getKey(), loadModel(classLoader, entry.getValue()));
                 } catch (Exception ex) { // TODO: do this properly
                     throw new ProviderFinderException(ex);
                 }
@@ -54,6 +54,23 @@ public final class ModelRegistry {
             registries.put(classLoader, registry);
         }
         return registry;
+    }
+    
+    private static NodeFactory loadModel(ClassLoader classLoader, Model model) throws Exception {
+        ModelWeaver weaver = new ModelWeaver(classLoader, model);
+        
+        // The following code serves two purposes:
+        //  * All classes are woven at this point, so that any errors will be reported here. This
+        //    avoids obscure class loader error messages if there is any problem with the aspects.
+        //  * The classes are loaded in superclass-first order to work around a bug in AspectJ
+        //    (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=286473).
+        // TODO: follow-up the bug with the AspectJ project
+        Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, NODE_FACTORY_IMPL_CLASS);
+        for (Class<?> cls : ClassUtils.sortHierarchically(Arrays.asList(classes))) {
+            weaver.loadClass(cls.getName());
+        }
+        
+        return (NodeFactory)weaver.loadClass(NODE_FACTORY_IMPL_CLASS).newInstance();
     }
     
     public static ModelRegistry getInstance() throws ProviderFinderException {
