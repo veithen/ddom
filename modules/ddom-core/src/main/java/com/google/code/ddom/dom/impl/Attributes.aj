@@ -58,11 +58,11 @@ public aspect Attributes {
         return null;
     }
 
-    public final boolean AttributeImpl.hasAttributes() {
+    public final boolean DOMAttribute.hasAttributes() {
         return false;
     }
 
-    public final NamedNodeMap AttributeImpl.getAttributes() {
+    public final NamedNodeMap DOMAttribute.getAttributes() {
         return null;
     }
 }

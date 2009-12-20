@@ -18,10 +18,14 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
-import com.google.code.ddom.core.model.*;
+import com.google.code.ddom.core.model.AttributeImpl;
+import com.google.code.ddom.core.model.NSDecl;
+import com.google.code.ddom.core.model.TypedAttributeImpl;
 
 public aspect AttributeSupport {
     declare parents: AttributeImpl implements DOMAttribute;
+    declare parents: TypedAttributeImpl implements DOMTypedAttribute;
+    declare parents: NSDecl implements DOMNamespaceDeclaration;
     
     public final String DOMAttribute.getValue() {
         return coreGetValue();
@@ -40,11 +44,11 @@ public aspect AttributeSupport {
         return true;
     }
 
-    public final boolean TypedAttributeImpl.isId() {
+    public final boolean DOMTypedAttribute.isId() {
         return "ID".equals(getType());
     }
 
-    public final boolean NSDecl.isId() {
+    public final boolean DOMNamespaceDeclaration.isId() {
         return false;
     }
 }

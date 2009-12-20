@@ -25,8 +25,8 @@ import com.google.code.ddom.core.model.*;
  * @author Andreas Veithen
  */
 public aspect NodeName {
-    public final String AttributeImpl.getNodeName() {
-        return ((Attr)this).getName(); // TODO
+    public final String DOMAttribute.getNodeName() {
+        return getName();
     }
 
     public final String CDATASectionImpl.getNodeName() {
@@ -57,7 +57,7 @@ public aspect NodeName {
         return coreGetName();
     }
 
-    public final String ProcessingInstructionImpl.getNodeName() {
+    public final String DOMProcessingInstruction.getNodeName() {
         return getTarget();
     }
 

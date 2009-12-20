@@ -123,7 +123,7 @@ public aspect Clone {
         return (Node)document.getNodeFactory().createEntityReference(document, coreGetName());
     }
 
-    public final Node ProcessingInstructionImpl.cloneNode(boolean deep) {
+    public final Node DOMProcessingInstruction.cloneNode(boolean deep) {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createProcessingInstruction(document, getTarget(), getData());
     }

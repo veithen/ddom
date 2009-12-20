@@ -17,15 +17,13 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.core.model.*;
-
 public aspect SchemaTypeInfo {
-    public final TypeInfo AttributeImpl.getSchemaTypeInfo() {
+    public final TypeInfo DOMAttribute.getSchemaTypeInfo() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final TypeInfo ElementImpl.getSchemaTypeInfo() {
+    public final TypeInfo DOMElement.getSchemaTypeInfo() {
         // TODO
         throw new UnsupportedOperationException();
     }

@@ -15,22 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.DOMException;
+import org.w3c.dom.ProcessingInstruction;
 
-import com.google.code.ddom.core.model.ProcessingInstructionImpl;
+import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 
-public aspect ProcessingInstructionSupport {
-    declare parents: ProcessingInstructionImpl implements DOMProcessingInstruction;
-    
-    public final String DOMProcessingInstruction.getData() {
-        return coreGetData();
-    }
+public interface DOMProcessingInstruction extends CoreProcessingInstruction, ProcessingInstruction {
 
-    public final void DOMProcessingInstruction.setData(String data) throws DOMException {
-        coreSetData(data);
-    }
-
-    public final String DOMProcessingInstruction.getTarget() {
-        return coreGetTarget();
-    }
 }

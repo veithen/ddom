@@ -17,32 +17,33 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
+import com.google.code.ddom.core.model.ElementImpl;
+import com.google.code.ddom.core.model.LeafNode;
 
 public aspect Sibling {
     declare parents: (LeafNode || ElementImpl) implements DOMChildNode;
     
-    public final Node AttributeImpl.getNextSibling() {
+    public final Node DOMAttribute.getNextSibling() {
         return null;
     }
 
-    public final Node AttributeImpl.getPreviousSibling() {
+    public final Node DOMAttribute.getPreviousSibling() {
         return null;
     }
 
-    public final Node DocumentImpl.getNextSibling() {
+    public final Node DOMDocument.getNextSibling() {
         return null;
     }
 
-    public final Node DocumentImpl.getPreviousSibling() {
+    public final Node DOMDocument.getPreviousSibling() {
         return null;
     }
 
-    public final Node DocumentFragmentImpl.getNextSibling() {
+    public final Node DOMDocumentFragment.getNextSibling() {
         return null;
     }
 
-    public final Node DocumentFragmentImpl.getPreviousSibling() {
+    public final Node DOMDocumentFragment.getPreviousSibling() {
         return null;
     }
 

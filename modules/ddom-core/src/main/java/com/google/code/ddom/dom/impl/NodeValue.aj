@@ -84,11 +84,11 @@ public aspect NodeValue {
         throw new UnsupportedOperationException();
     }
 
-    public final String ProcessingInstructionImpl.getNodeValue() throws DOMException {
+    public final String DOMProcessingInstruction.getNodeValue() throws DOMException {
         return getData();
     }
 
-    public final void ProcessingInstructionImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMProcessingInstruction.setNodeValue(String nodeValue) throws DOMException {
         setData(nodeValue);
     }
 }

@@ -15,11 +15,10 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Comment;
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.core.model.*;
+import com.google.code.ddom.core.model.CharacterDataImpl;
+import com.google.code.ddom.core.model.CommentImpl;
 
 public aspect CharacterDataSupport {
     declare parents: CharacterDataImpl implements DOMCharacterData;

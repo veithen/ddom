@@ -27,15 +27,13 @@ import org.w3c.dom.EntityReference;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.core.model.*;
-
 public aspect Create {
-    public final Element DocumentImpl.createElement(String tagName) throws DOMException {
+    public final Element DOMDocument.createElement(String tagName) throws DOMException {
         NSUtil.validateName(tagName);
         return (Element)getNodeFactory().createElement(this, tagName, true);
     }
     
-    public final Element DocumentImpl.createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
+    public final Element DOMDocument.createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
         int i = NSUtil.validateQualifiedName(qualifiedName);
         String prefix;
         String localName;
@@ -50,12 +48,12 @@ public aspect Create {
         return (Element)getNodeFactory().createElement(this, namespaceURI, localName, prefix, true);
     }
     
-    public final Attr DocumentImpl.createAttribute(String name) throws DOMException {
+    public final Attr DOMDocument.createAttribute(String name) throws DOMException {
         NSUtil.validateName(name);
         return (Attr)getNodeFactory().createAttribute(this, name, null, null);
     }
 
-    public final Attr DocumentImpl.createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
+    public final Attr DOMDocument.createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
         int i = NSUtil.validateQualifiedName(qualifiedName);
         String prefix;
         String localName;
@@ -74,28 +72,28 @@ public aspect Create {
         }
     }
 
-    public final ProcessingInstruction DocumentImpl.createProcessingInstruction(String target, String data) throws DOMException {
+    public final ProcessingInstruction DOMDocument.createProcessingInstruction(String target, String data) throws DOMException {
         NSUtil.validateName(target);
         return (ProcessingInstruction)getNodeFactory().createProcessingInstruction(this, target, data);
     }
     
-    public final DocumentFragment DocumentImpl.createDocumentFragment() {
+    public final DocumentFragment DOMDocument.createDocumentFragment() {
         return (DocumentFragment)getNodeFactory().createDocumentFragment(this);
     }
 
-    public final Text DocumentImpl.createTextNode(String data) {
+    public final Text DOMDocument.createTextNode(String data) {
         return (Text)getNodeFactory().createText(this, data);
     }
 
-    public final Comment DocumentImpl.createComment(String data) {
+    public final Comment DOMDocument.createComment(String data) {
         return (Comment)getNodeFactory().createComment(this, data);
     }
 
-    public final CDATASection DocumentImpl.createCDATASection(String data) throws DOMException {
+    public final CDATASection DOMDocument.createCDATASection(String data) throws DOMException {
         return (CDATASection)getNodeFactory().createCDATASection(this, data);
     }
 
-    public final EntityReference DocumentImpl.createEntityReference(String name) throws DOMException {
+    public final EntityReference DOMDocument.createEntityReference(String name) throws DOMException {
         return (EntityReference)getNodeFactory().createEntityReference(this, name);
     }
 }

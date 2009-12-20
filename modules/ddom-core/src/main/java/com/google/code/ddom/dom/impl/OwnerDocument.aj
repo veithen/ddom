@@ -27,19 +27,19 @@ import com.google.code.ddom.core.model.*;
  */
 // TODO: find a better name for this aspect
 public aspect OwnerDocument {
-    public final Document DocumentImpl.getOwnerDocument() {
+    public final Document DOMDocument.getOwnerDocument() {
         return null;
     }
 
-    public final Document AttributeImpl.getOwnerDocument() {
+    public final Document DOMAttribute.getOwnerDocument() {
         return (Document)getDocument();
     }
     
-    public final Document DocumentFragmentImpl.getOwnerDocument() {
+    public final Document DOMDocumentFragment.getOwnerDocument() {
         return (Document)getDocument();
     }
 
-    public final Document ElementImpl.getOwnerDocument() {
+    public final Document DOMElement.getOwnerDocument() {
         return (Document)getDocument();
     }
 
@@ -47,7 +47,7 @@ public aspect OwnerDocument {
         return (Document)getDocument();
     }
     
-    public final Node AttributeImpl.getParentNode() {
+    public final Node DOMAttribute.getParentNode() {
         return null;
     }
 
@@ -56,15 +56,15 @@ public aspect OwnerDocument {
         return (Node)coreGetParent();
     }
 
-    public final Node ElementImpl.getParentNode() {
+    public final Node DOMElement.getParentNode() {
         return (Node)coreGetParent();
     }
 
-    public final Node DocumentFragmentImpl.getParentNode() {
+    public final Node DOMDocumentFragment.getParentNode() {
         return null;
     }
     
-    public final Node DocumentImpl.getParentNode() {
+    public final Node DOMDocument.getParentNode() {
         return null;
     }
 }
