@@ -15,6 +15,14 @@
  */
 package com.google.code.ddom.commons.cl;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.code.ddom.commons.io.URLUtils;
+
 public class ClassLoaderUtils {
     private ClassLoaderUtils() {}
     
@@ -27,5 +35,52 @@ public class ClassLoaderUtils {
      */
     public static String getResourceNameForClassName(String className) {
         return className.replace('.', '/') + ".class";
+    }
+
+    /**
+     * Load all classes that are in the same package as a given class.
+     * 
+     * @param classLoader
+     *            the class loader
+     * @param className
+     *            the name of the class
+     * @return an array with the classes in the package
+     */
+    public static Class<?>[] getClassesInPackage(ClassLoader classLoader, String className) throws ClassNotFoundException {
+        String name = getResourceNameForClassName(className);
+        URL url = classLoader.getResource(name);
+        if (url == null) {
+            throw new ClassNotFoundException(className);
+        } else {
+            String localName = name.substring(name.lastIndexOf('/')+1);
+            String file = url.getFile();
+            if (file.endsWith(localName)) {
+                URL packageUrl;
+                try {
+                    packageUrl = new URL(url.getProtocol(), url.getHost(), url.getPort(),
+                            file.substring(0, file.length()-localName.length()));
+                } catch (MalformedURLException ex) {
+                    throw new ClassNotFoundException(className, ex);
+                }
+                URL[] urlsInPackage;
+                try {
+                    urlsInPackage = URLUtils.listFolder(packageUrl);
+                } catch (IOException ex) {
+                    throw new ClassNotFoundException(className, ex);
+                }
+                List<Class<?>> classesInPackage = new ArrayList<Class<?>>(urlsInPackage.length);
+                String pkg = className.substring(0, className.lastIndexOf('.'));
+                for (URL urlInPackage : urlsInPackage) {
+                    String s = urlInPackage.getFile();
+                    s = s.substring(s.lastIndexOf('/')+1);
+                    if (s.endsWith(".class")) {
+                        classesInPackage.add(classLoader.loadClass(pkg + "." + s.substring(0, s.length()-6)));
+                    }
+                }
+                return classesInPackage.toArray(new Class<?>[classesInPackage.size()]);
+            } else {
+                throw new ClassNotFoundException(className);
+            }
+        }
     }
 }
