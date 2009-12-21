@@ -21,10 +21,8 @@ import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreChildNode;
 
 public aspect TextContent {
-    declare parents: NodeImpl implements DOMNode;
-
-    public final String NodeImpl.getTextContent() throws DOMException {
-        CharSequence content = ((DOMNode)this).collectTextContent(null);
+    public final String DOMNode.getTextContent() throws DOMException {
+        CharSequence content = collectTextContent(null);
         return content == null ? "" : content.toString();
     }
 
@@ -71,7 +69,7 @@ public aspect TextContent {
         }
     }
 
-    public final void NodeImpl.setTextContent(String textContent) throws DOMException {
+    public final void DOMNode.setTextContent(String textContent) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

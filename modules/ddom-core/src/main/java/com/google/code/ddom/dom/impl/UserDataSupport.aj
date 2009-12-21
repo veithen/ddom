@@ -19,18 +19,15 @@ import java.util.Map;
 
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.core.model.*;
-
 public aspect UserDataSupport {
-    private Map<String,Object> NodeImpl.userData;
+    private Map<String,Object> DOMNode.userData;
     
-    public final Object NodeImpl.getUserData(String key) {
+    public final Object DOMNode.getUserData(String key) {
         return userData == null ? null : userData.get(key);
     }
 
-    public final Object NodeImpl.setUserData(String key, Object data, UserDataHandler handler) {
+    public final Object DOMNode.setUserData(String key, Object data, UserDataHandler handler) {
         // TODO
         throw new UnsupportedOperationException();
     }
-    
 }

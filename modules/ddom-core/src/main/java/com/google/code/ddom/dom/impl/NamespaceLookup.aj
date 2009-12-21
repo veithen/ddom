@@ -22,7 +22,7 @@ import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 
 public aspect NamespaceLookup {
-    public final boolean NodeImpl.isDefaultNamespace(String namespaceURI) {
+    public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
         // TODO
         throw new UnsupportedOperationException();
     }

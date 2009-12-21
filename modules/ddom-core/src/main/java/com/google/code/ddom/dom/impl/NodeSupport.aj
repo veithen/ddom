@@ -18,32 +18,34 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
+import com.google.code.ddom.core.model.NodeImpl;
 
 public aspect NodeSupport {
-    public final boolean NodeImpl.isSupported(String feature, String version) {
+    declare parents: NodeImpl implements DOMNode;
+
+    public final boolean DOMNode.isSupported(String feature, String version) {
         return ((DOMDocument)getDocument()).getImplementation().hasFeature(feature, version);
     }
 
-    public final Object NodeImpl.getFeature(String feature, String version) {
+    public final Object DOMNode.getFeature(String feature, String version) {
         return this;
     }
 
-    public final boolean NodeImpl.isSameNode(Node other) {
+    public final boolean DOMNode.isSameNode(Node other) {
         return other == this;
     }
 
-    public final boolean NodeImpl.isEqualNode(Node arg) {
+    public final boolean DOMNode.isEqualNode(Node arg) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final String NodeImpl.getBaseURI() {
+    public final String DOMNode.getBaseURI() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final short NodeImpl.compareDocumentPosition(Node other) throws DOMException {
+    public final short DOMNode.compareDocumentPosition(Node other) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }
