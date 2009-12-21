@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import com.google.code.ddom.core.model.*;
-
 /**
  * Aspect implementing {@link org.w3c.dom.Node#normalize()} and
  * {@link org.w3c.dom.Document#normalizeDocument()}.
@@ -24,12 +22,27 @@ import com.google.code.ddom.core.model.*;
  * @author Andreas Veithen
  */
 public aspect Normalization {
-    public final void NodeImpl.normalize() {
-        // TODO Auto-generated method stub
+    public final void DOMNode.normalize() {
+        try {
+            normalize(NormalizationConfig.DEFAULT);
+        } catch (AbortNormalizationException ex) {
+            // Do nothing, just abort.
+        }
     }
     
-    public final void DocumentImpl.normalizeDocument() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void DOMDocument.normalizeDocument() {
+        try {
+            normalize((NormalizationConfig)getDomConfig());
+        } catch (AbortNormalizationException ex) {
+            // Do nothing, just abort.
+        }
+    }
+    
+    public final void DOMLeafNode.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        
+    }
+    
+    public final void DOMParentNode.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        
     }
 }

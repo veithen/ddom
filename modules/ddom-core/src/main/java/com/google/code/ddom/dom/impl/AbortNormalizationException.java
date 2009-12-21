@@ -15,11 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.Node;
-
-import com.google.code.ddom.spi.model.CoreNode;
-
-public interface DOMNode extends CoreNode, Node {
-    CharSequence collectTextContent(CharSequence appendTo);
-    void normalize(NormalizationConfig config) throws AbortNormalizationException;
+public class AbortNormalizationException extends Exception {
+    private static final long serialVersionUID = 382706386704675861L;
 }
