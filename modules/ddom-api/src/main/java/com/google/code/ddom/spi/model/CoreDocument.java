@@ -23,8 +23,12 @@ public interface CoreDocument extends DeferredDocument, BuilderTarget {
     void next() throws DeferredParsingException;
     String coreGetInputEncoding();
     void coreSetInputEncoding(String inputEncoding);
+    String coreGetXmlVersion();
+    void coreSetXmlVersion(String xmlVersion);
     String coreGetXmlEncoding();
     void coreSetXmlEncoding(String xmlEncoding);
+    String coreGetStandalone();
+    void coreSetStandalone(String standalone);
     String coreGetDocumentURI();
     void coreSetDocumentURI(String documentURI);
     CoreDocumentType coreGetDocumentType();

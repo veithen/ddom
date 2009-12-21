@@ -19,7 +19,7 @@ import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 
 public class ProcessingInstructionImpl extends LeafNodeImpl implements CoreProcessingInstruction {
-    private final String target;
+    private String target;
     private String data;
 
     public ProcessingInstructionImpl(CoreDocument document, String target, String data) {
@@ -28,15 +28,19 @@ public class ProcessingInstructionImpl extends LeafNodeImpl implements CoreProce
         this.data = data;
     }
 
+    public final String coreGetTarget() {
+        return target;
+    }
+
+    public void coreSetTarget(String target) {
+        this.target = target;
+    }
+
     public final String coreGetData() {
         return data;
     }
 
     public final void coreSetData(String data) {
         this.data = data;
-    }
-
-    public final String coreGetTarget() {
-        return target;
     }
 }

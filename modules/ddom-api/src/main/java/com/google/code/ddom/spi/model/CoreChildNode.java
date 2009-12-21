@@ -19,6 +19,9 @@ public interface CoreChildNode extends CoreNode {
     CoreParentNode coreGetParent();
     CoreChildNode coreGetNextSibling();
     CoreChildNode coreGetPreviousSibling();
+    void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException;
+    void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException;
+    void coreDetach();
     void internalSetParent(CoreParentNode parent);
     CoreChildNode internalGetNextSibling();
     void internalSetNextSibling(CoreChildNode nextSibling);

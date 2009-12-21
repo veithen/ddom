@@ -15,10 +15,20 @@
  */
 package com.google.code.ddom.model.axiom;
 
-import org.apache.axiom.om.OMElement;
+public aspect ProcessingInstructionSupport {
+    public void AxiomProcessingInstruction.setTarget(String target) {
+        coreSetTarget(target);
+    }
 
-import com.google.code.ddom.spi.model.CoreNSAwareElement;
+    public String AxiomProcessingInstruction.getTarget() {
+        return coreGetTarget();
+    }
 
-public interface AxiomElement extends CoreNSAwareElement, OMElement, AxiomContainer, AxiomChildNode {
+    public void AxiomProcessingInstruction.setValue(String value) {
+        coreSetData(value);
+    }
 
+    public String AxiomProcessingInstruction.getValue() {
+        return coreGetData();
+    }
 }

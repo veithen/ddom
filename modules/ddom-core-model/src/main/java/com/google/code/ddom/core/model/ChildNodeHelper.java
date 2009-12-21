@@ -18,6 +18,8 @@ package com.google.code.ddom.core.model;
 import com.google.code.ddom.spi.model.BuilderTarget;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
 
 public class ChildNodeHelper {
@@ -48,5 +50,18 @@ public class ChildNodeHelper {
             }
             return sibling == null ? null : previousSibling;
         }
+    }
+    
+    public static void coreInsertSiblingAfter(CoreChildNode node, CoreNode sibling) throws CoreModelException {
+        node.coreGetParent().coreInsertChildAfter(sibling, node);
+    }
+    
+    public static void coreInsertSiblingBefore(CoreChildNode node, CoreNode sibling) throws CoreModelException {
+        node.coreGetParent().coreInsertChildBefore(sibling, node);
+    }
+    
+    public static void coreDetach(CoreChildNode node) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

@@ -36,7 +36,18 @@ public aspect DeferredParsing {
         // Do nothing: a leaf node is always complete
     }
     
-    public void AxiomLeafNode.buildWithAttachments() {
+    public void AxiomChildNode.buildWithAttachments() {
         // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomChildNode.discard() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomContainer.buildNext() {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

@@ -35,6 +35,7 @@
         <module>ddom-dom-utils</module>
         <module>ddom-domts</module>
         <module>ddom-jaxp</module>
+        <module>ddom-model-axiom</module>
         <module>ddom-model-dom</module>
         <module>ddom-spi</module>
         <module>ddom-spring-ws</module>

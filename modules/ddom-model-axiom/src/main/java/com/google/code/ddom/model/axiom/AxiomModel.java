@@ -26,11 +26,14 @@ public class AxiomModel implements Model {
     public List<String> getAspectClasses() {
         return Arrays.asList(new String[] {
                 "com.google.code.ddom.model.axiom.ChildNodeSupport",
+                "com.google.code.ddom.model.axiom.ContainerSupport",
                 "com.google.code.ddom.model.axiom.DeferredParsing",
                 "com.google.code.ddom.model.axiom.Deprecated",
+                "com.google.code.ddom.model.axiom.DocumentSupport",
                 "com.google.code.ddom.model.axiom.Factory",
                 "com.google.code.ddom.model.axiom.NodeType",
                 "com.google.code.ddom.model.axiom.Parents",
+                "com.google.code.ddom.model.axiom.ProcessingInstructionSupport",
                 "com.google.code.ddom.model.axiom.Serialization",
         });
     }

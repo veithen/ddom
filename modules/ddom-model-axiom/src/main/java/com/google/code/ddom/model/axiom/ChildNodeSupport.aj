@@ -15,14 +15,43 @@
  */
 package com.google.code.ddom.model.axiom;
 
+import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMNode;
 
+import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.spi.model.CoreNode;
+
 public aspect ChildNodeSupport {
+    public OMContainer AxiomChildNode.getParent() {
+        return (OMContainer)coreGetParent();
+    }
+    
     public OMNode AxiomChildNode.getPreviousOMSibling() {
         return (OMNode)coreGetPreviousSibling();
     }
     
     public OMNode AxiomChildNode.getNextOMSibling() {
         return (OMNode)coreGetNextSibling();
+    }
+    
+    public void AxiomChildNode.insertSiblingBefore(OMNode sibling) {
+        try {
+            coreInsertSiblingBefore((CoreNode)sibling);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+    
+    public void AxiomChildNode.insertSiblingAfter(OMNode sibling) {
+        try {
+            coreInsertSiblingAfter((CoreNode)sibling);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+    
+    public OMNode AxiomChildNode.detach() {
+        coreDetach();
+        return null; // TODO
     }
 }

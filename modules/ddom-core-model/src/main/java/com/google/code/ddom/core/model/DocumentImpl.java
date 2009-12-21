@@ -30,7 +30,9 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
     private CoreChildNode firstChild;
     private int children;
     private String inputEncoding;
+    private String xmlVersion;
     private String xmlEncoding;
+    private String standalone;
     private String documentURI;
 
     public DocumentImpl(NodeFactory nodeFactory, Producer producer) {
@@ -106,12 +108,28 @@ public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
         this.inputEncoding = inputEncoding;
     }
 
+    public String coreGetXmlVersion() {
+        return xmlVersion;
+    }
+
+    public void coreSetXmlVersion(String xmlVersion) {
+        this.xmlVersion = xmlVersion;
+    }
+
     public final String coreGetXmlEncoding() {
         return xmlEncoding;
     }
 
     public final void coreSetXmlEncoding(String xmlEncoding) {
         this.xmlEncoding = xmlEncoding;
+    }
+
+    public String coreGetStandalone() {
+        return standalone;
+    }
+
+    public void coreSetStandalone(String standalone) {
+        this.standalone = standalone;
     }
 
     // TODO: need test for this

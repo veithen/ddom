@@ -15,10 +15,14 @@
  */
 package com.google.code.ddom.model.axiom;
 
-import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMException;
 
-import com.google.code.ddom.spi.model.CoreNSAwareElement;
+import com.google.code.ddom.spi.model.CoreModelException;
 
-public interface AxiomElement extends CoreNSAwareElement, OMElement, AxiomContainer, AxiomChildNode {
-
+public class AxiomExceptionUtil {
+    private AxiomExceptionUtil() {}
+    
+    public static OMException translate(CoreModelException ex) {
+        return new OMException(ex);
+    }
 }

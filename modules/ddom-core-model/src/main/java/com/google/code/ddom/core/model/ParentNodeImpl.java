@@ -145,6 +145,10 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         merge(newChild, null, false);
     }
 
+    public void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
+        merge(newChild, refChild.coreGetNextSibling(), false);
+    }
+
     public void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
         merge(newChild, refChild, false);
     }

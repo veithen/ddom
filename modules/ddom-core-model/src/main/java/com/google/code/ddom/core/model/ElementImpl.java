@@ -19,6 +19,8 @@ import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
+import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
 
 public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {
@@ -110,5 +112,17 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
 
     public final CoreChildNode coreGetPreviousSibling() {
         return ChildNodeHelper.coreGetPreviousSibling(this);
+    }
+
+    public void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException {
+        ChildNodeHelper.coreInsertSiblingAfter(this, sibling);
+    }
+
+    public void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException {
+        ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
+    }
+    
+    public void coreDetach() {
+        ChildNodeHelper.coreDetach(this);
     }
 }
