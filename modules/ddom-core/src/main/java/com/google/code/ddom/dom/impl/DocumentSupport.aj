@@ -26,13 +26,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
-import com.google.code.ddom.core.model.DocumentImpl;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 public aspect DocumentSupport {
-    declare parents: DocumentImpl implements DOMDocument;
-    
     private DOMImplementationImpl DOMDocument.domImplementation;
     private final DOMConfigurationImpl DOMDocument.domConfig = new DOMConfigurationImpl();
     

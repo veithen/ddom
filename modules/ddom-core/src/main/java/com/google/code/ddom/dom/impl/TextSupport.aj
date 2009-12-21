@@ -15,18 +15,13 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreParentNode;
 import com.google.code.ddom.spi.model.CoreTextNode;
 
 public aspect TextSupport {
-    declare parents: TextNodeImpl implements DOMTextNode;
-    declare parents: CDATASectionImpl implements CDATASection;
-    
     public final Text DOMTextNode.splitText(int offset) throws DOMException {
         String text = getData();
         if (offset < 0 || offset > text.length()) {

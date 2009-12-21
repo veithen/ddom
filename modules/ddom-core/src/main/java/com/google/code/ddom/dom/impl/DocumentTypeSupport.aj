@@ -17,11 +17,7 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.NamedNodeMap;
 
-import com.google.code.ddom.core.model.DocumentTypeImpl;
-
 public aspect DocumentTypeSupport {
-    declare parents: DocumentTypeImpl implements DOMDocumentType;
-    
     public final String DOMDocumentType.getName() {
         return coreGetRootName();
     }

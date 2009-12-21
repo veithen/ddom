@@ -31,10 +31,6 @@ import com.google.code.ddom.spi.model.CoreTypedAttribute;
 import com.google.code.ddom.spi.model.NodeFactory;
 
 public aspect ElementSupport {
-    declare parents: ElementImpl implements DOMElement;
-    declare parents: NSAwareElementImpl implements DOMNSAwareElement;
-    declare parents: NSUnawareElementImpl implements DOMNSUnawareElement;
-    
     private static final int ATTR_DOM1 = 1;
     private static final int ATTR_DOM2 = 2;
     private static final int ATTR_NSDECL = 3;

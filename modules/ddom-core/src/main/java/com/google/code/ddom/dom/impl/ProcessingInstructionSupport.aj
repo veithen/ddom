@@ -17,11 +17,7 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.core.model.ProcessingInstructionImpl;
-
 public aspect ProcessingInstructionSupport {
-    declare parents: ProcessingInstructionImpl implements DOMProcessingInstruction;
-    
     public final String DOMProcessingInstruction.getData() {
         return coreGetData();
     }

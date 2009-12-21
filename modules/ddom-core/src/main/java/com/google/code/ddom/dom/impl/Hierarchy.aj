@@ -18,17 +18,12 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
-
 /**
  * Aspect implementing {@link Node#getOwnerDocument()} and {@link Node#getParentNode()}.
  * 
  * @author Andreas Veithen
  */
 public aspect Hierarchy {
-    declare parents: ParentNodeImpl implements DOMParentNode;
-    declare parents: LeafNodeImpl implements DOMLeafNode;
-
     public final Document DOMDocument.getOwnerDocument() {
         return null;
     }
