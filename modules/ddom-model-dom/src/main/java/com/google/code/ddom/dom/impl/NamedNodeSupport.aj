@@ -19,8 +19,6 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.core.model.*;
-
 public aspect NamedNodeSupport {
     public final String DOMNSUnawareNamedNode.getNamespaceURI() {
         return null;
@@ -66,11 +64,11 @@ public aspect NamedNodeSupport {
         return coreGetLocalName();
     }
     
-    public final String NSUnawareElementImpl.getTagName() {
+    public final String DOMNSUnawareElement.getTagName() {
         return coreGetName();
     }
     
-    public final String NSUnawareTypedAttributeImpl.getName() {
+    public final String DOMNSUnawareTypedAttribute.getName() {
         return coreGetName();
     }
 
@@ -84,13 +82,12 @@ public aspect NamedNodeSupport {
         }
     }
     
-    public final String NSAwareElementImpl.getTagName() {
-        // TODO: this is really ugly; is this a bug in AspectJ (it is only necessary when compiling aspects separately)?
-        return ((DOMNSAwareNamedNode)this).internalGetName();
+    public final String DOMNSAwareElement.getTagName() {
+        return internalGetName();
     }
     
-    public final String NSAwareTypedAttributeImpl.getName() {
-        return ((DOMNSAwareNamedNode)this).internalGetName();
+    public final String DOMNSAwareTypedAttribute.getName() {
+        return internalGetName();
     }
 
     public final String DOMNamespaceDeclaration.getNamespaceURI() {
@@ -121,35 +118,35 @@ public aspect NamedNodeSupport {
         }
     }
 
-    public final String DocumentFragmentImpl.getNamespaceURI() {
+    public final String DOMDocumentFragment.getNamespaceURI() {
         return null;
     }
 
-    public final String DocumentFragmentImpl.getPrefix() {
+    public final String DOMDocumentFragment.getPrefix() {
         return null;
     }
 
-    public final void DocumentFragmentImpl.setPrefix(String prefix) throws DOMException {
+    public final void DOMDocumentFragment.setPrefix(String prefix) throws DOMException {
         // Ignored
     }
 
-    public final String DocumentFragmentImpl.getLocalName() {
+    public final String DOMDocumentFragment.getLocalName() {
         return null;
     }
     
-    public final String DocumentImpl.getNamespaceURI() {
+    public final String DOMDocument.getNamespaceURI() {
         return null;
     }
 
-    public final String DocumentImpl.getPrefix() {
+    public final String DOMDocument.getPrefix() {
         return null;
     }
 
-    public final void DocumentImpl.setPrefix(String prefix) throws DOMException {
+    public final void DOMDocument.setPrefix(String prefix) throws DOMException {
         // Ignored
     }
 
-    public final String DocumentImpl.getLocalName() {
+    public final String DOMDocument.getLocalName() {
         return null;
     }
 

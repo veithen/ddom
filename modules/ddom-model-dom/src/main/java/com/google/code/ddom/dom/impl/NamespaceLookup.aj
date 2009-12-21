@@ -17,7 +17,6 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 
@@ -27,29 +26,29 @@ public aspect NamespaceLookup {
         throw new UnsupportedOperationException();
     }
 
-    public final String AttributeImpl.lookupNamespaceURI(String prefix) {
+    public final String DOMAttribute.lookupNamespaceURI(String prefix) {
         // TODO: needs to be checked
         return null;
     }
 
-    public final String AttributeImpl.lookupPrefix(String namespaceURI) {
+    public final String DOMAttribute.lookupPrefix(String namespaceURI) {
         // TODO: needs to be checked
         return null;
     }
 
-    public final String DocumentFragmentImpl.lookupNamespaceURI(String prefix) {
+    public final String DOMDocumentFragment.lookupNamespaceURI(String prefix) {
         return null;
     }
 
-    public final String DocumentFragmentImpl.lookupPrefix(String namespaceURI) {
+    public final String DOMDocumentFragment.lookupPrefix(String namespaceURI) {
         return null;
     }
 
-    public final String DocumentImpl.lookupNamespaceURI(String prefix) {
+    public final String DOMDocument.lookupNamespaceURI(String prefix) {
         return null;
     }
 
-    public final String DocumentImpl.lookupPrefix(String namespaceURI) {
+    public final String DOMDocument.lookupPrefix(String namespaceURI) {
         return null;
     }
 

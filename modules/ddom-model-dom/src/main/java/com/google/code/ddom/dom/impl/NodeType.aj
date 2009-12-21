@@ -17,51 +17,49 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
-
 /**
  * Aspect implementing {@link Node#getNodeType()}.
  * 
  * @author Andreas Veithen
  */
 public aspect NodeType {
-    public final short AttributeImpl.getNodeType() {
+    public final short DOMAttribute.getNodeType() {
         return Node.ATTRIBUTE_NODE;
     }
 
-    public final short CDATASectionImpl.getNodeType() {
+    public final short DOMCDATASection.getNodeType() {
         return Node.CDATA_SECTION_NODE;
     }
 
-    public final short CommentImpl.getNodeType() {
+    public final short DOMComment.getNodeType() {
         return Node.COMMENT_NODE;
     }
 
-    public final short DocumentFragmentImpl.getNodeType() {
+    public final short DOMDocumentFragment.getNodeType() {
         return Node.DOCUMENT_FRAGMENT_NODE;
     }
 
-    public final short DocumentImpl.getNodeType() {
+    public final short DOMDocument.getNodeType() {
         return Node.DOCUMENT_NODE;
     }
 
-    public final short DocumentTypeImpl.getNodeType() {
+    public final short DOMDocumentType.getNodeType() {
         return Node.DOCUMENT_TYPE_NODE;
     }
 
-    public final short ElementImpl.getNodeType() {
+    public final short DOMElement.getNodeType() {
         return Node.ELEMENT_NODE;
     }
 
-    public final short EntityReferenceImpl.getNodeType() {
+    public final short DOMEntityReference.getNodeType() {
         return Node.ENTITY_REFERENCE_NODE;
     }
 
-    public final short ProcessingInstructionImpl.getNodeType() {
+    public final short DOMProcessingInstruction.getNodeType() {
         return Node.PROCESSING_INSTRUCTION_NODE;
     }
 
-    public final short TextImpl.getNodeType() {
+    public final short DOMText.getNodeType() {
         return Node.TEXT_NODE;
     }
 }

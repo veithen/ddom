@@ -38,5 +38,6 @@ public aspect Parents {
     declare parents: ProcessingInstructionImpl implements DOMProcessingInstruction;
     declare parents: (LeafNodeImpl || ElementImpl) implements DOMChildNode;
     declare parents: TextNodeImpl implements DOMTextNode;
+    declare parents: TextImpl implements DOMText;
     declare parents: CDATASectionImpl implements DOMCDATASection;
 }

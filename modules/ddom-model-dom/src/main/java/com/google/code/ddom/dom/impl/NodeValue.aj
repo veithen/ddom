@@ -18,8 +18,6 @@ package com.google.code.ddom.dom.impl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
-
 /**
  * Aspect implementing {@link Node#getNodeValue()} and {@link Node#setNodeValue(String)}.
  * 
@@ -74,12 +72,12 @@ public aspect NodeValue {
         // Setting the node value has no effect
     }
     
-    public final String EntityReferenceImpl.getNodeValue() throws DOMException {
+    public final String DOMEntityReference.getNodeValue() throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final void EntityReferenceImpl.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMEntityReference.setNodeValue(String nodeValue) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

@@ -15,12 +15,8 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.*;
-
-import com.google.code.ddom.core.model.*;
-
 /**
- * Aspect implementing {@link Node#getNodeName()}.
+ * Aspect implementing {@link org.w3c.dom.Node#getNodeName()}.
  * 
  * @author Andreas Veithen
  */
@@ -29,31 +25,31 @@ public aspect NodeName {
         return getName();
     }
 
-    public final String CDATASectionImpl.getNodeName() {
+    public final String DOMCDATASection.getNodeName() {
         return "#cdata-section";
     }
 
-    public final String CommentImpl.getNodeName() {
+    public final String DOMComment.getNodeName() {
         return "#comment";
     }
 
-    public final String DocumentFragmentImpl.getNodeName() {
+    public final String DOMDocumentFragment.getNodeName() {
         return "#document-fragment";
     }
 
-    public final String DocumentImpl.getNodeName() {
+    public final String DOMDocument.getNodeName() {
         return "#document";
     }
 
-    public final String DocumentTypeImpl.getNodeName() {
-        return ((DocumentType)this).getName(); // TODO
+    public final String DOMDocumentType.getNodeName() {
+        return getName();
     }
 
-    public final String ElementImpl.getNodeName() {
-        return ((Element)this).getTagName(); // TODO
+    public final String DOMElement.getNodeName() {
+        return getTagName();
     }
 
-    public final String EntityReferenceImpl.getNodeName() {
+    public final String DOMEntityReference.getNodeName() {
         return coreGetName();
     }
 
@@ -61,7 +57,7 @@ public aspect NodeName {
         return getTarget();
     }
 
-    public final String TextImpl.getNodeName() {
+    public final String DOMText.getNodeName() {
         return "#text";
     }
 }

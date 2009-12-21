@@ -31,12 +31,12 @@ public aspect Clone {
         return deepClone();
     }
     
-    public final Node NSAwareTypedAttributeImpl.shallowClone() {
+    public final Node DOMNSAwareTypedAttribute.shallowClone() {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createAttribute(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, getType());
     }
     
-    public final Node NSUnawareTypedAttributeImpl.shallowClone() {
+    public final Node DOMNSUnawareTypedAttribute.shallowClone() {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, getType());
     }
@@ -134,12 +134,12 @@ public aspect Clone {
     
     public abstract DOMTextNode DOMTextNode.createNewTextNode(String data);
 
-    public final DOMTextNode TextImpl.createNewTextNode(String data) {
+    public final DOMTextNode DOMText.createNewTextNode(String data) {
         CoreDocument document = getDocument();
         return (DOMTextNode)document.getNodeFactory().createText(document, data);
     }
 
-    public final DOMTextNode CDATASectionImpl.createNewTextNode(String data) {
+    public final DOMTextNode DOMCDATASection.createNewTextNode(String data) {
         CoreDocument document = getDocument();
         return (DOMTextNode)document.getNodeFactory().createCDATASection(document, data);
     }

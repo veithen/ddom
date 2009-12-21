@@ -17,7 +17,6 @@ package com.google.code.ddom.dom.impl;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.spi.model.CoreChildNode;
 
 public aspect TextContent {
@@ -34,16 +33,16 @@ public aspect TextContent {
         return appendTo;
     }
 
-    public final CharSequence EntityReferenceImpl.collectTextContent(CharSequence appendTo) {
+    public final CharSequence DOMEntityReference.collectTextContent(CharSequence appendTo) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final CharSequence ProcessingInstructionImpl.collectTextContent(CharSequence appendTo) {
+    public final CharSequence DOMProcessingInstruction.collectTextContent(CharSequence appendTo) {
         return appendTo;
     }
 
-    public final CharSequence ParentNodeImpl.collectTextContent(CharSequence appendTo) {
+    public final CharSequence DOMParentNode.collectTextContent(CharSequence appendTo) {
         CharSequence content = appendTo;
         for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
             content = ((DOMNode)node).collectTextContent(content);
