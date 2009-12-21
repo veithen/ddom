@@ -68,7 +68,7 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
     // appendChild:  newChild != null, refChild == null, removeRefChild == false
     // replaceChild: newChild != null, refChild != null, removeRefChild == true
     // removeChild:  newChild == null, refChild != null, removeRefChild == true
-    public void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException {
+    private void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException {
         if (newChild instanceof CoreChildNode) {
             prepareNewChild((CoreChildNode)newChild);
         }
@@ -139,5 +139,21 @@ public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode 
         if (removeRefChild) {
             refChild.internalSetParent(null);
         }
+    }
+
+    public void coreAppendChild(CoreNode newChild) throws CoreModelException {
+        merge(newChild, null, false);
+    }
+
+    public void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
+        merge(newChild, refChild, false);
+    }
+
+    public void coreRemoveChild(CoreChildNode child) throws CoreModelException {
+        merge(null, child, true);
+    }
+
+    public void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
+        merge(newChild, oldChild, true);
     }
 }

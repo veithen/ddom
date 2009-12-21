@@ -21,5 +21,8 @@ public interface CoreParentNode extends CoreNode {
     CoreChildNode coreGetFirstChild();
     CoreChildNode coreGetLastChild();
     int coreGetChildCount();
-    void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException;
+    void coreAppendChild(CoreNode newChild) throws CoreModelException;
+    void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
+    void coreRemoveChild(CoreChildNode child) throws CoreModelException;
+    void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
 }

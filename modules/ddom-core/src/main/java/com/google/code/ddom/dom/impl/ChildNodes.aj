@@ -83,7 +83,7 @@ public aspect ChildNodes {
             throw new NullPointerException("newChild must not be null");
         }
         try {
-            merge((CoreNode)newChild, null, false);
+            coreAppendChild((CoreNode)newChild);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -99,7 +99,7 @@ public aspect ChildNodes {
             throw new NullPointerException("newChild must not be null");
         }
         try {
-            merge((CoreNode)newChild, (CoreChildNode)refChild, false);
+            coreInsertChildBefore((CoreNode)newChild, (CoreChildNode)refChild);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -111,7 +111,7 @@ public aspect ChildNodes {
             throw new NullPointerException("oldChild must not be null");
         }
         try {
-            merge(null, (CoreChildNode)oldChild, true);
+            coreRemoveChild((CoreChildNode)oldChild);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -126,7 +126,7 @@ public aspect ChildNodes {
             throw new NullPointerException("oldChild must not be null");
         }
         try {
-            merge((CoreNode)newChild, (CoreChildNode)oldChild, true);
+            coreReplaceChild((CoreNode)newChild, (CoreChildNode)oldChild);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
