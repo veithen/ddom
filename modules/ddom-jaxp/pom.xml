@@ -30,7 +30,7 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>ddom-core</artifactId>
+            <artifactId>ddom-model-dom</artifactId>
             <version>${version}</version>
         </dependency>
         <dependency>

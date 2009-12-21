@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-core</artifactId>
-    <name>DDOM :: Modules :: Core</name>
+    <artifactId>ddom-model-dom</artifactId>
+    <name>DDOM :: Modules :: Model :: DOM</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>

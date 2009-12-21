@@ -30,7 +30,7 @@
     <dependencies>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-core</artifactId>
+            <artifactId>ddom-model-dom</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>

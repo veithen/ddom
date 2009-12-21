@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>ddom-core</artifactId>
+            <artifactId>ddom-model-dom</artifactId>
             <version>${pom.version}</version>
             <scope>runtime</scope>
         </dependency>

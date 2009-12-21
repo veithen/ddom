@@ -31,11 +31,11 @@
     <modules>
         <module>ddom-api</module>
         <module>ddom-commons</module>
-        <module>ddom-core</module>
         <module>ddom-core-model</module>
         <module>ddom-dom-utils</module>
         <module>ddom-domts</module>
         <module>ddom-jaxp</module>
+        <module>ddom-model-dom</module>
         <module>ddom-spi</module>
         <module>ddom-spring-ws</module>
         <module>ddom-stream</module>
