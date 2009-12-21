@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import org.w3c.dom.CDATASection;
 import com.google.code.ddom.core.model.*;
 
 public aspect Parents {
@@ -33,11 +32,11 @@ public aspect Parents {
     declare parents: EntityReferenceImpl implements DOMEntityReference;
     declare parents: ParentNodeImpl implements DOMParentNode;
     declare parents: LeafNodeImpl implements DOMLeafNode;
-    declare parents: (NSAwareElementImpl || NSAwareTypedAttributeImpl) implements DOMNSAwareNamedNode;
-    declare parents: (NSUnawareElementImpl || NSUnawareTypedAttributeImpl) implements DOMNSUnawareNamedNode;
+    declare parents: NSAwareTypedAttributeImpl implements DOMNSAwareTypedAttribute;
+    declare parents: NSUnawareTypedAttributeImpl implements DOMNSUnawareTypedAttribute;
     declare parents: NodeImpl implements DOMNode;
     declare parents: ProcessingInstructionImpl implements DOMProcessingInstruction;
     declare parents: (LeafNodeImpl || ElementImpl) implements DOMChildNode;
     declare parents: TextNodeImpl implements DOMTextNode;
-    declare parents: CDATASectionImpl implements CDATASection;
+    declare parents: CDATASectionImpl implements DOMCDATASection;
 }
