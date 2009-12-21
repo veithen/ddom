@@ -24,6 +24,8 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 
+import com.google.code.ddom.utils.test.Validated;
+
 @RunWith(DOMTestRunner.class)
 public class NSDeclTest {
     @Validated @Test

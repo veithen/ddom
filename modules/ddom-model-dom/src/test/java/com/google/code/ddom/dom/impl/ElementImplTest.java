@@ -27,6 +27,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import com.google.code.ddom.utils.test.Validated;
+
 @RunWith(DOMTestRunner.class)
 public class ElementImplTest {
     @Validated @Test

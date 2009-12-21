@@ -15,88 +15,22 @@
  */
 package com.google.code.ddom.dom.impl;
 
-import java.lang.reflect.Method;
-
 import org.junit.internal.runners.InitializationError;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.runner.Description;
-import org.junit.runner.notification.Failure;
-import org.junit.runner.notification.RunListener;
-import org.junit.runner.notification.RunNotifier;
 
-public class DOMTestRunner extends JUnit4ClassRunner {
-    private static class MultiRunListener extends RunListener {
-        private final RunNotifier notifier;
-        private boolean firstRun = true;
-        private int runs;
-        private String failureMessage;
-        
-        public MultiRunListener(RunNotifier notifier, int runs) {
-            this.notifier = notifier;
-            this.runs = runs;
-        }
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-        @Override
-        public void testStarted(Description description) throws Exception {
-            runs--;
-            if (firstRun) {
-                notifier.fireTestStarted(description);
-                firstRun = false;
-            }
-        }
-        
-        @Override
-        public void testFailure(Failure failure) throws Exception {
-            if (failureMessage != null) {
-                failure = new Failure(failure.getDescription(), new Error(failureMessage,
-                        failure.getException()));
-            }
-            notifier.fireTestFailure(failure);
-            runs = 0;
-        }
-
-        @Override
-        public void testIgnored(Description description) throws Exception {
-            notifier.fireTestIgnored(description);
-            runs = 0;
-        }
-
-        @Override
-        public void testFinished(Description description) throws Exception {
-            if (runs == 0) {
-                notifier.fireTestFinished(description);
-            }
-        }
-        
-        public void setFailureMessage(String failureMessage) {
-            this.failureMessage = failureMessage;
-        }
-
-        public boolean isShouldContinue() {
-            return runs > 0;
-        }
-    }
-    
+public class DOMTestRunner extends ValidatedTestRunner {
     public DOMTestRunner(Class<?> klass) throws InitializationError {
         super(klass);
     }
 
     @Override
-    protected void invokeTestMethod(Method method, RunNotifier notifier) {
-        boolean validate = method.getAnnotation(Validated.class) != null;
-        RunNotifier multiRunNotifier = new RunNotifier();
-        MultiRunListener multiRunListener = new MultiRunListener(notifier, validate ? 2 : 1);
-        multiRunNotifier.addListener(multiRunListener);
-        if (validate) {
-            multiRunListener.setFailureMessage(
-                    "Invalid test case; execution failed with Xerces");
-            DOMUtil.impl = XercesDOMUtilImpl.INSTANCE;
-            super.invokeTestMethod(method, multiRunNotifier);
-        }
-        if (multiRunListener.isShouldContinue()) {
-            multiRunListener.setFailureMessage(null);
-            DOMUtil.impl = DDOMUtilImpl.INSTANCE;
-            super.invokeTestMethod(method, multiRunNotifier);
-        }
+    protected void setUpValidationEnvironment() {
+        DOMUtil.impl = XercesDOMUtilImpl.INSTANCE;
+    }
+
+    @Override
+    protected void setUpTargetEnvironment() {
+        DOMUtil.impl = DDOMUtilImpl.INSTANCE;
     }
 }

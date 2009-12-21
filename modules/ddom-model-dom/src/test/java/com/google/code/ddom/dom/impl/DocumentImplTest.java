@@ -36,6 +36,7 @@ import com.google.code.ddom.core.model.NSUnawareTypedAttributeImpl;
 import com.google.code.ddom.spi.model.CoreNSUnawareElement;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
+import com.google.code.ddom.utils.test.Validated;
 
 /**
  * @author Andreas Veithen

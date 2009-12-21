@@ -25,6 +25,8 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.google.code.ddom.utils.test.Validated;
+
 @RunWith(DOMTestRunner.class)
 public class AttrImplTest {
     @Validated @Test
