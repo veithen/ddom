@@ -35,6 +35,7 @@ public class AxiomModel implements Model {
                 "com.google.code.ddom.model.axiom.Parents",
                 "com.google.code.ddom.model.axiom.ProcessingInstructionSupport",
                 "com.google.code.ddom.model.axiom.Serialization",
+                "com.google.code.ddom.model.axiom.TextSupport",
         });
     }
 }

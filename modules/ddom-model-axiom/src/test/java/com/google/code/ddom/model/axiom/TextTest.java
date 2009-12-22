@@ -15,15 +15,18 @@
  */
 package com.google.code.ddom.model.axiom;
 
-import com.google.code.ddom.core.model.*;
+import org.apache.axiom.om.OMText;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public aspect Parents {
-    declare parents: DocumentImpl implements AxiomDocument;
-    declare parents: NSAwareElementImpl implements AxiomElement;
-    declare parents: TextNodeImpl implements AxiomTextNode;
-    declare parents: TextImpl implements AxiomText;
-    declare parents: ProcessingInstructionImpl implements AxiomProcessingInstruction;
-    declare parents: NodeImpl implements AxiomNode;
-    declare parents: LeafNodeImpl implements AxiomLeafNode;
-    declare parents: (LeafNodeImpl || ElementImpl) implements AxiomChildNode;
+import com.google.code.ddom.utils.test.Validated;
+
+@RunWith(AxiomTestRunner.class)
+public class TextTest {
+    @Validated @Test
+    public void testGetText() {
+        OMText text = AxiomUtil.createDocument().getOMFactory().createOMText("test");
+        Assert.assertEquals("test", text.getText());
+    }
 }

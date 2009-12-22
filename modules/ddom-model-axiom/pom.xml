@@ -27,6 +27,9 @@
     <artifactId>ddom-model-axiom</artifactId>
     <name>DDOM :: Modules :: Model :: Axiom</name>
     <packaging>jar</packaging>
+    <properties>
+        <axiom.version>1.2.9-SNAPSHOT</axiom.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
@@ -41,15 +44,27 @@
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-api</artifactId>
-            <version>1.2.9-SNAPSHOT</version>
+            <version>${axiom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-test-utils</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-impl</artifactId>
+            <version>${axiom.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

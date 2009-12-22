@@ -15,15 +15,18 @@
  */
 package com.google.code.ddom.model.axiom;
 
-import com.google.code.ddom.core.model.*;
+import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
 
-public aspect Parents {
-    declare parents: DocumentImpl implements AxiomDocument;
-    declare parents: NSAwareElementImpl implements AxiomElement;
-    declare parents: TextNodeImpl implements AxiomTextNode;
-    declare parents: TextImpl implements AxiomText;
-    declare parents: ProcessingInstructionImpl implements AxiomProcessingInstruction;
-    declare parents: NodeImpl implements AxiomNode;
-    declare parents: LeafNodeImpl implements AxiomLeafNode;
-    declare parents: (LeafNodeImpl || ElementImpl) implements AxiomChildNode;
+public class LLOMAxiomUtilImpl implements AxiomUtilImpl {
+    public final static LLOMAxiomUtilImpl INSTANCE = new LLOMAxiomUtilImpl();
+    
+    private final OMFactory factory = new OMLinkedListImplFactory();
+
+    private LLOMAxiomUtilImpl() {}
+    
+    public OMDocument createDocument() {
+        return factory.createOMDocument();
+    }
 }

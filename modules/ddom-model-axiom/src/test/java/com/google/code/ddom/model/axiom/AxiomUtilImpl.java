@@ -15,15 +15,8 @@
  */
 package com.google.code.ddom.model.axiom;
 
-import com.google.code.ddom.core.model.*;
+import org.apache.axiom.om.OMDocument;
 
-public aspect Parents {
-    declare parents: DocumentImpl implements AxiomDocument;
-    declare parents: NSAwareElementImpl implements AxiomElement;
-    declare parents: TextNodeImpl implements AxiomTextNode;
-    declare parents: TextImpl implements AxiomText;
-    declare parents: ProcessingInstructionImpl implements AxiomProcessingInstruction;
-    declare parents: NodeImpl implements AxiomNode;
-    declare parents: LeafNodeImpl implements AxiomLeafNode;
-    declare parents: (LeafNodeImpl || ElementImpl) implements AxiomChildNode;
+public interface AxiomUtilImpl {
+    OMDocument createDocument();
 }

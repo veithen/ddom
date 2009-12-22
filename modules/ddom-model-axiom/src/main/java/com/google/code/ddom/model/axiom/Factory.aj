@@ -119,8 +119,7 @@ public aspect Factory {
     }
 
     public OMText AxiomDocument.createOMText(String s) {
-        // TODO
-        throw new UnsupportedOperationException();
+        return (OMText)getNodeFactory().createText(this, s);
     }
 
     public OMText AxiomDocument.createOMText(String s, int type) {
