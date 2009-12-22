@@ -15,21 +15,59 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMNode;
+import com.google.code.ddom.frontend.dom.support.UserData;
 
 public aspect UserDataSupport {
-    private Map<String,Object> DOMNode.userData;
+    private Map<DOMNode,Map<String,UserData>> DOMDocument.userDataMap;
+    
+    public final Map<String,UserData> DOMDocument.getUserDataMap(DOMNode node, boolean create) {
+        if (userDataMap == null) {
+            if (!create) {
+                return null;
+            }
+            userDataMap = new HashMap<DOMNode,Map<String,UserData>>();
+        }
+        Map<String,UserData> mapForNode = userDataMap.get(node);
+        if (mapForNode == null) {
+            if (!create) {
+                return null;
+            }
+            mapForNode = new HashMap<String,UserData>();
+            userDataMap.put(node, mapForNode);
+        }
+        return mapForNode;
+    }
     
     public final Object DOMNode.getUserData(String key) {
-        return userData == null ? null : userData.get(key);
+        Map<String,UserData> userDataMap = ((DOMDocument)getDocument()).getUserDataMap(this, false);
+        if (userDataMap == null) {
+            return null;
+        } else {
+            UserData userData = userDataMap.get(key);
+            return userData == null ? null : userData.getData();
+        }
     }
 
     public final Object DOMNode.setUserData(String key, Object data, UserDataHandler handler) {
-        // TODO
-        throw new UnsupportedOperationException();
+        UserData userData;
+        if (data == null) {
+            Map<String,UserData> userDataMap = ((DOMDocument)getDocument()).getUserDataMap(this, false);
+            if (userDataMap != null) {
+                userData = userDataMap.remove(key);
+            } else {
+                userData = null;
+            }
+        } else {
+            Map<String,UserData> userDataMap = ((DOMDocument)getDocument()).getUserDataMap(this, true);
+            userData = userDataMap.put(key, new UserData(data, handler));
+        }
+        return userData == null ? null : userData.getData();
     }
 }
