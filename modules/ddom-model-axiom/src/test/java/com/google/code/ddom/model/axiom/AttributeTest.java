@@ -34,4 +34,11 @@ public class AttributeTest {
         Assert.assertEquals("", qname.getNamespaceURI());
         Assert.assertEquals("", qname.getPrefix());
     }
+    
+    @Validated @Test
+    public void testQNameCaching() {
+        OMAttribute attr = AxiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
+        QName qname = attr.getQName();
+        Assert.assertSame(qname, attr.getQName());
+    }
 }
