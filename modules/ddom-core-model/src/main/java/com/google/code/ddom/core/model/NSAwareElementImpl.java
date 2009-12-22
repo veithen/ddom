@@ -20,7 +20,7 @@ import com.google.code.ddom.spi.model.CoreNSAwareElement;
 
 public class NSAwareElementImpl extends ElementImpl implements CoreNSAwareElement {
     private final String namespaceURI;
-    private final String localName;
+    private String localName;
     private String prefix;
 
     public NSAwareElementImpl(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
@@ -44,5 +44,9 @@ public class NSAwareElementImpl extends ElementImpl implements CoreNSAwareElemen
     
     public final String coreGetLocalName() {
         return localName;
+    }
+    
+    public final void coreSetLocalName(String localName) {
+        this.localName = localName;
     }
 }

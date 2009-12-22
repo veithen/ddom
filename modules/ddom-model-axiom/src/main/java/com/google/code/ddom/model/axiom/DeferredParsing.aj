@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.model.axiom;
 
+import org.apache.axiom.om.OMXMLParserWrapper;
+
 import com.google.code.ddom.spi.model.CoreDocument;
 
 public aspect DeferredParsing {
@@ -49,5 +51,13 @@ public aspect DeferredParsing {
     public void AxiomContainer.buildNext() {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public void AxiomElement.setBuilder(OMXMLParserWrapper wrapper) {
+        throw new UnsupportedOperationException();
+    }
+    
+    public OMXMLParserWrapper AxiomElement.getBuilder() {
+        return null;
     }
 }

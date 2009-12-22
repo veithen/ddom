@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.model.axiom;
 
-public interface CoreNSAwareNamedNode extends CoreNode {
-    /**
-     * Get the namespace URI of this node.
-     * 
-     * @return the namespace URI, or <code>null</code> if the node has no namespace
-     */
-    String coreGetNamespaceURI();
+import javax.xml.namespace.QName;
+
+public aspect ElementText {
+    public void AxiomElement.setText(String text) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomElement.setText(QName text) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public String AxiomElement.getText() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
     
-    /**
-     * Get the namespace prefix of this node.
-     * 
-     * @return the namespace prefix, or <code>null</code> if the node has no prefix
-     */
-    String coreGetPrefix();
-    
-    void coreSetPrefix(String prefix);
-    
-    String coreGetLocalName();
-    
-    void coreSetLocalName(String localName);
+    public QName AxiomElement.getTextAsQName() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

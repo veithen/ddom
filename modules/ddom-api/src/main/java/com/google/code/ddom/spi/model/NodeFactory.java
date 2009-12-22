@@ -29,6 +29,17 @@ public interface NodeFactory {
     
     CoreNSUnawareElement createElement(CoreDocument document, String tagName, boolean complete);
     
+    /**
+     * Create a namespace aware element.
+     * 
+     * @param document the owner document of the new element
+     * @param namespaceURI the namespace URI of the element, or <code>null</code> if the element has no
+     *                     namespace
+     * @param localName the local part of the element's name
+     * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
+     * @param complete
+     * @return the element
+     */
     CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete);
     
     CoreNSUnawareTypedAttribute createAttribute(CoreDocument document, String name, String value, String type);

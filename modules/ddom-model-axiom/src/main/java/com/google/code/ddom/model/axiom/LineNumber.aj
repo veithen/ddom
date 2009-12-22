@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.model.axiom;
 
-public interface CoreNSAwareNamedNode extends CoreNode {
-    /**
-     * Get the namespace URI of this node.
-     * 
-     * @return the namespace URI, or <code>null</code> if the node has no namespace
-     */
-    String coreGetNamespaceURI();
+// TODO: this is a good example of an aspect that should be configurable
+public aspect LineNumber {
+    private int AxiomElement.lineNumber;
     
-    /**
-     * Get the namespace prefix of this node.
-     * 
-     * @return the namespace prefix, or <code>null</code> if the node has no prefix
-     */
-    String coreGetPrefix();
-    
-    void coreSetPrefix(String prefix);
-    
-    String coreGetLocalName();
-    
-    void coreSetLocalName(String localName);
+    public void AxiomElement.setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public int AxiomElement.getLineNumber() {
+        return lineNumber;
+    }
 }

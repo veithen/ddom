@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.model.axiom;
 
-public interface CoreNSAwareNamedNode extends CoreNode {
-    /**
-     * Get the namespace URI of this node.
-     * 
-     * @return the namespace URI, or <code>null</code> if the node has no namespace
-     */
-    String coreGetNamespaceURI();
-    
-    /**
-     * Get the namespace prefix of this node.
-     * 
-     * @return the namespace prefix, or <code>null</code> if the node has no prefix
-     */
-    String coreGetPrefix();
-    
-    void coreSetPrefix(String prefix);
-    
-    String coreGetLocalName();
-    
-    void coreSetLocalName(String localName);
+import org.apache.axiom.om.OMElement;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.google.code.ddom.utils.test.Validated;
+
+@RunWith(AxiomTestRunner.class)
+public class ElementTest {
+    @Validated @Test
+    public void testSetText() {
+        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("test", null);
+        // TODO: to be continued
+    }
 }

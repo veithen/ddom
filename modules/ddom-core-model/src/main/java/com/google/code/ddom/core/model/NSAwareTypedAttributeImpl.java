@@ -20,7 +20,7 @@ import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
 
 public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSAwareTypedAttribute {
     private final String namespaceURI;
-    private final String localName;
+    private String localName;
     private String prefix;
 
     public NSAwareTypedAttributeImpl(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
@@ -44,5 +44,9 @@ public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements Cor
     
     public final String coreGetLocalName() {
         return localName;
+    }
+    
+    public final void coreSetLocalName(String localName) {
+        this.localName = localName;
     }
 }

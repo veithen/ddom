@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMOutputFormat;
@@ -73,6 +74,24 @@ public aspect Serialization {
     }
 
     public void AxiomContainer.serializeAndConsume(Writer writer, OMOutputFormat format) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public XMLStreamReader AxiomElement.getXMLStreamReader() {
+        return getXMLStreamReader(true);
+    }
+    
+    public XMLStreamReader AxiomElement.getXMLStreamReaderWithoutCaching() {
+        return getXMLStreamReader(false);
+    }
+    
+    public XMLStreamReader AxiomElement.getXMLStreamReader(boolean cache) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public String AxiomElement.toStringWithConsume() throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
     }

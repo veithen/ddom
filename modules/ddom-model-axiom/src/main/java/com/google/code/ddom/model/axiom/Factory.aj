@@ -47,8 +47,8 @@ public aspect Factory {
     }
 
     public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns) {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: maybe still need to handle empty strings returned by OMNamespace
+        return (OMElement)getNodeFactory().createElement(this, ns == null ? null : ns.getNamespaceURI(), localName, ns == null ? null : ns.getPrefix(), true);
     }
 
     public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns, OMContainer parent) {

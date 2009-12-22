@@ -20,8 +20,15 @@ import java.io.Writer;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
 
+/**
+ * Aspect implementing methods that are deprecated in the Axiom API and throwing
+ * {@link UnsupportedOperationException}.
+ * 
+ * @author Andreas Veithen
+ */
 public aspect Deprecated {
     public void AxiomLeafNode.serialize(@SuppressWarnings("unused") OutputStream output) throws XMLStreamException {
         throw new UnsupportedOperationException();
@@ -52,6 +59,10 @@ public aspect Deprecated {
     }
 
     public void AxiomLeafNode.serializeAndConsume(@SuppressWarnings("unused") Writer writer, @SuppressWarnings("unused") OMOutputFormat format) throws XMLStreamException {
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomElement.setFirstChild(@SuppressWarnings("unused") OMNode node) {
         throw new UnsupportedOperationException();
     }
 }
