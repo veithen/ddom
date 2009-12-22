@@ -20,8 +20,8 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.spi.model.CoreAttribute;
@@ -38,7 +38,7 @@ public aspect ElementSupport {
     private static final int ATTR_DOM2 = 2;
     private static final int ATTR_NSDECL = 3;
 
-    private boolean ElementImpl.testAttribute(DOMAttribute attr, String namespaceURI, String localName, int mode) {
+    private boolean DOMElement.testAttribute(DOMAttribute attr, String namespaceURI, String localName, int mode) {
         switch (mode) {
             case ATTR_DOM1:
                 // Note: a lookup using DOM 1 methods may return any kind of attribute, including NSDecl
@@ -60,11 +60,11 @@ public aspect ElementSupport {
         }
     }
     
-    public final Attr ElementImpl.getAttributeNode(String name) {
+    public final Attr DOMElement.getAttributeNode(String name) {
         return getAttributeNode(null, name, ATTR_DOM1);
     }
 
-    public final Attr ElementImpl.getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
+    public final Attr DOMElement.getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
             return getAttributeNode(null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : localName, ATTR_NSDECL);
         } else {
@@ -72,7 +72,7 @@ public aspect ElementSupport {
         }
     }
     
-    private DOMAttribute ElementImpl.getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
+    private DOMAttribute DOMElement.getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
         DOMAttribute attr = (DOMAttribute)internalGetFirstAttribute();
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             attr = (DOMAttribute)attr.internalGetNextAttribute();
@@ -80,30 +80,30 @@ public aspect ElementSupport {
         return attr;
     }
 
-    public final String ElementImpl.getAttribute(String name) {
+    public final String DOMElement.getAttribute(String name) {
         Attr attr = getAttributeNode(name);
         return attr == null ? "" : attr.getValue();
     }
 
-    public final String ElementImpl.getAttributeNS(String namespaceURI, String localName) throws DOMException {
+    public final String DOMElement.getAttributeNS(String namespaceURI, String localName) throws DOMException {
         Attr attr = getAttributeNodeNS(namespaceURI, localName);
         return attr == null ? "" : attr.getValue();
     }
 
-    public final boolean ElementImpl.hasAttribute(String name) {
+    public final boolean DOMElement.hasAttribute(String name) {
         return getAttributeNode(name) != null;
     }
 
-    public final boolean ElementImpl.hasAttributeNS(String namespaceURI, String localName) throws DOMException {
+    public final boolean DOMElement.hasAttributeNS(String namespaceURI, String localName) throws DOMException {
         return getAttributeNodeNS(namespaceURI, localName) != null;
     }
 
-    public final void ElementImpl.setAttribute(String name, String value) throws DOMException {
+    public final void DOMElement.setAttribute(String name, String value) throws DOMException {
         NSUtil.validateName(name);
         setAttribute(null, name, null, ATTR_DOM1, value);
     }
 
-    public final void ElementImpl.setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
+    public final void DOMElement.setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
         int i = NSUtil.validateQualifiedName(qualifiedName);
         String prefix;
         String localName;
@@ -122,7 +122,7 @@ public aspect ElementSupport {
         }
     }
     
-    private void ElementImpl.setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
+    private void DOMElement.setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
         DOMAttribute attr = (DOMAttribute)internalGetFirstAttribute();
         CoreAttribute previousAttr = null;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
@@ -161,11 +161,11 @@ public aspect ElementSupport {
         }
     }
 
-    public final Attr ElementImpl.setAttributeNode(Attr newAttr) throws DOMException {
+    public final Attr DOMElement.setAttributeNode(Attr newAttr) throws DOMException {
         return setAttributeNodeNS(newAttr);
     }
     
-    public final Attr ElementImpl.setAttributeNodeNS(Attr _newAttr) throws DOMException {
+    public final Attr DOMElement.setAttributeNodeNS(Attr _newAttr) throws DOMException {
         try {
             // TODO: shouldn't this be handled by the core model?
             validateOwnerDocument((CoreNode)_newAttr);
@@ -221,7 +221,7 @@ public aspect ElementSupport {
         }
     }
 
-    public final Attr ElementImpl.removeAttributeNode(Attr _oldAttr) throws DOMException {
+    public final Attr DOMElement.removeAttributeNode(Attr _oldAttr) throws DOMException {
         DOMAttribute oldAttr = (DOMAttribute)_oldAttr;
         if (oldAttr.getOwnerElement() == this) {
             CoreAttribute previousAttr = internalGetFirstAttribute();
@@ -244,15 +244,15 @@ public aspect ElementSupport {
         return oldAttr;
     }
 
-    public final void ElementImpl.removeAttribute(String name) throws DOMException {
+    public final void DOMElement.removeAttribute(String name) throws DOMException {
         removeAttributeNode(getAttributeNode(name));
     }
 
-    public final void ElementImpl.removeAttributeNS(String namespaceURI, String localName) throws DOMException {
+    public final void DOMElement.removeAttributeNS(String namespaceURI, String localName) throws DOMException {
         removeAttributeNode(getAttributeNodeNS(namespaceURI, localName));
     }
 
-    public final void ElementImpl.setIdAttribute(String name, boolean isId) throws DOMException {
+    public final void DOMElement.setIdAttribute(String name, boolean isId) throws DOMException {
         CoreAttribute attr = getAttributeNode(null, name, ATTR_DOM1);
         if (attr == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
@@ -261,7 +261,7 @@ public aspect ElementSupport {
         }
     }
 
-    public final void ElementImpl.setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
+    public final void DOMElement.setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
         // Here, we assume that a namespace declaration can never be an ID attribute
         CoreAttribute attr = getAttributeNode(namespaceURI, localName, ATTR_DOM2);
         if (attr == null) {
@@ -271,7 +271,7 @@ public aspect ElementSupport {
         }
     }
 
-    public final void ElementImpl.setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
+    public final void DOMElement.setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

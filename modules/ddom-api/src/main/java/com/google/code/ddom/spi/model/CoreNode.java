@@ -22,4 +22,7 @@ public interface CoreNode {
      * @return the document; this will never be <code>null</code>    TODO: except for CoreDocumentType??
      */
     CoreDocument getDocument();
+    
+    // TODO: not sure if this should be exposed
+    void validateOwnerDocument(CoreNode node) throws WrongDocumentException;
 }
