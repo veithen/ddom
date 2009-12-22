@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
+// TODO: rename this to CoreCompactParentNode
 public interface CoreOptimizedParentNode extends CoreParentNode {
     /**
      * 
