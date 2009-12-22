@@ -23,4 +23,6 @@ public interface CoreOptimizedParentNode extends CoreParentNode {
      * @return
      */
     Object getContent();
+
+    void coreSetValue(String value);
 }

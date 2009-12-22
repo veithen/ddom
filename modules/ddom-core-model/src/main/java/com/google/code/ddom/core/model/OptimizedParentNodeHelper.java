@@ -26,7 +26,7 @@ public class OptimizedParentNodeHelper {
         if (content instanceof String) {
             CoreDocument document = node.getDocument();
             firstChild = document.getNodeFactory().createText(document, (String)content);
-            // TODO: need to set parent
+            firstChild.internalSetParent(node);
             node.internalSetFirstChild(firstChild);
         } else {
             firstChild = (CoreChildNode)content;

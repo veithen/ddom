@@ -19,8 +19,7 @@ import javax.xml.namespace.QName;
 
 public aspect ElementText {
     public void AxiomElement.setText(String text) {
-        // TODO
-        throw new UnsupportedOperationException();
+        coreSetValue(text);
     }
 
     public void AxiomElement.setText(QName text) {

@@ -83,6 +83,11 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         content = child;
     }
 
+    public final void coreSetValue(String value) {
+        // TODO: need to remove any existing children!
+        this.content = value;
+    }
+
     public final CoreChildNode coreGetFirstChild() {
         if (content == null && !complete) {
             document.next();
