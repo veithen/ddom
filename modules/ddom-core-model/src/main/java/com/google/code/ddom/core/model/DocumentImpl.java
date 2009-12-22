@@ -25,6 +25,7 @@ import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.stream.spi.Producer;
 
 public class DocumentImpl extends ParentNodeImpl implements CoreDocument {
+    // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
     private Builder builder;
     private CoreChildNode firstChild;
