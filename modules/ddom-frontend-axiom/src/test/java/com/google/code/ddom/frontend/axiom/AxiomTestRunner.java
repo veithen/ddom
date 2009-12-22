@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.model.axiom;
+package com.google.code.ddom.frontend.axiom;
 
-import org.apache.axiom.om.OMDocument;
-import org.junit.Test;
+import org.junit.internal.runners.InitializationError;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-public class DocumentTest {
-    @Test
-    public void test() {
-        OMDocument document = (OMDocument)DeferredDocumentFactory.newInstance().newDocument("axiom");
+public class AxiomTestRunner extends ValidatedTestRunner {
+    public AxiomTestRunner(Class<?> klass) throws InitializationError {
+        super(klass);
+    }
+
+    @Override
+    protected void setUpValidationEnvironment() {
+        AxiomUtil.impl = LLOMAxiomUtilImpl.INSTANCE;
+    }
+
+    @Override
+    protected void setUpTargetEnvironment() {
+        AxiomUtil.impl = DDOMAxiomUtilImpl.INSTANCE;
     }
 }

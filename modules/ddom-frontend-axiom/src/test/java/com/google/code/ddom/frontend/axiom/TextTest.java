@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.model.axiom;
+package com.google.code.ddom.frontend.axiom;
 
-import org.junit.internal.runners.InitializationError;
+import org.apache.axiom.om.OMText;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import com.google.code.ddom.utils.test.ValidatedTestRunner;
+import com.google.code.ddom.utils.test.Validated;
 
-public class AxiomTestRunner extends ValidatedTestRunner {
-    public AxiomTestRunner(Class<?> klass) throws InitializationError {
-        super(klass);
-    }
-
-    @Override
-    protected void setUpValidationEnvironment() {
-        AxiomUtil.impl = LLOMAxiomUtilImpl.INSTANCE;
-    }
-
-    @Override
-    protected void setUpTargetEnvironment() {
-        AxiomUtil.impl = DDOMAxiomUtilImpl.INSTANCE;
+@RunWith(AxiomTestRunner.class)
+public class TextTest {
+    @Validated @Test
+    public void testGetText() {
+        OMText text = AxiomUtil.createDocument().getOMFactory().createOMText("test");
+        Assert.assertEquals("test", text.getText());
     }
 }

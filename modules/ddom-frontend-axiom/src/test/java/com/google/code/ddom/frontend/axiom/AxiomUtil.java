@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.model.axiom;
+package com.google.code.ddom.frontend.axiom;
 
 import org.apache.axiom.om.OMDocument;
 
-public interface AxiomUtilImpl {
-    OMDocument createDocument();
+public class AxiomUtil {
+    public static AxiomUtilImpl impl;
+    
+    private AxiomUtil() {}
+
+    public static OMDocument createDocument() {
+        return impl.createDocument();
+    }
 }

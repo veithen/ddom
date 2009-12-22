@@ -13,20 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.model.axiom;
+package com.google.code.ddom.frontend.axiom;
 
-import org.apache.axiom.om.OMText;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.axiom.om.OMDocument;
 
-import com.google.code.ddom.utils.test.Validated;
-
-@RunWith(AxiomTestRunner.class)
-public class TextTest {
-    @Validated @Test
-    public void testGetText() {
-        OMText text = AxiomUtil.createDocument().getOMFactory().createOMText("test");
-        Assert.assertEquals("test", text.getText());
-    }
+public interface AxiomUtilImpl {
+    OMDocument createDocument();
 }

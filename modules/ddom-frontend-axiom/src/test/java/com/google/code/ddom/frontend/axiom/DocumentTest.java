@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.model.axiom;
+package com.google.code.ddom.frontend.axiom;
 
 import org.apache.axiom.om.OMDocument;
-import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
+import org.junit.Test;
 
-public class LLOMAxiomUtilImpl implements AxiomUtilImpl {
-    public final static LLOMAxiomUtilImpl INSTANCE = new LLOMAxiomUtilImpl();
-    
-    private final OMFactory factory = new OMLinkedListImplFactory();
+import com.google.code.ddom.DeferredDocumentFactory;
 
-    private LLOMAxiomUtilImpl() {}
-    
-    public OMDocument createDocument() {
-        return factory.createOMDocument();
+public class DocumentTest {
+    @Test
+    public void test() {
+        OMDocument document = (OMDocument)DeferredDocumentFactory.newInstance().newDocument("axiom");
     }
 }

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.model.axiom;
+package com.google.code.ddom.frontend.axiom;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMNode;
-import org.apache.axiom.om.OMText;
+import javax.xml.namespace.QName;
+
+import org.apache.axiom.om.OMAttribute;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,15 +25,20 @@ import org.junit.runner.RunWith;
 import com.google.code.ddom.utils.test.Validated;
 
 @RunWith(AxiomTestRunner.class)
-public class ElementTest {
+public class AttributeTest {
     @Validated @Test
-    public void testSetText() {
-        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("test", null);
-        element.setText("text");
-        OMNode child = element.getFirstOMChild();
-        Assert.assertTrue(child instanceof OMText);
-        Assert.assertSame(element, child.getParent());
-        Assert.assertEquals("text", ((OMText)child).getText());
-        Assert.assertNull(child.getNextOMSibling());
+    public void testGetQNameWithoutNamespace() {
+        OMAttribute attr = AxiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
+        QName qname = attr.getQName();
+        Assert.assertEquals("name", qname.getLocalPart());
+        Assert.assertEquals("", qname.getNamespaceURI());
+        Assert.assertEquals("", qname.getPrefix());
+    }
+    
+    @Validated @Test
+    public void testQNameCaching() {
+        OMAttribute attr = AxiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
+        QName qname = attr.getQName();
+        Assert.assertSame(qname, attr.getQName());
     }
 }
