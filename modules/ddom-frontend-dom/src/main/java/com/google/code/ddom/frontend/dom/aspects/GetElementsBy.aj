@@ -15,27 +15,24 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import java.util.Iterator;
-
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagName;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagNameNS;
 
 public aspect GetElementsBy {
-    public final int DocumentImpl.getStructureVersion() {
+    public final int DOMDocument.getStructureVersion() {
         // TODO Auto-generated method stub
         return 0;
     }
 
-    public final NodeList ParentNodeImpl.getElementsByTagName(String tagname) {
-        return new ElementsByTagName((DOMDocument)getDocument(), (Node)ParentNodeImpl.this, tagname);
+    public final NodeList DOMParentNode.getElementsByTagName(String tagname) {
+        return new ElementsByTagName((DOMDocument)getDocument(), this, tagname);
     }
 
-    public final NodeList ParentNodeImpl.getElementsByTagNameNS(String namespaceURI, String localName) {
-        return new ElementsByTagNameNS((DOMDocument)getDocument(), (Node)ParentNodeImpl.this, namespaceURI, localName);
+    public final NodeList DOMParentNode.getElementsByTagNameNS(String namespaceURI, String localName) {
+        return new ElementsByTagNameNS((DOMDocument)getDocument(), this, namespaceURI, localName);
     }
 }

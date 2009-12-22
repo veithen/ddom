@@ -37,7 +37,7 @@ public class FrontendWeaver extends TransformingClassLoader {
 
     @Override
     protected boolean needsTransformation(String className) {
-        return className.startsWith("com.google.code.ddom.core.model.") || className.startsWith("com.google.code.ddom.frontend.dom."); // TODO: hardcoded aspects package!!!
+        return className.startsWith("com.google.code.ddom.core.model.");
     }
 
     @Override
