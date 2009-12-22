@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.core.model;
 
+import javax.xml.namespace.QName;
+
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
 
@@ -48,5 +50,9 @@ public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements Cor
     
     public final void coreSetLocalName(String localName) {
         this.localName = localName;
+    }
+
+    public final QName coreGetQName() {
+        return NSAwareNamedNodeHelper.coreGetQName(this);
     }
 }

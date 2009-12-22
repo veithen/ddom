@@ -37,7 +37,7 @@ public aspect AttributeSupport {
     }
 
     public final boolean DOMTypedAttribute.isId() {
-        return "ID".equals(getType());
+        return "ID".equals(coreGetType());
     }
 
     public final boolean DOMNamespaceDeclaration.isId() {

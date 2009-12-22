@@ -33,12 +33,12 @@ public aspect Clone {
     
     public final Node DOMNSAwareTypedAttribute.shallowClone() {
         CoreDocument document = getDocument();
-        return (Node)document.getNodeFactory().createAttribute(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, getType());
+        return (Node)document.getNodeFactory().createAttribute(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
     
     public final Node DOMNSUnawareTypedAttribute.shallowClone() {
         CoreDocument document = getDocument();
-        return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, getType());
+        return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, coreGetType());
     }
 
     public final Node DOMNamespaceDeclaration.shallowClone() {

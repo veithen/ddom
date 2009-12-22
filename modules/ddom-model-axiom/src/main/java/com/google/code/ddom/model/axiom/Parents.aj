@@ -26,4 +26,5 @@ public aspect Parents {
     declare parents: NodeImpl implements AxiomNode;
     declare parents: LeafNodeImpl implements AxiomLeafNode;
     declare parents: (LeafNodeImpl || ElementImpl) implements AxiomChildNode;
+    declare parents: NSAwareTypedAttributeImpl implements AxiomAttribute;
 }

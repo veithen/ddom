@@ -25,6 +25,7 @@ import com.google.code.ddom.spi.model.Model;
 public class AxiomModel implements Model {
     public List<String> getAspectClasses() {
         return Arrays.asList(new String[] {
+                "com.google.code.ddom.model.axiom.AttributeSupport",
                 "com.google.code.ddom.model.axiom.ChildNodeSupport",
                 "com.google.code.ddom.model.axiom.ContainerSupport",
                 "com.google.code.ddom.model.axiom.DeferredParsing",

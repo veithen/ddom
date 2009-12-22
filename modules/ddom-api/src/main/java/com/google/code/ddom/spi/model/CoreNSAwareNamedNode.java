@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
+import javax.xml.namespace.QName;
+
 public interface CoreNSAwareNamedNode extends CoreNode {
     /**
      * Get the namespace URI of this node.
@@ -35,4 +37,6 @@ public interface CoreNSAwareNamedNode extends CoreNode {
     String coreGetLocalName();
     
     void coreSetLocalName(String localName);
+    
+    QName coreGetQName();
 }

@@ -254,7 +254,7 @@ public aspect ElementSupport {
         if (attr == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
-            ((CoreTypedAttribute)attr).setType(isId ? "ID" : "CDATA");
+            ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
         }
     }
 
@@ -264,7 +264,7 @@ public aspect ElementSupport {
         if (attr == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
-            ((CoreTypedAttribute)attr).setType(isId ? "ID" : "CDATA");
+            ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
         }
     }
 

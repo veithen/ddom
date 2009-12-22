@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.model.axiom;
 
-public interface CoreTypedAttribute extends CoreAttribute {
-    String coreGetType();
-    void coreSetType(String type);
+import org.apache.axiom.om.OMAttribute;
+
+import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
+
+public interface AxiomAttribute extends CoreNSAwareTypedAttribute, OMAttribute {
+
 }

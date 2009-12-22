@@ -37,6 +37,10 @@ public aspect Factory {
         return (OMFactory)getDocument();
     }
     
+    public OMFactory AxiomAttribute.getOMFactory() {
+        return (OMFactory)getDocument();
+    }
+
     public OMDocument AxiomDocument.createOMDocument() {
         // TODO: check if we should support this operation
         throw new UnsupportedOperationException();
@@ -47,8 +51,7 @@ public aspect Factory {
     }
 
     public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns) {
-        // TODO: maybe still need to handle empty strings returned by OMNamespace
-        return (OMElement)getNodeFactory().createElement(this, ns == null ? null : ns.getNamespaceURI(), localName, ns == null ? null : ns.getPrefix(), true);
+        return (OMElement)getNodeFactory().createElement(this, NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns), true);
     }
 
     public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns, OMContainer parent) {
@@ -152,8 +155,7 @@ public aspect Factory {
     }
 
     public OMAttribute AxiomDocument.createOMAttribute(String localName, OMNamespace ns, String value) {
-        // TODO
-        throw new UnsupportedOperationException();
+        return (OMAttribute)getNodeFactory().createAttribute(this, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns), value, "CDATA");
     }
 
     public OMDocType AxiomDocument.createOMDocType(OMContainer parent, String content) {

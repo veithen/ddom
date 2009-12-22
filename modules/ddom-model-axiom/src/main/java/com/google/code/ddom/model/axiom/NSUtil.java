@@ -13,9 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.model.axiom;
 
-public interface CoreTypedAttribute extends CoreAttribute {
-    String coreGetType();
-    void coreSetType(String type);
+import org.apache.axiom.om.OMNamespace;
+
+public class NSUtil {
+    private NSUtil() {}
+    
+    public static String getNamespaceURI(OMNamespace ns) {
+        // TODO: maybe still need to handle empty strings returned by OMNamespace
+        return ns == null ? null : ns.getNamespaceURI();
+    }
+    
+    public static String getPrefix(OMNamespace ns) {
+        // TODO: maybe still need to handle empty strings returned by OMNamespace
+        return ns == null ? null : ns.getPrefix();
+    }
 }

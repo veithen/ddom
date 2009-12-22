@@ -26,11 +26,11 @@ public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTy
         this.type = type;
     }
 
-    public final String getType() {
+    public final String coreGetType() {
         return type;
     }
 
-    public final void setType(String type) {
+    public final void coreSetType(String type) {
         this.type = type;
     }
 }
