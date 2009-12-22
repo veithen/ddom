@@ -34,9 +34,9 @@
         <module>ddom-core-model</module>
         <module>ddom-dom-utils</module>
         <module>ddom-domts</module>
+        <module>ddom-frontend-axiom</module>
+        <module>ddom-frontend-dom</module>
         <module>ddom-jaxp</module>
-        <module>ddom-model-axiom</module>
-        <module>ddom-model-dom</module>
         <module>ddom-spi</module>
         <module>ddom-spring-ws</module>
         <module>ddom-stream</module>
