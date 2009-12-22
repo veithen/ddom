@@ -35,7 +35,7 @@ import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.core.model.DocumentImpl;
-import com.google.code.ddom.dom.impl.DOMImplementationImpl;
+import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.spi.model.ModelRegistry;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
