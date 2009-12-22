@@ -34,6 +34,7 @@ public aspect TextSupport {
         CoreTextNode newNode = createNewTextNode(text.substring(offset));
         CoreParentNode parent = coreGetParent();
         if (parent != null) {
+            // TODO: use coreInsertSiblingAfter here!
             newNode.internalSetNextSibling(coreGetNextSibling());
             internalSetNextSibling(newNode);
             newNode.internalSetParent(parent);
