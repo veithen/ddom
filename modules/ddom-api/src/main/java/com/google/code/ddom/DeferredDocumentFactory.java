@@ -18,9 +18,7 @@ package com.google.code.ddom;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-
-import com.google.code.ddom.spi.model.ModelRegistry;
+import com.google.code.ddom.spi.model.FrontendRegistry;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -28,32 +26,32 @@ import com.google.code.ddom.stream.spi.StreamFactory;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
 public class DeferredDocumentFactory {
-    private final ModelRegistry modelRegistry;
+    private final FrontendRegistry frontendRegistry;
     private final StreamFactory streamFactory;
     private final Map<String,Object> properties = new HashMap<String,Object>();
     
-    private DeferredDocumentFactory(ModelRegistry modelRegistry, StreamFactory streamFactory) {
-        this.modelRegistry = modelRegistry;
+    private DeferredDocumentFactory(FrontendRegistry frontendRegistry, StreamFactory streamFactory) {
+        this.frontendRegistry = frontendRegistry;
         this.streamFactory = streamFactory;
     }
     
     public static DeferredDocumentFactory newInstance(ClassLoader classLoader) {
-        return new DeferredDocumentFactory(ModelRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
+        return new DeferredDocumentFactory(FrontendRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
     }
     
     public static DeferredDocumentFactory newInstance() {
-        return new DeferredDocumentFactory(ModelRegistry.getInstance(), StreamFactory.getInstance());
+        return new DeferredDocumentFactory(FrontendRegistry.getInstance(), StreamFactory.getInstance());
     }
     
-    public DeferredDocument newDocument(String model) {
+    public DeferredDocument newDocument(String frontend) {
         // TODO: check for null here!
-        return modelRegistry.getNodeFactory(model).createDocument(null);
+        return frontendRegistry.getNodeFactory(frontend).createDocument(null);
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public DeferredDocument parse(String model, Object source, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(String frontend, Object source, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
-        NodeFactory nodeFactory = modelRegistry.getNodeFactory(model);
+        NodeFactory nodeFactory = frontendRegistry.getNodeFactory(frontend);
         Producer producer;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
@@ -68,7 +66,7 @@ public class DeferredDocumentFactory {
         return nodeFactory.createDocument(producer);
     }
 
-    public DeferredDocument parse(String model, Object source) throws DeferredParsingException {
-        return parse(model, source, true);
+    public DeferredDocument parse(String frontend, Object source) throws DeferredParsingException {
+        return parse(frontend, source, true);
     }
 }

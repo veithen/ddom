@@ -19,10 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="axiom")
-public class AxiomModel implements Model {
+public class AxiomFrontend implements Frontend {
     public List<String> getAspectClasses() {
         return Arrays.asList(new String[] {
                 "com.google.code.ddom.frontend.axiom.aspects.AttributeSupport",

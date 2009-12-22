@@ -22,18 +22,18 @@ import org.aspectj.weaver.loadtime.DefaultWeavingContext;
 import org.aspectj.weaver.loadtime.definition.Definition;
 import org.aspectj.weaver.tools.WeavingAdaptor;
 
-import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.Frontend;
 
-public class ModelWeaverContext extends DefaultWeavingContext {
-    public ModelWeaverContext(ClassLoader loader) {
+public class FrontendWeaverContext extends DefaultWeavingContext {
+    public FrontendWeaverContext(ClassLoader loader) {
         super(loader);
     }
 
     @Override
     public List<Definition> getDefinitions(ClassLoader loader, WeavingAdaptor adaptor) {
-        Model model = ((ModelWeaver)loader).getModel();
+        Frontend frontend = ((FrontendWeaver)loader).getFrontend();
         Definition definition = new Definition();
-        definition.getAspectClassNames().addAll(model.getAspectClasses());
+        definition.getAspectClassNames().addAll(frontend.getAspectClasses());
         return Collections.singletonList(definition);
     }
 }

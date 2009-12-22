@@ -19,20 +19,20 @@ import org.aspectj.weaver.loadtime.Aj;
 import org.aspectj.weaver.loadtime.ClassPreProcessor;
 
 import com.google.code.ddom.commons.cl.TransformingClassLoader;
-import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.Frontend;
 
-public class ModelWeaver extends TransformingClassLoader {
-    private final Model model;
+public class FrontendWeaver extends TransformingClassLoader {
+    private final Frontend frontend;
     private final ClassPreProcessor preProcessor;
     
-    public ModelWeaver(ClassLoader parent, Model model) {
+    public FrontendWeaver(ClassLoader parent, Frontend frontend) {
         super(parent);
-        this.model = model;
-        preProcessor = new Aj(new ModelWeaverContext(this));
+        this.frontend = frontend;
+        preProcessor = new Aj(new FrontendWeaverContext(this));
     }
     
-    public Model getModel() {
-        return model;
+    public Frontend getFrontend() {
+        return frontend;
     }
 
     @Override

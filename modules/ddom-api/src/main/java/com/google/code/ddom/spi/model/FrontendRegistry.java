@@ -26,38 +26,38 @@ import com.google.code.ddom.commons.cl.ClassLoaderUtils;
 import com.google.code.ddom.commons.cl.ClassUtils;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
-import com.google.code.ddom.weaver.ModelWeaver;
+import com.google.code.ddom.weaver.FrontendWeaver;
 
-public final class ModelRegistry {
+public final class FrontendRegistry {
     private static final String NODE_FACTORY_IMPL_CLASS = "com.google.code.ddom.core.model.NodeFactoryImpl";
-    private static final ClassLoaderLocal<ModelRegistry> registries = new ClassLoaderLocal<ModelRegistry>();
+    private static final ClassLoaderLocal<FrontendRegistry> registries = new ClassLoaderLocal<FrontendRegistry>();
     
     private final Map<String,NodeFactory> nodeFactories;
     
-    private ModelRegistry(Map<String,NodeFactory> nodeFactories) {
+    private FrontendRegistry(Map<String,NodeFactory> nodeFactories) {
         this.nodeFactories = nodeFactories;
     }
     
-    public static ModelRegistry getInstance(ClassLoader classLoader) throws ProviderFinderException {
-        ModelRegistry registry = registries.get(classLoader);
+    public static FrontendRegistry getInstance(ClassLoader classLoader) throws ProviderFinderException {
+        FrontendRegistry registry = registries.get(classLoader);
         if (registry == null) {
             Map<String,NodeFactory> factories = new LinkedHashMap<String,NodeFactory>();
             // TODO: this should be done lazily
-            for (Map.Entry<String,Model> entry : ProviderFinder.find(classLoader, Model.class).entrySet()) {
+            for (Map.Entry<String,Frontend> entry : ProviderFinder.find(classLoader, Frontend.class).entrySet()) {
                 try {
-                    factories.put(entry.getKey(), loadModel(classLoader, entry.getValue()));
+                    factories.put(entry.getKey(), loadFrontend(classLoader, entry.getValue()));
                 } catch (Exception ex) { // TODO: do this properly
                     throw new ProviderFinderException(ex);
                 }
             }
-            registry = new ModelRegistry(factories);
+            registry = new FrontendRegistry(factories);
             registries.put(classLoader, registry);
         }
         return registry;
     }
     
-    private static NodeFactory loadModel(ClassLoader classLoader, Model model) throws Exception {
-        ModelWeaver weaver = new ModelWeaver(classLoader, model);
+    private static NodeFactory loadFrontend(ClassLoader classLoader, Frontend frontend) throws Exception {
+        FrontendWeaver weaver = new FrontendWeaver(classLoader, frontend);
         
         // The following code serves two purposes:
         //  * All classes are woven at this point, so that any errors will be reported here. This
@@ -73,7 +73,7 @@ public final class ModelRegistry {
         return (NodeFactory)weaver.loadClass(NODE_FACTORY_IMPL_CLASS).newInstance();
     }
     
-    public static ModelRegistry getInstance() throws ProviderFinderException {
+    public static FrontendRegistry getInstance() throws ProviderFinderException {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
                 return Thread.currentThread().getContextClassLoader();

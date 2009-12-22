@@ -18,12 +18,11 @@ package com.google.code.ddom.spi.model;
 import java.util.List;
 
 // TODO: this API is a bit simplistic; we need at least to support the following features:
-//        - a model configuration (so that aspects can be selected dynamically)
-//        - we need to be able to mix models and to support dependencies (e.g. SAAJ -> DOM)
-//        - mixing models must take into account that there may be overlap between them
-//          (one model may define a method with the same signature and behavior as a method
-//          in another model)
-// TODO: this should be renamed "Frontend", while the term "model" should be reserved for plain XML and SOAP
-public interface Model {
+//        - a frontend configuration (so that aspects can be selected dynamically)
+//        - we need to be able to mix frontends and to support dependencies (e.g. SAAJ -> DOM)
+//        - mixing frontends must take into account that there may be overlap between them
+//          (one frontend may define a method with the same signature and behavior as a method
+//          in another frontend)
+public interface Frontend {
     List<String> getAspectClasses();
 }

@@ -19,11 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.Frontend;
 
-// TODO: this name is a bit silly (double "com.google.code.ddom.frontend.dom.aspects.Model"), but DOModel is also not very attractive
 @Provider(name="dom")
-public class DOMModel implements Model {
+public class DOMFrontend implements Frontend {
     public List<String> getAspectClasses() {
         return Arrays.asList(new String[] {
                 "com.google.code.ddom.frontend.dom.aspects.AttributeSupport",
