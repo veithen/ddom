@@ -23,6 +23,7 @@ import java.util.List;
 //        - mixing models must take into account that there may be overlap between them
 //          (one model may define a method with the same signature and behavior as a method
 //          in another model)
+// TODO: this should be renamed "Frontend", while the term "model" should be reserved for plain XML and SOAP
 public interface Model {
     List<String> getAspectClasses();
 }
