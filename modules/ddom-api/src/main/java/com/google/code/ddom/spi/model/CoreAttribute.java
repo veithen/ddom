@@ -21,6 +21,5 @@ public interface CoreAttribute extends CoreParentNode, CoreOptimizedParentNode {
     void internalSetOwnerElement(CoreElement newOwner);
 
     String coreGetValue();
-    void coreSetValue(String value);
     CoreElement coreGetOwnerElement();
 }
