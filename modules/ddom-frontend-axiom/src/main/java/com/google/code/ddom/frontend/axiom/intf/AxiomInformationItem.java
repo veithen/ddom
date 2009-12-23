@@ -15,10 +15,12 @@
  */
 package com.google.code.ddom.frontend.axiom.intf;
 
-import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMFactory;
 
-import com.google.code.ddom.spi.model.CoreNSAwareElement;
-
-public interface AxiomElement extends CoreNSAwareElement, OMElement, AxiomContainer, AxiomChildNode, AxiomNamedNode {
-
+public interface AxiomInformationItem {
+    /**
+     * @see org.apache.axiom.om.OMSerializable#getOMFactory()
+     * @see org.apache.axiom.om.OMAttribute#getOMFactory()
+     */
+    OMFactory getOMFactory();
 }

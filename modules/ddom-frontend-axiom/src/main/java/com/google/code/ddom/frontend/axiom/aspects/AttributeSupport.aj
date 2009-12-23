@@ -15,22 +15,12 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 
 public aspect AttributeSupport {
-    public String AxiomAttribute.getLocalName() {
-        return coreGetLocalName();
-    }
-
-    public void AxiomAttribute.setLocalName(String localName) {
-        coreSetLocalName(localName);
-    }
-
     public String AxiomAttribute.getAttributeValue() {
         return coreGetValue();
     }
@@ -48,17 +38,7 @@ public aspect AttributeSupport {
     }
 
     public void AxiomAttribute.setOMNamespace(OMNamespace omNamespace) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public OMNamespace AxiomAttribute.getNamespace() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public QName AxiomAttribute.getQName() {
-        return coreGetQName();
+        setNamespace(omNamespace);
     }
 
     public OMElement AxiomAttribute.getOwner() {

@@ -19,6 +19,6 @@ import org.apache.axiom.om.OMAttribute;
 
 import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
 
-public interface AxiomAttribute extends CoreNSAwareTypedAttribute, OMAttribute {
+public interface AxiomAttribute extends CoreNSAwareTypedAttribute, OMAttribute, AxiomNamedNode {
 
 }

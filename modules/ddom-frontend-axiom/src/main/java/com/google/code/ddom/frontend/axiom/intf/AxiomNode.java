@@ -19,6 +19,6 @@ import org.apache.axiom.om.OMSerializable;
 
 import com.google.code.ddom.spi.model.CoreNode;
 
-public interface AxiomNode extends CoreNode, OMSerializable {
+public interface AxiomNode extends CoreNode, OMSerializable, AxiomInformationItem {
 
 }

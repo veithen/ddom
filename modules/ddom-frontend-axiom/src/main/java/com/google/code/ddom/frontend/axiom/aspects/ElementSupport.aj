@@ -28,32 +28,9 @@ import com.google.code.ddom.frontend.axiom.support.AttributeIterator;
 import com.google.code.ddom.spi.model.CoreAttribute;
 
 public aspect ElementSupport {
-    public String AxiomElement.getLocalName() {
-        return coreGetLocalName();
-    }
-
-    public void AxiomElement.setLocalName(String localName) {
-        coreSetLocalName(localName);
-    }
-    
-    public OMNamespace AxiomElement.getNamespace() {
-        String namespaceURI = coreGetNamespaceURI();
-        // TODO: handle null prefix!
-        return namespaceURI == null ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
-    }
-
-    public void AxiomElement.setNamespace(OMNamespace namespace) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
     public void AxiomElement.setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
         // TODO
         throw new UnsupportedOperationException();
-    }
-    
-    public QName AxiomElement.getQName() {
-        return coreGetQName();
     }
     
     public Iterator AxiomElement.getChildElements() {
