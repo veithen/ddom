@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom.frontend.axiom;
 
+import java.util.Iterator;
+
+import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMText;
@@ -35,5 +38,20 @@ public class ElementTest {
         Assert.assertSame(element, child.getParent());
         Assert.assertEquals("text", ((OMText)child).getText());
         Assert.assertNull(child.getNextOMSibling());
+    }
+    
+    @Validated @Test
+    public void testGetAllAttributes() {
+        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("test", null);
+        element.addAttribute("attr1", "value1", null);
+        element.addAttribute("attr2", "value2", null);
+        Iterator it = element.getAllAttributes();
+        Assert.assertTrue(it.hasNext());
+        OMAttribute attr = (OMAttribute)it.next();
+        Assert.assertEquals("attr1", attr.getLocalName());
+        Assert.assertTrue(it.hasNext());
+        attr = (OMAttribute)it.next();
+        Assert.assertEquals("attr2", attr.getLocalName());
+        Assert.assertFalse(it.hasNext());
     }
 }

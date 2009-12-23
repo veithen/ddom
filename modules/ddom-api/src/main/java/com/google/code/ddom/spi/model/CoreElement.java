@@ -18,4 +18,21 @@ package com.google.code.ddom.spi.model;
 public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimizedParentNode {
     CoreAttribute internalGetFirstAttribute();
     void internalSetFirstAttribute(CoreAttribute attr);
+    
+    /**
+     * Get the last attribute of this element.
+     * 
+     * @return the last attribute, or <code>null</code> if this element has no attributes
+     */
+    CoreAttribute coreGetLastAttribute();
+    
+    /**
+     * Add an attribute to this element. The attribute will be added after the last attribute
+     * currently existing on the element. Note that this method will NOT check if an attribute with
+     * the same name already exists, and always add the attribute.
+     * 
+     * @param attr
+     *            the attribute to add
+     */
+    void coreAppendAttribute(CoreAttribute attr);
 }

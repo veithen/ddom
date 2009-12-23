@@ -147,11 +147,10 @@ public aspect ElementSupport {
                 default:
                     throw new IllegalArgumentException();
             }
-            newAttr.internalSetOwnerElement(this);
             if (previousAttr == null) {
-                internalSetFirstAttribute(newAttr);
+                coreAppendAttribute(newAttr);
             } else {
-                previousAttr.internalSetNextAttribute(newAttr);
+                previousAttr.coreInsertAttributeAfter(newAttr);
             }
         } else {
             attr.setValue(value);

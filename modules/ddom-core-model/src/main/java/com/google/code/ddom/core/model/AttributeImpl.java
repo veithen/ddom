@@ -124,4 +124,13 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         // TODO: what if arg is null?
         this.value = value;
     }
+
+    public final void coreInsertAttributeAfter(CoreAttribute attr) {
+        // TODO: throw exception if attribute already has an owner
+        attr.internalSetOwnerElement(coreGetOwnerElement());
+        if (nextAttribute != null) {
+            attr.internalSetNextAttribute(nextAttribute);
+        }
+        nextAttribute = attr;
+    }
 }

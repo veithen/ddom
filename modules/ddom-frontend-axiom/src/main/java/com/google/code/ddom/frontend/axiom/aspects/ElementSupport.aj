@@ -18,14 +18,15 @@ package com.google.code.ddom.frontend.axiom.aspects;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.om.OMXMLParserWrapper;
 
+import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.support.AttributeIterator;
+import com.google.code.ddom.spi.model.CoreAttribute;
 
 public aspect ElementSupport {
     public String AxiomElement.getLocalName() {
@@ -62,8 +63,7 @@ public aspect ElementSupport {
     }
     
     public Iterator AxiomElement.getAllAttributes() {
-        // TODO
-        throw new UnsupportedOperationException();
+        return new AttributeIterator(this);
     }
     
     public OMAttribute AxiomElement.getAttribute(QName qname) {
@@ -77,13 +77,13 @@ public aspect ElementSupport {
     }
     
     public OMAttribute AxiomElement.addAttribute(OMAttribute attr) {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: need to check for existing attribute
+        coreAppendAttribute((CoreAttribute)attr);
+        return null; // TODO
     }
     
     public OMAttribute AxiomElement.addAttribute(String attributeName, String value, OMNamespace ns) {
-        // TODO
-        throw new UnsupportedOperationException();
+        return addAttribute(((AxiomDocument)getDocument()).createOMAttribute(attributeName, ns, value));
     }
     
     public void AxiomElement.removeAttribute(OMAttribute attr) {

@@ -130,4 +130,24 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
     public void coreDetach() {
         ChildNodeHelper.coreDetach(this);
     }
+
+    public CoreAttribute coreGetLastAttribute() {
+        CoreAttribute previousAttribute = null;
+        CoreAttribute attribute = firstAttribute;
+        while (attribute != null) {
+            previousAttribute = attribute;
+            attribute = attribute.internalGetNextAttribute();
+        }
+        return previousAttribute;
+    }
+
+    public void coreAppendAttribute(CoreAttribute attr) {
+        // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
+        attr.internalSetOwnerElement(this);
+        if (firstAttribute == null) {
+            firstAttribute = attr;
+        } else {
+            coreGetLastAttribute().coreInsertAttributeAfter(attr);
+        }
+    }
 }

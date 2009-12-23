@@ -22,4 +22,13 @@ public interface CoreAttribute extends CoreParentNode, CoreOptimizedParentNode {
 
     String coreGetValue();
     CoreElement coreGetOwnerElement();
+    
+    /**
+     * Insert a new attribute after this instance. Note that this method will NOT check if the
+     * element already has an attribute with the same name, and always insert the attribute.
+     * 
+     * @param attr
+     *            the new attribute
+     */
+    void coreInsertAttributeAfter(CoreAttribute attr);
 }
