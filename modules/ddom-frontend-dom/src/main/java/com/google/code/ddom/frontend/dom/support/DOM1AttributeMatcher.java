@@ -21,17 +21,38 @@ import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.NodeFactory;
 
+/**
+ * {@link AttributeMatcher} implementation that matches attributes based on the qualified name.
+ * Parameters are defined as follows:
+ * <dl>
+ * <dt><code>namespaceURI</code>
+ * <dd>Not used.
+ * <dt><code>name</code>
+ * <dd>The qualified name of the attribute. This value may be in the form
+ * <code>prefix:localName</code>.
+ * <dt><code>value</code>
+ * <dd>The attribute value.
+ * <dt><code>prefix</code>
+ * <dd>Not used.
+ * </dl>
+ * 
+ * @author Andreas Veithen
+ */
 public class DOM1AttributeMatcher implements AttributeMatcher {
     public static final DOM1AttributeMatcher INSTANCE = new DOM1AttributeMatcher();
     
     private DOM1AttributeMatcher() {}
     
-    public boolean matches(CoreAttribute attr, String namespaceURI, String localName) {
+    public boolean matches(CoreAttribute attr, String namespaceURI, String name) {
         // Note: a lookup using DOM 1 methods may return any kind of attribute, including NSDecl
-        return localName.equals(((DOMAttribute)attr).getName());
+        return name.equals(((DOMAttribute)attr).getName());
     }
 
-    public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String localName, String prefix, String value) {
-        return factory.createAttribute(document, localName, value, null);
+    public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+        return factory.createAttribute(document, name, value, null);
+    }
+
+    public void update(CoreAttribute attr, String prefix, String value) {
+        attr.coreSetValue(value);
     }
 }

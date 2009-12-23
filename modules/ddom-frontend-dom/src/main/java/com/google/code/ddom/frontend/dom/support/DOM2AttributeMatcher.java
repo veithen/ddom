@@ -27,15 +27,20 @@ public class DOM2AttributeMatcher implements AttributeMatcher {
     
     private DOM2AttributeMatcher() {}
     
-    public boolean matches(CoreAttribute _attr, String namespaceURI, String localName) {
+    public boolean matches(CoreAttribute _attr, String namespaceURI, String name) {
         DOMAttribute attr = (DOMAttribute)_attr;
         return attr instanceof CoreTypedAttribute
                 && (namespaceURI == null && attr.getNamespaceURI() == null
                         || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
-                && localName.equals(attr.getLocalName());
+                && name.equals(attr.getLocalName());
     }
 
-    public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String localName, String prefix, String value) {
-        return factory.createAttribute(document, namespaceURI, localName, prefix, value, null);
+    public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+        return factory.createAttribute(document, namespaceURI, name, prefix, value, null);
+    }
+
+    public void update(CoreAttribute attr, String prefix, String value) {
+        attr.coreSetValue(value);
+        ((DOMAttribute)attr).setPrefix(prefix);
     }
 }

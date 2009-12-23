@@ -27,52 +27,26 @@ import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.DOMNamespaceDeclarationMatcher;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
+import com.google.code.ddom.spi.model.AttributeMatcher;
 import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.CoreModelException;
 import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
-import com.google.code.ddom.spi.model.NodeFactory;
 
 public aspect ElementSupport {
-    private static final int ATTR_DOM1 = 1;
-    private static final int ATTR_DOM2 = 2;
-    private static final int ATTR_NSDECL = 3;
-
-    private boolean DOMElement.testAttribute(DOMAttribute attr, String namespaceURI, String localName, int mode) {
-        switch (mode) {
-            case ATTR_DOM1:
-                return DOM1AttributeMatcher.INSTANCE.matches(attr, namespaceURI, localName);
-            case ATTR_DOM2:
-                return DOM2AttributeMatcher.INSTANCE.matches(attr, namespaceURI, localName);
-            case ATTR_NSDECL:
-                return DOMNamespaceDeclarationMatcher.INSTANCE.matches(attr, namespaceURI, localName);
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-    
     public final Attr DOMElement.getAttributeNode(String name) {
-        return getAttributeNode(null, name, ATTR_DOM1);
+        return (DOMAttribute)coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
     }
 
     public final Attr DOMElement.getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return getAttributeNode(null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : localName, ATTR_NSDECL);
+            return (DOMAttribute)coreGetAttribute(DOMNamespaceDeclarationMatcher.INSTANCE, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : localName);
         } else {
-            return getAttributeNode(namespaceURI, localName, ATTR_DOM2);
+            return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
         }
     }
     
-    private DOMAttribute DOMElement.getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
-        DOMAttribute attr = (DOMAttribute)coreGetFirstAttribute();
-        while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
-            attr = (DOMAttribute)attr.coreGetNextAttribute();
-        }
-        return attr;
-    }
-
     public final String DOMElement.getAttribute(String name) {
         Attr attr = getAttributeNode(name);
         return attr == null ? "" : attr.getValue();
@@ -93,7 +67,7 @@ public aspect ElementSupport {
 
     public final void DOMElement.setAttribute(String name, String value) throws DOMException {
         NSUtil.validateName(name);
-        setAttribute(null, name, null, ATTR_DOM1, value);
+        coreSetAttribute(DOM1AttributeMatcher.INSTANCE, null, name, null, value);
     }
 
     public final void DOMElement.setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
@@ -108,50 +82,13 @@ public aspect ElementSupport {
             localName = qualifiedName.substring(i+1);
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            setAttribute(null, NSUtil.getDeclaredPrefix(localName, prefix), null, ATTR_NSDECL, value);
+            coreSetAttribute(DOMNamespaceDeclarationMatcher.INSTANCE, null, NSUtil.getDeclaredPrefix(localName, prefix), null, value);
         } else {
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-            setAttribute(namespaceURI, localName, prefix, ATTR_DOM2, value);
+            coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
         }
     }
     
-    private void DOMElement.setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
-        DOMAttribute attr = (DOMAttribute)coreGetFirstAttribute();
-        CoreAttribute previousAttr = null;
-        while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
-            previousAttr = attr;
-            attr = (DOMAttribute)attr.coreGetNextAttribute();
-        }
-        if (attr == null) {
-            CoreDocument document = getDocument();
-            NodeFactory factory = document.getNodeFactory();
-            CoreAttribute newAttr;
-            switch (mode) {
-                case ATTR_DOM1:
-                    newAttr = DOM1AttributeMatcher.INSTANCE.createAttribute(factory, document, namespaceURI, localName, prefix, value);
-                    break;
-                case ATTR_DOM2:
-                    newAttr = DOM2AttributeMatcher.INSTANCE.createAttribute(factory, document, namespaceURI, localName, prefix, value);
-                    break;
-                case ATTR_NSDECL:
-                    newAttr = DOMNamespaceDeclarationMatcher.INSTANCE.createAttribute(factory, document, namespaceURI, localName, prefix, value);
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-            }
-            if (previousAttr == null) {
-                coreAppendAttribute(newAttr);
-            } else {
-                previousAttr.coreInsertAttributeAfter(newAttr);
-            }
-        } else {
-            attr.setValue(value);
-            if (mode == ATTR_DOM2) {
-                attr.setPrefix(prefix);
-            }
-        }
-    }
-
     public final Attr DOMElement.setAttributeNode(Attr newAttr) throws DOMException {
         return setAttributeNodeNS(newAttr);
     }
@@ -172,43 +109,19 @@ public aspect ElementSupport {
         } else if (owner != null) {
             throw DOMExceptionUtil.newDOMException(DOMException.INUSE_ATTRIBUTE_ERR);
         } else {
-            DOMAttribute existingAttr = (DOMAttribute)coreGetFirstAttribute();
-            DOMAttribute previousAttr = null;
-            String localName = newAttr.getLocalName();
             String namespaceURI;
-            int mode;
+            String name = newAttr.getLocalName();
+            AttributeMatcher matcher;
             // TODO: ATTR_NSDECL case missing here
-            if (localName == null) {
+            if (name == null) {
                 namespaceURI = null;
-                localName = newAttr.getName();
-                mode = ATTR_DOM1;
+                name = newAttr.getName();
+                matcher = DOM1AttributeMatcher.INSTANCE;
             } else {
                 namespaceURI = newAttr.getNamespaceURI();
-                mode = ATTR_DOM2;
+                matcher = DOM2AttributeMatcher.INSTANCE;
             }
-            while (existingAttr != null && !testAttribute(existingAttr, namespaceURI, localName, mode)) {
-                previousAttr = existingAttr;
-                existingAttr = (DOMAttribute)existingAttr.coreGetNextAttribute();
-            }
-            newAttr.internalSetOwnerElement(this);
-            if (existingAttr == null) {
-                if (previousAttr == null) {
-                    internalSetFirstAttribute(newAttr);
-                } else {
-                    previousAttr.internalSetNextAttribute(newAttr);
-                }
-                return null;
-            } else {
-                if (previousAttr == null) {
-                    internalSetFirstAttribute(newAttr);
-                } else {
-                    previousAttr.internalSetNextAttribute(newAttr);
-                }
-                existingAttr.internalSetOwnerElement(null);
-                newAttr.internalSetNextAttribute(existingAttr.coreGetNextAttribute());
-                existingAttr.internalSetNextAttribute(null);
-                return existingAttr;
-            }
+            return (DOMAttribute)coreSetAttribute(matcher, namespaceURI, name, newAttr);
         }
     }
 
@@ -244,7 +157,7 @@ public aspect ElementSupport {
     }
 
     public final void DOMElement.setIdAttribute(String name, boolean isId) throws DOMException {
-        CoreAttribute attr = getAttributeNode(null, name, ATTR_DOM1);
+        CoreAttribute attr = coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
         if (attr == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
@@ -254,7 +167,7 @@ public aspect ElementSupport {
 
     public final void DOMElement.setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
         // Here, we assume that a namespace declaration can never be an ID attribute
-        CoreAttribute attr = getAttributeNode(namespaceURI, localName, ATTR_DOM2);
+        CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
         if (attr == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {

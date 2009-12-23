@@ -15,7 +15,64 @@
  */
 package com.google.code.ddom.spi.model;
 
+/**
+ * Selects, creates or updates an attribute based on some match rule.
+ * 
+ * @author Andreas Veithen
+ */
 public interface AttributeMatcher {
-    boolean matches(CoreAttribute attr, String namespaceURI, String localName);
-    CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String localName, String prefix, String value);
+    /**
+     * Check if the given attribute matches. The values of the <code>namespaceURI</code> and
+     * <code>name</code> parameters are those passed to
+     * {@link CoreElement#coreGetAttribute(AttributeMatcher, String, String)},
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, String, String)} or
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, CoreAttribute)}. It is
+     * not required that these parameters strictly represent the namespace URI and local name of the
+     * attribute Their exact meaning is defined by the particular {@link AttributeMatcher}
+     * implementation.
+     * 
+     * @param attr
+     *            the attribute to check
+     * @param namespaceURI
+     *            see above
+     * @param name
+     *            see above
+     * @return <code>true</code> if the attribute matches, <code>false</code> otherwise
+     */
+    boolean matches(CoreAttribute attr, String namespaceURI, String name);
+
+    /**
+     * Create a new attribute node. The values of the <code>namespaceURI</code>, <code>name</code>,
+     * <code>prefix</code> and <code>value</code> parameters are those passed to
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, String, String)}.
+     * 
+     * @param factory
+     *            the node factory to use
+     * @param document
+     *            the document in which the attribute is created
+     * @param namespaceURI
+     *            see above
+     * @param name
+     *            see above
+     * @param prefix
+     *            see above
+     * @param value
+     *            see above
+     * @return
+     */
+    CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value);
+    
+    /**
+     * Update an existing attribute. The values of the <code>prefix</code> and <code>value</code>
+     * parameters are those passed to
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, String, String)}.
+     * 
+     * @param attr
+     *            the attribute to update
+     * @param prefix
+     *            see above
+     * @param value
+     *            see above
+     */
+    void update(CoreAttribute attr, String prefix, String value);
 }

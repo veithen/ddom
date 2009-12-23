@@ -33,6 +33,64 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimized
     CoreAttribute coreGetLastAttribute();
     
     /**
+     * Get the first attribute selected by a given {@link AttributeMatcher}.
+     * 
+     * @param matcher
+     *            the {@link AttributeMatcher} implementation to use
+     * @param namespaceURI
+     *            the <code>namespaceURI</code> parameter to pass to
+     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
+     * @param name
+     *            the <code>name</code> parameter to pass to
+     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
+     * @return the (first) matching attribute, or <code>null</code> if no matching attribute was
+     *         found
+     */
+    CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name);
+    
+    /**
+     * Create or update an attribute based on a given {@link AttributeMatcher}.
+     * 
+     * @param matcher
+     *            the {@link AttributeMatcher} implementation to use
+     * @param namespaceURI
+     *            the <code>namespaceURI</code> parameter to pass to
+     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)} and
+     *            {@link AttributeMatcher#createAttribute(NodeFactory, CoreDocument, String, String, String, String)}
+     * @param name
+     *            the <code>name</code> parameter to pass to
+     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)} and
+     *            {@link AttributeMatcher#createAttribute(NodeFactory, CoreDocument, String, String, String, String)}
+     * @param prefix
+     *            the <code>prefix</code> parameter to pass to
+     *            {@link AttributeMatcher#createAttribute(NodeFactory, CoreDocument, String, String, String, String)}
+     *            and {@link AttributeMatcher#update(CoreAttribute, String, String)}
+     * @param value
+     *            the <code>value</code> parameter to pass to
+     *            {@link AttributeMatcher#createAttribute(NodeFactory, CoreDocument, String, String, String, String)}
+     *            and {@link AttributeMatcher#update(CoreAttribute, String, String)}
+     */
+    void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value);
+    
+    /**
+     * Create or replace an attribute based on a given {@link AttributeMatcher}.
+     * 
+     * @param matcher
+     *            the {@link AttributeMatcher} implementation to use
+     * @param namespaceURI
+     *            the <code>namespaceURI</code> parameter to pass to
+     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
+     * @param name
+     *            the <code>name</code> parameter to pass to
+     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
+     * @param attr
+     *            the new attribute to add
+     * @return the attribute that was replaced by the new attribute, or <code>null</code> if no
+     *         matching attribute existed
+     */
+    CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr);
+    
+    /**
      * Add an attribute to this element. The attribute will be added after the last attribute
      * currently existing on the element. Note that this method will NOT check if an attribute with
      * the same name already exists, and always add the attribute.

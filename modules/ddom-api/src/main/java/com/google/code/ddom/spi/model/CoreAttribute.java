@@ -30,5 +30,6 @@ public interface CoreAttribute extends CoreParentNode, CoreOptimizedParentNode {
      * @param attr
      *            the new attribute
      */
+    // TODO: check if we still need this as public method
     void coreInsertAttributeAfter(CoreAttribute attr);
 }
