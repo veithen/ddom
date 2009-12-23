@@ -23,7 +23,6 @@ import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AttributeIterator;
 import com.google.code.ddom.spi.model.CoreAttribute;
@@ -38,8 +37,9 @@ public aspect ElementSupport {
     }
     
     public OMNamespace AxiomElement.getNamespace() {
-        // TODO
-        throw new UnsupportedOperationException();
+        String namespaceURI = coreGetNamespaceURI();
+        // TODO: handle null prefix!
+        return namespaceURI == null ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
     }
 
     public void AxiomElement.setNamespace(OMNamespace namespace) {
@@ -82,7 +82,7 @@ public aspect ElementSupport {
     }
     
     public OMAttribute AxiomElement.addAttribute(String attributeName, String value, OMNamespace ns) {
-        return addAttribute(((AxiomDocument)getDocument()).createOMAttribute(attributeName, ns, value));
+        return addAttribute(getOMFactory().createOMAttribute(attributeName, ns, value));
     }
     
     public void AxiomElement.removeAttribute(OMAttribute attr) {

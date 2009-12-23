@@ -36,6 +36,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.NSUtil;
+import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 
 public aspect Factory {
     public OMFactory AxiomNode.getOMFactory() {
@@ -87,13 +88,14 @@ public aspect Factory {
     }
 
     public OMElement AxiomDocument.createOMElement(QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
+        return (OMElement)getNodeFactory().createElement(this, NSUtil.getNamespaceURI(qname), qname.getLocalPart(), NSUtil.getPrefix(qname), true);
     }
 
     public OMNamespace AxiomDocument.createOMNamespace(String uri, String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+        if (uri == null) {
+            throw new IllegalArgumentException();
+        }
+        return new OMNamespaceImpl(uri, prefix);
     }
 
     public OMText AxiomDocument.createOMText(OMContainer parent, String text) {
