@@ -22,12 +22,15 @@ import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.NodeFactory;
+import com.google.code.ddom.stream.spi.FragmentSource;
 import com.google.code.ddom.stream.spi.Producer;
 
 public class DocumentImpl extends BuilderWrapperImpl implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
+    private final FragmentSource source;
     private Builder builder;
+    private boolean complete;
     private CoreChildNode firstChild;
     private int children;
     private String inputEncoding;
@@ -36,16 +39,16 @@ public class DocumentImpl extends BuilderWrapperImpl implements CoreDocument {
     private String standalone;
     private String documentURI;
 
-    public DocumentImpl(NodeFactory nodeFactory, Producer producer) {
+    public DocumentImpl(NodeFactory nodeFactory, FragmentSource source) {
         this.nodeFactory = nodeFactory;
-        if (producer == null) {
-            builder = null;
-        } else {
-            builder = new Builder(producer, nodeFactory, this, this);
-        }
+        this.source = source;
+        complete = source == null;
     }
 
     public final void next() throws DeferredParsingException {
+        if (builder == null) {
+            builder = new Builder(source.getProducer(), nodeFactory, this, this);
+        }
         builder.next();
     }
     
@@ -58,7 +61,7 @@ public class DocumentImpl extends BuilderWrapperImpl implements CoreDocument {
     }
 
     public final boolean isComplete() {
-        return builder == null;
+        return complete;
     }
     
     public final void build() {
@@ -74,6 +77,7 @@ public class DocumentImpl extends BuilderWrapperImpl implements CoreDocument {
     public final void internalSetComplete() {
         builder.dispose();
         builder = null;
+        complete = true;
     }
     
     public final void internalSetFirstChild(CoreChildNode child) {

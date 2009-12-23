@@ -30,10 +30,12 @@ import com.google.code.ddom.spi.model.CoreProcessingInstruction;
 import com.google.code.ddom.spi.model.CoreText;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 
 public class NodeFactoryImpl implements NodeFactory {
+    // TODO: clean up the API
     public CoreDocument createDocument(Producer producer) {
-        return new DocumentImpl(this, producer);
+        return new DocumentImpl(this, producer == null ? null : new SimpleFragmentSource(producer));
     }
 
     public CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId) {
