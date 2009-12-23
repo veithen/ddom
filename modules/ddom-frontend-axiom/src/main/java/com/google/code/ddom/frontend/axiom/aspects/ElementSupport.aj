@@ -53,8 +53,7 @@ public aspect ElementSupport {
     }
     
     public QName AxiomElement.getQName() {
-        // TODO
-        throw new UnsupportedOperationException();
+        return coreGetQName();
     }
     
     public Iterator AxiomElement.getChildElements() {

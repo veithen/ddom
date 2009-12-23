@@ -17,6 +17,8 @@ package com.google.code.ddom.frontend.axiom;
 
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
@@ -29,6 +31,29 @@ import com.google.code.ddom.utils.test.Validated;
 
 @RunWith(AxiomTestRunner.class)
 public class ElementTest {
+    @Validated @Test
+    public void testGetQNameWithoutNamespace() {
+        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("name", null);
+        QName qname = element.getQName();
+        Assert.assertEquals("name", qname.getLocalPart());
+        Assert.assertEquals("", qname.getNamespaceURI());
+        Assert.assertEquals("", qname.getPrefix());
+    }
+    
+    @Validated @Test
+    public void testQNameCaching1() {
+        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("name", null);
+        QName qname = element.getQName();
+        Assert.assertSame(qname, element.getQName());
+    }
+    
+//    @Validated @Test
+//    public void testQNameCaching2() {
+//        QName qname = new QName("test", "urn:test", "t");
+//        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement(qname);
+//        Assert.assertSame(qname, element.getQName());
+//    }
+    
     @Validated @Test
     public void testSetText() {
         OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("test", null);
