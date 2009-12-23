@@ -16,7 +16,13 @@
 package com.google.code.ddom.spi.model;
 
 public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimizedParentNode {
-    CoreAttribute internalGetFirstAttribute();
+    /**
+     * Get the first attribute of this element.
+     * 
+     * @return the first attribute, or <code>null</code> if this element has no attributes
+     */
+    CoreAttribute coreGetFirstAttribute();
+    
     void internalSetFirstAttribute(CoreAttribute attr);
     
     /**

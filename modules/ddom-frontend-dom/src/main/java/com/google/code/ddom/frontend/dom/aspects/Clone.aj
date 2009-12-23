@@ -100,11 +100,11 @@ public aspect Clone {
     // TODO: review return type (should be DOMNode)
     public final Node DOMElement.shallowClone() {
         CoreElement clone = shallowCloneWithoutAttributes();
-        CoreAttribute attr = internalGetFirstAttribute();
+        CoreAttribute attr = coreGetFirstAttribute();
         while (attr != null) {
             // TODO: this could be optimized
             ((DOMElement)clone).setAttributeNode((Attr)((Attr)attr).cloneNode(false));
-            attr = attr.internalGetNextAttribute();
+            attr = attr.coreGetNextAttribute();
         }
         return (Node)clone;
     }

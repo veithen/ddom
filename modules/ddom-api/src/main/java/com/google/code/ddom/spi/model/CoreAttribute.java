@@ -16,7 +16,7 @@
 package com.google.code.ddom.spi.model;
 
 public interface CoreAttribute extends CoreParentNode, CoreOptimizedParentNode {
-    CoreAttribute internalGetNextAttribute();
+    CoreAttribute coreGetNextAttribute();
     void internalSetNextAttribute(CoreAttribute attr);
     void internalSetOwnerElement(CoreElement newOwner);
 

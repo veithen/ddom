@@ -33,9 +33,9 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
 
     public int getLength() {
         int length = 0;
-        CoreAttribute attr = element.internalGetFirstAttribute();
+        CoreAttribute attr = element.coreGetFirstAttribute();
         while (attr != null) {
-            attr = attr.internalGetNextAttribute();
+            attr = attr.coreGetNextAttribute();
             length++;
         }
         return length;
@@ -43,9 +43,9 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
     
     public Node item(int index) {
         // TODO: wrong result for negavite indexes
-        CoreAttribute attr = element.internalGetFirstAttribute();
+        CoreAttribute attr = element.coreGetFirstAttribute();
         for (int i=0; i<index && attr != null; i++) {
-            attr = attr.internalGetNextAttribute();
+            attr = attr.coreGetNextAttribute();
         }
         return (Node)attr;
     }

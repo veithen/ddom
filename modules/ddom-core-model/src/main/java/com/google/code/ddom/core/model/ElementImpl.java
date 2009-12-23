@@ -95,7 +95,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         return OptimizedParentNodeHelper.getFirstChild(this);
     }
     
-    public final CoreAttribute internalGetFirstAttribute() {
+    public final CoreAttribute coreGetFirstAttribute() {
         return firstAttribute;
     }
     
@@ -136,7 +136,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         CoreAttribute attribute = firstAttribute;
         while (attribute != null) {
             previousAttribute = attribute;
-            attribute = attribute.internalGetNextAttribute();
+            attribute = attribute.coreGetNextAttribute();
         }
         return previousAttribute;
     }

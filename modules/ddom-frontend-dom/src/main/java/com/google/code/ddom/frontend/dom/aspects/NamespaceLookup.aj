@@ -55,7 +55,7 @@ public aspect NamespaceLookup {
     }
 
     public final String DOMElement.lookupNamespaceURI(String prefix) {
-        for (CoreAttribute attr = internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
+        for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
                 if (decl.getDeclaredPrefix().equals(prefix)) {
@@ -69,7 +69,7 @@ public aspect NamespaceLookup {
 
     public final String DOMElement.lookupPrefix(String namespaceURI) {
         // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
-        for (CoreAttribute attr = internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
+        for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
                 if (decl.getDeclaredNamespaceURI().equals(namespaceURI)) {

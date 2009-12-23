@@ -30,15 +30,15 @@ public class AttributeIterator implements Iterator {
     }
 
     public boolean hasNext() {
-        return current == null && element.internalGetFirstAttribute() != null
-                || current != null && current.internalGetNextAttribute() != null;
+        return current == null && element.coreGetFirstAttribute() != null
+                || current != null && current.coreGetNextAttribute() != null;
     }
 
     public Object next() {
         if (current == null) {
-            current = (AxiomAttribute)element.internalGetFirstAttribute();
+            current = (AxiomAttribute)element.coreGetFirstAttribute();
         } else {
-            current = (AxiomAttribute)current.internalGetNextAttribute();
+            current = (AxiomAttribute)current.coreGetNextAttribute();
         }
         if (current == null) {
             throw new NoSuchElementException();

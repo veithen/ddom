@@ -52,7 +52,7 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
         }
     }
     
-    public final CoreAttribute internalGetNextAttribute() {
+    public final CoreAttribute coreGetNextAttribute() {
         return nextAttribute;
     }
 

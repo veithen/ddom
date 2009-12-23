@@ -131,7 +131,7 @@ public aspect DocumentSupport {
     public final Element DOMDocument.getElementById(String elementId) {
         for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
             DOMElement element = it.next();
-            for (CoreAttribute attr = element.internalGetFirstAttribute(); attr != null; attr = attr.internalGetNextAttribute()) {
+            for (CoreAttribute attr = element.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
                 if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {
                     return element;
                 }

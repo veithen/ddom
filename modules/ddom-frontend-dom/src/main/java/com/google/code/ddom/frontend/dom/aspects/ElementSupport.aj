@@ -73,9 +73,9 @@ public aspect ElementSupport {
     }
     
     private DOMAttribute DOMElement.getAttributeNode(String namespaceURI, String localName, int mode) throws DOMException {
-        DOMAttribute attr = (DOMAttribute)internalGetFirstAttribute();
+        DOMAttribute attr = (DOMAttribute)coreGetFirstAttribute();
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
-            attr = (DOMAttribute)attr.internalGetNextAttribute();
+            attr = (DOMAttribute)attr.coreGetNextAttribute();
         }
         return attr;
     }
@@ -123,11 +123,11 @@ public aspect ElementSupport {
     }
     
     private void DOMElement.setAttribute(String namespaceURI, String localName, String prefix, int mode, String value) throws DOMException {
-        DOMAttribute attr = (DOMAttribute)internalGetFirstAttribute();
+        DOMAttribute attr = (DOMAttribute)coreGetFirstAttribute();
         CoreAttribute previousAttr = null;
         while (attr != null && !testAttribute(attr, namespaceURI, localName, mode)) {
             previousAttr = attr;
-            attr = (DOMAttribute)attr.internalGetNextAttribute();
+            attr = (DOMAttribute)attr.coreGetNextAttribute();
         }
         if (attr == null) {
             CoreDocument document = getDocument();
@@ -180,7 +180,7 @@ public aspect ElementSupport {
         } else if (owner != null) {
             throw DOMExceptionUtil.newDOMException(DOMException.INUSE_ATTRIBUTE_ERR);
         } else {
-            DOMAttribute existingAttr = (DOMAttribute)internalGetFirstAttribute();
+            DOMAttribute existingAttr = (DOMAttribute)coreGetFirstAttribute();
             DOMAttribute previousAttr = null;
             String localName = newAttr.getLocalName();
             String namespaceURI;
@@ -196,7 +196,7 @@ public aspect ElementSupport {
             }
             while (existingAttr != null && !testAttribute(existingAttr, namespaceURI, localName, mode)) {
                 previousAttr = existingAttr;
-                existingAttr = (DOMAttribute)existingAttr.internalGetNextAttribute();
+                existingAttr = (DOMAttribute)existingAttr.coreGetNextAttribute();
             }
             newAttr.internalSetOwnerElement(this);
             if (existingAttr == null) {
@@ -213,7 +213,7 @@ public aspect ElementSupport {
                     previousAttr.internalSetNextAttribute(newAttr);
                 }
                 existingAttr.internalSetOwnerElement(null);
-                newAttr.internalSetNextAttribute(existingAttr.internalGetNextAttribute());
+                newAttr.internalSetNextAttribute(existingAttr.coreGetNextAttribute());
                 existingAttr.internalSetNextAttribute(null);
                 return existingAttr;
             }
@@ -223,9 +223,9 @@ public aspect ElementSupport {
     public final Attr DOMElement.removeAttributeNode(Attr _oldAttr) throws DOMException {
         DOMAttribute oldAttr = (DOMAttribute)_oldAttr;
         if (oldAttr.getOwnerElement() == this) {
-            CoreAttribute previousAttr = internalGetFirstAttribute();
+            CoreAttribute previousAttr = coreGetFirstAttribute();
             while (previousAttr != null) {
-                CoreAttribute nextAttr = previousAttr.internalGetNextAttribute();
+                CoreAttribute nextAttr = previousAttr.coreGetNextAttribute();
                 if (nextAttr == oldAttr) {
                     break;
                 }
@@ -233,9 +233,9 @@ public aspect ElementSupport {
             }
             oldAttr.internalSetOwnerElement(null);
             if (previousAttr == null) {
-                internalSetFirstAttribute(oldAttr.internalGetNextAttribute());
+                internalSetFirstAttribute(oldAttr.coreGetNextAttribute());
             } else {
-                previousAttr.internalSetNextAttribute(oldAttr.internalGetNextAttribute());
+                previousAttr.internalSetNextAttribute(oldAttr.coreGetNextAttribute());
             }
         } else {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);

@@ -29,7 +29,7 @@ import com.google.code.ddom.frontend.dom.intf.*;
  */
 public aspect Attributes {
     public final boolean DOMElement.hasAttributes() {
-        return internalGetFirstAttribute() != null;
+        return coreGetFirstAttribute() != null;
     }
 
     public final NamedNodeMap DOMElement.getAttributes() {
