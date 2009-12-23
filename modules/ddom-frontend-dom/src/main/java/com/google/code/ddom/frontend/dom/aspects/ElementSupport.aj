@@ -22,13 +22,15 @@ import org.w3c.dom.DOMException;
 
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.support.DOM1AttributeMatcher;
+import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.frontend.dom.support.DOMNamespaceDeclarationMatcher;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.CoreModelException;
-import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
 import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
 import com.google.code.ddom.spi.model.NodeFactory;
@@ -41,20 +43,11 @@ public aspect ElementSupport {
     private boolean DOMElement.testAttribute(DOMAttribute attr, String namespaceURI, String localName, int mode) {
         switch (mode) {
             case ATTR_DOM1:
-                // Note: a lookup using DOM 1 methods may return any kind of attribute, including NSDecl
-                return localName.equals(attr.getName());
+                return DOM1AttributeMatcher.INSTANCE.matches(attr, namespaceURI, localName);
             case ATTR_DOM2:
-                return attr instanceof CoreTypedAttribute
-                        && (namespaceURI == null && attr.getNamespaceURI() == null
-                                || namespaceURI != null && namespaceURI.equals(attr.getNamespaceURI()))
-                        && localName.equals(attr.getLocalName());
+                return DOM2AttributeMatcher.INSTANCE.matches(attr, namespaceURI, localName);
             case ATTR_NSDECL:
-                if (attr instanceof CoreNamespaceDeclaration) {
-                    String prefix = ((CoreNamespaceDeclaration)attr).getDeclaredPrefix();
-                    return localName == null && prefix == null || localName != null && localName.equals(prefix);
-                } else {
-                    return false;
-                }
+                return DOMNamespaceDeclarationMatcher.INSTANCE.matches(attr, namespaceURI, localName);
             default:
                 throw new IllegalArgumentException();
         }
@@ -135,14 +128,13 @@ public aspect ElementSupport {
             CoreAttribute newAttr;
             switch (mode) {
                 case ATTR_DOM1:
-                    newAttr = factory.createAttribute(document, localName, value, null);
+                    newAttr = DOM1AttributeMatcher.INSTANCE.createAttribute(factory, document, namespaceURI, localName, prefix, value);
                     break;
                 case ATTR_DOM2:
-                    newAttr = factory.createAttribute(document, namespaceURI, localName, prefix, value, null);
+                    newAttr = DOM2AttributeMatcher.INSTANCE.createAttribute(factory, document, namespaceURI, localName, prefix, value);
                     break;
                 case ATTR_NSDECL:
-                    // TODO: documentation here (localName instead of prefix is not a mistake...)
-                    newAttr = factory.createNSDecl(document, localName, value);
+                    newAttr = DOMNamespaceDeclarationMatcher.INSTANCE.createAttribute(factory, document, namespaceURI, localName, prefix, value);
                     break;
                 default:
                     throw new IllegalArgumentException();
