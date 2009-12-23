@@ -19,7 +19,7 @@ import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
 
-public class DocumentFragmentImpl extends ParentNodeImpl implements CoreDocumentFragment {
+public class DocumentFragmentImpl extends BuilderWrapperImpl implements CoreDocumentFragment {
     private final CoreDocument document;
     private CoreChildNode firstChild;
     private int children;

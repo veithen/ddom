@@ -15,5 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-public interface CoreDocumentFragment extends CoreParentNode /*, BuilderTarget*/ {
+public interface BuilderWrapper {
+
 }

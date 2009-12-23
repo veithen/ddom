@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.core.model;
 
-public interface CoreDocumentFragment extends CoreParentNode /*, BuilderTarget*/ {
+import com.google.code.ddom.spi.model.BuilderWrapper;
+
+public abstract class BuilderWrapperImpl extends ParentNodeImpl implements BuilderWrapper {
+
 }
