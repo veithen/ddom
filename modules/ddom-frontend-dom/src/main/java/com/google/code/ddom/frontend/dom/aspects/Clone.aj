@@ -18,7 +18,6 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.model.*;
 import com.google.code.ddom.frontend.dom.intf.DOMChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
@@ -89,8 +88,8 @@ public aspect Clone {
     }
 
     public final Node DOMDocumentType.cloneNode(boolean deep) {
-        // TODO: factory method here!
-        return (Node)new DocumentTypeImpl(getDocument(), coreGetRootName(), coreGetPublicId(), coreGetSystemId());
+        CoreDocument document = getDocument();
+        return (Node)document.getNodeFactory().createDocumentType(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
     
     public final Node DOMElement.cloneNode(boolean deep) {
