@@ -17,13 +17,13 @@ package com.google.code.ddom.frontend.axiom.aspects;
 
 import javax.xml.namespace.QName;
 
-import com.google.code.ddom.core.model.NSAwareElementImpl;
-import com.google.code.ddom.core.model.NSAwareTypedAttributeImpl;
 import com.google.code.ddom.frontend.axiom.intf.CoreNSAwareNamedNodeWithQNameCaching;
+import com.google.code.ddom.spi.model.CoreNSAwareNamedNode;
+import com.google.code.ddom.spi.model.Implementation;
 
 // TODO: move this to some common aspect module (since it is not strictly related to Axiom)
 public aspect QNameCaching {
-    declare parents: (NSAwareElementImpl || NSAwareTypedAttributeImpl) implements CoreNSAwareNamedNodeWithQNameCaching;
+    declare parents: @Implementation CoreNSAwareNamedNode+ implements CoreNSAwareNamedNodeWithQNameCaching;
     
     private QName CoreNSAwareNamedNodeWithQNameCaching.qname;
     
