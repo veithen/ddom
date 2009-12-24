@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.DeferredDocumentFactory;
-import com.google.code.ddom.core.model.DocumentImpl;
+import com.google.code.ddom.backend.linkedlist.DocumentImpl;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.spi.model.FrontendRegistry;
 

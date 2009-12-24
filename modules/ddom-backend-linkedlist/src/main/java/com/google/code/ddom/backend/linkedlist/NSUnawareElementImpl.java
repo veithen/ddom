@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.aspect;
+package com.google.code.ddom.backend.linkedlist;
 
-import junit.framework.AssertionFailedError;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreNSUnawareElement;
+import com.google.code.ddom.spi.model.Implementation;
 
-import org.junit.Test;
+@Implementation
+public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
+    private final String tagName;
 
-import com.google.code.ddom.backend.linkedlist.DocumentTypeImpl;
+    public NSUnawareElementImpl(CoreDocument document, String tagName, boolean complete) {
+        super(document, complete);
+        this.tagName = tagName;
+    }
 
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeImpl(null, null, null, null);
+    public String coreGetName() {
+        return tagName;
     }
 }

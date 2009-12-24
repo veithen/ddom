@@ -29,7 +29,8 @@ import com.google.code.ddom.spi.ProviderFinderException;
 import com.google.code.ddom.weaver.FrontendWeaver;
 
 public final class FrontendRegistry {
-    private static final String NODE_FACTORY_IMPL_CLASS = "com.google.code.ddom.core.model.NodeFactoryImpl";
+    // TODO: should be taken from the backend definition
+    private static final String NODE_FACTORY_IMPL_CLASS = "com.google.code.ddom.backend.linkedlist.NodeFactoryImpl";
     private static final ClassLoaderLocal<FrontendRegistry> registries = new ClassLoaderLocal<FrontendRegistry>();
     
     private final Map<String,NodeFactory> nodeFactories;

@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.aspect;
+package com.google.code.ddom.backend.linkedlist;
 
-import junit.framework.AssertionFailedError;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreEntityReference;
+import com.google.code.ddom.spi.model.Implementation;
 
-import org.junit.Test;
+@Implementation
+public class EntityReferenceImpl extends LeafNodeImpl implements CoreEntityReference {
+    private String name;
+    
+    public EntityReferenceImpl(CoreDocument document, String name) {
+        super(document);
+        this.name = name;
+    }
 
-import com.google.code.ddom.backend.linkedlist.DocumentTypeImpl;
-
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeImpl(null, null, null, null);
+    public final String coreGetName() {
+        return name;
     }
 }

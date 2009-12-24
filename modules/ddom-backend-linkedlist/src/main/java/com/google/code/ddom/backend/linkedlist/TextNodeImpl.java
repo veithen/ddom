@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.aspect;
+package com.google.code.ddom.backend.linkedlist;
 
-import junit.framework.AssertionFailedError;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreTextNode;
+import com.google.code.ddom.spi.model.Implementation;
 
-import org.junit.Test;
-
-import com.google.code.ddom.backend.linkedlist.DocumentTypeImpl;
-
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeImpl(null, null, null, null);
+@Implementation
+public abstract class TextNodeImpl extends CharacterDataImpl implements CoreTextNode {
+    public TextNodeImpl(CoreDocument document, String data) {
+        super(document, data);
     }
 }

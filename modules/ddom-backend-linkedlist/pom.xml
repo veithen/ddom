@@ -24,25 +24,24 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-jaxp</artifactId>
-    <name>DDOM :: Modules :: JAXP</name>
+    <artifactId>ddom-backend-linkedlist</artifactId>
+    <name>DDOM :: Modules :: Backend :: Linked list</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>ddom-frontend-dom</artifactId>
-            <version>${version}</version>
+            <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-api</artifactId>
+            <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <!-- TODO: this should only be a runtime dependency! -->
-            <groupId>${groupId}</groupId>
-            <artifactId>ddom-backend-linkedlist</artifactId>
-            <version>${version}</version>
+            <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-core-model</artifactId>
+            <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>ddom-stream-stax</artifactId>
-            <version>${version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

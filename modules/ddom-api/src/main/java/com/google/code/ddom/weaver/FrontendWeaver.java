@@ -37,7 +37,8 @@ public class FrontendWeaver extends TransformingClassLoader {
 
     @Override
     protected boolean needsTransformation(String className) {
-        return className.startsWith("com.google.code.ddom.core.model.");
+        // TODO: should be taken from the backend definition
+        return className.startsWith("com.google.code.ddom.backend.linkedlist.");
     }
 
     @Override
