@@ -47,6 +47,7 @@
             <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-core-model</artifactId>
             <version>${pom.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>

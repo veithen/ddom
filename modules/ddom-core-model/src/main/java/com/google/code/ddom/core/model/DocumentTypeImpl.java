@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class DocumentTypeImpl extends LeafNodeImpl implements CoreDocumentType {
     private final String rootName;
     private final String publicId;

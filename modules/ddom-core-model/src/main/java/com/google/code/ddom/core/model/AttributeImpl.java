@@ -23,7 +23,9 @@ import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.CoreEntityReference;
 import com.google.code.ddom.spi.model.CoreText;
 import com.google.code.ddom.spi.model.HierarchyException;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttribute {
     /**
      * The owner of the attribute. This is either a {@link CoreDocument} if the attribute is not linked

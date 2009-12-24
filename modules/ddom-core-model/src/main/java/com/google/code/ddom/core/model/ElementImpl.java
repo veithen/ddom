@@ -23,8 +23,10 @@ import com.google.code.ddom.spi.model.CoreElement;
 import com.google.code.ddom.spi.model.CoreModelException;
 import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
+import com.google.code.ddom.spi.model.Implementation;
 import com.google.code.ddom.spi.model.NodeFactory;
 
+@Implementation
 public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {
     private final CoreDocument document;
     private Object content;

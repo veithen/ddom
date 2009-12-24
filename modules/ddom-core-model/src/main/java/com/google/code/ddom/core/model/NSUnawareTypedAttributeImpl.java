@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSUnawareTypedAttribute {
     private final String name;
 

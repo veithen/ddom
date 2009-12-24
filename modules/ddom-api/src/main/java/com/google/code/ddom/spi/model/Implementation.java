@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.core.model;
+package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreTextNode;
-import com.google.code.ddom.spi.model.Implementation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Implementation
-public abstract class TextNodeImpl extends CharacterDataImpl implements CoreTextNode {
-    public TextNodeImpl(CoreDocument document, String data) {
-        super(document, data);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Implementation {
+
 }

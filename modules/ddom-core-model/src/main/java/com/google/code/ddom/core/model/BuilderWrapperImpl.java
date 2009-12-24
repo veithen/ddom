@@ -16,7 +16,9 @@
 package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.BuilderWrapper;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public abstract class BuilderWrapperImpl extends ParentNodeImpl implements BuilderWrapper {
 
 }

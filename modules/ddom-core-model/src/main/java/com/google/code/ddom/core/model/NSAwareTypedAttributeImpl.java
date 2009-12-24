@@ -19,7 +19,9 @@ import javax.xml.namespace.QName;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSAwareTypedAttribute {
     private final String namespaceURI;
     private String localName;

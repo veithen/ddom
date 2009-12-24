@@ -21,7 +21,9 @@ import com.google.code.ddom.spi.model.CoreLeafNode;
 import com.google.code.ddom.spi.model.CoreModelException;
 import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public abstract class LeafNodeImpl extends NodeImpl implements CoreLeafNode {
     private CoreDocument document;
     private CoreParentNode parent;

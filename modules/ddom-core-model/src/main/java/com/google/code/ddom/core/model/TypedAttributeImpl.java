@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreTypedAttribute;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTypedAttribute {
     private String type;
 

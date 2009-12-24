@@ -21,10 +21,12 @@ import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentType;
 import com.google.code.ddom.spi.model.CoreElement;
+import com.google.code.ddom.spi.model.Implementation;
 import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.stream.spi.FragmentSource;
 import com.google.code.ddom.stream.spi.Producer;
 
+@Implementation
 public class DocumentImpl extends BuilderWrapperImpl implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;

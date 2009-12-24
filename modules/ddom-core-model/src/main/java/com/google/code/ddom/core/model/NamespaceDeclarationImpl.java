@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class NamespaceDeclarationImpl extends AttributeImpl implements CoreNamespaceDeclaration {
     private String declaredPrefix;
 

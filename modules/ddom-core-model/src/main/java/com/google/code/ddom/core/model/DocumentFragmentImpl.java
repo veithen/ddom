@@ -18,7 +18,9 @@ package com.google.code.ddom.core.model;
 import com.google.code.ddom.spi.model.CoreChildNode;
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreDocumentFragment;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class DocumentFragmentImpl extends BuilderWrapperImpl implements CoreDocumentFragment {
     private final CoreDocument document;
     private CoreChildNode firstChild;

@@ -16,8 +16,10 @@
 package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreNode;
+import com.google.code.ddom.spi.model.Implementation;
 import com.google.code.ddom.spi.model.WrongDocumentException;
 
+@Implementation
 public abstract class NodeImpl implements CoreNode {
     public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
         if (node.getDocument() != getDocument()) {

@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreComment;
 import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class CommentImpl extends CharacterDataImpl implements CoreComment {
     public CommentImpl(CoreDocument document, String data) {
         super(document, data);

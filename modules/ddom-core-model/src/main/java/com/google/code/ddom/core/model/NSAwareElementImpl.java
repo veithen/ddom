@@ -19,7 +19,9 @@ import javax.xml.namespace.QName;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNSAwareElement;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class NSAwareElementImpl extends ElementImpl implements CoreNSAwareElement {
     private final String namespaceURI;
     private String localName;

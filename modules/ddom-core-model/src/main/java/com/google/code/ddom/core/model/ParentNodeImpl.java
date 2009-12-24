@@ -22,8 +22,10 @@ import com.google.code.ddom.spi.model.CoreModelException;
 import com.google.code.ddom.spi.model.CoreNode;
 import com.google.code.ddom.spi.model.CoreParentNode;
 import com.google.code.ddom.spi.model.HierarchyException;
+import com.google.code.ddom.spi.model.Implementation;
 import com.google.code.ddom.spi.model.NodeNotFoundException;
 
+@Implementation
 public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode {
     public final CoreChildNode coreGetLastChild() {
         CoreChildNode previousChild = null;

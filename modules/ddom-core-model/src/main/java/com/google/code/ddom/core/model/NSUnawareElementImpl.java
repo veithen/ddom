@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreNSUnawareElement;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
     private final String tagName;
 

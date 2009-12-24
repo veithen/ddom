@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreEntityReference;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class EntityReferenceImpl extends LeafNodeImpl implements CoreEntityReference {
     private String name;
     

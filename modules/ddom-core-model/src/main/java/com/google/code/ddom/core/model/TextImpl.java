@@ -17,7 +17,9 @@ package com.google.code.ddom.core.model;
 
 import com.google.code.ddom.spi.model.CoreDocument;
 import com.google.code.ddom.spi.model.CoreText;
+import com.google.code.ddom.spi.model.Implementation;
 
+@Implementation
 public class TextImpl extends TextNodeImpl implements CoreText {
     public TextImpl(CoreDocument document, String data) {
         super(document, data);

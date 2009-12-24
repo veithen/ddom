@@ -15,15 +15,6 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
-import com.google.code.ddom.core.model.DocumentImpl;
-import com.google.code.ddom.core.model.ElementImpl;
-import com.google.code.ddom.core.model.LeafNodeImpl;
-import com.google.code.ddom.core.model.NSAwareElementImpl;
-import com.google.code.ddom.core.model.NSAwareTypedAttributeImpl;
-import com.google.code.ddom.core.model.NodeImpl;
-import com.google.code.ddom.core.model.ProcessingInstructionImpl;
-import com.google.code.ddom.core.model.TextImpl;
-import com.google.code.ddom.core.model.TextNodeImpl;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
@@ -33,15 +24,25 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
 import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
+import com.google.code.ddom.spi.model.CoreChildNode;
+import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.spi.model.CoreLeafNode;
+import com.google.code.ddom.spi.model.CoreNSAwareElement;
+import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.spi.model.CoreNode;
+import com.google.code.ddom.spi.model.CoreProcessingInstruction;
+import com.google.code.ddom.spi.model.CoreText;
+import com.google.code.ddom.spi.model.CoreTextNode;
+import com.google.code.ddom.spi.model.Implementation;
 
 public aspect Parents {
-    declare parents: DocumentImpl implements AxiomDocument;
-    declare parents: NSAwareElementImpl implements AxiomElement;
-    declare parents: TextNodeImpl implements AxiomTextNode;
-    declare parents: TextImpl implements AxiomText;
-    declare parents: ProcessingInstructionImpl implements AxiomProcessingInstruction;
-    declare parents: NodeImpl implements AxiomNode;
-    declare parents: LeafNodeImpl implements AxiomLeafNode;
-    declare parents: (LeafNodeImpl || ElementImpl) implements AxiomChildNode;
-    declare parents: NSAwareTypedAttributeImpl implements AxiomAttribute;
+    declare parents: @Implementation CoreDocument+ implements AxiomDocument;
+    declare parents: @Implementation CoreNSAwareElement+ implements AxiomElement;
+    declare parents: @Implementation CoreTextNode+ implements AxiomTextNode;
+    declare parents: @Implementation CoreText+ implements AxiomText;
+    declare parents: @Implementation CoreProcessingInstruction+ implements AxiomProcessingInstruction;
+    declare parents: @Implementation CoreNode+ implements AxiomNode;
+    declare parents: @Implementation CoreLeafNode+ implements AxiomLeafNode;
+    declare parents: @Implementation CoreChildNode+ implements AxiomChildNode;
+    declare parents: @Implementation CoreNSAwareTypedAttribute+ implements AxiomAttribute;
 }
