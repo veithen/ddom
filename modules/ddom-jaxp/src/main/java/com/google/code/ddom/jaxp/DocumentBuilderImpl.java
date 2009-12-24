@@ -37,6 +37,7 @@ import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.backend.linkedlist.DocumentImpl;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.spi.model.FrontendRegistry;
+import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private final boolean ignoreComments;
@@ -51,7 +52,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public DOMImplementation getDOMImplementation() {
         // TODO: check if this is consistent with the rest of the code
-        return new DOMImplementationImpl(FrontendRegistry.getInstance().getNodeFactory("dom"));
+        return new DOMImplementationImpl((NodeFactory)FrontendRegistry.getInstance().getDocumentFactory("dom"));
     }
 
     @Override

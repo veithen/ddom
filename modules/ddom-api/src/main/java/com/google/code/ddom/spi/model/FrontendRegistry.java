@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
 import com.google.code.ddom.commons.cl.ClassUtils;
@@ -30,19 +31,19 @@ import com.google.code.ddom.weaver.FrontendWeaver;
 
 public final class FrontendRegistry {
     // TODO: should be taken from the backend definition
-    private static final String NODE_FACTORY_IMPL_CLASS = "com.google.code.ddom.backend.linkedlist.NodeFactoryImpl";
+    private static final String DOCUMENT_FACTORY_IMPL_CLASS = "com.google.code.ddom.backend.linkedlist.NodeFactoryImpl";
     private static final ClassLoaderLocal<FrontendRegistry> registries = new ClassLoaderLocal<FrontendRegistry>();
     
-    private final Map<String,NodeFactory> nodeFactories;
+    private final Map<String,DocumentFactory> documentFactories;
     
-    private FrontendRegistry(Map<String,NodeFactory> nodeFactories) {
-        this.nodeFactories = nodeFactories;
+    private FrontendRegistry(Map<String,DocumentFactory> documentFactories) {
+        this.documentFactories = documentFactories;
     }
     
     public static FrontendRegistry getInstance(ClassLoader classLoader) throws ProviderFinderException {
         FrontendRegistry registry = registries.get(classLoader);
         if (registry == null) {
-            Map<String,NodeFactory> factories = new LinkedHashMap<String,NodeFactory>();
+            Map<String,DocumentFactory> factories = new LinkedHashMap<String,DocumentFactory>();
             // TODO: this should be done lazily
             for (Map.Entry<String,Frontend> entry : ProviderFinder.find(classLoader, Frontend.class).entrySet()) {
                 try {
@@ -57,7 +58,7 @@ public final class FrontendRegistry {
         return registry;
     }
     
-    private static NodeFactory loadFrontend(ClassLoader classLoader, Frontend frontend) throws Exception {
+    private static DocumentFactory loadFrontend(ClassLoader classLoader, Frontend frontend) throws Exception {
         FrontendWeaver weaver = new FrontendWeaver(classLoader, frontend);
         
         // The following code serves two purposes:
@@ -66,12 +67,12 @@ public final class FrontendRegistry {
         //  * The classes are loaded in superclass-first order to work around a bug in AspectJ
         //    (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=286473).
         // TODO: follow-up the bug with the AspectJ project
-        Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, NODE_FACTORY_IMPL_CLASS);
+        Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, DOCUMENT_FACTORY_IMPL_CLASS);
         for (Class<?> cls : ClassUtils.sortHierarchically(Arrays.asList(classes))) {
             weaver.loadClass(cls.getName());
         }
         
-        return (NodeFactory)weaver.loadClass(NODE_FACTORY_IMPL_CLASS).newInstance();
+        return (DocumentFactory)weaver.loadClass(DOCUMENT_FACTORY_IMPL_CLASS).newInstance();
     }
     
     public static FrontendRegistry getInstance() throws ProviderFinderException {
@@ -82,7 +83,7 @@ public final class FrontendRegistry {
         }));
     }
     
-    public NodeFactory getNodeFactory(String model) {
-        return nodeFactories.get(model);
+    public DocumentFactory getDocumentFactory(String model) {
+        return documentFactories.get(model);
     }
 }

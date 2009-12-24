@@ -45,13 +45,13 @@ public class DeferredDocumentFactory {
     
     public DeferredDocument newDocument(String frontend) {
         // TODO: check for null here!
-        return frontendRegistry.getNodeFactory(frontend).createDocument(null);
+        return frontendRegistry.getDocumentFactory(frontend).createDocument(null);
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
     public DeferredDocument parse(String frontend, Object source, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
-        NodeFactory nodeFactory = frontendRegistry.getNodeFactory(frontend);
+        DocumentFactory nodeFactory = frontendRegistry.getDocumentFactory(frontend);
         Producer producer;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!

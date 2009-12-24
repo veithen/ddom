@@ -15,9 +15,10 @@
  */
 package com.google.code.ddom.spi.model;
 
+import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.stream.spi.Producer;
 
-public interface NodeFactory {
+public interface NodeFactory extends DocumentFactory {
     CoreDocument createDocument(Producer producer);
     
     /**

@@ -33,6 +33,7 @@ import org.w3c.domts.DocumentBuilderSetting;
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.spi.model.FrontendRegistry;
+import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFactory {
     private interface Strategy {
@@ -99,7 +100,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
     @Override
     public DOMImplementation getDOMImplementation() {
         // TODO: check this
-        return new DOMImplementationImpl(FrontendRegistry.getInstance().getNodeFactory("dom"));
+        return new DOMImplementationImpl((NodeFactory)FrontendRegistry.getInstance().getDocumentFactory("dom"));
     }
 
     @Override
