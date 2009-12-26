@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreNode;
-import com.google.code.ddom.spi.model.Implementation;
-import com.google.code.ddom.spi.model.WrongDocumentException;
+import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.backend.WrongDocumentException;
 
 @Implementation
 public abstract class NodeImpl implements CoreNode {

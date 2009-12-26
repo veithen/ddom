@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreDocumentFragment;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentFragment;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class DocumentFragmentImpl extends BuilderWrapperImpl implements CoreDocumentFragment {

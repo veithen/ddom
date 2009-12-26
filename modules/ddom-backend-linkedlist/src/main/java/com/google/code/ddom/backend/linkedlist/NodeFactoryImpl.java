@@ -15,20 +15,20 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreCDATASection;
-import com.google.code.ddom.spi.model.CoreComment;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreDocumentFragment;
-import com.google.code.ddom.spi.model.CoreDocumentType;
-import com.google.code.ddom.spi.model.CoreEntityReference;
-import com.google.code.ddom.spi.model.CoreNSAwareElement;
-import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
-import com.google.code.ddom.spi.model.CoreNSUnawareElement;
-import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
-import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
-import com.google.code.ddom.spi.model.CoreProcessingInstruction;
-import com.google.code.ddom.spi.model.CoreText;
-import com.google.code.ddom.spi.model.NodeFactory;
+import com.google.code.ddom.backend.CoreCDATASection;
+import com.google.code.ddom.backend.CoreComment;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentFragment;
+import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.backend.CoreNSAwareElement;
+import com.google.code.ddom.backend.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSUnawareElement;
+import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
+import com.google.code.ddom.backend.CoreProcessingInstruction;
+import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 

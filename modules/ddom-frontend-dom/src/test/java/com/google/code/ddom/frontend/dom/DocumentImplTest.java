@@ -32,8 +32,8 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.backend.CoreNSUnawareElement;
 import com.google.code.ddom.backend.linkedlist.NSUnawareTypedAttributeImpl;
-import com.google.code.ddom.spi.model.CoreNSUnawareElement;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 import com.google.code.ddom.utils.test.Validated;

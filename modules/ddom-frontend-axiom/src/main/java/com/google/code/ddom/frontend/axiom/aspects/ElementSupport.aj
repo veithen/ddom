@@ -23,9 +23,9 @@ import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
+import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AttributeIterator;
-import com.google.code.ddom.spi.model.CoreAttribute;
 
 public aspect ElementSupport {
     public void AxiomElement.setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {

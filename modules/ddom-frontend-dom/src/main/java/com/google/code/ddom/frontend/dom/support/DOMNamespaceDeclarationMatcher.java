@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.frontend.dom.support;
 
-import com.google.code.ddom.spi.model.AttributeMatcher;
-import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
-import com.google.code.ddom.spi.model.NodeFactory;
+import com.google.code.ddom.backend.AttributeMatcher;
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
+import com.google.code.ddom.backend.NodeFactory;
 
 /**
  * {@link AttributeMatcher} implementation that matches {@link CoreNamespaceDeclaration} attributes

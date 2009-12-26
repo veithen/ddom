@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreComment;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreComment;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class CommentImpl extends CharacterDataImpl implements CoreComment {

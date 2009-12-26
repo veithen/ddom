@@ -19,7 +19,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.spi.model.CoreNSAwareNamedNode;
+import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 
 /**
  * Defines methods common to {@link org.apache.axiom.om.OMElement} and

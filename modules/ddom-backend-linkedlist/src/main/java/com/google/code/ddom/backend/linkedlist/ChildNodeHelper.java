@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.BuilderTarget;
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreModelException;
-import com.google.code.ddom.spi.model.CoreNode;
-import com.google.code.ddom.spi.model.CoreParentNode;
+import com.google.code.ddom.backend.BuilderTarget;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.CoreParentNode;
 
 public class ChildNodeHelper {
     public static CoreChildNode coreGetNextSibling(CoreChildNode node) {

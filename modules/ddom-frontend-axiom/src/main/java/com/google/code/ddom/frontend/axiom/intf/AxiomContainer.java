@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMContainer;
 
-import com.google.code.ddom.spi.model.CoreParentNode;
+import com.google.code.ddom.backend.CoreParentNode;
 
 public interface AxiomContainer extends CoreParentNode, OMContainer {
 

@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSUnawareTypedAttribute {

@@ -19,11 +19,11 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.EmptyNodeList;
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreModelException;
-import com.google.code.ddom.spi.model.CoreNode;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 

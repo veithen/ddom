@@ -26,11 +26,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
+import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.support.DOMConfigurationImpl;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
-import com.google.code.ddom.spi.model.CoreAttribute;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 import com.google.code.ddom.frontend.dom.intf.*;

@@ -15,15 +15,15 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreCharacterData;
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreElement;
-import com.google.code.ddom.spi.model.CoreEntityReference;
-import com.google.code.ddom.spi.model.CoreText;
-import com.google.code.ddom.spi.model.HierarchyException;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreCharacterData;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.backend.HierarchyException;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttribute {

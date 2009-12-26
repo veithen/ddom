@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.support;
 
 import org.apache.axiom.om.OMException;
 
-import com.google.code.ddom.spi.model.CoreModelException;
+import com.google.code.ddom.backend.CoreModelException;
 
 public class AxiomExceptionUtil {
     private AxiomExceptionUtil() {}

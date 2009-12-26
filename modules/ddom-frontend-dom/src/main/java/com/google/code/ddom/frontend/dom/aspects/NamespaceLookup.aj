@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreNamespaceDeclaration;
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 

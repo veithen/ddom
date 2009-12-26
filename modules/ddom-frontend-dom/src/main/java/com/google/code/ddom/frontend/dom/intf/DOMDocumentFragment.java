@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.DocumentFragment;
 
-import com.google.code.ddom.spi.model.CoreDocumentFragment;
+import com.google.code.ddom.backend.CoreDocumentFragment;
 
 public interface DOMDocumentFragment extends CoreDocumentFragment, DocumentFragment, DOMParentNode {
 

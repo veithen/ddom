@@ -15,6 +15,16 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreLeafNode;
+import com.google.code.ddom.backend.CoreNSAwareElement;
+import com.google.code.ddom.backend.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.CoreProcessingInstruction;
+import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.backend.CoreTextNode;
+import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
@@ -24,16 +34,6 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
 import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreLeafNode;
-import com.google.code.ddom.spi.model.CoreNSAwareElement;
-import com.google.code.ddom.spi.model.CoreNSAwareTypedAttribute;
-import com.google.code.ddom.spi.model.CoreNode;
-import com.google.code.ddom.spi.model.CoreProcessingInstruction;
-import com.google.code.ddom.spi.model.CoreText;
-import com.google.code.ddom.spi.model.CoreTextNode;
-import com.google.code.ddom.spi.model.Implementation;
 
 public aspect Parents {
     declare parents: @Implementation CoreDocument+ implements AxiomDocument;

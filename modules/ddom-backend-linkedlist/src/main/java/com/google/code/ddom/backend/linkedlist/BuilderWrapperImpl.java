@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.BuilderWrapper;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.BuilderWrapper;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class BuilderWrapperImpl extends ParentNodeImpl implements BuilderWrapper {

@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreDocumentType;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class DocumentTypeImpl extends LeafNodeImpl implements CoreDocumentType {

@@ -16,13 +16,13 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.core.builder.Builder;
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreDocumentType;
-import com.google.code.ddom.spi.model.CoreElement;
-import com.google.code.ddom.spi.model.Implementation;
-import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.stream.spi.FragmentSource;
 import com.google.code.ddom.stream.spi.Producer;
 

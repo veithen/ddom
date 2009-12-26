@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.spi.model.CoreNode;
+import com.google.code.ddom.backend.CoreNode;
 
 public interface DOMNode extends CoreNode, Node {
     CharSequence collectTextContent(CharSequence appendTo);

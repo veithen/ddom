@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.spi.model.CoreNSUnawareElement;
+import com.google.code.ddom.backend.CoreNSUnawareElement;
 
 public interface DOMNSUnawareElement extends CoreNSUnawareElement, DOMElement, DOMNSUnawareNamedNode {
 

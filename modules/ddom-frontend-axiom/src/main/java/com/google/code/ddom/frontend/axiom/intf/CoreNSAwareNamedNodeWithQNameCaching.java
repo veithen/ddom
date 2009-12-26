@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.intf;
 
-import com.google.code.ddom.spi.model.CoreNSAwareNamedNode;
+import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 
 public interface CoreNSAwareNamedNodeWithQNameCaching extends CoreNSAwareNamedNode {
 

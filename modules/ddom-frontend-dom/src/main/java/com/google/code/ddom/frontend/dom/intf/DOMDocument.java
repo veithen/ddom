@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.backend.CoreDocument;
 
 public interface DOMDocument extends CoreDocument, Document, DOMParentNode {
     int getStructureVersion();

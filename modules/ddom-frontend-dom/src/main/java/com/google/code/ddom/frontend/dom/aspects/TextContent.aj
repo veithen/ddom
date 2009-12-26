@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMNode;
-import com.google.code.ddom.spi.model.CoreChildNode;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 

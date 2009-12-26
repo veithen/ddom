@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreTypedAttribute;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreTypedAttribute;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTypedAttribute {

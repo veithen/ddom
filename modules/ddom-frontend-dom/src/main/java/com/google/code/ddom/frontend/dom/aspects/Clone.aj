@@ -18,13 +18,13 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
-import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreElement;
-import com.google.code.ddom.spi.model.NodeFactory;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 

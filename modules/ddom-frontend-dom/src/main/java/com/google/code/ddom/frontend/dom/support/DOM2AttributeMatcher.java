@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.frontend.dom.support;
 
+import com.google.code.ddom.backend.AttributeMatcher;
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreTypedAttribute;
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
-import com.google.code.ddom.spi.model.AttributeMatcher;
-import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreTypedAttribute;
-import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DOM2AttributeMatcher implements AttributeMatcher {
     public static final DOM2AttributeMatcher INSTANCE = new DOM2AttributeMatcher();

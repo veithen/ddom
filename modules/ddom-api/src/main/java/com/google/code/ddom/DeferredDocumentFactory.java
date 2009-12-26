@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.code.ddom.spi.model.FrontendRegistry;
-import com.google.code.ddom.spi.model.NodeFactory;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;

@@ -21,10 +21,10 @@ import java.util.ResourceBundle;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.spi.model.CoreModelException;
-import com.google.code.ddom.spi.model.HierarchyException;
-import com.google.code.ddom.spi.model.NodeNotFoundException;
-import com.google.code.ddom.spi.model.WrongDocumentException;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.HierarchyException;
+import com.google.code.ddom.backend.NodeNotFoundException;
+import com.google.code.ddom.backend.WrongDocumentException;
 
 public class DOMExceptionUtil {
     private static final ResourceBundle messages =

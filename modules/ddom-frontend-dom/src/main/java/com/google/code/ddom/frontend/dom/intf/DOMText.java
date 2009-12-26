@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.spi.model.CoreText;
+import com.google.code.ddom.backend.CoreText;
 
 public interface DOMText extends CoreText, DOMTextNode {
 

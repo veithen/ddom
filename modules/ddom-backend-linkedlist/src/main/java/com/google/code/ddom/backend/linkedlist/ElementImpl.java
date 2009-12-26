@@ -15,16 +15,16 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.AttributeMatcher;
-import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreElement;
-import com.google.code.ddom.spi.model.CoreModelException;
-import com.google.code.ddom.spi.model.CoreNode;
-import com.google.code.ddom.spi.model.CoreParentNode;
-import com.google.code.ddom.spi.model.Implementation;
-import com.google.code.ddom.spi.model.NodeFactory;
+import com.google.code.ddom.backend.AttributeMatcher;
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.backend.NodeFactory;
 
 @Implementation
 public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {

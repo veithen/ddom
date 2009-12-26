@@ -18,10 +18,10 @@ package com.google.code.ddom.frontend.axiom.aspects;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMNode;
 
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
-import com.google.code.ddom.spi.model.CoreModelException;
-import com.google.code.ddom.spi.model.CoreNode;
 
 public aspect ChildNodeSupport {
     public OMContainer AxiomChildNode.getParent() {

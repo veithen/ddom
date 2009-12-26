@@ -35,6 +35,11 @@
         </dependency>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-backend</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-stream-utils</artifactId>
             <version>${pom.version}</version>
         </dependency>

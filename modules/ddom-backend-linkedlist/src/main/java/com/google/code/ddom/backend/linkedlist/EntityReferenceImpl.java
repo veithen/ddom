@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreEntityReference;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class EntityReferenceImpl extends LeafNodeImpl implements CoreEntityReference {

@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreTextNode;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreTextNode;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class TextNodeImpl extends CharacterDataImpl implements CoreTextNode {

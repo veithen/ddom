@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.CharacterData;
 
-import com.google.code.ddom.spi.model.CoreCharacterData;
+import com.google.code.ddom.backend.CoreCharacterData;
 
 public interface DOMCharacterData extends CoreCharacterData, CharacterData {
 

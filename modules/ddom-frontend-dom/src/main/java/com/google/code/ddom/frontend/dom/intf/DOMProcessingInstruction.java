@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.ProcessingInstruction;
 
-import com.google.code.ddom.spi.model.CoreProcessingInstruction;
+import com.google.code.ddom.backend.CoreProcessingInstruction;
 
 public interface DOMProcessingInstruction extends CoreProcessingInstruction, ProcessingInstruction {
 

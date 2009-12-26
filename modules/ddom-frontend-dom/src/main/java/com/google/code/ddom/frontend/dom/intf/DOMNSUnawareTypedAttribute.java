@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.spi.model.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
 
 public interface DOMNSUnawareTypedAttribute extends CoreNSUnawareTypedAttribute, DOMTypedAttribute, DOMNSUnawareNamedNode {
 

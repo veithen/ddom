@@ -16,12 +16,12 @@
 package com.google.code.ddom.core.builder;
 
 import com.google.code.ddom.DeferredParsingException;
-import com.google.code.ddom.spi.model.BuilderTarget;
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreAttribute;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreElement;
-import com.google.code.ddom.spi.model.NodeFactory;
+import com.google.code.ddom.backend.BuilderTarget;
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.AttributeData;
 import com.google.code.ddom.stream.spi.AttributeMode;
 import com.google.code.ddom.stream.spi.CharacterData;

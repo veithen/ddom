@@ -31,9 +31,9 @@ import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
 import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.spi.model.FrontendRegistry;
-import com.google.code.ddom.spi.model.NodeFactory;
 
 public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFactory {
     private interface Strategy {

@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.BuilderTarget;
-import com.google.code.ddom.spi.model.CoreDocument;
+import com.google.code.ddom.backend.BuilderTarget;
+import com.google.code.ddom.backend.CoreDocument;
 
 public class BuilderTargetHelper {
     public static void build(BuilderTarget node) {

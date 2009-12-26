@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.CDATASection;
 
-import com.google.code.ddom.spi.model.CoreCDATASection;
+import com.google.code.ddom.backend.CoreCDATASection;
 
 public interface DOMCDATASection extends CoreCDATASection, CDATASection, DOMTextNode {
 

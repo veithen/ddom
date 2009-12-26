@@ -17,12 +17,12 @@ package com.google.code.ddom.frontend.axiom.aspects;
 
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomLeafNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
-import com.google.code.ddom.spi.model.CoreDocument;
 
 public aspect DeferredParsing {
     public void AxiomNode.close(boolean build) {

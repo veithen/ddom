@@ -15,13 +15,13 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.spi.model.CoreChildNode;
-import com.google.code.ddom.spi.model.CoreDocument;
-import com.google.code.ddom.spi.model.CoreLeafNode;
-import com.google.code.ddom.spi.model.CoreModelException;
-import com.google.code.ddom.spi.model.CoreNode;
-import com.google.code.ddom.spi.model.CoreParentNode;
-import com.google.code.ddom.spi.model.Implementation;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreLeafNode;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class LeafNodeImpl extends NodeImpl implements CoreLeafNode {
