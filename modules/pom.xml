@@ -30,6 +30,7 @@
     
     <modules>
         <module>ddom-api</module>
+        <module>ddom-backend</module>
         <module>ddom-backend-linkedlist</module>
         <module>ddom-commons</module>
         <module>ddom-core-model</module>

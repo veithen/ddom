@@ -24,29 +24,14 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-backend-linkedlist</artifactId>
-    <name>DDOM :: Modules :: Backend :: Linked list</name>
+    <artifactId>ddom-backend</artifactId>
+    <name>DDOM :: Modules :: Backend :: API</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-api</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-core-model</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-backend</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-stream</artifactId>
+            <version>${version}</version>
         </dependency>
     </dependencies>
 </project>
