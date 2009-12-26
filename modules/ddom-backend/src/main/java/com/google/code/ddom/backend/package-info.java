@@ -13,5 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// TODO: this is an internal API and should be moved elsewhere (to ddom-core-model or to a separate module)
 package com.google.code.ddom.backend;
