@@ -31,8 +31,9 @@ import org.w3c.domts.level3.core.nodeinsertbefore12;
 import org.w3c.domts.level3.core.nodeinsertbefore14;
 import org.w3c.domts.level3.core.nodeinsertbefore15;
 import org.w3c.domts.level3.core.nodeinsertbefore25;
-import org.w3c.domts.level3.core.nodelookupnamespaceuri02;
 import org.w3c.domts.level3.core.nodelookupnamespaceuri04;
+import org.w3c.domts.level3.core.nodelookupprefix04;
+import org.w3c.domts.level3.core.nodelookupprefix12;
 import org.w3c.domts.level3.core.nodereplacechild12;
 import org.w3c.domts.level3.core.nodereplacechild30;
 
@@ -50,6 +51,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude("entityget.*");
         suite.addExclude("nodeissamenode(07|08|09)");
         suite.addExclude(nodelookupnamespaceuri04.class);
+        suite.addExclude(nodelookupprefix04.class);
         
         // Tests using entity references
         suite.addExclude(documentrenamenode27.class);
@@ -103,6 +105,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*userdata.*");
         suite.addExclude(".*infoset.*");
         suite.addExclude(namespacedeclarations02.class);
+        suite.addExclude(nodelookupprefix12.class);
         
         // TODO: contains some very tricky cases!
         suite.addExclude(nodeinsertbefore11.class);

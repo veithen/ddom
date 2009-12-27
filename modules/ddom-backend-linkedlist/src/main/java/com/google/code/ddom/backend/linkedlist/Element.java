@@ -265,9 +265,38 @@ public abstract class Element extends ParentNode implements CoreElement {
                 }
             }
         }
-        CoreParentNode parent = coreGetParent();
-        if (parent instanceof CoreElement) {
-            return ((CoreElement)parent).coreLookupNamespaceURI(prefix, strict);
+        CoreElement parentElement = coreGetParentElement();
+        if (parentElement != null) {
+            return parentElement.coreLookupNamespaceURI(prefix, strict);
+        } else {
+            return null;
+        }
+    }
+
+    protected abstract String getImplicitPrefix(String namespaceURI);
+    
+    public final String coreLookupPrefix(String namespaceURI, boolean strict) {
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("namespaceURI must not be null");
+        }
+        if (!strict) {
+            String prefix = getImplicitPrefix(namespaceURI);
+            if (prefix != null) {
+                return prefix;
+            }
+        }
+        // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
+        for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
+            if (attr instanceof CoreNamespaceDeclaration) {
+                CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
+                if (decl.coreGetDeclaredNamespaceURI().equals(namespaceURI)) {
+                    return decl.coreGetDeclaredPrefix();
+                }
+            }
+        }
+        CoreElement parentElement = coreGetParentElement();
+        if (parentElement != null) {
+            return parentElement.coreLookupPrefix(namespaceURI, strict);
         } else {
             return null;
         }

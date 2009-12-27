@@ -36,4 +36,9 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
     protected String getImplicitNamespaceURI(String prefix) {
         return null;
     }
+
+    @Override
+    protected String getImplicitPrefix(String namespaceURI) {
+        return null;
+    }
 }

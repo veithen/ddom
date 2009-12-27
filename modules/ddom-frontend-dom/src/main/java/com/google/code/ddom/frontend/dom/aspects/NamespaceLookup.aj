@@ -15,11 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.Node;
-
-import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 
@@ -69,21 +65,12 @@ public aspect NamespaceLookup {
     }
 
     public final String DOMNode.lookupPrefix(String namespaceURI) {
-        CoreElement contextElement = getNamespaceContext();
-        if (contextElement == null) {
+        if (namespaceURI == null) {
             return null;
+        } else {
+            CoreElement contextElement = getNamespaceContext();
+            return contextElement == null ? null : contextElement.coreLookupPrefix(namespaceURI, false);
         }
-        // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
-        for (CoreAttribute attr = contextElement.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
-            if (attr instanceof CoreNamespaceDeclaration) {
-                CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
-                if (decl.coreGetDeclaredNamespaceURI().equals(namespaceURI)) {
-                    return decl.coreGetDeclaredPrefix();
-                }
-            }
-        }
-        Node parent = ((DOMElement)contextElement).getParentNode();
-        return parent == null ? null : parent.lookupPrefix(namespaceURI);
     }
 
     public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {

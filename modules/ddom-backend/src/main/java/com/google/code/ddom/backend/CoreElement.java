@@ -115,4 +115,23 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimized
      * @return the namespace URI or <code>null</code> if none is found
      */
     String coreLookupNamespaceURI(String prefix, boolean strict);
+    
+    /**
+     * Find a prefix associated to the given namespace URI. Default namespaces are not taken into
+     * account by this method.
+     * 
+     * @param namespaceURI
+     *            The namespace URI to look for. This parameter must not be <code>null</code> (XML
+     *            forbids to bind a prefix to the null namespace).
+     * @param strict
+     *            If this parameter is set to <code>true</code>, only namespace declarations will be
+     *            taken into account. If set to <code>false</code> the prefixes of the element and
+     *            its ancestors are also taken into account (limited to instanced of
+     *            {@link CoreNSAwareElement}), even if no explicit namespace declarations exists for
+     *            these prefixes.
+     * @return a prefix bound to the given namespace URI or <code>null</code> if none is found
+     * @throws IllegalArgumentException
+     *             if <code>namespaceURI</code> is <code>null</code>
+     */
+    String coreLookupPrefix(String namespaceURI, boolean strict);
 }

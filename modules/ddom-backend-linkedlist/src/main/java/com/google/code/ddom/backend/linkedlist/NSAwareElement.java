@@ -66,4 +66,9 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
             return prefix.equals(this.prefix) ? namespaceURI : null;
         }
     }
+
+    @Override
+    protected String getImplicitPrefix(String namespaceURI) {
+        return namespaceURI.equals(this.namespaceURI) ? prefix : null;
+    }
 }
