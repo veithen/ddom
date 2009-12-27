@@ -23,7 +23,7 @@ import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class NSAwareTypedAttribute extends TypedAttribute implements CoreNSAwareTypedAttribute {
-    private final String namespaceURI;
+    private String namespaceURI;
     private String localName;
     private String prefix;
 
@@ -38,6 +38,10 @@ public class NSAwareTypedAttribute extends TypedAttribute implements CoreNSAware
         return namespaceURI;
     }
 
+    public final void coreSetNamespaceURI(String namespaceURI) {
+        this.namespaceURI = namespaceURI;
+    }
+    
     public final String coreGetPrefix() {
         return prefix;
     }

@@ -25,6 +25,8 @@ public interface CoreNSAwareNamedNode extends CoreNode {
      */
     String coreGetNamespaceURI();
     
+    void coreSetNamespaceURI(String namespaceURI);
+    
     /**
      * Get the namespace prefix of this node.
      * 

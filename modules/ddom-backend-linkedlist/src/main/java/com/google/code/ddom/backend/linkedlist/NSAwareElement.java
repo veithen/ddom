@@ -23,7 +23,7 @@ import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class NSAwareElement extends Element implements CoreNSAwareElement {
-    private final String namespaceURI;
+    private String namespaceURI;
     private String localName;
     private String prefix;
 
@@ -38,6 +38,10 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         return namespaceURI;
     }
 
+    public final void coreSetNamespaceURI(String namespaceURI) {
+        this.namespaceURI = namespaceURI;
+    }
+    
     public final String coreGetPrefix() {
         return prefix;
     }

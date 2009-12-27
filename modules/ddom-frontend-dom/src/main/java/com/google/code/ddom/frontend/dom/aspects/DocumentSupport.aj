@@ -27,10 +27,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreNSAwareNamedNode;
+import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.support.DOMConfigurationImpl;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
+import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 import com.google.code.ddom.frontend.dom.intf.*;
@@ -164,9 +167,42 @@ public aspect DocumentSupport {
         throw new UnsupportedOperationException();
     }
 
-    public final Node DOMDocument.renameNode(Node n, String namespaceURI, String qualifiedName) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    // TODO: we don't cover renaming a typed attribute to a namespace declaration and vice-versa
+    public final Node DOMDocument.renameNode(Node node, String namespaceURI, String qualifiedName) throws DOMException {
+        if (node instanceof CoreNSAwareNamedNode) {
+            CoreNSAwareNamedNode namedNode = (CoreNSAwareNamedNode)node;
+            
+            if (namedNode.getDocument() != this) {
+                throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
+            }
+            
+            // TODO: this is suggested by the documentrenamenode04 test case, but not specified in the DOM3 specs; check what is the required behavior also for the Document#createXXX methods
+            if (namespaceURI != null && namespaceURI.length() == 0) {
+                namespaceURI = null;
+            }
+            
+            int i = NSUtil.validateQualifiedName(qualifiedName);
+            String prefix;
+            String localName;
+            if (i == -1) {
+                prefix = null;
+                localName = qualifiedName;
+            } else {
+                prefix = qualifiedName.substring(0, i);
+                localName = qualifiedName.substring(i+1);
+            }
+            if (node instanceof CoreTypedAttribute) {
+                NSUtil.validateAttributeName(namespaceURI, localName, prefix);
+            } else {
+                NSUtil.validateNamespace(namespaceURI, prefix);
+            }
+            namedNode.coreSetNamespaceURI(namespaceURI);
+            namedNode.coreSetLocalName(localName);
+            namedNode.coreSetPrefix(prefix);
+            return node;
+        } else {
+            throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+        }
     }
 
     public final void DOMDocument.setStrictErrorChecking(boolean strictErrorChecking) {

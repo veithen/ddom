@@ -21,6 +21,8 @@ import org.w3c.domts.DOMTestDocumentBuilderFactory;
 import org.w3c.domts.JUnitTestSuiteAdapter;
 import org.w3c.domts.level3.core.alltests;
 import org.w3c.domts.level3.core.canonicalform06;
+import org.w3c.domts.level3.core.documentrenamenode09;
+import org.w3c.domts.level3.core.documentrenamenode19;
 import org.w3c.domts.level3.core.documentrenamenode27;
 import org.w3c.domts.level3.core.documentrenamenode28;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
@@ -33,7 +35,6 @@ import org.w3c.domts.level3.core.nodeinsertbefore15;
 import org.w3c.domts.level3.core.nodeinsertbefore25;
 import org.w3c.domts.level3.core.nodelookupnamespaceuri04;
 import org.w3c.domts.level3.core.nodelookupprefix04;
-import org.w3c.domts.level3.core.nodelookupprefix12;
 import org.w3c.domts.level3.core.noderemovechild07;
 import org.w3c.domts.level3.core.nodereplacechild12;
 import org.w3c.domts.level3.core.nodereplacechild17;
@@ -99,7 +100,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*xmlencoding.*");
         suite.addExclude(".*xmlstandalone.*");
         suite.addExclude(".*stricterrorchecking.*");
-        suite.addExclude(".*renamenode.*");
         suite.addExclude(".*handleerror.*");
         suite.addExclude(".*comparedocumentposition.*");
         suite.addExclude(".*getfeature.*");
@@ -113,7 +113,10 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*userdata.*");
         suite.addExclude(".*infoset.*");
         suite.addExclude(namespacedeclarations02.class);
-        suite.addExclude(nodelookupprefix12.class);
+        suite.addExclude(documentrenamenode09.class);
+        
+        // TODO: wrong exception thrown
+        suite.addExclude(documentrenamenode19.class);
         
         // TODO: contains some very tricky cases!
         suite.addExclude(nodeinsertbefore11.class);
