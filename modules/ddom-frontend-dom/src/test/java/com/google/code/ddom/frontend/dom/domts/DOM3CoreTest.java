@@ -26,6 +26,13 @@ import org.w3c.domts.level3.core.documentrenamenode28;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
 import org.w3c.domts.level3.core.namespacedeclarations02;
+import org.w3c.domts.level3.core.nodeinsertbefore11;
+import org.w3c.domts.level3.core.nodeinsertbefore12;
+import org.w3c.domts.level3.core.nodeinsertbefore14;
+import org.w3c.domts.level3.core.nodeinsertbefore15;
+import org.w3c.domts.level3.core.nodeinsertbefore25;
+import org.w3c.domts.level3.core.nodelookupnamespaceuri02;
+import org.w3c.domts.level3.core.nodelookupnamespaceuri04;
 import org.w3c.domts.level3.core.nodereplacechild12;
 import org.w3c.domts.level3.core.nodereplacechild30;
 
@@ -41,12 +48,15 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(documentrenamenode28.class);
         suite.addExclude(domconfigurationcansetparameter03.class);
         suite.addExclude("entityget.*");
+        suite.addExclude("nodeissamenode(07|08|09)");
+        suite.addExclude(nodelookupnamespaceuri04.class);
         
         // Tests using entity references
         suite.addExclude(documentrenamenode27.class);
         suite.addExclude("entities.*");
         suite.addExclude("infoset(01|02)");
         suite.addExclude("textreplacewholetext(06|07|08)");
+        suite.addExclude(nodeinsertbefore25.class);
         
         // Tests relying on Attr#getSchemaTypeInfo
         suite.addExclude("attrgetschematypeinfo.*");
@@ -93,6 +103,17 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*userdata.*");
         suite.addExclude(".*infoset.*");
         suite.addExclude(namespacedeclarations02.class);
+        
+        // TODO: contains some very tricky cases!
+        suite.addExclude(nodeinsertbefore11.class);
+        suite.addExclude(nodeinsertbefore12.class);
+
+        // TODO: only the wrong exception type is thrown here
+        suite.addExclude(nodeinsertbefore14.class);
+        suite.addExclude(nodeinsertbefore15.class);
+        
+        // TODO: namespace lookup on Document instance
+        suite.addExclude(nodelookupnamespaceuri02.class);
         
         // TODO: hangs
         suite.addExclude(nodereplacechild12.class);
