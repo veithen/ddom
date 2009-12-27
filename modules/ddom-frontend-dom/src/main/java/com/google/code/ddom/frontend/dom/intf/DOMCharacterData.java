@@ -19,6 +19,6 @@ import org.w3c.dom.CharacterData;
 
 import com.google.code.ddom.backend.CoreCharacterData;
 
-public interface DOMCharacterData extends CoreCharacterData, CharacterData {
+public interface DOMCharacterData extends CoreCharacterData, CharacterData, DOMLeafNode {
 
 }

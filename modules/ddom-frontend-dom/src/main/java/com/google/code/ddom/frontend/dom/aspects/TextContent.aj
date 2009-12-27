@@ -23,9 +23,42 @@ import com.google.code.ddom.frontend.dom.intf.DOMNode;
 import com.google.code.ddom.frontend.dom.intf.*;
 
 public aspect TextContent {
-    public final String DOMNode.getTextContent() throws DOMException {
-        CharSequence content = collectTextContent(null);
+    static String doGetTextContent(DOMParentNode node) {
+        CharSequence content = node.collectTextContent(null);
         return content == null ? "" : content.toString();
+    }
+    
+    public final String DOMElement.getTextContent() {
+        return doGetTextContent(this);
+    }
+
+    public final String DOMDocumentFragment.getTextContent() {
+        return doGetTextContent(this);
+    }
+
+    public final String DOMAttribute.getTextContent() {
+        return doGetTextContent(this);
+    }
+
+    public final String DOMCharacterData.getTextContent() {
+        return coreGetData();
+    }
+
+    public final String DOMEntityReference.getTextContent() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final String DOMProcessingInstruction.getTextContent() {
+        return coreGetData();
+    }
+
+    public final String DOMDocument.getTextContent() {
+        return null;
+    }
+
+    public final String DOMDocumentType.getTextContent() {
+        return null;
     }
 
     public final CharSequence DOMComment.collectTextContent(CharSequence appendTo) {
@@ -33,7 +66,7 @@ public aspect TextContent {
     }
 
     public final CharSequence DOMDocumentType.collectTextContent(CharSequence appendTo) {
-        return appendTo;
+        throw new UnsupportedOperationException();
     }
 
     public final CharSequence DOMEntityReference.collectTextContent(CharSequence appendTo) {

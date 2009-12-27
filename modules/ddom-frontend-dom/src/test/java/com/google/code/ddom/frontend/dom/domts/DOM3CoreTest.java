@@ -28,6 +28,7 @@ import org.w3c.domts.level3.core.documentrenamenode28;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
 import org.w3c.domts.level3.core.namespacedeclarations02;
+import org.w3c.domts.level3.core.nodegettextcontent15;
 import org.w3c.domts.level3.core.nodeinsertbefore11;
 import org.w3c.domts.level3.core.nodeinsertbefore12;
 import org.w3c.domts.level3.core.nodeinsertbefore14;
@@ -59,6 +60,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(noderemovechild07.class);
         suite.addExclude("noderemovechild(24|25|26|27)");
         suite.addExclude("nodereplacechild(10|21|25|28|31|38)");
+        suite.addExclude("nodegettextcontent(05|18)");
         
         // Tests using entity references
         suite.addExclude(documentrenamenode27.class);
@@ -68,6 +70,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(nodeinsertbefore25.class);
         suite.addExclude("noderemovechild(13|14|15)");
         suite.addExclude("nodereplacechild(22|23|24)");
+        suite.addExclude("nodegettextcontent(15|16|17)");
         
         // Tests relying on Attr#getSchemaTypeInfo
         suite.addExclude("attrgetschematypeinfo.*");
@@ -108,7 +111,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*userdatahandler.*");
         suite.addExclude(".*wholetext.*");
         suite.addExclude(".*iselementcontentwhitespace.*");
-        suite.addExclude(".*textcontent.*");
+        suite.addExclude(".*settextcontent.*");
         suite.addExclude(".*wellformed.*");
         suite.addExclude(".*userdata.*");
         suite.addExclude(".*infoset.*");
