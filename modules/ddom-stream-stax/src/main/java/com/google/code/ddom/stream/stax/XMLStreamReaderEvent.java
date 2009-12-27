@@ -143,8 +143,6 @@ public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData
         switch (mode) {
             case NODE:
                 switch (reader.getEventType()) {
-                    case XMLStreamReader.ENTITY_REFERENCE:
-                        return reader.getText();
                     case XMLStreamReader.PROCESSING_INSTRUCTION:
                         return reader.getPITarget();
                     default:
