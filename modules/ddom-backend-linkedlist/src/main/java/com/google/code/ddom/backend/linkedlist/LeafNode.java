@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreLeafNode;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
@@ -57,6 +58,10 @@ public abstract class LeafNode extends Node implements CoreLeafNode {
         return parent;
     }
     
+    public final CoreElement coreGetParentElement() {
+        return parent instanceof CoreElement ? (CoreElement)parent : null;
+    }
+
     public final CoreChildNode coreGetNextSibling() {
         return ChildNodeHelper.coreGetNextSibling(this);
     }

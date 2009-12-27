@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 
 import com.google.code.ddom.frontend.dom.intf.*;
@@ -31,47 +31,50 @@ import com.google.code.ddom.frontend.dom.intf.*;
  * @author Andreas Veithen
  */
 public aspect NamespaceLookup {
-    public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final CoreElement DOMElement.getNamespaceContext() {
+        return this;
     }
-
-    public final String DOMAttribute.lookupNamespaceURI(String prefix) {
-        // See section B.4 of the DOM3 spec
-        Element owner = getOwnerElement();
-        return owner == null ? null : owner.lookupNamespaceURI(prefix);
+    
+    public final CoreElement DOMAttribute.getNamespaceContext() {
+        return coreGetOwnerElement();
     }
-
-    public final String DOMAttribute.lookupPrefix(String namespaceURI) {
-        // TODO: needs to be checked
+    
+    public final CoreElement DOMDocument.getNamespaceContext() {
+        return coreGetDocumentElement();
+    }
+    
+    public final CoreElement DOMDocumentFragment.getNamespaceContext() {
         return null;
     }
-
-    public final String DOMDocumentFragment.lookupNamespaceURI(String prefix) {
+    
+    public final CoreElement DOMDocumentType.getNamespaceContext() {
         return null;
     }
-
-    public final String DOMDocumentFragment.lookupPrefix(String namespaceURI) {
-        return null;
+    
+    public final CoreElement DOMCharacterData.getNamespaceContext() {
+        return coreGetParentElement();
+    }
+    
+    public final CoreElement DOMProcessingInstruction.getNamespaceContext() {
+        return coreGetParentElement();
+    }
+    
+    public final CoreElement DOMEntityReference.getNamespaceContext() {
+        return coreGetParentElement();
+    }
+    
+    public final String DOMNode.lookupNamespaceURI(String prefix) {
+        CoreElement contextElement = getNamespaceContext();
+        return contextElement == null ? null : contextElement.coreLookupNamespaceURI(prefix, false);
     }
 
-    public final String DOMDocument.lookupNamespaceURI(String prefix) {
-        // See section B.4 of the DOM3 spec
-        DOMElement documentElement = (DOMElement)coreGetDocumentElement();
-        return documentElement == null ? null : documentElement.lookupNamespaceURI(prefix);
-    }
-
-    public final String DOMDocument.lookupPrefix(String namespaceURI) {
-        return null;
-    }
-
-    public final String DOMElement.lookupNamespaceURI(String prefix) {
-        return coreLookupNamespaceURI(prefix, false);
-    }
-
-    public final String DOMElement.lookupPrefix(String namespaceURI) {
+    public final String DOMNode.lookupPrefix(String namespaceURI) {
+        CoreElement contextElement = getNamespaceContext();
+        if (contextElement == null) {
+            return null;
+        }
         // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
-        for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
+        for (CoreAttribute attr = contextElement.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
                 if (decl.coreGetDeclaredNamespaceURI().equals(namespaceURI)) {
@@ -79,32 +82,12 @@ public aspect NamespaceLookup {
                 }
             }
         }
-        Node parent = getParentNode();
+        Node parent = ((DOMElement)contextElement).getParentNode();
         return parent == null ? null : parent.lookupPrefix(namespaceURI);
     }
 
-    public final String DOMDocumentType.lookupNamespaceURI(String prefix) {
-        // See section B.4 of the DOM3 spec
-        return null;
-    }
-    
-    public final String DOMEntityReference.lookupNamespaceURI(String prefix) {
-        // See section B.4 of the DOM3 spec
-        return null;
-    }
-    
-    public final String DOMCharacterData.lookupNamespaceURI(String prefix) {
-        Node parent = getParentNode();
-        return parent == null ? null : parent.lookupNamespaceURI(prefix);
-    }
-    
-    public final String DOMProcessingInstruction.lookupNamespaceURI(String prefix) {
-        Node parent = getParentNode();
-        return parent == null ? null : parent.lookupNamespaceURI(prefix);
-    }
-    
-    public final String DOMLeafNode.lookupPrefix(String namespaceURI) {
-        Node parent = getParentNode();
-        return parent == null ? null : parent.lookupPrefix(namespaceURI);
+    public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

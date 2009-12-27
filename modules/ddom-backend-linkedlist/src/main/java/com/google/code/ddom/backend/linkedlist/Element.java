@@ -118,6 +118,10 @@ public abstract class Element extends ParentNode implements CoreElement {
         return parent;
     }
     
+    public final CoreElement coreGetParentElement() {
+        return parent instanceof CoreElement ? (CoreElement)parent : null;
+    }
+
     public final CoreChildNode coreGetNextSibling() {
         return ChildNodeHelper.coreGetNextSibling(this);
     }
