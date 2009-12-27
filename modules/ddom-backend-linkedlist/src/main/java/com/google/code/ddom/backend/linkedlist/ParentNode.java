@@ -21,7 +21,8 @@ import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.HierarchyException;
+import com.google.code.ddom.backend.CyclicRelationshipException;
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
 
@@ -44,7 +45,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         CoreParentNode current = this;
         do {
             if (current == newChild) {
-                throw new HierarchyException();
+                throw new CyclicRelationshipException();
             }
             if (current instanceof CoreChildNode) {
                 current = ((CoreChildNode)current).coreGetParent();
@@ -62,9 +63,9 @@ public abstract class ParentNode extends Node implements CoreParentNode {
      * Check if the given node is allowed as a child.
      * 
      * @param newChild the child that will be added
-     * @throws HierarchyException if the child is not allowed
+     * @throws ChildTypeNotAllowedException if the child is not allowed
      */
-    protected abstract void validateChildType(CoreChildNode newChild) throws HierarchyException;
+    protected abstract void validateChildType(CoreChildNode newChild) throws ChildTypeNotAllowedException;
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false
@@ -121,7 +122,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 firstNodeToInsert.internalSetParent(this);
                 delta = 1;
             } else {
-                throw new HierarchyException();
+                throw new ChildTypeNotAllowedException();
             }
             if (removeRefChild) {
                 delta--;

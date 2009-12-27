@@ -15,14 +15,19 @@
  */
 package com.google.code.ddom.backend;
 
-// TODO: replace this by something more specific (e.g. ChildTypeNotAllowedException) and complete Javadoc
-public class HierarchyException extends CoreModelException {
-    private static final long serialVersionUID = -676602453248623826L;
+/**
+ * Indicates that an attempt was made to perform an operation that would turn the document tree into
+ * a cyclic graph.
+ * 
+ * @author Andreas Veithen
+ */
+public class CyclicRelationshipException extends CoreModelException {
+    private static final long serialVersionUID = 6161496839157477471L;
 
-    public HierarchyException() {
+    public CyclicRelationshipException() {
     }
 
-    public HierarchyException(String message) {
+    public CyclicRelationshipException(String message) {
         super(message);
     }
 }

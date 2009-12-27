@@ -22,7 +22,8 @@ import java.util.ResourceBundle;
 import org.w3c.dom.DOMException;
 
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.HierarchyException;
+import com.google.code.ddom.backend.CyclicRelationshipException;
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.WrongDocumentException;
 
@@ -70,7 +71,7 @@ public class DOMExceptionUtil {
     public static DOMException translate(CoreModelException ex) {
         if (ex instanceof NodeNotFoundException) {
             return newDOMException(DOMException.NOT_FOUND_ERR);
-        } else if (ex instanceof HierarchyException) {
+        } else if (ex instanceof ChildTypeNotAllowedException || ex instanceof CyclicRelationshipException) {
             return newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         } else if (ex instanceof WrongDocumentException) {
             return newDOMException(DOMException.WRONG_DOCUMENT_ERR);

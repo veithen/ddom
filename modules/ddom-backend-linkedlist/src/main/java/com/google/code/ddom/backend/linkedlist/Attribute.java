@@ -22,7 +22,7 @@ import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.HierarchyException;
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
@@ -67,9 +67,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
 
     @Override
-    protected final void validateChildType(CoreChildNode newChild) throws HierarchyException {
+    protected final void validateChildType(CoreChildNode newChild) throws ChildTypeNotAllowedException {
         if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
-            throw new HierarchyException();
+            throw new ChildTypeNotAllowedException();
         }
     }
 

@@ -16,19 +16,17 @@
 package com.google.code.ddom.backend;
 
 /**
- * Indicates an attempt to perform an invalid operation on the model. This exception is checked
- * since the frontend implementation must translate any exception thrown by the backend
- * implementation to an exception specific to the frontend API.
+ * Indicates that an attempt was made to insert a child node where it is not allowed.
  * 
  * @author Andreas Veithen
  */
-public class CoreModelException extends Exception {
-    private static final long serialVersionUID = 1204321445792058777L;
+public class ChildTypeNotAllowedException extends CoreModelException {
+    private static final long serialVersionUID = -676602453248623826L;
 
-    public CoreModelException() {
+    public ChildTypeNotAllowedException() {
     }
 
-    public CoreModelException(String message) {
+    public ChildTypeNotAllowedException(String message) {
         super(message);
     }
 }
