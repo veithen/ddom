@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend;
 
+// TODO: replace this by something more specific (e.g. ChildTypeNotAllowedException) and complete Javadoc
 public class HierarchyException extends CoreModelException {
     private static final long serialVersionUID = -676602453248623826L;
 
