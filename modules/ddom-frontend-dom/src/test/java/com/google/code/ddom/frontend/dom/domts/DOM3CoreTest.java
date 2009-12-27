@@ -25,6 +25,7 @@ import org.w3c.domts.level3.core.documentrenamenode27;
 import org.w3c.domts.level3.core.documentrenamenode28;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
+import org.w3c.domts.level3.core.namespacedeclarations02;
 import org.w3c.domts.level3.core.nodereplacechild12;
 import org.w3c.domts.level3.core.nodereplacechild30;
 
@@ -90,6 +91,8 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*textcontent.*");
         suite.addExclude(".*wellformed.*");
         suite.addExclude(".*userdata.*");
+        suite.addExclude(".*infoset.*");
+        suite.addExclude(namespacedeclarations02.class);
         
         // TODO: hangs
         suite.addExclude(nodereplacechild12.class);

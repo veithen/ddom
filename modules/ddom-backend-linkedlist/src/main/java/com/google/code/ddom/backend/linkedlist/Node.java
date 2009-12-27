@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.WrongDocumentException;
@@ -22,7 +23,9 @@ import com.google.code.ddom.backend.WrongDocumentException;
 @Implementation
 public abstract class Node implements CoreNode {
     public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
-        if (node.getDocument() != getDocument()) {
+        CoreDocument document1 = node.getDocument();
+        CoreDocument document2 = getDocument();
+        if (document1 != null && document2 != null && document1 != document2) {
             throw new WrongDocumentException();
         }
     }
