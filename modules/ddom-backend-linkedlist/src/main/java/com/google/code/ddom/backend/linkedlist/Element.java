@@ -16,9 +16,11 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.AttributeMatcher;
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
@@ -71,8 +73,11 @@ public abstract class Element extends ParentNode implements CoreElement {
     }
 
     @Override
-    protected void validateChildType(CoreChildNode newChild) {
-        // All node type are allowed
+    protected void validateChildType(CoreChildNode newChild) throws ChildTypeNotAllowedException {
+        // TODO: need a test case here!
+        if (newChild instanceof CoreDocumentType) {
+            throw new ChildTypeNotAllowedException();
+        }
     }
 
     public final int coreGetChildCount() {
