@@ -34,7 +34,10 @@ import org.w3c.domts.level3.core.nodeinsertbefore25;
 import org.w3c.domts.level3.core.nodelookupnamespaceuri04;
 import org.w3c.domts.level3.core.nodelookupprefix04;
 import org.w3c.domts.level3.core.nodelookupprefix12;
+import org.w3c.domts.level3.core.noderemovechild07;
 import org.w3c.domts.level3.core.nodereplacechild12;
+import org.w3c.domts.level3.core.nodereplacechild17;
+import org.w3c.domts.level3.core.nodereplacechild18;
 import org.w3c.domts.level3.core.nodereplacechild30;
 
 import com.google.code.ddom.domts.FilteredDOMTestSuite;
@@ -52,6 +55,9 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude("nodeissamenode(07|08|09)");
         suite.addExclude(nodelookupnamespaceuri04.class);
         suite.addExclude(nodelookupprefix04.class);
+        suite.addExclude(noderemovechild07.class);
+        suite.addExclude("noderemovechild(24|25|26|27)");
+        suite.addExclude("nodereplacechild(10|21|25|28|31|38)");
         
         // Tests using entity references
         suite.addExclude(documentrenamenode27.class);
@@ -59,6 +65,8 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude("infoset(01|02)");
         suite.addExclude("textreplacewholetext(06|07|08)");
         suite.addExclude(nodeinsertbefore25.class);
+        suite.addExclude("noderemovechild(13|14|15)");
+        suite.addExclude("nodereplacechild(22|23|24)");
         
         // Tests relying on Attr#getSchemaTypeInfo
         suite.addExclude("attrgetschematypeinfo.*");
@@ -110,6 +118,8 @@ public class DOM3CoreTest extends TestSuite {
         // TODO: contains some very tricky cases!
         suite.addExclude(nodeinsertbefore11.class);
         suite.addExclude(nodeinsertbefore12.class);
+        suite.addExclude(nodereplacechild17.class);
+        suite.addExclude(nodereplacechild18.class);
 
         // TODO: only the wrong exception type is thrown here
         suite.addExclude(nodeinsertbefore14.class);

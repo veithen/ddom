@@ -176,7 +176,6 @@
                         <include>**/*TestCase.java</include>
                     </includes>
                     <excludes>
-                        <exclude>**/DOM3CoreTest.java</exclude>
                         <exclude>**/NodeFactoryAspectTest.java</exclude>
                     </excludes>
                     <!-- TODO: doesn't seem to work very well with already woven code -->
