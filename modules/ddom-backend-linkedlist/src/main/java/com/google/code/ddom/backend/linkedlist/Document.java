@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentType;
@@ -98,8 +99,17 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     @Override
-    protected void validateChildType(CoreChildNode newChild) {
-        // TODO
+    protected void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+        // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
+        if (newChild instanceof CoreDocumentType) {
+            if (!(replacedChild instanceof CoreDocumentType || coreGetDocumentType() == null)) {
+                throw new ChildTypeNotAllowedException("The document already has a document type node");
+            }
+        } else if (newChild instanceof CoreElement) {
+            if (!(replacedChild instanceof CoreElement || coreGetDocumentElement() == null)) {
+                throw new ChildTypeNotAllowedException("The document already has a document element");
+            }
+        }
     }
 
     public final int coreGetChildCount() {
@@ -157,6 +167,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     public final CoreDocumentType coreGetDocumentType() {
+        // TODO: we know that the document type node must appear before the document element; use this to avoid expansion of the complete document
         CoreChildNode child = coreGetFirstChild();
         while (child != null && !(child instanceof CoreDocumentType)) {
             child = child.coreGetNextSibling();

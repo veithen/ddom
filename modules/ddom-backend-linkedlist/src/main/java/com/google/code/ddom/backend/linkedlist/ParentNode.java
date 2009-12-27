@@ -62,10 +62,15 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     /**
      * Check if the given node is allowed as a child.
      * 
-     * @param newChild the child that will be added
-     * @throws ChildTypeNotAllowedException if the child is not allowed
+     * @param newChild
+     *            the child that will be added
+     * @param replacedChild
+     *            the child that will be replaced by the new node, or <code>null</code> if the new
+     *            child will be inserted and doesn't replace any existing node
+     * @throws ChildTypeNotAllowedException
+     *             if the child is not allowed
      */
-    protected abstract void validateChildType(CoreChildNode newChild) throws ChildTypeNotAllowedException;
+    protected abstract void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException;
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false
@@ -109,7 +114,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 lastNodeToInsert = null;
                 for (CoreChildNode node = firstNodeToInsert; node != null; node = node.coreGetNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
-                    validateChildType(node);
+                    validateChildType(node, removeRefChild ? refChild : null);
                     node.internalSetParent(this);
                     lastNodeToInsert = node;
                 }
@@ -118,7 +123,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             } else if (newChild instanceof CoreChildNode) {
                 ((CoreChildNode)newChild).coreDetach();
                 firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
-                validateChildType(firstNodeToInsert);
+                validateChildType(firstNodeToInsert, removeRefChild ? refChild : null);
                 firstNodeToInsert.internalSetParent(this);
                 delta = 1;
             } else {

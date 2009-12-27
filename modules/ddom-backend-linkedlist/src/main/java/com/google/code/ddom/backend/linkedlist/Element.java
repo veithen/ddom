@@ -73,7 +73,7 @@ public abstract class Element extends ParentNode implements CoreElement {
     }
 
     @Override
-    protected void validateChildType(CoreChildNode newChild) throws ChildTypeNotAllowedException {
+    protected void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         // TODO: need a test case here!
         if (newChild instanceof CoreDocumentType) {
             throw new ChildTypeNotAllowedException();

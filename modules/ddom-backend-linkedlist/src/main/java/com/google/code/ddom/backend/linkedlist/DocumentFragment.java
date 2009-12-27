@@ -43,7 +43,7 @@ public class DocumentFragment extends BuilderWrapperImpl implements CoreDocument
     }
 
     @Override
-    protected void validateChildType(CoreChildNode newChild) {
+    protected void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) {
         // All node type are allowed
     }
 
