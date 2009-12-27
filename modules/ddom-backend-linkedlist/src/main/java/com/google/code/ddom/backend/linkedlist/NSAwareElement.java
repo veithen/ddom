@@ -57,4 +57,13 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     public final QName coreGetQName() {
         return NSAwareNamedNodeHelper.coreGetQName(this);
     }
+
+    @Override
+    protected String getImplicitNamespaceURI(String prefix) {
+        if (prefix == null) {
+            return this.prefix == null ? namespaceURI : null;
+        } else {
+            return prefix.equals(this.prefix) ? namespaceURI : null;
+        }
+    }
 }

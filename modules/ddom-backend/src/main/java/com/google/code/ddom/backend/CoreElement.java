@@ -99,4 +99,20 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimized
     void coreAppendAttribute(CoreAttribute attr);
     
     void coreRemoveAttribute(CoreAttribute attr) throws NodeNotFoundException;
+    
+    /**
+     * Look up the namespace URI associated to the given prefix.
+     * 
+     * @param prefix
+     *            The prefix to look for. If this parameter is <code>null</code> then the URI of the
+     *            default namespace will be returned.
+     * @param strict
+     *            If this parameter is set to <code>true</code>, only namespace declarations will be
+     *            taken into account. If set to <code>false</code> the prefixes of the element and
+     *            its ancestors are also taken into account (limited to instanced of
+     *            {@link CoreNSAwareElement}), even if no explicit namespace declarations exists for
+     *            these prefixes.
+     * @return the namespace URI or <code>null</code> if none is found
+     */
+    String coreLookupNamespaceURI(String prefix, boolean strict);
 }

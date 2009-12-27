@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.backend.CoreAttribute;
@@ -36,8 +37,9 @@ public aspect NamespaceLookup {
     }
 
     public final String DOMAttribute.lookupNamespaceURI(String prefix) {
-        // TODO: needs to be checked
-        return null;
+        // See section B.4 of the DOM3 spec
+        Element owner = getOwnerElement();
+        return owner == null ? null : owner.lookupNamespaceURI(prefix);
     }
 
     public final String DOMAttribute.lookupPrefix(String namespaceURI) {
@@ -64,16 +66,7 @@ public aspect NamespaceLookup {
     }
 
     public final String DOMElement.lookupNamespaceURI(String prefix) {
-        for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
-            if (attr instanceof CoreNamespaceDeclaration) {
-                CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
-                if (decl.getDeclaredPrefix().equals(prefix)) {
-                    return decl.getDeclaredNamespaceURI();
-                }
-            }
-        }
-        Node parent = getParentNode();
-        return parent instanceof DOMElement ? parent.lookupNamespaceURI(prefix) : null;
+        return coreLookupNamespaceURI(prefix, false);
     }
 
     public final String DOMElement.lookupPrefix(String namespaceURI) {
@@ -90,7 +83,22 @@ public aspect NamespaceLookup {
         return parent == null ? null : parent.lookupPrefix(namespaceURI);
     }
 
-    public final String DOMLeafNode.lookupNamespaceURI(String prefix) {
+    public final String DOMDocumentType.lookupNamespaceURI(String prefix) {
+        // See section B.4 of the DOM3 spec
+        return null;
+    }
+    
+    public final String DOMEntityReference.lookupNamespaceURI(String prefix) {
+        // See section B.4 of the DOM3 spec
+        return null;
+    }
+    
+    public final String DOMCharacterData.lookupNamespaceURI(String prefix) {
+        Node parent = getParentNode();
+        return parent == null ? null : parent.lookupNamespaceURI(prefix);
+    }
+    
+    public final String DOMProcessingInstruction.lookupNamespaceURI(String prefix) {
         Node parent = getParentNode();
         return parent == null ? null : parent.lookupNamespaceURI(prefix);
     }

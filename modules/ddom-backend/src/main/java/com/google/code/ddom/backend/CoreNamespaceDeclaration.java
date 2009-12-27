@@ -16,6 +16,13 @@
 package com.google.code.ddom.backend;
 
 public interface CoreNamespaceDeclaration extends CoreAttribute {
+    /**
+     * Get the prefix declared by this namespace declaration.
+     * 
+     * @return the prefix, or <code>null</code> if this namespace declaration defines the default
+     *         namespace
+     */
     String getDeclaredPrefix();
+    
     String getDeclaredNamespaceURI();
 }

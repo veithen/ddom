@@ -23,6 +23,7 @@ import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.Implementation;
@@ -233,6 +234,38 @@ public abstract class Element extends ParentNode implements CoreElement {
             }
         } else {
             throw new NodeNotFoundException();
+        }
+    }
+
+    protected abstract String getImplicitNamespaceURI(String prefix);
+    
+    public String coreLookupNamespaceURI(String prefix, boolean strict) {
+        if (!strict) {
+            String namespaceURI = getImplicitNamespaceURI(prefix);
+            if (namespaceURI != null) {
+                return namespaceURI;
+            }
+        }
+        for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
+            if (attr instanceof CoreNamespaceDeclaration) {
+                CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
+                String declaredPrefix = decl.getDeclaredPrefix();
+                if (prefix == null) {
+                    if (declaredPrefix == null) {
+                        return decl.getDeclaredNamespaceURI();
+                    }
+                } else {
+                    if (prefix.equals(declaredPrefix)) {
+                        return decl.getDeclaredNamespaceURI();
+                    }
+                }
+            }
+        }
+        CoreParentNode parent = coreGetParent();
+        if (parent instanceof CoreElement) {
+            return ((CoreElement)parent).coreLookupNamespaceURI(prefix, strict);
+        } else {
+            return null;
         }
     }
 }

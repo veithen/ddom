@@ -31,4 +31,9 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
     public String coreGetName() {
         return tagName;
     }
+
+    @Override
+    protected String getImplicitNamespaceURI(String prefix) {
+        return null;
+    }
 }
