@@ -15,24 +15,15 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreTypedAttribute;
+import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.backend.WrongDocumentException;
 
 @Implementation
-public abstract class TypedAttributeImpl extends AttributeImpl implements CoreTypedAttribute {
-    private String type;
-
-    public TypedAttributeImpl(CoreDocument document, String value, String type) {
-        super(document, value);
-        this.type = type;
-    }
-
-    public final String coreGetType() {
-        return type;
-    }
-
-    public final void coreSetType(String type) {
-        this.type = type;
+public abstract class Node implements CoreNode {
+    public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
+        if (node.getDocument() != getDocument()) {
+            throw new WrongDocumentException();
+        }
     }
 }

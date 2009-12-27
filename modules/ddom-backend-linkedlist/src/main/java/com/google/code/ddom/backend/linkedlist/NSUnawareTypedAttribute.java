@@ -16,15 +16,15 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class EntityReferenceImpl extends LeafNodeImpl implements CoreEntityReference {
-    private String name;
-    
-    public EntityReferenceImpl(CoreDocument document, String name) {
-        super(document);
+public class NSUnawareTypedAttribute extends TypedAttribute implements CoreNSUnawareTypedAttribute {
+    private final String name;
+
+    public NSUnawareTypedAttribute(CoreDocument document, String name, String value, String type) {
+        super(document, value, type);
         this.name = name;
     }
 

@@ -16,12 +16,19 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreTextNode;
+import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public abstract class TextNodeImpl extends CharacterDataImpl implements CoreTextNode {
-    public TextNodeImpl(CoreDocument document, String data) {
-        super(document, data);
+public class EntityReference extends LeafNode implements CoreEntityReference {
+    private String name;
+    
+    public EntityReference(CoreDocument document, String name) {
+        super(document);
+        this.name = name;
+    }
+
+    public final String coreGetName() {
+        return name;
     }
 }

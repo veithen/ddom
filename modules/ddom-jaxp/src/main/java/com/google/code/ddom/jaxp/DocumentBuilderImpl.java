@@ -35,7 +35,6 @@ import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.backend.NodeFactory;
-import com.google.code.ddom.backend.linkedlist.DocumentImpl;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.spi.model.FrontendRegistry;
 
@@ -98,7 +97,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             String encoding = reader.getEncoding();
             String xmlEncoding = reader.getCharacterEncodingScheme();
             // TODO: we should not refer to DocumentImpl here
-            DocumentImpl document = (DocumentImpl)DeferredDocumentFactory.newInstance().parse("dom", reader);
+            com.google.code.ddom.backend.linkedlist.Document document = (com.google.code.ddom.backend.linkedlist.Document)DeferredDocumentFactory.newInstance().parse("dom", reader);
 //            DocumentImpl document = new DocumentImpl(domImplementation, omDocument/*, namespaceAware */);
             document.coreSetDocumentURI(is.getSystemId());
             String inputEncoding = is.getEncoding();

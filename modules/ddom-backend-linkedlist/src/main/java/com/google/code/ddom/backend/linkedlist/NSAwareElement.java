@@ -22,12 +22,12 @@ import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class NSAwareElementImpl extends ElementImpl implements CoreNSAwareElement {
+public class NSAwareElement extends Element implements CoreNSAwareElement {
     private final String namespaceURI;
     private String localName;
     private String prefix;
 
-    public NSAwareElementImpl(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
+    public NSAwareElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
         super(document, complete);
         this.namespaceURI = namespaceURI;
         this.localName = localName;

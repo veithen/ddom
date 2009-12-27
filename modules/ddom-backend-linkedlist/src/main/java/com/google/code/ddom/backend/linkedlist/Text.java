@@ -15,15 +15,13 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.Implementation;
-import com.google.code.ddom.backend.WrongDocumentException;
 
 @Implementation
-public abstract class NodeImpl implements CoreNode {
-    public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
-        if (node.getDocument() != getDocument()) {
-            throw new WrongDocumentException();
-        }
+public class Text extends TextNode implements CoreText {
+    public Text(CoreDocument document, String data) {
+        super(document, data);
     }
 }

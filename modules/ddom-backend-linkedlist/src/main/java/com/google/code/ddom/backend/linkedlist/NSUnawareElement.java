@@ -15,13 +15,20 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreNSUnawareElement;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class CDATASectionImpl extends TextNodeImpl implements CoreCDATASection {
-    public CDATASectionImpl(CoreDocument document, String data) {
-        super(document, data);
+public class NSUnawareElement extends Element implements CoreNSUnawareElement {
+    private final String tagName;
+
+    public NSUnawareElement(CoreDocument document, String tagName, boolean complete) {
+        super(document, complete);
+        this.tagName = tagName;
+    }
+
+    public String coreGetName() {
+        return tagName;
     }
 }

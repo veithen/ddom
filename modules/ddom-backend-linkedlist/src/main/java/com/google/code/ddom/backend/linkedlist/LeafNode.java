@@ -24,12 +24,12 @@ import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public abstract class LeafNodeImpl extends NodeImpl implements CoreLeafNode {
+public abstract class LeafNode extends Node implements CoreLeafNode {
     private CoreDocument document;
     private CoreParentNode parent;
     private CoreChildNode nextSibling;
     
-    public LeafNodeImpl(CoreDocument document) {
+    public LeafNode(CoreDocument document) {
         this.document = document;
     }
 

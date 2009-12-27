@@ -28,7 +28,7 @@ import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.NodeNotFoundException;
 
 @Implementation
-public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {
+public abstract class Element extends ParentNode implements CoreElement {
     private final CoreDocument document;
     private Object content;
     private boolean complete;
@@ -37,7 +37,7 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
     private CoreChildNode nextSibling;
     private CoreAttribute firstAttribute;
 
-    public ElementImpl(CoreDocument document, boolean complete) {
+    public Element(CoreDocument document, boolean complete) {
         this.document = document;
         this.complete = complete;
     }

@@ -35,54 +35,54 @@ import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 public class NodeFactoryImpl implements NodeFactory {
     // TODO: clean up the API
     public CoreDocument createDocument(Producer producer) {
-        return new DocumentImpl(this, producer == null ? null : new SimpleFragmentSource(producer));
+        return new Document(this, producer == null ? null : new SimpleFragmentSource(producer));
     }
 
     public CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId) {
-        return new DocumentTypeImpl(document, rootName, publicId, systemId);
+        return new DocumentType(document, rootName, publicId, systemId);
     }
 
     public CoreNSUnawareElement createElement(CoreDocument document, String tagName, boolean complete) {
-        return new NSUnawareElementImpl(document, tagName, complete);
+        return new NSUnawareElement(document, tagName, complete);
     }
     
     public CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
-        return new NSAwareElementImpl(document, namespaceURI, localName, prefix, complete);
+        return new NSAwareElement(document, namespaceURI, localName, prefix, complete);
     }
     
     public CoreNSUnawareTypedAttribute createAttribute(CoreDocument document, String name, String value, String type) {
-        return new NSUnawareTypedAttributeImpl(document, name, value, type);
+        return new NSUnawareTypedAttribute(document, name, value, type);
     }
     
     public CoreNSAwareTypedAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
-        return new NSAwareTypedAttributeImpl(document, namespaceURI, localName, prefix, value, type);
+        return new NSAwareTypedAttribute(document, namespaceURI, localName, prefix, value, type);
     }
     
     public CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI) {
-        return new NamespaceDeclarationImpl(document, prefix, namespaceURI);
+        return new NamespaceDeclaration(document, prefix, namespaceURI);
     }
     
     public CoreProcessingInstruction createProcessingInstruction(CoreDocument document, String target, String data) {
-        return new ProcessingInstructionImpl(document, target, data);
+        return new ProcessingInstruction(document, target, data);
     }
     
     public CoreDocumentFragment createDocumentFragment(CoreDocument document) {
-        return new DocumentFragmentImpl(document);
+        return new DocumentFragment(document);
     }
 
     public CoreText createText(CoreDocument document, String data) {
-        return new TextImpl(document, data);
+        return new Text(document, data);
     }
 
     public CoreComment createComment(CoreDocument document, String data) {
-        return new CommentImpl(document, data);
+        return new Comment(document, data);
     }
 
     public CoreCDATASection createCDATASection(CoreDocument document, String data) {
-        return new CDATASectionImpl(document, data);
+        return new CDATASection(document, data);
     }
 
     public CoreEntityReference createEntityReference(CoreDocument document, String name) {
-        return new EntityReferenceImpl(document, name);
+        return new EntityReference(document, name);
     }
 }

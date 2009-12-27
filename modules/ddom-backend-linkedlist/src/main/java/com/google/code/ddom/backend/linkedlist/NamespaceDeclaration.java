@@ -20,10 +20,10 @@ import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class NamespaceDeclarationImpl extends AttributeImpl implements CoreNamespaceDeclaration {
+public class NamespaceDeclaration extends Attribute implements CoreNamespaceDeclaration {
     private String declaredPrefix;
 
-    public NamespaceDeclarationImpl(CoreDocument document, String prefix, String namespaceURI) {
+    public NamespaceDeclaration(CoreDocument document, String prefix, String namespaceURI) {
         super(document, namespaceURI);
         this.declaredPrefix = prefix;
     }

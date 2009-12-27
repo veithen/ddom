@@ -15,13 +15,13 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreComment;
+import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class CommentImpl extends CharacterDataImpl implements CoreComment {
-    public CommentImpl(CoreDocument document, String data) {
+public class CDATASection extends TextNode implements CoreCDATASection {
+    public CDATASection(CoreDocument document, String data) {
         super(document, data);
     }
 }

@@ -22,12 +22,12 @@ import com.google.code.ddom.backend.CoreNSAwareTypedAttribute;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class NSAwareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSAwareTypedAttribute {
+public class NSAwareTypedAttribute extends TypedAttribute implements CoreNSAwareTypedAttribute {
     private final String namespaceURI;
     private String localName;
     private String prefix;
 
-    public NSAwareTypedAttributeImpl(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
+    public NSAwareTypedAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
         super(document, value, type);
         this.namespaceURI = namespaceURI;
         this.localName = localName;

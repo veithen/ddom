@@ -21,12 +21,12 @@ import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class DocumentFragmentImpl extends BuilderWrapperImpl implements CoreDocumentFragment {
+public class DocumentFragment extends BuilderWrapperImpl implements CoreDocumentFragment {
     private final CoreDocument document;
     private CoreChildNode firstChild;
     private int children;
     
-    public DocumentFragmentImpl(CoreDocument document) {
+    public DocumentFragment(CoreDocument document) {
         this.document = document;
     }
 

@@ -26,7 +26,7 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
 
 @Implementation
-public abstract class ParentNodeImpl extends NodeImpl implements CoreParentNode {
+public abstract class ParentNode extends Node implements CoreParentNode {
     public final CoreChildNode coreGetLastChild() {
         CoreChildNode previousChild = null;
         CoreChildNode child = coreGetFirstChild();

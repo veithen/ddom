@@ -15,20 +15,24 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.CoreCharacterData;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class NSUnawareTypedAttributeImpl extends TypedAttributeImpl implements CoreNSUnawareTypedAttribute {
-    private final String name;
+public abstract class CharacterData extends LeafNode implements CoreCharacterData {
+    private String data;
 
-    public NSUnawareTypedAttributeImpl(CoreDocument document, String name, String value, String type) {
-        super(document, value, type);
-        this.name = name;
+    public CharacterData(CoreDocument document, String data) {
+        super(document);
+        this.data = data;
     }
 
-    public final String coreGetName() {
-        return name;
+    public final String coreGetData() {
+        return data;
+    }
+
+    public final void coreSetData(String data) {
+        this.data = data;
     }
 }

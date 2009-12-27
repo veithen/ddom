@@ -19,14 +19,14 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.code.ddom.backend.linkedlist.DocumentImpl;
+import com.google.code.ddom.backend.linkedlist.Document;
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
 
 public class NameCheckTest {
     // TODO: fix this
     @Ignore @Test
     public void testImplClassImplementsInterfaceWithSameName() throws Exception {
-        for (Class<?> cls : ClassLoaderUtils.getClassesInPackage(NameCheckTest.class.getClassLoader(), DocumentImpl.class.getName())) {
+        for (Class<?> cls : ClassLoaderUtils.getClassesInPackage(NameCheckTest.class.getClassLoader(), Document.class.getName())) {
             String name = cls.getSimpleName();
             if (!name.equals("NodeFactoryImpl") && name.endsWith("Impl")) {
                 Class<?> expectedIface = Class.forName("com.google.code.ddom.spi.model.Core" + name.substring(0, name.length()-4));

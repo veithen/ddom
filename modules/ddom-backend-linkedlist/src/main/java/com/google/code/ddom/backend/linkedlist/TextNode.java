@@ -16,31 +16,12 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class DocumentTypeImpl extends LeafNodeImpl implements CoreDocumentType {
-    private final String rootName;
-    private final String publicId;
-    private final String systemId;
-    
-    public DocumentTypeImpl(CoreDocument document, String rootName, String publicId, String systemId) {
-        super(document);
-        this.rootName = rootName;
-        this.publicId = publicId;
-        this.systemId = systemId;
-    }
-
-    public final String coreGetRootName() {
-        return rootName;
-    }
-
-    public final String coreGetPublicId() {
-        return publicId;
-    }
-
-    public final String coreGetSystemId() {
-        return systemId;
+public abstract class TextNode extends CharacterData implements CoreTextNode {
+    public TextNode(CoreDocument document, String data) {
+        super(document, data);
     }
 }

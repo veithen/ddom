@@ -19,6 +19,6 @@ import com.google.code.ddom.backend.BuilderWrapper;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public abstract class BuilderWrapperImpl extends ParentNodeImpl implements BuilderWrapper {
+public abstract class BuilderWrapperImpl extends ParentNode implements BuilderWrapper {
 
 }

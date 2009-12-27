@@ -16,19 +16,33 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNSUnawareElement;
+import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class NSUnawareElementImpl extends ElementImpl implements CoreNSUnawareElement {
-    private final String tagName;
+public class ProcessingInstruction extends LeafNode implements CoreProcessingInstruction {
+    private String target;
+    private String data;
 
-    public NSUnawareElementImpl(CoreDocument document, String tagName, boolean complete) {
-        super(document, complete);
-        this.tagName = tagName;
+    public ProcessingInstruction(CoreDocument document, String target, String data) {
+        super(document);
+        this.target = target;
+        this.data = data;
     }
 
-    public String coreGetName() {
-        return tagName;
+    public final String coreGetTarget() {
+        return target;
+    }
+
+    public void coreSetTarget(String target) {
+        this.target = target;
+    }
+
+    public final String coreGetData() {
+        return data;
+    }
+
+    public final void coreSetData(String data) {
+        this.data = data;
     }
 }

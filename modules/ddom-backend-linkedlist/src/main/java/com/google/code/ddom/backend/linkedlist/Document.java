@@ -27,7 +27,7 @@ import com.google.code.ddom.stream.spi.FragmentSource;
 import com.google.code.ddom.stream.spi.Producer;
 
 @Implementation
-public class DocumentImpl extends BuilderWrapperImpl implements CoreDocument {
+public class Document extends BuilderWrapperImpl implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
     private final FragmentSource source;
@@ -41,7 +41,7 @@ public class DocumentImpl extends BuilderWrapperImpl implements CoreDocument {
     private String standalone;
     private String documentURI;
 
-    public DocumentImpl(NodeFactory nodeFactory, FragmentSource source) {
+    public Document(NodeFactory nodeFactory, FragmentSource source) {
         this.nodeFactory = nodeFactory;
         this.source = source;
         complete = source == null;

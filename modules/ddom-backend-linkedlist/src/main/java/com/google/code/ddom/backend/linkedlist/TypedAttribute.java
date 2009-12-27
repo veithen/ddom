@@ -16,33 +16,23 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreProcessingInstruction;
+import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class ProcessingInstructionImpl extends LeafNodeImpl implements CoreProcessingInstruction {
-    private String target;
-    private String data;
+public abstract class TypedAttribute extends Attribute implements CoreTypedAttribute {
+    private String type;
 
-    public ProcessingInstructionImpl(CoreDocument document, String target, String data) {
-        super(document);
-        this.target = target;
-        this.data = data;
+    public TypedAttribute(CoreDocument document, String value, String type) {
+        super(document, value);
+        this.type = type;
     }
 
-    public final String coreGetTarget() {
-        return target;
+    public final String coreGetType() {
+        return type;
     }
 
-    public void coreSetTarget(String target) {
-        this.target = target;
-    }
-
-    public final String coreGetData() {
-        return data;
-    }
-
-    public final void coreSetData(String data) {
-        this.data = data;
+    public final void coreSetType(String type) {
+        this.type = type;
     }
 }

@@ -26,7 +26,7 @@ import com.google.code.ddom.backend.HierarchyException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttribute {
+public abstract class Attribute extends ParentNode implements CoreAttribute {
     /**
      * The owner of the attribute. This is either a {@link CoreDocument} if the attribute is not linked
      * to an element, or an {@link CoreElement} if the attribute has been added to an element.
@@ -36,7 +36,7 @@ public abstract class AttributeImpl extends ParentNodeImpl implements CoreAttrib
     private Object value;
     private CoreAttribute nextAttribute;
 
-    public AttributeImpl(CoreDocument document, String value) {
+    public Attribute(CoreDocument document, String value) {
         owner = document;
         this.value = value;
     }
