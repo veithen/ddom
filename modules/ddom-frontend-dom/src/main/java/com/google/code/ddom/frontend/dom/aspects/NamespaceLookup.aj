@@ -22,6 +22,13 @@ import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 
+/**
+ * Implements the namespace lookup methods using the algorithms described in <a
+ * href="http://www.w3.org/TR/DOM-Level-3-Core/namespaces-algorithms.html">Appendix B</a> of the DOM
+ * Level 3 Core specification.
+ * 
+ * @author Andreas Veithen
+ */
 public aspect NamespaceLookup {
     public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
         // TODO
