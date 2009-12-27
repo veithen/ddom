@@ -23,8 +23,6 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimized
      */
     CoreAttribute coreGetFirstAttribute();
     
-    void internalSetFirstAttribute(CoreAttribute attr);
-    
     /**
      * Get the last attribute of this element.
      * 
@@ -99,4 +97,6 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimized
      *            the attribute to add
      */
     void coreAppendAttribute(CoreAttribute attr);
+    
+    void coreRemoveAttribute(CoreAttribute attr) throws NodeNotFoundException;
 }

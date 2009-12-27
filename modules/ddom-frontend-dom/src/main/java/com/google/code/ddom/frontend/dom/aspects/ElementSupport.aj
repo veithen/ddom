@@ -125,25 +125,11 @@ public aspect ElementSupport {
         }
     }
 
-    public final Attr DOMElement.removeAttributeNode(Attr _oldAttr) throws DOMException {
-        DOMAttribute oldAttr = (DOMAttribute)_oldAttr;
-        if (oldAttr.getOwnerElement() == this) {
-            CoreAttribute previousAttr = coreGetFirstAttribute();
-            while (previousAttr != null) {
-                CoreAttribute nextAttr = previousAttr.coreGetNextAttribute();
-                if (nextAttr == oldAttr) {
-                    break;
-                }
-                previousAttr = nextAttr;
-            }
-            oldAttr.internalSetOwnerElement(null);
-            if (previousAttr == null) {
-                internalSetFirstAttribute(oldAttr.coreGetNextAttribute());
-            } else {
-                previousAttr.internalSetNextAttribute(oldAttr.coreGetNextAttribute());
-            }
-        } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+    public final Attr DOMElement.removeAttributeNode(Attr oldAttr) throws DOMException {
+        try {
+            coreRemoveAttribute((DOMAttribute)oldAttr);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
         return oldAttr;
     }

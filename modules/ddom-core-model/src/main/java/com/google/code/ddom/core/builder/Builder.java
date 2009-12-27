@@ -154,11 +154,10 @@ public class Builder extends CallbackConsumer {
     private void appendAttribute(CoreAttribute attr) {
         CoreElement element = (CoreElement)parent;
         if (lastAttribute == null) {
-            element.internalSetFirstAttribute(attr);
+            element.coreAppendAttribute(attr);
         } else {
-            lastAttribute.internalSetNextAttribute(attr);
+            lastAttribute.coreInsertAttributeAfter(attr);
         }
-        attr.internalSetOwnerElement(element);
         lastAttribute = attr;
     }
     

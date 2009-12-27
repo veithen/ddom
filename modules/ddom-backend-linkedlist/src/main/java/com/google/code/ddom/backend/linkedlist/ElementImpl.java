@@ -25,6 +25,7 @@ import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.NodeNotFoundException;
 
 @Implementation
 public abstract class ElementImpl extends ParentNodeImpl implements CoreElement {
@@ -103,10 +104,6 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         return firstAttribute;
     }
     
-    public final void internalSetFirstAttribute(CoreAttribute attr) {
-        firstAttribute = attr;
-    }
-
     public final CoreDocument getDocument() {
         return document;
     }
@@ -184,14 +181,14 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
         attr.internalSetOwnerElement(this);
         if (existingAttr == null) {
             if (previousAttr == null) {
-                internalSetFirstAttribute(attr);
+                firstAttribute = attr;
             } else {
                 previousAttr.internalSetNextAttribute(attr);
             }
             return null;
         } else {
             if (previousAttr == null) {
-                internalSetFirstAttribute(attr);
+                firstAttribute = attr;
             } else {
                 previousAttr.internalSetNextAttribute(attr);
             }
@@ -210,6 +207,27 @@ public abstract class ElementImpl extends ParentNodeImpl implements CoreElement 
             firstAttribute = attr;
         } else {
             coreGetLastAttribute().coreInsertAttributeAfter(attr);
+        }
+    }
+
+    public final void coreRemoveAttribute(CoreAttribute attr) throws NodeNotFoundException {
+        if (attr.coreGetOwnerElement() == this) {
+            CoreAttribute previousAttr = firstAttribute;
+            while (previousAttr != null) {
+                CoreAttribute nextAttr = previousAttr.coreGetNextAttribute();
+                if (nextAttr == attr) {
+                    break;
+                }
+                previousAttr = nextAttr;
+            }
+            attr.internalSetOwnerElement(null);
+            if (previousAttr == null) {
+                firstAttribute = attr.coreGetNextAttribute();
+            } else {
+                previousAttr.internalSetNextAttribute(attr.coreGetNextAttribute());
+            }
+        } else {
+            throw new NodeNotFoundException();
         }
     }
 }
