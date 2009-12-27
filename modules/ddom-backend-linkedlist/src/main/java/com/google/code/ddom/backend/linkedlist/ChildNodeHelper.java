@@ -21,6 +21,7 @@ import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.backend.NoParentException;
 
 public class ChildNodeHelper {
     public static CoreChildNode coreGetNextSibling(CoreChildNode node) {
@@ -53,11 +54,21 @@ public class ChildNodeHelper {
     }
     
     public static void coreInsertSiblingAfter(CoreChildNode node, CoreNode sibling) throws CoreModelException {
-        node.coreGetParent().coreInsertChildAfter(sibling, node);
+        CoreParentNode parent = node.coreGetParent();
+        if (parent == null) {
+            throw new NoParentException();
+        } else {
+            parent.coreInsertChildAfter(sibling, node);
+        }
     }
     
     public static void coreInsertSiblingBefore(CoreChildNode node, CoreNode sibling) throws CoreModelException {
-        node.coreGetParent().coreInsertChildBefore(sibling, node);
+        CoreParentNode parent = node.coreGetParent();
+        if (parent == null) {
+            throw new NoParentException();
+        } else {
+            parent.coreInsertChildBefore(sibling, node);
+        }
     }
     
     public static void coreDetach(CoreChildNode node) {

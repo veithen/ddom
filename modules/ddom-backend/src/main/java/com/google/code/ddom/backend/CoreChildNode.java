@@ -19,8 +19,21 @@ public interface CoreChildNode extends CoreNode {
     CoreParentNode coreGetParent();
     CoreChildNode coreGetNextSibling();
     CoreChildNode coreGetPreviousSibling();
+    
+    /**
+     * 
+     * @param sibling
+     * @throws NoParentException if this node has no parent
+     */
     void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException;
+    
+    /**
+     * 
+     * @param sibling
+     * @throws NoParentException if this node has no parent
+     */
     void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException;
+    
     void coreDetach();
     void internalSetParent(CoreParentNode parent);
     CoreChildNode internalGetNextSibling();
