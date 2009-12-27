@@ -27,7 +27,7 @@ import org.w3c.dom.Document;
 import com.google.code.ddom.utils.test.Validated;
 
 @RunWith(DOMTestRunner.class)
-public class NSDeclTest {
+public class NamespaceDeclarationTest {
     @Validated @Test
     public void testGetNamespaceURI() {
         Document doc = DOMUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");

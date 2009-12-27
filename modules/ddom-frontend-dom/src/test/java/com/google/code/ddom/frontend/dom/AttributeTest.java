@@ -28,7 +28,7 @@ import org.w3c.dom.Element;
 import com.google.code.ddom.utils.test.Validated;
 
 @RunWith(DOMTestRunner.class)
-public class AttrImplTest {
+public class AttributeTest {
     @Validated @Test
     public void testGetNextSibling() {
         Document doc = DOMUtil.newDocument();

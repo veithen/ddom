@@ -42,7 +42,7 @@ import com.google.code.ddom.utils.test.Validated;
  * @author Andreas Veithen
  */
 @RunWith(DOMTestRunner.class)
-public class DocumentImplTest {
+public class DocumentTest {
     @Test
     public void testNamespaceUnawareParsing() throws Exception {
         // TODO: do this properly
