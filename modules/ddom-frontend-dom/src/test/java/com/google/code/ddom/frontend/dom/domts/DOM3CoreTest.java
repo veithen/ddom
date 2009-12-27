@@ -112,9 +112,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(nodeinsertbefore14.class);
         suite.addExclude(nodeinsertbefore15.class);
         
-        // TODO: namespace lookup on Document instance
-        suite.addExclude(nodelookupnamespaceuri02.class);
-        
         // TODO: hangs
         suite.addExclude(nodereplacechild12.class);
         suite.addExclude(nodereplacechild30.class);

@@ -54,7 +54,9 @@ public aspect NamespaceLookup {
     }
 
     public final String DOMDocument.lookupNamespaceURI(String prefix) {
-        return null;
+        // See section B.4 of the DOM3 spec
+        DOMElement documentElement = (DOMElement)coreGetDocumentElement();
+        return documentElement == null ? null : documentElement.lookupNamespaceURI(prefix);
     }
 
     public final String DOMDocument.lookupPrefix(String namespaceURI) {
@@ -71,7 +73,7 @@ public aspect NamespaceLookup {
             }
         }
         Node parent = getParentNode();
-        return parent == null ? null : parent.lookupNamespaceURI(prefix);
+        return parent instanceof DOMElement ? parent.lookupNamespaceURI(prefix) : null;
     }
 
     public final String DOMElement.lookupPrefix(String namespaceURI) {
