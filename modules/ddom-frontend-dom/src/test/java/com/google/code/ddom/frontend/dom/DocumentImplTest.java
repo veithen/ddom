@@ -33,7 +33,7 @@ import org.w3c.dom.Node;
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.backend.CoreNSUnawareElement;
-import com.google.code.ddom.backend.linkedlist.NSUnawareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 import com.google.code.ddom.utils.test.Validated;
@@ -43,8 +43,7 @@ import com.google.code.ddom.utils.test.Validated;
  */
 @RunWith(DOMTestRunner.class)
 public class DocumentImplTest {
-    // TODO: doesn't work with LTW
-//    @Test
+    @Test
     public void testNamespaceUnawareParsing() throws Exception {
         // TODO: do this properly
         XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -58,7 +57,7 @@ public class DocumentImplTest {
         Assert.assertEquals("p:root", element.getTagName());
         
         Attr attr = (Attr)element.getAttributes().item(0);
-        Assert.assertTrue(attr instanceof NSUnawareTypedAttribute);
+        Assert.assertTrue(attr instanceof CoreNSUnawareTypedAttribute);
         Assert.assertNull(attr.getLocalName());
         Assert.assertEquals("xmlns:p", attr.getName());
     }
