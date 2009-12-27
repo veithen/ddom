@@ -34,7 +34,11 @@ public interface CoreChildNode extends CoreNode {
      */
     void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException;
     
+    /**
+     * Detach this node from its parent. If the node has no parent, then this method does nothing.
+     */
     void coreDetach();
+    
     void internalSetParent(CoreParentNode parent);
     CoreChildNode internalGetNextSibling();
     void internalSetNextSibling(CoreChildNode nextSibling);

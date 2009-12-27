@@ -115,7 +115,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 delta = fragment.coreGetChildCount();
                 // TODO: need to clear the document fragment?
             } else if (newChild instanceof CoreChildNode) {
-                // TODO: what if this is already a child of some container?
+                ((CoreChildNode)newChild).coreDetach();
                 firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
                 validateChildType(firstNodeToInsert);
                 firstNodeToInsert.internalSetParent(this);

@@ -21,7 +21,19 @@ public interface CoreParentNode extends CoreNode {
     CoreChildNode coreGetFirstChild();
     CoreChildNode coreGetLastChild();
     int coreGetChildCount();
+    
+    /**
+     * Append a new child to the list of children of this parent node. If the node to be added
+     * already has a parent node, it is first removed from this parent.
+     * 
+     * @param newChild
+     *            the new child; this may either be a {@link CoreChildNode} or a
+     *            {@link CoreDocumentFragment}
+     * @throws CoreModelException
+     *             TODO: specify the exceptions
+     */
     void coreAppendChild(CoreNode newChild) throws CoreModelException;
+    
     void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
     void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
     void coreRemoveChild(CoreChildNode child) throws CoreModelException;
