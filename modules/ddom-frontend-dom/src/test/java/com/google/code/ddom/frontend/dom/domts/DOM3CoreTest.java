@@ -109,7 +109,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*isdefaultnamespace.*");
         suite.addExclude(".*isequalnode.*");
         suite.addExclude(".*userdatahandler.*");
-        suite.addExclude(".*wholetext.*");
         suite.addExclude(".*iselementcontentwhitespace.*");
         suite.addExclude(".*settextcontent.*");
         suite.addExclude(".*wellformed.*");

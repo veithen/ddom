@@ -74,9 +74,9 @@ public class ChildNodeHelper {
     public static void coreDetach(CoreChildNode node) {
         CoreParentNode parent = node.coreGetParent();
         if (parent != null) {
-            node.internalSetParent(null);
             CoreChildNode previousSibling = node.coreGetPreviousSibling();
             CoreChildNode nextSibling = node.coreGetNextSibling();
+            node.internalSetParent(null);
             if (previousSibling == null) {
                 parent.internalSetFirstChild(nextSibling);
             } else {

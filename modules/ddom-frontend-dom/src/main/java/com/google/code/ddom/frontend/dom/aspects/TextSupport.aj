@@ -18,6 +18,9 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
@@ -44,13 +47,78 @@ public aspect TextSupport {
     }
     
     public final String DOMTextNode.getWholeText() {
-        // TODO
-        throw new UnsupportedOperationException();
+        DOMTextNode first = getWholeTextStartNode();
+        DOMTextNode last = getWholeTextEndNode();
+        if (first == last) {
+            return first.coreGetData();
+        } else {
+            StringBuilder buffer = new StringBuilder();
+            DOMTextNode current = first;
+            while (true) {
+                buffer.append(current.coreGetData());
+                if (current == last) {
+                    break;
+                } else {
+                    current = (DOMTextNode)current.coreGetNextSibling();
+                }
+            }
+            return buffer.toString();
+        }
     }
 
+    private DOMTextNode DOMTextNode.getWholeTextStartNode() {
+        DOMTextNode first = this;
+        while (true) {
+            CoreChildNode sibling = first.coreGetPreviousSibling();
+            if (sibling instanceof DOMTextNode) {
+                first = (DOMTextNode)sibling;
+            } else {
+                break;
+            }
+        }
+        return first;
+    }
+    
+    private DOMTextNode DOMTextNode.getWholeTextEndNode() {
+        DOMTextNode last = this;
+        while (true) {
+            CoreChildNode sibling = last.coreGetNextSibling();
+            if (sibling instanceof DOMTextNode) {
+                last = (DOMTextNode)sibling;
+            } else {
+                break;
+            }
+        }
+        return last;
+    }
+    
     public final Text DOMTextNode.replaceWholeText(String content) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+        DOMTextNode newText;
+        if (content.length() > 0) {
+            CoreDocument document = getDocument();
+            newText = (DOMTextNode)document.getNodeFactory().createText(document, content);
+        } else {
+            newText = null;
+        }
+        if (coreGetParent() != null) {
+            DOMTextNode first = getWholeTextStartNode();
+            DOMTextNode last = getWholeTextEndNode();
+            if (newText != null) {
+                try {
+                    first.coreInsertSiblingBefore(newText);
+                } catch (CoreModelException ex) {
+                    throw DOMExceptionUtil.translate(ex);
+                }
+            }
+            DOMTextNode current = first;
+            DOMTextNode next;
+            do {
+                next = current == last ? null : (DOMTextNode)current.coreGetNextSibling();
+                current.coreDetach();
+                current = next;
+            } while (next != null);
+        }
+        return newText;
     }
 
     public final boolean DOMTextNode.isElementContentWhitespace() {
