@@ -31,7 +31,6 @@ import org.w3c.domts.level1.core.elementremoveattributerestoredefaultvalue;
 import org.w3c.domts.level1.core.hc_attrgetvalue2;
 import org.w3c.domts.level1.core.hc_attrnormalize;
 import org.w3c.domts.level1.core.hc_nodeappendchildchildexists;
-import org.w3c.domts.level1.core.hc_nodeinsertbeforenewchildexists;
 import org.w3c.domts.level1.core.hc_nodereplacechildnewchildexists;
 import org.w3c.domts.level1.core.hc_nodevalue03;
 import org.w3c.domts.level1.core.hc_nodevalue07;
@@ -88,9 +87,8 @@ public class DOM1CoreTest extends TestSuite {
         suite.addExclude(hc_nodevalue03.class);
         suite.addExclude(nodevalue03.class);
         
-        // TODO: bugs in Axiom!
+        // TODO
         suite.addExclude(hc_nodeappendchildchildexists.class);
-        suite.addExclude(hc_nodeinsertbeforenewchildexists.class);
         suite.addExclude(hc_nodereplacechildnewchildexists.class);
         suite.addExclude(nodeappendchildchildexists.class);
         suite.addExclude(nodeinsertbeforenewchildexists.class);
