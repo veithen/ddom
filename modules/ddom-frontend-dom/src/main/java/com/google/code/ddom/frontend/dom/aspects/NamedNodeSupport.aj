@@ -100,7 +100,7 @@ public aspect NamedNodeSupport {
     }
 
     public final String DOMNamespaceDeclaration.getPrefix() {
-        return getDeclaredPrefix() == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
+        return coreGetDeclaredPrefix() == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
     }
 
     public final void DOMNamespaceDeclaration.setPrefix(String prefix) throws DOMException {
@@ -110,12 +110,12 @@ public aspect NamedNodeSupport {
     }
 
     public final String DOMNamespaceDeclaration.getLocalName() {
-        String declaredPrefix = getDeclaredPrefix();
+        String declaredPrefix = coreGetDeclaredPrefix();
         return declaredPrefix == null ? XMLConstants.XMLNS_ATTRIBUTE : declaredPrefix;
     }
 
     public final String DOMNamespaceDeclaration.getName() {
-        String declaredPrefix = getDeclaredPrefix();
+        String declaredPrefix = coreGetDeclaredPrefix();
         if (declaredPrefix == null) {
             return XMLConstants.XMLNS_ATTRIBUTE;
         } else {

@@ -44,7 +44,7 @@ public class DOMNamespaceDeclarationMatcher implements AttributeMatcher {
     
     public boolean matches(CoreAttribute attr, String namespaceURI, String name) {
         if (attr instanceof CoreNamespaceDeclaration) {
-            String prefix = ((CoreNamespaceDeclaration)attr).getDeclaredPrefix();
+            String prefix = ((CoreNamespaceDeclaration)attr).coreGetDeclaredPrefix();
             return name == null && prefix == null || name != null && name.equals(prefix);
         } else {
             return false;

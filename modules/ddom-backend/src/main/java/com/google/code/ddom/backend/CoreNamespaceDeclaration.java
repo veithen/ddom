@@ -22,7 +22,7 @@ public interface CoreNamespaceDeclaration extends CoreAttribute {
      * @return the prefix, or <code>null</code> if this namespace declaration defines the default
      *         namespace
      */
-    String getDeclaredPrefix();
+    String coreGetDeclaredPrefix();
     
-    String getDeclaredNamespaceURI();
+    String coreGetDeclaredNamespaceURI();
 }

@@ -74,8 +74,8 @@ public aspect NamespaceLookup {
         for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
-                if (decl.getDeclaredNamespaceURI().equals(namespaceURI)) {
-                    return decl.getDeclaredPrefix();
+                if (decl.coreGetDeclaredNamespaceURI().equals(namespaceURI)) {
+                    return decl.coreGetDeclaredPrefix();
                 }
             }
         }

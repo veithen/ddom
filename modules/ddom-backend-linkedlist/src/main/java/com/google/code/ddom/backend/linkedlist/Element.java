@@ -249,14 +249,14 @@ public abstract class Element extends ParentNode implements CoreElement {
         for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
-                String declaredPrefix = decl.getDeclaredPrefix();
+                String declaredPrefix = decl.coreGetDeclaredPrefix();
                 if (prefix == null) {
                     if (declaredPrefix == null) {
-                        return decl.getDeclaredNamespaceURI();
+                        return decl.coreGetDeclaredNamespaceURI();
                     }
                 } else {
                     if (prefix.equals(declaredPrefix)) {
-                        return decl.getDeclaredNamespaceURI();
+                        return decl.coreGetDeclaredNamespaceURI();
                     }
                 }
             }

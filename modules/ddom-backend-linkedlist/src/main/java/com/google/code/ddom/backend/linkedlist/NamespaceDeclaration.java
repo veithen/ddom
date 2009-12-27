@@ -28,11 +28,11 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
         this.declaredPrefix = prefix;
     }
 
-    public final String getDeclaredPrefix() {
+    public final String coreGetDeclaredPrefix() {
         return declaredPrefix;
     }
     
-    public final String getDeclaredNamespaceURI() {
+    public final String coreGetDeclaredNamespaceURI() {
         return coreGetValue();
     }
 }
