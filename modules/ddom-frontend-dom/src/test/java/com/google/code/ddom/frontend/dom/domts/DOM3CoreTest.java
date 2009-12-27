@@ -28,8 +28,6 @@ import org.w3c.domts.level3.core.documentrenamenode28;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
 import org.w3c.domts.level3.core.namespacedeclarations02;
-import org.w3c.domts.level3.core.nodegettextcontent15;
-import org.w3c.domts.level3.core.nodeinsertbefore11;
 import org.w3c.domts.level3.core.nodeinsertbefore12;
 import org.w3c.domts.level3.core.nodeinsertbefore14;
 import org.w3c.domts.level3.core.nodeinsertbefore15;
@@ -121,7 +119,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(documentrenamenode19.class);
         
         // TODO: contains some very tricky cases!
-        suite.addExclude(nodeinsertbefore11.class);
         suite.addExclude(nodeinsertbefore12.class);
         suite.addExclude(nodereplacechild17.class);
         suite.addExclude(nodereplacechild18.class);

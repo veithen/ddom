@@ -38,8 +38,6 @@ import org.w3c.domts.level1.core.hc_nodevalue08;
 import org.w3c.domts.level1.core.namednodemapremovenameditem;
 import org.w3c.domts.level1.core.namednodemapremovenameditemgetvalue;
 import org.w3c.domts.level1.core.nodeappendchildchildexists;
-import org.w3c.domts.level1.core.nodeinsertbeforenewchildexists;
-import org.w3c.domts.level1.core.nodereplacechildnewchildexists;
 import org.w3c.domts.level1.core.nodevalue03;
 import org.w3c.domts.level1.core.nodevalue07;
 import org.w3c.domts.level1.core.nodevalue08;
@@ -91,8 +89,6 @@ public class DOM1CoreTest extends TestSuite {
         suite.addExclude(hc_nodeappendchildchildexists.class);
         suite.addExclude(hc_nodereplacechildnewchildexists.class);
         suite.addExclude(nodeappendchildchildexists.class);
-        suite.addExclude(nodeinsertbeforenewchildexists.class);
-        suite.addExclude(nodereplacechildnewchildexists.class);
         
         // TODO Incorrect test cases?
         suite.addExclude(cdatasectionnormalize.class);
