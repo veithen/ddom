@@ -114,12 +114,16 @@ public aspect ChildNodes {
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
-        try {
-            coreRemoveChild((CoreChildNode)oldChild);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+        if (oldChild instanceof CoreChildNode) {
+            try {
+                coreRemoveChild((CoreChildNode)oldChild);
+            } catch (CoreModelException ex) {
+                throw DOMExceptionUtil.translate(ex);
+            }
+            return oldChild;
+        } else {
+            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         }
-        return oldChild;
     }
 
     public final Node DOMParentNode.replaceChild(Node newChild, Node oldChild) throws DOMException {
