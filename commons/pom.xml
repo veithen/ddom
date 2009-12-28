@@ -24,29 +24,13 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>modules</artifactId>
-    <name>DDOM :: Modules</name>
+    <artifactId>commons</artifactId>
+    <name>DDOM :: Commons</name>
     <packaging>pom</packaging>
     
     <modules>
-        <module>ddom-api</module>
-        <module>ddom-backend</module>
-        <module>ddom-backend-linkedlist</module>
-        <module>ddom-commons</module>
-        <module>ddom-core-model</module>
-        <module>ddom-dom-utils</module>
-        <module>ddom-frontend-axiom</module>
-        <module>ddom-frontend-dom</module>
-        <module>ddom-jaxp</module>
-        <module>ddom-spi</module>
-        <module>ddom-spring-ws</module>
-        <module>ddom-stream</module>
-        <module>ddom-stream-dom</module>
-        <module>ddom-stream-sax</module>
-        <module>ddom-stream-stax</module>
-        <module>ddom-stream-utils</module>
-        <module>ddom-test-utils</module>
-        <module>ddom-weaver</module>
+        <module>ddom-domts</module>
+        <module>ddom-xmlts</module>
     </modules>
     
     <build>

@@ -55,6 +55,7 @@
     </scm>
     
     <modules>
+        <module>commons</module>
         <module>modules</module>
         <module>tests</module>
     </modules>

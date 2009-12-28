@@ -20,12 +20,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>commons</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>ddom-domts</artifactId>
-    <name>DDOM :: Modules :: DOM Conformance Test Suite</name>
+    <name>DDOM :: Commons :: DOM Conformance Test Suite</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
