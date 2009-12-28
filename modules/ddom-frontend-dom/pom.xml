@@ -52,7 +52,13 @@
             <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-backend-linkedlist</artifactId>
             <version>${pom.version}</version>
-            <scope>runtime</scope>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-weaver</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>

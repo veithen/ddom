@@ -24,31 +24,18 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-jaxp</artifactId>
-    <name>DDOM :: Modules :: JAXP</name>
+    <artifactId>ddom-weaver</artifactId>
+    <name>DDOM :: Modules :: Weaver</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>ddom-frontend-dom</artifactId>
+            <artifactId>ddom-api</artifactId>
             <version>${version}</version>
         </dependency>
         <dependency>
-            <!-- TODO: this should only be a runtime dependency! -->
-            <groupId>${groupId}</groupId>
-            <artifactId>ddom-backend-linkedlist</artifactId>
-            <version>${version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-weaver</artifactId>
-            <version>${pom.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>ddom-stream-stax</artifactId>
-            <version>${version}</version>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
         </dependency>
     </dependencies>
 </project>

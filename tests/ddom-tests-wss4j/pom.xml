@@ -46,6 +46,18 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-backend-linkedlist</artifactId>
+            <version>${pom.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-weaver</artifactId>
+            <version>${pom.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.ws.security</groupId>
             <artifactId>wss4j</artifactId>
             <version>1.5.7</version>

@@ -47,6 +47,7 @@
         <module>ddom-stream-stax</module>
         <module>ddom-stream-utils</module>
         <module>ddom-test-utils</module>
+        <module>ddom-weaver</module>
         <module>ddom-xmlts</module>
     </modules>
     
