@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.ProviderFinder;
+import com.google.code.ddom.spi.ProviderFinderException;
 
 public class ModelLoaderRegistry {
     private static final ClassLoaderLocal<ModelLoaderRegistry> registries = new ClassLoaderLocal<ModelLoaderRegistry>();
@@ -48,6 +51,14 @@ public class ModelLoaderRegistry {
         return registry;
     }
 
+    public static ModelLoaderRegistry getInstance() throws ProviderFinderException {
+        return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            public ClassLoader run() {
+                return Thread.currentThread().getContextClassLoader();
+            }
+        }));
+    }
+    
     public DocumentFactory getDocumentFactory(ModelDefinition model) {
         DocumentFactory documentFactory = modelCache.get(model);
         if (documentFactory == null) {

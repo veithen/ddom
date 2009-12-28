@@ -43,4 +43,10 @@ public class ModelBuilder {
         // TODO: make class loader configurable
         return ModelLoaderRegistry.getInstance(ModelBuilder.class.getClassLoader()).getDocumentFactory(buildModelDefinition());
     }
+    
+    public static ModelDefinition buildModelDefinition(String frontend) {
+        ModelBuilder builder = new ModelBuilder();
+        builder.addFrontend(frontend);
+        return builder.buildModelDefinition();
+    }
 }
