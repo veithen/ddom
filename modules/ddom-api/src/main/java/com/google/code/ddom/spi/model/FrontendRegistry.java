@@ -29,6 +29,7 @@ import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
 import com.google.code.ddom.weaver.FrontendWeaver;
 
+@Deprecated
 public final class FrontendRegistry {
     // TODO: should be taken from the backend definition
     private static final String DOCUMENT_FACTORY_IMPL_CLASS = "com.google.code.ddom.backend.linkedlist.NodeFactoryImpl";

@@ -15,14 +15,16 @@
  */
 package com.google.code.ddom.weaver;
 
+import com.google.code.ddom.spi.Provider;
+import com.google.code.ddom.spi.ProviderFinder;
+import com.google.code.ddom.spi.model.Backend;
+import com.google.code.ddom.spi.model.Frontend;
 import com.google.code.ddom.spi.model.ModelLoader;
 import com.google.code.ddom.spi.model.ModelLoaderFactory;
 
+@Provider(name="dynamic")
 public class DynamicModelLoaderFactory implements ModelLoaderFactory {
-
     public ModelLoader createModelLoader(ClassLoader classLoader) {
-        // TODO Auto-generated method stub
-        return null;
+        return new DynamicModelLoader(classLoader, ProviderFinder.find(classLoader, Backend.class), ProviderFinder.find(classLoader, Frontend.class));
     }
-
 }

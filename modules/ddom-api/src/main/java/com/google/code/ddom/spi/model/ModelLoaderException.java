@@ -15,11 +15,21 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.spi.Provider;
+public class ModelLoaderException extends Exception {
+    private static final long serialVersionUID = 2523649110649686261L;
 
-@Provider(name="static")
-public class StaticModelLoaderFactory implements ModelLoaderFactory {
-    public ModelLoader createModelLoader(ClassLoader classLoader) {
-        return new StaticModelLoader();
+    public ModelLoaderException() {
+    }
+
+    public ModelLoaderException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ModelLoaderException(String message) {
+        super(message);
+    }
+
+    public ModelLoaderException(Throwable cause) {
+        super(cause);
     }
 }

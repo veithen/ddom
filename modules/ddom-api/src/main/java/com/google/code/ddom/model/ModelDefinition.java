@@ -29,5 +29,13 @@ public class ModelDefinition implements Serializable {
         this.frontends = frontends;
     }
     
+    public String getBackend() {
+        return backend;
+    }
+
+    public String[] getFrontends() {
+        return frontends.clone();
+    }
+    
     // TODO: implement equals and hashCode
 }

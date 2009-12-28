@@ -19,6 +19,12 @@ import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 
 public interface ModelLoader {
+    /**
+     * Load the model corresponding to a given definition.
+     * 
+     * @param definition
+     * @return the model, or <code>null</code> if the model could not be loaded
+     */
     // TODO: document that the loader is not responsible for caching the returned instance
-    DocumentFactory loadModel(ModelDefinition definition);
+    DocumentFactory loadModel(ModelDefinition definition) throws ModelLoaderException;
 }

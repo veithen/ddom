@@ -18,6 +18,9 @@ package com.google.code.ddom.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.code.ddom.DocumentFactory;
+import com.google.code.ddom.spi.model.ModelLoaderRegistry;
+
 public class ModelBuilder {
     private String backend = "linkedlist";
     private List<String> frontends = new ArrayList<String>();
@@ -33,5 +36,10 @@ public class ModelBuilder {
     
     public ModelDefinition buildModelDefinition() {
         return new ModelDefinition(backend, frontends.toArray(new String[frontends.size()]));
+    }
+    
+    public DocumentFactory buildDocumentFactory() {
+        // TODO: make class loader configurable
+        return ModelLoaderRegistry.getInstance(ModelBuilder.class.getClassLoader()).getDocumentFactory(buildModelDefinition());
     }
 }
