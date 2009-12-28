@@ -15,15 +15,10 @@
  */
 package com.google.code.ddom.spi.model;
 
-import java.util.List;
+import com.google.code.ddom.DocumentFactory;
+import com.google.code.ddom.model.ModelDefinition;
 
-// TODO: this API is a bit simplistic; we need at least to support the following features:
-//        - a frontend configuration (so that aspects can be selected dynamically)
-//        - we need to be able to mix frontends and to support dependencies (e.g. SAAJ -> DOM)
-//        - mixing frontends must take into account that there may be overlap between them
-//          (one frontend may define a method with the same signature and behavior as a method
-//          in another frontend)
-// TODO: move to LTW module
-public interface Frontend {
-    List<String> getAspectClasses();
+public interface ModelLoader {
+    // TODO: document that the loader is not responsible for caching the returned instance
+    DocumentFactory loadModel(ModelDefinition definition);
 }
