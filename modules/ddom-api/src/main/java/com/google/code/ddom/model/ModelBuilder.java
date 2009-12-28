@@ -17,6 +17,7 @@ package com.google.code.ddom.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
@@ -35,7 +36,7 @@ public class ModelBuilder {
     }
     
     public ModelDefinition buildModelDefinition() {
-        return new ModelDefinition(backend, frontends.toArray(new String[frontends.size()]));
+        return new ModelDefinition(backend, new TreeSet<String>(frontends));
     }
     
     public DocumentFactory buildDocumentFactory() {

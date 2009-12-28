@@ -18,6 +18,7 @@ package com.google.code.ddom.spi.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
@@ -28,6 +29,7 @@ public class ModelLoaderRegistry {
     private static final ClassLoaderLocal<ModelLoaderRegistry> registries = new ClassLoaderLocal<ModelLoaderRegistry>();
     
     private final List<ModelLoader> loaders;
+    private final Map<ModelDefinition,DocumentFactory> modelCache = new ConcurrentHashMap<ModelDefinition,DocumentFactory>();
 
     private ModelLoaderRegistry(List<ModelLoader> loaders) {
         this.loaders = loaders;
@@ -47,17 +49,23 @@ public class ModelLoaderRegistry {
     }
 
     public DocumentFactory getDocumentFactory(ModelDefinition model) {
-        // TODO: cache by model definition!
-        for (ModelLoader loader : loaders) {
-            try {
-                DocumentFactory documentFactory = loader.loadModel(model);
-                if (documentFactory != null) {
-                    return documentFactory;
+        DocumentFactory documentFactory = modelCache.get(model);
+        if (documentFactory == null) {
+            for (ModelLoader loader : loaders) {
+                try {
+                    documentFactory = loader.loadModel(model);
+                    if (documentFactory != null) {
+                        break;
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace(); // TODO
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace(); // TODO
             }
+            if (documentFactory == null) {
+                throw new RuntimeException(); // TODO
+            }
+            modelCache.put(model, documentFactory);
         }
-        throw new RuntimeException(); // TODO
+        return documentFactory;
     }
 }
