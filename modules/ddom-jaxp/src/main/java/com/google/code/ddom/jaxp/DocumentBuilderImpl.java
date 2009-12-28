@@ -36,7 +36,8 @@ import org.xml.sax.SAXParseException;
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
-import com.google.code.ddom.spi.model.FrontendRegistry;
+import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private final boolean ignoreComments;
@@ -51,7 +52,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public DOMImplementation getDOMImplementation() {
         // TODO: check if this is consistent with the rest of the code
-        return new DOMImplementationImpl((NodeFactory)FrontendRegistry.getInstance().getDocumentFactory("dom"));
+        return new DOMImplementationImpl((NodeFactory)ModelLoaderRegistry.getInstance().getDocumentFactory(ModelBuilder.buildModelDefinition("dom")));
     }
 
     @Override
