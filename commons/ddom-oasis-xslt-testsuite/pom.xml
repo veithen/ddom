@@ -30,6 +30,12 @@
         (http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=xslt). The project contains
         version 04 of the test suite.</description>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <resources>
             <resource>
