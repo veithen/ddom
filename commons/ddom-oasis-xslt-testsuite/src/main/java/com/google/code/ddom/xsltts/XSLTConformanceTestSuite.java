@@ -17,8 +17,15 @@ package com.google.code.ddom.xsltts;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -26,6 +33,12 @@ import javax.xml.stream.XMLStreamReader;
 
 public class XSLTConformanceTestSuite {
     private static XSLTConformanceTestSuite instance;
+    
+    private static final Set<String> ignoredTests = new HashSet<String>(Arrays.asList(new String[] {
+            "Keys_PerfRepro3", // Hangs or takes too much time
+    }));
+    
+    private final List<XSLTConformanceTest> tests = new LinkedList<XSLTConformanceTest>();
     
     private XSLTConformanceTestSuite() {}
     
@@ -61,11 +74,12 @@ public class XSLTConformanceTestSuite {
     
     private void parseTestCatalog(XMLStreamReader reader) throws XMLStreamException {
         reader.require(XMLStreamReader.START_ELEMENT, null, "test-catalog");
+        String submitter = reader.getAttributeValue(null, "submitter");
         String majorPath = null;
         while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
             String name = reader.getLocalName();
             if (name.equals("test-case")) {
-                parseTestCase(reader);
+                parseTestCase(reader, submitter, majorPath);
             } else {
                 String value = reader.getElementText();
                 if (name.equals("major-path")) {
@@ -75,8 +89,10 @@ public class XSLTConformanceTestSuite {
         }
     }
     
-    private void parseTestCase(XMLStreamReader reader) throws XMLStreamException {
+    private void parseTestCase(XMLStreamReader reader, String submitter, String majorPath) throws XMLStreamException {
         reader.require(XMLStreamReader.START_ELEMENT, null, "test-case");
+        String id = reader.getAttributeValue(null, "id");
+        String filePath = null;
         String input = null;
         String stylesheet = null;
         String output = null;
@@ -102,10 +118,18 @@ public class XSLTConformanceTestSuite {
             } else if (name.equals("discretionary")) {
                 discretionaryChoices = parseDiscretionary(reader);
             } else {
-                reader.getElementText();
+                String value = reader.getElementText();
+                if (name.equals("file-path")) {
+                    filePath = value;
+                }
             }
         }
-        System.out.println(input + " " + stylesheet + " " + output + " " + compare + " " + discretionaryChoices);
+        if (!ignoredTests.contains(id)) {
+            tests.add(new XSLTConformanceTest(submitter + "/" + id,
+                    XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/" + filePath + "/" + input),
+                    XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/" + filePath + "/" + stylesheet),
+                    XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/REF_OUT/" + filePath + "/" + output), compare));
+        }
     }
     
     private Map<String,String> parseDiscretionary(XMLStreamReader reader) throws XMLStreamException {
@@ -119,7 +143,7 @@ public class XSLTConformanceTestSuite {
         return discretionaryChoices;
     }
     
-    public static void main(String[] args) {
-        load();
+    public Collection<XSLTConformanceTest> getTests() {
+        return Collections.unmodifiableCollection(tests);
     }
 }
