@@ -97,10 +97,12 @@ public class XSLTConformanceTestSuite {
         String stylesheet = null;
         String output = null;
         String compare = null;
+        String operation = null;
         Map<String,String> discretionaryChoices = null;
         while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
             String name = reader.getLocalName();
             if (name.equals("scenario")) {
+                operation = reader.getAttributeValue(null, "operation");
                 while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
                     String role = reader.getAttributeValue(null, "role");
                     if (reader.getLocalName().equals("input-file")) {
@@ -125,7 +127,9 @@ public class XSLTConformanceTestSuite {
             }
         }
         if (!ignoredTests.contains(id)) {
-            tests.add(new XSLTConformanceTest(submitter + "/" + id,
+            tests.add(new XSLTConformanceTest(
+                    submitter + "/" + id,
+                    operation.equals("execution-error"),
                     XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/" + filePath + "/" + input),
                     XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/" + filePath + "/" + stylesheet),
                     XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/REF_OUT/" + filePath + "/" + output), compare));

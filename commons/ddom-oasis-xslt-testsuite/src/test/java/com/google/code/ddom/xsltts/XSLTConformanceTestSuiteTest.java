@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.xsltts;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.xalan.processor.TransformerFactoryImpl;
@@ -35,13 +36,16 @@ public class XSLTConformanceTestSuiteTest extends TestCase {
     protected void runTest() throws Throwable {
         DocumentBuilderFactory documentBuilderFactory = new DocumentBuilderFactoryImpl();
         documentBuilderFactory.setNamespaceAware(true);
-        test.execute(documentBuilderFactory.newDocumentBuilder(), new TransformerFactoryImpl());
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        test.execute(documentBuilder, documentBuilder, new TransformerFactoryImpl());
     }
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
         for (XSLTConformanceTest test : XSLTConformanceTestSuite.load().getTests()) {
-            suite.addTest(new XSLTConformanceTestSuiteTest(test));
+            if (!test.isErrorScenario()) {
+                suite.addTest(new XSLTConformanceTestSuiteTest(test));
+            }
         }
         return suite;
     }
