@@ -46,7 +46,7 @@ public class XSLTConformanceTestSuite {
         if (instance == null) {
             XSLTConformanceTestSuite suite = new XSLTConformanceTestSuite();
             try {
-                suite.doLoad();
+                suite.loadCatalog(loadDoubts());
             } catch (Exception ex) {
                 throw new RuntimeException("Could not load test suite", ex);
             }
@@ -55,7 +55,62 @@ public class XSLTConformanceTestSuite {
         return instance;
     }
     
-    private void doLoad() throws XMLStreamException, IOException {
+    private static Set<String> loadDoubts() throws XMLStreamException, IOException {
+        Set<String> testsInDoubt = new HashSet<String>();
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        InputStream in = XSLTConformanceTestSuite.class.getResourceAsStream("/doubts.xml");
+        try {
+            XMLStreamReader reader = factory.createXMLStreamReader(in);
+            while (!reader.isStartElement()) {
+                reader.next();
+            }
+            reader.require(XMLStreamReader.START_ELEMENT, null, "test-suite");
+            while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
+                parseDoubtsTestCatalog(reader, testsInDoubt);
+            }
+        } finally {
+            in.close();
+        }
+        return testsInDoubt;
+    }
+    
+    private static void parseDoubtsTestCatalog(XMLStreamReader reader, Set<String> testsInDoubt) throws XMLStreamException {
+        reader.require(XMLStreamReader.START_ELEMENT, null, "test-catalog");
+        while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
+            parseDoubtsTestCase(reader, testsInDoubt);
+        }
+    }
+    
+    private static void parseDoubtsTestCase(XMLStreamReader reader, Set<String> testsInDoubt) throws XMLStreamException {
+        reader.require(XMLStreamReader.START_ELEMENT, null, "test-case");
+        String id = reader.getAttributeValue(null, "id");
+        while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
+            String name = reader.getLocalName();
+            if (name.equals("serial") || name.equals("processor-specific")) {
+                reader.nextTag();
+            } else if (name.equals("extension")) {
+                testsInDoubt.add(id);
+                reader.nextTag();
+            } else if (name.equals("doubt")) {
+                testsInDoubt.add(id);
+                reader.getElementText();
+            } else {
+                parseGrayArea(reader);
+                testsInDoubt.add(id);
+            }
+        }
+    }
+    
+    private static void parseGrayArea(XMLStreamReader reader) throws XMLStreamException {
+        reader.require(XMLStreamReader.START_ELEMENT, null, "gray-area");
+        while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
+            // For the moment we simply skip the details of the gray-area
+            reader.require(XMLStreamReader.START_ELEMENT, null, "gray-area-choice");
+            reader.nextTag();
+        }
+    }
+    
+    private void loadCatalog(Set<String> testsInDoubt) throws XMLStreamException, IOException {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         InputStream in = XSLTConformanceTestSuite.class.getResourceAsStream("/catalog.xml");
         try {
@@ -65,21 +120,21 @@ public class XSLTConformanceTestSuite {
             }
             reader.require(XMLStreamReader.START_ELEMENT, null, "test-suite");
             while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
-                parseTestCatalog(reader);
+                parseCatalogTestCatalog(reader, testsInDoubt);
             }
         } finally {
             in.close();
         }
     }
     
-    private void parseTestCatalog(XMLStreamReader reader) throws XMLStreamException {
+    private void parseCatalogTestCatalog(XMLStreamReader reader, Set<String> testsInDoubt) throws XMLStreamException {
         reader.require(XMLStreamReader.START_ELEMENT, null, "test-catalog");
         String submitter = reader.getAttributeValue(null, "submitter");
         String majorPath = null;
         while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
             String name = reader.getLocalName();
             if (name.equals("test-case")) {
-                parseTestCase(reader, submitter, majorPath);
+                parseCatalogTestCase(reader, submitter, majorPath, testsInDoubt);
             } else {
                 String value = reader.getElementText();
                 if (name.equals("major-path")) {
@@ -89,7 +144,7 @@ public class XSLTConformanceTestSuite {
         }
     }
     
-    private void parseTestCase(XMLStreamReader reader, String submitter, String majorPath) throws XMLStreamException {
+    private void parseCatalogTestCase(XMLStreamReader reader, String submitter, String majorPath, Set<String> testsInDoubt) throws XMLStreamException {
         reader.require(XMLStreamReader.START_ELEMENT, null, "test-case");
         String id = reader.getAttributeValue(null, "id");
         String filePath = null;
@@ -130,6 +185,7 @@ public class XSLTConformanceTestSuite {
             tests.add(new XSLTConformanceTest(
                     submitter + "/" + id,
                     operation.equals("execution-error"),
+                    testsInDoubt.contains(id),
                     XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/" + filePath + "/" + input),
                     XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/" + filePath + "/" + stylesheet),
                     XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/REF_OUT/" + filePath + "/" + output), compare));

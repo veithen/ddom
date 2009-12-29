@@ -31,14 +31,16 @@ import org.w3c.dom.Document;
 public class XSLTConformanceTest {
     private final String id;
     private final boolean errorScenario;
+    private final boolean inDoubt;
     private final URL input;
     private final URL stylesheet;
     private final URL output;
     private final String compare; // TODO: doesn't seem to be reliable
     
-    XSLTConformanceTest(String id, boolean errorScenario, URL input, URL stylesheet, URL output, String compare) {
+    XSLTConformanceTest(String id, boolean errorScenario, boolean inDoubt, URL input, URL stylesheet, URL output, String compare) {
         this.id = id;
         this.errorScenario = errorScenario;
+        this.inDoubt = inDoubt;
         this.input = input;
         this.stylesheet = stylesheet;
         this.output = output;
@@ -51,6 +53,10 @@ public class XSLTConformanceTest {
 
     public boolean isErrorScenario() {
         return errorScenario;
+    }
+
+    public boolean isInDoubt() {
+        return inDoubt;
     }
 
     private static DOMSource createDOMSource(DocumentBuilder documentBuilder, URL url) throws Exception {

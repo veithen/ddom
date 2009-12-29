@@ -43,7 +43,7 @@ public class XSLTConformanceTestSuiteTest extends TestCase {
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
         for (XSLTConformanceTest test : XSLTConformanceTestSuite.load().getTests()) {
-            if (!test.isErrorScenario()) {
+            if (!test.isErrorScenario() && !test.isInDoubt()) {
                 suite.addTest(new XSLTConformanceTestSuiteTest(test));
             }
         }
