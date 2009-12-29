@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import com.google.code.ddom.model.ModelBuilder;
@@ -28,7 +28,6 @@ import com.google.code.ddom.stream.spi.StreamFactory;
 public class DeferredDocumentFactory {
     private final ModelLoaderRegistry modelLoaderRegistry;
     private final StreamFactory streamFactory;
-    private final Map<String,Object> properties = new HashMap<String,Object>();
     
     private DeferredDocumentFactory(ModelLoaderRegistry modelLoaderRegistry, StreamFactory streamFactory) {
         this.modelLoaderRegistry = modelLoaderRegistry;
@@ -49,7 +48,7 @@ public class DeferredDocumentFactory {
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public DeferredDocument parse(String frontend, Object source, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(String frontend, Object source, Map<String,Object> properties, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
         DocumentFactory nodeFactory = modelLoaderRegistry.getDocumentFactory(ModelBuilder.buildModelDefinition(frontend));
         Producer producer;
@@ -66,7 +65,15 @@ public class DeferredDocumentFactory {
         return nodeFactory.createDocument(producer);
     }
 
+    public DeferredDocument parse(String frontend, Object source, boolean preserve) throws DeferredParsingException {
+        return parse(frontend, source, Collections.<String,Object>emptyMap(), preserve);
+    }
+    
+    public DeferredDocument parse(String frontend, Object source, Map<String,Object> properties) throws DeferredParsingException {
+        return parse(frontend, source, properties, true);
+    }
+    
     public DeferredDocument parse(String frontend, Object source) throws DeferredParsingException {
-        return parse(frontend, source, true);
+        return parse(frontend, source, Collections.<String,Object>emptyMap(), true);
     }
 }

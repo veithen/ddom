@@ -15,8 +15,11 @@
  */
 package com.google.code.ddom.stream.stax;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
@@ -36,6 +39,8 @@ public class StAXStreamProvider implements StreamProvider {
     public Producer getProducer(Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
         XMLStreamReader reader;
         try {
+            // TODO: most of the source types should be handled by a StreamProvider based on Woodstox's proprietary API
+            // TODO: who actually closes the streams???
             if (source instanceof XMLStreamReader) {
                 // TODO: we shouldn't allow this because we don't have control over the properties of the XMLStreamReader
                 reader = (XMLStreamReader)source;
@@ -49,8 +54,20 @@ public class StAXStreamProvider implements StreamProvider {
                     // TODO: recover system ID
                     reader = factory.createXMLStreamReader(is.getCharacterStream());
                 } else {
-                    // TODO
-                    throw new UnsupportedOperationException();
+                    String systemId = is.getSystemId();
+                    URL url;
+                    try {
+                        url = new URL(systemId);
+                    } catch (MalformedURLException ex) {
+                        throw new StreamException(ex);
+                    }
+                    InputStream in;
+                    try {
+                        in = url.openStream();
+                    } catch (IOException ex) {
+                        throw new StreamException(ex);
+                    }
+                    reader = factory.createXMLStreamReader(systemId, in);
                 }
             } else if (source instanceof InputStream) {
                 reader = getFactory(properties).createXMLStreamReader((InputStream)source);
@@ -73,9 +90,9 @@ public class StAXStreamProvider implements StreamProvider {
     private XMLInputFactory getFactory(Map<String,Object> properties) {
         // TODO: we should have something to distinguish properties that we must understand from properties that are provider specific
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        
-        // TODO: apply properties
-        
+        for (Map.Entry<String,Object> entry : properties.entrySet()) {
+            factory.setProperty(entry.getKey(), entry.getValue());
+        }
         return factory;
     }
 

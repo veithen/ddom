@@ -16,7 +16,6 @@
 package com.google.code.ddom.frontend.dom;
 
 import java.io.IOException;
-import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,9 +25,10 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class XercesDOMUtilImpl implements DOMUtilImpl {
+public class XercesDOMUtilImpl extends DOMUtilImpl {
     public static final XercesDOMUtilImpl INSTANCE = new XercesDOMUtilImpl();
     
+    @Override
     public Document newDocument() {
         try {
             DocumentBuilderFactory factory = new DocumentBuilderFactoryImpl();
@@ -38,11 +38,12 @@ public class XercesDOMUtilImpl implements DOMUtilImpl {
         }
     }
     
-    public Document parse(boolean namespaceAware, String xml) {
+    @Override
+    public Document parse(boolean namespaceAware, InputSource source) {
         try {
             DocumentBuilderFactory factory = new DocumentBuilderFactoryImpl();
             factory.setNamespaceAware(namespaceAware);
-            return factory.newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
+            return factory.newDocumentBuilder().parse(source);
         } catch (SAXException ex) {
             throw new Error(ex);
         } catch (IOException ex) {

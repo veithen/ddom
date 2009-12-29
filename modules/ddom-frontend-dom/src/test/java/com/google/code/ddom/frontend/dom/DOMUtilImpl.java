@@ -15,9 +15,21 @@
  */
 package com.google.code.ddom.frontend.dom;
 
-import org.w3c.dom.Document;
+import java.io.StringReader;
+import java.net.URL;
 
-public interface DOMUtilImpl {
-    Document newDocument();
-    Document parse(boolean namespaceAware, String xml);
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
+public abstract class DOMUtilImpl {
+    public abstract Document newDocument();
+    public abstract Document parse(boolean namespaceAware, InputSource source);
+
+    public Document parse(boolean namespaceAware, String xml) {
+        return parse(namespaceAware, new InputSource(new StringReader(xml)));
+    }
+    
+    public Document parse(boolean namespaceAware, URL url) {
+        return parse(namespaceAware, new InputSource(url.toExternalForm()));
+    }
 }

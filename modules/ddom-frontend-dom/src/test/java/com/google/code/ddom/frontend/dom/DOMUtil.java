@@ -16,6 +16,7 @@
 package com.google.code.ddom.frontend.dom;
 
 import java.io.StringWriter;
+import java.net.URL;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -38,6 +39,10 @@ public class DOMUtil {
     
     public static Document parse(boolean namespaceAware, String xml) {
         return impl.parse(namespaceAware, xml);
+    }
+    
+    public static Document parse(boolean namespaceAware, URL url) {
+        return impl.parse(namespaceAware, url);
     }
     
     public static String toString(Node node) throws TransformerException {
