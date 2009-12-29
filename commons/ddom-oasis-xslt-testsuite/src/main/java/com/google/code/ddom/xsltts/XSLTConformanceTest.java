@@ -17,7 +17,9 @@ package com.google.code.ddom.xsltts;
 
 import java.net.URL;
 
-public class XSLTConformanceTest {
+import com.google.code.ddom.collections.Identifiable;
+
+public class XSLTConformanceTest implements Identifiable<String> {
     private final String id;
     private final boolean errorScenario;
     private final boolean inDoubt;

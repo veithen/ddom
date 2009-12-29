@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.xsltts;
+package com.google.code.ddom.collections;
 
-public interface Filter {
-    boolean accept(XSLTConformanceTest test);
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class ExclusionFilter<T> implements Filter<Identifiable<T>> {
+    private final Set<T> ids;
+
+    public ExclusionFilter(T[] ids) {
+        this.ids = new HashSet<T>(Arrays.asList(ids));
+    }
+
+    public boolean accept(Identifiable<T> item) {
+        return !ids.contains(item.getId());
+    }
 }

@@ -20,36 +20,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>ddom</artifactId>
+        <artifactId>commons</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>commons</artifactId>
-    <name>DDOM :: Commons</name>
-    <packaging>pom</packaging>
-    
-    <modules>
-        <module>ddom-collections</module>
-        <module>ddom-domts</module>
-        <module>ddom-jaxen-testsuite</module>
-        <module>ddom-oasis-xslt-testsuite</module>
-        <module>ddom-xmlts</module>
-    </modules>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <inherited>true</inherited>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <artifactId>ddom-collections</artifactId>
+    <name>DDOM :: Commons :: Collections</name>
+    <packaging>jar</packaging>
 </project>

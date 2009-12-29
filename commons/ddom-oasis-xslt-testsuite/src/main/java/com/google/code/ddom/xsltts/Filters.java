@@ -15,10 +15,13 @@
  */
 package com.google.code.ddom.xsltts;
 
+import com.google.code.ddom.collections.ExclusionFilter;
+import com.google.code.ddom.collections.Filter;
+
 public class Filters {
     private Filters() {}
     
-    public static final Filter XALAN_2_7_1_FILTER = new ExclusionFilter(new String[] {
+    public static final Filter<? super XSLTConformanceTest> XALAN_2_7_1_FILTER = new ExclusionFilter<String>(new String[] {
             "BVTs_bvt077", // Strange issue with xsl:include
             
             // NullPointerExceptions deep inside Xalan:

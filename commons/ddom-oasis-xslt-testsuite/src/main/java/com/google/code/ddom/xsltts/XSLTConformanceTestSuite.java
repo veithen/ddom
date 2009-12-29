@@ -32,6 +32,9 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import com.google.code.ddom.collections.Filter;
+import com.google.code.ddom.collections.FilteredCollection;
+
 public class XSLTConformanceTestSuite {
     private static XSLTConformanceTestSuite instance;
     
@@ -210,13 +213,7 @@ public class XSLTConformanceTestSuite {
         return Collections.unmodifiableCollection(tests);
     }
     
-    public Collection<XSLTConformanceTest> getTests(Filter filter) {
-        List<XSLTConformanceTest> result = new LinkedList<XSLTConformanceTest>();
-        for (XSLTConformanceTest test : tests) {
-            if (filter.accept(test)) {
-                result.add(test);
-            }
-        }
-        return result;
+    public Collection<XSLTConformanceTest> getTests(Filter<? super XSLTConformanceTest> filter) {
+        return new FilteredCollection<XSLTConformanceTest>(tests, filter);
     }
 }
