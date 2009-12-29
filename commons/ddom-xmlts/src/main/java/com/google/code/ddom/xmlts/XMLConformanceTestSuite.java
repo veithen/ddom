@@ -58,6 +58,8 @@ public class XMLConformanceTestSuite {
     
     private final Map<String,XMLConformanceTest> tests = new LinkedHashMap<String,XMLConformanceTest>();
     
+    private XMLConformanceTestSuite() {}
+    
     private static String getElementText(XMLStreamReader reader) throws XMLStreamException {
         StringBuilder buffer = new StringBuilder();
         int level = 0;
