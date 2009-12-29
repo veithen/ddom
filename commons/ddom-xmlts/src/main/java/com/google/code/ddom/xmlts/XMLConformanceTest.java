@@ -41,14 +41,16 @@ public class XMLConformanceTest {
     private final Set<XMLVersion> xmlVersions;
     private final boolean usingNamespaces;
     private final URL url;
+    private final URL output;
     private final String description;
     
-    XMLConformanceTest(String id, Type type, Set<XMLVersion> xmlVersions, boolean usingNamespaces, URL url, String description) {
+    XMLConformanceTest(String id, Type type, Set<XMLVersion> xmlVersions, boolean usingNamespaces, URL url, URL output, String description) {
         this.id = id;
         this.type = type;
         this.xmlVersions = Collections.unmodifiableSet(xmlVersions);
         this.usingNamespaces = usingNamespaces;
         this.url = url;
+        this.output = output;
         this.description = description;
     }
 
@@ -72,10 +74,18 @@ public class XMLConformanceTest {
         return url;
     }
     
+    public URL getOutput() {
+        return output;
+    }
+
     public String getSystemId() {
         return url.toExternalForm();
     }
     
+    public String getOutputSystemId() {
+        return output == null ? null : output.toExternalForm();
+    }
+
     public InputStream getInputStream() throws IOException {
         return url.openStream();
     }

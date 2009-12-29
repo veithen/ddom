@@ -141,6 +141,7 @@ public class XMLConformanceTestSuite {
         reader.require(XMLStreamReader.START_ELEMENT, null, "TEST");
         String id = reader.getAttributeValue(null, "ID");
         String uri = reader.getAttributeValue(null, "URI");
+        String output = reader.getAttributeValue(null, "OUTPUT");
         String version = reader.getAttributeValue(null, "VERSION");
         String edition = reader.getAttributeValue(null, "EDITION");
         Set<XMLVersion> versions;
@@ -166,6 +167,7 @@ public class XMLConformanceTestSuite {
                 versions,
                 !"no".equals(reader.getAttributeValue(null, "NAMESPACE")),
                 new URL(base, uri),
+                output == null ? null : new URL(base, output),
                 getElementText(reader)));
     }
     

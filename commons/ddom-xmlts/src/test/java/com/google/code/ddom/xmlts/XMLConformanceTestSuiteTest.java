@@ -19,18 +19,14 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.Assert;
 
-import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 
@@ -91,20 +87,6 @@ public class XMLConformanceTestSuiteTest {
                 }
             } finally {
                 in.close();
-            }
-        }
-    }
-    
-    @Test
-    public void testParseWithXerces() throws Exception {
-        DocumentBuilderFactory factory = new DocumentBuilderFactoryImpl();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        for (XMLConformanceTest test : suite.getTestsByType(XMLConformanceTest.Type.VALID)) {
-            try {
-                builder.parse(test.getSystemId());
-            } catch (SAXException ex) {
-                System.out.println("Failing test: " + test.getSystemId() + " [ID: " + test.getId() + "]");
-                throw ex;
             }
         }
     }
