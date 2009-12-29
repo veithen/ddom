@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Andreas Veithen
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<test-suite>
+    <test-catalog submitter="Microsoft">
+        <test-case id="AttributeSets__91119">
+            <doubt>Uses xsl:element nested inside xsl:attribute.</doubt>
+        </test-case>
+        <test-case id="BVTs_bvt038">
+            <doubt>Uses xsl:attribute at top level (not nested inside xsl:element).</doubt>
+        </test-case>
+        <test-case id="Completeness__84361">
+            <doubt>Uses nested xsl:comment elements.</doubt>
+        </test-case>
+        <test-case id="Elements__78362">
+            <doubt>Uses xsl:element nested inside xsl:comment.</doubt>
+        </test-case>
+        <test-case id="Elements__89716">
+            <doubt>Uses elements nested inside xsl:attribute.</doubt>
+        </test-case>
+        <test-case id="Elements__89717">
+            <doubt>Uses elements nested inside xsl:processing-instruction.</doubt>
+        </test-case>
+        <test-case id="Elements__89718">
+            <doubt>Uses elements nested inside xsl:comment.</doubt>
+        </test-case>
+        <test-case id="ForwardComp__91848">
+            <doubt>Uses unrecognized value for the ident attribute.</doubt>
+        </test-case>
+        <test-case id="ForwardComp__91849">
+            <doubt>Uses invalid XPath expression.</doubt>
+        </test-case>
+        <test-case id="ForwardComp__91853">
+            <doubt>Uses invalid XPath expression.</doubt>
+        </test-case>
+        <test-case id="Namespace__77670">
+            <doubt>Uses xsl:element nested inside xsl:attribute.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_Conflict_XPath_XSLT">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_DefaultNamespace">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_NavigatorMethods">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_PredefinedPrefix_XML">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_PredefinedPrefix_XMLNS">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_SameQuery_DiffNamespace">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_ScopingRules">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Namespace_XPath_UndeclaredPrefix">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Output__84306">
+            <doubt>Uses empty version attribute in xsl:output.</doubt>
+        </test-case>
+        <test-case id="Output__84309">
+            <doubt>Uses elements nested inside xsl:processing-instruction.</doubt>
+        </test-case>
+        <test-case id="ProcessingInstruction__78196">
+            <doubt>Uses elements nested inside xsl:processing-instruction.</doubt>
+        </test-case>
+        <test-case id="ProcessingInstruction__78200">
+            <doubt>Has a DOCTYPE element with a system ID referencing an unreachable host.</doubt>
+        </test-case>
+        <test-case id="ProcessingInstruction__78202">
+            <doubt>Has a DOCTYPE element with a system ID referencing an unreachable host.</doubt>
+        </test-case>
+        <test-case id="ProcessingInstruction__78203">
+            <doubt>Has a DOCTYPE element with a system ID referencing an unreachable host.</doubt>
+        </test-case>
+        <test-case id="Text__78245">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Text__78273">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="Text__78281">
+            <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+    </test-catalog>
+</test-suite>
+  

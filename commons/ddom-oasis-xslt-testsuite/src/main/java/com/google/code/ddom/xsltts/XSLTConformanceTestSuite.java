@@ -17,6 +17,7 @@ package com.google.code.ddom.xsltts;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,7 +47,10 @@ public class XSLTConformanceTestSuite {
         if (instance == null) {
             XSLTConformanceTestSuite suite = new XSLTConformanceTestSuite();
             try {
-                suite.loadCatalog(loadDoubts());
+                Set<String> testsInDoubt = new HashSet<String>();
+                loadDoubts(testsInDoubt, XSLTConformanceTestSuite.class.getResource("/doubts.xml"));
+                loadDoubts(testsInDoubt, XSLTConformanceTestSuite.class.getResource("doubts.xml"));
+                suite.loadCatalog(testsInDoubt);
             } catch (Exception ex) {
                 throw new RuntimeException("Could not load test suite", ex);
             }
@@ -55,10 +59,9 @@ public class XSLTConformanceTestSuite {
         return instance;
     }
     
-    private static Set<String> loadDoubts() throws XMLStreamException, IOException {
-        Set<String> testsInDoubt = new HashSet<String>();
+    private static Set<String> loadDoubts(Set<String> testsInDoubt, URL url) throws XMLStreamException, IOException {
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        InputStream in = XSLTConformanceTestSuite.class.getResourceAsStream("/doubts.xml");
+        InputStream in = url.openStream();
         try {
             XMLStreamReader reader = factory.createXMLStreamReader(in);
             while (!reader.isStartElement()) {
@@ -183,7 +186,7 @@ public class XSLTConformanceTestSuite {
         }
         if (!ignoredTests.contains(id)) {
             tests.add(new XSLTConformanceTest(
-                    submitter + "/" + id,
+                    id,
                     operation.equals("execution-error"),
                     testsInDoubt.contains(id),
                     XSLTConformanceTestSuite.class.getResource("/" + majorPath + "/" + filePath + "/" + input),
@@ -205,5 +208,15 @@ public class XSLTConformanceTestSuite {
     
     public Collection<XSLTConformanceTest> getTests() {
         return Collections.unmodifiableCollection(tests);
+    }
+    
+    public Collection<XSLTConformanceTest> getTests(Filter filter) {
+        List<XSLTConformanceTest> result = new LinkedList<XSLTConformanceTest>();
+        for (XSLTConformanceTest test : tests) {
+            if (filter.accept(test)) {
+                result.add(test);
+            }
+        }
+        return result;
     }
 }

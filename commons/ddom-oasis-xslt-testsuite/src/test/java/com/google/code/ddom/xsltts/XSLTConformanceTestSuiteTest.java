@@ -42,7 +42,7 @@ public class XSLTConformanceTestSuiteTest extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        for (XSLTConformanceTest test : XSLTConformanceTestSuite.load().getTests()) {
+        for (XSLTConformanceTest test : XSLTConformanceTestSuite.load().getTests(Filters.XALAN_2_7_1_FILTER)) {
             if (!test.isErrorScenario() && !test.isInDoubt()) {
                 suite.addTest(new XSLTConformanceTestSuiteTest(test));
             }
