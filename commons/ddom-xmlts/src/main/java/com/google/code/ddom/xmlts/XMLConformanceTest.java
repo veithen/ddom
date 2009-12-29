@@ -23,7 +23,9 @@ import java.util.Set;
 
 import org.xml.sax.InputSource;
 
-public class XMLConformanceTest {
+import com.google.code.ddom.collections.Identifiable;
+
+public class XMLConformanceTest implements Identifiable<String> {
     public enum Type {
         VALID,
         INVALID,

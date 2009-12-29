@@ -37,12 +37,15 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import com.google.code.ddom.collections.Filter;
+import com.google.code.ddom.collections.FilteredCollection;
 import com.google.code.ddom.xmlts.XMLConformanceTest.Type;
 
 public class XMLConformanceTestSuite {
     /**
      * Default set of XML versions for which tests are returned. This is XML 1.0 4th edition and XML 1.1.
      */
+    @Deprecated
     public static final Set<XMLVersion> DEFAULT_VERSIONS = Collections.unmodifiableSet(EnumSet.of(XMLVersion.XML_1_0_EDITION_4, XMLVersion.XML_1_1));
     
     private static final Map<String,Type> typeMap = new HashMap<String,Type>();
@@ -179,6 +182,11 @@ public class XMLConformanceTestSuite {
         return Collections.unmodifiableCollection(tests.values());
     }
     
+    public Collection<XMLConformanceTest> getTests(Filter<? super XMLConformanceTest> filter) {
+        return new FilteredCollection<XMLConformanceTest>(tests.values(), filter);
+    }
+    
+    @Deprecated
     public Collection<XMLConformanceTest> getTests(Set<XMLVersion> versions, Set<Type> types) {
         List<XMLConformanceTest> result = new LinkedList<XMLConformanceTest>();
         for (XMLConformanceTest test : tests.values()) {
@@ -190,18 +198,22 @@ public class XMLConformanceTestSuite {
         return result;
     }
     
+    @Deprecated
     public Collection<XMLConformanceTest> getTests() {
         return getTests(DEFAULT_VERSIONS, null);
     }
     
+    @Deprecated
     public Collection<XMLConformanceTest> getTestsForXMLVersions(Set<XMLVersion> versions) {
         return getTests(versions, null);
     }
     
+    @Deprecated
     public Collection<XMLConformanceTest> getTestsByType(Set<Type> types) {
         return getTests(DEFAULT_VERSIONS, types);
     }
     
+    @Deprecated
     public Collection<XMLConformanceTest> getTestsByType(Type type) {
         return getTests(DEFAULT_VERSIONS, Collections.singleton(type));
     }

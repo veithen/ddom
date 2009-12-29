@@ -25,6 +25,8 @@ import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.w3c.dom.Document;
 
+import com.google.code.ddom.collections.AndFilter;
+
 public class XercesTest extends TestCase {
     private final XMLConformanceTest test;
     
@@ -50,7 +52,7 @@ public class XercesTest extends TestCase {
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTestsByType(XMLConformanceTest.Type.VALID)) {
+        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests(new AndFilter<XMLConformanceTest>(Filters.DEFAULT, Filters.XERCES_2_9_1_FILTER))) {
             suite.addTest(new XercesTest(test));
         }
         return suite;
