@@ -17,17 +17,6 @@ package com.google.code.ddom.xsltts;
 
 import java.net.URL;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-
-import org.custommonkey.xmlunit.XMLAssert;
-import org.w3c.dom.Document;
-
 public class XSLTConformanceTest {
     private final String id;
     private final boolean errorScenario;
@@ -59,46 +48,15 @@ public class XSLTConformanceTest {
         return inDoubt;
     }
 
-    private static DOMSource createDOMSource(DocumentBuilder documentBuilder, URL url) throws Exception {
-        String systemId = url.toExternalForm();
-        return new DOMSource(documentBuilder.parse(systemId), systemId);
+    public URL getInput() {
+        return input;
     }
-    
-    public void execute(DocumentBuilder refDocumentBuilder, DocumentBuilder documentBuilder, TransformerFactory transformerFactory) throws Exception {
-        transformerFactory.setErrorListener(StrictErrorListener.INSTANCE);
-        
-        DOMSource refInputSource = createDOMSource(refDocumentBuilder, input);
-        DOMSource refStylesheetSource = createDOMSource(refDocumentBuilder, stylesheet);
-        Transformer refTransformer = transformerFactory.newTransformer(refStylesheetSource);
-        refTransformer.setErrorListener(StrictErrorListener.INSTANCE);
 
-        DOMSource inputSource = createDOMSource(documentBuilder, input);
-        DOMSource stylesheetSource = createDOMSource(documentBuilder, stylesheet);
-        Transformer transformer = transformerFactory.newTransformer(stylesheetSource);
-        transformer.setErrorListener(StrictErrorListener.INSTANCE);
-        
-        boolean isXmlOutput = refTransformer.getOutputProperty(OutputKeys.METHOD).equals("xml");
-        boolean repeat;
-        do {
-            repeat = false;
-            if (isXmlOutput) {
-                Document refOutputDocument = refDocumentBuilder.newDocument();
-                DOMResult refOutputResult = new DOMResult(refOutputDocument);
-                try {
-                    refTransformer.transform(refInputSource, refOutputResult);
-                } catch (TransformerException ex) {
-                    isXmlOutput = false;
-                    repeat = true;
-                }
-                if (!repeat) {
-                    Document outputDocument = documentBuilder.newDocument();
-                    DOMResult outputResult = new DOMResult(outputDocument);
-                    refTransformer.transform(inputSource, outputResult);
-                    XMLAssert.assertXMLEqual(refOutputDocument, outputDocument);
-                }
-            } else {
-                // TODO
-            }
-        } while (repeat);
+    public URL getStylesheet() {
+        return stylesheet;
+    }
+
+    public URL getOutput() {
+        return output;
     }
 }

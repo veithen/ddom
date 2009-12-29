@@ -20,45 +20,63 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>commons</artifactId>
+        <artifactId>tests</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-oasis-xslt-testsuite</artifactId>
-    <name>DDOM :: Commons :: OASIS XSLT Test Suite</name>
-    <description>Test suite developed by the OASIS XSLT Conformance TC
-        (http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=xslt). The project contains
-        version 04 of the test suite.</description>
+    <artifactId>ddom-tests-xslt</artifactId>
+    <name>DDOM :: Tests :: Xalan and Saxon interoperability tests</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-api</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-frontend-dom</artifactId>
+            <version>${pom.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-stream-stax</artifactId>
+            <version>${pom.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-backend-linkedlist</artifactId>
+            <version>${pom.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-weaver</artifactId>
+            <version>${pom.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-oasis-xslt-testsuite</artifactId>
+            <version>${version}</version>
         </dependency>
         <dependency>
         	<groupId>junit</groupId>
         	<artifactId>junit</artifactId>
-        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>xmlunit</groupId>
+        	<artifactId>xmlunit</artifactId>
         </dependency>
         <dependency>
         	<groupId>xalan</groupId>
         	<artifactId>xalan</artifactId>
-        	<scope>test</scope>
         </dependency>
         <dependency>
         	<groupId>xerces</groupId>
         	<artifactId>xercesImpl</artifactId>
-        	<scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/oasis/resources</directory>
-            </resource>
-        </resources>
-    </build>
 </project>

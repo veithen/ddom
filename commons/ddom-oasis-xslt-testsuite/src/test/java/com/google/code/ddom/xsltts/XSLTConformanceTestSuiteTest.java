@@ -15,14 +15,17 @@
  */
 package com.google.code.ddom.xsltts;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayOutputStream;
 
-import org.apache.xalan.processor.TransformerFactoryImpl;
-import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.xalan.processor.TransformerFactoryImpl;
 
 public class XSLTConformanceTestSuiteTest extends TestCase {
     private final XSLTConformanceTest test;
@@ -34,10 +37,13 @@ public class XSLTConformanceTestSuiteTest extends TestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        DocumentBuilderFactory documentBuilderFactory = new DocumentBuilderFactoryImpl();
-        documentBuilderFactory.setNamespaceAware(true);
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        test.execute(documentBuilder, documentBuilder, new TransformerFactoryImpl());
+        TransformerFactory transformerFactory = new TransformerFactoryImpl();
+        transformerFactory.setErrorListener(StrictErrorListener.INSTANCE);
+        Transformer transformer = transformerFactory.newTransformer(new StreamSource(test.getStylesheet().toExternalForm()));
+        transformer.setErrorListener(StrictErrorListener.INSTANCE);
+        // TODO: use NullOutputStream here
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        transformer.transform(new StreamSource(test.getInput().toExternalForm()), new StreamResult(baos));
     }
 
     public static TestSuite suite() {

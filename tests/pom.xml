@@ -31,5 +31,6 @@
     <modules>
         <module>ddom-tests-jaxen</module>
         <module>ddom-tests-wss4j</module>
+        <module>ddom-tests-xslt</module>
     </modules>
 </project>
