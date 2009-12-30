@@ -49,6 +49,20 @@ public aspect DocumentSupport {
         return domImplementation;
     }
 
+    public final String DOMDocument.getXmlVersion() {
+        String xmlVersion = coreGetXmlVersion();
+        return xmlVersion == null ? "1.0" : xmlVersion;
+    }
+
+    // TODO: check right behavior when parameter is null
+    public final void DOMDocument.setXmlVersion(String xmlVersion) {
+        if (xmlVersion.equals("1.0") || xmlVersion.equals("1.1")) {
+            coreSetXmlVersion(xmlVersion);
+        } else {
+            throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+        }
+    }
+
     public final String DOMDocument.getInputEncoding() {
         return coreGetInputEncoding();
     }
@@ -162,11 +176,6 @@ public aspect DocumentSupport {
         throw new UnsupportedOperationException();
     }
 
-    public final String DOMDocument.getXmlVersion() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     // TODO: we don't cover renaming a typed attribute to a namespace declaration and vice-versa
     public final Node DOMDocument.renameNode(Node node, String namespaceURI, String qualifiedName) throws DOMException {
         if (node instanceof CoreNSAwareNamedNode) {
@@ -211,11 +220,6 @@ public aspect DocumentSupport {
     }
 
     public final void DOMDocument.setXmlStandalone(boolean xmlStandalone) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final void DOMDocument.setXmlVersion(String xmlVersion) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

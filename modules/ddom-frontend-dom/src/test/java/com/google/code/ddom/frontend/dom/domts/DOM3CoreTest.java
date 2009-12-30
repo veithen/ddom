@@ -97,7 +97,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*documenturi.*");
         suite.addExclude(".*baseuri.*");
         suite.addExclude(".*inputencoding.*");
-        suite.addExclude(".*xmlversion.*");
         suite.addExclude(".*xmlencoding.*");
         suite.addExclude(".*xmlstandalone.*");
         suite.addExclude(".*stricterrorchecking.*");

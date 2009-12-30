@@ -49,6 +49,10 @@ public class DOMConsumer extends CallbackConsumer {
         node = document;
     }
 
+    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+        // TODO Auto-generated method stub
+    }
+
     public void processDocumentType(String rootName, String publicId, String systemId) {
         node.appendChild(document.getImplementation().createDocumentType(rootName, publicId, systemId));
     }

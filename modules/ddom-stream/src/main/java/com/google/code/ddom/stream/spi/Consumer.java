@@ -18,6 +18,8 @@ package com.google.code.ddom.stream.spi;
 // TODO: explain that the preferred way of delivering data to the consumer is
 //       using processEvent with a scope of PARSER_INVOCATION or ETERNAL 
 public interface Consumer {
+    void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
+    
     /**
      * Determine how attributes are expected to be delivered to this consumer.
      * Note that the value returned by this method MAY change during the lifecycle

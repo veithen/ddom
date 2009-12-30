@@ -64,6 +64,13 @@ public class Builder extends CallbackConsumer {
         }
     }
 
+    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+        document.coreSetXmlVersion(xmlVersion);
+        document.coreSetXmlEncoding(xmlEncoding);
+        document.coreSetInputEncoding(inputEncoding);
+        document.coreSetStandalone(standalone);
+    }
+
     public final void processDocumentType(String rootName, String publicId, String systemId) {
         appendNode(nodeFactory.createDocumentType(document, rootName, publicId, systemId));
     }

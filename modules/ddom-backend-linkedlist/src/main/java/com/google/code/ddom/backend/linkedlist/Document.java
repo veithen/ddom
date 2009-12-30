@@ -39,7 +39,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     private String inputEncoding;
     private String xmlVersion;
     private String xmlEncoding;
-    private String standalone;
+    private boolean standalone;
     private String documentURI;
 
     public Document(NodeFactory nodeFactory, FragmentSource source) {
@@ -117,44 +117,60 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         return children;
     }
 
+    private void ensureDocumentInfoReceived() {
+        if (!isComplete() && firstChild == null) {
+            next();
+        }
+    }
+    
     public final String coreGetInputEncoding() {
+        ensureDocumentInfoReceived();
         return inputEncoding;
     }
 
     public final void coreSetInputEncoding(String inputEncoding) {
+//        ensureDocumentInfoReceived();
         this.inputEncoding = inputEncoding;
     }
 
     public String coreGetXmlVersion() {
+        ensureDocumentInfoReceived();
         return xmlVersion;
     }
 
     public void coreSetXmlVersion(String xmlVersion) {
+//        ensureDocumentInfoReceived();
         this.xmlVersion = xmlVersion;
     }
 
     public final String coreGetXmlEncoding() {
+        ensureDocumentInfoReceived();
         return xmlEncoding;
     }
 
     public final void coreSetXmlEncoding(String xmlEncoding) {
+//        ensureDocumentInfoReceived();
         this.xmlEncoding = xmlEncoding;
     }
 
-    public String coreGetStandalone() {
+    public boolean coreGetStandalone() {
+        ensureDocumentInfoReceived();
         return standalone;
     }
 
-    public void coreSetStandalone(String standalone) {
+    public void coreSetStandalone(boolean standalone) {
+//        ensureDocumentInfoReceived();
         this.standalone = standalone;
     }
 
     // TODO: need test for this
     public final String coreGetDocumentURI() {
+        ensureDocumentInfoReceived();
         return documentURI;
     }
 
     public final void coreSetDocumentURI(String documentURI) {
+        ensureDocumentInfoReceived();
         this.documentURI = documentURI;
     }
 

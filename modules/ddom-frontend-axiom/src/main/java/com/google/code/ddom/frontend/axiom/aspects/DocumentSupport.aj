@@ -39,11 +39,11 @@ public aspect DocumentSupport {
     }
     
     public String AxiomDocument.isStandalone() {
-        return coreGetStandalone();
+        return coreGetStandalone() ? "yes" : "no";
     }
 
     public void AxiomDocument.setStandalone(String isStandalone) {
-        coreSetStandalone(isStandalone);
+        coreSetStandalone("yes".equals(isStandalone));
     }
     
     public OMElement AxiomDocument.getOMDocumentElement() {
