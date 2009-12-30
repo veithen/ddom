@@ -24,6 +24,6 @@ public class BackendTestCase extends TestCase {
     
     public BackendTestCase(NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
-        setName(getClass().getSimpleName());
+        setName(getClass().getName());
     }
 }

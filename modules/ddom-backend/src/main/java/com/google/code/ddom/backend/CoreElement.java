@@ -134,4 +134,14 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreCompactPa
      *             if <code>namespaceURI</code> is <code>null</code>
      */
     String coreLookupPrefix(String namespaceURI, boolean strict);
+    
+    /**
+     * Coalesce child text nodes, and optionally CDATA sections. This method replaces groups of
+     * adjacent text nodes by single text nodes. If <code>includeCDATASections</code> is
+     * <code>true</code>, then CDATA sections are treated as text nodes.
+     * 
+     * @param includeCDATASections
+     *            <code>true</code> if CDATA sections should also be coalesced
+     */
+    void coreCoalesce(boolean includeCDATASections);
 }

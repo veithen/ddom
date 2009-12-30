@@ -15,9 +15,13 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentType;
@@ -26,6 +30,8 @@ import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.NodeNotFoundException;
@@ -303,6 +309,66 @@ public abstract class Element extends ParentNode implements CoreElement {
             return parentElement.coreLookupPrefix(namespaceURI, strict);
         } else {
             return null;
+        }
+    }
+
+    public void coreCoalesce(boolean includeCDATASections) {
+        CoreDocument document = getDocument();
+        // TODO: using a collection here is very bad!!
+        List<CoreTextNode> textNodes = new ArrayList<CoreTextNode>();
+        CoreChildNode child = coreGetFirstChild();
+        boolean forceReplace = false;
+        while (true) {
+            // Get the next child now, in case we detach the current child.
+            CoreChildNode nextChild = child == null ? null : child.coreGetNextSibling();
+            boolean isText;
+            if (child == null) {
+                isText = false;
+            } else {
+                if (child instanceof CoreText) {
+                    isText = true;
+                } else if (child instanceof CoreCDATASection) {
+                    if (includeCDATASections) {
+                        isText = true;
+                        forceReplace = true;
+                    } else {
+                        isText = false;
+                    }
+                } else {
+                    isText = false;
+                }
+            }
+            if (isText) {
+                CoreTextNode textNode = (CoreTextNode)child;
+                if (textNode.coreGetData().length() == 0) {
+                    textNode.coreDetach();
+                } else {
+                    textNodes.add(textNode);
+                }
+            } else {
+                if (forceReplace || textNodes.size() > 1) {
+                    StringBuilder buffer = new StringBuilder();
+                    for (CoreTextNode textNode : textNodes) {
+                        buffer.append(textNode.coreGetData());
+                    }
+                    CoreTextNode first = textNodes.get(0);
+                    CoreText newTextNode = document.getNodeFactory().createText(document, buffer.toString());
+                    try {
+                        first.coreInsertSiblingBefore(newTextNode);
+                    } catch (CoreModelException ex) {
+                        throw new Error(ex); // TODO: we should never get here
+                    }
+                    for (CoreTextNode textNode : textNodes) {
+                        textNode.coreDetach();
+                    }
+                    forceReplace = false;
+                }
+                textNodes.clear();
+            }
+            if (child == null) {
+                break;
+            }
+            child = nextChild;
         }
     }
 }
