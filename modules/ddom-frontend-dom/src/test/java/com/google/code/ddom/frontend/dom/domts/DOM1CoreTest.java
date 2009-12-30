@@ -30,6 +30,7 @@ import org.w3c.domts.level1.core.elementremoveattribute;
 import org.w3c.domts.level1.core.elementremoveattributerestoredefaultvalue;
 import org.w3c.domts.level1.core.hc_attrgetvalue2;
 import org.w3c.domts.level1.core.hc_attrnormalize;
+import org.w3c.domts.level1.core.hc_elementnormalize2;
 import org.w3c.domts.level1.core.hc_nodeappendchildchildexists;
 import org.w3c.domts.level1.core.hc_nodereplacechildnewchildexists;
 import org.w3c.domts.level1.core.hc_nodevalue03;
@@ -94,7 +95,7 @@ public class DOM1CoreTest extends TestSuite {
         suite.addExclude(cdatasectionnormalize.class);
         
         // TODO Will implement normalization later
-        suite.addExclude("hc_elementnormalize.*");
+        suite.addExclude(hc_elementnormalize2.class);
         suite.addExclude(hc_attrnormalize.class);
         
         return new JUnitTestSuiteAdapter(suite);

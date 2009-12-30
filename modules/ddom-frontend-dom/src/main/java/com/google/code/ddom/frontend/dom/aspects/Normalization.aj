@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 
@@ -47,7 +48,28 @@ public aspect Normalization {
         
     }
     
-    public final void DOMParentNode.normalize(NormalizationConfig config) throws AbortNormalizationException {
-        
+    private void DOMParentNode.normalizeChildren(NormalizationConfig config) throws AbortNormalizationException {
+        CoreChildNode child = coreGetFirstChild();
+        while (child != null) {
+            ((DOMNode)child).normalize(config);
+            child = child.coreGetNextSibling();
+        }
+    }
+    
+    public final void DOMElement.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        coreCoalesce(!config.isKeepCDATASections());
+        normalizeChildren(config);
+    }
+    
+    public final void DOMDocument.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        normalizeChildren(config);
+    }
+    
+    public final void DOMDocumentFragment.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        normalizeChildren(config);
+    }
+    
+    public final void DOMAttribute.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        normalizeChildren(config);
     }
 }
