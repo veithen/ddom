@@ -162,7 +162,10 @@ public aspect ElementSupport {
     }
 
     public final void DOMElement.setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+        if (idAttr.getOwnerElement() != this) {
+            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        } else {
+            ((CoreTypedAttribute)idAttr).coreSetType(isId ? "ID" : "CDATA");
+        }
     }
 }

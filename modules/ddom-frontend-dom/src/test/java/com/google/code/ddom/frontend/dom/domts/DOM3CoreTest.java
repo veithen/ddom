@@ -27,6 +27,7 @@ import org.w3c.domts.level3.core.documentrenamenode27;
 import org.w3c.domts.level3.core.documentrenamenode28;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
+import org.w3c.domts.level3.core.elementsetidattributens05;
 import org.w3c.domts.level3.core.namespacedeclarations02;
 import org.w3c.domts.level3.core.nodeinsertbefore12;
 import org.w3c.domts.level3.core.nodeinsertbefore14;
@@ -69,6 +70,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude("noderemovechild(13|14|15)");
         suite.addExclude("nodereplacechild(22|23|24)");
         suite.addExclude("nodegettextcontent(15|16|17)");
+        suite.addExclude("elementsetidattribute(node|ns)09");
         
         // Tests relying on Attr#getSchemaTypeInfo
         suite.addExclude("attrgetschematypeinfo.*");
@@ -93,7 +95,6 @@ public class DOM3CoreTest extends TestSuite {
         // TODO: later
         suite.addExclude(".*normaliz.*");
         suite.addExclude(".*adopt.*");
-        suite.addExclude(".*idattribute.*");
         suite.addExclude(".*documenturi.*");
         suite.addExclude(".*baseuri.*");
         suite.addExclude(".*inputencoding.*");
@@ -113,6 +114,9 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*infoset.*");
         suite.addExclude(namespacedeclarations02.class);
         suite.addExclude(documentrenamenode09.class);
+        
+        // TODO: uses "*" as namespace in setAttributeNS
+        suite.addExclude(elementsetidattributens05.class);
         
         // TODO: wrong exception thrown
         suite.addExclude(documentrenamenode19.class);
