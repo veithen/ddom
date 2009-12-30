@@ -32,5 +32,12 @@ public interface CoreDocument extends DeferredDocument, BuilderTarget {
     String coreGetDocumentURI();
     void coreSetDocumentURI(String documentURI);
     CoreDocumentType coreGetDocumentType();
+    
+    /**
+     * Get the document element.
+     * 
+     * @return the document element, or <code>null</code> if the document doesn't have a child
+     *         element
+     */
     CoreElement coreGetDocumentElement();
 }
