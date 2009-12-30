@@ -136,8 +136,6 @@ public aspect Clone {
         return createNewTextNode(getData());
     }
     
-    public abstract DOMTextNode DOMTextNode.createNewTextNode(String data);
-
     public final DOMTextNode DOMText.createNewTextNode(String data) {
         CoreDocument document = getDocument();
         return (DOMTextNode)document.getNodeFactory().createText(document, data);

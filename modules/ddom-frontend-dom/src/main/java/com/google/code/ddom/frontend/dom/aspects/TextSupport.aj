@@ -34,7 +34,7 @@ public aspect TextSupport {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         setData(text.substring(0, offset));
-        CoreTextNode newNode = createNewTextNode(text.substring(offset));
+        DOMTextNode newNode = createNewTextNode(text.substring(offset));
         CoreParentNode parent = coreGetParent();
         if (parent != null) {
             // TODO: use coreInsertSiblingAfter here!
@@ -43,7 +43,7 @@ public aspect TextSupport {
             newNode.internalSetParent(parent);
             parent.notifyChildrenModified(1);
         }
-        return (Text)newNode; // TODO
+        return newNode;
     }
     
     public final String DOMTextNode.getWholeText() {

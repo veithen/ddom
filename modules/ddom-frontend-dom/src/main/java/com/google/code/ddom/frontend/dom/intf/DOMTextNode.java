@@ -20,5 +20,11 @@ import org.w3c.dom.Text;
 import com.google.code.ddom.backend.CoreTextNode;
 
 public interface DOMTextNode extends CoreTextNode, Text, DOMCharacterData {
-
+    /**
+     * Create a new text node of the same type as this one.
+     * 
+     * @param data the data for the new text node
+     * @return the new text node
+     */
+    DOMTextNode createNewTextNode(String data);
 }
