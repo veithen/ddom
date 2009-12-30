@@ -25,6 +25,7 @@ public class BackendTestSuiteBuilder {
     public static TestSuite suite(NodeFactory nodeFactory) {
         TestSuite suite = new TestSuite();
         suite.addTest(new com.google.code.ddom.backend.testsuite.attribute.TestCoreSetValue(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetach(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreSetValue(nodeFactory));

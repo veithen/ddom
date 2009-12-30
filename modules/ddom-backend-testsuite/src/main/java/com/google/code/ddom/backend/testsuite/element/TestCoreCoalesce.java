@@ -25,6 +25,7 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.CoreAssert;
 
 public class TestCoreCoalesce extends BackendTestCase {
     public TestCoreCoalesce(NodeFactory nodeFactory) {
@@ -57,6 +58,10 @@ public class TestCoreCoalesce extends BackendTestCase {
         child = child.coreGetNextSibling();
         Assert.assertSame(text4, child);
         
-        // TODO: check parent of text1, text2, cdata and text3
+        CoreAssert.assertOrphan(text1);
+        CoreAssert.assertOrphan(text2);
+        CoreAssert.assertOrphan(cdata);
+        CoreAssert.assertOrphan(text3);
+        Assert.assertEquals(3, element.coreGetChildCount());
     }
 }

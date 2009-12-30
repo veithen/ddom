@@ -77,6 +77,7 @@ public class ChildNodeHelper {
             CoreChildNode previousSibling = node.coreGetPreviousSibling();
             CoreChildNode nextSibling = node.coreGetNextSibling();
             node.internalSetParent(null);
+            node.internalSetNextSibling(null);
             if (previousSibling == null) {
                 parent.internalSetFirstChild(nextSibling);
             } else {
