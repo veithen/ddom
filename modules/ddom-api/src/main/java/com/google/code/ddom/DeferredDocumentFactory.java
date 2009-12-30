@@ -15,9 +15,6 @@
  */
 package com.google.code.ddom;
 
-import java.util.Collections;
-import java.util.Map;
-
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 import com.google.code.ddom.stream.spi.Producer;
@@ -48,13 +45,14 @@ public class DeferredDocumentFactory {
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public DeferredDocument parse(String frontend, Object source, Map<String,Object> properties, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
         DocumentFactory nodeFactory = modelLoaderRegistry.getDocumentFactory(ModelBuilder.buildModelDefinition(frontend));
+        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
         Producer producer;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
-            producer = streamFactory.getProducer(source, properties, preserve);
+            producer = streamFactory.getProducer(source, optionsProcessor, preserve);
         } catch (StreamException ex) {
             throw new DeferredParsingException(ex.getMessage(), ex.getCause());
         }
@@ -62,18 +60,19 @@ public class DeferredDocumentFactory {
             // TODO: maybe a distinct exception here?
             throw new DeferredParsingException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
+        optionsProcessor.finish();
         return nodeFactory.createDocument(producer);
     }
 
     public DeferredDocument parse(String frontend, Object source, boolean preserve) throws DeferredParsingException {
-        return parse(frontend, source, Collections.<String,Object>emptyMap(), preserve);
+        return parse(frontend, source, new Options(), preserve);
     }
     
-    public DeferredDocument parse(String frontend, Object source, Map<String,Object> properties) throws DeferredParsingException {
-        return parse(frontend, source, properties, true);
+    public DeferredDocument parse(String frontend, Object source, Options options) throws DeferredParsingException {
+        return parse(frontend, source, options, true);
     }
     
     public DeferredDocument parse(String frontend, Object source) throws DeferredParsingException {
-        return parse(frontend, source, Collections.<String,Object>emptyMap(), true);
+        return parse(frontend, source, new Options(), true);
     }
 }

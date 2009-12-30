@@ -15,8 +15,7 @@
  */
 package com.google.code.ddom.stream;
 
-import java.util.Map;
-
+import com.google.code.ddom.Options;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -36,8 +35,8 @@ public class Transformer {
             }
         }
         
-        public void to(Object destination, Map<String,Object> properties) throws StreamException {
-            to(streamFactory.getConsumer(destination, properties));
+        public void to(Object destination, Options options) throws StreamException {
+            to(streamFactory.getConsumer(destination, options));
         }
         
         public void to(Object destination) throws StreamException {
@@ -59,12 +58,12 @@ public class Transformer {
         return new Transformer(StreamFactory.getInstance(classLoader));
     }
     
-    public Source from(String providerName, Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
-        return new Source(streamFactory.getProducer(providerName, source, properties, preserve));
+    public Source from(String providerName, Object source, Options options, boolean preserve) throws StreamException {
+        return new Source(streamFactory.getProducer(providerName, source, options, preserve));
     }
     
-    public Source from(Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
-        return new Source(streamFactory.getProducer(source, properties, preserve));
+    public Source from(Object source, Options options, boolean preserve) throws StreamException {
+        return new Source(streamFactory.getProducer(source, options, preserve));
     }
     
     public Source from(Object source) throws StreamException {

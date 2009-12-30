@@ -28,6 +28,8 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.xml.sax.InputSource;
 
+import com.google.code.ddom.NamespaceAwareness;
+import com.google.code.ddom.OptionsProcessor;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
@@ -36,7 +38,7 @@ import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="stax")
 public class StAXStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
+    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
         XMLStreamReader reader;
         try {
             // TODO: most of the source types should be handled by a StreamProvider based on Woodstox's proprietary API
@@ -45,7 +47,7 @@ public class StAXStreamProvider implements StreamProvider {
                 // TODO: we shouldn't allow this because we don't have control over the properties of the XMLStreamReader
                 reader = (XMLStreamReader)source;
             } else if (source instanceof InputSource) {
-                XMLInputFactory factory = getFactory(properties);
+                XMLInputFactory factory = getFactory(options);
                 InputSource is = (InputSource)source;
                 if (is.getByteStream() != null) {
                     // TODO: recover system ID
@@ -70,9 +72,9 @@ public class StAXStreamProvider implements StreamProvider {
                     reader = factory.createXMLStreamReader(systemId, in);
                 }
             } else if (source instanceof InputStream) {
-                reader = getFactory(properties).createXMLStreamReader((InputStream)source);
+                reader = getFactory(options).createXMLStreamReader((InputStream)source);
             } else if (source instanceof Reader) {
-                reader = getFactory(properties).createXMLStreamReader((Reader)source);
+                reader = getFactory(options).createXMLStreamReader((Reader)source);
             } else {
                 // TODO: support for File, URL, StreamSource, DataSource (with charset encoding detection), DataHandler, etc.
                 reader = null;
@@ -87,21 +89,19 @@ public class StAXStreamProvider implements StreamProvider {
         }
     }
     
-    private XMLInputFactory getFactory(Map<String,Object> properties) {
-        // TODO: we should have something to distinguish properties that we must understand from properties that are provider specific
+    private XMLInputFactory getFactory(OptionsProcessor options) {
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        for (Map.Entry<String,Object> entry : properties.entrySet()) {
-            factory.setProperty(entry.getKey(), entry.getValue());
-        }
+        factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE,
+                options.getAndMarkAsProcessed(NamespaceAwareness.class) != NamespaceAwareness.DISABLE);
         return factory;
     }
 
-    public Consumer getConsumer(Object destination, Map<String, Object> properties) throws StreamException {
+    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
         // TODO construct Consumer wrapping an XMLStreamWriter
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, Map<String, Object> properties) {
+    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options) {
         // TODO support wrapping the consumer in an XMLStreamWriter
         return null;
     }

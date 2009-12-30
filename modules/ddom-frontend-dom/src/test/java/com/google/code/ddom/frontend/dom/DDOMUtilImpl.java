@@ -15,15 +15,12 @@
  */
 package com.google.code.ddom.frontend.dom;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.stream.XMLInputFactory;
-
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.NamespaceAwareness;
+import com.google.code.ddom.Options;
 
 public class DDOMUtilImpl extends DOMUtilImpl {
     public static final DDOMUtilImpl INSTANCE = new DDOMUtilImpl();
@@ -36,8 +33,8 @@ public class DDOMUtilImpl extends DOMUtilImpl {
     @Override
     public Document parse(boolean namespaceAware, InputSource source) {
         // TODO: need to cleanup somehow
-        Map<String,Object> properties = new HashMap<String,Object>();
-        properties.put(XMLInputFactory.IS_NAMESPACE_AWARE, namespaceAware);
-        return (Document)DeferredDocumentFactory.newInstance().parse("dom", source, properties);
+        Options options = new Options();
+        options.set(NamespaceAwareness.get(namespaceAware));
+        return (Document)DeferredDocumentFactory.newInstance().parse("dom", source, options);
     }
 }

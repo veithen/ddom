@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.stream.spi;
 
-import java.util.Map;
+import com.google.code.ddom.OptionsProcessor;
 
 // TODO: refer to the @Provider annotation
 public interface StreamProvider {
@@ -23,16 +23,16 @@ public interface StreamProvider {
      * Create a producer for a given source object.
      * 
      * @param source
-     * @param properties
+     * @param options
      * @param preserve <code>true</code> if the producer should preserve the data in the original
      *                 source object; <code>false</code> if the producer is allowed to consume
      *                 the source object in a destructive way
      * @return
      * @throws StreamException
      */
-    Producer getProducer(Object source, Map<String,Object> properties, boolean preserve) throws StreamException;
+    Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException;
     
-    Consumer getConsumer(Object destination, Map<String,Object> properties) throws StreamException;
+    Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException;
     
-    <T> T getSerializer(Class<T> serializerType, Consumer consumer, Map<String,Object> properties);
+    <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options);
 }

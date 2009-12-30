@@ -19,6 +19,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Map;
 
+import com.google.code.ddom.Options;
+import com.google.code.ddom.OptionsProcessor;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
@@ -70,7 +72,7 @@ public final class StreamFactory {
      * 
      * @param providerName
      * @param source
-     * @param properties
+     * @param options
      * @param preserve
      * @return the {@link Producer} instance that reads the data from the given <code>source</code>
      * @throws NoStreamProviderFoundException
@@ -78,12 +80,12 @@ public final class StreamFactory {
      *             source object passed as argument
      * @throws StreamException
      */
-    public Producer getProducer(String providerName, Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
+    public Producer getProducer(String providerName, Object source, OptionsProcessor options, boolean preserve) throws StreamException {
         StreamProvider provider = providers.get(providerName);
         if (provider == null) {
             throw new NoStreamProviderFoundException("Provider '" + providerName + "' not found");
         } else {
-            Producer producer = provider.getProducer(source, properties, preserve);
+            Producer producer = provider.getProducer(source, options, preserve);
             if (producer == null) {
                 throw new NoStreamProviderFoundException("Provider '" + providerName + "' doesn't support source objects of type " + source.getClass().getName());
             } else {
@@ -92,9 +94,17 @@ public final class StreamFactory {
         }
     }
     
-    public Producer getProducer(Object source, Map<String,Object> properties, boolean preserve) throws StreamException {
+    public Producer getProducer(String providerName, Object source, Options options, boolean preserve) throws StreamException {
+        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
+        Producer producer = getProducer(providerName, source, optionsProcessor, preserve);
+        // TODO: clean up producer if this fails
+        optionsProcessor.finish();
+        return producer;
+    }
+    
+    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
         for (StreamProvider provider : providers.values()) {
-            Producer producer = provider.getProducer(source, properties, preserve);
+            Producer producer = provider.getProducer(source, options, preserve);
             if (producer != null) {
                 return producer;
             }
@@ -102,14 +112,30 @@ public final class StreamFactory {
         throw new NoStreamProviderFoundException("No provider found for source objects of type " + source.getClass().getName());
     }
     
-    public Consumer getConsumer(Object destination, Map<String,Object> properties) throws StreamException {
+    public Producer getProducer(Object source, Options options, boolean preserve) throws StreamException {
+        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
+        Producer producer = getProducer(source, optionsProcessor, preserve);
+        // TODO: clean up producer if this fails
+        optionsProcessor.finish();
+        return producer;
+    }
+    
+    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
         for (StreamProvider provider : providers.values()) {
-            Consumer consumer = provider.getConsumer(destination, properties);
+            Consumer consumer = provider.getConsumer(destination, options);
             if (consumer != null) {
                 return consumer;
             }
         }
         throw new NoStreamProviderFoundException("No provider found for destination objects of type " + destination.getClass().getName());
+    }
+    
+    public Consumer getConsumer(Object destination, Options options) throws StreamException {
+        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
+        Consumer consumer = getConsumer(destination, optionsProcessor);
+        // TODO: clean up producer if this fails
+        optionsProcessor.finish();
+        return consumer;
     }
     
     // TODO: similar methods for getConsumer, getSerializer, etc.

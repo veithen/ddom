@@ -15,25 +15,24 @@
  */
 package com.google.code.ddom.stream.core;
 
-import java.util.Map;
-
+import com.google.code.ddom.OptionsProcessor;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
 
 public class CoreStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, Map<String, Object> properties, boolean preserve) throws StreamException {
+    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
         // TODO build a Producer for ParentNode objects (from our own core object model)
         return null;
     }
 
-    public Consumer getConsumer(Object destination, Map<String, Object> properties) throws StreamException {
+    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, Map<String, Object> properties) {
+    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options) {
         // We don't define any particular serializers
         return null;
     }
