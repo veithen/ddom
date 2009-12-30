@@ -23,6 +23,7 @@ import org.w3c.dom.Document;
 
 import com.google.code.ddom.collections.AndFilter;
 import com.google.code.ddom.frontend.dom.DDOMUtilImpl;
+import com.google.code.ddom.frontend.dom.DOMUtilImpl;
 import com.google.code.ddom.frontend.dom.XercesDOMUtilImpl;
 import com.google.code.ddom.xmlts.Filters;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
@@ -36,13 +37,21 @@ public class InfosetTest extends TestCase {
         this.test = test;
     }
 
+    private Document loadDocument(DOMUtilImpl domUtil) {
+        Document document = domUtil.parse(test.isUsingNamespaces(), test.getUrl());
+        
+        // Coalesce Text nodes
+        document.getDomConfig().setParameter("cdata-sections", true);
+        document.normalize();
+        
+        return document;
+    }
+    
     @Override
     protected void runTest() {
-        Document expected = XercesDOMUtilImpl.INSTANCE.parse(test.isUsingNamespaces(), test.getUrl());
-        Document actual = DDOMUtilImpl.INSTANCE.parse(test.isUsingNamespaces(), test.getUrl());
         // TODO: need to normalize (using Node#normalize) to avoid differences because of non coalesced text nodes
         // TODO: at some point we should check that the documents are identical rather than equal
-        XMLAssert.assertXMLEqual(expected, actual);
+        XMLAssert.assertXMLEqual(loadDocument(XercesDOMUtilImpl.INSTANCE), loadDocument(DDOMUtilImpl.INSTANCE));
     }
 
     public static TestSuite suite() {
