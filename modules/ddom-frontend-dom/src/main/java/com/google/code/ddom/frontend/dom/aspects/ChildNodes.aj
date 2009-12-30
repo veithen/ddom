@@ -65,7 +65,7 @@ public aspect ChildNodes {
     }
     
     public final NodeList DOMParentNode.getChildNodes() {
-        return (NodeList)this; // TODO: cast necessary??
+        return this;
     }
     
     public final int DOMParentNode.getLength() {
