@@ -17,11 +17,11 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreOptimizedParentNode;
+import com.google.code.ddom.backend.CoreCompactParentNode;
 
 public class OptimizedParentNodeHelper {
-    public static CoreChildNode getFirstChild(CoreOptimizedParentNode node) {
-        Object content = node.getContent();
+    public static CoreChildNode getFirstChild(CoreCompactParentNode node) {
+        Object content = node.coreGetContent();
         CoreChildNode firstChild;
         if (content instanceof String) {
             CoreDocument document = node.getDocument();

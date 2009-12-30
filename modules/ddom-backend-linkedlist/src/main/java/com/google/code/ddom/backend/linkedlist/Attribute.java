@@ -73,7 +73,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
 
-    public final Object getContent() {
+    public final Object coreGetContent() {
         return value;
     }
 
@@ -125,6 +125,10 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     public final void coreSetValue(String value) {
         // TODO: what if arg is null?
         this.value = value;
+    }
+
+    public boolean coreIsExpanded() {
+        return value instanceof CoreChildNode;
     }
 
     public final void coreInsertAttributeAfter(CoreAttribute attr) {

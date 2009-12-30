@@ -86,7 +86,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         return children;
     }
 
-    public final Object getContent() {
+    public final Object coreGetContent() {
         return content;
     }
     
@@ -97,6 +97,10 @@ public abstract class Element extends ParentNode implements CoreElement {
     public final void coreSetValue(String value) {
         // TODO: need to remove any existing children!
         this.content = value;
+    }
+
+    public boolean coreIsExpanded() {
+        return content instanceof CoreChildNode;
     }
 
     public final CoreChildNode coreGetFirstChild() {

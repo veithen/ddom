@@ -15,15 +15,29 @@
  */
 package com.google.code.ddom.backend;
 
-// TODO: rename this to CoreCompactParentNode
-public interface CoreOptimizedParentNode extends CoreParentNode {
+/**
+ * Parent node able to store a single text node without creating a {@link CoreText} instance.
+ * 
+ * @author Andreas Veithen
+ */
+public interface CoreCompactParentNode extends CoreParentNode {
     /**
      * 
      * either a String or a ChildNode
      * 
      * @return
      */
-    Object getContent();
+    Object coreGetContent();
 
+    /**
+     * Set the content of this node to the given value. This will remove all children previously
+     * owned by this element.
+     * 
+     * @param value
+     *            the value to set
+     */
     void coreSetValue(String value);
+    
+    // TODO: specify behavior if the element neither has children nor a value
+    boolean coreIsExpanded();
 }

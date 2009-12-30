@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.testsuite;
+package com.google.code.ddom.backend.testsuite.attribute;
 
+import com.google.code.ddom.backend.CoreCompactParentNode;
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.testsuite.compactparent.AbstractTestCoreSetValue;
 
-import junit.framework.TestSuite;
+public class TestCoreSetValue extends AbstractTestCoreSetValue {
+    public TestCoreSetValue(NodeFactory nodeFactory) {
+        super(nodeFactory);
+    }
 
-public class BackendTestSuiteBuilder {
-    private BackendTestSuiteBuilder() {}
-    
-    public static TestSuite suite(NodeFactory nodeFactory) {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new com.google.code.ddom.backend.testsuite.attribute.TestCoreSetValue(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreSetValue(nodeFactory));
-        return suite;
+    @Override
+    protected CoreCompactParentNode createNode(CoreDocument document) {
+        return nodeFactory.createAttribute(document, null, "attr", null, null, null);
     }
 }

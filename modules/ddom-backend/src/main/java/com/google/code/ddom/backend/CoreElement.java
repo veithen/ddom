@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend;
 
-public interface CoreElement extends CoreChildNode, BuilderTarget, CoreOptimizedParentNode {
+public interface CoreElement extends CoreChildNode, BuilderTarget, CoreCompactParentNode {
     /**
      * Get the first attribute of this element.
      * 
