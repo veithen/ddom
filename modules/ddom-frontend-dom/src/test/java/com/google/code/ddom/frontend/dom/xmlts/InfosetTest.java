@@ -15,18 +15,18 @@
  */
 package com.google.code.ddom.frontend.dom.xmlts;
 
-import java.util.EnumSet;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.w3c.dom.Document;
 
+import com.google.code.ddom.collections.AndFilter;
 import com.google.code.ddom.frontend.dom.DDOMUtilImpl;
 import com.google.code.ddom.frontend.dom.XercesDOMUtilImpl;
+import com.google.code.ddom.xmlts.Filters;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class InfosetTest extends TestCase {
     private final XMLConformanceTest test;
@@ -40,12 +40,14 @@ public class InfosetTest extends TestCase {
     protected void runTest() {
         Document expected = XercesDOMUtilImpl.INSTANCE.parse(test.isUsingNamespaces(), test.getUrl());
         Document actual = DDOMUtilImpl.INSTANCE.parse(test.isUsingNamespaces(), test.getUrl());
+        // TODO: need to normalize (using Node#normalize) to avoid differences because of non coalesced text nodes
+        // TODO: at some point we should check that the documents are identical rather than equal
         XMLAssert.assertXMLEqual(expected, actual);
     }
 
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
-        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTestsByType(EnumSet.of(XMLConformanceTest.Type.VALID))) {
+        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests(new AndFilter<XMLConformanceTest>(Filters.DEFAULT, Filters.XERCES_2_9_1_FILTER))) {
             suite.addTest(new InfosetTest(test));
         }
         return suite;
