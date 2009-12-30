@@ -36,7 +36,6 @@ public class DDOMUtilImpl extends DOMUtilImpl {
     @Override
     public Document parse(boolean namespaceAware, InputSource source) {
         // TODO: need to cleanup somehow
-        // TODO: set namespaceAware flag
         Map<String,Object> properties = new HashMap<String,Object>();
         properties.put(XMLInputFactory.IS_NAMESPACE_AWARE, namespaceAware);
         return (Document)DeferredDocumentFactory.newInstance().parse("dom", source, properties);
