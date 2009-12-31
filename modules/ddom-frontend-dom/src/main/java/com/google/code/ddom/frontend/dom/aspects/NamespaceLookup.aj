@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.google.code.ddom.backend.CoreElement;
 
 import com.google.code.ddom.frontend.dom.intf.*;
@@ -74,7 +76,7 @@ public aspect NamespaceLookup {
     }
 
     public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
-        // TODO
-        throw new UnsupportedOperationException();
+        CoreElement contextElement = getNamespaceContext();
+        return contextElement == null ? false : ObjectUtils.equals(namespaceURI, contextElement.coreLookupNamespaceURI(null, false));
     }
 }
