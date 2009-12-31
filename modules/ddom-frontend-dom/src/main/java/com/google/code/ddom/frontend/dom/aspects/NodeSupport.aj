@@ -18,6 +18,7 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.apache.commons.lang.ObjectUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 
@@ -47,7 +48,23 @@ public aspect NodeSupport {
                 || !ObjectUtils.equals(getNodeValue(), other.getNodeValue())) {
             return false;
         }
-        // TODO: compare children and attributes
+        NodeList children = getChildNodes();
+        NodeList otherChildren = other.getChildNodes();
+        if ((children == null) != (otherChildren == null)) {
+            return false;
+        }
+        if (children != null) {
+            int length = children.getLength();
+            if (length != otherChildren.getLength()) {
+                return false;
+            }
+            for (int i=0; i<length; i++) {
+                if (!children.item(i).isEqualNode(otherChildren.item(i))) {
+                    return false;
+                }
+            }
+        }
+        // TODO: attributes (seems that this is not covered by the DOM3 test suite)
         return true;
     }
 

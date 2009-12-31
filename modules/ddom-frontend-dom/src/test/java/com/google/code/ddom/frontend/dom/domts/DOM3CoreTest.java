@@ -34,6 +34,8 @@ import org.w3c.domts.level3.core.nodeinsertbefore12;
 import org.w3c.domts.level3.core.nodeinsertbefore14;
 import org.w3c.domts.level3.core.nodeinsertbefore15;
 import org.w3c.domts.level3.core.nodeinsertbefore25;
+import org.w3c.domts.level3.core.nodeisequalnode13;
+import org.w3c.domts.level3.core.nodeisequalnode18;
 import org.w3c.domts.level3.core.nodelookupnamespaceuri04;
 import org.w3c.domts.level3.core.nodelookupprefix04;
 import org.w3c.domts.level3.core.noderemovechild07;
@@ -61,6 +63,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude("noderemovechild(24|25|26|27)");
         suite.addExclude("nodereplacechild(10|21|25|28|31|38)");
         suite.addExclude("nodegettextcontent(05|18)");
+        suite.addExclude("nodeisequalnode(25|26|27)");
         
         // Tests using entity references
         suite.addExclude(documentrenamenode27.class);
@@ -105,7 +108,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*comparedocumentposition.*");
         suite.addExclude(".*getfeature.*");
         suite.addExclude(".*isdefaultnamespace.*");
-        suite.addExclude(".*isequalnode.*");
         suite.addExclude(".*userdatahandler.*");
         suite.addExclude(".*iselementcontentwhitespace.*");
         suite.addExclude(".*settextcontent.*");
@@ -114,6 +116,8 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*infoset.*");
         suite.addExclude(namespacedeclarations02.class);
         suite.addExclude(documentrenamenode09.class);
+        suite.addExclude(nodeisequalnode13.class); // Uses cloneNode
+        suite.addExclude(nodeisequalnode18.class); // Uses adoptNode
         
         // TODO: uses "*" as namespace in setAttributeNS
         suite.addExclude(elementsetidattributens05.class);
