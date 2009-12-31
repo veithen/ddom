@@ -71,6 +71,14 @@ public aspect DocumentSupport {
         return coreGetXmlEncoding();
     }
 
+    public final boolean DOMDocument.getXmlStandalone() {
+        return coreGetStandalone();
+    }
+
+    public final void DOMDocument.setXmlStandalone(boolean xmlStandalone) throws DOMException {
+        coreSetStandalone(xmlStandalone);
+    }
+
     // TODO: need test for this
     public final String DOMDocument.getDocumentURI() {
         return coreGetDocumentURI();
@@ -171,11 +179,6 @@ public aspect DocumentSupport {
         throw new UnsupportedOperationException();
     }
 
-    public final boolean DOMDocument.getXmlStandalone() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     // TODO: we don't cover renaming a typed attribute to a namespace declaration and vice-versa
     public final Node DOMDocument.renameNode(Node node, String namespaceURI, String qualifiedName) throws DOMException {
         if (node instanceof CoreNSAwareNamedNode) {
@@ -215,11 +218,6 @@ public aspect DocumentSupport {
     }
 
     public final void DOMDocument.setStrictErrorChecking(boolean strictErrorChecking) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final void DOMDocument.setXmlStandalone(boolean xmlStandalone) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

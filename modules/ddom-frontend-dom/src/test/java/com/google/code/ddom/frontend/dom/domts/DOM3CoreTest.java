@@ -25,6 +25,7 @@ import org.w3c.domts.level3.core.documentrenamenode09;
 import org.w3c.domts.level3.core.documentrenamenode19;
 import org.w3c.domts.level3.core.documentrenamenode27;
 import org.w3c.domts.level3.core.documentrenamenode28;
+import org.w3c.domts.level3.core.documentsetxmlstandalone01;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
 import org.w3c.domts.level3.core.elementsetidattributens05;
@@ -99,7 +100,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*baseuri.*");
         suite.addExclude(".*inputencoding.*");
         suite.addExclude(".*xmlencoding.*");
-        suite.addExclude(".*xmlstandalone.*");
         suite.addExclude(".*stricterrorchecking.*");
         suite.addExclude(".*handleerror.*");
         suite.addExclude(".*comparedocumentposition.*");
@@ -117,6 +117,9 @@ public class DOM3CoreTest extends TestSuite {
         
         // TODO: uses "*" as namespace in setAttributeNS
         suite.addExclude(elementsetidattributens05.class);
+        
+        // TODO: conflict during deferred building
+        suite.addExclude(documentsetxmlstandalone01.class);
         
         // TODO: wrong exception thrown
         suite.addExclude(documentrenamenode19.class);
