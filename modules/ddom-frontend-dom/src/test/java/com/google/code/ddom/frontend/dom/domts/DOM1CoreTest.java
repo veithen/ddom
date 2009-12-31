@@ -23,7 +23,6 @@ import org.w3c.domts.level1.core.alltests;
 import org.w3c.domts.level1.core.attrremovechild1;
 import org.w3c.domts.level1.core.attrreplacechild1;
 import org.w3c.domts.level1.core.attrspecifiedvalueremove;
-import org.w3c.domts.level1.core.cdatasectionnormalize;
 import org.w3c.domts.level1.core.documentcreateelementdefaultattr;
 import org.w3c.domts.level1.core.elementassociatedattribute;
 import org.w3c.domts.level1.core.elementremoveattribute;
@@ -90,9 +89,6 @@ public class DOM1CoreTest extends TestSuite {
         suite.addExclude(hc_nodeappendchildchildexists.class);
         suite.addExclude(hc_nodereplacechildnewchildexists.class);
         suite.addExclude(nodeappendchildchildexists.class);
-        
-        // TODO Incorrect test cases?
-        suite.addExclude(cdatasectionnormalize.class);
         
         // TODO Will implement normalization later
         suite.addExclude(hc_elementnormalize2.class);
