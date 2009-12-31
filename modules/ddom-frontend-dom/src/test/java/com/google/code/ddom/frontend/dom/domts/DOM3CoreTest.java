@@ -66,6 +66,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude("nodegettextcontent(05|18)");
         suite.addExclude("nodeisequalnode(25|26|27)");
         suite.addExclude(nodeisdefaultnamespace04.class);
+        suite.addExclude("nodesettextcontent(04|13)");
         
         // Tests using entity references
         suite.addExclude(documentrenamenode27.class);
@@ -111,7 +112,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*getfeature.*");
         suite.addExclude(".*userdatahandler.*");
         suite.addExclude(".*iselementcontentwhitespace.*");
-        suite.addExclude(".*settextcontent.*");
         suite.addExclude(".*wellformed.*");
         suite.addExclude(".*userdata.*");
         suite.addExclude(".*infoset.*");
