@@ -17,12 +17,12 @@ package com.google.code.ddom.frontend.dom;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
+import org.apache.crimson.jaxp.DocumentBuilderFactoryImpl;
 
-public class XercesDOMUtilImpl extends JAXPDOMUtilImpl {
-    public static final XercesDOMUtilImpl INSTANCE = new XercesDOMUtilImpl();
+public class CrimsonDOMUtilImpl extends JAXPDOMUtilImpl {
+    public static final CrimsonDOMUtilImpl INSTANCE = new CrimsonDOMUtilImpl();
     
-    private XercesDOMUtilImpl() {}
+    private CrimsonDOMUtilImpl() {}
     
     @Override
     protected DocumentBuilderFactory createDocumentBuilderFactory() {

@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
@@ -35,9 +36,19 @@ public aspect NodeSupport {
         return other == this;
     }
 
-    public final boolean DOMNode.isEqualNode(Node arg) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean DOMNode.isEqualNode(Node other) {
+        // Note: We may not assume that the "other" node has been created by DDOM. Therefore we
+        //       must only use standard DOM methods on that node.
+        if (getNodeType() != other.getNodeType()
+                || !ObjectUtils.equals(getNodeName(), other.getNodeName())
+                || !ObjectUtils.equals(getLocalName(), other.getLocalName())
+                || !ObjectUtils.equals(getNamespaceURI(), other.getNamespaceURI())
+                || !ObjectUtils.equals(getPrefix(), other.getPrefix())
+                || !ObjectUtils.equals(getNodeValue(), other.getNodeValue())) {
+            return false;
+        }
+        // TODO: compare children and attributes
+        return true;
     }
 
     public final String DOMNode.getBaseURI() {

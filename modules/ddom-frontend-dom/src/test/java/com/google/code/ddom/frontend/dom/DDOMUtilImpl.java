@@ -25,6 +25,8 @@ import com.google.code.ddom.Options;
 public class DDOMUtilImpl extends DOMUtilImpl {
     public static final DDOMUtilImpl INSTANCE = new DDOMUtilImpl();
     
+    private DDOMUtilImpl() {}
+    
     @Override
     public Document newDocument() {
         return (Document)DeferredDocumentFactory.newInstance().newDocument("dom");
