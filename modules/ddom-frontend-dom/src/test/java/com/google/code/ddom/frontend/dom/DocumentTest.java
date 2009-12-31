@@ -102,7 +102,7 @@ public class DocumentTest {
     }
 
     /**
-     * @see ElementImplTest#testSetAttributeNSNamespaceDeclaration()
+     * @see ElementTest#testSetAttributeNSNamespaceDeclaration()
      */
     @Validated @Test
     public void testCreateAttributeNSNamespaceDeclaration() {

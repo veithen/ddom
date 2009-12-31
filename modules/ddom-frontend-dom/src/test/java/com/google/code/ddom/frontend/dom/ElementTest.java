@@ -30,7 +30,7 @@ import org.w3c.dom.Text;
 import com.google.code.ddom.utils.test.Validated;
 
 @RunWith(DOMTestRunner.class)
-public class ElementImplTest {
+public class ElementTest {
     @Validated @Test
     public void testGetLocalNameAfterCreateElementWithPrefix() {
         Document doc = DOMUtil.newDocument();
