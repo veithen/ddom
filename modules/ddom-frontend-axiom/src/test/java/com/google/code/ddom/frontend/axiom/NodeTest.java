@@ -28,8 +28,8 @@ import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
 @RunWith(ValidatedTestRunner.class)
 public class NodeTest {
-    @ValidatedTestResource(reference=LLOMAxiomUtilImpl.class, actual=DDOMAxiomUtilImpl.class)
-    private AxiomUtilImpl axiomUtil;
+    @ValidatedTestResource(reference=LLOMAxiomUtil.class, actual=DDOMAxiomUtil.class)
+    private AxiomUtil axiomUtil;
     
     @Validated @Test(expected=OMException.class)
     public void testInsertSiblingAfterOnOrphan() {

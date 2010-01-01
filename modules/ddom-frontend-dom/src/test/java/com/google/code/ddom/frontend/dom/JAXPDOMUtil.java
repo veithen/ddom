@@ -24,7 +24,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public abstract class JAXPDOMUtilImpl extends DOMUtilImpl {
+public abstract class JAXPDOMUtil extends DOMUtil {
     protected abstract DocumentBuilderFactory createDocumentBuilderFactory();
     
     @Override

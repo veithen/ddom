@@ -16,17 +16,17 @@
 package com.google.code.ddom.frontend.axiom;
 
 import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
 
-import com.google.code.ddom.DeferredDocumentFactory;
-
-public class DDOMAxiomUtilImpl implements AxiomUtilImpl {
-    public static final DDOMAxiomUtilImpl INSTANCE = new DDOMAxiomUtilImpl();
+public class LLOMAxiomUtil implements AxiomUtil {
+    public final static LLOMAxiomUtil INSTANCE = new LLOMAxiomUtil();
     
-    private final DeferredDocumentFactory factory = DeferredDocumentFactory.newInstance();
+    private final OMFactory factory = new OMLinkedListImplFactory();
 
-    private DDOMAxiomUtilImpl() {}
+    private LLOMAxiomUtil() {}
     
     public OMDocument createDocument() {
-        return (OMDocument)factory.newDocument("axiom");
+        return factory.createOMDocument();
     }
 }

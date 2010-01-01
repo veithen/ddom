@@ -19,10 +19,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
 
-public class XercesDOMUtilImpl extends JAXPDOMUtilImpl {
-    public static final XercesDOMUtilImpl INSTANCE = new XercesDOMUtilImpl();
+public class XercesDOMUtil extends JAXPDOMUtil {
+    public static final XercesDOMUtil INSTANCE = new XercesDOMUtil();
     
-    private XercesDOMUtilImpl() {}
+    private XercesDOMUtil() {}
     
     @Override
     protected DocumentBuilderFactory createDocumentBuilderFactory() {

@@ -45,8 +45,8 @@ import com.google.code.ddom.utils.test.ValidatedTestRunner;
  */
 @RunWith(ValidatedTestRunner.class)
 public class DocumentTest {
-    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
-    private DOMUtilImpl domUtil;
+    @ValidatedTestResource(reference=XercesDOMUtil.class, actual=DDOMUtil.class)
+    private DOMUtil domUtil;
     
     @Test
     public void testNamespaceUnawareParsing() throws Exception {

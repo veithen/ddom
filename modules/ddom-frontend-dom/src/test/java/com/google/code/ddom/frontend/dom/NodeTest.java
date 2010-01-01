@@ -29,13 +29,13 @@ import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
 @RunWith(ValidatedTestRunner.class)
 public class NodeTest {
-    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
-    private DOMUtilImpl domUtil;
+    @ValidatedTestResource(reference=XercesDOMUtil.class, actual=DDOMUtil.class)
+    private DOMUtil domUtil;
     
     @Validated @Test
     public void testIsEqualNodeWithForeignNode() {
         Document document = domUtil.newDocument();
-        Document foreignDocument = CrimsonDOMUtilImpl.INSTANCE.newDocument();
+        Document foreignDocument = CrimsonDOMUtil.INSTANCE.newDocument();
         ProcessingInstruction pi = document.createProcessingInstruction("target", "data");
         ProcessingInstruction foreignPi = foreignDocument.createProcessingInstruction("target", "data");
         Assert.assertTrue(pi.isEqualNode(foreignPi));

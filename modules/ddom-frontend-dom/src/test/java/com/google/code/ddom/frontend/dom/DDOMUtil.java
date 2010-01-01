@@ -22,10 +22,10 @@ import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.NamespaceAwareness;
 import com.google.code.ddom.Options;
 
-public class DDOMUtilImpl extends DOMUtilImpl {
-    public static final DDOMUtilImpl INSTANCE = new DDOMUtilImpl();
+public class DDOMUtil extends DOMUtil {
+    public static final DDOMUtil INSTANCE = new DDOMUtil();
     
-    private DDOMUtilImpl() {}
+    private DDOMUtil() {}
     
     @Override
     public Document newDocument() {

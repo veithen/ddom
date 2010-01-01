@@ -27,8 +27,8 @@ import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
 @RunWith(ValidatedTestRunner.class)
 public class CDATASectionTest {
-    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
-    private DOMUtilImpl domUtil;
+    @ValidatedTestResource(reference=XercesDOMUtil.class, actual=DDOMUtil.class)
+    private DOMUtil domUtil;
     
     /**
      * Check that empty CDATA sections are removed by the parser. It is not sure if this behavior is

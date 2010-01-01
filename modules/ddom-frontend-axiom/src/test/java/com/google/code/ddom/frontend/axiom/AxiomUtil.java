@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom;
+package com.google.code.ddom.frontend.axiom;
 
-import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.axiom.om.OMDocument;
 
-import org.apache.crimson.jaxp.DocumentBuilderFactoryImpl;
-
-public class CrimsonDOMUtilImpl extends JAXPDOMUtilImpl {
-    public static final CrimsonDOMUtilImpl INSTANCE = new CrimsonDOMUtilImpl();
-    
-    private CrimsonDOMUtilImpl() {}
-    
-    @Override
-    protected DocumentBuilderFactory createDocumentBuilderFactory() {
-        return new DocumentBuilderFactoryImpl();
-    }
+public interface AxiomUtil {
+    OMDocument createDocument();
 }

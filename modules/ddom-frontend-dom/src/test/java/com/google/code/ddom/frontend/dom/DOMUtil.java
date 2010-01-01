@@ -30,7 +30,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
-public abstract class DOMUtilImpl {
+public abstract class DOMUtil {
     public abstract Document newDocument();
     public abstract Document parse(boolean namespaceAware, InputSource source);
 

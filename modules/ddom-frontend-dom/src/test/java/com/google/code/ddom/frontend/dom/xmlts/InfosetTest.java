@@ -23,9 +23,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.collections.AndFilter;
-import com.google.code.ddom.frontend.dom.DDOMUtilImpl;
-import com.google.code.ddom.frontend.dom.DOMUtilImpl;
-import com.google.code.ddom.frontend.dom.XercesDOMUtilImpl;
+import com.google.code.ddom.frontend.dom.DDOMUtil;
+import com.google.code.ddom.frontend.dom.DOMUtil;
+import com.google.code.ddom.frontend.dom.XercesDOMUtil;
 import com.google.code.ddom.xmlts.Filters;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
@@ -39,7 +39,7 @@ public class InfosetTest extends TestCase {
         this.test = test;
     }
 
-    private Document loadDocument(DOMUtilImpl domUtil) {
+    private Document loadDocument(DOMUtil domUtil) {
         Document document = domUtil.parse(test.isUsingNamespaces(), test.getUrl());
         
         // Coalesce Text nodes
@@ -76,7 +76,7 @@ public class InfosetTest extends TestCase {
     @Override
     protected void runTest() {
         // TODO: at some point we should check that the documents are identical rather than equal
-        XMLAssert.assertXMLEqual(loadDocument(XercesDOMUtilImpl.INSTANCE), loadDocument(DDOMUtilImpl.INSTANCE));
+        XMLAssert.assertXMLEqual(loadDocument(XercesDOMUtil.INSTANCE), loadDocument(DDOMUtil.INSTANCE));
     }
 
     public static TestSuite suite() {
