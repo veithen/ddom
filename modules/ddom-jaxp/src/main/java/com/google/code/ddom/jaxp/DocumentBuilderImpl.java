@@ -38,6 +38,7 @@ import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
+import com.google.code.ddom.stream.stax.CommentFilterStreamReader;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private final boolean ignoreComments;

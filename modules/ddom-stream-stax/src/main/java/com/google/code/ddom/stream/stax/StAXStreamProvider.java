@@ -28,6 +28,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.xml.sax.InputSource;
 
+import com.google.code.ddom.CommentPolicy;
 import com.google.code.ddom.NamespaceAwareness;
 import com.google.code.ddom.OptionsProcessor;
 import com.google.code.ddom.spi.Provider;
@@ -83,6 +84,9 @@ public class StAXStreamProvider implements StreamProvider {
             throw new StreamException(ex);
         }
         if (reader != null) {
+            if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
+                reader = new CommentFilterStreamReader(reader);
+            }
             return new StAXParser(reader);
         } else {
             return null;
@@ -95,7 +99,7 @@ public class StAXStreamProvider implements StreamProvider {
                 options.getAndMarkAsProcessed(NamespaceAwareness.class) != NamespaceAwareness.DISABLE);
         return factory;
     }
-
+    
     public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
         // TODO construct Consumer wrapping an XMLStreamWriter
         return null;
