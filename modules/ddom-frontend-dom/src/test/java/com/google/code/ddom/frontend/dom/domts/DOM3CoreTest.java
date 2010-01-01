@@ -100,7 +100,7 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(canonicalform06.class);
         
         // TODO: later
-        suite.addExclude(".*normaliz.*");
+        suite.addExclude(".*normalizedocument.*");
         suite.addExclude(".*adopt.*");
         suite.addExclude(".*documenturi.*");
         suite.addExclude(".*baseuri.*");
