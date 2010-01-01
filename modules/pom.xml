@@ -46,6 +46,7 @@
         <module>ddom-stream-sax</module>
         <module>ddom-stream-stax</module>
         <module>ddom-stream-utils</module>
+        <module>ddom-stream-wstx</module>
         <module>ddom-test-utils</module>
         <module>ddom-weaver</module>
     </modules>
