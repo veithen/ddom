@@ -20,6 +20,7 @@ import junit.framework.TestSuite;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.collections.AndFilter;
 import com.google.code.ddom.frontend.dom.DDOMUtilImpl;
@@ -44,7 +45,28 @@ public class InfosetTest extends TestCase {
         document.getDomConfig().setParameter("cdata-sections", true);
         document.normalize();
         
+        // Xerces removes empty CDATA sections, while Woodstox/DDOM preserves them
+        removeEmptyCDATASections(document);
+        
         return document;
+    }
+    
+    // TODO: once we implement support for EmptyCDATASectionPolicy, this should no longer be required
+    private void removeEmptyCDATASections(Node node) {
+        Node child = node.getFirstChild();
+        while (child != null) {
+            Node next = child.getNextSibling();
+            switch (child.getNodeType()) {
+                case Node.CDATA_SECTION_NODE:
+                    if (child.getNodeValue().length() == 0) {
+                        child.getParentNode().removeChild(child);
+                    }
+                    break;
+                case Node.ELEMENT_NODE:
+                    removeEmptyCDATASections(child);
+            }
+            child = next;
+        }
     }
     
     @Override
