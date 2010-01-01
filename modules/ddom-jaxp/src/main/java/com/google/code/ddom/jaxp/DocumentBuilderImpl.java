@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
@@ -98,9 +99,8 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             }
             String encoding = reader.getEncoding();
             String xmlEncoding = reader.getCharacterEncodingScheme();
-            // TODO: we should not refer to DocumentImpl here
-            com.google.code.ddom.backend.linkedlist.Document document = (com.google.code.ddom.backend.linkedlist.Document)DeferredDocumentFactory.newInstance().parse("dom", reader);
-//            DocumentImpl document = new DocumentImpl(domImplementation, omDocument/*, namespaceAware */);
+            CoreDocument document = (CoreDocument)DeferredDocumentFactory.newInstance().parse("dom", reader);
+            document.build();
             document.coreSetDocumentURI(is.getSystemId());
             String inputEncoding = is.getEncoding();
             if (isByteStream && inputEncoding == null) {
@@ -112,7 +112,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             }
             document.coreSetInputEncoding(inputEncoding);
             document.coreSetXmlEncoding(xmlEncoding);
-            // TODO: build the document and close the reader
+            // TODO: close the reader and the underlying stream
             return (Document)document;
         } catch (XMLStreamException ex) {
             throw toSAXParseException(ex);
