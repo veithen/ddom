@@ -34,7 +34,6 @@ import org.w3c.domts.level2.core.internalSubset01;
 import org.w3c.domts.level2.core.namednodemapgetnameditemns01;
 import org.w3c.domts.level2.core.namednodemapremovenameditemns02;
 import org.w3c.domts.level2.core.namednodemapremovenameditemns05;
-import org.w3c.domts.level2.core.nodenormalize01;
 import org.w3c.domts.level2.core.prefix08;
 import org.w3c.domts.level2.core.removeAttributeNS01;
 import org.w3c.domts.level2.core.removeAttributeNS02;
@@ -76,7 +75,6 @@ public class DOM2CoreTest extends TestSuite {
         suite.addExclude("hc_nodedocumentfragmentnormalize.*");
         suite.addExclude("importNode(10|11)"); // entity references
         suite.addExclude(internalSubset01.class);
-        suite.addExclude(nodenormalize01.class);
         suite.addExclude(prefix08.class); // entity references
         suite.addExclude(removeAttributeNS01.class); // entity references
         suite.addExclude(removeNamedItemNS03.class); // entity references
