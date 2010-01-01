@@ -19,6 +19,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 
 import com.google.code.ddom.utils.test.Validated;
@@ -32,5 +34,19 @@ public class NodeTest {
         ProcessingInstruction pi = document.createProcessingInstruction("target", "data");
         ProcessingInstruction foreignPi = foreignDocument.createProcessingInstruction("target", "data");
         Assert.assertTrue(pi.isEqualNode(foreignPi));
+    }
+    
+    /**
+     * Check that {@link org.w3c.dom.Node#normalize()} doesn't merge adjacent CDATA sections.
+     */
+    @Validated @Test
+    public void testNormalizeAdjacentCDATASections() {
+        Document document = DOMUtil.newDocument();
+        Element element = document.createElement("test");
+        element.appendChild(document.createCDATASection("te"));
+        element.appendChild(document.createCDATASection("st"));
+        element.normalize();
+        NodeList children = element.getChildNodes();
+        Assert.assertEquals(2, children.getLength());
     }
 }
