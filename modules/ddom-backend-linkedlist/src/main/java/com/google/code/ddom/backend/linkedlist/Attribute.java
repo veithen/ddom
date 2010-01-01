@@ -127,7 +127,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         this.value = value;
     }
 
-    public boolean coreIsExpanded() {
+    public final boolean coreIsExpanded() {
         return value instanceof CoreChildNode;
     }
 

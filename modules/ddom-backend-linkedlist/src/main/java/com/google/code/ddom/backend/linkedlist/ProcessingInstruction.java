@@ -34,7 +34,7 @@ public class ProcessingInstruction extends LeafNode implements CoreProcessingIns
         return target;
     }
 
-    public void coreSetTarget(String target) {
+    public final void coreSetTarget(String target) {
         this.target = target;
     }
 

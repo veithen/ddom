@@ -105,7 +105,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         this.content = value;
     }
 
-    public boolean coreIsExpanded() {
+    public final boolean coreIsExpanded() {
         return content instanceof CoreChildNode;
     }
 
@@ -140,19 +140,19 @@ public abstract class Element extends ParentNode implements CoreElement {
         return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
-    public void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingAfter(this, sibling);
     }
 
-    public void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
     }
     
-    public void coreDetach() {
+    public final void coreDetach() {
         ChildNodeHelper.coreDetach(this);
     }
 
-    public CoreAttribute coreGetLastAttribute() {
+    public final CoreAttribute coreGetLastAttribute() {
         CoreAttribute previousAttribute = null;
         CoreAttribute attribute = firstAttribute;
         while (attribute != null) {
@@ -220,7 +220,7 @@ public abstract class Element extends ParentNode implements CoreElement {
     }
 
     // TODO: check if we still need this as public method
-    public void coreAppendAttribute(CoreAttribute attr) {
+    public final void coreAppendAttribute(CoreAttribute attr) {
         // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
         attr.internalSetOwnerElement(this);
         if (firstAttribute == null) {
@@ -253,7 +253,7 @@ public abstract class Element extends ParentNode implements CoreElement {
 
     protected abstract String getImplicitNamespaceURI(String prefix);
     
-    public String coreLookupNamespaceURI(String prefix, boolean strict) {
+    public final String coreLookupNamespaceURI(String prefix, boolean strict) {
         if (!strict) {
             String namespaceURI = getImplicitNamespaceURI(prefix);
             if (namespaceURI != null) {
@@ -312,7 +312,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         }
     }
 
-    public void coreCoalesce(boolean includeCDATASections) {
+    public final void coreCoalesce(boolean includeCDATASections) {
         CoreDocument document = getDocument();
         // TODO: using a collection here is very bad!!
         List<CoreTextNode> textNodes = new ArrayList<CoreTextNode>();

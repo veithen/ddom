@@ -70,15 +70,15 @@ public abstract class LeafNode extends Node implements CoreLeafNode {
         return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
-    public void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingAfter(this, sibling);
     }
 
-    public void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
     }
     
-    public void coreDetach() {
+    public final void coreDetach() {
         ChildNodeHelper.coreDetach(this);
     }
 }

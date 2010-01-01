@@ -149,23 +149,23 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         }
     }
 
-    public void coreAppendChild(CoreNode newChild) throws CoreModelException {
+    public final void coreAppendChild(CoreNode newChild) throws CoreModelException {
         merge(newChild, null, false);
     }
 
-    public void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
+    public final void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
         merge(newChild, refChild.coreGetNextSibling(), false);
     }
 
-    public void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
+    public final void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
         merge(newChild, refChild, false);
     }
 
-    public void coreRemoveChild(CoreChildNode child) throws CoreModelException {
+    public final void coreRemoveChild(CoreChildNode child) throws CoreModelException {
         merge(null, child, true);
     }
 
-    public void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
+    public final void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
         merge(newChild, oldChild, true);
     }
 }

@@ -55,7 +55,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         builder.next();
     }
     
-    public NodeFactory getNodeFactory() {
+    public final NodeFactory getNodeFactory() {
         return nodeFactory;
     }
 
@@ -133,12 +133,12 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         this.inputEncoding = inputEncoding;
     }
 
-    public String coreGetXmlVersion() {
+    public final String coreGetXmlVersion() {
         ensureDocumentInfoReceived();
         return xmlVersion;
     }
 
-    public void coreSetXmlVersion(String xmlVersion) {
+    public final void coreSetXmlVersion(String xmlVersion) {
 //        ensureDocumentInfoReceived();
         this.xmlVersion = xmlVersion;
     }
@@ -153,12 +153,12 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         this.xmlEncoding = xmlEncoding;
     }
 
-    public boolean coreGetStandalone() {
+    public final boolean coreGetStandalone() {
         ensureDocumentInfoReceived();
         return standalone;
     }
 
-    public void coreSetStandalone(boolean standalone) {
+    public final void coreSetStandalone(boolean standalone) {
 //        ensureDocumentInfoReceived();
         this.standalone = standalone;
     }
