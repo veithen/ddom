@@ -29,6 +29,7 @@ import com.google.code.ddom.frontend.dom.XercesDOMUtilImpl;
 import com.google.code.ddom.xmlts.Filters;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
+import com.google.code.ddom.xmlts.XMLConformanceTestUtils;
 
 public class InfosetTest extends TestCase {
     private final XMLConformanceTest test;
@@ -47,6 +48,9 @@ public class InfosetTest extends TestCase {
         
         // Xerces removes empty CDATA sections, while Woodstox/DDOM preserves them
         removeEmptyCDATASections(document);
+        
+        // TODO: once we correctly support DOM3 (see section 1.3.4 of the DOM Level 3 Core spec), this should no longer be necessary
+        XMLConformanceTestUtils.removeXmlBaseAttributes(document);
         
         return document;
     }
