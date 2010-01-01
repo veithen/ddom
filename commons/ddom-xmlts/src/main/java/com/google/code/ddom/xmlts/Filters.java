@@ -32,10 +32,5 @@ public class Filters {
     
     public static final Filter<? super XMLConformanceTest> XERCES_2_9_1_FILTER = new ExclusionFilter<String>(new String[] {
             "valid-sa-097",
-            "valid-ext-sa-005",
-            "valid-ext-sa-006",
-            "valid-ext-sa-013",
-            "ext01",
-            "ext02",
     });
 }

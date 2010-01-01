@@ -45,6 +45,7 @@ public class XercesTest extends TestCase {
         Document actual = builder.parse(test.getSystemId());
         String outputSystemId = test.getOutputSystemId();
         if (outputSystemId != null) {
+            XMLConformanceTestUtils.removeXmlBaseAttributes(actual);
             Document expected = builder.parse(outputSystemId);
             XMLAssert.assertXMLEqual(expected, actual);
         }
