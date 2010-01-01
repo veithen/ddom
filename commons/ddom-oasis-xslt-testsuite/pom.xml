@@ -41,19 +41,19 @@
             <artifactId>woodstox-core-asl</artifactId>
         </dependency>
         <dependency>
-        	<groupId>junit</groupId>
-        	<artifactId>junit</artifactId>
-        	<scope>test</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-        	<groupId>xalan</groupId>
-        	<artifactId>xalan</artifactId>
-        	<scope>test</scope>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-        	<groupId>xerces</groupId>
-        	<artifactId>xercesImpl</artifactId>
-        	<scope>test</scope>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
