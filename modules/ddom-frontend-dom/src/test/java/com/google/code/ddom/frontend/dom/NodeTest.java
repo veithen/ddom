@@ -24,12 +24,17 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(DOMTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class NodeTest {
+    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
+    private DOMUtilImpl domUtil;
+    
     @Validated @Test
     public void testIsEqualNodeWithForeignNode() {
-        Document document = DOMUtil.newDocument();
+        Document document = domUtil.newDocument();
         Document foreignDocument = CrimsonDOMUtilImpl.INSTANCE.newDocument();
         ProcessingInstruction pi = document.createProcessingInstruction("target", "data");
         ProcessingInstruction foreignPi = foreignDocument.createProcessingInstruction("target", "data");
@@ -41,7 +46,7 @@ public class NodeTest {
      */
     @Validated @Test
     public void testNormalizeAdjacentCDATASections() {
-        Document document = DOMUtil.newDocument();
+        Document document = domUtil.newDocument();
         Element element = document.createElement("test");
         element.appendChild(document.createCDATASection("te"));
         element.appendChild(document.createCDATASection("st"));

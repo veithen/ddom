@@ -17,7 +17,6 @@ package com.google.code.ddom.frontend.dom;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Attr;
@@ -26,12 +25,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(DOMTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class AttributeTest {
+    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
+    private DOMUtilImpl domUtil;
+    
     @Validated @Test
     public void testGetNextSibling() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("test");
         element.setAttribute("attr1", "val");
         element.setAttribute("attr2", "val");
@@ -42,14 +46,14 @@ public class AttributeTest {
     
     @Validated @Test
     public void testGetLocalNameAfterCreateAttributeWithPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Attr attr = doc.createAttribute("p:name");
         Assert.assertNull(attr.getLocalName());
     }
     
     @Validated @Test
     public void testSetPrefixAfterCreateAttributeWithoutPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Attr attr = doc.createAttribute("name");
         try {
             attr.setPrefix("p");
@@ -61,7 +65,7 @@ public class AttributeTest {
     
     @Validated @Test
     public void testGetValueWithMultipleChildren() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Attr attr = doc.createAttribute("name");
         attr.setValue("te");
         attr.appendChild(doc.createTextNode("st"));

@@ -28,12 +28,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(AxiomTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class ElementTest {
+    @ValidatedTestResource(reference=LLOMAxiomUtilImpl.class, actual=DDOMAxiomUtilImpl.class)
+    private AxiomUtilImpl axiomUtil;
+    
     @Validated @Test
     public void testGetQNameWithoutNamespace() {
-        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("name", null);
+        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement("name", null);
         QName qname = element.getQName();
         Assert.assertEquals("name", qname.getLocalPart());
         Assert.assertEquals("", qname.getNamespaceURI());
@@ -42,7 +47,7 @@ public class ElementTest {
     
     @Validated @Test
     public void testQNameCaching1() {
-        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("name", null);
+        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement("name", null);
         QName qname = element.getQName();
         Assert.assertSame(qname, element.getQName());
     }
@@ -50,13 +55,13 @@ public class ElementTest {
 //    @Validated @Test
 //    public void testQNameCaching2() {
 //        QName qname = new QName("test", "urn:test", "t");
-//        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement(qname);
+//        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
 //        Assert.assertSame(qname, element.getQName());
 //    }
     
     @Validated @Test
     public void testSetText() {
-        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("test", null);
+        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement("test", null);
         element.setText("text");
         OMNode child = element.getFirstOMChild();
         Assert.assertTrue(child instanceof OMText);
@@ -67,7 +72,7 @@ public class ElementTest {
     
     @Validated @Test
     public void testGetAllAttributes() {
-        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement("test", null);
+        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement("test", null);
         element.addAttribute("attr1", "value1", null);
         element.addAttribute("attr2", "value2", null);
         Iterator it = element.getAllAttributes();

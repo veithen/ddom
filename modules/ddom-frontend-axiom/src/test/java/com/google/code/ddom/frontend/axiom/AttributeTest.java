@@ -23,12 +23,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(AxiomTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class AttributeTest {
+    @ValidatedTestResource(reference=LLOMAxiomUtilImpl.class, actual=DDOMAxiomUtilImpl.class)
+    private AxiomUtilImpl axiomUtil;
+    
     @Validated @Test
     public void testGetQNameWithoutNamespace() {
-        OMAttribute attr = AxiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
+        OMAttribute attr = axiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
         QName qname = attr.getQName();
         Assert.assertEquals("name", qname.getLocalPart());
         Assert.assertEquals("", qname.getNamespaceURI());
@@ -37,7 +42,7 @@ public class AttributeTest {
     
     @Validated @Test
     public void testQNameCaching() {
-        OMAttribute attr = AxiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
+        OMAttribute attr = axiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
         QName qname = attr.getQName();
         Assert.assertSame(qname, attr.getQName());
     }

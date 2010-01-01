@@ -22,9 +22,14 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(DOMTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class CDATASectionTest {
+    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
+    private DOMUtilImpl domUtil;
+    
     /**
      * Check that empty CDATA sections are removed by the parser. It is not sure if this behavior is
      * required by any specification, but the test is important to avoid spurious failures in other
@@ -33,7 +38,7 @@ public class CDATASectionTest {
     @Ignore // TODO
     @Validated @Test
     public void testEmptyCDATASectionsAreRemovedByParser() {
-        Document document = DOMUtil.parse(true, "<root><![CDATA[]]></root>");
+        Document document = domUtil.parse(true, "<root><![CDATA[]]></root>");
         Assert.assertNull(document.getDocumentElement().getFirstChild());
     }
 }

@@ -23,12 +23,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(AxiomTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class NodeTest {
+    @ValidatedTestResource(reference=LLOMAxiomUtilImpl.class, actual=DDOMAxiomUtilImpl.class)
+    private AxiomUtilImpl axiomUtil;
+    
     @Validated @Test(expected=OMException.class)
     public void testInsertSiblingAfterOnOrphan() {
-        OMFactory factory = AxiomUtil.createDocument().getOMFactory();
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
         OMText text = factory.createOMText("test");
         OMElement element = factory.createOMElement("test", null);
         text.insertSiblingAfter(element);
@@ -36,7 +41,7 @@ public class NodeTest {
 
     @Validated @Test(expected=OMException.class)
     public void testInsertSiblingBeforeOnOrphan() {
-        OMFactory factory = AxiomUtil.createDocument().getOMFactory();
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
         OMText text = factory.createOMText("test");
         OMElement element = factory.createOMElement("test", null);
         text.insertSiblingBefore(element);

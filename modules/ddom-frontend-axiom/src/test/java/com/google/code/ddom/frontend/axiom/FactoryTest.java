@@ -24,25 +24,30 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(AxiomTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class FactoryTest {
+    @ValidatedTestResource(reference=LLOMAxiomUtilImpl.class, actual=DDOMAxiomUtilImpl.class)
+    private AxiomUtilImpl axiomUtil;
+    
     @Validated @Test
     public void createOMNamespace() {
-        OMNamespace ns = AxiomUtil.createDocument().getOMFactory().createOMNamespace("urn:test", "t");
+        OMNamespace ns = axiomUtil.createDocument().getOMFactory().createOMNamespace("urn:test", "t");
         Assert.assertEquals("urn:test", ns.getNamespaceURI());
         Assert.assertEquals("t", ns.getPrefix());
     }
     
     @Validated @Test(expected=IllegalArgumentException.class)
     public void createOMNamespaceWithNullURI() {
-        AxiomUtil.createDocument().getOMFactory().createOMNamespace(null, "t");
+        axiomUtil.createDocument().getOMFactory().createOMNamespace(null, "t");
     }
     
     @Validated @Test
     public void createOMElementFromQNameWithoutNamespace() {
         QName qname = new QName("test");
-        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement(qname);
+        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
         Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
         Assert.assertNull(element.getNamespace());
     }
@@ -50,7 +55,7 @@ public class FactoryTest {
     @Validated @Test
     public void createOMElementFromQNameWithNamespace() {
         QName qname = new QName("test", "urn:test", "t");
-        OMElement element = AxiomUtil.createDocument().getOMFactory().createOMElement(qname);
+        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
         Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
         OMNamespace ns = element.getNamespace();
         Assert.assertNotNull(ns);

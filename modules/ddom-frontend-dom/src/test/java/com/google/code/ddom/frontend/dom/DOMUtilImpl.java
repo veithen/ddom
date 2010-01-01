@@ -16,9 +16,18 @@
 package com.google.code.ddom.frontend.dom;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URL;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 public abstract class DOMUtilImpl {
@@ -31,5 +40,13 @@ public abstract class DOMUtilImpl {
     
     public Document parse(boolean namespaceAware, URL url) {
         return parse(namespaceAware, new InputSource(url.toExternalForm()));
+    }
+
+    public String toString(Node node) throws TransformerException {
+        StringWriter out = new StringWriter();
+        Transformer t = TransformerFactory.newInstance().newTransformer();
+        t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        t.transform(new DOMSource(node), new StreamResult(out));
+        return out.toString();
     }
 }

@@ -25,61 +25,66 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(DOMTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class NamespaceDeclarationTest {
+    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
+    private DOMUtilImpl domUtil;
+    
     @Validated @Test
     public void testGetNamespaceURI() {
-        Document doc = DOMUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertEquals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, nsAttr.getNamespaceURI());
     }
 
     @Validated @Test
     public void testGetLocalName() {
-        Document doc = DOMUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertEquals("p", nsAttr.getLocalName());
     }
 
     @Validated @Test
     public void testGetPrefix() {
-        Document doc = DOMUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertEquals(XMLConstants.XMLNS_ATTRIBUTE, nsAttr.getPrefix());
     }
 
     @Validated @Test
     public void testGetName() {
-        Document doc = DOMUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertEquals("xmlns:p", nsAttr.getName());
     }
 
     @Validated @Test
     public void testGetNamespaceURIForDefaultNamespace() {
-        Document doc = DOMUtil.parse(true, "<test xmlns='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<test xmlns='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertEquals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, nsAttr.getNamespaceURI());
     }
 
     @Validated @Test
     public void testGetLocalNameForDefaultNamespace() {
-        Document doc = DOMUtil.parse(true, "<test xmlns='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<test xmlns='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertEquals(XMLConstants.XMLNS_ATTRIBUTE, nsAttr.getLocalName());
     }
 
     @Validated @Test
     public void testGetPrefixForDefaultNamespace() {
-        Document doc = DOMUtil.parse(true, "<test xmlns='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<test xmlns='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertNull(nsAttr.getPrefix());
     }
 
     @Validated @Test
     public void testGetNameForDefaultNamespace() {
-        Document doc = DOMUtil.parse(true, "<test xmlns='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<test xmlns='urn:ns'/>");
         Attr nsAttr = (Attr)doc.getDocumentElement().getAttributes().item(0);
         Assert.assertEquals(XMLConstants.XMLNS_ATTRIBUTE, nsAttr.getName());
     }

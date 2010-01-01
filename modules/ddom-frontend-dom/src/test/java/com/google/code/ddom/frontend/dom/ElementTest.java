@@ -28,47 +28,52 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(DOMTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class ElementTest {
+    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
+    private DOMUtilImpl domUtil;
+    
     @Validated @Test
     public void testGetLocalNameAfterCreateElementWithPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("p:name");
         Assert.assertNull(element.getLocalName());
     }
     
     @Validated @Test
     public void testGetPrefixFromCreateElementWithPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("p:test");
         Assert.assertNull(element.getPrefix());
     }
 
     @Validated @Test
     public void testGetPrefixFromCreateElementWithoutPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("test");
         Assert.assertNull(element.getPrefix());
     }
     
     @Validated @Test
     public void testGetPrefixFromCreateElementNSWithPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS("urn:ns", "p:test");
         Assert.assertEquals("p", element.getPrefix());
     }
     
     @Validated @Test
     public void testGetPrefixFromCreateElementNSWithoutPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS("urn:ns", "test");
         Assert.assertNull(element.getPrefix());
     }
     
     @Validated @Test
     public void testSetPrefixAfterCreateElementWithoutPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("name");
         try {
             element.setPrefix("p");
@@ -80,42 +85,42 @@ public class ElementTest {
     
     @Validated @Test
     public void testGetNamespaceURIFromCreateElement() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("test");
         Assert.assertNull(element.getNamespaceURI());
     }
     
     @Validated @Test
     public void testGetTagNameFromCreateElementNSWithPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS("urn:ns", "p:test");
         Assert.assertEquals("p:test", element.getTagName());
     }
     
     @Validated @Test
     public void testGetTagNameFromCreateElementNSWithoutPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS("urn:ns", "test");
         Assert.assertEquals("test", element.getTagName());
     }
     
     @Validated @Test
     public void testGetTagNameFromNamespaceAwareParseWithPrefix() {
-        Document doc = DOMUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
+        Document doc = domUtil.parse(true, "<p:test xmlns:p='urn:ns'/>");
         Element element = doc.getDocumentElement();
         Assert.assertEquals("p:test", element.getTagName());
     }
     
     @Validated @Test
     public void testGetTagNameFromNonNamespaceAwareParseWithPrefix() {
-        Document doc = DOMUtil.parse(false, "<p:test xmlns:p='urn:ns'/>");
+        Document doc = domUtil.parse(false, "<p:test xmlns:p='urn:ns'/>");
         Element element = doc.getDocumentElement();
         Assert.assertEquals("p:test", element.getTagName());
     }
     
     @Validated @Test
     public void testGetAttributeAfterSetAttributeNSWithPrefix() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("test");
         element.setAttributeNS("urn:ns", "p:att", "value");
         Assert.assertEquals("value", element.getAttribute("p:att"));
@@ -123,7 +128,7 @@ public class ElementTest {
     
     @Validated @Test
     public void testGetAttributeNSAfterSetAttributeWithPrefix() {
-        Document doc = DOMUtil.parse(false, "<p:test xmlns:p='urn:ns'/>");
+        Document doc = domUtil.parse(false, "<p:test xmlns:p='urn:ns'/>");
         Element element = doc.getDocumentElement();
         element.setAttribute("p:test", "value");
         Assert.assertEquals("", element.getAttributeNS("urn:ns", "test"));
@@ -134,7 +139,7 @@ public class ElementTest {
      */
     @Validated @Test
     public void testSetAttributeNSNamespaceDeclaration() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         element.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p", "urn:ns");
         Assert.assertEquals("urn:ns", element.lookupNamespaceURI("p"));
@@ -143,7 +148,7 @@ public class ElementTest {
     
     @Validated @Test
     public void testSetAttributeAndCheckDOMLevel() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         element.setAttribute("attr", "val");
         Attr attr = element.getAttributeNode("attr");
@@ -153,7 +158,7 @@ public class ElementTest {
     
     @Validated @Test(expected=NullPointerException.class)
     public void testInsertBeforeWithNullNewChild() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         Text child = doc.createTextNode("test");
         element.appendChild(child);
@@ -162,21 +167,21 @@ public class ElementTest {
 
     @Validated @Test(expected=NullPointerException.class)
     public void testAppendChildWithNullArgument() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         element.appendChild(null);
     }
     
     @Validated @Test(expected=NullPointerException.class)
     public void testRemoveChildWithNullArgument() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         element.removeChild(null);
     }
 
     @Validated @Test(expected=NullPointerException.class)
     public void testReplaceChildWithNullNewChild() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         Text child = doc.createTextNode("test");
         element.appendChild(child);
@@ -185,14 +190,14 @@ public class ElementTest {
 
     @Validated @Test(expected=NullPointerException.class)
     public void testReplaceChildWithNullOldChild() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         element.replaceChild(doc.createTextNode("test"), null);
     }
     
     @Validated @Test
     public void testGetTextContent() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         element.appendChild(doc.createTextNode("te"));
         element.appendChild(doc.createTextNode("st"));
@@ -205,7 +210,7 @@ public class ElementTest {
      */
     @Validated @Test
     public void testRemoveAttributeNotExisting() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElement("test");
         element.removeAttribute("unknown");
     }
@@ -216,7 +221,7 @@ public class ElementTest {
      */
     @Validated @Test
     public void testRemoveAttributeNSNotExisting() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         element.removeAttributeNS("urn:some:namespace", "unknown");
     }

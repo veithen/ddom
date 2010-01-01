@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.utils.test;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.junit.internal.runners.InitializationError;
@@ -24,7 +25,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 
-public abstract class ValidatedTestRunner extends JUnit4ClassRunner {
+public class ValidatedTestRunner extends JUnit4ClassRunner {
     private static class MultiRunListener extends RunListener {
         private final RunNotifier notifier;
         private boolean firstRun = true;
@@ -77,13 +78,12 @@ public abstract class ValidatedTestRunner extends JUnit4ClassRunner {
         }
     }
     
+    private boolean isReferenceEnvironment;
+    
     public ValidatedTestRunner(Class<?> klass) throws InitializationError {
         super(klass);
     }
 
-    protected abstract void setUpValidationEnvironment();
-    protected abstract void setUpTargetEnvironment();
-    
     @Override
     protected void invokeTestMethod(Method method, RunNotifier notifier) {
         boolean validate = method.getAnnotation(Validated.class) != null;
@@ -91,15 +91,44 @@ public abstract class ValidatedTestRunner extends JUnit4ClassRunner {
         MultiRunListener multiRunListener = new MultiRunListener(notifier, validate ? 2 : 1);
         multiRunNotifier.addListener(multiRunListener);
         if (validate) {
+            isReferenceEnvironment = true;
             multiRunListener.setFailureMessage(
                     "Invalid test case; execution failed in validation environment");
-            setUpValidationEnvironment();
             super.invokeTestMethod(method, multiRunNotifier);
         }
         if (multiRunListener.isShouldContinue()) {
+            isReferenceEnvironment = false;
             multiRunListener.setFailureMessage(null);
-            setUpTargetEnvironment();
             super.invokeTestMethod(method, multiRunNotifier);
         }
+    }
+
+    private <T> T createInstance(Class<T> clazz) throws Exception {
+        Field field;
+        try {
+            // TODO: this should be documented in the JavaDoc of ValidatedTestResource
+            field = clazz.getDeclaredField("INSTANCE");
+        } catch (NoSuchFieldException ex) {
+            field = null;
+        }
+        if (field != null) {
+            return clazz.cast(field.get(null));
+        } else {
+            return clazz.newInstance();
+        }
+    }
+    
+    @Override
+    protected Object createTest() throws Exception {
+        Object test = super.createTest();
+        for (Field field : test.getClass().getDeclaredFields()) {
+            ValidatedTestResource annotation = field.getAnnotation(ValidatedTestResource.class);
+            if (annotation != null) {
+                Class<?> clazz = isReferenceEnvironment ? annotation.reference() : annotation.actual();
+                field.setAccessible(true);
+                field.set(test, createInstance(clazz));
+            }
+        }
+        return test;
     }
 }

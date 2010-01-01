@@ -21,12 +21,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(AxiomTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class TextTest {
+    @ValidatedTestResource(reference=LLOMAxiomUtilImpl.class, actual=DDOMAxiomUtilImpl.class)
+    private AxiomUtilImpl axiomUtil;
+    
     @Validated @Test
     public void testGetText() {
-        OMText text = AxiomUtil.createDocument().getOMFactory().createOMText("test");
+        OMText text = axiomUtil.createDocument().getOMFactory().createOMText("test");
         Assert.assertEquals("test", text.getText());
     }
 }

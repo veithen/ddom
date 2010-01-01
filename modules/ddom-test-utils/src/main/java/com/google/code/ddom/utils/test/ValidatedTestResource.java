@@ -16,19 +16,25 @@
 package com.google.code.ddom.utils.test;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import java.lang.annotation.Retention;
-
 /**
- * Indicates that a test method should be validated by executing it against a reference environment.
- * 
- * @see ValidatedTestRunner
+ * Specifies a resource to be injected by {@link ValidatedTestRunner}.
  * 
  * @author Andreas Veithen
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Validated {
+@Target(ElementType.FIELD)
+public @interface ValidatedTestResource {
+    /**
+     * The resource to be used when running the test in the reference environment.
+     */
+    Class<?> reference();
+    
+    /**
+     * The resource to be used when running the test in the actual environment.
+     */
+    Class<?> actual();
 }

@@ -23,12 +23,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(AxiomTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class ContainerTest {
+    @ValidatedTestResource(reference=LLOMAxiomUtilImpl.class, actual=DDOMAxiomUtilImpl.class)
+    private AxiomUtilImpl axiomUtil;
+    
     @Validated @Test
     public void testAddChild() {
-        OMFactory factory = AxiomUtil.createDocument().getOMFactory();
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
         OMElement element = factory.createOMElement("test", null);
         OMText text = factory.createOMText("test");
         element.addChild(text);
@@ -43,7 +48,7 @@ public class ContainerTest {
     // TODO: update Javadoc of OMContainer
     @Validated @Test
     public void testAddChildWithParent() {
-        OMFactory factory = AxiomUtil.createDocument().getOMFactory();
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
         OMElement element1 = factory.createOMElement("test1", null);
         OMElement element2 = factory.createOMElement("test2", null);
         OMText text = factory.createOMText("test");

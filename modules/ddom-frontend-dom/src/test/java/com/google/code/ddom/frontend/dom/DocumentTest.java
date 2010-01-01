@@ -37,12 +37,17 @@ import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 import com.google.code.ddom.utils.test.Validated;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
 /**
  * @author Andreas Veithen
  */
-@RunWith(DOMTestRunner.class)
+@RunWith(ValidatedTestRunner.class)
 public class DocumentTest {
+    @ValidatedTestResource(reference=XercesDOMUtilImpl.class, actual=DDOMUtilImpl.class)
+    private DOMUtilImpl domUtil;
+    
     @Test
     public void testNamespaceUnawareParsing() throws Exception {
         // TODO: do this properly
@@ -106,7 +111,7 @@ public class DocumentTest {
      */
     @Validated @Test
     public void testCreateAttributeNSNamespaceDeclaration() {
-        Document doc = DOMUtil.newDocument();
+        Document doc = domUtil.newDocument();
         Element element = doc.createElementNS(null, "test");
         Attr attr = doc.createAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p");
         attr.setValue("urn:ns");
