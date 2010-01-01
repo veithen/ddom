@@ -68,7 +68,7 @@ public class StAXParser implements Producer {
         boolean complete;
         if (mode == XMLStreamReaderEvent.Mode.NODE) {
             if (reader.getEventType() == XMLStreamReader.START_DOCUMENT) {
-                consumer.setDocumentInfo(reader.getVersion(), reader.getEncoding(), reader.getCharacterEncodingScheme(), reader.isStandalone());
+                consumer.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
             }
             try {
                 complete = reader.next() == XMLStreamReader.END_DOCUMENT;

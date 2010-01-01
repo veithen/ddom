@@ -81,11 +81,9 @@ public class DocumentBuilderTest {
     }
 
     @Validated @Test
-    // TODO: also test encoding with systemId (this is a problem for XMLInputFactory in StAX!)
     public void testEncoding() throws Exception {
         testEncoding("ISO-8859-1", true, false, "ISO-8859-1", null);
-        // TODO
-//        testEncoding("ISO-8859-1", false, true, "ISO-8859-1", "ISO-8859-1");
+        testEncoding("ISO-8859-1", false, true, "ISO-8859-1", "ISO-8859-1");
         testEncoding("ISO-8859-1", true, true, "ISO-8859-1", "ISO-8859-1");
     }
 }

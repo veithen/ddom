@@ -15,13 +15,13 @@
  */
 package com.google.code.ddom.jaxp;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLInputFactory;
+
+import com.google.code.ddom.CommentPolicy;
+import com.google.code.ddom.NamespaceAwareness;
+import com.google.code.ddom.Options;
 
 public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
     @Override
@@ -38,13 +38,14 @@ public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
 
     @Override
     public DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
-        Map<String,Object> props = new HashMap<String,Object>();
-        props.put(XMLInputFactory.IS_VALIDATING, isValidating());
-        props.put(XMLInputFactory.IS_NAMESPACE_AWARE, isNamespaceAware());
+        Options options = new Options();
+        options.set(NamespaceAwareness.get(isNamespaceAware()));
+        options.set(isIgnoringComments() ? CommentPolicy.REMOVE : CommentPolicy.PRESERVE);
+// TODO       props.put(XMLInputFactory.IS_VALIDATING, isValidating());
 // TODO       private boolean whitespace = false;
-        props.put(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, isExpandEntityReferences());
-        props.put(XMLInputFactory.IS_COALESCING, isCoalescing());
-        return new DocumentBuilderImpl(/*isNamespaceAware(),*/ isIgnoringComments(), props);
+// TODO        props.put(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, isExpandEntityReferences());
+// TODO        props.put(XMLInputFactory.IS_COALESCING, isCoalescing());
+        return new DocumentBuilderImpl(options);
     }
 
     @Override

@@ -25,6 +25,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.xml.sax.InputSource;
 
 import com.ctc.wstx.api.ReaderConfig;
+import com.ctc.wstx.io.DefaultInputResolver;
 import com.ctc.wstx.io.InputBootstrapper;
 import com.ctc.wstx.io.ReaderBootstrapper;
 import com.ctc.wstx.io.StreamBootstrapper;
@@ -77,17 +78,26 @@ public class WoodstoxStreamProvider implements StreamProvider {
         if (byteStream == null && characterStream == null) {
             return null;
         } else {
-            InputBootstrapper bs;
-            if (byteStream != null) {
-                // TODO: where do we pass the encoding?!?
-                bs = StreamBootstrapper.getInstance(publicId, systemId, byteStream);
-            } else {
-                bs = ReaderBootstrapper.getInstance(publicId, systemId, characterStream, encoding);
-            }
             WstxInputFactory factory = new WstxInputFactory();
             ReaderConfig config = factory.createPrivateConfig();
             // TODO: allow to set the base configuration through configureForXXX
             config.doSupportNamespaces(options.getAndMarkAsProcessed(NamespaceAwareness.class) != NamespaceAwareness.DISABLE);
+            InputBootstrapper bs;
+            if (characterStream == null && encoding != null) {
+                // Switch to reader since we know the encoding
+                try {
+                    // See WstxInputFactory for more information about this piece of code
+                    characterStream = DefaultInputResolver.constructOptimizedReader(config, byteStream, false, encoding);
+                } catch (XMLStreamException ex) {
+                    // This should only occur if the encoding is unsupported
+                    throw new StreamException(ex.getCause());
+                }
+            }
+            if (characterStream != null) {
+                bs = ReaderBootstrapper.getInstance(publicId, systemId, characterStream, encoding);
+            } else {
+                bs = StreamBootstrapper.getInstance(publicId, systemId, byteStream);
+            }
             XMLStreamReader reader;
             try {
                 // The method actually returns a BasicStreamReader if that matters
