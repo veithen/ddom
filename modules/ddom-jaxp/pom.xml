@@ -47,7 +47,7 @@
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>ddom-stream-stax</artifactId>
+            <artifactId>ddom-stream-wstx</artifactId>
             <version>${version}</version>
         </dependency>
         <dependency>

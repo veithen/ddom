@@ -88,7 +88,7 @@
         </dependency>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-stream-stax</artifactId>
+            <artifactId>ddom-stream-wstx</artifactId>
             <version>${pom.version}</version>
             <scope>test</scope>
         </dependency>
