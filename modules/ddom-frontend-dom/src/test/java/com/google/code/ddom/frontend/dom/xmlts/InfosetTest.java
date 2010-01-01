@@ -75,7 +75,6 @@ public class InfosetTest extends TestCase {
     
     @Override
     protected void runTest() {
-        // TODO: need to normalize (using Node#normalize) to avoid differences because of non coalesced text nodes
         // TODO: at some point we should check that the documents are identical rather than equal
         XMLAssert.assertXMLEqual(loadDocument(XercesDOMUtilImpl.INSTANCE), loadDocument(DDOMUtilImpl.INSTANCE));
     }
