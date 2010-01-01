@@ -135,11 +135,19 @@ public aspect ElementSupport {
     }
 
     public final void DOMElement.removeAttribute(String name) throws DOMException {
-        removeAttributeNode(getAttributeNode(name));
+        // Specs: "If no attribute with this name is found, this method has no effect."
+        Attr attr = getAttributeNode(name);
+        if (attr != null) {
+            removeAttributeNode(attr);
+        }
     }
 
     public final void DOMElement.removeAttributeNS(String namespaceURI, String localName) throws DOMException {
-        removeAttributeNode(getAttributeNodeNS(namespaceURI, localName));
+        // Specs: "If no attribute with this local name and namespace URI is found, this method has no effect."
+        Attr attr = getAttributeNodeNS(namespaceURI, localName);
+        if (attr != null) {
+            removeAttributeNode(attr);
+        }
     }
 
     public final void DOMElement.setIdAttribute(String name, boolean isId) throws DOMException {

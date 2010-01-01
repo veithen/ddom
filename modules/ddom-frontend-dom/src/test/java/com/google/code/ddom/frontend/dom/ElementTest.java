@@ -198,4 +198,26 @@ public class ElementTest {
         element.appendChild(doc.createTextNode("st"));
         Assert.assertEquals("test", element.getTextContent());
     }
+    
+    /**
+     * Test that invoking {@link Element#removeAttribute(String)} has no effect if there is no
+     * attribute with the given name. This is not covered by the DOM Conformance Test Suite.
+     */
+    @Validated @Test
+    public void testRemoveAttributeNotExisting() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElement("test");
+        element.removeAttribute("unknown");
+    }
+    
+    /**
+     * Test that invoking {@link Element#removeAttributeNS(String, String)} has no effect if there is no
+     * attribute with the given name. This is not covered by the DOM Conformance Test Suite.
+     */
+    @Validated @Test
+    public void testRemoveAttributeNSNotExisting() {
+        Document doc = DOMUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.removeAttributeNS("urn:some:namespace", "unknown");
+    }
 }
