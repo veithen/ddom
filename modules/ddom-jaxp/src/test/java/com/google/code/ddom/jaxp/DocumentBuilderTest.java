@@ -18,12 +18,14 @@ package com.google.code.ddom.jaxp;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.io.Writer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
@@ -85,5 +87,24 @@ public class DocumentBuilderTest {
         testEncoding("ISO-8859-1", true, false, "ISO-8859-1", null);
         testEncoding("ISO-8859-1", false, true, "ISO-8859-1", "ISO-8859-1");
         testEncoding("ISO-8859-1", true, true, "ISO-8859-1", "ISO-8859-1");
+    }
+    
+    /**
+     * Check that CDATA sections are not segmented, even if coalescing is disabled.
+     * 
+     * @throws Exception
+     */
+    // TODO
+    @Ignore
+    @Validated @Test
+    public void testNoCDATASegmentation() throws Exception {
+        StringBuilder buffer = new StringBuilder("<root><![CDATA[");
+        for (int i=0; i<100000; i++) {
+            buffer.append('a');
+        }
+        buffer.append("]]></root>");
+        factory.setCoalescing(false);
+        Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader(buffer.toString())));
+        Assert.assertEquals(1, document.getDocumentElement().getChildNodes().getLength());
     }
 }
