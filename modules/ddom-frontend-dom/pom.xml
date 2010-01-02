@@ -204,8 +204,6 @@
                     </includes>
                     <excludes>
                         <exclude>**/NodeFactoryAspectTest.java</exclude>
-                        <!-- TODO -->
-                        <exclude>**/InfosetTest.java</exclude>
                     </excludes>
                     <!-- TODO: doesn't seem to work very well with already woven code -->
                     <!-- argLine>-javaagent:target/lib/aspectjweaver.jar</argLine -->

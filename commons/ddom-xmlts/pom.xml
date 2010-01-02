@@ -34,8 +34,9 @@
             <version>${version}</version>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-woodstox-internal</artifactId>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

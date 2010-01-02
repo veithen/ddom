@@ -94,8 +94,6 @@ public class DocumentBuilderTest {
      * 
      * @throws Exception
      */
-    // TODO
-    @Ignore
     @Validated @Test
     public void testNoCDATASegmentation() throws Exception {
         StringBuilder buffer = new StringBuilder("<root><![CDATA[");
