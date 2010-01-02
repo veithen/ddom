@@ -15,15 +15,9 @@
  */
 package com.google.code.ddom.weaver;
 
-import java.util.Arrays;
 import java.util.Map;
 
-import org.aspectj.weaver.loadtime.Aj;
-import org.aspectj.weaver.loadtime.ClassPreProcessor;
-
 import com.google.code.ddom.DocumentFactory;
-import com.google.code.ddom.commons.cl.ClassLoaderUtils;
-import com.google.code.ddom.commons.cl.ClassUtils;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
@@ -51,7 +45,6 @@ public class DynamicModelLoader implements ModelLoader {
         if (backend == null) {
             return null;
         }
-        String documentFactoryClassName = backend.getDocumentFactoryClassName();
         
         String[] frontendIds = definition.getFrontends();
         Frontend[] frontends = new Frontend[frontendIds.length];
@@ -63,22 +56,17 @@ public class DynamicModelLoader implements ModelLoader {
             frontends[i] = frontend;
         }
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
-        ClassPreProcessor preProcessor = new Aj(new LoadTimeWeaverContext(classLoader, frontends));
         try {
+            ModelWeaver weaver = new ModelWeaver(parentClassLoader, classLoader, backend);
             // Aspects must be loaded into the child class loader. Otherwise the code in these aspects
             // will not see the woven backend classes. 
-            for (Frontend frontend : frontends) {
-                for (String className : frontend.getAspectClasses()) {
-                    classLoader.processClassDefinition(className, ClassLoaderUtils.getClassDefinition(parentClassLoader, className));
-                }
-            }
-            Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(parentClassLoader, documentFactoryClassName);
-            for (Class<?> cls : ClassUtils.sortHierarchically(Arrays.asList(classes))) {
-                String className = cls.getName();
-                // TODO: Aj#preProcess may have the side effect of calling ClassLoader#defineClass (through reflection); thus, this approach can't be generalized to static model loading (because we miss some generated classes, namely the XXX$AjcClosureT classes)
-                classLoader.processClassDefinition(className, preProcessor.preProcess(className, ClassLoaderUtils.getClassDefinition(parentClassLoader, className), classLoader));
-            }
-            return (DocumentFactory)classLoader.loadClass(documentFactoryClassName).newInstance();
+//            for (Frontend frontend : frontends) {
+//                for (String className : frontend.getAspectClasses()) {
+//                    classLoader.processClassDefinition(className, ClassLoaderUtils.getClassDefinition(parentClassLoader, className));
+//                }
+//            }
+            weaver.weave(frontends);
+            return (DocumentFactory)classLoader.loadClass(backend.getDocumentFactoryClassName()).newInstance();
         } catch (Exception ex) {
             throw new ModelLoaderException(ex);
         }

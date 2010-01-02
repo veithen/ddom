@@ -15,10 +15,109 @@
  */
 package com.google.code.ddom.weaver;
 
-public class ModelWeaver {
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.logging.Logger;
 
+import org.aspectj.bridge.IMessage;
+import org.aspectj.bridge.IMessageHandler;
+import org.aspectj.weaver.IClassFileProvider;
+import org.aspectj.weaver.IUnwovenClassFile;
+import org.aspectj.weaver.IWeaveRequestor;
+import org.aspectj.weaver.bcel.BcelWeaver;
+import org.aspectj.weaver.bcel.BcelWorld;
+import org.aspectj.weaver.bcel.UnwovenClassFile;
+
+import com.google.code.ddom.commons.cl.ClassLoaderUtils;
+import com.google.code.ddom.commons.cl.ClassUtils;
+import com.google.code.ddom.spi.model.Backend;
+import com.google.code.ddom.spi.model.Frontend;
+
+public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessageHandler {
+    private static final Logger log = Logger.getLogger(ModelWeaver.class.getName());
     
-    public void weave(ClassDefinitionProcessor processor) {
-        // TODO
+    private final ClassLoader classLoader;
+    private final ClassDefinitionProcessor processor;
+    private final UnwovenClassFile[] classFiles;
+    
+    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ClassNotFoundException {
+        this.classLoader = classLoader;
+        this.processor = processor;
+        Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, backend.getDocumentFactoryClassName());
+        classFiles = new UnwovenClassFile[classes.length];
+        int i = 0;
+        // We sort the classes hierarchically to prevent BcelWeaver from emitting the same class
+        // multiple times (this occurs if a subclass is woven before its superclass).
+        for (Class<?> clazz : ClassUtils.sortHierarchically(Arrays.asList(classes))) {
+            String className = clazz.getName();
+            classFiles[i++] = new UnwovenClassFile(
+                    ClassLoaderUtils.getResourceNameForClassName(className),
+                    className,
+                    ClassLoaderUtils.getClassDefinition(classLoader, className));
+        }
+    }
+
+    public void weave(Frontend[] frontends) {
+        BcelWorld world = new BcelWorld(classLoader, this, null);
+        BcelWeaver weaver = new BcelWeaver(world);
+        for (UnwovenClassFile classFile : classFiles) {
+            weaver.addClassFile(classFile, true);
+        }
+        for (Frontend frontend : frontends) {
+            for (String aspectClass : frontend.getAspectClasses()) {
+                weaver.addLibraryAspect(aspectClass);
+            }
+        }
+        weaver.prepareForWeave();
+        try {
+            weaver.weave(this);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex); // TODO
+        }
+    }
+
+    public Iterator getClassFileIterator() {
+        return Arrays.asList(classFiles).iterator();
+    }
+
+    public IWeaveRequestor getRequestor() {
+        return this;
+    }
+
+    public boolean isApplyAtAspectJMungersOnly() {
+        return false;
+    }
+
+    public void acceptResult(IUnwovenClassFile result) {
+        processor.processClassDefinition(result.getClassName(), result.getBytes());
+    }
+
+    public void addingTypeMungers() {}
+    public void processingReweavableState() {}
+    public void weaveCompleted() {}
+    public void weavingAspects() {}
+    public void weavingClasses() {}
+    
+    public boolean handleMessage(IMessage message) {
+        if (message.getKind().compareTo(IMessage.ERROR) >= 0) {
+            // TODO: we should actually fail here, but the Axiom frontend is not yet ready
+            log.severe(message.toString());
+            return true;
+//            throw new AbortException(message);
+        } else {
+            log.warning(message.toString());
+            return true;
+        }
+    }
+    
+    public boolean isIgnoring(IMessage.Kind kind) {
+        return kind.compareTo(IMessage.WARNING) < 0; 
+    }
+    
+    public void dontIgnore(IMessage.Kind kind) {
+    }
+    
+    public void ignore(IMessage.Kind kind) {
     }
 }
