@@ -24,16 +24,20 @@ import org.aspectj.weaver.tools.WeavingAdaptor;
 
 import com.google.code.ddom.spi.model.Frontend;
 
-public class FrontendWeaverContext extends DefaultWeavingContext {
-    public FrontendWeaverContext(ClassLoader loader) {
+public class LoadTimeWeaverContext extends DefaultWeavingContext {
+    private final Frontend[] frontends;
+    
+    public LoadTimeWeaverContext(ClassLoader loader, Frontend[] frontends) {
         super(loader);
+        this.frontends = frontends;
     }
 
     @Override
     public List<Definition> getDefinitions(ClassLoader loader, WeavingAdaptor adaptor) {
-        Frontend frontend = ((FrontendWeaver)loader).getFrontend();
         Definition definition = new Definition();
-        definition.getAspectClassNames().addAll(frontend.getAspectClasses());
+        for (Frontend frontend : frontends) {
+            definition.getAspectClassNames().addAll(frontend.getAspectClasses());
+        }
         return Collections.singletonList(definition);
     }
 }

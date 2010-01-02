@@ -18,6 +18,9 @@ package com.google.code.ddom.weaver;
 import java.util.Arrays;
 import java.util.Map;
 
+import org.aspectj.weaver.loadtime.Aj;
+import org.aspectj.weaver.loadtime.ClassPreProcessor;
+
 import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
 import com.google.code.ddom.commons.cl.ClassUtils;
@@ -33,12 +36,12 @@ import com.google.code.ddom.spi.model.ModelLoaderException;
  * @author Andreas Veithen
  */
 public class DynamicModelLoader implements ModelLoader {
-    private final ClassLoader classLoader;
+    private final ClassLoader parentClassLoader;
     private final Map<String,Backend> backendMap;
     private final Map<String,Frontend> frontendMap;
     
     DynamicModelLoader(ClassLoader classLoader, Map<String,Backend> backends, Map<String,Frontend> frontends) {
-        this.classLoader = classLoader;
+        this.parentClassLoader = classLoader;
         this.backendMap = backends;
         this.frontendMap = frontends;
     }
@@ -59,27 +62,24 @@ public class DynamicModelLoader implements ModelLoader {
             }
             frontends[i] = frontend;
         }
-        
-        FrontendWeaver weaver = new FrontendWeaver(classLoader, frontends[0]); // TODO: support multiple frontends
-        
+        DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
+        ClassPreProcessor preProcessor = new Aj(new LoadTimeWeaverContext(classLoader, frontends));
         try {
-            // The following code serves two purposes:
-            //  * All classes are woven at this point, so that any errors will be reported here. This
-            //    avoids obscure class loader error messages if there is any problem with the aspects.
-            //  * The classes are loaded in superclass-first order to work around a bug in AspectJ
-            //    (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=286473).
-            // TODO: follow-up the bug with the AspectJ project
-            Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, documentFactoryClassName);
-            for (Class<?> cls : ClassUtils.sortHierarchically(Arrays.asList(classes))) {
-                weaver.loadClass(cls.getName());
+            // Aspects must be loaded into the child class loader. Otherwise the code in these aspects
+            // will not see the woven backend classes. 
+            for (Frontend frontend : frontends) {
+                for (String className : frontend.getAspectClasses()) {
+                    classLoader.processClassDefinition(className, ClassLoaderUtils.getClassDefinition(parentClassLoader, className));
+                }
             }
-            
-            return (DocumentFactory)weaver.loadClass(documentFactoryClassName).newInstance();
-        } catch (ClassNotFoundException ex) {
-            throw new ModelLoaderException(ex);
-        } catch (IllegalAccessException ex) {
-            throw new ModelLoaderException(ex);
-        } catch (InstantiationException ex) {
+            Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(parentClassLoader, documentFactoryClassName);
+            for (Class<?> cls : ClassUtils.sortHierarchically(Arrays.asList(classes))) {
+                String className = cls.getName();
+                // TODO: Aj#preProcess may have the side effect of calling ClassLoader#defineClass (through reflection); thus, this approach can't be generalized to static model loading (because we miss some generated classes, namely the XXX$AjcClosureT classes)
+                classLoader.processClassDefinition(className, preProcessor.preProcess(className, ClassLoaderUtils.getClassDefinition(parentClassLoader, className), classLoader));
+            }
+            return (DocumentFactory)classLoader.loadClass(documentFactoryClassName).newInstance();
+        } catch (Exception ex) {
             throw new ModelLoaderException(ex);
         }
     }

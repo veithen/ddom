@@ -16,10 +16,13 @@
 package com.google.code.ddom.commons.cl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.IOUtils;
 
 import com.google.code.ddom.commons.io.URLUtils;
 
@@ -37,6 +40,23 @@ public class ClassLoaderUtils {
         return className.replace('.', '/') + ".class";
     }
 
+    public static byte[] getClassDefinition(ClassLoader classLoader, String className) throws ClassNotFoundException {
+        String resourceName = getResourceNameForClassName(className);
+        InputStream in = classLoader.getResourceAsStream(resourceName);
+        if (in == null) {
+            throw new ClassNotFoundException(className);
+        }
+        try {
+            try {
+                return IOUtils.toByteArray(in);
+            } finally {
+                in.close();
+            }
+        } catch (IOException ex) {
+            throw new ClassNotFoundException(className, ex);
+        }
+    }
+    
     /**
      * Load all classes that are in the same package as a given class.
      * 
