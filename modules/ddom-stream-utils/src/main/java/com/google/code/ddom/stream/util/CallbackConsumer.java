@@ -41,19 +41,19 @@ public abstract class CallbackConsumer implements Consumer {
             case DTD:
                 processDocumentType(event.getDTDRootName(), event.getDTDPublicId(), event.getDTDSystemId());
                 break;
-            case DOM1_ELEMENT:
+            case NS_UNAWARE_ELEMENT:
                 processElement(event.getName(), attributeMode == AttributeMode.ELEMENT ? event.getAttributes() : null);
                 break;
-            case DOM2_ELEMENT:
+            case NS_AWARE_ELEMENT:
                 processElement(event.getNamespaceURI(), event.getName(), event.getPrefix(), attributeMode == AttributeMode.ELEMENT ? event.getAttributes() : null);
                 break;
-            case DOM1_ATTRIBUTE:
+            case NS_UNAWARE_ATTRIBUTE:
                 processAttribute(event.getName(), event.getValue(), event.getDataType());
                 break;
-            case DOM2_ATTRIBUTE:
+            case NS_AWARE_ATTRIBUTE:
                 processAttribute(event.getNamespaceURI(), event.getName(), event.getPrefix(), event.getValue(), event.getDataType());
                 break;
-            case NS_DECL:
+            case NAMESPACE_DECLARATION:
                 processNSDecl(event.getPrefix(), event.getNamespaceURI());
                 break;
             case ATTRIBUTES_COMPLETE:

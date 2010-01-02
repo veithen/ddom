@@ -69,7 +69,7 @@ public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData
                     case XMLStreamReader.DTD:
                         return Event.Type.DTD;
                     case XMLStreamReader.START_ELEMENT:
-                        return parserIsNamespaceAware ? Event.Type.DOM2_ELEMENT : Event.Type.DOM1_ELEMENT;
+                        return parserIsNamespaceAware ? Event.Type.NS_AWARE_ELEMENT : Event.Type.NS_UNAWARE_ELEMENT;
                     case XMLStreamReader.END_ELEMENT:
                     case XMLStreamReader.END_DOCUMENT:
                         return Event.Type.NODE_COMPLETE;
@@ -89,9 +89,9 @@ public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData
                         throw new RuntimeException("Unexpected event " + reader.getEventType()); // TODO
                 }
             case ATTRIBUTE:
-                return parserIsNamespaceAware ? Event.Type.DOM2_ATTRIBUTE : Event.Type.DOM1_ATTRIBUTE;
+                return parserIsNamespaceAware ? Event.Type.NS_AWARE_ATTRIBUTE : Event.Type.NS_UNAWARE_ATTRIBUTE;
             case NS_DECL:
-                return Event.Type.NS_DECL;
+                return Event.Type.NAMESPACE_DECLARATION;
             case ATTRIBUTES_COMPLETE:
                 return Event.Type.ATTRIBUTES_COMPLETE;
             default:

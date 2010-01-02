@@ -19,15 +19,15 @@ public interface Event extends Data {
     public enum Type {
         DTD,
         
-        DOM1_ELEMENT,
+        NS_UNAWARE_ELEMENT,
         
-        DOM2_ELEMENT,
+        NS_AWARE_ELEMENT,
         
-        DOM1_ATTRIBUTE,
+        NS_UNAWARE_ATTRIBUTE,
         
-        DOM2_ATTRIBUTE,
+        NS_AWARE_ATTRIBUTE,
         
-        NS_DECL,
+        NAMESPACE_DECLARATION,
         
         ATTRIBUTES_COMPLETE,
         
@@ -51,7 +51,7 @@ public interface Event extends Data {
     /**
      * 
      * 
-     * Only valid for {@link Type#DOM1_ELEMENT} and {@link Type#DOM2_ELEMENT} and if
+     * Only valid for {@link Type#NS_UNAWARE_ELEMENT} and {@link Type#NS_AWARE_ELEMENT} and if
      * {@link AttributeMode#ELEMENT} is used.
      * 
      * @return
@@ -63,10 +63,10 @@ public interface Event extends Data {
      * 
      * @return
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
-     * <tr><td>{@link Type#DOM1_ELEMENT}</td><td>the name of the element</td></tr>
-     * <tr><td>{@link Type#DOM2_ELEMENT}</td><td>the local part of the element name</td></tr>
-     * <tr><td>{@link Type#DOM1_ATTRIBUTE}</td><td>the name of the attribute</td></tr>
-     * <tr><td>{@link Type#DOM2_ATTRIBUTE}</td><td>the local part of the attribute name</td></tr>
+     * <tr><td>{@link Type#NS_UNAWARE_ELEMENT}</td><td>the name of the element</td></tr>
+     * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the local part of the element name</td></tr>
+     * <tr><td>{@link Type#NS_UNAWARE_ATTRIBUTE}</td><td>the name of the attribute</td></tr>
+     * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the local part of the attribute name</td></tr>
      * <tr><td>{@link Type#PROCESSING_INSTRUCTION}</td><td>the target of the processing instruction</td></tr>
      * <tr><td>{@link Type#ENTITY_REFERENCE}</td><td>the name of the entity reference</td></tr>
      * </table>
@@ -78,11 +78,11 @@ public interface Event extends Data {
      * 
      * @return
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
-     * <tr><td>{@link Type#DOM2_ELEMENT}</td><td>the namespace URI of the element, or <code>null</code>
+     * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the namespace URI of the element, or <code>null</code>
      * if the element has no namespace</td></tr>
-     * <tr><td>{@link Type#DOM2_ATTRIBUTE}</td><td>the namespace URI of the attribute, or <code>null</code>
+     * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the namespace URI of the attribute, or <code>null</code>
      * if the attribute has no namespace</td></tr>
-     * <tr><td>{@link Type#NS_DECL}</td><td>the URI of the namespace that the declaration refers to</td>
+     * <tr><td>{@link Type#NAMESPACE_DECLARATION}</td><td>the URI of the namespace that the declaration refers to</td>
      * </table>
      */
     String getNamespaceURI();
@@ -91,11 +91,11 @@ public interface Event extends Data {
      * 
      * @return
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
-     * <tr><td>{@link Type#DOM2_ELEMENT}</td><td>the prefix of the element, or <code>null</code>
+     * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the prefix of the element, or <code>null</code>
      * if the element has no prefix</td></tr>
-     * <tr><td>{@link Type#DOM2_ATTRIBUTE}</td><td>the prefix of the attribute, or <code>null</code>
+     * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the prefix of the attribute, or <code>null</code>
      * if the attribute has no prefix</td></tr>
-     * <tr><td>{@link Type#NS_DECL}</td><td>the prefix that the declaration refers to, or <code>null</code>
+     * <tr><td>{@link Type#NAMESPACE_DECLARATION}</td><td>the prefix that the declaration refers to, or <code>null</code>
      * if the declaration declares the default namespace</td>
      * </table>
      */
@@ -112,7 +112,7 @@ public interface Event extends Data {
 
     /**
      * 
-     * Valid for {@link Type#DOM1_ATTRIBUTE} and {@link Type#DOM2_ATTRIBUTE}.
+     * Valid for {@link Type#NS_UNAWARE_ATTRIBUTE} and {@link Type#NS_AWARE_ATTRIBUTE}.
      * 
      * @return
      */
@@ -120,7 +120,7 @@ public interface Event extends Data {
 
     /**
      * 
-     * Valid for {@link Type#DOM1_ATTRIBUTE} and {@link Type#DOM2_ATTRIBUTE}.
+     * Valid for {@link Type#NS_UNAWARE_ATTRIBUTE} and {@link Type#NS_AWARE_ATTRIBUTE}.
      * 
      * @return
      */
