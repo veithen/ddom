@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.aspectj.bridge.AbortException;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.bridge.IMessageHandler;
 import org.aspectj.weaver.IClassFileProvider;
@@ -101,10 +102,8 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
     
     public boolean handleMessage(IMessage message) {
         if (message.getKind().compareTo(IMessage.ERROR) >= 0) {
-            // TODO: we should actually fail here, but the Axiom frontend is not yet ready
             log.severe(message.toString());
-            return true;
-//            throw new AbortException(message);
+            throw new AbortException(message);
         } else {
             log.warning(message.toString());
             return true;
