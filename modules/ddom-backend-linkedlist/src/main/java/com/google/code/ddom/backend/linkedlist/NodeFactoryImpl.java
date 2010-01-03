@@ -22,9 +22,9 @@ import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.CoreNSUnawareElement;
-import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSUnawareAttribute;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.backend.CoreText;
@@ -50,12 +50,12 @@ public class NodeFactoryImpl implements NodeFactory {
         return new NSAwareElement(document, namespaceURI, localName, prefix, complete);
     }
     
-    public CoreNSUnawareTypedAttribute createAttribute(CoreDocument document, String name, String value, String type) {
-        return new NSUnawareTypedAttribute(document, name, value, type);
+    public CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type) {
+        return new NSUnawareAttribute(document, name, value, type);
     }
     
-    public CoreNSAwareTypedAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
-        return new NSAwareTypedAttribute(document, namespaceURI, localName, prefix, value, type);
+    public CoreNSAwareAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
+        return new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type);
     }
     
     public CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI) {

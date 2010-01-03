@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.backend.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
 
-public interface DOMNSAwareTypedAttribute extends CoreNSAwareTypedAttribute, DOMTypedAttribute, DOMNSAwareNamedNode {
+public interface DOMNSAwareTypedAttribute extends CoreNSAwareAttribute, DOMTypedAttribute, DOMNSAwareNamedNode {
 
 }

@@ -33,7 +33,7 @@ import org.w3c.dom.Node;
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.backend.CoreNSUnawareElement;
-import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSUnawareAttribute;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 import com.google.code.ddom.utils.test.Validated;
@@ -62,7 +62,7 @@ public class DocumentTest {
         Assert.assertEquals("p:root", element.getTagName());
         
         Attr attr = (Attr)element.getAttributes().item(0);
-        Assert.assertTrue(attr instanceof CoreNSUnawareTypedAttribute);
+        Assert.assertTrue(attr instanceof CoreNSUnawareAttribute);
         Assert.assertNull(attr.getLocalName());
         Assert.assertEquals("xmlns:p", attr.getName());
     }

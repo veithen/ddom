@@ -15,6 +15,6 @@
  */
 package com.google.code.ddom.backend;
 
-public interface CoreNSUnawareTypedAttribute extends CoreTypedAttribute, CoreNSUnawareNamedNode {
+public interface CoreNSAwareAttribute extends CoreTypedAttribute, CoreNSAwareNamedNode {
 
 }

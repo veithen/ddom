@@ -18,16 +18,16 @@ package com.google.code.ddom.backend.linkedlist;
 import javax.xml.namespace.QName;
 
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class NSAwareTypedAttribute extends TypedAttribute implements CoreNSAwareTypedAttribute {
+public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttribute {
     private String namespaceURI;
     private String localName;
     private String prefix;
 
-    public NSAwareTypedAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
+    public NSAwareAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
         super(document, value, type);
         this.namespaceURI = namespaceURI;
         this.localName = localName;

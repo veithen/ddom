@@ -13,22 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.linkedlist;
+package com.google.code.ddom.backend;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNSUnawareTypedAttribute;
-import com.google.code.ddom.backend.Implementation;
+public interface CoreNSUnawareAttribute extends CoreTypedAttribute, CoreNSUnawareNamedNode {
 
-@Implementation
-public class NSUnawareTypedAttribute extends TypedAttribute implements CoreNSUnawareTypedAttribute {
-    private final String name;
-
-    public NSUnawareTypedAttribute(CoreDocument document, String name, String value, String type) {
-        super(document, value, type);
-        this.name = name;
-    }
-
-    public final String coreGetName() {
-        return name;
-    }
 }

@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreLeafNode;
 import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.CoreNSAwareTypedAttribute;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.backend.CoreText;
@@ -44,5 +44,5 @@ public aspect Parents {
     declare parents: @Implementation CoreNode+ implements AxiomNode;
     declare parents: @Implementation CoreLeafNode+ implements AxiomLeafNode;
     declare parents: @Implementation CoreChildNode+ implements AxiomChildNode;
-    declare parents: @Implementation CoreNSAwareTypedAttribute+ implements AxiomAttribute;
+    declare parents: @Implementation CoreNSAwareAttribute+ implements AxiomAttribute;
 }

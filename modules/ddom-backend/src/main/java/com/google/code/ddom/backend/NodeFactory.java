@@ -43,9 +43,9 @@ public interface NodeFactory extends DocumentFactory {
      */
     CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete);
     
-    CoreNSUnawareTypedAttribute createAttribute(CoreDocument document, String name, String value, String type);
+    CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type);
     
-    CoreNSAwareTypedAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type);
+    CoreNSAwareAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type);
     
     CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI);
     
