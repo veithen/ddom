@@ -22,10 +22,11 @@ import org.codehaus.stax2.DTDInfo;
 
 import com.google.code.ddom.stream.spi.AttributeData;
 import com.google.code.ddom.stream.spi.CharacterData;
+import com.google.code.ddom.stream.spi.DTDEvent;
 import com.google.code.ddom.stream.spi.Event;
 import com.google.code.ddom.stream.spi.StreamException;
 
-public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData {
+public class XMLStreamReaderEvent implements Event, DTDEvent, AttributeData, CharacterData {
     public enum Mode { NODE, ATTRIBUTE, NS_DECL, ATTRIBUTES_COMPLETE }
     
     private final XMLStreamReader reader;
@@ -66,8 +67,6 @@ public class XMLStreamReaderEvent implements Event, AttributeData, CharacterData
             case NODE:
                 // TODO: probably, mapping using an array would be more efficient
                 switch (reader.getEventType()) {
-                    case XMLStreamReader.DTD:
-                        return Event.Type.DTD;
                     case XMLStreamReader.START_ELEMENT:
                         return parserIsNamespaceAware ? Event.Type.NS_AWARE_ELEMENT : Event.Type.NS_UNAWARE_ELEMENT;
                     case XMLStreamReader.END_ELEMENT:

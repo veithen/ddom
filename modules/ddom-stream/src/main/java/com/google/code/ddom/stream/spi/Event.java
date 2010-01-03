@@ -17,8 +17,6 @@ package com.google.code.ddom.stream.spi;
 
 public interface Event extends Data {
     public enum Type {
-        DTD,
-        
         NS_UNAWARE_ELEMENT,
         
         NS_AWARE_ELEMENT,
@@ -125,10 +123,4 @@ public interface Event extends Data {
      * @return
      */
     String getDataType();
-    
-    String getDTDPublicId();
-
-    String getDTDRootName();
-
-    String getDTDSystemId();
 }

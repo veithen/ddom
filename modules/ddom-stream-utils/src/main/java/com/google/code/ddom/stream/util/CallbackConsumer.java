@@ -17,6 +17,7 @@ package com.google.code.ddom.stream.util;
 
 import com.google.code.ddom.stream.spi.AttributeMode;
 import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.DTDEvent;
 import com.google.code.ddom.stream.spi.Event;
 
 /**
@@ -36,11 +37,12 @@ public abstract class CallbackConsumer implements Consumer {
         return attributeMode;
     }
 
+    public final void processDTD(DTDEvent event) {
+        processDocumentType(event.getDTDRootName(), event.getDTDPublicId(), event.getDTDSystemId());
+    }
+
     public final void processEvent(Event event) {
         switch (event.getEventType()) {
-            case DTD:
-                processDocumentType(event.getDTDRootName(), event.getDTDPublicId(), event.getDTDSystemId());
-                break;
             case NS_UNAWARE_ELEMENT:
                 processElement(event.getName(), attributeMode == AttributeMode.ELEMENT ? event.getAttributes() : null);
                 break;

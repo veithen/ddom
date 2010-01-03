@@ -20,6 +20,8 @@ package com.google.code.ddom.stream.spi;
 public interface Consumer {
     void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
     
+    void processDTD(DTDEvent event);
+    
     /**
      * Determine how attributes are expected to be delivered to this consumer.
      * Note that the value returned by this method MAY change during the lifecycle

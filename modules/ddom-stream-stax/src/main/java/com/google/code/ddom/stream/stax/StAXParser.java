@@ -78,7 +78,11 @@ public class StAXParser implements Producer {
         } else {
             complete = false;
         }
-        consumer.processEvent(event);
+        if (reader.getEventType() == XMLStreamReader.DTD) {
+            consumer.processDTD(event);
+        } else {
+            consumer.processEvent(event);
+        }
         return !complete;
     }
 
