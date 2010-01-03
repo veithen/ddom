@@ -24,7 +24,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
@@ -94,7 +96,22 @@ public class XSLTTestCase extends TestCase {
                     Document outputDocument = (Document)deferredDocumentFactory.newDocument("dom");
                     DOMResult outputResult = new DOMResult(outputDocument);
                     refTransformer.transform(inputSource, outputResult);
-                    XMLAssert.assertXMLEqual(refOutputDocument, outputDocument);
+                    try {
+                        XMLAssert.assertXMLEqual(refOutputDocument, outputDocument);
+                    } catch (AssertionFailedError ex) {
+                        // Dump the two documents for investigation
+                        Transformer identity = transformerFactory.newTransformer();
+                        StreamResult sysOut = new StreamResult(System.out);
+                        System.out.print("\nReference input:\n");
+                        identity.transform(refInputSource, sysOut);
+                        System.out.print("\nActual input:\n");
+                        identity.transform(inputSource, sysOut);
+                        System.out.print("\nReference output:\n");
+                        identity.transform(new DOMSource(refOutputDocument), sysOut);
+                        System.out.print("\nActual output:\n");
+                        identity.transform(new DOMSource(outputDocument), sysOut);
+                        throw ex;
+                    }
                 }
             } else {
                 // TODO
