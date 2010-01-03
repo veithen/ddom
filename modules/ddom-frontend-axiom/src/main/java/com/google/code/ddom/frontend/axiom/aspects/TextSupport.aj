@@ -15,10 +15,70 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
+import javax.activation.DataHandler;
+import javax.xml.namespace.QName;
+
+import org.apache.axiom.om.OMNamespace;
+
 import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
 
 public aspect TextSupport {
     public String AxiomTextNode.getText() {
         return coreGetData();
+    }
+    
+    public char[] AxiomTextNode.getTextCharacters() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public boolean AxiomTextNode.isCharacters() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public QName AxiomTextNode.getTextAsQName() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public OMNamespace AxiomTextNode.getNamespace() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public DataHandler AxiomTextNode.getDataHandler() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public boolean AxiomTextNode.isOptimized() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomTextNode.setOptimize(boolean optimize) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public boolean AxiomTextNode.isBinary() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomTextNode.setBinary(boolean binary) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public String AxiomTextNode.getContentID() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomTextNode.setContentID(String contentID) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }
