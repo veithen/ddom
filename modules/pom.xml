@@ -37,6 +37,7 @@
         <module>ddom-core-model</module>
         <module>ddom-dom-utils</module>
         <module>ddom-frontend-axiom</module>
+        <module>ddom-frontend-axiom-soap</module>
         <module>ddom-frontend-dom</module>
         <module>ddom-jaxp</module>
         <module>ddom-spi</module>
