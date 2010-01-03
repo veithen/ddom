@@ -33,6 +33,8 @@ public interface CoreChildNode extends CoreNode {
      * 
      * @param sibling
      * @throws NoParentException if this node has no parent
+     * @throws SelfRelationshipException if this node and the new sibling are the same
+     * @throws CyclicRelationshipException if the sibling to be inserted is an ancestor of this node
      */
     void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException;
     
@@ -40,6 +42,8 @@ public interface CoreChildNode extends CoreNode {
      * 
      * @param sibling
      * @throws NoParentException if this node has no parent
+     * @throws SelfRelationshipException if this node and the new sibling are the same
+     * @throws CyclicRelationshipException if the sibling to be inserted is an ancestor of this node
      */
     void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException;
     

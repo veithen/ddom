@@ -19,6 +19,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMText;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -30,6 +31,29 @@ import com.google.code.ddom.utils.test.ValidatedTestRunner;
 public class NodeTest {
     @ValidatedTestResource(reference=LLOMAxiomUtil.class, actual=DDOMAxiomUtil.class)
     private AxiomUtil axiomUtil;
+    
+    @Validated @Test
+    public void testInsertSiblingAfter() {
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
+        OMElement parent = factory.createOMElement("test", null);
+        OMText text1 = factory.createOMText("text1");
+        OMText text2 = factory.createOMText("text2");
+        parent.addChild(text1);
+        text1.insertSiblingAfter(text2);
+        Assert.assertSame(parent, text2.getParent());
+    }
+    
+    @Validated @Test
+    public void testInsertSiblingBefore() {
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
+        OMElement parent = factory.createOMElement("test", null);
+        OMText text1 = factory.createOMText("text1");
+        OMText text2 = factory.createOMText("text2");
+        parent.addChild(text1);
+        text1.insertSiblingBefore(text2);
+        Assert.assertSame(parent, text2.getParent());
+        Assert.assertSame(text2, parent.getFirstOMChild());
+    }
     
     @Validated @Test(expected=OMException.class)
     public void testInsertSiblingAfterOnOrphan() {
@@ -44,6 +68,46 @@ public class NodeTest {
         OMFactory factory = axiomUtil.createDocument().getOMFactory();
         OMText text = factory.createOMText("test");
         OMElement element = factory.createOMElement("test", null);
+        text.insertSiblingBefore(element);
+    }
+    
+    @Validated @Test(expected=OMException.class)
+    public void testInsertSiblingAfterOnSelf() {
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
+        OMElement parent = factory.createOMElement("test", null);
+        OMText text = factory.createOMText("test");
+        parent.addChild(text);
+        text.insertSiblingAfter(text);
+    }
+
+    @Validated @Test(expected=OMException.class)
+    public void testInsertSiblingBeforeOnSelf() {
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
+        OMElement parent = factory.createOMElement("test", null);
+        OMText text = factory.createOMText("test");
+        parent.addChild(text);
+        text.insertSiblingBefore(text);
+    }
+
+    // TODO: this actually doesn't throw an exception in Axiom!
+    // @Validated
+    @Test(expected=OMException.class)
+    public void testInsertSiblingAfterOnChild() {
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
+        OMElement element = factory.createOMElement("test", null);
+        OMText text = factory.createOMText("test");
+        element.addChild(text);
+        text.insertSiblingAfter(element);
+    }
+
+    // TODO: this actually doesn't throw an exception in Axiom!
+    // @Validated
+    @Test(expected=OMException.class)
+    public void testInsertSiblingBeforeOnChild() {
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
+        OMElement element = factory.createOMElement("test", null);
+        OMText text = factory.createOMText("test");
+        element.addChild(text);
         text.insertSiblingBefore(element);
     }
 }

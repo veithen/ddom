@@ -26,9 +26,19 @@ public class BackendTestSuiteBuilder {
         TestSuite suite = new TestSuite();
         suite.addTest(new com.google.code.ddom.backend.testsuite.attribute.TestCoreSetValue(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetach(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfter(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnChild(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnOrphan(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnSelf(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBefore(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnChild(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnOrphan(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnSelf(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreSetValue(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildAfterSelf(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildBeforeSelf(nodeFactory));
         return suite;
     }
 }

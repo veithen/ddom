@@ -34,8 +34,22 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreAppendChild(CoreNode newChild) throws CoreModelException;
     
+    /**
+     * 
+     * @param newChild
+     * @param refChild
+     * @throws SelfRelationshipException if <code>newChild</code> and <code>refChild</code> are the same
+     */
     void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
+    
+    /**
+     * 
+     * @param newChild
+     * @param refChild
+     * @throws SelfRelationshipException if <code>newChild</code> and <code>refChild</code> are the same
+     */
     void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
+    
     void coreRemoveChild(CoreChildNode child) throws CoreModelException;
     void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
 }

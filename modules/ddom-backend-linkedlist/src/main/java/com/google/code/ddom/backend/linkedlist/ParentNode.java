@@ -25,6 +25,7 @@ import com.google.code.ddom.backend.CyclicRelationshipException;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
+import com.google.code.ddom.backend.SelfRelationshipException;
 
 @Implementation
 public abstract class ParentNode extends Node implements CoreParentNode {
@@ -154,10 +155,16 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     }
 
     public final void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
+        if (newChild == refChild) {
+            throw new SelfRelationshipException();
+        }
         merge(newChild, refChild.coreGetNextSibling(), false);
     }
 
     public final void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
+        if (newChild == refChild) {
+            throw new SelfRelationshipException();
+        }
         merge(newChild, refChild, false);
     }
 
