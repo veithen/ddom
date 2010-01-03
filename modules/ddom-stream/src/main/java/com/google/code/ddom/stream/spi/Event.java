@@ -49,16 +49,6 @@ public interface Event extends Data {
     /**
      * 
      * 
-     * Only valid for {@link Type#NS_UNAWARE_ELEMENT} and {@link Type#NS_AWARE_ELEMENT} and if
-     * {@link AttributeMode#ELEMENT} is used.
-     * 
-     * @return
-     */
-    AttributeData getAttributes();
-    
-    /**
-     * 
-     * 
      * @return
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
      * <tr><td>{@link Type#NS_UNAWARE_ELEMENT}</td><td>the name of the element</td></tr>

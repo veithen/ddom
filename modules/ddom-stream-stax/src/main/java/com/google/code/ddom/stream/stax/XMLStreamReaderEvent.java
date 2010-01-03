@@ -20,13 +20,12 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.stream.spi.AttributeData;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.DTDEvent;
 import com.google.code.ddom.stream.spi.Event;
 import com.google.code.ddom.stream.spi.StreamException;
 
-public class XMLStreamReaderEvent implements Event, DTDEvent, AttributeData, CharacterData {
+public class XMLStreamReaderEvent implements Event, DTDEvent, CharacterData {
     public enum Mode { NODE, ATTRIBUTE, NS_DECL, ATTRIBUTES_COMPLETE }
     
     private final XMLStreamReader reader;
@@ -96,46 +95,6 @@ public class XMLStreamReaderEvent implements Event, DTDEvent, AttributeData, Cha
             default:
                 return null;
         }
-    }
-
-    public AttributeData getAttributes() {
-        return this;
-    }
-
-    public int getLength() {
-        return reader.getAttributeCount() + reader.getNamespaceCount();
-    }
-
-    public AttributeData.Type getType(int index) {
-        if (index < reader.getAttributeCount()) {
-            return parserIsNamespaceAware ? AttributeData.Type.DOM2 : AttributeData.Type.DOM1;
-        } else {
-            return AttributeData.Type.NS_DECL;
-        }
-    }
-
-    public String getName(int index) {
-        return reader.getAttributeLocalName(index);
-    }
-
-    public String getNamespaceURI(int index) {
-        int c = reader.getAttributeCount();
-        return emptyToNull(index < c ? reader.getAttributeNamespace(index)
-                                     : reader.getNamespaceURI(index-c));
-    }
-
-    public String getPrefix(int index) {
-        int c = reader.getAttributeCount();
-        return emptyToNull(index < c ? reader.getAttributePrefix(index)
-                                     : reader.getNamespacePrefix(index-c));
-    }
-
-    public String getValue(int index) {
-        return reader.getAttributeValue(index);
-    }
-
-    public String getDataType(int index) {
-        return reader.getAttributeType(index);
     }
 
     public String getName() {

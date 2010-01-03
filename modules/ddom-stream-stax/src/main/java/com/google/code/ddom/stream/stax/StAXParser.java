@@ -18,7 +18,6 @@ package com.google.code.ddom.stream.stax;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.stream.spi.AttributeMode;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -34,37 +33,35 @@ public class StAXParser implements Producer {
 
     public boolean proceed(Consumer consumer) throws StreamException {
         XMLStreamReaderEvent.Mode mode = event.getMode();
-        if (consumer.getAttributeMode() == AttributeMode.EVENT) {
-            int index = event.getIndex();
-            switch (mode) {
-                case ATTRIBUTES_COMPLETE:
-                    mode = XMLStreamReaderEvent.Mode.NODE;
+        int index = event.getIndex();
+        switch (mode) {
+            case ATTRIBUTES_COMPLETE:
+                mode = XMLStreamReaderEvent.Mode.NODE;
+                break;
+            case NODE:
+                if (!reader.isStartElement()) {
                     break;
-                case NODE:
-                    if (!reader.isStartElement()) {
-                        break;
-                    } else {
-                        mode = XMLStreamReaderEvent.Mode.ATTRIBUTE;
-                        index = -1;
-                        // Fall through
-                    }
-                case ATTRIBUTE:
-                    if (++index < reader.getAttributeCount()) {
-                        break;
-                    } else {
-                        mode = XMLStreamReaderEvent.Mode.NS_DECL;
-                        index = -1;
-                        // Fall through
-                    }
-                case NS_DECL:
-                    if (++index < reader.getNamespaceCount()) {
-                        break;
-                    } else {
-                        mode = XMLStreamReaderEvent.Mode.ATTRIBUTES_COMPLETE;
-                    }
-            }
-            event.updateState(mode, index);
+                } else {
+                    mode = XMLStreamReaderEvent.Mode.ATTRIBUTE;
+                    index = -1;
+                    // Fall through
+                }
+            case ATTRIBUTE:
+                if (++index < reader.getAttributeCount()) {
+                    break;
+                } else {
+                    mode = XMLStreamReaderEvent.Mode.NS_DECL;
+                    index = -1;
+                    // Fall through
+                }
+            case NS_DECL:
+                if (++index < reader.getNamespaceCount()) {
+                    break;
+                } else {
+                    mode = XMLStreamReaderEvent.Mode.ATTRIBUTES_COMPLETE;
+                }
         }
+        event.updateState(mode, index);
         boolean complete;
         if (mode == XMLStreamReaderEvent.Mode.NODE) {
             if (reader.getEventType() == XMLStreamReader.START_DOCUMENT) {

@@ -22,32 +22,14 @@ public interface Consumer {
     
     void processDTD(DTDEvent event);
     
-    /**
-     * Determine how attributes are expected to be delivered to this consumer.
-     * Note that the value returned by this method MAY change during the lifecycle
-     * of the consumer.
-     * <p>
-     * The producer MUST query this value each time it processes
-     * an element and MUST deliver the attributes for this element in the way requested
-     * by the consumer.
-     * <p>
-     * The consumer SHOULD return {@link AttributeMode#EVENT} whenever possible. It SHOULD
-     * use {@link AttributeMode#ELEMENT} only if there is a strong requirement to do so.
-     * 
-     * @return one of the values defined by the {@link AttributeMode} enumeration
-     */
-    AttributeMode getAttributeMode();
-    
     void processDocumentType(String rootName, String publicId, String systemId);
     
     /**
      * Process an element in non namespace aware mode.
      * 
      * @param tagName the name of the element
-     * @param attributes the attributes of the element if {@link AttributeMode#ELEMENT} is used,
-     *                   or <code>null</code> if {@link AttributeMode#EVENT} is used
      */
-    void processElement(String tagName, AttributeData attributes);
+    void processElement(String tagName);
     
     /**
      * Process an element in namespace aware mode.
@@ -56,10 +38,8 @@ public interface Consumer {
      *                     namespace
      * @param localName the local part of the element's name
      * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
-     * @param attributes the attributes of the element if {@link AttributeMode#ELEMENT} is used,
-     *                   or <code>null</code> if {@link AttributeMode#EVENT} is used
      */
-    void processElement(String namespaceURI, String localName, String prefix, AttributeData attributes);
+    void processElement(String namespaceURI, String localName, String prefix);
     
     /**
      * Process an attribute in non namespace aware mode.

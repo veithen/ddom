@@ -23,7 +23,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 
-import com.google.code.ddom.stream.spi.AttributeMode;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.util.CharArrayCharacterData;
 import com.google.code.ddom.stream.util.StringCharacterData;
@@ -33,7 +32,6 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
     private boolean inCDATA;
     private StringCharacterData stringData;
     private CharArrayCharacterData charArrayData;
-    private SAXAttributeData attributeData;
 
     public ConsumerContentHandler(Consumer consumer) {
         this.consumer = consumer;
@@ -63,50 +61,32 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
     }
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        SAXAttributeData data;
-        if (consumer.getAttributeMode() == AttributeMode.ELEMENT) {
-            data = attributeData;
-            if (attributeData == null) {
-                data = new SAXAttributeData();
-                attributeData = data;
-            }
-            data.setData(atts);
-        } else {
-            data = null;
-        }
-        
         if (localName.length() == 0) {
-            consumer.processElement(qName, data);
+            consumer.processElement(qName);
         } else {
-            consumer.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName), data);
+            consumer.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName));
         }
 
-        if (data == null) {
-            int length = atts.getLength();
-            for (int i=0; i<length; i++) {
-                String attLocalName = atts.getLocalName(i);
-                if (attLocalName.length() == 0) {
-                    consumer.processAttribute(qName, atts.getValue(i), atts.getType(i));
+        int length = atts.getLength();
+        for (int i=0; i<length; i++) {
+            String attLocalName = atts.getLocalName(i);
+            if (attLocalName.length() == 0) {
+                consumer.processAttribute(qName, atts.getValue(i), atts.getType(i));
+            } else {
+                String attUri = atts.getURI(i);
+                if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+                    consumer.processNSDecl(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
                 } else {
-                    String attUri = atts.getURI(i);
-                    if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                        consumer.processNSDecl(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
-                    } else {
-                        consumer.processAttribute(
-                                SAXStreamUtils.normalizeNamespaceURI(attUri),
-                                atts.getLocalName(i),
-                                SAXStreamUtils.getPrefixFromQName(qName),
-                                atts.getValue(i),
-                                atts.getType(i));
-                    }
+                    consumer.processAttribute(
+                            SAXStreamUtils.normalizeNamespaceURI(attUri),
+                            atts.getLocalName(i),
+                            SAXStreamUtils.getPrefixFromQName(qName),
+                            atts.getValue(i),
+                            atts.getType(i));
                 }
             }
-            consumer.attributesCompleted();
         }
-        
-        if (data != null) {
-            data.clear();
-        }
+        consumer.attributesCompleted();
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {

@@ -21,8 +21,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.stream.spi.AttributeData;
-import com.google.code.ddom.stream.spi.AttributeMode;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.util.CallbackConsumer;
@@ -44,7 +42,6 @@ public class DOMConsumer extends CallbackConsumer {
     private Node node;
     
     public DOMConsumer(Document document) {
-        super(AttributeMode.EVENT);
         this.document = document;
         node = document;
     }
@@ -61,13 +58,13 @@ public class DOMConsumer extends CallbackConsumer {
         return prefix == null ? localName : prefix + ":" + localName;
     }
     
-    public void processElement(String tagName, AttributeData attributes) {
+    public void processElement(String tagName) {
         Element element = document.createElement(tagName);
         node.appendChild(element);
         node = element;
     }
 
-    public void processElement(String namespaceURI, String localName, String prefix, AttributeData attributes) {
+    public void processElement(String namespaceURI, String localName, String prefix) {
         Element element = document.createElementNS(namespaceURI, getQualifiedName(localName, prefix));
         node.appendChild(element);
         node = element;

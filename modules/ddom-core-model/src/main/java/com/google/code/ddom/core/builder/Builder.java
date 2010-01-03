@@ -22,8 +22,6 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.NodeFactory;
-import com.google.code.ddom.stream.spi.AttributeData;
-import com.google.code.ddom.stream.spi.AttributeMode;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -41,7 +39,6 @@ public class Builder extends CallbackConsumer {
     private boolean nodeAppended;
 
     public Builder(Producer producer, NodeFactory nodeFactory, CoreDocument document, BuilderTarget target) {
-        super(AttributeMode.EVENT);
         this.producer = producer;
         this.nodeFactory = nodeFactory;
         this.document = document;
@@ -75,11 +72,11 @@ public class Builder extends CallbackConsumer {
         appendNode(nodeFactory.createDocumentType(document, rootName, publicId, systemId));
     }
     
-    public final void processElement(String tagName, AttributeData attributes) {
+    public final void processElement(String tagName) {
         appendNode(nodeFactory.createElement(document, tagName, false));
     }
     
-    public final void processElement(String namespaceURI, String localName, String prefix, AttributeData attributes) {
+    public final void processElement(String namespaceURI, String localName, String prefix) {
         appendNode(nodeFactory.createElement(document, namespaceURI, localName, prefix, false));
     }
     
