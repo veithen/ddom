@@ -79,7 +79,8 @@ public class XSLTTestCase extends TestCase {
         Transformer transformer = transformerFactory.newTransformer(stylesheetSource);
         transformer.setErrorListener(StrictErrorListener.INSTANCE);
         
-        boolean isXmlOutput = refTransformer.getOutputProperty(OutputKeys.METHOD).equals("xml");
+        String method = refTransformer.getOutputProperty(OutputKeys.METHOD);
+        boolean isXmlOutput = method == null || method.equals("xml");
         boolean repeat;
         do {
             repeat = false;
