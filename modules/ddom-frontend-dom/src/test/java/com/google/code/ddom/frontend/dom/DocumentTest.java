@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom;
 
+import java.io.Reader;
 import java.io.StringReader;
 
 import javax.xml.XMLConstants;
@@ -32,6 +33,8 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.DeferredDocumentFactory;
 import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.NamespaceAwareness;
+import com.google.code.ddom.Options;
 import com.google.code.ddom.backend.CoreNSUnawareElement;
 import com.google.code.ddom.backend.CoreNSUnawareAttribute;
 import com.google.code.ddom.utils.dom.DOM;
@@ -50,11 +53,10 @@ public class DocumentTest {
     
     @Test
     public void testNamespaceUnawareParsing() throws Exception {
-        // TODO: do this properly
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
-        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<p:root xmlns:p='urn:ns'>"));
-        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", reader);
+        Reader reader = new StringReader("<p:root xmlns:p='urn:ns'>");
+        Options options = new Options();
+        options.set(NamespaceAwareness.DISABLE);
+        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", reader, options);
         
         Element element = doc.getDocumentElement();
         Assert.assertTrue(element instanceof CoreNSUnawareElement);
