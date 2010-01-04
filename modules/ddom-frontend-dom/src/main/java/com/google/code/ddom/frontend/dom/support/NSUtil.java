@@ -91,6 +91,10 @@ public class NSUtil {
         return colonPosition;
     }
     
+    public static String normalizeNamespaceURI(String namespaceURI) {
+        return namespaceURI == null || namespaceURI.length() == 0 ? null : namespaceURI;
+    }
+    
     public static void validateNamespace(String namespaceURI, String prefix) {
         if (prefix != null && namespaceURI == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);

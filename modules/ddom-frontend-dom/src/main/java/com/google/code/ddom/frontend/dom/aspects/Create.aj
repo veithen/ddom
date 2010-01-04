@@ -48,6 +48,7 @@ public aspect Create {
             prefix = qualifiedName.substring(0, i);
             localName = qualifiedName.substring(i+1);
         }
+        namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
         NSUtil.validateNamespace(namespaceURI, prefix);
         return (Element)getNodeFactory().createElement(this, namespaceURI, localName, prefix, true);
     }
