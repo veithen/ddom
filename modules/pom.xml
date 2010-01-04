@@ -50,6 +50,7 @@
         <module>ddom-stream-wstx</module>
         <module>ddom-test-utils</module>
         <module>ddom-weaver</module>
+        <module>maven-ddom-weaver-plugin</module>
     </modules>
     
     <build>
