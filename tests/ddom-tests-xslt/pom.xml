@@ -100,6 +100,8 @@
                     <excludes>
                         <!-- TODO -->
                         <exclude>**/XalanTest.java</exclude>
+                        <!-- TODO -->
+                        <exclude>**/SaxonTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
