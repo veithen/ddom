@@ -33,5 +33,9 @@
             <artifactId>ddom-spi</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 </project>
