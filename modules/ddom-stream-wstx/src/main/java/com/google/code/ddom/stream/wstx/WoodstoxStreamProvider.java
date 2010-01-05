@@ -108,7 +108,7 @@ public class WoodstoxStreamProvider implements StreamProvider {
             if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
                 reader = new CommentFilterStreamReader(reader);
             }
-            return new StAXParser(reader);
+            return new StAXParser(reader, config.getSymbols());
         }
     }
     

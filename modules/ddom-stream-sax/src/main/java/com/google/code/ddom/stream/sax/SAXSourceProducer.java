@@ -25,12 +25,18 @@ import org.xml.sax.XMLReader;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.Symbols;
 
 public class SAXSourceProducer implements Producer {
     private final SAXSource source;
 
     public SAXSourceProducer(SAXSource source) {
         this.source = source;
+    }
+
+    public Symbols getSymbols() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public boolean proceed(Consumer consumer) throws StreamException {

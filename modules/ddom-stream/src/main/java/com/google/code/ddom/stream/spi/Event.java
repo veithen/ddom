@@ -47,9 +47,10 @@ public interface Event extends Data {
     Type getEventType();
     
     /**
+     * Get the name of the information item represented by this event.
      * 
-     * 
-     * @return
+     * @return The return value depends on the event type:
+     * <p>
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
      * <tr><td>{@link Type#NS_UNAWARE_ELEMENT}</td><td>the name of the element</td></tr>
      * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the local part of the element name</td></tr>
@@ -58,13 +59,18 @@ public interface Event extends Data {
      * <tr><td>{@link Type#PROCESSING_INSTRUCTION}</td><td>the target of the processing instruction</td></tr>
      * <tr><td>{@link Type#ENTITY_REFERENCE}</td><td>the name of the entity reference</td></tr>
      * </table>
+     * <p>
+     * For all other event types, the behavior of this method is undefined.
+     * <p>
+     * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
      */
     String getName();
 
     /**
+     * Get the namespace URI of the information item represented by this event.
      * 
-     * 
-     * @return
+     * @return The return value depends on the event type:
+     * <p>
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
      * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the namespace URI of the element, or <code>null</code>
      * if the element has no namespace</td></tr>
@@ -72,12 +78,18 @@ public interface Event extends Data {
      * if the attribute has no namespace</td></tr>
      * <tr><td>{@link Type#NAMESPACE_DECLARATION}</td><td>the URI of the namespace that the declaration refers to</td>
      * </table>
+     * <p>
+     * For all other event types, the behavior of this method is undefined.
+     * <p>
+     * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
      */
     String getNamespaceURI();
     
     /**
+     * Get the namespace prefix of the information item represented by this event.
      * 
-     * @return
+     * @return The return value depends on the event type:
+     * <p>
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
      * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the prefix of the element, or <code>null</code>
      * if the element has no prefix</td></tr>
@@ -86,6 +98,10 @@ public interface Event extends Data {
      * <tr><td>{@link Type#NAMESPACE_DECLARATION}</td><td>the prefix that the declaration refers to, or <code>null</code>
      * if the declaration declares the default namespace</td>
      * </table>
+     * <p>
+     * For all other event types, the behavior of this method is undefined.
+     * <p>
+     * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
      */
     String getPrefix();
 

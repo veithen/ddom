@@ -33,7 +33,8 @@ public class StAXStreamProvider implements StreamProvider {
             if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
                 reader = new CommentFilterStreamReader(reader);
             }
-            return new StAXParser(reader);
+            // TODO: implement canonicalization!
+            return new StAXParser(reader, null);
         } else {
             return null;
         }

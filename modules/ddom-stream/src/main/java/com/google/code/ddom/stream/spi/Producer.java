@@ -17,6 +17,15 @@ package com.google.code.ddom.stream.spi;
 
 public interface Producer {
     /**
+     * Get the symbol table used by this producer. More precisely, get the symbol table that the
+     * producer uses to canonicalize the return values of {@link Event#getName()},
+     * {@link Event#getNamespaceURI()} and {@link Event#getPrefix()}.
+     * 
+     * @return the symbol table; may not be <code>null</code>
+     */
+    Symbols getSymbols();
+    
+    /**
      * 
      * 
      * Must result in one or more calls to the {@link Consumer}.

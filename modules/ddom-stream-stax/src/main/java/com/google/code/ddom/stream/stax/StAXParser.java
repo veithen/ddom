@@ -21,14 +21,21 @@ import javax.xml.stream.XMLStreamReader;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.Symbols;
 
 public class StAXParser implements Producer {
     private final XMLStreamReader reader;
+    private final Symbols symbols;
     private final XMLStreamReaderEvent event; // TODO: maybe this should be an inner class
 
-    public StAXParser(XMLStreamReader reader) {
+    public StAXParser(XMLStreamReader reader, Symbols symbols) {
         this.reader = reader;
+        this.symbols = symbols;
         event = new XMLStreamReaderEvent(reader);
+    }
+
+    public Symbols getSymbols() {
+        return symbols;
     }
 
     public boolean proceed(Consumer consumer) throws StreamException {
