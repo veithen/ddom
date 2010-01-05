@@ -29,6 +29,12 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
+            <!-- TODO: not good: we are in commons and ddom-stream is in modules; solve this later -->
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-stream</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
             <groupId>stax</groupId>
             <artifactId>stax-api</artifactId>
             <version>1.0.1</version>
