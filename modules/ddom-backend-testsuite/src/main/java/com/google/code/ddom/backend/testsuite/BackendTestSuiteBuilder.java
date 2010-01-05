@@ -66,6 +66,6 @@ public class BackendTestSuiteBuilder {
     }
     
     private static void addNSAwareNamedNodeTests(TestSuite suite, NodeFactory nodeFactory, NSAwareNamedNodeFactory namedNodeFactory) {
-        suite.addTest(new com.google.code.ddom.backend.testsuite.nsaware.TestGetNamespaceURICanonicalization(nodeFactory, namedNodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.nsaware.TestCoreGetNamespaceURICanonicalization(nodeFactory, namedNodeFactory));
     }
 }

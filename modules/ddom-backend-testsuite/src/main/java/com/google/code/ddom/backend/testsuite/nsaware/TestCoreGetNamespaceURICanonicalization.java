@@ -20,10 +20,10 @@ import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 
-public class TestGetNamespaceURICanonicalization extends BackendTestCase {
+public class TestCoreGetNamespaceURICanonicalization extends BackendTestCase {
     private final NSAwareNamedNodeFactory namedNodeFactory;
     
-    public TestGetNamespaceURICanonicalization(NodeFactory nodeFactory, NSAwareNamedNodeFactory namedNodeFactory) {
+    public TestCoreGetNamespaceURICanonicalization(NodeFactory nodeFactory, NSAwareNamedNodeFactory namedNodeFactory) {
         super(nodeFactory, namedNodeFactory.getNodeClass().getSimpleName());
         this.namedNodeFactory = namedNodeFactory;
     }
