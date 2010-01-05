@@ -32,12 +32,22 @@ public interface CoreNSAwareNamedNode extends CoreNode {
     /**
      * Get the namespace prefix of this node.
      * 
-     * @return the namespace prefix, or <code>null</code> if the node has no prefix
+     * @return The namespace prefix, or <code>null</code> if the node has no prefix, i.e. if the
+     *         node has no namespace or is in the default namespace. The return value is required to
+     *         be canonicalized with respect to the symbol table identified by
+     *         {@link CoreDocument#getSymbols()}.
      */
     String coreGetPrefix();
     
     void coreSetPrefix(String prefix);
-    
+
+    /**
+     * Get the local part of the node name.
+     * 
+     * @return The local part of the node name. The return value is never <code>null</code>. It is
+     *         required to be canonicalized with respect to the symbol table identified by
+     *         {@link CoreDocument#getSymbols()}.
+     */
     String coreGetLocalName();
     
     void coreSetLocalName(String localName);

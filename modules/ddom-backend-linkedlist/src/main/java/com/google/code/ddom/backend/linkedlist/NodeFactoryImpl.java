@@ -49,10 +49,11 @@ public class NodeFactoryImpl implements NodeFactory {
     
     public CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix) {
         Symbols symbols = document.getSymbols();
-        if (namespaceURI != null) {
-            namespaceURI = symbols.getSymbol(namespaceURI);
-        }
-        return new NSAwareElement(document, namespaceURI, localName, prefix, true);
+        return new NSAwareElement(document,
+                namespaceURI == null ? null : symbols.getSymbol(namespaceURI),
+                symbols.getSymbol(localName),
+                prefix == null ? null : symbols.getSymbol(prefix),
+                true);
     }
     
     public CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type) {
@@ -61,10 +62,11 @@ public class NodeFactoryImpl implements NodeFactory {
     
     public CoreNSAwareAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
         Symbols symbols = document.getSymbols();
-        if (namespaceURI != null) {
-            namespaceURI = symbols.getSymbol(namespaceURI);
-        }
-        return new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type);
+        return new NSAwareAttribute(document,
+                namespaceURI == null ? null : symbols.getSymbol(namespaceURI),
+                symbols.getSymbol(localName),
+                prefix == null ? null : symbols.getSymbol(prefix),
+                value, type);
     }
     
     public CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI) {
