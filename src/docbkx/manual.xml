@@ -129,6 +129,51 @@
                 </itemizedlist>
             </section>
         </chapter>
+    </part>
+    <part>
+        <title>Developer guide</title>
+        <chapter>
+            <title>Backend development</title>
+            
+            <section>
+                <title>Backend implementations and deferred parsing</title>
+                <para>
+                    If loading existing documents is supported<footnote><para>This may not be the
+                    case for proxy backends.</para></footnote>, it is the responsibility of the
+                    backend to implement deferred parsing. The component managing the on-demand
+                    parsing and creation of nodes is called <firstterm>builder</firstterm> (see
+                    for example the <classname>Builder</classname> class in the linked list
+                    backend). There are several reasons why the builder implementation is
+                    considered backend specific:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            The node object lifecycle is backend specific. Some backends may create
+                            nodes eagerly, i.e. immediately after reception of an XML event from
+                            the underlying parser. Other backends may store the data in another
+                            data structure and defer creation of the corresponding nodes until they
+                            are actually accessed.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            The builder will typically create nodes directly, without going through
+                            the node factory. One reason is that names, namespace URIs and prefixes
+                            received from the underlying parser are already canonicalized.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <note>
+                    <para>
+                        The fact that the builder is part of the backend implementation and not
+                        a generic component is a major architectural difference with respect to
+                        Axiom, where the <classname>StAXOMBuilder</classname> class is used by
+                        all implementations.
+                    </para>
+                </note>
+            </section>
+        </chapter>
         <chapter>
             <title>Background material</title>
             <section>
