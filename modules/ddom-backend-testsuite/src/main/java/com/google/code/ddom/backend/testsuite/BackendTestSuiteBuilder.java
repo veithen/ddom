@@ -44,8 +44,6 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreSetValue(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildAfterSelf(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildBeforeSelf(nodeFactory));
-        // TODO
-/*
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareElement.class;
@@ -64,7 +62,6 @@ public class BackendTestSuiteBuilder {
                 return document.getNodeFactory().createAttribute(document, namespaceURI, localName, prefix, "test", "CDATA");
             }
         });
-*/
         return suite;
     }
     
