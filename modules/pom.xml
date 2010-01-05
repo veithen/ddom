@@ -34,7 +34,6 @@
         <module>ddom-backend-linkedlist</module>
         <module>ddom-backend-testsuite</module>
         <module>ddom-commons</module>
-        <module>ddom-core-model</module>
         <module>ddom-dom-utils</module>
         <module>ddom-frontend-axiom</module>
         <module>ddom-frontend-axiom-soap</module>

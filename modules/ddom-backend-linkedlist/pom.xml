@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
-            <artifactId>ddom-core-model</artifactId>
+            <artifactId>ddom-stream-utils</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
