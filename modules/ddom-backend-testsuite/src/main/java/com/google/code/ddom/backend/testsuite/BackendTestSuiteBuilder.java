@@ -15,9 +15,14 @@
  */
 package com.google.code.ddom.backend.testsuite;
 
-import com.google.code.ddom.backend.NodeFactory;
-
 import junit.framework.TestSuite;
+
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
+import com.google.code.ddom.backend.CoreNSAwareElement;
+import com.google.code.ddom.backend.CoreNSAwareNamedNode;
+import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.testsuite.nsaware.NSAwareNamedNodeFactory;
 
 public class BackendTestSuiteBuilder {
     private BackendTestSuiteBuilder() {}
@@ -39,6 +44,31 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreSetValue(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildAfterSelf(nodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildBeforeSelf(nodeFactory));
+        // TODO
+/*
+        addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
+            public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
+                return CoreNSAwareElement.class;
+            }
+            
+            public CoreNSAwareNamedNode create(CoreDocument document, String namespaceURI, String localName, String prefix) {
+                return document.getNodeFactory().createElement(document, namespaceURI, localName, prefix);
+            }
+        });
+        addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
+            public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
+                return CoreNSAwareAttribute.class;
+            }
+            
+            public CoreNSAwareNamedNode create(CoreDocument document, String namespaceURI, String localName, String prefix) {
+                return document.getNodeFactory().createAttribute(document, namespaceURI, localName, prefix, "test", "CDATA");
+            }
+        });
+*/
         return suite;
+    }
+    
+    private static void addNSAwareNamedNodeTests(TestSuite suite, NodeFactory nodeFactory, NSAwareNamedNodeFactory namedNodeFactory) {
+        suite.addTest(new com.google.code.ddom.backend.testsuite.nsaware.TestGetNamespaceURICanonicalization(nodeFactory, namedNodeFactory));
     }
 }

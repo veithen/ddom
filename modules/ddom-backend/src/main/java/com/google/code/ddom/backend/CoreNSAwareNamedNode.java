@@ -21,7 +21,9 @@ public interface CoreNSAwareNamedNode extends CoreNode {
     /**
      * Get the namespace URI of this node.
      * 
-     * @return the namespace URI, or <code>null</code> if the node has no namespace
+     * @return The namespace URI of the node, or <code>null</code> if the node has no namespace. The
+     *         return value is required to be canonicalized with respect to the symbol table
+     *         identified by {@link CoreDocument#getSymbols()}.
      */
     String coreGetNamespaceURI();
     

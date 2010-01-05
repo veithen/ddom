@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.testsuite;
+package com.google.code.ddom.backend.testsuite.nsaware;
 
-import junit.framework.TestCase;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 
-import com.google.code.ddom.backend.NodeFactory;
-
-public class BackendTestCase extends TestCase {
-    protected final NodeFactory nodeFactory;
-    
-    public BackendTestCase(NodeFactory nodeFactory) {
-        this.nodeFactory = nodeFactory;
-        setName(getClass().getName());
-    }
-    
-    public BackendTestCase(NodeFactory nodeFactory, String nameQualifier) {
-        this.nodeFactory = nodeFactory;
-        setName(getClass().getName() + " [" + nameQualifier + "]");
-    }
+public interface NSAwareNamedNodeFactory {
+    Class<? extends CoreNSAwareNamedNode> getNodeClass();
+    CoreNSAwareNamedNode create(CoreDocument document, String namespaceURI, String localName, String prefix);
 }

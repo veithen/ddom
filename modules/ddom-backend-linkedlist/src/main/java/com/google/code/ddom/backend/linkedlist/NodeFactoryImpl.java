@@ -31,6 +31,7 @@ import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
+import com.google.code.ddom.stream.spi.Symbols;
 
 public class NodeFactoryImpl implements NodeFactory {
     // TODO: clean up the API
@@ -47,6 +48,11 @@ public class NodeFactoryImpl implements NodeFactory {
     }
     
     public CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix) {
+        // TODO: not yet working
+//        Symbols symbols = document.getSymbols();
+//        if (namespaceURI != null) {
+//            namespaceURI = symbols.getSymbol(namespaceURI);
+//        }
         return new NSAwareElement(document, namespaceURI, localName, prefix, true);
     }
     
@@ -55,6 +61,11 @@ public class NodeFactoryImpl implements NodeFactory {
     }
     
     public CoreNSAwareAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
+        // TODO: not yet working
+//        Symbols symbols = document.getSymbols();
+//        if (namespaceURI != null) {
+//            namespaceURI = symbols.getSymbol(namespaceURI);
+//        }
         return new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type);
     }
     
