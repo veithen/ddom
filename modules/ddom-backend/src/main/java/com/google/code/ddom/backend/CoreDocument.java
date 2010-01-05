@@ -26,6 +26,10 @@ public interface CoreDocument extends DeferredDocument, BuilderTarget {
      * Get the symbol table used by this document. Various methods defined by the core model are
      * required to return canonicalized strings. This method gives access to the symbol table used
      * for all canonicalizations occurring for nodes linked to this document.
+     * <p>
+     * If the document has been created from a {@link com.google.code.ddom.stream.spi.Producer}, the
+     * the symbol table MUST be the same as the one returned by
+     * {@link com.google.code.ddom.stream.spi.Producer#getSymbols()}.
      * 
      * @return the symbol table; may not be <code>null</code>
      */
