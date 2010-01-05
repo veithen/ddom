@@ -83,6 +83,10 @@ public class Options {
         internalSet(option.getClass(), option, true);
     }
     
+    public <T> T get(Class<T> key) {
+        return key.cast(map.get(key));
+    }
+    
     public OptionsProcessor createOptionsProcessor() {
         return new OptionsProcessorImpl();
     }

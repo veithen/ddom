@@ -19,10 +19,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.stream.StreamSource;
-
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.domts.DOMTestDocumentBuilderFactory;
@@ -31,24 +27,31 @@ import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
 import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.Options;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.stream.options.CoalescingFeature;
+import com.google.code.ddom.stream.options.EntityReferencePolicy;
+import com.google.code.ddom.stream.options.NamespaceAwareness;
+import com.google.code.ddom.stream.options.ValidationPolicy;
 
 public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFactory {
     private interface Strategy {
-        void applySetting(XMLInputFactory factory, boolean value);
+        void applySetting(Options options, boolean value);
     }
     
     private static class SimpleStrategy implements Strategy {
-        private final String property;
+        private final Object enabledOption;
+        private final Object disabledOption;
         
-        public SimpleStrategy(String property) {
-            this.property = property;
+        public SimpleStrategy(Object enabledOption, Object disabledOption) {
+            this.enabledOption = enabledOption;
+            this.disabledOption = disabledOption;
         }
 
-        public void applySetting(XMLInputFactory factory, boolean value) {
-            factory.setProperty(property, value);
+        public void applySetting(Options options, boolean value) {
+            options.set(value ? enabledOption : disabledOption);
         }
     }
     
@@ -56,23 +59,23 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
         new HashMap<String,Strategy>();
     
     static {
-        strategies.put("coalescing", new SimpleStrategy(XMLInputFactory.IS_COALESCING));
-        strategies.put("expandEntityReferences", new SimpleStrategy(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES));
-        strategies.put("namespaceAware", new SimpleStrategy(XMLInputFactory.IS_NAMESPACE_AWARE));
-        strategies.put("validating", new SimpleStrategy(XMLInputFactory.IS_VALIDATING));
+        strategies.put("coalescing", new SimpleStrategy(CoalescingFeature.ENABLE, CoalescingFeature.DISABLE));
+        strategies.put("expandEntityReferences", new SimpleStrategy(EntityReferencePolicy.EXPAND, EntityReferencePolicy.DONT_EXPAND));
+        strategies.put("namespaceAware", new SimpleStrategy(NamespaceAwareness.ENABLE, NamespaceAwareness.DISABLE));
+        strategies.put("validating", new SimpleStrategy(ValidationPolicy.ENABLE, ValidationPolicy.DISABLE));
     }
     
-    private final XMLInputFactory factory;
+    private final Options options;
     
     public DOMTestDocumentBuilderFactoryImpl(DocumentBuilderSetting[] settings) throws DOMTestIncompatibleException {
         super(settings);
-        factory = XMLInputFactory.newInstance();
+        options = new Options();
         for (DocumentBuilderSetting setting : settings) {
             Strategy strategy = strategies.get(setting.getProperty());
             if (strategy == null) {
                 throw new DOMTestIncompatibleException(null, setting);
             } else {
-                strategy.applySetting(factory, setting.getValue());
+                strategy.applySetting(options, setting.getValue());
             }
         }
     }
@@ -90,11 +93,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
     @Override
     public Document load(URL url) throws DOMTestLoadException {
         // TODO: need to cleanup somehow
-        try {
-            return (Document)DeferredDocumentFactory.newInstance().parse("dom", factory.createXMLStreamReader(new StreamSource(url.toExternalForm())));
-        } catch (XMLStreamException ex) {
-            throw new DOMTestLoadException(ex);
-        }
+        return (Document)DeferredDocumentFactory.newInstance().parse("dom", url, options);
     }
 
     @Override
@@ -112,12 +111,12 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
 
     @Override
     public boolean isCoalescing() {
-        return (Boolean)factory.getProperty(XMLInputFactory.IS_COALESCING);
+        return options.get(CoalescingFeature.class) == CoalescingFeature.ENABLE;
     }
 
     @Override
     public boolean isExpandEntityReferences() {
-        return (Boolean)factory.getProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES);
+        return options.get(EntityReferencePolicy.class) != EntityReferencePolicy.DONT_EXPAND;
     }
 
     @Override
@@ -127,11 +126,11 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
 
     @Override
     public boolean isNamespaceAware() {
-        return (Boolean)factory.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
+        return options.get(NamespaceAwareness.class) != NamespaceAwareness.DISABLE;
     }
 
     @Override
     public boolean isValidating() {
-        return (Boolean)factory.getProperty(XMLInputFactory.IS_VALIDATING);
+        return options.get(ValidationPolicy.class) == ValidationPolicy.ENABLE;
     }
 }
