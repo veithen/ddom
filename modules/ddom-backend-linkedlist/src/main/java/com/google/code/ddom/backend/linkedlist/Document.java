@@ -24,7 +24,6 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.FragmentSource;
-import com.google.code.ddom.stream.spi.Producer;
 
 @Implementation
 public class Document extends BuilderWrapperImpl implements CoreDocument {
@@ -49,7 +48,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
 
     public final void next() throws DeferredParsingException {
         if (builder == null) {
-            builder = new Builder(source.getProducer(), nodeFactory, this, this);
+            builder = new Builder(source.getProducer(), this, this);
         }
         builder.next();
     }

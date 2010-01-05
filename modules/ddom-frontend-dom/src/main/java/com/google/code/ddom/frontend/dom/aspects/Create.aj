@@ -34,7 +34,7 @@ import com.google.code.ddom.frontend.dom.intf.*;
 public aspect Create {
     public final Element DOMDocument.createElement(String tagName) throws DOMException {
         NSUtil.validateName(tagName);
-        return (Element)getNodeFactory().createElement(this, tagName, true);
+        return (Element)getNodeFactory().createElement(this, tagName);
     }
     
     public final Element DOMDocument.createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
@@ -50,7 +50,7 @@ public aspect Create {
         }
         namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
         NSUtil.validateNamespace(namespaceURI, prefix);
-        return (Element)getNodeFactory().createElement(this, namespaceURI, localName, prefix, true);
+        return (Element)getNodeFactory().createElement(this, namespaceURI, localName, prefix);
     }
     
     public final Attr DOMDocument.createAttribute(String name) throws DOMException {

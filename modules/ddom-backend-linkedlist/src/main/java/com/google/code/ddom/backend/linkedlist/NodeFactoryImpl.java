@@ -42,12 +42,12 @@ public class NodeFactoryImpl implements NodeFactory {
         return new DocumentType(document, rootName, publicId, systemId);
     }
 
-    public CoreNSUnawareElement createElement(CoreDocument document, String tagName, boolean complete) {
-        return new NSUnawareElement(document, tagName, complete);
+    public CoreNSUnawareElement createElement(CoreDocument document, String tagName) {
+        return new NSUnawareElement(document, tagName, true);
     }
     
-    public CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
-        return new NSAwareElement(document, namespaceURI, localName, prefix, complete);
+    public CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix) {
+        return new NSAwareElement(document, namespaceURI, localName, prefix, true);
     }
     
     public CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type) {

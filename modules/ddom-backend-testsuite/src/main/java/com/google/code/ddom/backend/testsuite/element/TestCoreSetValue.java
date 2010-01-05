@@ -27,6 +27,6 @@ public class TestCoreSetValue extends AbstractTestCoreSetValue {
 
     @Override
     protected CoreCompactParentNode createNode(CoreDocument document) {
-        return nodeFactory.createElement(document, null, "element", null, true);
+        return nodeFactory.createElement(document, null, "element", null);
     }
 }

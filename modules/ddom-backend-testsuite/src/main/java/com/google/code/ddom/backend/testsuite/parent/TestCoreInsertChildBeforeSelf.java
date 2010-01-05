@@ -31,7 +31,7 @@ public class TestCoreInsertChildBeforeSelf extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument(null);
-        CoreElement parent = nodeFactory.createElement(document, "test", true);
+        CoreElement parent = nodeFactory.createElement(document, "test");
         CoreText text = nodeFactory.createText(document, "text");
         parent.coreAppendChild(text);
         try {

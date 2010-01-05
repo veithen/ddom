@@ -31,10 +31,10 @@ public class TestCoreGetDocumentElement extends BackendTestCase {
     protected void runTest() throws Exception {
         CoreDocument document = nodeFactory.createDocument(null);
         Assert.assertNull(document.coreGetDocumentElement());
-        CoreElement element1 = nodeFactory.createElement(document, null, "root1", null, true);
+        CoreElement element1 = nodeFactory.createElement(document, null, "root1", null);
         document.coreAppendChild(element1);
         Assert.assertSame(element1, document.coreGetDocumentElement());
-        CoreElement element2 = nodeFactory.createElement(document, null, "root2", null, true);
+        CoreElement element2 = nodeFactory.createElement(document, null, "root2", null);
         document.coreReplaceChild(element2, element1);
         Assert.assertSame(element2, document.coreGetDocumentElement());
     }

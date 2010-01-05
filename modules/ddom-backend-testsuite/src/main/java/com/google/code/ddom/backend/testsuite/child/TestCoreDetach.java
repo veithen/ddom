@@ -32,7 +32,7 @@ public class TestCoreDetach extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument(null);
-        CoreElement element = nodeFactory.createElement(document, "test", true);
+        CoreElement element = nodeFactory.createElement(document, "test");
         CoreText text1 = nodeFactory.createText(document, "text1");
         element.coreAppendChild(text1);
         CoreText text2 = nodeFactory.createText(document, "text1");

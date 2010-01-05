@@ -57,7 +57,7 @@ public aspect Factory {
     }
 
     public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns) {
-        return (OMElement)getNodeFactory().createElement(this, NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns), true);
+        return (OMElement)getNodeFactory().createElement(this, NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns));
     }
 
     public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns, OMContainer parent) {
@@ -88,7 +88,7 @@ public aspect Factory {
     }
 
     public OMElement AxiomDocument.createOMElement(QName qname) {
-        return (OMElement)getNodeFactory().createElement(this, NSUtil.getNamespaceURI(qname), qname.getLocalPart(), NSUtil.getPrefix(qname), true);
+        return (OMElement)getNodeFactory().createElement(this, NSUtil.getNamespaceURI(qname), qname.getLocalPart(), NSUtil.getPrefix(qname));
     }
 
     public OMNamespace AxiomDocument.createOMNamespace(String uri, String prefix) {

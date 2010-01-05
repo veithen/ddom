@@ -18,6 +18,19 @@ package com.google.code.ddom.backend;
 import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.stream.spi.Producer;
 
+/**
+ * Node factory. The frontend code MUST use this interface to create new nodes. To do so, it MUST
+ * obtain an instance using {@link CoreDocument#getNodeFactory()}. On the other hand, the frontend
+ * MUST NOT assume that all nodes are created using this factory. The backend internally MAY create
+ * nodes without using this factory, in particular during deferred parsing. Thus, frontend aspects
+ * SHOULD NOT apply advices to this interface or its implementing classes.
+ * <p>
+ * Parameters passed to methods defined by this interface are not required to be canonicalized. It
+ * is the responsibility of the implementation to canonicalize names, namespace URIs and prefixes as
+ * necessary.
+ * 
+ * @author Andreas Veithen
+ */
 public interface NodeFactory extends DocumentFactory {
     CoreDocument createDocument(Producer producer);
     
@@ -28,7 +41,7 @@ public interface NodeFactory extends DocumentFactory {
      */
     CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId);
     
-    CoreNSUnawareElement createElement(CoreDocument document, String tagName, boolean complete);
+    CoreNSUnawareElement createElement(CoreDocument document, String tagName);
     
     /**
      * Create a namespace aware element.
@@ -41,7 +54,7 @@ public interface NodeFactory extends DocumentFactory {
      * @param complete
      * @return the element
      */
-    CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete);
+    CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix);
     
     CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type);
     

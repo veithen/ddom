@@ -21,7 +21,6 @@ import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -30,7 +29,6 @@ import com.google.code.ddom.stream.util.CallbackConsumer;
 // TODO: also allow for deferred building of attributes
 public class Builder extends CallbackConsumer {
     private final Producer producer;
-    private final NodeFactory nodeFactory;
     private final CoreDocument document;
     private StreamException streamException;
     private BuilderTarget parent;
@@ -38,9 +36,8 @@ public class Builder extends CallbackConsumer {
     private CoreAttribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Producer producer, NodeFactory nodeFactory, CoreDocument document, BuilderTarget target) {
+    public Builder(Producer producer, CoreDocument document, BuilderTarget target) {
         this.producer = producer;
-        this.nodeFactory = nodeFactory;
         this.document = document;
         parent = target;
     }
@@ -69,27 +66,27 @@ public class Builder extends CallbackConsumer {
     }
 
     public final void processDocumentType(String rootName, String publicId, String systemId) {
-        appendNode(nodeFactory.createDocumentType(document, rootName, publicId, systemId));
+        appendNode(new DocumentType(document, rootName, publicId, systemId));
     }
     
     public final void processElement(String tagName) {
-        appendNode(nodeFactory.createElement(document, tagName, false));
+        appendNode(new NSUnawareElement(document, tagName, false));
     }
     
     public final void processElement(String namespaceURI, String localName, String prefix) {
-        appendNode(nodeFactory.createElement(document, namespaceURI, localName, prefix, false));
+        appendNode(new NSAwareElement(document, namespaceURI, localName, prefix, false));
     }
     
     public final void processAttribute(String name, String value, String type) {
-        appendAttribute(nodeFactory.createAttribute(document, name, value, type));
+        appendAttribute(new NSUnawareAttribute(document, name, value, type));
     }
 
     public final void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
-        appendAttribute(nodeFactory.createAttribute(document, namespaceURI, localName, prefix, value, type));
+        appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type));
     }
 
     public final void processNSDecl(String prefix, String namespaceURI) {
-        appendAttribute(nodeFactory.createNSDecl(document, prefix, namespaceURI));
+        appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
     }
 
     public void attributesCompleted() {
@@ -98,7 +95,7 @@ public class Builder extends CallbackConsumer {
 
     public final void processProcessingInstruction(String target, CharacterData data) {
         try {
-            appendNode(nodeFactory.createProcessingInstruction(document, target, data.getString()));
+            appendNode(new ProcessingInstruction(document, target, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
             throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
@@ -107,7 +104,7 @@ public class Builder extends CallbackConsumer {
     
     public final void processText(CharacterData data) {
         try {
-            appendNode(nodeFactory.createText(document, data.getString()));
+            appendNode(new Text(document, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
             throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
@@ -116,7 +113,7 @@ public class Builder extends CallbackConsumer {
     
     public final void processComment(CharacterData data) {
         try {
-            appendNode(nodeFactory.createComment(document, data.getString()));
+            appendNode(new Comment(document, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
             throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
@@ -125,7 +122,7 @@ public class Builder extends CallbackConsumer {
     
     public final void processCDATASection(CharacterData data) {
         try {
-            appendNode(nodeFactory.createCDATASection(document, data.getString()));
+            appendNode(new CDATASection(document, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
             throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
@@ -133,7 +130,7 @@ public class Builder extends CallbackConsumer {
     }
     
     public final void processEntityReference(String name) {
-        appendNode(nodeFactory.createEntityReference(document, name));
+        appendNode(new EntityReference(document, name));
     }
     
     private void appendNode(CoreChildNode node) {

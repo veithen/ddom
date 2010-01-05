@@ -29,7 +29,7 @@ public class TestCoreInsertSiblingBefore extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument(null);
-        CoreElement parent = nodeFactory.createElement(document, "test", true);
+        CoreElement parent = nodeFactory.createElement(document, "test");
         CoreText text1 = nodeFactory.createText(document, "text1");
         CoreText text2 = nodeFactory.createText(document, "text2");
         parent.coreAppendChild(text1);

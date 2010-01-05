@@ -113,13 +113,13 @@ public aspect Clone {
     public final CoreElement DOMNSAwareElement.shallowCloneWithoutAttributes() {
         CoreDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), true);
+        return factory.createElement(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
     }
     
     public final CoreElement DOMNSUnawareElement.shallowCloneWithoutAttributes() {
         CoreDocument document = getDocument();
         NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, coreGetName(), true);
+        return factory.createElement(document, coreGetName());
     }
 
     public final Node DOMEntityReference.cloneNode(boolean deep) {

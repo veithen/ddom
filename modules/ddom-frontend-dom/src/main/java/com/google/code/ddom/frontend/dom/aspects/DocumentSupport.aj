@@ -104,7 +104,7 @@ public aspect DocumentSupport {
             case Node.ELEMENT_NODE:
                 Element element = (Element)node;
                 // TODO: detect DOM 1 elements (as with attributes)
-                importedNode = (Node)getNodeFactory().createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix(), true);
+                importedNode = (Node)getNodeFactory().createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
                 importChildren = deep;
                 break;
             case Node.ATTRIBUTE_NODE:
