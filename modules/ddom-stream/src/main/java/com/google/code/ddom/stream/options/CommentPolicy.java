@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom;
+package com.google.code.ddom.stream.options;
 
 /**
  * Specifies how comments will be handled by a parser.

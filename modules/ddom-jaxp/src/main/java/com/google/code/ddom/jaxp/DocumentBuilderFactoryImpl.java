@@ -19,9 +19,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.google.code.ddom.CommentPolicy;
-import com.google.code.ddom.NamespaceAwareness;
 import com.google.code.ddom.Options;
+import com.google.code.ddom.stream.options.CommentPolicy;
+import com.google.code.ddom.stream.options.NamespaceAwareness;
 
 public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
     @Override

@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom;
+package com.google.code.ddom.stream.options;
 
-/**
- * Specifies how empty CDATA sections will be handled by a parser.
- * 
- * @author Andreas Veithen
- */
-public enum EmptyCDATASectionPolicy {
+public enum NamespaceAwareness {
     /**
-     * Empty CDATA sections will be removed by the parser.
+     * Enable namespace aware parsing. If no option is specified, this mode SHOULD be the default.
+     * However, it can only be enforced by setting this option explicitly.
      */
-    REMOVE,
+    ENABLE,
     
     /**
-     * Empty CDATA sections will be preserved by the parser.
+     * Disable namespace aware parsing.
      */
-    PRESERVE
+    DISABLE;
+    
+    public static NamespaceAwareness get(boolean value) {
+        return value ? ENABLE : DISABLE;
+    }
 }

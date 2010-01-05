@@ -19,8 +19,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.google.code.ddom.DeferredDocumentFactory;
-import com.google.code.ddom.NamespaceAwareness;
 import com.google.code.ddom.Options;
+import com.google.code.ddom.stream.options.NamespaceAwareness;
 
 public class DDOMUtil extends DOMUtil {
     public static final DDOMUtil INSTANCE = new DDOMUtil();

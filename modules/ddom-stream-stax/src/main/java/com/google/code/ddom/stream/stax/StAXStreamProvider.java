@@ -17,9 +17,9 @@ package com.google.code.ddom.stream.stax;
 
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.CommentPolicy;
 import com.google.code.ddom.OptionsProcessor;
 import com.google.code.ddom.spi.Provider;
+import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
