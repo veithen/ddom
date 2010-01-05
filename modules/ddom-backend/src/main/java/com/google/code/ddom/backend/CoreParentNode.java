@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.backend;
 
+import java.util.Iterator;
+
 public interface CoreParentNode extends CoreNode {
     void internalSetFirstChild(CoreChildNode child);
     void notifyChildrenModified(int delta);
@@ -52,4 +54,6 @@ public interface CoreParentNode extends CoreNode {
     
     void coreRemoveChild(CoreChildNode child) throws CoreModelException;
     void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
+    
+    Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
 }

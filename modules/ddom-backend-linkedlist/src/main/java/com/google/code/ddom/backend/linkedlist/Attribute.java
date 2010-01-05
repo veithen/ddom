@@ -139,4 +139,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
         nextAttribute = attr;
     }
+
+    @Override
+    protected final boolean isComplete() {
+        return true;
+    }
 }
