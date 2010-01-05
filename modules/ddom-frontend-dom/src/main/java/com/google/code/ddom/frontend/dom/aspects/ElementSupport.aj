@@ -33,6 +33,7 @@ import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.DOMNamespaceDeclarationMatcher;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
+import com.google.code.ddom.stream.spi.Symbols;
 
 public aspect ElementSupport {
     public final Attr DOMElement.getAttributeNode(String name) {
@@ -78,8 +79,10 @@ public aspect ElementSupport {
             prefix = null;
             localName = qualifiedName;
         } else {
-            prefix = qualifiedName.substring(0, i);
-            localName = qualifiedName.substring(i+1);
+            // Use symbol table to avoid creation of new String objects
+            Symbols symbols = getDocument().getSymbols();
+            prefix = symbols.getSymbol(qualifiedName, 0, i);
+            localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
             coreSetAttribute(DOMNamespaceDeclarationMatcher.INSTANCE, null, NSUtil.getDeclaredPrefix(localName, prefix), null, value);

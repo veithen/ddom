@@ -30,6 +30,7 @@ import org.w3c.dom.Text;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 
 import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.stream.spi.Symbols;
 
 public aspect Create {
     public final Element DOMDocument.createElement(String tagName) throws DOMException {
@@ -45,8 +46,10 @@ public aspect Create {
             prefix = null;
             localName = qualifiedName;
         } else {
-            prefix = qualifiedName.substring(0, i);
-            localName = qualifiedName.substring(i+1);
+            // Use symbol table to avoid creation of new String objects
+            Symbols symbols = getSymbols();
+            prefix = symbols.getSymbol(qualifiedName, 0, i);
+            localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
         namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
         NSUtil.validateNamespace(namespaceURI, prefix);
@@ -66,8 +69,10 @@ public aspect Create {
             prefix = null;
             localName = qualifiedName;
         } else {
-            prefix = qualifiedName.substring(0, i);
-            localName = qualifiedName.substring(i+1);
+            // Use symbol table to avoid creation of new String objects
+            Symbols symbols = getSymbols();
+            prefix = symbols.getSymbol(qualifiedName, 0, i);
+            localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
             return (Attr)getNodeFactory().createNSDecl(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
