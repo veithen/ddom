@@ -24,12 +24,16 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.FragmentSource;
+import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.SymbolHashTable;
+import com.google.code.ddom.stream.spi.Symbols;
 
 @Implementation
 public class Document extends BuilderWrapperImpl implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
-    private final FragmentSource source;
+    private final Symbols symbols;
+    private final Producer producer;
     private Builder builder;
     private boolean complete;
     private CoreChildNode firstChild;
@@ -42,19 +46,30 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
 
     public Document(NodeFactory nodeFactory, FragmentSource source) {
         this.nodeFactory = nodeFactory;
-        this.source = source;
-        complete = source == null;
+        if (source == null) {
+            complete = true;
+            producer = null;
+            symbols = new SymbolHashTable();
+        } else {
+            complete = false;
+            producer = source.getProducer();
+            symbols = producer.getSymbols();
+        }
     }
 
     public final void next() throws DeferredParsingException {
         if (builder == null) {
-            builder = new Builder(source.getProducer(), this, this);
+            builder = new Builder(producer, this, this);
         }
         builder.next();
     }
     
     public final NodeFactory getNodeFactory() {
         return nodeFactory;
+    }
+
+    public final Symbols getSymbols() {
+        return symbols;
     }
 
     public final CoreDocument getDocument() {

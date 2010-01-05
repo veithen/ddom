@@ -17,9 +17,20 @@ package com.google.code.ddom.backend;
 
 import com.google.code.ddom.DeferredDocument;
 import com.google.code.ddom.DeferredParsingException;
+import com.google.code.ddom.stream.spi.Symbols;
 
 public interface CoreDocument extends DeferredDocument, BuilderTarget {
     NodeFactory getNodeFactory();
+    
+    /**
+     * Get the symbol table used by this document. Various methods defined by the core model are
+     * required to return canonicalized strings. This method gives access to the symbol table used
+     * for all canonicalizations occurring for nodes linked to this document.
+     * 
+     * @return the symbol table; may not be <code>null</code>
+     */
+    Symbols getSymbols();
+    
     void next() throws DeferredParsingException;
     String coreGetInputEncoding();
     void coreSetInputEncoding(String inputEncoding);
