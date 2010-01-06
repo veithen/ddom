@@ -16,6 +16,7 @@
 package com.google.code.ddom.frontend.axiom.support;
 
 import org.apache.axiom.om.OMNamespace;
+import org.apache.commons.lang.ObjectUtils;
 
 public class OMNamespaceImpl implements OMNamespace {
     private final String namespaceURI;
@@ -42,4 +43,19 @@ public class OMNamespaceImpl implements OMNamespace {
     public String getPrefix() {
         return prefix;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        } else if (obj instanceof OMNamespace) {
+            OMNamespace other = (OMNamespace)obj;
+            // TODO: can prefix be null?
+            return ObjectUtils.equals(prefix, other.getPrefix()) && namespaceURI.equals(other.getNamespaceURI());
+        } else {
+            return false;
+        }
+    }
+    
+    // TODO: implement hashCode
 }

@@ -32,8 +32,10 @@ import org.apache.axiom.om.OMSourcedElement;
 import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
@@ -88,7 +90,14 @@ public aspect Factory {
     }
 
     public OMElement AxiomDocument.createOMElement(QName qname) {
-        return (OMElement)getNodeFactory().createElement(this, NSUtil.getNamespaceURI(qname), qname.getLocalPart(), NSUtil.getPrefix(qname));
+        NodeFactory nodeFactory = getNodeFactory();
+        String namespaceURI = NSUtil.getNamespaceURI(qname);
+        String prefix = NSUtil.getPrefix(qname);
+        AxiomElement element = (AxiomElement)nodeFactory.createElement(this, namespaceURI, qname.getLocalPart(), prefix);
+        if (prefix != null) {
+            element.coreAppendAttribute(nodeFactory.createNSDecl(this, prefix, namespaceURI));
+        }
+        return element;
     }
 
     public OMNamespace AxiomDocument.createOMNamespace(String uri, String prefix) {

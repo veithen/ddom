@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.frontend.axiom;
 
+import java.util.Iterator;
+
 import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMElement;
@@ -50,6 +52,7 @@ public class FactoryTest {
         OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
         Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
         Assert.assertNull(element.getNamespace());
+        Assert.assertFalse(element.getAllDeclaredNamespaces().hasNext());
     }
     
     @Validated @Test
@@ -61,5 +64,9 @@ public class FactoryTest {
         Assert.assertNotNull(ns);
         Assert.assertEquals(qname.getNamespaceURI(), ns.getNamespaceURI());
         Assert.assertEquals(qname.getPrefix(), ns.getPrefix());
+        Iterator it = element.getAllDeclaredNamespaces();
+        Assert.assertTrue(it.hasNext());
+        Assert.assertEquals(ns, it.next());
+        Assert.assertFalse(it.hasNext());
     }
 }
