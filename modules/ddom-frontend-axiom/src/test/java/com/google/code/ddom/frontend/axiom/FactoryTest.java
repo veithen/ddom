@@ -35,19 +35,19 @@ public class FactoryTest {
     private AxiomUtil axiomUtil;
     
     @Validated @Test
-    public void createOMNamespace() {
+    public void testCreateOMNamespace() {
         OMNamespace ns = axiomUtil.createDocument().getOMFactory().createOMNamespace("urn:test", "t");
         Assert.assertEquals("urn:test", ns.getNamespaceURI());
         Assert.assertEquals("t", ns.getPrefix());
     }
     
     @Validated @Test(expected=IllegalArgumentException.class)
-    public void createOMNamespaceWithNullURI() {
+    public void testCreateOMNamespaceWithNullURI() {
         axiomUtil.createDocument().getOMFactory().createOMNamespace(null, "t");
     }
     
     @Validated @Test
-    public void createOMElementFromQNameWithoutNamespace() {
+    public void testCreateOMElementFromQNameWithoutNamespace() {
         QName qname = new QName("test");
         OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
         Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
@@ -56,7 +56,7 @@ public class FactoryTest {
     }
 
     @Validated @Test
-    public void createOMElementFromQNameWithDefaultNamespace() {
+    public void testCreateOMElementFromQNameWithDefaultNamespace() {
         QName qname = new QName("urn:test", "test");
         OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
         Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
@@ -72,7 +72,7 @@ public class FactoryTest {
     }
     
     @Validated @Test
-    public void createOMElementFromQNameWithNonDefaultNamespace() {
+    public void testCreateOMElementFromQNameWithNonDefaultNamespace() {
         QName qname = new QName("urn:test", "test", "t");
         OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
         Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
