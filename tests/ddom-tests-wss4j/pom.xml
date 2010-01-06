@@ -31,30 +31,30 @@
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>ddom-api</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>ddom-frontend-dom</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>ddom-stream-wstx</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>ddom-backend-linkedlist</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>ddom-weaver</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
