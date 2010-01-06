@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.intf;
+package com.google.code.ddom.frontend.axiom.aspects;
 
-import org.apache.axiom.om.OMDocument;
-import org.apache.axiom.om.OMFactory;
+import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 
-import com.google.code.ddom.backend.CoreDocument;
-
-public interface AxiomDocument extends CoreDocument, OMDocument, OMFactory, AxiomContainer {
-    String generatePrefix();
+public aspect GeneratePrefix {
+    private int AxiomDocument.nextGeneratedPrefix = 1;
+    
+    public String AxiomDocument.generatePrefix() {
+        return "ns" + nextGeneratedPrefix++;
+    }
 }

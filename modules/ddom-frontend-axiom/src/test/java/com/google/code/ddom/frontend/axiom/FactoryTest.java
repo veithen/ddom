@@ -54,10 +54,26 @@ public class FactoryTest {
         Assert.assertNull(element.getNamespace());
         Assert.assertFalse(element.getAllDeclaredNamespaces().hasNext());
     }
+
+    @Validated @Test
+    public void createOMElementFromQNameWithDefaultNamespace() {
+        QName qname = new QName("urn:test", "test");
+        OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
+        Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
+        OMNamespace ns = element.getNamespace();
+        Assert.assertNotNull(ns);
+        Assert.assertEquals(qname.getNamespaceURI(), ns.getNamespaceURI());
+        // Axiom auto-generates a prefix here
+        Assert.assertTrue(ns.getPrefix().length() != 0);
+        Iterator it = element.getAllDeclaredNamespaces();
+        Assert.assertTrue(it.hasNext());
+        Assert.assertEquals(ns, it.next());
+        Assert.assertFalse(it.hasNext());
+    }
     
     @Validated @Test
-    public void createOMElementFromQNameWithNamespace() {
-        QName qname = new QName("test", "urn:test", "t");
+    public void createOMElementFromQNameWithNonDefaultNamespace() {
+        QName qname = new QName("urn:test", "test", "t");
         OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement(qname);
         Assert.assertEquals(qname.getLocalPart(), element.getLocalName());
         OMNamespace ns = element.getNamespace();

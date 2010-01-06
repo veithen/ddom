@@ -93,6 +93,9 @@ public aspect Factory {
         NodeFactory nodeFactory = getNodeFactory();
         String namespaceURI = NSUtil.getNamespaceURI(qname);
         String prefix = NSUtil.getPrefix(qname);
+        if (prefix == null && namespaceURI != null) {
+            prefix = generatePrefix();
+        }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(this, namespaceURI, qname.getLocalPart(), prefix);
         if (prefix != null) {
             element.coreAppendAttribute(nodeFactory.createNSDecl(this, prefix, namespaceURI));

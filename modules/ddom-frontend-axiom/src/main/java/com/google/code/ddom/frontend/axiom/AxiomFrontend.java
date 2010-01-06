@@ -34,6 +34,7 @@ public class AxiomFrontend implements Frontend {
                 "com.google.code.ddom.frontend.axiom.aspects.ElementSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.ElementText",
                 "com.google.code.ddom.frontend.axiom.aspects.Factory",
+                "com.google.code.ddom.frontend.axiom.aspects.GeneratePrefix",
                 "com.google.code.ddom.frontend.axiom.aspects.LineNumber",
                 "com.google.code.ddom.frontend.axiom.aspects.NamedNodeSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.NamespaceDeclarations",
