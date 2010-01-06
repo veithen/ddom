@@ -35,12 +35,12 @@ public aspect Clone {
         return deepClone();
     }
     
-    public final Node DOMNSAwareTypedAttribute.shallowClone() {
+    public final Node DOMNSAwareAttribute.shallowClone() {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createAttribute(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
     
-    public final Node DOMNSUnawareTypedAttribute.shallowClone() {
+    public final Node DOMNSUnawareAttribute.shallowClone() {
         CoreDocument document = getDocument();
         return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, coreGetType());
     }

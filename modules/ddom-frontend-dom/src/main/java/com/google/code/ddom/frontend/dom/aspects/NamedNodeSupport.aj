@@ -73,7 +73,7 @@ public aspect NamedNodeSupport {
         return coreGetName();
     }
     
-    public final String DOMNSUnawareTypedAttribute.getName() {
+    public final String DOMNSUnawareAttribute.getName() {
         return coreGetName();
     }
 
@@ -91,7 +91,7 @@ public aspect NamedNodeSupport {
         return internalGetName();
     }
     
-    public final String DOMNSAwareTypedAttribute.getName() {
+    public final String DOMNSAwareAttribute.getName() {
         return internalGetName();
     }
 
