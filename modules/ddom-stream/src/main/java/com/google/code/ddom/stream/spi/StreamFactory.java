@@ -20,7 +20,7 @@ import java.security.PrivilegedAction;
 import java.util.Map;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.OptionsProcessor;
+import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
@@ -80,7 +80,7 @@ public final class StreamFactory {
      *             source object passed as argument
      * @throws StreamException
      */
-    public Producer getProducer(String providerName, Object source, OptionsProcessor options, boolean preserve) throws StreamException {
+    public Producer getProducer(String providerName, Object source, OptionsTracker options, boolean preserve) throws StreamException {
         StreamProvider provider = providers.get(providerName);
         if (provider == null) {
             throw new NoStreamProviderFoundException("Provider '" + providerName + "' not found");
@@ -95,14 +95,14 @@ public final class StreamFactory {
     }
     
     public Producer getProducer(String providerName, Object source, Options options, boolean preserve) throws StreamException {
-        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
+        OptionsTracker optionsProcessor = options.createTracker();
         Producer producer = getProducer(providerName, source, optionsProcessor, preserve);
         // TODO: clean up producer if this fails
         optionsProcessor.finish();
         return producer;
     }
     
-    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
+    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         for (StreamProvider provider : providers.values()) {
             Producer producer = provider.getProducer(source, options, preserve);
             if (producer != null) {
@@ -113,14 +113,14 @@ public final class StreamFactory {
     }
     
     public Producer getProducer(Object source, Options options, boolean preserve) throws StreamException {
-        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
+        OptionsTracker optionsProcessor = options.createTracker();
         Producer producer = getProducer(source, optionsProcessor, preserve);
         // TODO: clean up producer if this fails
         optionsProcessor.finish();
         return producer;
     }
     
-    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
+    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
         for (StreamProvider provider : providers.values()) {
             Consumer consumer = provider.getConsumer(destination, options);
             if (consumer != null) {
@@ -131,7 +131,7 @@ public final class StreamFactory {
     }
     
     public Consumer getConsumer(Object destination, Options options) throws StreamException {
-        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
+        OptionsTracker optionsProcessor = options.createTracker();
         Consumer consumer = getConsumer(destination, optionsProcessor);
         // TODO: clean up producer if this fails
         optionsProcessor.finish();

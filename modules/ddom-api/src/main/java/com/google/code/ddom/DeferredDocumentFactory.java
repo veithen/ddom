@@ -48,11 +48,11 @@ public class DeferredDocumentFactory {
     public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
         DocumentFactory nodeFactory = modelLoaderRegistry.getDocumentFactory(ModelBuilder.buildModelDefinition(frontend));
-        OptionsProcessor optionsProcessor = options.createOptionsProcessor();
+        OptionsTracker tracker = options.createTracker();
         Producer producer;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
-            producer = streamFactory.getProducer(source, optionsProcessor, preserve);
+            producer = streamFactory.getProducer(source, tracker, preserve);
         } catch (StreamException ex) {
             throw new DeferredParsingException(ex.getMessage(), ex.getCause());
         }
@@ -60,7 +60,7 @@ public class DeferredDocumentFactory {
             // TODO: maybe a distinct exception here?
             throw new DeferredParsingException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
-        optionsProcessor.finish();
+        tracker.finish();
         return nodeFactory.createDocument(producer);
     }
 

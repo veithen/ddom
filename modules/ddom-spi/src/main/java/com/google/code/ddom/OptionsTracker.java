@@ -15,7 +15,14 @@
  */
 package com.google.code.ddom;
 
-public interface OptionsProcessor {
+/**
+ * Tracks with options in an {@link Options} object have been processed. Instances of this interface
+ * are produced by {@link Options#createTracker()} and are used to check that all options flagged as
+ * "must understand" have been processed.
+ * 
+ * @author Andreas Veithen
+ */
+public interface OptionsTracker {
     <T> T get(Class<T> key);
     void markProcessed(Class<?> key);
     <T> T getAndMarkAsProcessed(Class<T> key);

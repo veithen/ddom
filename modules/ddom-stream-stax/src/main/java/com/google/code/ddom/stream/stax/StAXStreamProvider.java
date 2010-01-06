@@ -17,7 +17,7 @@ package com.google.code.ddom.stream.stax;
 
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.OptionsProcessor;
+import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.spi.Consumer;
@@ -27,7 +27,7 @@ import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="stax")
 public class StAXStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
+    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         if (source instanceof XMLStreamReader) {
             XMLStreamReader reader = (XMLStreamReader)source;
             if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
@@ -40,12 +40,12 @@ public class StAXStreamProvider implements StreamProvider {
         }
     }
     
-    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
+    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
         // TODO construct Consumer wrapping an XMLStreamWriter
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options) {
+    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
         // TODO support wrapping the consumer in an XMLStreamWriter
         return null;
     }

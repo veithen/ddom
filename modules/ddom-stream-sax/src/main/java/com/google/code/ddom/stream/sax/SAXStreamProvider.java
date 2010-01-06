@@ -19,7 +19,7 @@ import java.net.ContentHandler;
 
 import javax.xml.transform.sax.SAXSource;
 
-import com.google.code.ddom.OptionsProcessor;
+import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
@@ -28,7 +28,7 @@ import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="sax")
 public class SAXStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
+    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         if (source instanceof SAXSource) {
             return new SAXSourceProducer((SAXSource)source);
         } else {
@@ -36,12 +36,12 @@ public class SAXStreamProvider implements StreamProvider {
         }
     }
 
-    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
+    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
         // TODO build a Consumer that wraps a ContentHandler
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options) {
+    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
         if (serializerType.equals(ContentHandler.class)) {
             return serializerType.cast(new ConsumerContentHandler(consumer));
         } else {

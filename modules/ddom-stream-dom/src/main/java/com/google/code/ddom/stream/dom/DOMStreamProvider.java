@@ -17,7 +17,7 @@ package com.google.code.ddom.stream.dom;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.OptionsProcessor;
+import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
@@ -26,12 +26,12 @@ import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="dom")
 public class DOMStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
+    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         // TODO build Producer for Node and DOMSource objects
         return null;
     }
 
-    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
+    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
         // TODO: support DOMResult objects (and DocumentFragment and Element objects)
         if (destination instanceof Document) {
             return new DOMConsumer((Document)destination);
@@ -40,7 +40,7 @@ public class DOMStreamProvider implements StreamProvider {
         }
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options) {
+    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
         // DOM doesn't define any serializers
         return null;
     }

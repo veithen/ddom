@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.stream.spi;
 
-import com.google.code.ddom.OptionsProcessor;
+import com.google.code.ddom.OptionsTracker;
 
 // TODO: refer to the @Provider annotation
 public interface StreamProvider {
@@ -30,9 +30,9 @@ public interface StreamProvider {
      * @return
      * @throws StreamException
      */
-    Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException;
+    Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException;
     
-    Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException;
+    Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException;
     
-    <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options);
+    <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options);
 }

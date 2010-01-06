@@ -32,7 +32,7 @@ import com.ctc.wstx.io.ReaderBootstrapper;
 import com.ctc.wstx.io.StreamBootstrapper;
 import com.ctc.wstx.stax.WstxInputFactory;
 import com.ctc.wstx.util.URLUtil;
-import com.google.code.ddom.OptionsProcessor;
+import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.options.CoalescingFeature;
 import com.google.code.ddom.stream.options.CommentPolicy;
@@ -48,7 +48,7 @@ import com.google.code.ddom.stream.stax.StAXParser;
 
 @Provider(name="woodstox")
 public class WoodstoxStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsProcessor options, boolean preserve) throws StreamException {
+    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         // TODO: who actually closes the streams???
         InputStream byteStream;
         Reader characterStream;
@@ -146,12 +146,12 @@ public class WoodstoxStreamProvider implements StreamProvider {
         return new StAXParser(reader, config.getSymbols());
     }
     
-    public Consumer getConsumer(Object destination, OptionsProcessor options) throws StreamException {
+    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
         // TODO
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsProcessor options) {
+    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
         // TODO
         return null;
     }
