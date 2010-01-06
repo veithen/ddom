@@ -95,10 +95,10 @@ public final class StreamFactory {
     }
     
     public Producer getProducer(String providerName, Object source, Options options, boolean preserve) throws StreamException {
-        OptionsTracker optionsProcessor = options.createTracker();
-        Producer producer = getProducer(providerName, source, optionsProcessor, preserve);
+        OptionsTracker tracker = options.createTracker();
+        Producer producer = getProducer(providerName, source, tracker, preserve);
         // TODO: clean up producer if this fails
-        optionsProcessor.finish();
+        tracker.finish();
         return producer;
     }
     
@@ -113,10 +113,10 @@ public final class StreamFactory {
     }
     
     public Producer getProducer(Object source, Options options, boolean preserve) throws StreamException {
-        OptionsTracker optionsProcessor = options.createTracker();
-        Producer producer = getProducer(source, optionsProcessor, preserve);
+        OptionsTracker tracker = options.createTracker();
+        Producer producer = getProducer(source, tracker, preserve);
         // TODO: clean up producer if this fails
-        optionsProcessor.finish();
+        tracker.finish();
         return producer;
     }
     
@@ -131,10 +131,10 @@ public final class StreamFactory {
     }
     
     public Consumer getConsumer(Object destination, Options options) throws StreamException {
-        OptionsTracker optionsProcessor = options.createTracker();
-        Consumer consumer = getConsumer(destination, optionsProcessor);
+        OptionsTracker tracker = options.createTracker();
+        Consumer consumer = getConsumer(destination, tracker);
         // TODO: clean up producer if this fails
-        optionsProcessor.finish();
+        tracker.finish();
         return consumer;
     }
     
