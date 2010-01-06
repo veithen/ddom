@@ -71,8 +71,11 @@ public class ElementTest {
         Assert.assertNull(child.getNextOMSibling());
     }
     
+    /**
+     * Test {@link OMElement#getAllAttributes()} on a programmatically created document.
+     */
     @Validated @Test
-    public void testGetAllAttributes() {
+    public void testGetAllAttributes1() {
         OMElement element = axiomUtil.createDocument().getOMFactory().createOMElement("test", null);
         element.addAttribute("attr1", "value1", null);
         element.addAttribute("attr2", "value2", null);
@@ -83,6 +86,21 @@ public class ElementTest {
         Assert.assertTrue(it.hasNext());
         attr = (OMAttribute)it.next();
         Assert.assertEquals("attr2", attr.getLocalName());
+        Assert.assertFalse(it.hasNext());
+    }
+
+    /**
+     * Test {@link OMElement#getAllAttributes()} on a parsed document. Also check that the iterator
+     * doesn't attempt to return namespace declarations.
+     */
+    @Validated @Test
+    public void testGetAllAttributes2() {
+        OMElement element = axiomUtil.parse("<e xmlns:p='urn:test' p:attr='test'/>").getOMDocumentElement();
+        Iterator it = element.getAllAttributes();
+        Assert.assertTrue(it.hasNext());
+        OMAttribute attr = (OMAttribute)it.next();
+        Assert.assertEquals("urn:test", attr.getNamespace().getNamespaceURI());
+        Assert.assertEquals("attr", attr.getLocalName());
         Assert.assertFalse(it.hasNext());
     }
     

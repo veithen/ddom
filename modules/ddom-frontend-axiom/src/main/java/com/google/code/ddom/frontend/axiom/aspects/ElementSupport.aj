@@ -24,8 +24,9 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.IdentityMapper;
+import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
-import com.google.code.ddom.frontend.axiom.support.AttributeIterator;
 
 public aspect ElementSupport {
     public void AxiomElement.setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
@@ -38,8 +39,10 @@ public aspect ElementSupport {
         throw new UnsupportedOperationException();
     }
     
+    private static final IdentityMapper<AxiomAttribute> attributeIdentityMapper = new IdentityMapper<AxiomAttribute>();
+    
     public Iterator AxiomElement.getAllAttributes() {
-        return new AttributeIterator(this);
+        return coreGetAttributesByType(AxiomAttribute.class, attributeIdentityMapper);
     }
     
     public OMAttribute AxiomElement.getAttribute(QName qname) {
