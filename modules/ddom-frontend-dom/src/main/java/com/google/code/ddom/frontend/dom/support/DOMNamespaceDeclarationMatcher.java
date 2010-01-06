@@ -52,7 +52,7 @@ public class DOMNamespaceDeclarationMatcher implements AttributeMatcher {
     }
 
     public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
-        return factory.createNSDecl(document, name, value);
+        return factory.createNamespaceDeclaration(document, name, value);
     }
 
     public void update(CoreAttribute attr, String prefix, String value) {

@@ -26,7 +26,7 @@
  * <ul>
  * <li>{@link com.google.code.ddom.backend.NodeFactory#createElement(CoreDocument, String, String, String)}
  * <li>{@link com.google.code.ddom.backend.NodeFactory#createAttribute(CoreDocument, String, String, String, String, String)}
- * <li>{@link com.google.code.ddom.backend.NodeFactory#createNSDecl(CoreDocument, String, String)}
+ * <li>{@link com.google.code.ddom.backend.NodeFactory#createNamespaceDeclaration(CoreDocument, String, String)}
  * <li>{@link com.google.code.ddom.backend.CoreNSAwareNamedNode#coreGetNamespaceURI()}
  * <li>{@link com.google.code.ddom.backend.CoreNSAwareNamedNode#coreGetPrefix()}
  * <li>{@link com.google.code.ddom.backend.CoreNSAwareNamedNode#coreSetNamespaceURI(String)}

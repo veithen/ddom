@@ -60,7 +60,7 @@ public interface NodeFactory extends DocumentFactory {
     
     CoreNSAwareAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type);
     
-    CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI);
+    CoreNamespaceDeclaration createNamespaceDeclaration(CoreDocument document, String prefix, String namespaceURI);
     
     CoreProcessingInstruction createProcessingInstruction(CoreDocument document, String target, String data);
     

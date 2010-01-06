@@ -98,7 +98,7 @@ public aspect Factory {
         }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(this, namespaceURI, qname.getLocalPart(), prefix);
         if (prefix != null) {
-            element.coreAppendAttribute(nodeFactory.createNSDecl(this, prefix, namespaceURI));
+            element.coreAppendAttribute(nodeFactory.createNamespaceDeclaration(this, prefix, namespaceURI));
         }
         return element;
     }

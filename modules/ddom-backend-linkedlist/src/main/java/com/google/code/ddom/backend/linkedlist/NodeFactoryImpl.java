@@ -69,7 +69,7 @@ public class NodeFactoryImpl implements NodeFactory {
                 value, type);
     }
     
-    public CoreNamespaceDeclaration createNSDecl(CoreDocument document, String prefix, String namespaceURI) {
+    public CoreNamespaceDeclaration createNamespaceDeclaration(CoreDocument document, String prefix, String namespaceURI) {
         return new NamespaceDeclaration(document, prefix, namespaceURI);
     }
     

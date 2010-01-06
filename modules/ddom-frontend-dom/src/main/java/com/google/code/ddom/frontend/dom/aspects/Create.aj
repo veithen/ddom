@@ -75,7 +75,7 @@ public aspect Create {
             localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return (Attr)getNodeFactory().createNSDecl(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
+            return (Attr)getNodeFactory().createNamespaceDeclaration(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
         } else {
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
             return (Attr)getNodeFactory().createAttribute(this, namespaceURI, localName, prefix, null, null);
