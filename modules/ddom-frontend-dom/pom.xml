@@ -29,35 +29,35 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-api</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-dom-utils</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-stream-utils</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-backend</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-backend-linkedlist</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-weaver</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -69,27 +69,27 @@
             <artifactId>commons-lang</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-test-utils</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-domts</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-xmlts</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>ddom-stream-wstx</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
