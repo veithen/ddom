@@ -24,43 +24,25 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreParentNode;
 
 public abstract class AbstractNodeIterator<T extends CoreChildNode> implements Iterator<T> {
-    /**
-     * There has been no call to {@link #hasNext()} since the last call to {@link #next()}
-     * completed. {@link #node} is the node returned by the last call to {@link #next()}, or
-     * <code>null</code> if the iterator has just been created.
-     */
-    private static final int NEED_NEXT = 1;
-    
-    /**
-     * {@link #hasNext()} has been called and the iterator expects a call to {@link #next()}.
-     * {@link #node} is the node that will be returned by the next call to {@link #next()}.
-     */
-    private static final int HAS_NEXT = 2;
-    
-    /**
-     * {@link #hasNext()} has been called and returned <code>false</code>.
-     */
-    private static final int NO_MORE_NODES = 3;
-    
     private final CoreParentNode startNode;
-    private final Class<T> nodeClass;
+    private final Class<T> type;
     private final Axis axis;
     private CoreChildNode node;
-    private int state = NEED_NEXT;
+    private boolean hasNext;
     private int depth;
     
-    public AbstractNodeIterator(CoreParentNode startNode, Class<T> nodeClass, Axis axis) {
+    public AbstractNodeIterator(CoreParentNode startNode, Class<T> type, Axis axis) {
         this.startNode = startNode;
-        this.nodeClass = nodeClass;
+        this.type = type;
         this.axis = axis;
     }
 
     protected abstract boolean matches(T node);
 
     public boolean hasNext() {
-        if (state == NEED_NEXT) {
+        if (!hasNext) {
             CoreChildNode node = this.node;
-            while (true) {
+            do {
                 // Get to the next node
                 switch (axis) {
                     case CHILDREN:
@@ -100,24 +82,17 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
                             }
                         }
                 }
-                if (node == null) {
-                    state = NO_MORE_NODES;
-                    break;
-                }
-                if (nodeClass.isInstance(node) && matches(nodeClass.cast(node))) {
-                    state = HAS_NEXT;
-                    break;
-                }
-            }
+            } while (node != null && (!type.isInstance(node) || !matches(type.cast(node))));
             this.node = node;
+            hasNext = true;
         }
-        return state == HAS_NEXT;
+        return node != null;
     }
 
     public T next() {
         if (hasNext()) {
-            state = NEED_NEXT;
-            return nodeClass.cast(node);
+            hasNext = false;
+            return type.cast(node);
         } else {
             throw new NoSuchElementException();
         }
