@@ -239,7 +239,17 @@
                     </reportSet>
                 </reportSets>
                 <configuration>
-                    <excludePackageNames>org.w3c.domts.*:com.ctc.wstx.*:org.jaxen.*</excludePackageNames>
+                    <excludePackageNames>org.w3c.domts*:com.ctc.wstx*:org.jaxen*</excludePackageNames>
+                    <groups>
+                        <group>
+                            <title>Public APIs</title>
+                            <packages>com.google.code.ddom:com.google.code.ddom.stream:com.google.code.ddom.stream.options</packages>
+                        </group>
+                        <group>
+                            <title>Service provider interfaces</title>
+                            <packages>com.google.code.ddom.backend:com.google.code.ddom.backend.ext:com.google.code.ddom.stream.spi</packages>
+                        </group>
+                    </groups>
                 </configuration>
             </plugin>
             <plugin>
