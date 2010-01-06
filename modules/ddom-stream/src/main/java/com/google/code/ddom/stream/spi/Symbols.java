@@ -16,6 +16,7 @@
 package com.google.code.ddom.stream.spi;
 
 // TODO: specify that args must not be null
+// TODO: we should support interning as well; reason: when importing or adopting nodes from another document, we don't need to lookup the symbols again (if the symbol tables of both documents have interning enabled)
 public interface Symbols {
     String lookupSymbol(String str);
     String lookupSymbol(String str, int beginIndex, int endIndex);
