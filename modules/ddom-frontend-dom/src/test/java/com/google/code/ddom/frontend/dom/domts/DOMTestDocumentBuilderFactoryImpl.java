@@ -26,7 +26,7 @@ import org.w3c.domts.DOMTestIncompatibleException;
 import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
@@ -93,7 +93,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
     @Override
     public Document load(URL url) throws DOMTestLoadException {
         // TODO: need to cleanup somehow
-        return (Document)DeferredDocumentFactory.newInstance().parse("dom", url, options);
+        return (Document)DocumentHelper.newInstance().parse("dom", url, options);
     }
 
     @Override

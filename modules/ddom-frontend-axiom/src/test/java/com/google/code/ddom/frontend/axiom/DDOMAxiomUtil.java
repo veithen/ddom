@@ -19,12 +19,12 @@ import java.io.StringReader;
 
 import org.apache.axiom.om.OMDocument;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 
 public class DDOMAxiomUtil implements AxiomUtil {
     public static final DDOMAxiomUtil INSTANCE = new DDOMAxiomUtil();
     
-    private final DeferredDocumentFactory factory = DeferredDocumentFactory.newInstance();
+    private final DocumentHelper factory = DocumentHelper.newInstance();
 
     private DDOMAxiomUtil() {}
     

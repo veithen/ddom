@@ -22,21 +22,34 @@ import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
-public class DeferredDocumentFactory {
+public class DocumentHelper {
     private final ModelLoaderRegistry modelLoaderRegistry;
     private final StreamFactory streamFactory;
     
-    private DeferredDocumentFactory(ModelLoaderRegistry modelLoaderRegistry, StreamFactory streamFactory) {
+    private DocumentHelper(ModelLoaderRegistry modelLoaderRegistry, StreamFactory streamFactory) {
         this.modelLoaderRegistry = modelLoaderRegistry;
         this.streamFactory = streamFactory;
     }
     
-    public static DeferredDocumentFactory newInstance(ClassLoader classLoader) {
-        return new DeferredDocumentFactory(ModelLoaderRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
+    /**
+     * Get the default instance. In a non OSGi environment, this instance will have access to all
+     * frontend, backend and stream providers visible in the class loader from which the
+     * {@link DocumentHelper} class is loaded. In an OSGi environment, this instance will use all
+     * providers in registered bundles. TODO: make this more precise
+     * 
+     * @return the default instance
+     */
+    public static DocumentHelper getDefaultInstance() {
+        // TODO
+        return null;
     }
     
-    public static DeferredDocumentFactory newInstance() {
-        return new DeferredDocumentFactory(ModelLoaderRegistry.getInstance(), StreamFactory.getInstance());
+    public static DocumentHelper newInstance(ClassLoader classLoader) {
+        return new DocumentHelper(ModelLoaderRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
+    }
+    
+    public static DocumentHelper newInstance() {
+        return new DocumentHelper(ModelLoaderRegistry.getInstance(), StreamFactory.getInstance());
     }
     
     public DeferredDocument newDocument(String frontend) {
@@ -74,5 +87,9 @@ public class DeferredDocumentFactory {
     
     public DeferredDocument parse(String frontend, Object source) throws DeferredParsingException {
         return parse(frontend, source, new Options(), true);
+    }
+    
+    public void disposeDocument(Object document) {
+        // TODO
     }
 }

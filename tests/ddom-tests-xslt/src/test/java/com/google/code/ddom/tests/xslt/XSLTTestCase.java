@@ -34,7 +34,7 @@ import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.xsltts.Filters;
 import com.google.code.ddom.xsltts.StrictErrorListener;
 import com.google.code.ddom.xsltts.XSLTConformanceTest;
@@ -42,7 +42,7 @@ import com.google.code.ddom.xsltts.XSLTConformanceTestSuite;
 
 public class XSLTTestCase extends TestCase {
     private static final DocumentBuilder refDocumentBuilder;
-    private static final DeferredDocumentFactory deferredDocumentFactory = DeferredDocumentFactory.newInstance();
+    private static final DocumentHelper documentHelper = DocumentHelper.newInstance();
     
     static {
         DocumentBuilderFactory documentBuilderFactory = new DocumentBuilderFactoryImpl();
@@ -74,8 +74,8 @@ public class XSLTTestCase extends TestCase {
         refTransformer.setErrorListener(StrictErrorListener.INSTANCE);
 
         // TODO: close input streams
-        DOMSource inputSource = new DOMSource((Document)deferredDocumentFactory.parse("dom", test.getInput().openStream()), inputSystemId);
-        DOMSource stylesheetSource = new DOMSource((Document)deferredDocumentFactory.parse("dom", test.getStylesheet().openStream()), stylesheetSystemId);
+        DOMSource inputSource = new DOMSource((Document)documentHelper.parse("dom", test.getInput().openStream()), inputSystemId);
+        DOMSource stylesheetSource = new DOMSource((Document)documentHelper.parse("dom", test.getStylesheet().openStream()), stylesheetSystemId);
         Transformer transformer = transformerFactory.newTransformer(stylesheetSource);
         transformer.setErrorListener(StrictErrorListener.INSTANCE);
         
@@ -94,7 +94,7 @@ public class XSLTTestCase extends TestCase {
                     repeat = true;
                 }
                 if (!repeat) {
-                    Document outputDocument = (Document)deferredDocumentFactory.newDocument("dom");
+                    Document outputDocument = (Document)documentHelper.newDocument("dom");
                     DOMResult outputResult = new DOMResult(outputDocument);
                     refTransformer.transform(inputSource, outputResult);
                     try {

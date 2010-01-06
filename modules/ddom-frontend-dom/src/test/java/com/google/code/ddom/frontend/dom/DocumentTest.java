@@ -31,7 +31,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.backend.CoreNSUnawareElement;
@@ -56,7 +56,7 @@ public class DocumentTest {
         Reader reader = new StringReader("<p:root xmlns:p='urn:ns'>");
         Options options = new Options();
         options.set(NamespaceAwareness.DISABLE);
-        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", reader, options);
+        Document doc = (Document)DocumentHelper.newInstance().parse("dom", reader, options);
         
         Element element = doc.getDocumentElement();
         Assert.assertTrue(element instanceof CoreNSUnawareElement);
@@ -81,7 +81,7 @@ public class DocumentTest {
         InvocationCounter cter = new InvocationCounter();
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<root>This is malformed"));
-        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", cter.createProxy(XMLStreamReader.class, reader));
+        Document doc = (Document)DocumentHelper.newInstance().parse("dom", cter.createProxy(XMLStreamReader.class, reader));
         
         // First loop over the document; this should give an exception
         try {

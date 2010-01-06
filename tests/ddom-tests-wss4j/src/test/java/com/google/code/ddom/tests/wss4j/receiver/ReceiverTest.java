@@ -28,12 +28,12 @@ import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 
 public class ReceiverTest {
     @Test
     public void testUsernameToken() throws Exception {
-        Document doc = (Document)DeferredDocumentFactory.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
+        Document doc = (Document)DocumentHelper.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
         WSSecurityEngine engine = WSSecurityEngine.getInstance();
         CallbackHandler cb = new CallbackHandler() {
             public void handle(Callback[] callbacks) {

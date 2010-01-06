@@ -18,7 +18,7 @@ package com.google.code.ddom.frontend.dom;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 
@@ -29,7 +29,7 @@ public class DDOMUtil extends DOMUtil {
     
     @Override
     public Document newDocument() {
-        return (Document)DeferredDocumentFactory.newInstance().newDocument("dom");
+        return (Document)DocumentHelper.newInstance().newDocument("dom");
     }
 
     @Override
@@ -37,6 +37,6 @@ public class DDOMUtil extends DOMUtil {
         // TODO: need to cleanup somehow
         Options options = new Options();
         options.set(NamespaceAwareness.get(namespaceAware));
-        return (Document)DeferredDocumentFactory.newInstance().parse("dom", source, options);
+        return (Document)DocumentHelper.newInstance().parse("dom", source, options);
     }
 }

@@ -22,7 +22,7 @@ import org.jaxen.Navigator;
 import org.jaxen.dom.DocumentNavigator;
 import org.jaxen.test.XPathTestBase;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 
 public class JaxenTest extends XPathTestBase {
     public JaxenTest(String name) {
@@ -42,7 +42,7 @@ public class JaxenTest extends XPathTestBase {
             public Object getDocument(String url) throws FunctionCallException {
                 // TODO: we need to properly close the input stream/parser somewhere
                 InputStream in = JaxenTest.class.getClassLoader().getResourceAsStream(url);
-                return DeferredDocumentFactory.newInstance().parse("dom", in);
+                return DocumentHelper.newInstance().parse("dom", in);
             }
         };
     }

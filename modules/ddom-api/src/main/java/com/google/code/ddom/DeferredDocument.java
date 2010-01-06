@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom;
 
+/**
+ * @deprecated see {@link DocumentHelper#disposeDocument(Object)}
+ */
 public interface DeferredDocument extends DeferredNode {
     void dispose();
 }

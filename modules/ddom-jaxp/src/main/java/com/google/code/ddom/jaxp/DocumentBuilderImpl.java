@@ -29,7 +29,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.google.code.ddom.DeferredDocumentFactory;
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.NodeFactory;
@@ -67,13 +67,13 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public Document newDocument() {
         // TODO: do this properly
-        return (Document)DeferredDocumentFactory.newInstance().newDocument("dom");
+        return (Document)DocumentHelper.newInstance().newDocument("dom");
     }
 
     @Override
     public Document parse(InputSource is) throws SAXException, IOException {
         // TODO: catch StreamException/DeferredParsingException and translate to SAXException
-        CoreDocument document = (CoreDocument)DeferredDocumentFactory.newInstance().parse("dom", is, options);
+        CoreDocument document = (CoreDocument)DocumentHelper.newInstance().parse("dom", is, options);
         document.build();
         // TODO: close the reader and the underlying stream
         return (Document)document;
