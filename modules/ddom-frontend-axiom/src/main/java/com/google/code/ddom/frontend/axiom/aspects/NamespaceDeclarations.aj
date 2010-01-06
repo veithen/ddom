@@ -22,8 +22,17 @@ import javax.xml.namespace.QName;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
+import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
+import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 
 public aspect NamespaceDeclarations {
+    public OMNamespace AxiomNamespaceDeclaration.getOMNamespace() {
+        // TODO: inefficient
+        // TODO: handle null namespaces/prefixes
+        return new OMNamespaceImpl(coreGetDeclaredNamespaceURI(), coreGetDeclaredPrefix());
+    }
+    
     public OMNamespace AxiomElement.declareNamespace(String uri, String prefix) {
         // TODO
         throw new UnsupportedOperationException();
@@ -55,8 +64,7 @@ public aspect NamespaceDeclarations {
     }
     
     public Iterator AxiomElement.getAllDeclaredNamespaces() {
-        // TODO
-        throw new UnsupportedOperationException();
+        return coreGetAttributesByType(AxiomNamespaceDeclaration.class, NamespaceDeclarationMapper.INSTANCE);
     }
     
     public QName AxiomElement.resolveQName(String qname) {

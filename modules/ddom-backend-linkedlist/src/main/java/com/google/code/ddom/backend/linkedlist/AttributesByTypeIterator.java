@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom;
+package com.google.code.ddom.backend.linkedlist;
 
-import org.apache.axiom.om.OMDocument;
+import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.Mapper;
 
-public interface AxiomUtil {
-    OMDocument createDocument();
-    OMDocument parse(String xml);
+public class AttributesByTypeIterator<T extends CoreAttribute,S> extends AbstractAttributeIterator<T,S> {
+    public AttributesByTypeIterator(CoreElement element, Class<T> type, Mapper<T,S> mapper) {
+        super(element, type, mapper);
+    }
+
+    @Override
+    protected boolean matches(T attribute) {
+        return true;
+    }
 }

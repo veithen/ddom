@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 
+// TODO: replace this by something from the core model
 public class AttributeIterator implements Iterator {
     private final AxiomElement element;
     private AxiomAttribute current;

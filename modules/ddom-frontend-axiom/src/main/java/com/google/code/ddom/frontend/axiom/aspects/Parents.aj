@@ -18,6 +18,7 @@ package com.google.code.ddom.frontend.axiom.aspects;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreLeafNode;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.CoreNode;
@@ -30,6 +31,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomLeafNode;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
@@ -45,4 +47,5 @@ public aspect Parents {
     declare parents: @Implementation CoreLeafNode+ implements AxiomLeafNode;
     declare parents: @Implementation CoreChildNode+ implements AxiomChildNode;
     declare parents: @Implementation CoreNSAwareAttribute+ implements AxiomAttribute;
+    declare parents: @Implementation CoreNamespaceDeclaration+ implements AxiomNamespaceDeclaration;
 }

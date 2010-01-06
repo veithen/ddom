@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.code.ddom.backend.AttributeMatcher;
@@ -33,6 +34,7 @@ import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.backend.Mapper;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.NodeNotFoundException;
 
@@ -370,5 +372,9 @@ public abstract class Element extends ParentNode implements CoreElement {
             }
             child = nextChild;
         }
+    }
+
+    public final <T extends CoreAttribute,S> Iterator<S> coreGetAttributesByType(Class<T> type, Mapper<T,S> mapper) {
+        return new AttributesByTypeIterator<T,S>(this, type, mapper);
     }
 }

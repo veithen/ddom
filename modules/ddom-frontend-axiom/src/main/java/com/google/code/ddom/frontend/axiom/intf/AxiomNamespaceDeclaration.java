@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom;
+package com.google.code.ddom.frontend.axiom.intf;
 
-import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMNamespace;
 
-public interface AxiomUtil {
-    OMDocument createDocument();
-    OMDocument parse(String xml);
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
+
+public interface AxiomNamespaceDeclaration extends CoreNamespaceDeclaration {
+    OMNamespace getOMNamespace();
 }

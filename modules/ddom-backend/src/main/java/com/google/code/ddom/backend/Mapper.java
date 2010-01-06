@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom;
+package com.google.code.ddom.backend;
 
-import org.apache.axiom.om.OMDocument;
-
-public interface AxiomUtil {
-    OMDocument createDocument();
-    OMDocument parse(String xml);
+public interface Mapper<T,S> {
+    S map(T object);
 }

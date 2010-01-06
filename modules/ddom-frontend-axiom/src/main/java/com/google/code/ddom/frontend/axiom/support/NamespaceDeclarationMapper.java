@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom;
+package com.google.code.ddom.frontend.axiom.support;
 
-import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMNamespace;
 
-public interface AxiomUtil {
-    OMDocument createDocument();
-    OMDocument parse(String xml);
+import com.google.code.ddom.backend.Mapper;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
+
+public class NamespaceDeclarationMapper implements Mapper<AxiomNamespaceDeclaration,OMNamespace> {
+    public static final NamespaceDeclarationMapper INSTANCE = new NamespaceDeclarationMapper();
+    
+    private NamespaceDeclarationMapper() {}
+    
+    public OMNamespace map(AxiomNamespaceDeclaration namespaceDeclaration) {
+        return namespaceDeclaration.getOMNamespace();
+    }
 }

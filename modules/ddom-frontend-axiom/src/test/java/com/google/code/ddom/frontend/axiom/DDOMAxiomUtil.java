@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.frontend.axiom;
 
+import java.io.StringReader;
+
 import org.apache.axiom.om.OMDocument;
 
 import com.google.code.ddom.DeferredDocumentFactory;
@@ -28,5 +30,9 @@ public class DDOMAxiomUtil implements AxiomUtil {
     
     public OMDocument createDocument() {
         return (OMDocument)factory.newDocument("axiom");
+    }
+
+    public OMDocument parse(String xml) {
+        return (OMDocument)factory.parse("axiom", new StringReader(xml));
     }
 }

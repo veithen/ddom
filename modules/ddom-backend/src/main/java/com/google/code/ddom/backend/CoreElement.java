@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.backend;
 
+import java.util.Iterator;
+
 public interface CoreElement extends CoreChildNode, BuilderTarget, CoreCompactParentNode {
     /**
      * Get the first attribute of this element.
@@ -144,4 +146,6 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreCompactPa
      *            <code>true</code> if CDATA sections should also be coalesced
      */
     void coreCoalesce(boolean includeCDATASections);
+    
+    <T extends CoreAttribute,S> Iterator<S> coreGetAttributesByType(Class<T> type, Mapper<T,S> mapper);
 }

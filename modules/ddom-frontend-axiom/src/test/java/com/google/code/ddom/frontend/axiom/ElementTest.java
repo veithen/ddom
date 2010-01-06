@@ -21,6 +21,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMText;
 import org.junit.Assert;
@@ -82,6 +83,17 @@ public class ElementTest {
         Assert.assertTrue(it.hasNext());
         attr = (OMAttribute)it.next();
         Assert.assertEquals("attr2", attr.getLocalName());
+        Assert.assertFalse(it.hasNext());
+    }
+    
+    @Validated @Test
+    public void testGetAllDeclaredNamespaces() {
+        OMElement element = axiomUtil.parse("<e xmlns:p='urn:test' p:attr='test'/>").getOMDocumentElement();
+        Iterator it = element.getAllDeclaredNamespaces();
+        Assert.assertTrue(it.hasNext());
+        OMNamespace ns = (OMNamespace)it.next();
+        Assert.assertEquals("p", ns.getPrefix());
+        Assert.assertEquals("urn:test", ns.getNamespaceURI());
         Assert.assertFalse(it.hasNext());
     }
 }

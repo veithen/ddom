@@ -15,9 +15,16 @@
  */
 package com.google.code.ddom.frontend.axiom;
 
+import java.io.StringReader;
+
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
+import org.apache.axiom.om.util.StAXUtils;
+import org.junit.Assert;
 
 public class LLOMAxiomUtil implements AxiomUtil {
     public final static LLOMAxiomUtil INSTANCE = new LLOMAxiomUtil();
@@ -28,5 +35,14 @@ public class LLOMAxiomUtil implements AxiomUtil {
     
     public OMDocument createDocument() {
         return factory.createOMDocument();
+    }
+
+    public OMDocument parse(String xml) {
+        try {
+            return new StAXOMBuilder(StAXUtils.createXMLStreamReader(new StringReader(xml))).getDocument();
+        } catch (XMLStreamException ex) {
+            Assert.fail(ex.getMessage());
+            return null; // Make compiler happy
+        }
     }
 }
