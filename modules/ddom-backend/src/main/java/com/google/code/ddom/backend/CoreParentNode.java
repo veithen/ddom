@@ -54,6 +54,9 @@ public interface CoreParentNode extends CoreNode {
     
     void coreRemoveChild(CoreChildNode child) throws CoreModelException;
     void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
-    
+
+    <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
     Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
+    Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI);
+    Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName);
 }

@@ -185,6 +185,10 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     // TODO: check if we really need this; there also may be collisions with frontend methods here
     protected abstract boolean isComplete();
     
+    public <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
+        return new ChildrenByTypeIterator<T>(this, axis, type);
+    }
+
     public Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName) {
         Symbols symbols = getDocument().getSymbols();
         // Optimization here: if the node is complete and we can't find the symbols, we know that
@@ -214,5 +218,33 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             localName = symbols.getSymbol(localName);
         }
         return new ElementsByNameIterator(this, axis, namespaceURI, localName);
+    }
+
+    public Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
+        Symbols symbols = getDocument().getSymbols();
+        if (namespaceURI != null) {
+            if (isComplete()) {
+                namespaceURI = symbols.lookupSymbol(namespaceURI);
+                if (namespaceURI == null) {
+                    return Collections.<CoreNSAwareElement>emptyList().iterator();
+                }
+            } else {
+                namespaceURI = symbols.getSymbol(namespaceURI);
+            }
+        }
+        return new ElementsByNamespaceIterator(this, axis, namespaceURI);
+    }
+
+    public Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
+        Symbols symbols = getDocument().getSymbols();
+        if (isComplete()) {
+            localName = symbols.lookupSymbol(localName);
+            if (localName == null) {
+                return Collections.<CoreNSAwareElement>emptyList().iterator();
+            }
+        } else {
+            localName = symbols.getSymbol(localName);
+        }
+        return new ElementsByLocalNameIterator(this, axis, localName);
     }
 }

@@ -6,10 +6,8 @@ import org.w3c.dom.Element;
 
 import com.google.code.ddom.backend.Axis;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
-import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementLocalNameFilterIterator;
-import com.google.code.ddom.utils.dom.iterator.ElementNamespaceFilterIterator;
 
 // TODO: clean this up
 public class ElementsByTagNameNS extends ElementsBy {
@@ -29,13 +27,13 @@ public class ElementsByTagNameNS extends ElementsBy {
     protected Iterator<Element> createIterator() {
         boolean nsWildcard = "*".equals(namespaceURI);
         boolean localNameWildcard = localName.equals("*");
-        Iterator<Element> iterator = new DescendantsIterator<Element>(Element.class, node);
         if (nsWildcard && localNameWildcard) {
-            return iterator;
+            // TODO: there seems to be no unit test checking whether the iterator should return DOM1 elements!
+            return (Iterator)node.coreGetChildrenByType(Axis.DESCENDANTS, DOMElement.class);
         } else if (nsWildcard) {
-            return new ElementLocalNameFilterIterator(iterator, localName);
+            return (Iterator)node.coreGetElementsByLocalName(Axis.DESCENDANTS, localName);
         } else if (localNameWildcard) {
-            return new ElementNamespaceFilterIterator(iterator, namespaceURI);
+            return (Iterator)node.coreGetElementsByNamespace(Axis.DESCENDANTS, namespaceURI);
         } else {
             // TODO: handle the cast problem properly
             return (Iterator)node.coreGetElementsByName(Axis.DESCENDANTS, namespaceURI, localName);
