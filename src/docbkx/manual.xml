@@ -170,7 +170,11 @@
                     <variablelist>
                         <varlistentry>
                             <term>[name]</term>
-                            <listitem>The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the element.</listitem>
+                            <listitem>
+                                <para>
+                                    The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the element.
+                                </para>
+                            </listitem>
                         </varlistentry>
                     </variablelist>
                     <para>
@@ -226,7 +230,11 @@
                     <variablelist>
                         <varlistentry>
                             <term>[name]</term>
-                            <listitem>The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the attribute.</listitem>
+                            <listitem>
+                                <para>
+                                    The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the attribute.
+                                </para>
+                            </listitem>
                         </varlistentry>
                     </variablelist>
                     <para>
@@ -281,7 +289,26 @@
                 </section>
                 <section>
                     <title>CDATA section information items</title>
-                    
+                    <para>
+                        A parser produces a CDATA section information item for every <xref linkend="NT-CDSect"/>.
+                        It has the following properties: 
+                    </para>
+                    <variablelist>
+                        <varlistentry>
+                            <term>segments</term>
+                            <listitem>
+                                <para>
+                                    A sequence of strings that when concatenated reproduce the <xref linkend="NT-CData"/>.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
+                    <para>
+                        When a CDATA section information item is serialized, a single <xref linkend="NT-CDSect"/> is
+                        produced by concatenating the segments. It is the responsibility of the serializer to
+                        enfore that the <xref linkend="NT-CData"/> does not contain the <literal>']]&gt;'</literal>
+                        character sequence.
+                    </para>
                 </section>
                 <section>
                     <title>Comment information items</title>
@@ -357,6 +384,14 @@
                 <section>
                     <title>DOM</title>
                     
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                DOM doesn't support CDATA segmentation.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                    
                 </section>
                 <section>
                     <title>Axiom</title>
@@ -404,6 +439,34 @@
             <section>
                 <title>XML 1.0</title>
                 <productionset>
+                    <title>Document</title>
+                    <production id="NT-document">
+                        <lhs>document</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-prolog">prolog</nonterminal>
+                            <nonterminal def="#NT-element">element</nonterminal>
+                            <nonterminal def="#NT-Misc">Misc</nonterminal>*
+                        </rhs>
+                    </production>
+                    <production id="NT-prolog">
+                        <lhs>prolog</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-XMLDecl">XMLDecl</nonterminal>?
+                            <nonterminal def="#NT-Misc">Misc</nonterminal>*
+                            (<nonterminal def="#NT-doctypedecl">doctypedecl</nonterminal>
+                            <nonterminal def="#NT-Misc">Misc</nonterminal>*)?
+                        </rhs>
+                    </production>
+                    <production id="NT-Misc">
+                        <lhs>Misc</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-Comment">Comment</nonterminal>
+                          | <nonterminal def="#NT-PI">PI</nonterminal>
+                          | <nonterminal def="#NT-S">S</nonterminal>
+                        </rhs>
+                    </production>
+                </productionset>
+                <productionset>
                     <title>Element</title>
                     <production id="NT-element" xreflabel="&ntxs;element&ntxe;">
                         <lhs>element</lhs>
@@ -435,6 +498,45 @@
                             <nonterminal def="#NT-Eq">Eq</nonterminal>
                             <nonterminal def="#NT-AttValue">AttValue</nonterminal>
                         </rhs>
+                    </production>
+                    <production id="NT-content">
+                        <lhs>content</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-CharData">CharData</nonterminal>?
+                            ((<nonterminal def="#NT-element">element</nonterminal>
+                            | <nonterminal def="#NT-Reference">Reference</nonterminal>
+                            | <nonterminal def="#NT-CDSect">CDSect</nonterminal>
+                            | <nonterminal def="#NT-PI">PI</nonterminal>
+                            | <nonterminal def="#NT-Comment">Comment</nonterminal>)
+                            <nonterminal def="#NT-CharData">CharData</nonterminal>?)*
+                        </rhs>
+                    </production>
+                    <production id="NT-CharData">
+                        <lhs>CharData</lhs>
+                        <rhs>[^&lt;&amp;]* - ([^&lt;&amp;]* ']]&gt;' [^&lt;&amp;]*)</rhs>
+                    </production>
+                </productionset>
+                <productionset>
+                    <title>CDATA sections</title>
+                    <production id="NT-CDSect" xreflabel="&ntxs;CDSect&ntxe;">
+                        <lhs>CDSect</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-CDStart">CDStart</nonterminal>
+                            <nonterminal def="#NT-CData">CData</nonterminal>
+                            <nonterminal def="#NT-CDEnd">CDEnd</nonterminal>
+                        </rhs>
+                    </production>
+                    <production id="NT-CDStart">
+                        <lhs>CDStart</lhs>
+                        <rhs>'&lt;![CDATA['</rhs>
+                    </production>
+                    <production id="NT-CData" xreflabel="&ntxs;CData&ntxe;">
+                        <lhs>CData</lhs>
+                        <rhs>(<nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* ']]&gt;' <nonterminal def="#NT-Char">Char</nonterminal>*))</rhs> 
+                    </production>
+                    <production id="NT-CDEnd">
+                        <lhs>CDEnd</lhs>
+                        <rhs>']]&gt;'</rhs>
                     </production>
                 </productionset>
             </section>
@@ -731,7 +833,52 @@ writer.writeNamespace("p", "urn:ns1");</programlisting>
             </section>
         </chapter>
     </part>
-        
+    
+    <glossary>
+        <glossentry>
+            <glossterm>XML Object Model</glossterm>
+            <glossdef>
+                <para>
+                    An Object Model defines a set of language independent or specific structures
+                    (interfaces and classes) and a convention to map between these structures and
+                    XML documents, where the set of supported XML documents may only be limited by
+                    their well-formedness or validity (or by restrictions on less frequently used
+                    XML or schema constructs).
+                </para>
+                <para>
+                    Since it is assumed that the language structures are predefined, this
+                    definition excludes databinding frameworks such as JAXB. On the other hand,
+                    it includes SDO. Other examples are: DOM (language independent), JDOM,
+                    DOM4J and Axiom (all Java specific).
+                </para>
+            </glossdef>
+        </glossentry>
+        <glossentry>
+            <glossterm>Deferred parsing</glossterm>
+            <glossdef>
+                <para>
+                    TODO
+                </para>
+            </glossdef>
+        </glossentry>
+        <glossentry>
+            <glossterm>Covariant literals</glossterm>
+            <glossdef>
+                <para>
+                    TODO
+                </para>
+            </glossdef>
+        </glossentry>
+        <glossentry>
+            <glossterm>Axiom</glossterm>
+            <glossdef>
+                <para>
+                    TODO
+                </para>
+            </glossdef>
+        </glossentry>
+    </glossary>
+    
     <bibliography>
         <title>References</title>
         <bibliodiv>
