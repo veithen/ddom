@@ -153,7 +153,7 @@
                     <title>The namespace unaware element information item</title>
                     <para>
                         A namespace unaware element information item is produced by a namespace unaware parser
-                        for each <ulink url="http://www.w3.org/TR/REC-xml/#NT-element"><literal>element</literal></ulink>
+                        for each <link linkend="NT-element"><literal>element</literal></link>
                         appearing in the document. It has the following properties:
                     </para>
                     <variablelist>
@@ -205,7 +205,7 @@
                     <title>The namespace unaware attribute information item</title>
                     <para>
                         A namespace unaware attribute information item is produced by a namespace unaware parser
-                        for each <ulink url="http://www.w3.org/TR/REC-xml/#NT-Attribute"><literal>Attribute</literal></ulink>
+                        for each <link linkend="NT-Attribute"><literal>Attribute</literal></link>
                         appearing in the document. It has the following properties:
                     </para>
                     <variablelist>
@@ -254,6 +254,50 @@
                 </section>
             </section>
         </chapter>
+        <appendix>
+            <title>XML grammar</title>
+            <para>
+                This appendix reproduces parts of the productions defined in <biblioref linkend="bib.xml"/>
+                that are referenced in this document.
+            </para>
+            <section>
+                <title>XML 1.0</title>
+                <productionset>
+                    <title>Element</title>
+                    <production id="NT-element">
+                        <lhs>element</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-EmptyElemTag">EmptyElemTag</nonterminal>
+                          | <nonterminal def="#NT-STag">STag</nonterminal>
+                            <nonterminal def="#NT-content">content</nonterminal>
+                            <nonterminal def="#NT-ETag">ETag</nonterminal>
+                        </rhs>
+                    </production>
+                    <production id="NT-EmptyElemTag">
+                        <lhs>EmptyElemTag</lhs>
+                        <rhs>'&lt;' <nonterminal def="#NT-Name">Name</nonterminal> (<nonterminal def="#NT-S">S</nonterminal>
+                            <nonterminal def="#NT-Attribute">Attribute</nonterminal>)* <nonterminal def="#NT-S">S</nonterminal>? '/>'</rhs>
+                    </production>
+                    <production id="NT-STag">
+                        <lhs>STag</lhs>
+                        <rhs>'&lt;' <nonterminal def="#NT-Name">Name</nonterminal> (<nonterminal def="#NT-S">S</nonterminal>
+                            <nonterminal def="#NT-Attribute">Attribute</nonterminal>)* <nonterminal def="#NT-S">S</nonterminal>? '>'</rhs>
+                    </production>
+                    <production id="NT-ETag">
+                        <lhs>ETag</lhs>
+                        <rhs>'&lt;/' <nonterminal def="#NT-Name">Name</nonterminal> <nonterminal def="#NT-S">S</nonterminal>? '>'</rhs>
+                    </production>
+                    <production id="NT-Attribute">
+                        <lhs>Attribute</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-Name">Name</nonterminal>
+                            <nonterminal def="#NT-Eq">Eq</nonterminal>
+                            <nonterminal def="#NT-AttValue">AttValue</nonterminal>
+                        </rhs>
+                    </production>
+                </productionset>
+            </section>
+        </appendix>
     </part>
     <part>
         <title>Developer guide</title>
@@ -551,6 +595,12 @@ writer.writeNamespace("p", "urn:ns1");</programlisting>
         <title>References</title>
         <bibliodiv>
             <title>Specifications</title>
+            <biblioentry id="bib.xml">
+                <abbrev>XML</abbrev>
+                <title><ulink url="http://www.w3.org/TR/2008/REC-xml-20081126/">Extensible Markup Language (XML) 1.0 (Fifth Edition)</ulink></title>
+                <publishername>W3C Recommendation</publishername>
+                <pubdate>26 November 2008</pubdate>
+            </biblioentry>
             <biblioentry id="bib.xmlschema.part2">
                 <abbrev>Schema-2</abbrev>
                 <title><ulink url="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">XML Schema Part 2: Datatypes Second Edition</ulink></title>
