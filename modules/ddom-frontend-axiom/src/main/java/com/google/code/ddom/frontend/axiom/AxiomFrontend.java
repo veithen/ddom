@@ -15,16 +15,19 @@
  */
 package com.google.code.ddom.frontend.axiom;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="axiom")
 public class AxiomFrontend implements Frontend {
-    public List<String> getAspectClasses() {
-        return Arrays.asList(new String[] {
+    public List<String> getAspectClasses(Map<String,Frontend> frontends) {
+        List<String> aspects = new ArrayList<String>();
+        aspects.addAll(Arrays.asList(new String[] {
                 "com.google.code.ddom.frontend.axiom.aspects.AttributeSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.ChildNodeSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.ContainerSupport",
@@ -44,6 +47,10 @@ public class AxiomFrontend implements Frontend {
                 "com.google.code.ddom.frontend.axiom.aspects.QNameCaching", // TODO: should be configurable
                 "com.google.code.ddom.frontend.axiom.aspects.Serialization",
                 "com.google.code.ddom.frontend.axiom.aspects.TextSupport",
-        });
+        }));
+        if (!frontends.containsKey("dom")) {
+            aspects.add("com.google.code.ddom.frontend.axiom.aspects.DOMCompatibleMethods");
+        }
+        return aspects;
     }
 }

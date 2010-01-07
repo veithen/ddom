@@ -16,6 +16,7 @@
 package com.google.code.ddom;
 
 import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -52,15 +53,18 @@ public class DocumentHelper {
         return new DocumentHelper(ModelLoaderRegistry.getInstance(), StreamFactory.getInstance());
     }
     
+    public DeferredDocument newDocument(ModelDefinition model) {
+        return modelLoaderRegistry.getDocumentFactory(model).createDocument(null);
+    }
+    
     public DeferredDocument newDocument(String frontend) {
-        // TODO: check for null here!
-        return modelLoaderRegistry.getDocumentFactory(ModelBuilder.buildModelDefinition(frontend)).createDocument(null);
+        return newDocument(ModelBuilder.buildModelDefinition(frontend));
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(ModelDefinition model, Object source, Options options, boolean preserve) throws DeferredParsingException {
         // TODO: check for null here!
-        DocumentFactory nodeFactory = modelLoaderRegistry.getDocumentFactory(ModelBuilder.buildModelDefinition(frontend));
+        DocumentFactory nodeFactory = modelLoaderRegistry.getDocumentFactory(model);
         OptionsTracker tracker = options.createTracker();
         Producer producer;
         try {
@@ -77,6 +81,10 @@ public class DocumentHelper {
         return nodeFactory.createDocument(producer);
     }
 
+    public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) throws DeferredParsingException {
+        return parse(ModelBuilder.buildModelDefinition(frontend), source, options, preserve);
+    }
+    
     public DeferredDocument parse(String frontend, Object source, boolean preserve) throws DeferredParsingException {
         return parse(frontend, source, new Options(), preserve);
     }

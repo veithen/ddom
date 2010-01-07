@@ -21,11 +21,14 @@ import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamedNode;
 
+/**
+ * 
+ * 
+ * Note that {@link AxiomNamedNode#getLocalName()} is defined by {@link DOMCompatibleMethods}.
+ * 
+ * @author Andreas Veithen
+ */
 public aspect NamedNodeSupport {
-    public final String AxiomNamedNode.getLocalName() {
-        return coreGetLocalName();
-    }
-
     public final void AxiomNamedNode.setLocalName(String localName) {
         coreSetLocalName(localName);
     }

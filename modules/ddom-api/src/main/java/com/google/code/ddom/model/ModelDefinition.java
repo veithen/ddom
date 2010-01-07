@@ -18,6 +18,7 @@ package com.google.code.ddom.model;
 import java.io.Serializable;
 import java.util.SortedSet;
 
+// TODO: rename this Model?
 public class ModelDefinition implements Serializable {
     private static final long serialVersionUID = -5835186734017759182L;
     

@@ -17,13 +17,14 @@ package com.google.code.ddom.frontend.dom;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="dom")
 public class DOMFrontend implements Frontend {
-    public List<String> getAspectClasses() {
+    public List<String> getAspectClasses(Map<String,Frontend> frontends) {
         return Arrays.asList(new String[] {
                 "com.google.code.ddom.frontend.dom.aspects.AttributeSupport",
                 "com.google.code.ddom.frontend.dom.aspects.Attributes",

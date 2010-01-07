@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.weaver;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.google.code.ddom.DocumentFactory;
@@ -47,13 +48,14 @@ public class DynamicModelLoader implements ModelLoader {
         }
         
         String[] frontendIds = definition.getFrontends();
-        Frontend[] frontends = new Frontend[frontendIds.length];
+        Map<String,Frontend> frontends = new LinkedHashMap<String,Frontend>();
         for (int i=0; i<frontendIds.length; i++) {
-            Frontend frontend = frontendMap.get(frontendIds[i]);
+            String frontendId = frontendIds[i];
+            Frontend frontend = frontendMap.get(frontendId);
             if (frontend == null) {
                 return null;
             }
-            frontends[i] = frontend;
+            frontends.put(frontendId, frontend);
         }
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         try {

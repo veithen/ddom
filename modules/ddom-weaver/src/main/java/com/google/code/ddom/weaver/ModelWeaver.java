@@ -17,7 +17,9 @@ package com.google.code.ddom.weaver;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.aspectj.bridge.AbortException;
@@ -59,14 +61,14 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
         }
     }
 
-    public void weave(Frontend[] frontends) {
+    public void weave(Map<String,Frontend> frontends) {
         BcelWorld world = new BcelWorld(classLoader, this, null);
         BcelWeaver weaver = new BcelWeaver(world);
         for (UnwovenClassFile classFile : classFiles) {
             weaver.addClassFile(classFile, true);
         }
-        for (Frontend frontend : frontends) {
-            for (String aspectClass : frontend.getAspectClasses()) {
+        for (Frontend frontend : frontends.values()) {
+            for (String aspectClass : frontend.getAspectClasses(Collections.unmodifiableMap(frontends))) {
                 weaver.addLibraryAspect(aspectClass);
             }
         }

@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import com.google.code.ddom.DocumentFactory;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 
+// TODO: rename this ModelConfigurator?
 public class ModelBuilder {
     private String backend = "linkedlist";
     private List<String> frontends = new ArrayList<String>();
