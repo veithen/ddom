@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.aspects;
+package com.google.code.ddom.frontend.saaj.intf;
 
-import com.google.code.ddom.backend.CoreNSAwareAttribute;
-import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.Implementation;
-import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
-import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
+import javax.xml.soap.Name;
 
-public aspect Parents {
-    declare parents: @Implementation CoreNSAwareElement+ implements SAAJSOAPElement;
-    declare parents: @Implementation CoreNSAwareAttribute+ implements SAAJNSAwareAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMNSAwareAttribute;
+
+public interface SAAJNSAwareAttribute extends Name, DOMNSAwareAttribute {
+
 }

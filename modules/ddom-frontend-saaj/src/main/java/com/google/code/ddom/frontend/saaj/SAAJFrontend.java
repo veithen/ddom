@@ -28,6 +28,7 @@ public class SAAJFrontend extends DOMFrontend {
     @Override
     public List<String> getAspectClasses(Map<String,Frontend> frontends) {
         List<String> aspects = new ArrayList<String>(super.getAspectClasses(frontends));
+        aspects.add("com.google.code.ddom.frontend.saaj.aspects.AttributeAsName");
         aspects.add("com.google.code.ddom.frontend.saaj.aspects.NodeSupport");
         aspects.add("com.google.code.ddom.frontend.saaj.aspects.Parents");
         aspects.add("com.google.code.ddom.frontend.saaj.aspects.SOAPElementSupport");

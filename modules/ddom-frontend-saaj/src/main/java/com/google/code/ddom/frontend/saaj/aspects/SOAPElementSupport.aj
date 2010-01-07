@@ -22,6 +22,10 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
+import com.google.code.ddom.backend.IdentityMapper;
+import com.google.code.ddom.frontend.dom.support.DOMNamespaceDeclarationMatcher;
+import com.google.code.ddom.frontend.dom.support.NSUtil;
+import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 
 public aspect SOAPElementSupport {
@@ -76,8 +80,8 @@ public aspect SOAPElementSupport {
     }
 
     public SOAPElement SAAJSOAPElement.addNamespaceDeclaration(String prefix, String uri) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+        coreSetAttribute(DOMNamespaceDeclarationMatcher.INSTANCE, null, prefix, null, uri);
+        return this;
     }
 
     public String SAAJSOAPElement.getAttributeValue(Name name) {
@@ -90,9 +94,12 @@ public aspect SOAPElementSupport {
         throw new UnsupportedOperationException();
     }
 
+    private static final IdentityMapper<SAAJNSAwareAttribute> attributeIdentityMapper = new IdentityMapper<SAAJNSAwareAttribute>();
+    
     public Iterator SAAJSOAPElement.getAllAttributes() {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: this doesn't return namespace unaware attributes!
+        // See AttributesAsName for the explanation of this
+        return coreGetAttributesByType(SAAJNSAwareAttribute.class, attributeIdentityMapper);
     }
 
     public Iterator SAAJSOAPElement.getAllAttributesAsQNames() {
