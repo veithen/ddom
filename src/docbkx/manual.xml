@@ -153,7 +153,15 @@
             <section>
                 <title>Information items</title>
                 <section>
-                    <title>The namespace unaware element information item</title>
+                    <title>The document information item</title>
+                    
+                </section>
+                <section>
+                    <title>Namepace aware element information items</title>
+                    
+                </section>
+                <section>
+                    <title>Namespace unaware element information item</title>
                     <para>
                         A namespace unaware element information item is produced by a namespace unaware parser
                         for each <xref linkend="NT-element"/>
@@ -205,7 +213,11 @@
                     </note>
                 </section>
                 <section>
-                    <title>The namespace unaware attribute information item</title>
+                    <title>Namespace aware attribute information items</title>
+                    
+                </section>
+                <section>
+                    <title>Namespace unaware attribute information items</title>
                     <para>
                         A namespace unaware attribute information item is produced by a namespace unaware parser
                         for each <xref linkend="NT-Attribute"/>
@@ -254,6 +266,132 @@
                             namespace aware attribute information items.
                         </para>
                     </note>
+                </section>
+                <section>
+                    <title>Processing instruction information items</title>
+                    
+                </section>
+                <section>
+                    <title>Entity reference information items</title>
+                    
+                </section>
+                <section>
+                    <title>Text information items</title>
+                
+                </section>
+                <section>
+                    <title>CDATA section information items</title>
+                    
+                </section>
+                <section>
+                    <title>Comment information items</title>
+                    
+                </section>
+                <section>
+                    <title>The document type declaration information item</title>
+                    
+                </section>
+                <section>
+                    <title>Unparsed entity information items</title>
+                    
+                </section>
+                <section>
+                    <title>Notation information items</title>
+                    
+                </section>
+                <section>
+                    <title>Namespace declaration information items</title>
+                
+                </section>
+            </section>
+            <section>
+                <title>Information item classification</title>
+                <section>
+                    <title>Element information items</title>
+                    
+                </section>
+                <section>
+                    <title>Attribute information items</title>
+                    
+                </section>
+                <section>
+                    <title>Namespace aware named information items</title>
+                    
+                </section>
+                <section>
+                    <title>Namespace unaware named information items</title>
+                    
+                </section>
+                <section>
+                    <title>Character data information items</title>
+                    
+                </section>
+                <section>
+                    <title>Summary</title>
+                    <para>
+                        UML diagram here
+                    </para>
+                </section>
+            </section>
+            <section>
+                <title>Syntactic structures not captured by the Logical Content Model</title>
+                
+            </section>
+            <section>
+                <title>Transformations of the Logical Content Model</title>
+                <section>
+                    <title>Coalescing</title>
+                    
+                </section>
+                <section>
+                    <title>Entity reference expansion</title>
+                    
+                </section>
+                <section>
+                    <title>"Namespace repairing"</title>
+                    
+                </section>
+            </section>
+            <section>
+                <title>Comparison with existing object models</title>
+                <section>
+                    <title>DOM</title>
+                    
+                </section>
+                <section>
+                    <title>Axiom</title>
+                    
+                </section>
+            </section>
+        </chapter>
+        <chapter>
+            <title>The Logical Event Model</title>
+            <section>
+                <title>Definition</title>
+                <para>
+                    TODO: Define the LEM by deriving it from the LCM
+                </para>
+            </section>
+            <section>
+                <title>Comparison with existing parsers and serializers</title>
+                <section>
+                    <title>SAX</title>
+                    
+                </section>
+                <section>
+                    <title>StAX</title>
+                    <section>
+                        <title>The <classname>XMLStreamReader</classname> interface</title>
+                        
+                    </section>
+                    <section>
+                        <title>The <classname>XMLStreamWriter</classname> interface</title>
+                        
+                    </section>
+                </section>
+                <section>
+                    <title>Xerces XNI</title>
+                    
                 </section>
             </section>
         </chapter>
