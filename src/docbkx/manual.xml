@@ -285,7 +285,104 @@
                 </section>
                 <section>
                     <title>Text information items</title>
-                
+                    <para>
+                        The <xref linkend="NT-document"/> production may be rewritten as follows:
+                    </para>
+                    <productionset>
+                        <production id="NT-document-alt">
+                            <lhs>document</lhs>
+                            <rhs>
+                                <nonterminal def="#NT-XMLDecl">XMLDecl</nonterminal>?
+                                (<nonterminal def="#NT-Comment">Comment</nonterminal>
+                                | <nonterminal def="#NT-PI">PI</nonterminal>
+                                | <nonterminal def="#NT-DocText">DocText</nonterminal>)*
+                                (<nonterminal def="#NT-doctypedecl">doctypedecl</nonterminal>
+                                 (<nonterminal def="#NT-Comment">Comment</nonterminal>
+                                 | <nonterminal def="#NT-PI">PI</nonterminal>
+                                 | <nonterminal def="#NT-DocText">DocText</nonterminal>)*)?
+                                <nonterminal def="#NT-element">element</nonterminal>
+                                (<nonterminal def="#NT-Comment">Comment</nonterminal>
+                                | <nonterminal def="#NT-PI">PI</nonterminal>
+                                | <nonterminal def="#NT-DocText">DocText</nonterminal>)*
+                            </rhs>
+                        </production>
+                        <production id="NT-DocText" xreflabel="&ntxs;DocText&ntxe;">
+                            <lhs>DocText</lhs>
+                            <rhs><nonterminal def="#NT-S">S</nonterminal></rhs>
+                        </production>
+                    </productionset>
+                    <para>
+                        The <xref linkend="NT-content"/> production appearing in <xref linkend="NT-element"/>
+                        may be rewritten as follows:
+                    </para>
+                    <productionset>
+                        <production id="NT-content-alt">
+                            <lhs>content</lhs>
+                            <rhs>
+                                <nonterminal def="#NT-ElemText">ElemText</nonterminal>?
+                                ((<nonterminal def="#NT-element">element</nonterminal>
+                                | <nonterminal def="#NT-DeclaredEntityRef">DeclaredEntityRef</nonterminal>
+                                | <nonterminal def="#NT-CDSect">CDSect</nonterminal>
+                                | <nonterminal def="#NT-PI">PI</nonterminal>
+                                | <nonterminal def="#NT-Comment">Comment</nonterminal>)
+                                <nonterminal def="#NT-ElemText">ElemText</nonterminal>?)*
+                            </rhs>
+                        </production>
+                        <production id="NT-ElemText" xreflabel="&ntxs;ElemText&ntxe;">
+                            <lhs>ElemText</lhs>
+                            <rhs>
+                                <nonterminal def="#NT-CharData">CharData</nonterminal>?
+                                ((<nonterminal def="#NT-CharRef">CharRef</nonterminal> | <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal>)
+                                 <nonterminal def="#NT-CharData">CharData</nonterminal>?)*
+                            </rhs>
+                        </production>
+                        <production id="NT-PredefinedEntityRef"> <!-- Concept defined in XML 1.0, 4.6 Predefined Entities -->
+                            <lhs>PredefinedEntityRef</lhs>
+                            <rhs>'&amp;amp;' | '&amp;lt;' | '&amp;gt;' | '&amp;apos;' | '&amp;quot;'</rhs>
+                        </production>
+                        <production id="NT-DeclaredEntityRef">
+                            <lhs>DeclaredEntityRef</lhs>
+                            <rhs><nonterminal def="#NT-EntityRef">EntityRef</nonterminal> - <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal></rhs>
+                        </production>
+                    </productionset>
+                    <para>
+                        In the same way, the <xref linkend="NT-AttValue"/> production can be transformed:
+                    </para>
+                    <productionset>
+                        <production id="NT-AttValue-alt">
+                            <lhs>AttValue</lhs>
+                            <rhs>'"' <nonterminal def="#NT-AttValueContent">AttValueContent</nonterminal> '"' 
+                                | "'" <nonterminal def="#NT-AttValueContent">AttValueContent</nonterminal> "'"
+                            </rhs>
+                        </production>
+                        <production id="NT-AttValueContent">
+                            <lhs>AttValueContent</lhs>
+                            <rhs>
+                                <nonterminal def="#NT-AttText">AttText</nonterminal>?
+                                (<nonterminal def="#NT-DeclaredEntityRef">DeclaredEntityRef</nonterminal>
+                                <nonterminal def="#NT-AttText">AttText</nonterminal>?)*
+                            </rhs>
+                        </production>
+                        <production id="NT-AttText" xreflabel="&ntxs;AttText&ntxe;">
+                            <lhs>AttText</lhs>
+                            <rhs>
+                                ([^&lt;&amp;"]
+                                | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
+                                | <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal>)*
+                            </rhs>
+                        </production>
+                    </productionset>
+                    <para>
+                        For every <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>, <xref linkend="NT-AttText"/>
+                        and <xref linkend="NT-CData"/><footnote><para>Note that <xref linkend="NT-CData"/> only appears
+                        as part of <xref linkend="NT-CDSect"/>; thus the definition is consistent.</para></footnote>, the
+                        parser produces one or more text information items. They may thus appear as children of
+                        document, element, attribute and CDATA section information items. The individual text information
+                        items produced for a single <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>,
+                        <xref linkend="NT-AttText"/> or <xref linkend="NT-CData"/> are called <firstterm>segments</firstterm>.
+                        The way how they are split into segments is arbitrary and segment boundaries have
+                        no syntactic meaning.
+                    </para>
                 </section>
                 <section>
                     <title>CDATA section information items</title>
@@ -440,7 +537,7 @@
                 <title>XML 1.0</title>
                 <productionset>
                     <title>Document</title>
-                    <production id="NT-document">
+                    <production id="NT-document" xreflabel="&ntxs;document&ntxe;">
                         <lhs>document</lhs>
                         <rhs>
                             <nonterminal def="#NT-prolog">prolog</nonterminal>
@@ -499,7 +596,14 @@
                             <nonterminal def="#NT-AttValue">AttValue</nonterminal>
                         </rhs>
                     </production>
-                    <production id="NT-content">
+                    <production id="NT-AttValue" xreflabel="&ntxs;AttValue&ntxe;">
+                        <lhs>AttValue</lhs>
+                        <rhs>
+                            '"' ([^&lt;&amp;"] | <nonterminal def="#NT-Reference">Reference</nonterminal>)* '"' 
+                            | "'" ([^&lt;&amp;'] | <nonterminal def="#NT-Reference">Reference</nonterminal>)* "'"
+                        </rhs>
+                    </production>
+                    <production id="NT-content" xreflabel="&ntxs;content&ntxe;">
                         <lhs>content</lhs>
                         <rhs>
                             <nonterminal def="#NT-CharData">CharData</nonterminal>?
@@ -514,6 +618,13 @@
                     <production id="NT-CharData">
                         <lhs>CharData</lhs>
                         <rhs>[^&lt;&amp;]* - ([^&lt;&amp;]* ']]&gt;' [^&lt;&amp;]*)</rhs>
+                    </production>
+                    <production id="NT-Reference">
+                        <lhs>Reference</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-EntityRef">EntityRef</nonterminal>
+                          | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
+                        </rhs> 
                     </production>
                 </productionset>
                 <productionset>
