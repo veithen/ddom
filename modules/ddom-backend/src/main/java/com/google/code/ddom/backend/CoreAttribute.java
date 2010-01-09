@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend;
 
-public interface CoreAttribute extends CoreParentNode, CoreCompactParentNode {
+public interface CoreAttribute extends CoreCompactParentNode {
     CoreAttribute coreGetNextAttribute();
     void internalSetNextAttribute(CoreAttribute attr);
     void internalSetOwnerElement(CoreElement newOwner);
