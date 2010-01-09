@@ -343,7 +343,7 @@
                                  <nonterminal def="#NT-CharData">CharData</nonterminal>?)*
                             </rhs>
                         </production>
-                        <production id="NT-PredefinedEntityRef"> <!-- Concept defined in XML 1.0, 4.6 Predefined Entities -->
+                        <production id="NT-PredefinedEntityRef" xreflabel="&ntxs;PredefinedEntityRef&ntxe;"> <!-- Concept defined in XML 1.0, 4.6 Predefined Entities -->
                             <lhs>PredefinedEntityRef</lhs>
                             <rhs>'&amp;amp;' | '&amp;lt;' | '&amp;gt;' | '&amp;apos;' | '&amp;quot;'</rhs>
                         </production>
@@ -380,14 +380,70 @@
                         </production>
                     </productionset>
                     <para>
-                        For every <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>, <xref linkend="NT-AttText"/>
-                        and <xref linkend="NT-CData"/><footnote><para>Note that <xref linkend="NT-CData"/> only appears
-                        as part of <xref linkend="NT-CDSect"/>; thus the definition is consistent.</para></footnote>, the
+                        For CDATA sections:
+                    </para>
+                    <productionset>
+                        <production id="NT-CDSect-alt" xreflabel="&ntxs;CDSect&ntxe;">
+                            <lhs>CDSect</lhs>
+                            <rhs>
+                                '&lt;![CDATA[' <nonterminal def="#NT-CData">CData</nonterminal> ']]&gt;'
+                            </rhs>
+                        </production>
+                        <production>
+                            <lhs>CData</lhs>
+                            <rhs>(<nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* ']]&gt;' <nonterminal def="#NT-Char">Char</nonterminal>*))</rhs> 
+                        </production>
+                    </productionset>
+                    <para>
+                        For comments:
+                    </para>
+                    <productionset>
+                        <production id="NT-Comment-alt">
+                            <lhs>Comment</lhs>
+                            <rhs>
+                                '&lt;!--' <nonterminal def="#NT-CommentText">CommentText</nonterminal> '-->'
+                            </rhs>
+                        </production>
+                        <production id="NT-CommentText" xreflabel="&ntxs;CommentText&ntxe;">
+                            <lhs>CommentText</lhs>
+                            <rhs>
+                                ((<nonterminal def="#NT-Char">Char</nonterminal> - '-') | ('-' (<nonterminal def="#NT-Char">Char</nonterminal> - '-')))*
+                            </rhs>
+                        </production>
+                    </productionset>
+                    <para>
+                        For processing instructions:
+                    </para>
+                    <productionset>
+                        <production id="NT-PI-alt">
+                            <lhs>PI</lhs>
+                            <rhs>
+                                '&lt;?' <nonterminal def="#NT-PITarget">PITarget</nonterminal>
+                                (<nonterminal def="#NT-S">S</nonterminal> <nonterminal def="#NT-PIText">PIText</nonterminal>)? '?>'
+                            </rhs>
+                        </production>
+                        <production id="NT-PIText" xreflabel="&ntxs;PIText&ntxe;">
+                            <lhs>PIText</lhs>
+                            <rhs>
+                                <nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* '?>' <nonterminal def="#NT-Char">Char</nonterminal>*)
+                            </rhs>
+                        </production>
+                    </productionset>
+                    <para>
+                        For every <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>, <xref linkend="NT-AttText"/>,
+                        <xref linkend="NT-CData"/><footnote><para>Note that <xref linkend="NT-CData"/> only appears
+                        as part of <xref linkend="NT-CDSect"/>; thus the definition is consistent.</para></footnote>,
+                        <xref linkend="NT-CommentText"/> and <xref linkend="NT-PIText"/> the
                         parser produces one or more text information items. They may thus appear as children of
-                        document, element, attribute and CDATA section information items. The individual text information
+                        document, element, attribute, CDATA section, comment and processing instruction information
+                        items. The individual text information
                         items produced for a single <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>,
-                        <xref linkend="NT-AttText"/> or <xref linkend="NT-CData"/> are called <firstterm>segments</firstterm>.
-                        The way how they are split into segments is arbitrary and segment boundaries have
+                        <xref linkend="NT-AttText"/>, <xref linkend="NT-CData"/>, <xref linkend="NT-CommentText"/>
+                        or <xref linkend="NT-PIText"/> are called <firstterm>segments</firstterm>.
+                        The concatenation of the content of these segments must equal the value of the token
+                        after substitution of all <xref linkend="NT-CharRef"/> and <xref linkend="NT-PredefinedEntityRef"/> tokens
+                        by their corresponding characters.
+                        The way how tokens are split into segments is arbitrary and segment boundaries have
                         no syntactic meaning.
                     </para>
                 </section>
@@ -559,6 +615,18 @@
                 <title>XML 1.0</title>
                 <productionset>
                     <title>Characters and names</title>
+                    <production id="NT-Char">
+                        <lhs>Char</lhs>
+                        <rhs>#x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]</rhs>
+                    </production>
+                    <production id="NT-NameStartChar">
+                        <lhs>NameStartChar</lhs>
+                        <rhs>":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]</rhs>
+                    </production>
+                    <production id="NT-NameChar">
+                        <lhs>NameChar</lhs>
+                        <rhs><nonterminal def="#NT-NameStartChar">NameStartChar</nonterminal> | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]</rhs>
+                    </production>
                     <production id="NT-Name" xreflabel="&ntxs;Name&ntxe;">
                         <lhs>Name</lhs>
                         <rhs><nonterminal def="#NT-NameStartChar">NameStartChar</nonterminal> (<nonterminal def="#NT-NameChar">NameChar</nonterminal>)*</rhs>
@@ -648,12 +716,19 @@
                         <lhs>CharData</lhs>
                         <rhs>[^&lt;&amp;]* - ([^&lt;&amp;]* ']]&gt;' [^&lt;&amp;]*)</rhs>
                     </production>
+                </productionset>
+                <productionset>
+                    <title>Character and entity references</title>
                     <production id="NT-Reference">
                         <lhs>Reference</lhs>
                         <rhs>
                             <nonterminal def="#NT-EntityRef">EntityRef</nonterminal>
                           | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
                         </rhs> 
+                    </production>
+                    <production id="NT-CharRef" xreflabel="&ntxs;CharRef&ntxe;">
+                        <lhs>CharRef</lhs>
+                        <rhs>'&amp;#' [0-9]+ ';' | '&amp;#x' [0-9a-fA-F]+ ';'</rhs>
                     </production>
                 </productionset>
                 <productionset>
@@ -677,6 +752,31 @@
                     <production id="NT-CDEnd">
                         <lhs>CDEnd</lhs>
                         <rhs>']]&gt;'</rhs>
+                    </production>
+                </productionset>
+                <productionset>
+                    <title>Comments</title>
+                    <production id="NT-Comment">
+                        <lhs>Comment</lhs>
+                        <rhs>
+                            '&lt;!--' ((<nonterminal def="#NT-Char">Char</nonterminal> - '-') | ('-' (<nonterminal def="#NT-Char">Char</nonterminal> - '-')))* '-->'
+                        </rhs>
+                    </production>
+                </productionset>
+                <productionset>
+                    <title>Processing instructions</title>
+                    <production id="NT-PI">
+                        <lhs>PI</lhs>
+                        <rhs>
+                            '&lt;?' <nonterminal def="#NT-PITarget">PITarget</nonterminal>
+                            (<nonterminal def="#NT-S">S</nonterminal> (<nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* '?>' <nonterminal def="#NT-Char">Char</nonterminal>*)))? '?>'
+                        </rhs>
+                    </production>
+                    <production id="NT-PITarget">
+                        <lhs>PITarget</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-Name">Name</nonterminal> - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
+                        </rhs>
                     </production>
                 </productionset>
             </section>
