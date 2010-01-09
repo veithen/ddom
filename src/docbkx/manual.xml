@@ -92,7 +92,7 @@
                 </listitem>
             </itemizedlist>
         </chapter>
-        <chapter>
+        <chapter id="lcm">
             <title>The Logical Content Model</title>
             <section>
                 <title>Introduction</title>
@@ -152,12 +152,37 @@
             </section>
             <section>
                 <title>Information items</title>
-                <section>
+                <section id="lcm.document">
                     <title>The document information item</title>
+                    
+                    <variablelist>
+                        <varlistentry>
+                            <term>children</term>
+                            <listitem>
+                                <para>
+                                    An ordered list of child information items, in document order.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
+                </section>
+                <section>
+                    <title>The document type declaration information item</title>
                     
                 </section>
                 <section id="lcm.element">
                     <title>Element information items</title>
+
+                    <variablelist>
+                        <varlistentry>
+                            <term>children</term>
+                            <listitem>
+                                <para>
+                                    An ordered list of child information items, in document order.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
                     <section>
                         <title>Namepace aware element information items</title>
                         
@@ -222,6 +247,16 @@
                 <section id="lcm.attribute">
                     <title>Attribute information items</title>
                     
+                    <variablelist>
+                        <varlistentry>
+                            <term>children</term>
+                            <listitem>
+                                <para>
+                                    An ordered list of child information items, in document order.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
                     <section>
                         <title>Namespace aware attribute information items</title>
                         
@@ -283,14 +318,10 @@
                     </section>
                 </section>
                 <section>
-                    <title>Processing instruction information items</title>
-                    
-                </section>
-                <section>
                     <title>Entity reference information items</title>
                     
                 </section>
-                <section>
+                <section id="lcm.text">
                     <title>Text information items</title>
                     <para>
                         The <xref linkend="NT-document"/> production may be rewritten as follows:
@@ -435,7 +466,9 @@
                         as part of <xref linkend="NT-CDSect"/>; thus the definition is consistent.</para></footnote>,
                         <xref linkend="NT-CommentText"/> and <xref linkend="NT-PIText"/> the
                         parser produces one or more text information items. They may thus appear as children of
-                        document, element, attribute, CDATA section, comment and processing instruction information
+                        <link linkend="lcm.document">document</link>, <link linkend="lcm.element">element</link>,
+                        <link linkend="lcm.attribute">attribute</link>, <link linkend="lcm.cdata">CDATA section</link>,
+                        <link linkend="lcm.comment">comment</link> and <link linkend="lcm.pi">processing instruction</link> information
                         items. The individual text information
                         items produced for a single <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>,
                         <xref linkend="NT-AttText"/>, <xref linkend="NT-CData"/>, <xref linkend="NT-CommentText"/>
@@ -446,8 +479,11 @@
                         The way how tokens are split into segments is arbitrary and segment boundaries have
                         no syntactic meaning.
                     </para>
+                    <para>
+                        TODO: Evaluate what this means for section 3.3.3 "Attribute-Value Normalization" in the XML specs.
+                    </para>
                 </section>
-                <section>
+                <section id="lcm.cdata">
                     <title>CDATA section information items</title>
                     <para>
                         A parser produces a CDATA section information item for every <xref linkend="NT-CDSect"/>.
@@ -455,10 +491,11 @@
                     </para>
                     <variablelist>
                         <varlistentry>
-                            <term>segments</term>
+                            <term>children</term>
                             <listitem>
                                 <para>
-                                    A sequence of strings that when concatenated reproduce the <xref linkend="NT-CData"/>.
+                                    An ordered list of child information items, in document order. This list
+                                    may only contain <link linkend="lcm.text">text information items</link>.
                                 </para>
                             </listitem>
                         </varlistentry>
@@ -470,13 +507,49 @@
                         character sequence.
                     </para>
                 </section>
-                <section>
+                <section id="lcm.comment">
                     <title>Comment information items</title>
-                    
+                    <para>
+                        A parser produces a comment information item for every <xref linkend="NT-Comment"/>.
+                        It has the following properties:
+                    </para>
+                    <variablelist>
+                        <varlistentry>
+                            <term>children</term>
+                            <listitem>
+                                <para>
+                                    An ordered list of child information items, in document order. This list
+                                    may only contain <link linkend="lcm.text">text information items</link>.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
                 </section>
-                <section>
-                    <title>The document type declaration information item</title>
-                    
+                <section id="lcm.pi">
+                    <title>Processing instruction information items</title>
+                    <para>
+                        A parser produces a processing instruction information item for every
+                        <xref linkend="NT-PI"/>. It has the following properties:
+                    </para>
+                    <variablelist>
+                        <varlistentry>
+                            <term>target</term>
+                            <listitem>
+                                <para>
+                                    The <xref linkend="NT-PITarget"/>.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry>
+                            <term>children</term>
+                            <listitem>
+                                <para>
+                                    An ordered list of child information items, in document order. This list
+                                    may only contain <link linkend="lcm.text">text information items</link>.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
                 </section>
                 <section>
                     <title>Unparsed entity information items</title>
@@ -499,6 +572,51 @@
                     items and attribute information items. This section identifies several further
                     classifications that will prove to be useful.
                 </para>
+                <section>
+                    <title>Parent, child and leaf information items</title>
+                    <para>
+                        Parent information items are information items that have a parent property.
+                        Child information items are information items that have a children property.
+                        Leaf information items are child information items that are not parent information
+                        items.
+                    </para>
+                    <table id="tbl.lcm.parent-child-leaf">
+                        <caption>Parent, child and leaf information items</caption>
+                        <tgroup cols="4">
+                            <thead>
+                                <row>
+                                    <entry>Information item</entry><entry>Parent</entry><entry>Child</entry><entry>Leaf</entry>
+                                </row>
+                            </thead>
+                            <tbody>
+                                <row>
+                                    <entry>Document</entry><entry>X</entry><entry></entry><entry></entry>
+                                </row>
+                                <row>
+                                    <entry>Document type declaration</entry><entry></entry><entry>X</entry><entry>X</entry>
+                                </row>
+                                <row>
+                                    <entry>Element</entry><entry>X</entry><entry>X</entry><entry></entry>
+                                </row>
+                                <row>
+                                    <entry>Attribute</entry><entry>X</entry><entry></entry><entry></entry>
+                                </row>
+                                <row>
+                                    <entry>Text</entry><entry></entry><entry>X</entry><entry>X</entry>
+                                </row>
+                                <row>
+                                    <entry>CDATA section</entry><entry>X</entry><entry>X</entry><entry></entry>
+                                </row>
+                                <row>
+                                    <entry>Comment</entry><entry>X</entry><entry>X</entry><entry></entry>
+                                </row>
+                                <row>
+                                    <entry>Processing instruction</entry><entry>X</entry><entry>X</entry><entry></entry>
+                                </row>
+                            </tbody>
+                        </tgroup>
+                    </table>
+                </section>
                 <section>
                     <title>Namespace aware named information items</title>
                     
@@ -590,14 +708,147 @@
         </chapter>
         <chapter>
             <title>The Core Model</title>
-            
+            <para>
+                The Core Model is a mapping of the Logical Content Model defined in <xref linkend="lcm"/>
+                into a set of interfaces in the Java language. The Core Model is thus an abstract API.
+                The mapping between the two models is mostly direct, but there are some slight
+                differences that will be explained in the following sections.
+            </para>
             <section>
                 <title>Document fragments</title>
-                
+                <para>
+                    While the Logical Content Model is a model of the content of a well-formed
+                    XML document, the Core Model is an API that allows user code to manipulate,
+                    edit and create XML documents. To allow these manipulations, it is necessary
+                    to introduce a node type that has no corresponding information item.
+                    ...
+                </para>
             </section>
             <section>
                 <title>Compact parent nodes</title>
-                
+                <para>
+                    The Logical Content Model defines the children property as an ordered list
+                    of child information items. The direct transcription of this would be to
+                    specify that a parent node is a node that has an ordered list of child nodes.
+                    There are several reasons why this is too simplistic:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <xref linkend="tbl.lcm.parent-child-leaf"/> shows that most nodes are
+                            actually parent nodes. In practice however, many instances of parent
+                            nodes will only contain a single text node as their child. This is
+                            certainly true for attributes, CDATA sections, comments and
+                            processing instructions. Surprisingly, this is also true for elements,
+                            especially in SOAP messages. Indeed, in a typical Web service message,
+                            most elements are instances of simple schema types, and thus
+                            contain a single text information item (unless the element is empty or
+                            the parser decides to segment the value of the element).
+                        </para>
+                        <para>
+                            Storing this character data in separate node instances creates an
+                            overhead that in most cases is unnecessary because the text node will
+                            never be accessed directly. Instead, the application typically uses
+                            a method on the parent node to retrieve its text content.
+                            E.g. for elements, the following methods can be used, depending on
+                            the API:
+                        </para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    DOM: <methodname>Node#getTextContent()</methodname> invoked on
+                                    the <classname>Element</classname> instance.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    Axiom: <methodname>OMElement#getText()</methodname>.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    StAX: <methodname>XMLStreamReader#getElementText()</methodname>.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                        <para>
+                            In the case of attributes, CDATA sections, comments and processing
+                            instructions, some APIs even don't have methods to
+                            access the child nodes because they don't consider these nodes as
+                            parent nodes. Especially for attributes, the overhead created
+                            by storing their values in separate child nodes would be
+                            annoying.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            The Logical Content Model only captures the content of a document,
+                            but not its semantics. In particular, if the document is described
+                            by an XML schema, then for simple types, the Logical Content Model
+                            only refers to the lexical space but never to the value
+                            space of these types.
+                            To support frontends such as Axiom [and SDO??], it is necessary 
+                            to allow the Core Model to store content using objects other than
+                            strings.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            One of the design goals is to support sourced content.
+                            [TODO: (link to) definition here]
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    Therefore, the design of the Core Model specifies that the content of a parent
+                    node may be stored in one of the following forms:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            As an order list of child nodes.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            As a <firstterm>value object</firstterm>, i.e. a single String object or
+                            an object of another type that has a well-defined mapping from value to lexical space. Examples are
+                            <classname>javax.xml.namespace.QName</classname> for <type>xs:QName</type>
+                            and <classname>javax.activation.DataHandler</classname> for <type>xs:base64Binary</type>.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            An object of type <classname>FragmentSource</classname>.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    An instance that stores its content as an order list of child nodes is said to
+                    be <firstterm>expanded</firstterm>. If it uses one of the other two representations,
+                    it is said to be <firstterm>unexpanded</firstterm>. When the children of an
+                    unexpanded parent node are queried, the node will be <firstterm>expanded</firstterm>,
+                    i.e. the alternative representation will be replaced by an equivalent list of
+                    child nodes. Node types supporting this mechanism are called
+                    <firstterm>compact</firstterm>. Note that in the Core Model, all parent nodes
+                    are compact [Well, not yet...].
+                </para>
+                <para>
+                    If the content is stored using a <classname>FragmentSource</classname>, then
+                    deferred parsing is used when the node is expanded. This means that after
+                    expansion, the list of child nodes may be incomplete and only contain the
+                    materialized child nodes. Of course this is transparent to the code
+                    interacting with the Core Model.
+                </para>
+                <para>
+                    In this context it is important not to confuse the concept
+                    of "expanded" with the concept of "complete".
+                    [TODO: elaborate a bit more; it is clear that an incomplete node may be expanded;
+                    but may a complete node become incomplete when it is expanded?!?] 
+                </para>
+                <para>
+                    TODO: specify what happens to value objects after expansion!
+                </para>
             </section>
             <section>
                 <title>UML diagram</title>
@@ -756,7 +1007,7 @@
                 </productionset>
                 <productionset>
                     <title>Comments</title>
-                    <production id="NT-Comment">
+                    <production id="NT-Comment" xreflabel="&ntxs;Comment&ntxe;">
                         <lhs>Comment</lhs>
                         <rhs>
                             '&lt;!--' ((<nonterminal def="#NT-Char">Char</nonterminal> - '-') | ('-' (<nonterminal def="#NT-Char">Char</nonterminal> - '-')))* '-->'
@@ -765,14 +1016,14 @@
                 </productionset>
                 <productionset>
                     <title>Processing instructions</title>
-                    <production id="NT-PI">
+                    <production id="NT-PI" xreflabel="&ntxs;PI&ntxe;">
                         <lhs>PI</lhs>
                         <rhs>
                             '&lt;?' <nonterminal def="#NT-PITarget">PITarget</nonterminal>
                             (<nonterminal def="#NT-S">S</nonterminal> (<nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* '?>' <nonterminal def="#NT-Char">Char</nonterminal>*)))? '?>'
                         </rhs>
                     </production>
-                    <production id="NT-PITarget">
+                    <production id="NT-PITarget" xreflabel="&ntxs;PITarget&ntxe;">
                         <lhs>PITarget</lhs>
                         <rhs>
                             <nonterminal def="#NT-Name">Name</nonterminal> - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
