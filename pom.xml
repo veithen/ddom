@@ -201,6 +201,14 @@
                             <includes>manual.xml</includes>
                             <chunkedOutput>true</chunkedOutput>
                             <targetDirectory>target/site/manual</targetDirectory>
+                            <htmlCustomization>src/docbkx/xsl/html.xsl</htmlCustomization>
+                            <postProcess>
+                                <copy todir="target/site/manual/images">
+                                    <fileset dir="src/docbkx/images">
+                                        <include name="**/*.png"/>
+                                    </fileset>
+                                </copy>
+                            </postProcess>
                         </configuration>
                     </execution>
                 </executions>
