@@ -527,6 +527,22 @@
                 </section>
             </section>
         </chapter>
+        <chapter>
+            <title>The Core Model</title>
+            
+            <section>
+                <title>Document fragments</title>
+                
+            </section>
+            <section>
+                <title>Compact parent nodes</title>
+                
+            </section>
+            <section>
+                <title>UML diagram</title>
+                
+            </section>
+        </chapter>
         <appendix>
             <title>XML grammar</title>
             <para>
@@ -659,6 +675,11 @@
             <title>Backend development</title>
             
             <section>
+                <title>Addressing the multiple inheritance problem</title>
+                
+            </section>
+            
+            <section>
                 <title>Backend implementations and deferred parsing</title>
                 <para>
                     If loading existing documents is supported<footnote><para>This may not be the
@@ -695,6 +716,31 @@
                         all implementations.
                     </para>
                 </note>
+            </section>
+            <section>
+                <title>What operations should force a node to be built?</title>
+                <para>
+                    Three possible types of builders:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Whenever the parent of the node changes or siblings are inserted after the node.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Whenever siblings are inserted after the node. --> the builder needs to maintain
+                            a node stack
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Never --> the builder needs to keep even more information: the siblings inserted
+                            immediately after the node + siblings added at the end
+                        </para>
+                    </listitem>
+                </itemizedlist>
             </section>
         </chapter>
         <chapter>
