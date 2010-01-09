@@ -194,7 +194,7 @@
                                 <listitem>
                                     <para>
                                         If the name is an <xref linkend="NT-NCName"/>,
-                                        the it will pick up the default namespace in scope. Since a default namespace
+                                        the element will pick up the default namespace in scope. Since a default namespace
                                         always exists, the element is always namespace well-formed.
                                     </para>
                                 </listitem>
@@ -256,7 +256,7 @@
                                 <listitem>
                                     <para>
                                         If the name is an <xref linkend="NT-NCName"/>,
-                                        the the attribute will be namespace well-formed and have no namespace.
+                                        the attribute will be namespace well-formed and have no namespace.
                                     </para>
                                 </listitem>
                                 <listitem>
