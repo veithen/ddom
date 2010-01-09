@@ -115,7 +115,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         if (content == null && !complete) {
             document.next();
         }
-        return OptimizedParentNodeHelper.getFirstChild(this);
+        return CompactParentNodeHelper.getFirstChild(this);
     }
     
     public final CoreAttribute coreGetFirstAttribute() {

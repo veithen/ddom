@@ -90,7 +90,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
 
     public final CoreChildNode coreGetFirstChild() {
-        return OptimizedParentNodeHelper.getFirstChild(this);
+        return CompactParentNodeHelper.getFirstChild(this);
     }
     
     public final CoreElement coreGetOwnerElement() {
