@@ -171,10 +171,10 @@
                         </para>
                         <variablelist>
                             <varlistentry>
-                                <term>[name]</term>
+                                <term>name</term>
                                 <listitem>
                                     <para>
-                                        The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the element.
+                                        The <xref linkend="NT-Name"/> of the element.
                                     </para>
                                 </listitem>
                             </varlistentry>
@@ -193,14 +193,14 @@
                             <itemizedlist>
                                 <listitem>
                                     <para>
-                                        If the name is an <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-NCName"><literal>NCName</literal></ulink>,
+                                        If the name is an <xref linkend="NT-NCName"/>,
                                         the it will pick up the default namespace in scope. Since a default namespace
                                         always exists, the element is always namespace well-formed.
                                     </para>
                                 </listitem>
                                 <listitem>
                                     <para>
-                                        If the name is a <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-PrefixedName"><literal>PrefixedName</literal></ulink>,
+                                        If the name is a <xref linkend="NT-PrefixedName"/>,
                                         then it will pick up the namespace bound to the corresponding prefix.
                                         If no corresponding namespace declaration is in scope, the element
                                         is not namespace well-formed.
@@ -235,10 +235,10 @@
                         </para>
                         <variablelist>
                             <varlistentry>
-                                <term>[name]</term>
+                                <term>name</term>
                                 <listitem>
                                     <para>
-                                        The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the attribute.
+                                        The <xref linkend="NT-Name"/> of the attribute.
                                     </para>
                                 </listitem>
                             </varlistentry>
@@ -255,13 +255,13 @@
                             <itemizedlist>
                                 <listitem>
                                     <para>
-                                        If the name is an <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-NCName"><literal>NCName</literal></ulink>,
+                                        If the name is an <xref linkend="NT-NCName"/>,
                                         the the attribute will be namespace well-formed and have no namespace.
                                     </para>
                                 </listitem>
                                 <listitem>
                                     <para>
-                                        If the name is not an <literal>NCName</literal>, then the attribute will be
+                                        If the name is not an <xref linkend="NT-NCName"/>, then the attribute will be
                                         either not namespace well-formed or it will pick up the namespace of one
                                         of the namespace declarations in scope, exactly as for namespace unaware
                                         elements.
@@ -271,8 +271,8 @@
                             <para>
                                 The important point to note here is that in contrast to namespace unaware elements,
                                 a namespace unaware attribute has a well-defined namespace if its name is a
-                                <literal>NCName</literal>. This is also true if the name is a
-                                <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-PrefixedName"><literal>PrefixedName</literal></ulink>
+                                <xref linkend="NT-NCName"/>. This is also true if the name is a
+                                <xref linkend="NT-PrefixedName"/>
                                 with <literal>xml</literal> as prefix, because this prefix is always implicitly
                                 bound to <literal>http://www.w3.org/XML/1998/namespace</literal> (and
                                 must not be bound to any other namespace).
@@ -552,10 +552,18 @@
             <title>XML grammar</title>
             <para>
                 This appendix reproduces parts of the productions defined in <biblioref linkend="bib.xml"/>
+                and <biblioref linkend="bib.namespaces"/>
                 that are referenced in this document.
             </para>
             <section>
                 <title>XML 1.0</title>
+                <productionset>
+                    <title>Characters and names</title>
+                    <production id="NT-Name" xreflabel="&ntxs;Name&ntxe;">
+                        <lhs>Name</lhs>
+                        <rhs><nonterminal def="#NT-NameStartChar">NameStartChar</nonterminal> (<nonterminal def="#NT-NameChar">NameChar</nonterminal>)*</rhs>
+                    </production>
+                </productionset>
                 <productionset>
                     <title>Document</title>
                     <production id="NT-document" xreflabel="&ntxs;document&ntxe;">
@@ -669,6 +677,50 @@
                     <production id="NT-CDEnd">
                         <lhs>CDEnd</lhs>
                         <rhs>']]&gt;'</rhs>
+                    </production>
+                </productionset>
+            </section>
+            <section>
+                <title>Namespaces in XML 1.0</title>
+                <productionset>
+                    <title>Names</title>
+                    <production id="NT-NCName" xreflabel="&ntxs;NCName&ntxe;">
+                        <lhs>NCName</lhs> 
+                        <rhs>
+                            <nonterminal def="#NT-Name">Name</nonterminal>
+                            - (<nonterminal def="#NT-Char">Char</nonterminal>* ':' <nonterminal def="#NT-Char">Char</nonterminal>*)
+                        </rhs>
+                    </production>
+                    <production id="NT-QName">
+                        <lhs>QName</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-PrefixedName">PrefixedName</nonterminal>
+                          | <nonterminal def="#NT-UnprefixedName">UnprefixedName</nonterminal>
+                        </rhs>
+                    </production>
+                    <production id="NT-PrefixedName" xreflabel="&ntxs;PrefixedName&ntxe;">
+                        <lhs>PrefixedName</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-Prefix">Prefix</nonterminal> ':' <nonterminal def="#NT-LocalPart">LocalPart</nonterminal>
+                        </rhs>
+                    </production>
+                    <production id="NT-UnprefixedName">
+                        <lhs>UnprefixedName</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-LocalPart">LocalPart</nonterminal>
+                        </rhs>
+                    </production>
+                    <production id="NT-Prefix" xreflabel="&ntxs;Prefix&ntxe;">
+                        <lhs>Prefix</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-NCName">NCName</nonterminal>
+                        </rhs>
+                    </production>
+                    <production id="NT-LocalPart">
+                        <lhs>LocalPart</lhs>
+                        <rhs>
+                            <nonterminal def="#NT-NCName">NCName</nonterminal>
+                        </rhs>
                     </production>
                 </productionset>
             </section>
@@ -1050,6 +1102,12 @@ writer.writeNamespace("p", "urn:ns1");</programlisting>
                 <title><ulink url="http://www.w3.org/TR/2008/REC-xml-20081126/">Extensible Markup Language (XML) 1.0 (Fifth Edition)</ulink></title>
                 <publishername>W3C Recommendation</publishername>
                 <pubdate>26 November 2008</pubdate>
+            </biblioentry>
+            <biblioentry id="bib.namespaces">
+                <abbrev>Namespaces</abbrev>
+                <title><ulink url="http://www.w3.org/TR/2009/REC-xml-names-20091208/">Namespaces in XML 1.0 (Third Edition)</ulink></title>
+                <publishername>W3C Recommendation</publishername>
+                <pubdate>8 December 2009</pubdate>
             </biblioentry>
             <biblioentry id="bib.xmlschema.part2">
                 <abbrev>Schema-2</abbrev>
