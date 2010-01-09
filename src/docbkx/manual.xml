@@ -156,124 +156,131 @@
                     <title>The document information item</title>
                     
                 </section>
-                <section>
-                    <title>Namepace aware element information items</title>
+                <section id="lcm.element">
+                    <title>Element information items</title>
+                    <section>
+                        <title>Namepace aware element information items</title>
+                        
+                    </section>
+                    <section>
+                        <title>Namespace unaware element information item</title>
+                        <para>
+                            A namespace unaware element information item is produced by a namespace unaware parser
+                            for each <xref linkend="NT-element"/>
+                            appearing in the document. It has the following properties:
+                        </para>
+                        <variablelist>
+                            <varlistentry>
+                                <term>[name]</term>
+                                <listitem>
+                                    <para>
+                                        The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the element.
+                                    </para>
+                                </listitem>
+                            </varlistentry>
+                        </variablelist>
+                        <para>
+                            When a namespace unaware element information item is serialized, it is written as-is, without
+                            consideration for the namespace declarations that are in scope at the location
+                            where the element is written.
+                        </para>
+                        <note>
+                            <para>
+                                This has important consequences if the resulting document is later
+                                parsed by a namespace aware parser. The behavior depends on the
+                                structure of its name:
+                            </para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para>
+                                        If the name is an <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-NCName"><literal>NCName</literal></ulink>,
+                                        the it will pick up the default namespace in scope. Since a default namespace
+                                        always exists, the element is always namespace well-formed.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para>
+                                        If the name is a <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-PrefixedName"><literal>PrefixedName</literal></ulink>,
+                                        then it will pick up the namespace bound to the corresponding prefix.
+                                        If no corresponding namespace declaration is in scope, the element
+                                        is not namespace well-formed.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para>
+                                        Otherwise the element is never namespace well-formed.
+                                    </para>
+                                </listitem>
+                            </itemizedlist>
+                            <para>
+                                This implies that a namespace unaware element information item may never
+                                be considered to have a well-defined namespace.
+                            </para>
+                        </note>
+                    </section>
+                </section>
+                <section id="lcm.attribute">
+                    <title>Attribute information items</title>
                     
-                </section>
-                <section>
-                    <title>Namespace unaware element information item</title>
-                    <para>
-                        A namespace unaware element information item is produced by a namespace unaware parser
-                        for each <xref linkend="NT-element"/>
-                        appearing in the document. It has the following properties:
-                    </para>
-                    <variablelist>
-                        <varlistentry>
-                            <term>[name]</term>
-                            <listitem>
-                                <para>
-                                    The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the element.
-                                </para>
-                            </listitem>
-                        </varlistentry>
-                    </variablelist>
-                    <para>
-                        When a namespace unaware element information item is serialized, it is written as-is, without
-                        consideration for the namespace declarations that are in scope at the location
-                        where the element is written.
-                    </para>
-                    <note>
+                    <section>
+                        <title>Namespace aware attribute information items</title>
+                        
+                    </section>
+                    <section>
+                        <title>Namespace unaware attribute information items</title>
                         <para>
-                            This has important consequences if the resulting document is later
-                            parsed by a namespace aware parser. The behavior depends on the
-                            structure of its name:
+                            A namespace unaware attribute information item is produced by a namespace unaware parser
+                            for each <xref linkend="NT-Attribute"/>
+                            appearing in the document. It has the following properties:
                         </para>
-                        <itemizedlist>
-                            <listitem>
-                                <para>
-                                    If the name is an <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-NCName"><literal>NCName</literal></ulink>,
-                                    the it will pick up the default namespace in scope. Since a default namespace
-                                    always exists, the element is always namespace well-formed.
-                                </para>
-                            </listitem>
-                            <listitem>
-                                <para>
-                                    If the name is a <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-PrefixedName"><literal>PrefixedName</literal></ulink>,
-                                    then it will pick up the namespace bound to the corresponding prefix.
-                                    If no corresponding namespace declaration is in scope, the element
-                                    is not namespace well-formed.
-                                </para>
-                            </listitem>
-                            <listitem>
-                                <para>
-                                    Otherwise the element is never namespace well-formed.
-                                </para>
-                            </listitem>
-                        </itemizedlist>
+                        <variablelist>
+                            <varlistentry>
+                                <term>[name]</term>
+                                <listitem>
+                                    <para>
+                                        The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the attribute.
+                                    </para>
+                                </listitem>
+                            </varlistentry>
+                        </variablelist>
                         <para>
-                            This implies that a namespace unaware element information item may never
-                            be considered to have a well-defined namespace.
+                            When a namespace unaware attribute information item is serialized, it is written as-is, without
+                            consideration for the namespace declarations that are in scope at the location
+                            where the element is written.
                         </para>
-                    </note>
-                </section>
-                <section>
-                    <title>Namespace aware attribute information items</title>
-                    
-                </section>
-                <section>
-                    <title>Namespace unaware attribute information items</title>
-                    <para>
-                        A namespace unaware attribute information item is produced by a namespace unaware parser
-                        for each <xref linkend="NT-Attribute"/>
-                        appearing in the document. It has the following properties:
-                    </para>
-                    <variablelist>
-                        <varlistentry>
-                            <term>[name]</term>
-                            <listitem>
-                                <para>
-                                    The <ulink url="http://www.w3.org/TR/REC-xml/#NT-Name"><literal>Name</literal></ulink> of the attribute.
-                                </para>
-                            </listitem>
-                        </varlistentry>
-                    </variablelist>
-                    <para>
-                        When a namespace unaware attribute information item is serialized, it is written as-is, without
-                        consideration for the namespace declarations that are in scope at the location
-                        where the element is written.
-                    </para>
-                    <note>
-                        <para>
-                            The consequences of this are slightly different than for namespace unaware elements:
-                        </para>
-                        <itemizedlist>
-                            <listitem>
-                                <para>
-                                    If the name is an <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-NCName"><literal>NCName</literal></ulink>,
-                                    the the attribute will be namespace well-formed and have no namespace.
-                                </para>
-                            </listitem>
-                            <listitem>
-                                <para>
-                                    If the name is not an <literal>NCName</literal>, then the attribute will be
-                                    either not namespace well-formed or it will pick up the namespace of one
-                                    of the namespace declarations in scope, exactly as for namespace unaware
-                                    elements.
-                                </para>
-                            </listitem>
-                        </itemizedlist>
-                        <para>
-                            The important point to note here is that in contrast to namespace unaware elements,
-                            a namespace unaware attribute has a well-defined namespace if its name is a
-                            <literal>NCName</literal>. This is also true if the name is a
-                            <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-PrefixedName"><literal>PrefixedName</literal></ulink>
-                            with <literal>xml</literal> as prefix, because this prefix is always implicitly
-                            bound to <literal>http://www.w3.org/XML/1998/namespace</literal> (and
-                            must not be bound to any other namespace).
-                            There is thus a partial equivalence between namespace unaware and
-                            namespace aware attribute information items.
-                        </para>
-                    </note>
+                        <note>
+                            <para>
+                                The consequences of this are slightly different than for namespace unaware elements:
+                            </para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para>
+                                        If the name is an <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-NCName"><literal>NCName</literal></ulink>,
+                                        the the attribute will be namespace well-formed and have no namespace.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para>
+                                        If the name is not an <literal>NCName</literal>, then the attribute will be
+                                        either not namespace well-formed or it will pick up the namespace of one
+                                        of the namespace declarations in scope, exactly as for namespace unaware
+                                        elements.
+                                    </para>
+                                </listitem>
+                            </itemizedlist>
+                            <para>
+                                The important point to note here is that in contrast to namespace unaware elements,
+                                a namespace unaware attribute has a well-defined namespace if its name is a
+                                <literal>NCName</literal>. This is also true if the name is a
+                                <ulink url="http://www.w3.org/TR/REC-xml-names/#NT-PrefixedName"><literal>PrefixedName</literal></ulink>
+                                with <literal>xml</literal> as prefix, because this prefix is always implicitly
+                                bound to <literal>http://www.w3.org/XML/1998/namespace</literal> (and
+                                must not be bound to any other namespace).
+                                There is thus a partial equivalence between namespace unaware and
+                                namespace aware attribute information items.
+                            </para>
+                        </note>
+                    </section>
                 </section>
                 <section>
                     <title>Processing instruction information items</title>
@@ -430,14 +437,12 @@
             </section>
             <section>
                 <title>Information item classification</title>
-                <section>
-                    <title>Element information items</title>
-                    
-                </section>
-                <section>
-                    <title>Attribute information items</title>
-                    
-                </section>
+                <para>
+                    In <xref linkend="lcm.element"/> and <xref linkend="lcm.attribute"/>, we already
+                    established two abstract classes of information items, namely element information
+                    items and attribute information items. This section identifies several further
+                    classifications that will prove to be useful.
+                </para>
                 <section>
                     <title>Namespace aware named information items</title>
                     
