@@ -20,6 +20,8 @@ import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.collections.ArrayStack;
+import com.google.code.ddom.collections.Stack;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -29,9 +31,10 @@ import com.google.code.ddom.stream.util.CallbackConsumer;
 public class Builder extends CallbackConsumer {
     private final Producer producer;
     private final Document document;
+    private final Stack<BuilderTarget> nodeStack = new ArrayStack<BuilderTarget>();
     private StreamException streamException;
-    private BuilderTarget parent;
-    private CoreChildNode lastSibling;
+    private BuilderTarget parent; // The current node being built
+    private CoreChildNode lastSibling; // The last child of the current node
     private CoreAttribute lastAttribute;
     private boolean nodeAppended;
 
@@ -146,6 +149,7 @@ public class Builder extends CallbackConsumer {
         node.internalSetParent(parent);
         if (node instanceof CoreElement) {
             // TODO: this assumes that elements are always created as incomplete
+            nodeStack.push(parent);
             parent = (CoreElement)node;
             lastSibling = null;
         } else {
@@ -167,12 +171,13 @@ public class Builder extends CallbackConsumer {
     
     public final void nodeCompleted() {
         parent.internalSetComplete();
-        if (parent instanceof CoreChildNode) {
-            lastSibling = (CoreChildNode)parent;
-            // TODO: get rid of cast here
-            parent = (BuilderTarget)lastSibling.coreGetParent(); 
-        } else {
+        if (nodeStack.isEmpty()) {
             parent = null;
+        } else {
+            lastSibling = (CoreChildNode)parent;
+            // This is important for being a builder of type 2: instead of getting the
+            // parent from the current node, we get it from the node stack.
+            parent = nodeStack.pop();
         }
     }
 

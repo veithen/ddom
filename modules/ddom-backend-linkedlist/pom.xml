@@ -44,6 +44,11 @@
             <version>${version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.code.ddom</groupId>
+            <artifactId>ddom-collections</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
