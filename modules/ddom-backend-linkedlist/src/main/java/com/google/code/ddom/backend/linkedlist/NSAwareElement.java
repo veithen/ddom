@@ -62,7 +62,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     @Override
-    protected String getImplicitNamespaceURI(String prefix) {
+    protected final String getImplicitNamespaceURI(String prefix) {
         if (prefix == null) {
             return this.prefix == null ? namespaceURI : null;
         } else {
@@ -71,7 +71,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     @Override
-    protected String getImplicitPrefix(String namespaceURI) {
+    protected final String getImplicitPrefix(String namespaceURI) {
         return namespaceURI.equals(this.namespaceURI) ? prefix : null;
     }
 }

@@ -32,7 +32,7 @@ public class ElementsByNameIterator extends AbstractNodeIterator<CoreNSAwareElem
     }
 
     @Override
-    protected boolean matches(CoreNSAwareElement node) {
+    protected final boolean matches(CoreNSAwareElement node) {
         return ObjectUtils.equals(node.coreGetNamespaceURI(), namespaceURI) && node.coreGetLocalName().equals(localName);
     }
 }

@@ -27,17 +27,17 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
         this.tagName = tagName;
     }
 
-    public String coreGetName() {
+    public final String coreGetName() {
         return tagName;
     }
 
     @Override
-    protected String getImplicitNamespaceURI(String prefix) {
+    protected final String getImplicitNamespaceURI(String prefix) {
         return null;
     }
 
     @Override
-    protected String getImplicitPrefix(String namespaceURI) {
+    protected final String getImplicitPrefix(String namespaceURI) {
         return null;
     }
 }

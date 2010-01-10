@@ -57,7 +57,7 @@ public class Builder extends CallbackConsumer {
         }
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    public final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         document.coreSetXmlVersion(xmlVersion);
         document.coreSetXmlEncoding(xmlEncoding);
         document.coreSetInputEncoding(inputEncoding);
@@ -88,7 +88,7 @@ public class Builder extends CallbackConsumer {
         appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
     }
 
-    public void attributesCompleted() {
+    public final void attributesCompleted() {
         nodeAppended = true;
     }
 

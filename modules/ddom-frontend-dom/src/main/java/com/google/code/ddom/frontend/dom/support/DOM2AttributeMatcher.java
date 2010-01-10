@@ -22,7 +22,7 @@ import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 
-public class DOM2AttributeMatcher implements AttributeMatcher {
+public final class DOM2AttributeMatcher implements AttributeMatcher {
     public static final DOM2AttributeMatcher INSTANCE = new DOM2AttributeMatcher();
     
     private DOM2AttributeMatcher() {}

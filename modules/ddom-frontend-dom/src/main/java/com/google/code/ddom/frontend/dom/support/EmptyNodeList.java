@@ -18,7 +18,7 @@ package com.google.code.ddom.frontend.dom.support;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class EmptyNodeList implements NodeList {
+public final class EmptyNodeList implements NodeList {
     public static final EmptyNodeList INSTANCE = new EmptyNodeList();
     
     private EmptyNodeList() {

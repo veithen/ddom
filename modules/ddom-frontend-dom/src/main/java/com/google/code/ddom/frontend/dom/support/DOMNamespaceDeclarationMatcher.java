@@ -37,7 +37,7 @@ import com.google.code.ddom.backend.NodeFactory;
  * 
  * @author Andreas Veithen
  */
-public class DOMNamespaceDeclarationMatcher implements AttributeMatcher {
+public final class DOMNamespaceDeclarationMatcher implements AttributeMatcher {
     public static final DOMNamespaceDeclarationMatcher INSTANCE = new DOMNamespaceDeclarationMatcher();
     
     private DOMNamespaceDeclarationMatcher() {}

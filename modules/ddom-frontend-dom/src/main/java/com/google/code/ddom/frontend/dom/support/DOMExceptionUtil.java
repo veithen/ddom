@@ -29,7 +29,7 @@ import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.WrongDocumentException;
 import com.google.code.ddom.frontend.dom.DOMDeferredParsingException;
 
-public class DOMExceptionUtil {
+public final class DOMExceptionUtil {
     private static final ResourceBundle messages =
             PropertyResourceBundle.getBundle(DOMExceptionUtil.class.getName());
     

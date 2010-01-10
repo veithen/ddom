@@ -19,8 +19,7 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
-
-public class NSUtil {
+public final class NSUtil {
     private NSUtil() {}
     
     // This is the NameStartChar production from http://www.w3.org/TR/2008/REC-xml-20081126/

@@ -37,7 +37,7 @@ public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> imple
     
     protected abstract boolean matches(T attribute);
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         if (!hasNext) {
             CoreAttribute attribute = this.attribute;
             do {
@@ -53,7 +53,7 @@ public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> imple
         return attribute != null;
     }
 
-    public S next() {
+    public final S next() {
         if (hasNext()) {
             hasNext = false;
             return mapper.map(type.cast(attribute));
@@ -62,7 +62,7 @@ public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> imple
         }
     }
 
-    public void remove() {
+    public final void remove() {
         throw new UnsupportedOperationException();
     }
 }

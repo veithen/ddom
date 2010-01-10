@@ -38,7 +38,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
  * 
  * @author Andreas Veithen
  */
-public class DOM1AttributeMatcher implements AttributeMatcher {
+public final class DOM1AttributeMatcher implements AttributeMatcher {
     public static final DOM1AttributeMatcher INSTANCE = new DOM1AttributeMatcher();
     
     private DOM1AttributeMatcher() {}

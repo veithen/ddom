@@ -40,7 +40,7 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
 
     protected abstract boolean matches(T node);
 
-    public boolean hasNext() {
+    public final boolean hasNext() {
         if (!hasNext) {
             CoreChildNode node = this.node;
             do {
@@ -95,7 +95,7 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
         return node != null;
     }
 
-    public T next() {
+    public final T next() {
         if (hasNext()) {
             hasNext = false;
             return type.cast(node);
@@ -104,7 +104,7 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
         }
     }
 
-    public void remove() {
+    public final void remove() {
         throw new UnsupportedOperationException();
     }
 }

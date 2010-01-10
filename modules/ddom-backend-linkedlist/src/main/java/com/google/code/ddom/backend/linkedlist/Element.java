@@ -70,7 +70,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         return complete;
     }
 
-    public void coreBuild() throws DeferredParsingException {
+    public final void coreBuild() throws DeferredParsingException {
         BuilderTargetHelper.coreBuild(this);
     }
 
@@ -83,7 +83,7 @@ public abstract class Element extends ParentNode implements CoreElement {
     }
 
     @Override
-    protected void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    protected final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         // TODO: need a test case here!
         if (newChild instanceof CoreDocumentType) {
             throw new ChildTypeNotAllowedException();

@@ -19,7 +19,7 @@ import javax.xml.namespace.QName;
 
 import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 
-public class NSAwareNamedNodeHelper {
+public final class NSAwareNamedNodeHelper {
     private NSAwareNamedNodeHelper() {}
     
     public static QName coreGetQName(CoreNSAwareNamedNode node) {

@@ -23,7 +23,9 @@ import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.NoParentException;
 
-public class ChildNodeHelper {
+public final class ChildNodeHelper {
+    private ChildNodeHelper() {}
+    
     public static CoreChildNode coreGetNextSibling(CoreChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
         // TODO: try to avoid the cast here

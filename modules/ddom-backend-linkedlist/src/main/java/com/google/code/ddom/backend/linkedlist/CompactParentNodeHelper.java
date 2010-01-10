@@ -19,7 +19,9 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreCompactParentNode;
 
-public class CompactParentNodeHelper {
+public final class CompactParentNodeHelper {
+    private CompactParentNodeHelper() {}
+    
     public static CoreChildNode getFirstChild(CoreCompactParentNode node) {
         Object content = node.coreGetContent();
         CoreChildNode firstChild;

@@ -108,7 +108,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     @Override
-    protected void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
+    protected final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
         if (newChild instanceof CoreDocumentType) {
             if (!(replacedChild instanceof CoreDocumentType || coreGetDocumentType() == null)) {

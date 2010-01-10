@@ -25,7 +25,7 @@ public class ChildrenByTypeIterator<T extends CoreChildNode> extends AbstractNod
     }
 
     @Override
-    protected boolean matches(T node) {
+    protected final boolean matches(T node) {
         return true;
     }
 }

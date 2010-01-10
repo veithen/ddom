@@ -18,7 +18,9 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.DeferredParsingException;
 
-public class BuilderTargetHelper {
+public final class BuilderTargetHelper {
+    private BuilderTargetHelper() {}
+    
     public static void coreBuild(BuilderTarget node) throws DeferredParsingException {
         // TODO: try to avoid the cast here
         Document document = (Document)node.getDocument();

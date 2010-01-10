@@ -182,19 +182,19 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         merge(newChild, oldChild, true);
     }
 
-    public <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
+    public final <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
         return new ChildrenByTypeIterator<T>(this, axis, type);
     }
 
-    public Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName) {
+    public final Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName) {
         return new ElementsByNameIterator(this, axis, namespaceURI, localName);
     }
 
-    public Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
+    public final Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
         return new ElementsByNamespaceIterator(this, axis, namespaceURI);
     }
 
-    public Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
+    public final Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
         return new ElementsByLocalNameIterator(this, axis, localName);
     }
 }
