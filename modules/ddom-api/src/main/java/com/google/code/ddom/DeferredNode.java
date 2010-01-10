@@ -18,7 +18,5 @@ package com.google.code.ddom;
 // TODO: need to specify which nodes implement this interface (e.g. attributes??)
 @Deprecated
 public interface DeferredNode {
-    boolean isComplete();
-    
     void build();
 }

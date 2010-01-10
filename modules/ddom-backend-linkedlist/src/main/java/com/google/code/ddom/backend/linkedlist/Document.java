@@ -76,10 +76,6 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         return this;
     }
 
-    public final boolean isComplete() {
-        return complete;
-    }
-    
     public final boolean coreIsComplete() {
         return complete;
     }

@@ -65,10 +65,6 @@ public abstract class Element extends ParentNode implements CoreElement {
         this.nextSibling = nextSibling;
     }
     
-    public final boolean isComplete() {
-        return complete;
-    }
-    
     public final boolean coreIsComplete() {
         return complete;
     }

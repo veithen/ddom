@@ -34,6 +34,10 @@ public aspect DeferredParsing {
         document.dispose();
     }
     
+    public boolean AxiomContainer.isComplete() {
+        return coreIsComplete();
+    }
+    
     public boolean AxiomLeafNode.isComplete() {
         // A leaf node is always complete
         return true;
