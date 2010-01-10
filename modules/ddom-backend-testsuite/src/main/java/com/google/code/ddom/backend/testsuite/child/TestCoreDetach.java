@@ -20,13 +20,13 @@ import org.junit.Assert;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
 
 public class TestCoreDetach extends BackendTestCase {
-    public TestCoreDetach(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreDetach(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

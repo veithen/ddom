@@ -27,24 +27,25 @@ import com.google.code.ddom.backend.testsuite.nsaware.NSAwareNamedNodeFactory;
 public class BackendTestSuiteBuilder {
     private BackendTestSuiteBuilder() {}
     
-    public static TestSuite suite(NodeFactory nodeFactory) {
+    public static TestSuite suite(NodeFactory nodeFactory, int builderType) {
+        BackendTestSuiteConfig config = new BackendTestSuiteConfig(nodeFactory, builderType);
         TestSuite suite = new TestSuite();
-        suite.addTest(new com.google.code.ddom.backend.testsuite.attribute.TestCoreSetValue(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetach(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetachIncomplete(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfter(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnChild(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnOrphan(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnSelf(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBefore(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnChild(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnOrphan(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnSelf(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreSetValue(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildAfterSelf(nodeFactory));
-        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildBeforeSelf(nodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.attribute.TestCoreSetValue(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetach(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetachIncomplete(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfter(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnChild(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnOrphan(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnSelf(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBefore(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnChild(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnOrphan(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnSelf(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreSetValue(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildAfterSelf(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreInsertChildBeforeSelf(config));
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareElement.class;

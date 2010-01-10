@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.linkedlist;
+package com.google.code.ddom.backend.testsuite;
 
-import com.google.code.ddom.backend.testsuite.BackendTestSuiteBuilder;
+import com.google.code.ddom.backend.NodeFactory;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+public final class BackendTestSuiteConfig {
+    private final NodeFactory nodeFactory;
+    private final int builderType;
+    
+    public BackendTestSuiteConfig(NodeFactory nodeFactory, int builderType) {
+        this.nodeFactory = nodeFactory;
+        this.builderType = builderType;
+    }
 
-public class BackendTest extends TestCase {
-    public static TestSuite suite() {
-        return BackendTestSuiteBuilder.suite(new NodeFactoryImpl(), 1);
+    public NodeFactory getNodeFactory() {
+        return nodeFactory;
+    }
+
+    public int getBuilderType() {
+        return builderType;
     }
 }

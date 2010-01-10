@@ -18,12 +18,12 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.NoParentException;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
 public class TestCoreInsertSiblingBeforeOnOrphan extends BackendTestCase {
-    public TestCoreInsertSiblingBeforeOnOrphan(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreInsertSiblingBeforeOnOrphan(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

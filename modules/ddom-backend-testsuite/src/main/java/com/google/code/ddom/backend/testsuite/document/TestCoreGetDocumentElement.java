@@ -19,12 +19,12 @@ import org.junit.Assert;
 
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
 public class TestCoreGetDocumentElement extends BackendTestCase {
-    public TestCoreGetDocumentElement(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreGetDocumentElement(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

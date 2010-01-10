@@ -21,12 +21,12 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreCompactParentNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
 public abstract class AbstractTestCoreSetValue extends BackendTestCase {
-    public AbstractTestCoreSetValue(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public AbstractTestCoreSetValue(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     protected abstract CoreCompactParentNode createNode(CoreDocument document);

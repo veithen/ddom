@@ -18,13 +18,13 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.SelfRelationshipException;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
 public class TestCoreInsertSiblingBeforeOnSelf extends BackendTestCase {
-    public TestCoreInsertSiblingBeforeOnSelf(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreInsertSiblingBeforeOnSelf(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

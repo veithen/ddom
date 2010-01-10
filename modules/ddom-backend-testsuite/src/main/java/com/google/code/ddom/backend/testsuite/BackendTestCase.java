@@ -32,14 +32,16 @@ public class BackendTestCase extends TestCase {
     private final StreamFactory streamFactory = StreamFactory.getInstance(BackendTestCase.class.getClassLoader());
     
     protected final NodeFactory nodeFactory;
+    protected final int builderType;
     
-    public BackendTestCase(NodeFactory nodeFactory) {
-        this.nodeFactory = nodeFactory;
+    public BackendTestCase(BackendTestSuiteConfig config) {
+        nodeFactory = config.getNodeFactory();
+        builderType = config.getBuilderType();
         setName(getClass().getName());
     }
     
-    public BackendTestCase(NodeFactory nodeFactory, String nameQualifier) {
-        this.nodeFactory = nodeFactory;
+    public BackendTestCase(BackendTestSuiteConfig config, String nameQualifier) {
+        this(config);
         setName(getClass().getName() + " [" + nameQualifier + "]");
     }
     

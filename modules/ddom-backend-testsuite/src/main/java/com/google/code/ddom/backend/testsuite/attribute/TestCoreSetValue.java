@@ -17,12 +17,12 @@ package com.google.code.ddom.backend.testsuite.attribute;
 
 import com.google.code.ddom.backend.CoreCompactParentNode;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.compactparent.AbstractTestCoreSetValue;
 
 public class TestCoreSetValue extends AbstractTestCoreSetValue {
-    public TestCoreSetValue(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreSetValue(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

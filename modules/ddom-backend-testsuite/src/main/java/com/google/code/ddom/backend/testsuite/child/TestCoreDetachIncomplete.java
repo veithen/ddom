@@ -20,8 +20,8 @@ import org.junit.Assert;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
 /**
  * Test that deferred parsing proceeds correctly after detaching an incomplete node.
@@ -29,8 +29,8 @@ import com.google.code.ddom.backend.testsuite.BackendTestCase;
  * @author Andreas Veithen
  */
 public class TestCoreDetachIncomplete extends BackendTestCase {
-    public TestCoreDetachIncomplete(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreDetachIncomplete(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

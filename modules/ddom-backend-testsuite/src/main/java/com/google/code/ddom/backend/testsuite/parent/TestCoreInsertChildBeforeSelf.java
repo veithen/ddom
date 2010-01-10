@@ -18,14 +18,14 @@ package com.google.code.ddom.backend.testsuite.parent;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.SelfRelationshipException;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
 // TODO: need a DOM frontend test case for this case
 public class TestCoreInsertChildBeforeSelf extends BackendTestCase {
-    public TestCoreInsertChildBeforeSelf(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreInsertChildBeforeSelf(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

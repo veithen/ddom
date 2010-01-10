@@ -23,13 +23,13 @@ import com.google.code.ddom.backend.CoreComment;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
 
 public class TestCoreCoalesce extends BackendTestCase {
-    public TestCoreCoalesce(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreCoalesce(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override

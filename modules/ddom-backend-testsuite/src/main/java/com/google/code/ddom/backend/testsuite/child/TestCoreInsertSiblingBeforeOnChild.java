@@ -19,12 +19,12 @@ import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.CyclicRelationshipException;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
+import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
 public class TestCoreInsertSiblingBeforeOnChild extends BackendTestCase {
-    public TestCoreInsertSiblingBeforeOnChild(NodeFactory nodeFactory) {
-        super(nodeFactory);
+    public TestCoreInsertSiblingBeforeOnChild(BackendTestSuiteConfig config) {
+        super(config);
     }
 
     @Override
