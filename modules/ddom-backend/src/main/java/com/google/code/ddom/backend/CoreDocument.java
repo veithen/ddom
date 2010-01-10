@@ -16,7 +16,6 @@
 package com.google.code.ddom.backend;
 
 import com.google.code.ddom.DeferredDocument;
-import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public interface CoreDocument extends DeferredDocument, BuilderTarget {
@@ -35,7 +34,6 @@ public interface CoreDocument extends DeferredDocument, BuilderTarget {
      */
     Symbols getSymbols();
     
-    void next() throws DeferredParsingException;
     String coreGetInputEncoding();
     void coreSetInputEncoding(String inputEncoding);
     String coreGetXmlVersion();

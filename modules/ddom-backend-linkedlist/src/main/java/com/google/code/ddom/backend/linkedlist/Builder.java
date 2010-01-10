@@ -19,7 +19,6 @@ import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.Producer;
@@ -29,14 +28,14 @@ import com.google.code.ddom.stream.util.CallbackConsumer;
 // TODO: also allow for deferred building of attributes
 public class Builder extends CallbackConsumer {
     private final Producer producer;
-    private final CoreDocument document;
+    private final Document document;
     private StreamException streamException;
     private BuilderTarget parent;
     private CoreChildNode lastSibling;
     private CoreAttribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Producer producer, CoreDocument document, BuilderTarget target) {
+    public Builder(Producer producer, Document document, BuilderTarget target) {
         this.producer = producer;
         this.document = document;
         parent = target;

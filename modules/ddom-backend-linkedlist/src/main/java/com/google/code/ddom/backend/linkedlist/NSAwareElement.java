@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import javax.xml.namespace.QName;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.Implementation;
 
@@ -27,7 +26,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     private String localName;
     private String prefix;
 
-    public NSAwareElement(CoreDocument document, String namespaceURI, String localName, String prefix, boolean complete) {
+    public NSAwareElement(Document document, String namespaceURI, String localName, String prefix, boolean complete) {
         super(document, complete);
         this.namespaceURI = namespaceURI;
         this.localName = localName;

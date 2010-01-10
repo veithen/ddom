@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
@@ -26,7 +25,8 @@ import com.google.code.ddom.backend.NoParentException;
 public class ChildNodeHelper {
     public static CoreChildNode coreGetNextSibling(CoreChildNode node) {
         CoreParentNode parent = node.coreGetParent();
-        CoreDocument document = node.getDocument();
+        // TODO: try to avoid the cast here
+        Document document = (Document)node.getDocument();
         if (parent instanceof BuilderTarget) {
             CoreChildNode nextSibling;
             while ((nextSibling = node.internalGetNextSibling()) == null && !((BuilderTarget)parent).isComplete()) {

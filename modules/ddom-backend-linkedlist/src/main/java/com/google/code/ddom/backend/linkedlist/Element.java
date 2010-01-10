@@ -40,7 +40,7 @@ import com.google.code.ddom.backend.NodeNotFoundException;
 
 @Implementation
 public abstract class Element extends ParentNode implements CoreElement {
-    private final CoreDocument document;
+    private final Document document;
     private Object content;
     private boolean complete;
     private int children;
@@ -48,7 +48,7 @@ public abstract class Element extends ParentNode implements CoreElement {
     private CoreChildNode nextSibling;
     private CoreAttribute firstAttribute;
 
-    public Element(CoreDocument document, boolean complete) {
+    public Element(Document document, boolean complete) {
         this.document = document;
         this.complete = complete;
     }

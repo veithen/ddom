@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNSUnawareElement;
 import com.google.code.ddom.backend.Implementation;
 
@@ -23,7 +22,7 @@ import com.google.code.ddom.backend.Implementation;
 public class NSUnawareElement extends Element implements CoreNSUnawareElement {
     private final String tagName;
 
-    public NSUnawareElement(CoreDocument document, String tagName, boolean complete) {
+    public NSUnawareElement(Document document, String tagName, boolean complete) {
         super(document, complete);
         this.tagName = tagName;
     }

@@ -16,11 +16,11 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.BuilderTarget;
-import com.google.code.ddom.backend.CoreDocument;
 
 public class BuilderTargetHelper {
     public static void build(BuilderTarget node) {
-        CoreDocument document = node.getDocument();
+        // TODO: try to avoid the cast here
+        Document document = (Document)node.getDocument();
         while (!node.isComplete()) {
             document.next();
         }

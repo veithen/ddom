@@ -44,12 +44,12 @@ public class NodeFactoryImpl implements NodeFactory {
     }
 
     public CoreNSUnawareElement createElement(CoreDocument document, String tagName) {
-        return new NSUnawareElement(document, tagName, true);
+        return new NSUnawareElement((Document)document, tagName, true);
     }
     
     public CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix) {
         Symbols symbols = document.getSymbols();
-        return new NSAwareElement(document,
+        return new NSAwareElement((Document)document,
                 namespaceURI == null ? null : symbols.getSymbol(namespaceURI),
                 symbols.getSymbol(localName),
                 prefix == null ? null : symbols.getSymbol(prefix),
