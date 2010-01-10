@@ -63,7 +63,7 @@ public class DocumentHelper {
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public DeferredDocument parse(ModelDefinition model, Object source, Options options, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(ModelDefinition model, Object source, Options options, boolean preserve) {
         // TODO: check for null here!
         DocumentFactory nodeFactory = modelLoaderRegistry.getDocumentFactory(model);
         OptionsTracker tracker = options.createTracker();
@@ -72,11 +72,12 @@ public class DocumentHelper {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
             producer = streamFactory.getProducer(source, tracker, preserve);
         } catch (StreamException ex) {
-            throw new DeferredParsingException(ex.getMessage(), ex.getCause());
+            // TODO
+            throw new RuntimeException(ex.getMessage(), ex.getCause());
         }
         if (producer == null) {
-            // TODO: maybe a distinct exception here?
-            throw new DeferredParsingException("Don't know how to parse sources of type " + source.getClass().getName(), null);
+            // TODO
+            throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
         DeferredDocument document = nodeFactory.createDocument();
@@ -84,19 +85,19 @@ public class DocumentHelper {
         return document;
     }
 
-    public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) {
         return parse(ModelBuilder.buildModelDefinition(frontend), source, options, preserve);
     }
     
-    public DeferredDocument parse(String frontend, Object source, boolean preserve) throws DeferredParsingException {
+    public DeferredDocument parse(String frontend, Object source, boolean preserve) {
         return parse(frontend, source, new Options(), preserve);
     }
     
-    public DeferredDocument parse(String frontend, Object source, Options options) throws DeferredParsingException {
+    public DeferredDocument parse(String frontend, Object source, Options options) {
         return parse(frontend, source, options, true);
     }
     
-    public DeferredDocument parse(String frontend, Object source) throws DeferredParsingException {
+    public DeferredDocument parse(String frontend, Object source) {
         return parse(frontend, source, new Options(), true);
     }
     
