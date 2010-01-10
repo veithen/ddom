@@ -33,5 +33,10 @@
             <artifactId>ddom-backend</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-stream-wstx</artifactId>
+            <version>${version}</version>
+        </dependency>
     </dependencies>
 </project>

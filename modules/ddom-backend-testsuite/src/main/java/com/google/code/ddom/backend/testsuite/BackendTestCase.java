@@ -15,11 +15,21 @@
  */
 package com.google.code.ddom.backend.testsuite;
 
+import java.io.StringReader;
+
+import org.junit.Assert;
+
 import junit.framework.TestCase;
 
+import com.google.code.ddom.Options;
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.StreamFactory;
 
 public class BackendTestCase extends TestCase {
+    private final StreamFactory streamFactory = StreamFactory.getInstance(BackendTestCase.class.getClassLoader());
+    
     protected final NodeFactory nodeFactory;
     
     public BackendTestCase(NodeFactory nodeFactory) {
@@ -30,5 +40,14 @@ public class BackendTestCase extends TestCase {
     public BackendTestCase(NodeFactory nodeFactory, String nameQualifier) {
         this.nodeFactory = nodeFactory;
         setName(getClass().getName() + " [" + nameQualifier + "]");
+    }
+    
+    protected CoreDocument parse(String xml) {
+        try {
+            return nodeFactory.createDocument(streamFactory.getProducer(new StringReader(xml), new Options(), true));
+        } catch (StreamException ex) {
+            Assert.fail(ex.getMessage());
+            return null;
+        }
     }
 }
