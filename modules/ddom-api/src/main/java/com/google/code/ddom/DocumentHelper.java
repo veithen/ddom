@@ -101,6 +101,10 @@ public class DocumentHelper {
         return parse(frontend, source, new Options(), true);
     }
     
+    public void buildDocument(Object document) {
+        ((DeferredDocument)document).build();
+    }
+    
     public void disposeDocument(Object document) {
         // TODO
     }

@@ -144,4 +144,8 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     public final boolean coreIsComplete() {
         return true;
     }
+
+    public final void coreBuild() throws DeferredParsingException {
+        // Nothing to do
+    }
 }

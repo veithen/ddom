@@ -18,18 +18,24 @@ package com.google.code.ddom.frontend.axiom.aspects;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomLeafNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 public aspect DeferredParsing {
     public void AxiomNode.close(boolean build) {
         CoreDocument document = getDocument();
         if (build) {
-            // TODO: not sure if the document or only the node should be built
-            document.build();
+            try {
+                // TODO: not sure if the document or only the node should be built
+                document.coreBuild();
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         }
         document.dispose();
     }

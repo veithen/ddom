@@ -61,7 +61,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         } while (current != null);
         
         if (newChild instanceof BuilderTarget) {
-            ((BuilderTarget)newChild).build();
+            ((BuilderTarget)newChild).coreBuild();
         }
     }
     
