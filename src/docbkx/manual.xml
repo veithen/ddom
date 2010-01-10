@@ -387,22 +387,38 @@
                     <productionset>
                         <production id="NT-AttValue-alt">
                             <lhs>AttValue</lhs>
-                            <rhs>'"' <nonterminal def="#NT-AttValueContent">AttValueContent</nonterminal> '"' 
-                                | "'" <nonterminal def="#NT-AttValueContent">AttValueContent</nonterminal> "'"
+                            <rhs>'"' <nonterminal def="#NT-AttValueContent1">AttValueContent1</nonterminal> '"' 
+                                | "'" <nonterminal def="#NT-AttValueContent2">AttValueContent2</nonterminal> "'"
                             </rhs>
                         </production>
-                        <production id="NT-AttValueContent">
-                            <lhs>AttValueContent</lhs>
+                        <production id="NT-AttValueContent1">
+                            <lhs>AttValueContent1</lhs>
                             <rhs>
-                                <nonterminal def="#NT-AttText">AttText</nonterminal>?
+                                <nonterminal def="#NT-AttText1">AttText1</nonterminal>?
                                 (<nonterminal def="#NT-DeclaredEntityRef">DeclaredEntityRef</nonterminal>
-                                <nonterminal def="#NT-AttText">AttText</nonterminal>?)*
+                                <nonterminal def="#NT-AttText1">AttText1</nonterminal>?)*
                             </rhs>
                         </production>
-                        <production id="NT-AttText" xreflabel="&ntxs;AttText&ntxe;">
-                            <lhs>AttText</lhs>
+                        <production id="NT-AttValueContent2">
+                            <lhs>AttValueContent2</lhs>
+                            <rhs>
+                                <nonterminal def="#NT-AttText2">AttText2</nonterminal>?
+                                (<nonterminal def="#NT-DeclaredEntityRef">DeclaredEntityRef</nonterminal>
+                                <nonterminal def="#NT-AttText2">AttText2</nonterminal>?)*
+                            </rhs>
+                        </production>
+                        <production id="NT-AttText1" xreflabel="&ntxs;AttText1&ntxe;">
+                            <lhs>AttText1</lhs>
                             <rhs>
                                 ([^&lt;&amp;"]
+                                | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
+                                | <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal>)*
+                            </rhs>
+                        </production>
+                        <production id="NT-AttText2" xreflabel="&ntxs;AttText2&ntxe;">
+                            <lhs>AttText2</lhs>
+                            <rhs>
+                                ([^&lt;&amp;']
                                 | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
                                 | <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal>)*
                             </rhs>
@@ -459,7 +475,7 @@
                         </production>
                     </productionset>
                     <para>
-                        For every <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>, <xref linkend="NT-AttText"/>,
+                        For every <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>, <xref linkend="NT-AttText1"/>, <xref linkend="NT-AttText2"/>,
                         <xref linkend="NT-CData"/><footnote><para>Note that <xref linkend="NT-CData"/> only appears
                         as part of <xref linkend="NT-CDSect"/>; thus the definition is consistent.</para></footnote>,
                         <xref linkend="NT-CommentText"/> and <xref linkend="NT-PIText"/> the
@@ -469,7 +485,7 @@
                         <link linkend="lcm.comment">comment</link> and <link linkend="lcm.pi">processing instruction</link> information
                         items. The individual text information
                         items produced for a single <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>,
-                        <xref linkend="NT-AttText"/>, <xref linkend="NT-CData"/>, <xref linkend="NT-CommentText"/>
+                        <xref linkend="NT-AttText1"/>, <xref linkend="NT-AttText2"/>, <xref linkend="NT-CData"/>, <xref linkend="NT-CommentText"/>
                         or <xref linkend="NT-PIText"/> are called <firstterm>segments</firstterm>.
                         The concatenation of the content of these segments must equal the value of the token
                         after substitution of all <xref linkend="NT-CharRef"/> and <xref linkend="NT-PredefinedEntityRef"/> tokens
