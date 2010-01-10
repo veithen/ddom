@@ -2,6 +2,8 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
   <!ENTITY ntxs "&#183;"> <!-- non terminal xref start -->
   <!ENTITY ntxe "&#183;"> <!-- non terminal xref end -->
+  <!ENTITY lcmxs "&#9900;"> <!-- logical content model (property xref) start -->
+  <!ENTITY lcmxe "&#9900;"> <!-- logical content model (property xref) end -->
 ]>
 <book>
     <bookinfo>
@@ -317,10 +319,6 @@
                         </note>
                     </section>
                 </section>
-                <section>
-                    <title>Entity reference information items</title>
-                    
-                </section>
                 <section id="lcm.text">
                     <title>Text information items</title>
                     <para>
@@ -483,6 +481,50 @@
                         TODO: Evaluate what this means for section 3.3.3 "Attribute-Value Normalization" in the XML specs.
                     </para>
                 </section>
+                <section>
+                    <title>Entity reference information items</title>
+                    <para>
+                        Unless the parser is configured to replace entity reference, an entity reference information item is
+                        produced by the parser for every <xref linkend="NT-EntityRef"/>
+                        which doesn't refer to one of the predefined entities <literal>amp</literal>, <literal>lt</literal>,
+                        <literal>gt</literal>, <literal>apos</literal> or <literal>quot</literal>.
+                        The entity reference information item has the following properties:
+                    </para>
+                    <variablelist>
+                        <varlistentry id="prop-lcm.entityref.name" xreflabel="&lcmxs;name&lcmxe;">
+                            <term>name</term>
+                            <listitem>
+                                <para>
+                                    The name of the entity [or a reference to an entity information item???]
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                        <varlistentry id="prop-lcm.entityref.children" xreflabel="&lcmxs;children&lcmxe;">
+                            <term>children</term>
+                            <listitem>
+                                <para>
+                                    An ordered list of child information items that describe the content of the
+                                    entity reference after expansion.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
+                    <note>
+                        <para>
+                            It is important to note that the <xref linkend="prop-lcm.entityref.children"/>
+                            of two entity reference information items having the same
+                            <xref linkend="prop-lcm.entityref.name"/> are not necessarily the same.
+                            The reason for this is that the <xref linkend="prop-lcm.nsaware.namespaceURI"/>
+                            of namespace aware elements and attributes generated during the entity
+                            expansion may depend on the namespace context in which the entity reference
+                            appears.
+                        </para>
+                    </note>
+                    <para>
+                        An entity reference information item is serialized as an <xref linkend="NT-EntityRef"/>
+                        or, if the serializer is requested to do so, by replacing the entity reference by the content of the entity.
+                    </para>
+                </section>
                 <section id="lcm.cdata">
                     <title>CDATA section information items</title>
                     <para>
@@ -620,6 +662,19 @@
                 <section>
                     <title>Namespace aware named information items</title>
                     
+                    <para>
+                        Common properties:
+                    </para>
+                    <variablelist>
+                        <varlistentry id="prop-lcm.nsaware.namespaceURI" xreflabel="&lcmxs;namespaceURI&lcmxe;">
+                            <term>namespaceURI</term>
+                            <listitem>
+                                <para>
+                                    The namespace URI of the named information item.
+                                </para>
+                            </listitem>
+                        </varlistentry>
+                    </variablelist>
                 </section>
                 <section>
                     <title>Namespace unaware named information items</title>
@@ -851,6 +906,39 @@
                 </para>
             </section>
             <section>
+                <title>Read-only nodes</title>
+                <para>
+                    For consistency during serialization, modifying the descendants of an entity
+                    reference node is disallowed. Since this is the only case of read-only nodes,
+                    it is specified that a node is read-only if and only if it is an entity
+                    reference node or a descendant of an entity reference node. It is the
+                    responsibility of the backend to enforce this.
+                </para>
+                <para>
+                    One can see that there are three different ways to implement this behavior:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Let the each node have an attribute that indicates
+                            if it is read-only and set this attribute appropriately.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Explicitly check if the node has an ancestor which is an entity
+                            reference.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Let parent nodes have an explicit flag and let leaf nodes (i.e. text nodes) check
+                            if they are children of a read-only node.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </section>
+            <section>
                 <title>UML diagram</title>
                 
             </section>
@@ -977,6 +1065,12 @@
                           | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
                         </rhs> 
                     </production>
+                    <production id="NT-EntityRef" xreflabel="&ntxs;EntityRef&ntxe;">
+                        <lhs>EntityRef</lhs>
+                        <rhs>
+                            '&amp;' <nonterminal def="#NT-Name">Name</nonterminal> ';'
+                        </rhs>
+                    </production> 
                     <production id="NT-CharRef" xreflabel="&ntxs;CharRef&ntxe;">
                         <lhs>CharRef</lhs>
                         <rhs>'&amp;#' [0-9]+ ';' | '&amp;#x' [0-9a-fA-F]+ ';'</rhs>
