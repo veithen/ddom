@@ -31,17 +31,17 @@
         <dependency>
             <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-api</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-stream-utils</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-backend</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.google.code.ddom</groupId>
             <artifactId>ddom-backend-testsuite</artifactId>
-            <version>${pom.version}</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
