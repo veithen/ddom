@@ -28,7 +28,7 @@ public class TestCoreInsertSiblingBeforeOnOrphan extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument(null);
+        CoreDocument document = nodeFactory.createDocument();
         CoreText text1 = nodeFactory.createText(document, "text1");
         CoreText text2 = nodeFactory.createText(document, "text2");
         try {

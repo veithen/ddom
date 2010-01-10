@@ -19,6 +19,7 @@ import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
 
@@ -54,7 +55,7 @@ public class DocumentHelper {
     }
     
     public DeferredDocument newDocument(ModelDefinition model) {
-        return modelLoaderRegistry.getDocumentFactory(model).createDocument(null);
+        return modelLoaderRegistry.getDocumentFactory(model).createDocument();
     }
     
     public DeferredDocument newDocument(String frontend) {
@@ -78,7 +79,9 @@ public class DocumentHelper {
             throw new DeferredParsingException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
-        return nodeFactory.createDocument(producer);
+        DeferredDocument document = nodeFactory.createDocument();
+        document.coreSetContent(new SimpleFragmentSource(producer));
+        return document;
     }
 
     public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) throws DeferredParsingException {

@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom;
 
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.FragmentSource;
 
 public interface DocumentFactory {
-    DeferredDocument createDocument(Producer producer);
+    DeferredDocument createDocument();
 }

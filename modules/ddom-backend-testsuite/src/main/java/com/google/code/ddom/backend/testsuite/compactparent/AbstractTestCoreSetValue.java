@@ -33,7 +33,7 @@ public abstract class AbstractTestCoreSetValue extends BackendTestCase {
 
     @Override
     protected void runTest() {
-        CoreDocument document = nodeFactory.createDocument(null);
+        CoreDocument document = nodeFactory.createDocument();
         CoreCompactParentNode element = createNode(document);
         element.coreSetValue("test");
         Assert.assertFalse(element.coreIsExpanded());

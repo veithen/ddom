@@ -29,14 +29,10 @@ import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.NodeFactory;
-import com.google.code.ddom.stream.spi.Producer;
-import com.google.code.ddom.stream.spi.SimpleFragmentSource;
-import com.google.code.ddom.stream.spi.Symbols;
 
 public class NodeFactoryImpl implements NodeFactory {
-    // TODO: clean up the API
-    public CoreDocument createDocument(Producer producer) {
-        return new Document(this, producer == null ? null : new SimpleFragmentSource(producer));
+    public CoreDocument createDocument() {
+        return new Document(this);
     }
 
     public CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId) {

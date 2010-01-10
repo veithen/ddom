@@ -32,7 +32,7 @@ public class DOMImplementationImpl implements DOMImplementation {
     }
     
     public Document createDocument(String namespaceURI, String qualifiedName, DocumentType doctype) throws DOMException {
-        DOMDocument document = (DOMDocument)nodeFactory.createDocument(null);
+        DOMDocument document = (DOMDocument)nodeFactory.createDocument();
         if (doctype != null) {
             if (doctype.getOwnerDocument() == null) {
                 ((CoreDocumentType)doctype).internalSetDocument(document);

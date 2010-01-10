@@ -24,7 +24,6 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.FragmentSource;
-import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 
@@ -33,7 +32,6 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
     private final Symbols symbols;
-    private final Producer producer;
     private Builder builder;
     private boolean complete;
     private CoreChildNode firstChild;
@@ -44,23 +42,21 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     private boolean standalone;
     private String documentURI;
 
-    public Document(NodeFactory nodeFactory, FragmentSource source) {
+    public Document(NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
-        if (source == null) {
-            complete = true;
-            producer = null;
-            symbols = new SymbolHashTable();
-        } else {
-            complete = false;
-            producer = source.getProducer();
-            symbols = producer.getSymbols();
-        }
+        complete = true;
+        symbols = new SymbolHashTable();
+    }
+
+    public final void coreSetContent(FragmentSource source) {
+        // TODO: need to clear any existing content!
+        complete = false;
+        builder = new Builder(source.getProducer(), this, this);
+        // TODO: need to decide how to handle symbol tables in a smart way here
+//        symbols = producer.getSymbols();
     }
 
     public final void next() throws DeferredParsingException {
-        if (builder == null) {
-            builder = new Builder(producer, this, this);
-        }
         builder.next();
     }
     

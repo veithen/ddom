@@ -16,7 +16,6 @@
 package com.google.code.ddom.backend;
 
 import com.google.code.ddom.DocumentFactory;
-import com.google.code.ddom.stream.spi.Producer;
 
 /**
  * Node factory. The frontend code MUST use this interface to create new nodes. To do so, it MUST
@@ -32,7 +31,7 @@ import com.google.code.ddom.stream.spi.Producer;
  * @author Andreas Veithen
  */
 public interface NodeFactory extends DocumentFactory {
-    CoreDocument createDocument(Producer producer);
+    CoreDocument createDocument();
     
     /**
      * 

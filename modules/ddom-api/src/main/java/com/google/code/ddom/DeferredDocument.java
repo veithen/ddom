@@ -15,9 +15,14 @@
  */
 package com.google.code.ddom;
 
+import com.google.code.ddom.stream.spi.FragmentSource;
+
 /**
  * @deprecated see {@link DocumentHelper#disposeDocument(Object)}
  */
 public interface DeferredDocument extends DeferredNode {
     void dispose();
+    
+    // TODO: this needs serious cleanup
+    void coreSetContent(FragmentSource source);
 }

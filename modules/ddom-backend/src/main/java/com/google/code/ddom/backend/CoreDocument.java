@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend;
 
 import com.google.code.ddom.DeferredDocument;
+import com.google.code.ddom.stream.spi.FragmentSource;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public interface CoreDocument extends DeferredDocument, BuilderTarget {
@@ -28,6 +29,8 @@ public interface CoreDocument extends DeferredDocument, BuilderTarget {
      * @return the symbol table; may not be <code>null</code>
      */
     Symbols getSymbols();
+    
+    void coreSetContent(FragmentSource source);
     
     String coreGetInputEncoding();
     void coreSetInputEncoding(String inputEncoding);
