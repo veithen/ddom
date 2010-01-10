@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom;
 
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
@@ -54,18 +57,18 @@ public class DocumentHelper {
         return new DocumentHelper(ModelLoaderRegistry.getInstance(), StreamFactory.getInstance());
     }
     
-    public DeferredDocument newDocument(ModelDefinition model) {
-        return modelLoaderRegistry.getDocumentFactory(model).createDocument();
+    public Object newDocument(ModelDefinition model) {
+        return modelLoaderRegistry.getNodeFactory(model).createDocument();
     }
     
-    public DeferredDocument newDocument(String frontend) {
+    public Object newDocument(String frontend) {
         return newDocument(ModelBuilder.buildModelDefinition(frontend));
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public DeferredDocument parse(ModelDefinition model, Object source, Options options, boolean preserve) {
+    public Object parse(ModelDefinition model, Object source, Options options, boolean preserve) {
         // TODO: check for null here!
-        DocumentFactory nodeFactory = modelLoaderRegistry.getDocumentFactory(model);
+        NodeFactory nodeFactory = modelLoaderRegistry.getNodeFactory(model);
         OptionsTracker tracker = options.createTracker();
         Producer producer;
         try {
@@ -80,29 +83,34 @@ public class DocumentHelper {
             throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
-        DeferredDocument document = nodeFactory.createDocument();
+        CoreDocument document = nodeFactory.createDocument();
         document.coreSetContent(new SimpleFragmentSource(producer));
         return document;
     }
 
-    public DeferredDocument parse(String frontend, Object source, Options options, boolean preserve) {
+    public Object parse(String frontend, Object source, Options options, boolean preserve) {
         return parse(ModelBuilder.buildModelDefinition(frontend), source, options, preserve);
     }
     
-    public DeferredDocument parse(String frontend, Object source, boolean preserve) {
+    public Object parse(String frontend, Object source, boolean preserve) {
         return parse(frontend, source, new Options(), preserve);
     }
     
-    public DeferredDocument parse(String frontend, Object source, Options options) {
+    public Object parse(String frontend, Object source, Options options) {
         return parse(frontend, source, options, true);
     }
     
-    public DeferredDocument parse(String frontend, Object source) {
+    public Object parse(String frontend, Object source) {
         return parse(frontend, source, new Options(), true);
     }
     
     public void buildDocument(Object document) {
-        ((DeferredDocument)document).build();
+        try {
+            ((CoreDocument)document).coreBuild();
+        } catch (DeferredParsingException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
     }
     
     public void disposeDocument(Object document) {

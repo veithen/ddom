@@ -47,7 +47,7 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ClassNotFoundException {
         this.classLoader = classLoader;
         this.processor = processor;
-        Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, backend.getDocumentFactoryClassName());
+        Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, backend.getNodeFactoryClassName());
         classFiles = new UnwovenClassFile[classes.length];
         int i = 0;
         // We sort the classes hierarchically to prevent BcelWeaver from emitting the same class

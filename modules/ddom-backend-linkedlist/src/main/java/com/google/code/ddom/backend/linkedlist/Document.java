@@ -76,16 +76,6 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         return complete;
     }
 
-    // TODO: eliminate this
-    public final void build() {
-        try {
-            BuilderTargetHelper.coreBuild(this);
-        } catch (DeferredParsingException ex) {
-            // TODO
-            throw new RuntimeException(ex);
-        }
-    }
-    
     public final void coreBuild() throws DeferredParsingException {
         BuilderTargetHelper.coreBuild(this);
     }

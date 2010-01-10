@@ -39,6 +39,11 @@
             <version>${version}</version>
         </dependency>
         <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-backend</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>

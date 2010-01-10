@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.backend;
 
-import com.google.code.ddom.DeferredNode;
-
-public interface BuilderTarget extends CoreParentNode, DeferredNode {
+public interface BuilderTarget extends CoreParentNode {
     void internalSetComplete();
 }

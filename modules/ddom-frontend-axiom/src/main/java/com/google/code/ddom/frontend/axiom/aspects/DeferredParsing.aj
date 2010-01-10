@@ -37,7 +37,8 @@ public aspect DeferredParsing {
                 throw AxiomExceptionUtil.translate(ex);
             }
         }
-        document.dispose();
+        // TODO
+//        document.dispose();
     }
     
     public boolean AxiomContainer.isComplete() {
@@ -47,6 +48,14 @@ public aspect DeferredParsing {
     public boolean AxiomLeafNode.isComplete() {
         // A leaf node is always complete
         return true;
+    }
+    
+    public void AxiomContainer.build() {
+        try {
+            coreBuild();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public void AxiomLeafNode.build() {

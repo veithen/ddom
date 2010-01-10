@@ -17,5 +17,5 @@ package com.google.code.ddom.spi.model;
 
 // TODO: move to LTW module
 public interface Backend {
-    String getDocumentFactoryClassName();
+    String getNodeFactoryClassName();
 }

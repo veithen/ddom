@@ -48,7 +48,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public DOMImplementation getDOMImplementation() {
         // TODO: check if this is consistent with the rest of the code
-        return new DOMImplementationImpl((NodeFactory)ModelLoaderRegistry.getInstance().getDocumentFactory(ModelBuilder.buildModelDefinition("dom")));
+        return new DOMImplementationImpl((NodeFactory)ModelLoaderRegistry.getInstance().getNodeFactory(ModelBuilder.buildModelDefinition("dom")));
     }
 
     @Override

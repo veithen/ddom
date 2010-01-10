@@ -101,7 +101,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
         // TODO: check this
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.addFrontend("dom");
-        return new DOMImplementationImpl((NodeFactory)modelBuilder.buildDocumentFactory());
+        return new DOMImplementationImpl((NodeFactory)modelBuilder.buildNodeFactory());
     }
 
     @Override

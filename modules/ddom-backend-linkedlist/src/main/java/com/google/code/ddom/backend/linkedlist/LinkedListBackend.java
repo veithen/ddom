@@ -20,7 +20,7 @@ import com.google.code.ddom.spi.model.Backend;
 
 @Provider(name="linkedlist")
 public class LinkedListBackend implements Backend {
-    public String getDocumentFactoryClassName() {
+    public String getNodeFactoryClassName() {
         return NodeFactoryImpl.class.getName();
     }
 }
