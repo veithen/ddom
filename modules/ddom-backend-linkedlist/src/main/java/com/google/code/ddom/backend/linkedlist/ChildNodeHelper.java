@@ -20,10 +20,11 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.NoParentException;
 
 public class ChildNodeHelper {
-    public static CoreChildNode coreGetNextSibling(CoreChildNode node) {
+    public static CoreChildNode coreGetNextSibling(CoreChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
         // TODO: try to avoid the cast here
         Document document = (Document)node.getDocument();
@@ -38,7 +39,7 @@ public class ChildNodeHelper {
         }
     }
     
-    public static CoreChildNode coreGetPreviousSibling(CoreChildNode node) {
+    public static CoreChildNode coreGetPreviousSibling(CoreChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
         if (parent == null) {
             return null;
@@ -71,7 +72,7 @@ public class ChildNodeHelper {
         }
     }
     
-    public static void coreDetach(CoreChildNode node) {
+    public static void coreDetach(CoreChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
         if (parent != null) {
             CoreChildNode previousSibling = node.coreGetPreviousSibling();

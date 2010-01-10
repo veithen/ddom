@@ -21,12 +21,27 @@ import org.w3c.dom.Node;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMChildNode;
+import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
+import com.google.code.ddom.frontend.dom.intf.DOMComment;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
+import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
+import com.google.code.ddom.frontend.dom.intf.DOMNSAwareAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
+import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareElement;
+import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
+import com.google.code.ddom.frontend.dom.intf.DOMProcessingInstruction;
+import com.google.code.ddom.frontend.dom.intf.DOMText;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
-
-import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect Clone {
     public final Node DOMAttribute.cloneNode(boolean deep) {
@@ -51,13 +66,17 @@ public aspect Clone {
     }
     
     public final Node DOMParentNode.deepClone() {
-        Node clone = shallowClone();
-        DOMChildNode child = (DOMChildNode)coreGetFirstChild();
-        while (child != null) {
-            clone.appendChild(child.cloneNode(true));
-            child = (DOMChildNode)child.coreGetNextSibling();
+        try {
+            Node clone = shallowClone();
+            DOMChildNode child = (DOMChildNode)coreGetFirstChild();
+            while (child != null) {
+                clone.appendChild(child.cloneNode(true));
+                child = (DOMChildNode)child.coreGetNextSibling();
+            }
+            return clone;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return clone;
     }
     
     public abstract Node DOMParentNode.shallowClone();

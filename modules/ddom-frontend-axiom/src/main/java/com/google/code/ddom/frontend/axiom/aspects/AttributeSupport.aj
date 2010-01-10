@@ -18,11 +18,17 @@ package com.google.code.ddom.frontend.axiom.aspects;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 public aspect AttributeSupport {
     public String AxiomAttribute.getAttributeValue() {
-        return coreGetValue();
+        try {
+            return coreGetValue();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public void AxiomAttribute.setAttributeValue(String value) {

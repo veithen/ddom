@@ -27,9 +27,9 @@ public interface CoreParentNode extends CoreNode {
     
     void internalSetFirstChild(CoreChildNode child);
     void notifyChildrenModified(int delta);
-    CoreChildNode coreGetFirstChild();
-    CoreChildNode coreGetLastChild();
-    int coreGetChildCount();
+    CoreChildNode coreGetFirstChild() throws DeferredParsingException;
+    CoreChildNode coreGetLastChild() throws DeferredParsingException;
+    int coreGetChildCount() throws DeferredParsingException;
     
     /**
      * Append a new child to the list of children of this parent node. If the node to be added

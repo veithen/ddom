@@ -23,6 +23,7 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
@@ -77,7 +78,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return value;
     }
 
-    public final int coreGetChildCount() {
+    public final int coreGetChildCount() throws DeferredParsingException {
         if (value instanceof String) {
             return 1;
         } else {
@@ -105,7 +106,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
 
-    public final String coreGetValue() {
+    public final String coreGetValue() throws DeferredParsingException {
         // TODO: this should also be applicable for other OptimizedParentNodes
         if (value instanceof String) {
             return (String)value;

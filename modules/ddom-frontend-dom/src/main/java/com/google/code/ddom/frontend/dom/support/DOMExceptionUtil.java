@@ -24,8 +24,10 @@ import org.w3c.dom.DOMException;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CyclicRelationshipException;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.WrongDocumentException;
+import com.google.code.ddom.frontend.dom.DOMDeferredParsingException;
 
 public class DOMExceptionUtil {
     private static final ResourceBundle messages =
@@ -68,13 +70,15 @@ public class DOMExceptionUtil {
         }
     }
     
-    public static DOMException translate(CoreModelException ex) {
+    public static RuntimeException translate(CoreModelException ex) {
         if (ex instanceof NodeNotFoundException) {
             return newDOMException(DOMException.NOT_FOUND_ERR);
         } else if (ex instanceof ChildTypeNotAllowedException || ex instanceof CyclicRelationshipException) {
             return newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         } else if (ex instanceof WrongDocumentException) {
             return newDOMException(DOMException.WRONG_DOCUMENT_ERR);
+        } else if (ex instanceof DeferredParsingException) {
+            return new DOMDeferredParsingException(ex.getMessage(), ex.getCause());
         } else {
             throw new IllegalArgumentException("Don't know how to translate " + ex.getClass().getName());
         }

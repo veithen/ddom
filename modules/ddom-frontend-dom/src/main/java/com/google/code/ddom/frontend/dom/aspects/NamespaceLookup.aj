@@ -18,8 +18,17 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.google.code.ddom.backend.CoreElement;
-
-import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMCharacterData;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
+import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
+import com.google.code.ddom.frontend.dom.intf.DOMNode;
+import com.google.code.ddom.frontend.dom.intf.DOMProcessingInstruction;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 /**
  * Implements the namespace lookup methods using the algorithms described in <a
@@ -38,7 +47,11 @@ public aspect NamespaceLookup {
     }
     
     public final CoreElement DOMDocument.getNamespaceContext() {
-        return coreGetDocumentElement();
+        try {
+            return coreGetDocumentElement();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final CoreElement DOMDocumentFragment.getNamespaceContext() {
@@ -62,21 +75,33 @@ public aspect NamespaceLookup {
     }
     
     public final String DOMNode.lookupNamespaceURI(String prefix) {
-        CoreElement contextElement = getNamespaceContext();
-        return contextElement == null ? null : contextElement.coreLookupNamespaceURI(prefix, false);
+        try {
+            CoreElement contextElement = getNamespaceContext();
+            return contextElement == null ? null : contextElement.coreLookupNamespaceURI(prefix, false);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final String DOMNode.lookupPrefix(String namespaceURI) {
         if (namespaceURI == null) {
             return null;
         } else {
-            CoreElement contextElement = getNamespaceContext();
-            return contextElement == null ? null : contextElement.coreLookupPrefix(namespaceURI, false);
+            try {
+                CoreElement contextElement = getNamespaceContext();
+                return contextElement == null ? null : contextElement.coreLookupPrefix(namespaceURI, false);
+            } catch (CoreModelException ex) {
+                throw DOMExceptionUtil.translate(ex);
+            }
         }
     }
 
     public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
-        CoreElement contextElement = getNamespaceContext();
-        return contextElement == null ? false : ObjectUtils.equals(namespaceURI, contextElement.coreLookupNamespaceURI(null, false));
+        try {
+            CoreElement contextElement = getNamespaceContext();
+            return contextElement == null ? false : ObjectUtils.equals(namespaceURI, contextElement.coreLookupNamespaceURI(null, false));
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 }

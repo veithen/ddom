@@ -27,6 +27,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
@@ -50,8 +51,12 @@ public aspect DocumentSupport {
     }
 
     public final String DOMDocument.getXmlVersion() {
-        String xmlVersion = coreGetXmlVersion();
-        return xmlVersion == null ? "1.0" : xmlVersion;
+        try {
+            String xmlVersion = coreGetXmlVersion();
+            return xmlVersion == null ? "1.0" : xmlVersion;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     // TODO: check right behavior when parameter is null
@@ -64,15 +69,27 @@ public aspect DocumentSupport {
     }
 
     public final String DOMDocument.getInputEncoding() {
-        return coreGetInputEncoding();
+        try {
+            return coreGetInputEncoding();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final String DOMDocument.getXmlEncoding() {
-        return coreGetXmlEncoding();
+        try {
+            return coreGetXmlEncoding();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final boolean DOMDocument.getXmlStandalone() {
-        return coreGetStandalone();
+        try {
+            return coreGetStandalone();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void DOMDocument.setXmlStandalone(boolean xmlStandalone) throws DOMException {
@@ -81,19 +98,35 @@ public aspect DocumentSupport {
 
     // TODO: need test for this
     public final String DOMDocument.getDocumentURI() {
-        return coreGetDocumentURI();
+        try {
+            return coreGetDocumentURI();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void DOMDocument.setDocumentURI(String documentURI) {
-        coreSetDocumentURI(documentURI);
+        try {
+            coreSetDocumentURI(documentURI);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final Element DOMDocument.getDocumentElement() {
-        return (Element)coreGetDocumentElement();
+        try {
+            return (Element)coreGetDocumentElement();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final DocumentType DOMDocument.getDoctype() {
-        return (DocumentType)coreGetDocumentType();
+        try {
+            return (DocumentType)coreGetDocumentType();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final Node DOMDocument.importNode(Node node, boolean deep) throws DOMException {
@@ -154,15 +187,19 @@ public aspect DocumentSupport {
     }
 
     public final Element DOMDocument.getElementById(String elementId) {
-        for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
-            DOMElement element = it.next();
-            for (CoreAttribute attr = element.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
-                if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {
-                    return element;
+        try {
+            for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
+                DOMElement element = it.next();
+                for (CoreAttribute attr = element.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
+                    if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {
+                        return element;
+                    }
                 }
             }
+            return null;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return null;
     }
 
     public final Node DOMDocument.adoptNode(Node source) throws DOMException {

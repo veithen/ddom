@@ -18,6 +18,7 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.w3c.dom.DOMException;
 
 import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMNode;
 
 import com.google.code.ddom.frontend.dom.intf.*;
@@ -113,11 +114,15 @@ public aspect TextContent {
     }
 
     public final CharSequence DOMParentNode.collectTextContent(CharSequence appendTo) {
-        CharSequence content = appendTo;
-        for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
-            content = ((DOMNode)node).collectTextContent(content);
+        try {
+            CharSequence content = appendTo;
+            for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
+                content = ((DOMNode)node).collectTextContent(content);
+            }
+            return content;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return content;
     }
 
     public final CharSequence DOMTextNode.collectTextContent(CharSequence appendTo) {

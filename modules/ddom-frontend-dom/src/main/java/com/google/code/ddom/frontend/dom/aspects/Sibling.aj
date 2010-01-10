@@ -17,7 +17,12 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMChildNode;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect Sibling {
     public final Node DOMAttribute.getNextSibling() {
@@ -45,10 +50,18 @@ public aspect Sibling {
     }
 
     public final Node DOMChildNode.getNextSibling() {
-        return (Node)coreGetNextSibling();
+        try {
+            return (Node)coreGetNextSibling();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final Node DOMChildNode.getPreviousSibling() {
-        return (Node)coreGetPreviousSibling();
+        try {
+            return (Node)coreGetPreviousSibling();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 }

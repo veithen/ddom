@@ -18,11 +18,12 @@ package com.google.code.ddom.backend.testsuite;
 import org.junit.Assert;
 
 import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.DeferredParsingException;
 
 public class CoreAssert {
     private CoreAssert() {}
     
-    public static void assertOrphan(CoreChildNode node) {
+    public static void assertOrphan(CoreChildNode node) throws DeferredParsingException {
         Assert.assertNull(node.coreGetParent());
         Assert.assertNull(node.coreGetPreviousSibling());
         Assert.assertNull(node.coreGetNextSibling());

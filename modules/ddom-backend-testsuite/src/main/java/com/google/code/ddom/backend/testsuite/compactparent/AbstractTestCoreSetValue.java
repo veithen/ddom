@@ -32,7 +32,7 @@ public abstract class AbstractTestCoreSetValue extends BackendTestCase {
     protected abstract CoreCompactParentNode createNode(CoreDocument document);
 
     @Override
-    protected void runTest() {
+    protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreCompactParentNode element = createNode(document);
         element.coreSetValue("test");

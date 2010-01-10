@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -97,7 +97,8 @@ public class Builder extends CallbackConsumer {
             appendNode(new ProcessingInstruction(document, target, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
-            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
+            // TODO
+            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
         }
     }
     
@@ -106,7 +107,8 @@ public class Builder extends CallbackConsumer {
             appendNode(new Text(document, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
-            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
+            // TODO
+            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
         }
     }
     
@@ -115,7 +117,8 @@ public class Builder extends CallbackConsumer {
             appendNode(new Comment(document, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
-            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
+            // TODO
+            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
         }
     }
     
@@ -124,7 +127,8 @@ public class Builder extends CallbackConsumer {
             appendNode(new CDATASection(document, data.getString()));
         } catch (StreamException ex) {
             streamException = ex;
-            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
+            // TODO
+            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
         }
     }
     

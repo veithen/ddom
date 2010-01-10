@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.DeferredParsingException;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.FragmentSource;
@@ -77,7 +77,12 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     public final void build() {
-        BuilderTargetHelper.build(this);
+        try {
+            BuilderTargetHelper.build(this);
+        } catch (DeferredParsingException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
     }
     
     public final void dispose() {
@@ -96,7 +101,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         firstChild = child;
     }
 
-    public final CoreChildNode coreGetFirstChild() {
+    public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
         if (firstChild == null && !coreIsComplete()) {
             next();
         }
@@ -108,7 +113,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     @Override
-    protected void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    protected void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
         if (newChild instanceof CoreDocumentType) {
             if (!(replacedChild instanceof CoreDocumentType || coreGetDocumentType() == null)) {
@@ -126,13 +131,13 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         return children;
     }
 
-    private void ensureDocumentInfoReceived() {
+    private void ensureDocumentInfoReceived() throws DeferredParsingException {
         if (!coreIsComplete() && firstChild == null) {
             next();
         }
     }
     
-    public final String coreGetInputEncoding() {
+    public final String coreGetInputEncoding() throws DeferredParsingException {
         ensureDocumentInfoReceived();
         return inputEncoding;
     }
@@ -142,7 +147,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         this.inputEncoding = inputEncoding;
     }
 
-    public final String coreGetXmlVersion() {
+    public final String coreGetXmlVersion() throws DeferredParsingException {
         ensureDocumentInfoReceived();
         return xmlVersion;
     }
@@ -152,7 +157,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         this.xmlVersion = xmlVersion;
     }
 
-    public final String coreGetXmlEncoding() {
+    public final String coreGetXmlEncoding() throws DeferredParsingException {
         ensureDocumentInfoReceived();
         return xmlEncoding;
     }
@@ -162,7 +167,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         this.xmlEncoding = xmlEncoding;
     }
 
-    public final boolean coreGetStandalone() {
+    public final boolean coreGetStandalone() throws DeferredParsingException {
         ensureDocumentInfoReceived();
         return standalone;
     }
@@ -173,17 +178,17 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     // TODO: need test for this
-    public final String coreGetDocumentURI() {
+    public final String coreGetDocumentURI() throws DeferredParsingException {
         ensureDocumentInfoReceived();
         return documentURI;
     }
 
-    public final void coreSetDocumentURI(String documentURI) {
+    public final void coreSetDocumentURI(String documentURI) throws DeferredParsingException {
         ensureDocumentInfoReceived();
         this.documentURI = documentURI;
     }
 
-    public final CoreElement coreGetDocumentElement() {
+    public final CoreElement coreGetDocumentElement() throws DeferredParsingException {
         CoreChildNode child = coreGetFirstChild();
         while (child != null && !(child instanceof CoreElement)) {
             child = child.coreGetNextSibling();
@@ -191,7 +196,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         return (CoreElement)child;
     }
 
-    public final CoreDocumentType coreGetDocumentType() {
+    public final CoreDocumentType coreGetDocumentType() throws DeferredParsingException {
         // TODO: we know that the document type node must appear before the document element; use this to avoid expansion of the complete document
         CoreChildNode child = coreGetFirstChild();
         while (child != null && !(child instanceof CoreDocumentType)) {

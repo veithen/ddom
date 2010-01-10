@@ -29,11 +29,19 @@ public aspect ChildNodeSupport {
     }
     
     public OMNode AxiomChildNode.getPreviousOMSibling() {
-        return (OMNode)coreGetPreviousSibling();
+        try {
+            return (OMNode)coreGetPreviousSibling();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public OMNode AxiomChildNode.getNextOMSibling() {
-        return (OMNode)coreGetNextSibling();
+        try {
+            return (OMNode)coreGetNextSibling();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public void AxiomChildNode.insertSiblingBefore(OMNode sibling) {
@@ -53,7 +61,11 @@ public aspect ChildNodeSupport {
     }
     
     public OMNode AxiomChildNode.detach() {
-        coreDetach();
-        return null; // TODO
+        try {
+            coreDetach();
+            return null; // TODO
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 }

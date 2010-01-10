@@ -26,8 +26,8 @@ public interface CoreChildNode extends CoreNode {
      */
     CoreElement coreGetParentElement();
     
-    CoreChildNode coreGetNextSibling();
-    CoreChildNode coreGetPreviousSibling();
+    CoreChildNode coreGetNextSibling() throws DeferredParsingException;
+    CoreChildNode coreGetPreviousSibling() throws DeferredParsingException;
     
     /**
      * 
@@ -49,8 +49,9 @@ public interface CoreChildNode extends CoreNode {
     
     /**
      * Detach this node from its parent. If the node has no parent, then this method does nothing.
+     * @throws DeferredParsingException 
      */
-    void coreDetach();
+    void coreDetach() throws DeferredParsingException;
     
     void internalSetParent(CoreParentNode parent);
     CoreChildNode internalGetNextSibling();

@@ -18,11 +18,19 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
-import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
+import com.google.code.ddom.frontend.dom.intf.DOMTypedAttribute;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect AttributeSupport {
     public final String DOMAttribute.getValue() {
-        return coreGetValue();
+        try {
+            return coreGetValue();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final void DOMAttribute.setValue(String value) throws DOMException {

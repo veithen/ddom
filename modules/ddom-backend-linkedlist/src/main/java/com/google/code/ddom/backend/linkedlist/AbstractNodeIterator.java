@@ -22,6 +22,7 @@ import com.google.code.ddom.backend.Axis;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.backend.DeferredParsingException;
 
 public abstract class AbstractNodeIterator<T extends CoreChildNode> implements Iterator<T> {
     private final CoreParentNode startNode;
@@ -43,44 +44,49 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
         if (!hasNext) {
             CoreChildNode node = this.node;
             do {
-                // Get to the next node
-                switch (axis) {
-                    case CHILDREN:
-                        if (node == null) {
-                            node = startNode.coreGetFirstChild();
-                        } else {
-                            node = node.coreGetNextSibling();
-                        }
-                        break;
-                    case DESCENDANTS:
-                        if (node == null) {
-                            node = startNode.coreGetFirstChild();
-                        } else {
-                            boolean visitChildren = true;
-                            while (true) {
-                                if (visitChildren && node instanceof CoreElement) {
-                                    CoreChildNode firstChild = ((CoreElement)node).coreGetFirstChild();
-                                    if (firstChild != null) {
-                                        depth++;
-                                        node = firstChild;
+                try {
+                    // Get to the next node
+                    switch (axis) {
+                        case CHILDREN:
+                            if (node == null) {
+                                node = startNode.coreGetFirstChild();
+                            } else {
+                                node = node.coreGetNextSibling();
+                            }
+                            break;
+                        case DESCENDANTS:
+                            if (node == null) {
+                                node = startNode.coreGetFirstChild();
+                            } else {
+                                boolean visitChildren = true;
+                                while (true) {
+                                    if (visitChildren && node instanceof CoreElement) {
+                                        CoreChildNode firstChild = ((CoreElement)node).coreGetFirstChild();
+                                        if (firstChild != null) {
+                                            depth++;
+                                            node = firstChild;
+                                            break;
+                                        }
+                                    }
+                                    CoreChildNode nextSibling = node.coreGetNextSibling();
+                                    if (nextSibling != null) {
+                                        node = nextSibling;
+                                        break;
+                                    }
+                                    if (depth > 0) {
+                                        depth--;
+                                        node = (CoreChildNode)node.coreGetParent();
+                                        visitChildren = false;
+                                    } else {
+                                        node = null;
                                         break;
                                     }
                                 }
-                                CoreChildNode nextSibling = node.coreGetNextSibling();
-                                if (nextSibling != null) {
-                                    node = nextSibling;
-                                    break;
-                                }
-                                if (depth > 0) {
-                                    depth--;
-                                    node = (CoreChildNode)node.coreGetParent();
-                                    visitChildren = false;
-                                } else {
-                                    node = null;
-                                    break;
-                                }
                             }
-                        }
+                    }
+                } catch (DeferredParsingException ex) {
+                    // TODO
+                    throw new RuntimeException(ex);
                 }
             } while (node != null && (!type.isInstance(node) || !matches(type.cast(node))));
             this.node = node;

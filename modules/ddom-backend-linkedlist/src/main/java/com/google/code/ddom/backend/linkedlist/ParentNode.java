@@ -27,13 +27,14 @@ import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CyclicRelationshipException;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.SelfRelationshipException;
 
 @Implementation
 public abstract class ParentNode extends Node implements CoreParentNode {
-    public final CoreChildNode coreGetLastChild() {
+    public final CoreChildNode coreGetLastChild() throws DeferredParsingException {
         CoreChildNode previousChild = null;
         CoreChildNode child = coreGetFirstChild();
         while (child != null) {
@@ -74,8 +75,9 @@ public abstract class ParentNode extends Node implements CoreParentNode {
      *            child will be inserted and doesn't replace any existing node
      * @throws ChildTypeNotAllowedException
      *             if the child is not allowed
+     * @throws DeferredParsingException 
      */
-    protected abstract void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException;
+    protected abstract void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false

@@ -24,5 +24,5 @@ public interface CoreNamespaceDeclaration extends CoreAttribute {
      */
     String coreGetDeclaredPrefix();
     
-    String coreGetDeclaredNamespaceURI();
+    String coreGetDeclaredNamespaceURI() throws DeferredParsingException;
 }

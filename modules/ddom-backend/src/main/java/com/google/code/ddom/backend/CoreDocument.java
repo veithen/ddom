@@ -32,23 +32,24 @@ public interface CoreDocument extends DeferredDocument, BuilderTarget {
     
     void coreSetContent(FragmentSource source);
     
-    String coreGetInputEncoding();
+    String coreGetInputEncoding() throws DeferredParsingException;
     void coreSetInputEncoding(String inputEncoding);
-    String coreGetXmlVersion();
+    String coreGetXmlVersion() throws DeferredParsingException;
     void coreSetXmlVersion(String xmlVersion);
-    String coreGetXmlEncoding();
+    String coreGetXmlEncoding() throws DeferredParsingException;
     void coreSetXmlEncoding(String xmlEncoding);
-    boolean coreGetStandalone();
+    boolean coreGetStandalone() throws DeferredParsingException;
     void coreSetStandalone(boolean standalone);
-    String coreGetDocumentURI();
-    void coreSetDocumentURI(String documentURI);
-    CoreDocumentType coreGetDocumentType();
+    String coreGetDocumentURI() throws DeferredParsingException;
+    void coreSetDocumentURI(String documentURI) throws DeferredParsingException;
+    CoreDocumentType coreGetDocumentType() throws DeferredParsingException;
     
     /**
      * Get the document element.
      * 
      * @return the document element, or <code>null</code> if the document doesn't have a child
      *         element
+     * @throws DeferredParsingException 
      */
-    CoreElement coreGetDocumentElement();
+    CoreElement coreGetDocumentElement() throws DeferredParsingException;
 }

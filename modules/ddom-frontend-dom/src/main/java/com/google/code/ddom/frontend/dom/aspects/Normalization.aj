@@ -16,8 +16,10 @@
 package com.google.code.ddom.frontend.dom.aspects;
 
 import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 
@@ -49,15 +51,23 @@ public aspect Normalization {
     }
     
     private void DOMParentNode.normalizeChildren(NormalizationConfig config) throws AbortNormalizationException {
-        CoreChildNode child = coreGetFirstChild();
-        while (child != null) {
-            ((DOMNode)child).normalize(config);
-            child = child.coreGetNextSibling();
+        try {
+            CoreChildNode child = coreGetFirstChild();
+            while (child != null) {
+                ((DOMNode)child).normalize(config);
+                child = child.coreGetNextSibling();
+            }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
     }
     
     public final void DOMElement.normalize(NormalizationConfig config) throws AbortNormalizationException {
-        coreCoalesce(!config.isKeepCDATASections());
+        try {
+            coreCoalesce(!config.isKeepCDATASections());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
         normalizeChildren(config);
     }
     

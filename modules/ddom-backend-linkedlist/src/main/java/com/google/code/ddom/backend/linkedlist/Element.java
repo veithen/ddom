@@ -33,6 +33,7 @@ import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.CoreTextNode;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.Mapper;
 import com.google.code.ddom.backend.NodeFactory;
@@ -70,7 +71,12 @@ public abstract class Element extends ParentNode implements CoreElement {
     }
 
     public final void build() {
-        BuilderTargetHelper.build(this);
+        try {
+            BuilderTargetHelper.build(this);
+        } catch (DeferredParsingException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
     }
     
     public final void internalSetComplete() {
@@ -111,7 +117,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         return content instanceof CoreChildNode;
     }
 
-    public final CoreChildNode coreGetFirstChild() {
+    public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
         if (content == null && !complete) {
             document.next();
         }
@@ -134,11 +140,11 @@ public abstract class Element extends ParentNode implements CoreElement {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
-    public final CoreChildNode coreGetNextSibling() {
+    public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {
         return ChildNodeHelper.coreGetNextSibling(this);
     }
 
-    public final CoreChildNode coreGetPreviousSibling() {
+    public final CoreChildNode coreGetPreviousSibling() throws DeferredParsingException {
         return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
@@ -150,7 +156,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
     }
     
-    public final void coreDetach() {
+    public final void coreDetach() throws DeferredParsingException {
         ChildNodeHelper.coreDetach(this);
     }
 
@@ -255,7 +261,7 @@ public abstract class Element extends ParentNode implements CoreElement {
 
     protected abstract String getImplicitNamespaceURI(String prefix);
     
-    public final String coreLookupNamespaceURI(String prefix, boolean strict) {
+    public final String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredParsingException {
         if (!strict) {
             String namespaceURI = getImplicitNamespaceURI(prefix);
             if (namespaceURI != null) {
@@ -287,7 +293,7 @@ public abstract class Element extends ParentNode implements CoreElement {
 
     protected abstract String getImplicitPrefix(String namespaceURI);
     
-    public final String coreLookupPrefix(String namespaceURI, boolean strict) {
+    public final String coreLookupPrefix(String namespaceURI, boolean strict) throws DeferredParsingException {
         if (namespaceURI == null) {
             throw new IllegalArgumentException("namespaceURI must not be null");
         }
@@ -314,7 +320,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         }
     }
 
-    public final void coreCoalesce(boolean includeCDATASections) {
+    public final void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException {
         CoreDocument document = getDocument();
         // TODO: using a collection here is very bad!!
         List<CoreTextNode> textNodes = new ArrayList<CoreTextNode>();

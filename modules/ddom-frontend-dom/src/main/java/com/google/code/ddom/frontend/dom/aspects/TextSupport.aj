@@ -22,7 +22,6 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 import com.google.code.ddom.frontend.dom.intf.*;
@@ -37,11 +36,15 @@ public aspect TextSupport {
         DOMTextNode newNode = createNewTextNode(text.substring(offset));
         CoreParentNode parent = coreGetParent();
         if (parent != null) {
-            // TODO: use coreInsertSiblingAfter here!
-            newNode.internalSetNextSibling(coreGetNextSibling());
-            internalSetNextSibling(newNode);
-            newNode.internalSetParent(parent);
-            parent.notifyChildrenModified(1);
+            try {
+                // TODO: use coreInsertSiblingAfter here!
+                newNode.internalSetNextSibling(coreGetNextSibling());
+                internalSetNextSibling(newNode);
+                newNode.internalSetParent(parent);
+                parent.notifyChildrenModified(1);
+            } catch (CoreModelException ex) {
+                throw DOMExceptionUtil.translate(ex);
+            }
         }
         return newNode;
     }
@@ -52,44 +55,56 @@ public aspect TextSupport {
         if (first == last) {
             return first.coreGetData();
         } else {
-            StringBuilder buffer = new StringBuilder();
-            DOMTextNode current = first;
-            while (true) {
-                buffer.append(current.coreGetData());
-                if (current == last) {
-                    break;
-                } else {
-                    current = (DOMTextNode)current.coreGetNextSibling();
+            try {
+                StringBuilder buffer = new StringBuilder();
+                DOMTextNode current = first;
+                while (true) {
+                    buffer.append(current.coreGetData());
+                    if (current == last) {
+                        break;
+                    } else {
+                        current = (DOMTextNode)current.coreGetNextSibling();
+                    }
                 }
+                return buffer.toString();
+            } catch (CoreModelException ex) {
+                throw DOMExceptionUtil.translate(ex);
             }
-            return buffer.toString();
         }
     }
 
     private DOMTextNode DOMTextNode.getWholeTextStartNode() {
-        DOMTextNode first = this;
-        while (true) {
-            CoreChildNode sibling = first.coreGetPreviousSibling();
-            if (sibling instanceof DOMTextNode) {
-                first = (DOMTextNode)sibling;
-            } else {
-                break;
+        try {
+            DOMTextNode first = this;
+            while (true) {
+                CoreChildNode sibling = first.coreGetPreviousSibling();
+                if (sibling instanceof DOMTextNode) {
+                    first = (DOMTextNode)sibling;
+                } else {
+                    break;
+                }
             }
+            return first;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return first;
     }
     
     private DOMTextNode DOMTextNode.getWholeTextEndNode() {
-        DOMTextNode last = this;
-        while (true) {
-            CoreChildNode sibling = last.coreGetNextSibling();
-            if (sibling instanceof DOMTextNode) {
-                last = (DOMTextNode)sibling;
-            } else {
-                break;
+        try {
+            DOMTextNode last = this;
+            while (true) {
+                CoreChildNode sibling = last.coreGetNextSibling();
+                if (sibling instanceof DOMTextNode) {
+                    last = (DOMTextNode)sibling;
+                } else {
+                    break;
+                }
             }
+            return last;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return last;
     }
     
     public final Text DOMTextNode.replaceWholeText(String content) throws DOMException {
@@ -101,22 +116,22 @@ public aspect TextSupport {
             newText = null;
         }
         if (coreGetParent() != null) {
-            DOMTextNode first = getWholeTextStartNode();
-            DOMTextNode last = getWholeTextEndNode();
-            if (newText != null) {
-                try {
+            try {
+                DOMTextNode first = getWholeTextStartNode();
+                DOMTextNode last = getWholeTextEndNode();
+                if (newText != null) {
                     first.coreInsertSiblingBefore(newText);
-                } catch (CoreModelException ex) {
-                    throw DOMExceptionUtil.translate(ex);
                 }
+                DOMTextNode current = first;
+                DOMTextNode next;
+                do {
+                    next = current == last ? null : (DOMTextNode)current.coreGetNextSibling();
+                    current.coreDetach();
+                    current = next;
+                } while (next != null);
+            } catch (CoreModelException ex) {
+                throw DOMExceptionUtil.translate(ex);
             }
-            DOMTextNode current = first;
-            DOMTextNode next;
-            do {
-                next = current == last ? null : (DOMTextNode)current.coreGetNextSibling();
-                current.coreDetach();
-                current = next;
-            } while (next != null);
         }
         return newText;
     }

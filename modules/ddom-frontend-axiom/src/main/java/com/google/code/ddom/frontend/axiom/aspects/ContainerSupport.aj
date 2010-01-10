@@ -29,7 +29,11 @@ import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 public aspect ContainerSupport {
     public OMNode AxiomContainer.getFirstOMChild() {
-        return (OMNode)coreGetFirstChild();
+        try {
+            return (OMNode)coreGetFirstChild();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public Iterator AxiomContainer.getChildren() {

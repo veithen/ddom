@@ -17,11 +17,17 @@ package com.google.code.ddom.frontend.axiom.aspects;
 
 import org.apache.axiom.om.OMElement;
 
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 public aspect DocumentSupport {
     public String AxiomDocument.getXMLVersion() {
-        return coreGetXmlVersion();
+        try {
+            return coreGetXmlVersion();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public void AxiomDocument.setXMLVersion(String version) {
@@ -29,8 +35,12 @@ public aspect DocumentSupport {
     }
     
     public String AxiomDocument.getCharsetEncoding() {
-        // TODO: need to check that this is the right property!
-        return coreGetXmlEncoding();
+        try {
+            // TODO: need to check that this is the right property!
+            return coreGetXmlEncoding();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public void AxiomDocument.setCharsetEncoding(String charsetEncoding) {
@@ -39,7 +49,11 @@ public aspect DocumentSupport {
     }
     
     public String AxiomDocument.isStandalone() {
-        return coreGetStandalone() ? "yes" : "no";
+        try {
+            return coreGetStandalone() ? "yes" : "no";
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public void AxiomDocument.setStandalone(String isStandalone) {
@@ -47,7 +61,11 @@ public aspect DocumentSupport {
     }
     
     public OMElement AxiomDocument.getOMDocumentElement() {
-        return (OMElement)coreGetDocumentElement();
+        try {
+            return (OMElement)coreGetDocumentElement();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public void AxiomDocument.setOMDocumentElement(@SuppressWarnings("unused") OMElement rootElement) {

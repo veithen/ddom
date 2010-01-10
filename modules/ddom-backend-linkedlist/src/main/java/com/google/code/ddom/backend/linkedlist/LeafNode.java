@@ -22,6 +22,7 @@ import com.google.code.ddom.backend.CoreLeafNode;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
@@ -62,11 +63,11 @@ public abstract class LeafNode extends Node implements CoreLeafNode {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
-    public final CoreChildNode coreGetNextSibling() {
+    public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {
         return ChildNodeHelper.coreGetNextSibling(this);
     }
 
-    public final CoreChildNode coreGetPreviousSibling() {
+    public final CoreChildNode coreGetPreviousSibling() throws DeferredParsingException {
         return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
@@ -78,7 +79,7 @@ public abstract class LeafNode extends Node implements CoreLeafNode {
         ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
     }
     
-    public final void coreDetach() {
+    public final void coreDetach() throws DeferredParsingException {
         ChildNodeHelper.coreDetach(this);
     }
 }

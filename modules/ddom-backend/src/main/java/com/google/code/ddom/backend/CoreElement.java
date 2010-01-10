@@ -115,8 +115,9 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreCompactPa
      *            {@link CoreNSAwareElement}), even if no explicit namespace declarations exists for
      *            these prefixes.
      * @return the namespace URI or <code>null</code> if none is found
+     * @throws DeferredParsingException 
      */
-    String coreLookupNamespaceURI(String prefix, boolean strict);
+    String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredParsingException;
     
     /**
      * Find a prefix associated to the given namespace URI. Default namespaces are not taken into
@@ -132,10 +133,11 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreCompactPa
      *            {@link CoreNSAwareElement}), even if no explicit namespace declarations exists for
      *            these prefixes.
      * @return a prefix bound to the given namespace URI or <code>null</code> if none is found
+     * @throws DeferredParsingException 
      * @throws IllegalArgumentException
      *             if <code>namespaceURI</code> is <code>null</code>
      */
-    String coreLookupPrefix(String namespaceURI, boolean strict);
+    String coreLookupPrefix(String namespaceURI, boolean strict) throws DeferredParsingException;
     
     /**
      * Coalesce child text nodes, and optionally CDATA sections. This method replaces groups of
@@ -144,8 +146,9 @@ public interface CoreElement extends CoreChildNode, BuilderTarget, CoreCompactPa
      * 
      * @param includeCDATASections
      *            <code>true</code> if CDATA sections should also be coalesced
+     * @throws DeferredParsingException 
      */
-    void coreCoalesce(boolean includeCDATASections);
+    void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException;
     
     <T extends CoreAttribute,S> Iterator<S> coreGetAttributesByType(Class<T> type, Mapper<T,S> mapper);
 }

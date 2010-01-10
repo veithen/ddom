@@ -57,11 +57,19 @@ public aspect ChildNodes {
     }
     
     public final Node DOMParentNode.getFirstChild() {
-        return (Node)coreGetFirstChild();
+        try {
+            return (Node)coreGetFirstChild();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final Node DOMParentNode.getLastChild() {
-        return (Node)coreGetLastChild();
+        try {
+            return (Node)coreGetLastChild();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final NodeList DOMParentNode.getChildNodes() {
@@ -69,17 +77,25 @@ public aspect ChildNodes {
     }
     
     public final int DOMParentNode.getLength() {
-        return coreGetChildCount();
+        try {
+            return coreGetChildCount();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final Node DOMParentNode.item(int index) {
-        // TODO: need unit test to check that this works when parsing is deferred
-        // TODO: wrong result for negavite indexes
-        CoreChildNode node = coreGetFirstChild();
-        for (int i=0; i<index && node != null; i++) {
-            node = node.coreGetNextSibling();
+        try {
+            // TODO: need unit test to check that this works when parsing is deferred
+            // TODO: wrong result for negavite indexes
+            CoreChildNode node = coreGetFirstChild();
+            for (int i=0; i<index && node != null; i++) {
+                node = node.coreGetNextSibling();
+            }
+            return (Node)node;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return (Node)node;
     }
 
     public final Node DOMParentNode.appendChild(Node newChild) throws DOMException {

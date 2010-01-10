@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
@@ -32,7 +33,7 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
         return declaredPrefix;
     }
     
-    public final String coreGetDeclaredNamespaceURI() {
+    public final String coreGetDeclaredNamespaceURI() throws DeferredParsingException {
         return coreGetValue();
     }
 }
