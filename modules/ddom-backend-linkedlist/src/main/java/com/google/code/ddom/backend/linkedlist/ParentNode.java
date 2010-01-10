@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import java.util.Collections;
 import java.util.Iterator;
 
 import com.google.code.ddom.backend.Axis;
 import com.google.code.ddom.backend.BuilderTarget;
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
@@ -27,11 +27,9 @@ import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CyclicRelationshipException;
-import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.SelfRelationshipException;
-import com.google.code.ddom.stream.spi.Symbols;
 
 @Implementation
 public abstract class ParentNode extends Node implements CoreParentNode {
@@ -187,61 +185,14 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     }
 
     public Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName) {
-        Symbols symbols = getDocument().getSymbols();
-        // Optimization here: if the node is complete and we can't find the symbols, we know that
-        // we will not find any node, so we may return an empty iterator right away.
-        // TODO: probably this is not covered by any unit test
-        if (coreIsComplete()) {
-            if (namespaceURI != null) {
-                namespaceURI = symbols.lookupSymbol(namespaceURI);
-                if (namespaceURI == null) {
-                    return Collections.<CoreNSAwareElement>emptyList().iterator();
-                }
-            }
-            localName = symbols.lookupSymbol(localName);
-            if (localName == null) {
-                return Collections.<CoreNSAwareElement>emptyList().iterator();
-            }
-        } else {
-            // TODO: The side effect of this is that it will actually define the symbols.
-            //       This is a bit unfortunate because it will prevent any further optimization
-            //       for the given namespace URI and localName. Maybe our symbol table should make
-            //       a distinction between symbols that really appear in the document, and those
-            //       that don't. However, this would not be supported by the symbol table implementation
-            //       we get from Woodstox.
-            if (namespaceURI != null) {
-                namespaceURI = symbols.getSymbol(namespaceURI);
-            }
-            localName = symbols.getSymbol(localName);
-        }
         return new ElementsByNameIterator(this, axis, namespaceURI, localName);
     }
 
     public Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
-        Symbols symbols = getDocument().getSymbols();
-        if (namespaceURI != null) {
-            if (coreIsComplete()) {
-                namespaceURI = symbols.lookupSymbol(namespaceURI);
-                if (namespaceURI == null) {
-                    return Collections.<CoreNSAwareElement>emptyList().iterator();
-                }
-            } else {
-                namespaceURI = symbols.getSymbol(namespaceURI);
-            }
-        }
         return new ElementsByNamespaceIterator(this, axis, namespaceURI);
     }
 
     public Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
-        Symbols symbols = getDocument().getSymbols();
-        if (coreIsComplete()) {
-            localName = symbols.lookupSymbol(localName);
-            if (localName == null) {
-                return Collections.<CoreNSAwareElement>emptyList().iterator();
-            }
-        } else {
-            localName = symbols.getSymbol(localName);
-        }
         return new ElementsByLocalNameIterator(this, axis, localName);
     }
 }

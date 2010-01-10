@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.google.code.ddom.backend.Axis;
 import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreParentNode;
@@ -29,6 +31,6 @@ public class ElementsByNamespaceIterator extends AbstractNodeIterator<CoreNSAwar
 
     @Override
     protected boolean matches(CoreNSAwareElement node) {
-        return node.coreGetNamespaceURI() == namespaceURI;
+        return ObjectUtils.equals(node.coreGetNamespaceURI(), namespaceURI);
     }
 }

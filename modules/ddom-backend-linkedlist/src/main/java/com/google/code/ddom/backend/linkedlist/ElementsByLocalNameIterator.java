@@ -29,6 +29,6 @@ public class ElementsByLocalNameIterator extends AbstractNodeIterator<CoreNSAwar
 
     @Override
     protected boolean matches(CoreNSAwareElement node) {
-        return node.coreGetLocalName() == localName;
+        return node.coreGetLocalName().equals(localName);
     }
 }
