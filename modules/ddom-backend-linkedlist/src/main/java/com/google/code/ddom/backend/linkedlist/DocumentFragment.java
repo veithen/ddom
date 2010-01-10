@@ -55,8 +55,7 @@ public class DocumentFragment extends BuilderWrapperImpl implements CoreDocument
         return document;
     }
 
-    @Override
-    protected final boolean isComplete() {
+    public final boolean coreIsComplete() {
         return true;
     }
 }

@@ -18,6 +18,13 @@ package com.google.code.ddom.backend;
 import java.util.Iterator;
 
 public interface CoreParentNode extends CoreNode {
+    /**
+     * Determine if this parent node is complete.
+     * 
+     * @return <code>true</code> if the node is complete, <code>false</code> otherwise
+     */
+    boolean coreIsComplete();
+    
     void internalSetFirstChild(CoreChildNode child);
     void notifyChildrenModified(int delta);
     CoreChildNode coreGetFirstChild();

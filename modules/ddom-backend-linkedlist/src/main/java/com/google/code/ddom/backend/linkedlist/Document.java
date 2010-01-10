@@ -80,6 +80,10 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         return complete;
     }
     
+    public final boolean coreIsComplete() {
+        return complete;
+    }
+
     public final void build() {
         BuilderTargetHelper.build(this);
     }
@@ -101,7 +105,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     public final CoreChildNode coreGetFirstChild() {
-        if (firstChild == null && !isComplete()) {
+        if (firstChild == null && !coreIsComplete()) {
             next();
         }
         return firstChild;
@@ -131,7 +135,7 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
     }
 
     private void ensureDocumentInfoReceived() {
-        if (!isComplete() && firstChild == null) {
+        if (!coreIsComplete() && firstChild == null) {
             next();
         }
     }

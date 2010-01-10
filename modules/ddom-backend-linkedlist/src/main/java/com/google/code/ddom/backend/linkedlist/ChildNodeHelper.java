@@ -29,7 +29,7 @@ public class ChildNodeHelper {
         Document document = (Document)node.getDocument();
         if (parent instanceof BuilderTarget) {
             CoreChildNode nextSibling;
-            while ((nextSibling = node.internalGetNextSibling()) == null && !((BuilderTarget)parent).isComplete()) {
+            while ((nextSibling = node.internalGetNextSibling()) == null && !((BuilderTarget)parent).coreIsComplete()) {
                 document.next();
             }
             return nextSibling;

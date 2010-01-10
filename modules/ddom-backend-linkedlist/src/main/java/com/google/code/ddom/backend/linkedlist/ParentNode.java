@@ -182,9 +182,6 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         merge(newChild, oldChild, true);
     }
 
-    // TODO: check if we really need this; there also may be collisions with frontend methods here
-    protected abstract boolean isComplete();
-    
     public <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
         return new ChildrenByTypeIterator<T>(this, axis, type);
     }
@@ -194,7 +191,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         // Optimization here: if the node is complete and we can't find the symbols, we know that
         // we will not find any node, so we may return an empty iterator right away.
         // TODO: probably this is not covered by any unit test
-        if (isComplete()) {
+        if (coreIsComplete()) {
             if (namespaceURI != null) {
                 namespaceURI = symbols.lookupSymbol(namespaceURI);
                 if (namespaceURI == null) {
@@ -223,7 +220,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     public Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
         Symbols symbols = getDocument().getSymbols();
         if (namespaceURI != null) {
-            if (isComplete()) {
+            if (coreIsComplete()) {
                 namespaceURI = symbols.lookupSymbol(namespaceURI);
                 if (namespaceURI == null) {
                     return Collections.<CoreNSAwareElement>emptyList().iterator();
@@ -237,7 +234,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
 
     public Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
         Symbols symbols = getDocument().getSymbols();
-        if (isComplete()) {
+        if (coreIsComplete()) {
             localName = symbols.lookupSymbol(localName);
             if (localName == null) {
                 return Collections.<CoreNSAwareElement>emptyList().iterator();

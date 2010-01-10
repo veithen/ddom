@@ -21,7 +21,7 @@ public class BuilderTargetHelper {
     public static void build(BuilderTarget node) {
         // TODO: try to avoid the cast here
         Document document = (Document)node.getDocument();
-        while (!node.isComplete()) {
+        while (!node.coreIsComplete()) {
             document.next();
         }
     }

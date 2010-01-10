@@ -69,6 +69,10 @@ public abstract class Element extends ParentNode implements CoreElement {
         return complete;
     }
     
+    public final boolean coreIsComplete() {
+        return complete;
+    }
+
     public final void build() {
         BuilderTargetHelper.build(this);
     }
