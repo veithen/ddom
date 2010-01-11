@@ -67,7 +67,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         // TODO: need to clear any existing content!
         complete = false;
         // TODO: getting the producer should be deferred!
-        ((Document)getDocument()).createBuilder(source.getProducer(), this);
+        getDocument().createBuilder(source.getProducer(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }
@@ -113,9 +113,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     
     public final void coreBuild() throws DeferredParsingException {
         if (!complete) {
-            // TODO: try to avoid the cast here
-            Document document = (Document)getDocument();
-            Builder builder = document.getBuilderFor(this);
+            Builder builder = getDocument().getBuilderFor(this);
             do {
                 builder.next();
             } while (!complete);
@@ -127,8 +125,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             if (complete) {
                 return null;
             } else {
-                // TODO: get rid of cast here
-                Builder builder = ((Document)getDocument()).getBuilderFor(this);
+                Builder builder = getDocument().getBuilderFor(this);
                 while (content == null && !complete) {
                     builder.next();
                 }
