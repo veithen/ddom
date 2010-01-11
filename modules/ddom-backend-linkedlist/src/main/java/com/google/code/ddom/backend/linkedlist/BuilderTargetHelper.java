@@ -22,10 +22,13 @@ public final class BuilderTargetHelper {
     private BuilderTargetHelper() {}
     
     public static void coreBuild(BuilderTarget node) throws DeferredParsingException {
-        // TODO: try to avoid the cast here
-        Document document = (Document)node.getDocument();
-        while (!node.coreIsComplete()) {
-            document.next();
+        if (!node.coreIsComplete()) {
+            // TODO: try to avoid the cast here
+            Document document = (Document)node.getDocument();
+            Builder builder = document.getBuilderFor(node);
+            do {
+                builder.next();
+            } while (!node.coreIsComplete());
         }
     }
 }

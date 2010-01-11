@@ -15,6 +15,10 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
@@ -32,7 +36,9 @@ public class Document extends ParentNode implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
     private final Symbols symbols;
+    @Deprecated // There can be several builders
     private Builder builder;
+    private List<Builder> builders = new LinkedList<Builder>();
     private boolean complete;
     private CoreChildNode firstChild;
     private int children;
@@ -52,12 +58,22 @@ public class Document extends ParentNode implements CoreDocument {
         // TODO: need to clear any existing content!
         complete = false;
         builder = new Builder(source.getProducer(), this, this);
+        builders.add(builder);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }
 
     public final void next() throws DeferredParsingException {
         builder.next();
+    }
+    
+    public final Builder getBuilderFor(BuilderTarget target) {
+        for (Builder builder : builders) {
+            if (builder.isBuilderFor(target)) {
+                return builder;
+            }
+        }
+        throw new IllegalArgumentException("No builder found for target");
     }
     
     public final NodeFactory getNodeFactory() {
@@ -131,9 +147,7 @@ public class Document extends ParentNode implements CoreDocument {
     }
 
     private void ensureDocumentInfoReceived() throws DeferredParsingException {
-        if (!coreIsComplete() && firstChild == null) {
-            next();
-        }
+        coreGetFirstChild();
     }
     
     public final String coreGetInputEncoding() throws DeferredParsingException {

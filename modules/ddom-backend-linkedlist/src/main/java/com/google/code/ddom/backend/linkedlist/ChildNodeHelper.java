@@ -31,9 +31,13 @@ public final class ChildNodeHelper {
         // TODO: try to avoid the cast here
         Document document = (Document)node.getDocument();
         if (parent instanceof BuilderTarget) {
-            CoreChildNode nextSibling;
-            while ((nextSibling = node.internalGetNextSibling()) == null && !parent.coreIsComplete()) {
-                document.next();
+            CoreChildNode nextSibling = node.internalGetNextSibling();
+            if (nextSibling == null && !parent.coreIsComplete()) {
+                Builder builder = document.getBuilderFor((BuilderTarget)parent);
+                do {
+                    builder.next();
+                    nextSibling = node.internalGetNextSibling();
+                } while (nextSibling == null && !parent.coreIsComplete());
             }
             return nextSibling;
         } else {

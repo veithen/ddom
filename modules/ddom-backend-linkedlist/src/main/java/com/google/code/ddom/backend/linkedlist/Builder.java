@@ -44,6 +44,10 @@ public class Builder extends CallbackConsumer {
         parent = target;
     }
 
+    public final boolean isBuilderFor(BuilderTarget target) {
+        return target == parent || nodeStack.contains(target);
+    }
+    
     public final void next() throws DeferredParsingException {
         if (streamException == null) {
             try {

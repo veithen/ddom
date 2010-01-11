@@ -117,8 +117,11 @@ public abstract class Element extends ParentNode implements CoreElement {
     }
 
     public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
-        while (content == null && !complete) {
-            document.next();
+        if (content == null && !complete) {
+            Builder builder = document.getBuilderFor(this);
+            while (content == null && !complete) {
+                builder.next();
+            }
         }
         return CompactParentNodeHelper.getFirstChild(this);
     }
