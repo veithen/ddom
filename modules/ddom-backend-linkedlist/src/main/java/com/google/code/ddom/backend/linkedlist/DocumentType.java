@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.Implementation;
 
@@ -25,7 +24,7 @@ public class DocumentType extends LeafNode implements CoreDocumentType {
     private final String publicId;
     private final String systemId;
     
-    public DocumentType(CoreDocument document, String rootName, String publicId, String systemId) {
+    public DocumentType(Document document, String rootName, String publicId, String systemId) {
         super(document);
         this.rootName = rootName;
         this.publicId = publicId;

@@ -80,7 +80,7 @@ public aspect ElementSupport {
             localName = qualifiedName;
         } else {
             // Use symbol table to avoid creation of new String objects
-            Symbols symbols = getDocument().getSymbols();
+            Symbols symbols = coreGetDocument().getSymbols();
             prefix = symbols.getSymbol(qualifiedName, 0, i);
             localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }

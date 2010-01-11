@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
@@ -24,7 +23,7 @@ import com.google.code.ddom.backend.Implementation;
 public class NamespaceDeclaration extends Attribute implements CoreNamespaceDeclaration {
     private String declaredPrefix;
 
-    public NamespaceDeclaration(CoreDocument document, String prefix, String namespaceURI) {
+    public NamespaceDeclaration(Document document, String prefix, String namespaceURI) {
         super(document, namespaceURI);
         this.declaredPrefix = prefix;
     }

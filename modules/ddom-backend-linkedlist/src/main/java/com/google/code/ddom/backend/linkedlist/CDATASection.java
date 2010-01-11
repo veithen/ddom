@@ -16,12 +16,11 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreCDATASection;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class CDATASection extends TextNode implements CoreCDATASection {
-    public CDATASection(CoreDocument document, String data) {
+    public CDATASection(Document document, String data) {
         super(document, data);
     }
 }

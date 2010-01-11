@@ -42,11 +42,11 @@ import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 
 public aspect Factory {
     public OMFactory AxiomNode.getOMFactory() {
-        return (OMFactory)getDocument();
+        return (OMFactory)coreGetDocument();
     }
     
     public OMFactory AxiomAttribute.getOMFactory() {
-        return (OMFactory)getDocument();
+        return (OMFactory)coreGetDocument();
     }
 
     public OMDocument AxiomDocument.createOMDocument() {

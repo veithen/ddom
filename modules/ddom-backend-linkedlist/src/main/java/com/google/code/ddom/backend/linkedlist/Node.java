@@ -22,8 +22,14 @@ import com.google.code.ddom.backend.WrongDocumentException;
 
 @Implementation
 public abstract class Node implements CoreNode {
+    public final CoreDocument coreGetDocument() {
+        return getDocument();
+    }
+
+    abstract Document getDocument();
+    
     public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
-        CoreDocument document1 = node.getDocument();
+        CoreDocument document1 = ((Node)node).getDocument(); // TODO: get rid of cast
         CoreDocument document2 = getDocument();
         if (document1 != null && document2 != null && document1 != document2) {
             throw new WrongDocumentException();

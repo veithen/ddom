@@ -15,13 +15,12 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class Text extends TextNode implements CoreText {
-    public Text(CoreDocument document, String data) {
+    public Text(Document document, String data) {
         super(document, data);
     }
 }

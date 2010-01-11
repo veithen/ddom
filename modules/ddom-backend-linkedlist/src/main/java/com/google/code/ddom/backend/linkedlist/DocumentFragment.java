@@ -16,16 +16,15 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class DocumentFragment extends ParentNode implements CoreDocumentFragment {
-    private final CoreDocument document;
+    private final Document document;
     private int children;
     
-    public DocumentFragment(CoreDocument document) {
+    public DocumentFragment(Document document) {
         super(true);
         this.document = document;
     }
@@ -43,7 +42,8 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         return children;
     }
 
-    public final CoreDocument getDocument() {
+    @Override
+    final Document getDocument() {
         return document;
     }
 }

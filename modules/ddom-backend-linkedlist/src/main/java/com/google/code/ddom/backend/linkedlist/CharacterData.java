@@ -16,14 +16,13 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreCharacterData;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class CharacterData extends LeafNode implements CoreCharacterData {
     private String data;
 
-    public CharacterData(CoreDocument document, String data) {
+    public CharacterData(Document document, String data) {
         super(document);
         this.data = data;
     }

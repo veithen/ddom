@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.backend.Implementation;
 
@@ -23,7 +22,7 @@ import com.google.code.ddom.backend.Implementation;
 public abstract class TypedAttribute extends Attribute implements CoreTypedAttribute {
     private String type;
 
-    public TypedAttribute(CoreDocument document, String value, String type) {
+    public TypedAttribute(Document document, String value, String type) {
         super(document, value);
         this.type = type;
     }

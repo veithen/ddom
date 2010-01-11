@@ -221,7 +221,7 @@ public aspect DocumentSupport {
         if (node instanceof CoreNSAwareNamedNode) {
             CoreNSAwareNamedNode namedNode = (CoreNSAwareNamedNode)node;
             
-            if (namedNode.getDocument() != this) {
+            if (namedNode.coreGetDocument() != this) {
                 throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
             }
             

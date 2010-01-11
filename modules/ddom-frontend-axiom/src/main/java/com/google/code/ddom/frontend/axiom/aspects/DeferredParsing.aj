@@ -28,7 +28,7 @@ import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 public aspect DeferredParsing {
     public void AxiomNode.close(boolean build) {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         if (build) {
             try {
                 // TODO: not sure if the document or only the node should be built

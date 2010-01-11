@@ -18,7 +18,6 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreText;
@@ -28,14 +27,14 @@ import com.google.code.ddom.backend.Implementation;
 @Implementation
 public abstract class Attribute extends ParentNode implements CoreAttribute {
     /**
-     * The owner of the attribute. This is either a {@link CoreDocument} if the attribute is not linked
-     * to an element, or an {@link CoreElement} if the attribute has been added to an element.
+     * The owner of the attribute. This is either a {@link Document} if the attribute is not linked
+     * to an element, or an {@link Element} if the attribute has been added to an element.
      */
     private Object owner;
     
     private CoreAttribute nextAttribute;
 
-    public Attribute(CoreDocument document, String value) {
+    public Attribute(Document document, String value) {
         super(value);
         owner = document;
     }
@@ -47,7 +46,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     public final void internalSetOwnerElement(CoreElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
-            owner = ((CoreElement)owner).getDocument();
+            owner = ((Element)owner).getDocument();
         } else {
             owner = newOwner;
         }
@@ -84,11 +83,12 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return owner instanceof CoreElement ? (CoreElement)owner : null;
     }
 
-    public final CoreDocument getDocument() {
-        if (owner instanceof CoreDocument) {
-            return (CoreDocument)owner;
+    @Override
+    final Document getDocument() {
+        if (owner instanceof Document) {
+            return (Document)owner;
         } else {
-            return ((CoreElement)owner).getDocument();
+            return ((Element)owner).getDocument();
         }
     }
 

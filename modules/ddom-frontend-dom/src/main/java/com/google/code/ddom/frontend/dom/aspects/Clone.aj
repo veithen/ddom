@@ -51,12 +51,12 @@ public aspect Clone {
     }
     
     public final Node DOMNSAwareAttribute.shallowClone() {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (Node)document.getNodeFactory().createAttribute(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
     
     public final Node DOMNSUnawareAttribute.shallowClone() {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, coreGetType());
     }
 
@@ -82,7 +82,7 @@ public aspect Clone {
     public abstract Node DOMParentNode.shallowClone();
 
     public final Node DOMComment.cloneNode(boolean deep) {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (Node)document.getNodeFactory().createComment(document, getData());
     }
 
@@ -92,7 +92,7 @@ public aspect Clone {
     }
 
     public final Node DOMDocumentFragment.shallowClone() {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (Node)document.getNodeFactory().createDocumentFragment(document);
     }
     
@@ -107,7 +107,7 @@ public aspect Clone {
     }
 
     public final Node DOMDocumentType.cloneNode(boolean deep) {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (Node)document.getNodeFactory().createDocumentType(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
     
@@ -130,24 +130,24 @@ public aspect Clone {
     public abstract CoreElement DOMElement.shallowCloneWithoutAttributes();
 
     public final CoreElement DOMNSAwareElement.shallowCloneWithoutAttributes() {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         NodeFactory factory = document.getNodeFactory();
         return factory.createElement(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
     }
     
     public final CoreElement DOMNSUnawareElement.shallowCloneWithoutAttributes() {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         NodeFactory factory = document.getNodeFactory();
         return factory.createElement(document, coreGetName());
     }
 
     public final Node DOMEntityReference.cloneNode(boolean deep) {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (Node)document.getNodeFactory().createEntityReference(document, coreGetName());
     }
 
     public final Node DOMProcessingInstruction.cloneNode(boolean deep) {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (Node)document.getNodeFactory().createProcessingInstruction(document, getTarget(), getData());
     }
 
@@ -156,12 +156,12 @@ public aspect Clone {
     }
     
     public final DOMTextNode DOMText.createNewTextNode(String data) {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (DOMTextNode)document.getNodeFactory().createText(document, data);
     }
 
     public final DOMTextNode DOMCDATASection.createNewTextNode(String data) {
-        CoreDocument document = getDocument();
+        CoreDocument document = coreGetDocument();
         return (DOMTextNode)document.getNodeFactory().createCDATASection(document, data);
     }
 }

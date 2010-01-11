@@ -27,11 +27,11 @@ import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class LeafNode extends Node implements CoreLeafNode {
-    private CoreDocument document;
+    private Document document;
     private CoreParentNode parent;
     private CoreChildNode nextSibling;
     
-    public LeafNode(CoreDocument document) {
+    public LeafNode(Document document) {
         this.document = document;
     }
 
@@ -40,7 +40,7 @@ public abstract class LeafNode extends Node implements CoreLeafNode {
     }
     
     public final void internalSetDocument(CoreDocument document) {
-        this.document = document;
+        this.document = (Document)document; // TODO: get rid of cast
     }
     
     public final CoreChildNode internalGetNextSibling() {
@@ -51,7 +51,8 @@ public abstract class LeafNode extends Node implements CoreLeafNode {
         this.nextSibling = nextSibling;
     }
     
-    public final CoreDocument getDocument() {
+    @Override
+    final Document getDocument() {
         return document;
     }
 

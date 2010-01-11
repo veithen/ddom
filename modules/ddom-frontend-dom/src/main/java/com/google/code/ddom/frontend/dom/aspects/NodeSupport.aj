@@ -26,7 +26,7 @@ import com.google.code.ddom.frontend.dom.intf.*;
 
 public aspect NodeSupport {
     public final boolean DOMNode.isSupported(String feature, String version) {
-        return ((DOMDocument)getDocument()).getImplementation().hasFeature(feature, version);
+        return ((DOMDocument)coreGetDocument()).getImplementation().hasFeature(feature, version);
     }
 
     public final Object DOMNode.getFeature(String feature, String version) {

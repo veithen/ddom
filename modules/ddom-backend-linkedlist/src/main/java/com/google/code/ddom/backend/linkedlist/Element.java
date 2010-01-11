@@ -85,7 +85,8 @@ public abstract class Element extends ParentNode implements CoreElement {
         return firstAttribute;
     }
     
-    public final CoreDocument getDocument() {
+    @Override
+    final Document getDocument() {
         return document;
     }
 

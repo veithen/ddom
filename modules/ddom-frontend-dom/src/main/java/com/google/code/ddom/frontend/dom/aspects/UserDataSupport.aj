@@ -46,7 +46,7 @@ public aspect UserDataSupport {
     }
     
     public final Object DOMNode.getUserData(String key) {
-        Map<String,UserData> userDataMap = ((DOMDocument)getDocument()).getUserDataMap(this, false);
+        Map<String,UserData> userDataMap = ((DOMDocument)coreGetDocument()).getUserDataMap(this, false);
         if (userDataMap == null) {
             return null;
         } else {
@@ -58,14 +58,14 @@ public aspect UserDataSupport {
     public final Object DOMNode.setUserData(String key, Object data, UserDataHandler handler) {
         UserData userData;
         if (data == null) {
-            Map<String,UserData> userDataMap = ((DOMDocument)getDocument()).getUserDataMap(this, false);
+            Map<String,UserData> userDataMap = ((DOMDocument)coreGetDocument()).getUserDataMap(this, false);
             if (userDataMap != null) {
                 userData = userDataMap.remove(key);
             } else {
                 userData = null;
             }
         } else {
-            Map<String,UserData> userDataMap = ((DOMDocument)getDocument()).getUserDataMap(this, true);
+            Map<String,UserData> userDataMap = ((DOMDocument)coreGetDocument()).getUserDataMap(this, true);
             userData = userDataMap.put(key, new UserData(data, handler));
         }
         return userData == null ? null : userData.getData();

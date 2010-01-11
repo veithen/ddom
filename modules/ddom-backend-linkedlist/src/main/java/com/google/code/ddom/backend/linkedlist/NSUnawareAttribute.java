@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNSUnawareAttribute;
 import com.google.code.ddom.backend.Implementation;
 
@@ -23,7 +22,7 @@ import com.google.code.ddom.backend.Implementation;
 public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareAttribute {
     private final String name;
 
-    public NSUnawareAttribute(CoreDocument document, String name, String value, String type) {
+    public NSUnawareAttribute(Document document, String name, String value, String type) {
         super(document, value, type);
         this.name = name;
     }

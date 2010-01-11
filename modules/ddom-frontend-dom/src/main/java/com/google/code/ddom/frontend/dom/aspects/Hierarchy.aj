@@ -31,19 +31,19 @@ public aspect Hierarchy {
     }
 
     public final Document DOMAttribute.getOwnerDocument() {
-        return (Document)getDocument();
+        return (Document)coreGetDocument();
     }
     
     public final Document DOMDocumentFragment.getOwnerDocument() {
-        return (Document)getDocument();
+        return (Document)coreGetDocument();
     }
 
     public final Document DOMElement.getOwnerDocument() {
-        return (Document)getDocument();
+        return (Document)coreGetDocument();
     }
 
     public final Document DOMLeafNode.getOwnerDocument() {
-        return (Document)getDocument();
+        return (Document)coreGetDocument();
     }
     
     public final Node DOMAttribute.getParentNode() {

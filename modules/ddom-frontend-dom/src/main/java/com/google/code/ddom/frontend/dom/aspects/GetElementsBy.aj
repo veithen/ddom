@@ -29,10 +29,10 @@ public aspect GetElementsBy {
     }
 
     public final NodeList DOMParentNode.getElementsByTagName(String tagname) {
-        return new ElementsByTagName((DOMDocument)getDocument(), this, tagname);
+        return new ElementsByTagName((DOMDocument)coreGetDocument(), this, tagname);
     }
 
     public final NodeList DOMParentNode.getElementsByTagNameNS(String namespaceURI, String localName) {
-        return new ElementsByTagNameNS((DOMDocument)getDocument(), this, namespaceURI, localName);
+        return new ElementsByTagNameNS((DOMDocument)coreGetDocument(), this, namespaceURI, localName);
     }
 }

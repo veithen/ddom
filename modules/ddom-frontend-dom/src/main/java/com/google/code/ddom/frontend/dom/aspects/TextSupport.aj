@@ -110,7 +110,7 @@ public aspect TextSupport {
     public final Text DOMTextNode.replaceWholeText(String content) throws DOMException {
         DOMTextNode newText;
         if (content.length() > 0) {
-            CoreDocument document = getDocument();
+            CoreDocument document = coreGetDocument();
             newText = (DOMTextNode)document.getNodeFactory().createText(document, content);
         } else {
             newText = null;

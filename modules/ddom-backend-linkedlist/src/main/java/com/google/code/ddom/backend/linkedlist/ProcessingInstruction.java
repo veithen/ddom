@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.backend.Implementation;
 
@@ -24,7 +23,7 @@ public class ProcessingInstruction extends LeafNode implements CoreProcessingIns
     private String target;
     private String data;
 
-    public ProcessingInstruction(CoreDocument document, String target, String data) {
+    public ProcessingInstruction(Document document, String target, String data) {
         super(document);
         this.target = target;
         this.data = data;

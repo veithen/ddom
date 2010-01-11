@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import javax.xml.namespace.QName;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.Implementation;
 
@@ -27,7 +26,7 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
     private String localName;
     private String prefix;
 
-    public NSAwareAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
+    public NSAwareAttribute(Document document, String namespaceURI, String localName, String prefix, String value, String type) {
         super(document, value, type);
         this.namespaceURI = namespaceURI;
         this.localName = localName;

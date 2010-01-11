@@ -16,12 +16,11 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreComment;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class Comment extends CharacterData implements CoreComment {
-    public Comment(CoreDocument document, String data) {
+    public Comment(Document document, String data) {
         super(document, data);
     }
 }

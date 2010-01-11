@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.Implementation;
 
@@ -23,7 +22,7 @@ import com.google.code.ddom.backend.Implementation;
 public class EntityReference extends LeafNode implements CoreEntityReference {
     private String name;
     
-    public EntityReference(CoreDocument document, String name) {
+    public EntityReference(Document document, String name) {
         super(document);
         this.name = name;
     }

@@ -71,7 +71,8 @@ public class Document extends ParentNode implements CoreDocument {
         return symbols;
     }
 
-    public final CoreDocument getDocument() {
+    @Override
+    final Document getDocument() {
         return this;
     }
 

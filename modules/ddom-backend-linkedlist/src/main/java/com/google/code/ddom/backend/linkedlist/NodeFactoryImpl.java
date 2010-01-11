@@ -36,7 +36,7 @@ public class NodeFactoryImpl implements NodeFactory {
     }
 
     public CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId) {
-        return new DocumentType(document, rootName, publicId, systemId);
+        return new DocumentType((Document)document, rootName, publicId, systemId);
     }
 
     public CoreNSUnawareElement createElement(CoreDocument document, String tagName) {
@@ -48,38 +48,38 @@ public class NodeFactoryImpl implements NodeFactory {
     }
     
     public CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type) {
-        return new NSUnawareAttribute(document, name, value, type);
+        return new NSUnawareAttribute((Document)document, name, value, type);
     }
     
     public CoreNSAwareAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type) {
-        return new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type);
+        return new NSAwareAttribute((Document)document, namespaceURI, localName, prefix, value, type);
     }
     
     public CoreNamespaceDeclaration createNamespaceDeclaration(CoreDocument document, String prefix, String namespaceURI) {
-        return new NamespaceDeclaration(document, prefix, namespaceURI);
+        return new NamespaceDeclaration((Document)document, prefix, namespaceURI);
     }
     
     public CoreProcessingInstruction createProcessingInstruction(CoreDocument document, String target, String data) {
-        return new ProcessingInstruction(document, target, data);
+        return new ProcessingInstruction((Document)document, target, data);
     }
     
     public CoreDocumentFragment createDocumentFragment(CoreDocument document) {
-        return new DocumentFragment(document);
+        return new DocumentFragment((Document)document);
     }
 
     public CoreText createText(CoreDocument document, String data) {
-        return new Text(document, data);
+        return new Text((Document)document, data);
     }
 
     public CoreComment createComment(CoreDocument document, String data) {
-        return new Comment(document, data);
+        return new Comment((Document)document, data);
     }
 
     public CoreCDATASection createCDATASection(CoreDocument document, String data) {
-        return new CDATASection(document, data);
+        return new CDATASection((Document)document, data);
     }
 
     public CoreEntityReference createEntityReference(CoreDocument document, String name) {
-        return new EntityReference(document, name);
+        return new EntityReference((Document)document, name);
     }
 }
