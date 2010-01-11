@@ -22,7 +22,7 @@ import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class DocumentFragment extends BuilderWrapperImpl implements CoreDocumentFragment {
+public class DocumentFragment extends ParentNode implements CoreDocumentFragment {
     private final CoreDocument document;
     private CoreChildNode firstChild;
     private int children;

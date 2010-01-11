@@ -28,7 +28,7 @@ import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 
 @Implementation
-public class Document extends BuilderWrapperImpl implements CoreDocument {
+public class Document extends ParentNode implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
     private final Symbols symbols;
