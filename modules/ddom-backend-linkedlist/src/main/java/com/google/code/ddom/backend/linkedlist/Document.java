@@ -27,7 +27,6 @@ import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
-import com.google.code.ddom.stream.spi.FragmentSource;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
