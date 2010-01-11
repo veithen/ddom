@@ -42,16 +42,14 @@ import com.google.code.ddom.backend.NodeNotFoundException;
 @Implementation
 public abstract class Element extends ParentNode implements CoreElement {
     private final Document document;
-    private Object content;
-    private boolean complete;
     private int children;
     private CoreParentNode parent;
     private CoreChildNode nextSibling;
     private CoreAttribute firstAttribute;
 
     public Element(Document document, boolean complete) {
+        super(complete);
         this.document = document;
-        this.complete = complete;
     }
 
     public final void internalSetParent(CoreParentNode parent) {
@@ -64,18 +62,6 @@ public abstract class Element extends ParentNode implements CoreElement {
 
     public final void internalSetNextSibling(CoreChildNode nextSibling) {
         this.nextSibling = nextSibling;
-    }
-    
-    public final boolean coreIsComplete() {
-        return complete;
-    }
-
-    public final void coreBuild() throws DeferredParsingException {
-        BuilderTargetHelper.coreBuild(this);
-    }
-
-    public final void internalSetComplete() {
-        complete = true;
     }
     
     public final void notifyChildrenModified(int delta) {
@@ -95,37 +81,6 @@ public abstract class Element extends ParentNode implements CoreElement {
         return children;
     }
 
-    public final Object coreGetContent() {
-        return content;
-    }
-    
-    public final CoreChildNode internalGetFirstChild() {
-        return (CoreChildNode)content;
-    }
-
-    public final void internalSetFirstChild(CoreChildNode child) {
-        content = child;
-    }
-
-    public final void coreSetValue(String value) {
-        // TODO: need to remove any existing children!
-        this.content = value;
-    }
-
-    public final boolean coreIsExpanded() {
-        return content instanceof CoreChildNode;
-    }
-
-    public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
-        if (content == null && !complete) {
-            Builder builder = document.getBuilderFor(this);
-            while (content == null && !complete) {
-                builder.next();
-            }
-        }
-        return CompactParentNodeHelper.getFirstChild(this);
-    }
-    
     public final CoreAttribute coreGetFirstAttribute() {
         return firstAttribute;
     }

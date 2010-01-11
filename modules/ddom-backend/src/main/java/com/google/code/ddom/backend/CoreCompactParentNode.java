@@ -21,23 +21,4 @@ package com.google.code.ddom.backend;
  * @author Andreas Veithen
  */
 public interface CoreCompactParentNode extends CoreParentNode {
-    /**
-     * 
-     * either a String or a ChildNode
-     * 
-     * @return
-     */
-    Object coreGetContent();
-
-    /**
-     * Set the content of this node to the given value. This will remove all children previously
-     * owned by this element.
-     * 
-     * @param value
-     *            the value to set
-     */
-    void coreSetValue(String value);
-    
-    // TODO: specify behavior if the element neither has children nor a value
-    boolean coreIsExpanded();
 }

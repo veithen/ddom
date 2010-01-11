@@ -17,7 +17,11 @@ package com.google.code.ddom.backend;
 
 import java.util.Iterator;
 
+import com.google.code.ddom.stream.spi.FragmentSource;
+
 public interface CoreParentNode extends CoreNode {
+    void internalSetComplete();
+    
     /**
      * Determine if this parent node is complete.
      * 
@@ -27,8 +31,34 @@ public interface CoreParentNode extends CoreNode {
     
     void coreBuild() throws DeferredParsingException;
     
+    CoreChildNode internalGetFirstChild();
     void internalSetFirstChild(CoreChildNode child);
     void notifyChildrenModified(int delta);
+
+    /**
+     * 
+     * either a String or a ChildNode
+     * 
+     * @return
+     */
+    Object coreGetContent();
+    
+    void coreSetContent(FragmentSource source);
+    
+    String coreGetValue() throws DeferredParsingException;
+    
+    /**
+     * Set the content of this node to the given value. This will remove all children previously
+     * owned by this element.
+     * 
+     * @param value
+     *            the value to set
+     */
+    void coreSetValue(String value);
+    
+    // TODO: specify behavior if the element neither has children nor a value
+    boolean coreIsExpanded();
+    
     CoreChildNode coreGetFirstChild() throws DeferredParsingException;
     CoreChildNode coreGetLastChild() throws DeferredParsingException;
     int coreGetChildCount() throws DeferredParsingException;

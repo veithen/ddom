@@ -18,9 +18,10 @@ package com.google.code.ddom.backend.linkedlist;
 import java.util.Iterator;
 
 import com.google.code.ddom.backend.Axis;
-import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
+import com.google.code.ddom.backend.CoreCharacterData;
 import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNSAwareElement;
@@ -31,9 +32,120 @@ import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.SelfRelationshipException;
+import com.google.code.ddom.stream.spi.FragmentSource;
 
 @Implementation
 public abstract class ParentNode extends Node implements CoreParentNode {
+    /**
+     * The content of this node. This is a {@link CoreChildNode} if the node is expanded, a
+     * {@link FragmentSource} if the content is sourced or a {@link String} if the value has been
+     * set.
+     */
+    private Object content;
+    
+    // TODO: this should be merged with other flags
+    private boolean complete;
+    
+    public ParentNode(Object content) {
+        this.content = content;
+        complete = true;
+    }
+
+    public ParentNode(boolean complete) {
+        this.complete = complete;
+    }
+
+    public final Object coreGetContent() {
+        return content;
+    }
+
+    public final boolean coreIsExpanded() {
+        return content instanceof CoreChildNode;
+    }
+
+    public final void coreSetContent(FragmentSource source) {
+        // TODO: need to clear any existing content!
+        complete = false;
+        // TODO: getting the producer should be deferred!
+        ((Document)getDocument()).createBuilder(source.getProducer(), this);
+        // TODO: need to decide how to handle symbol tables in a smart way here
+//        symbols = producer.getSymbols();
+    }
+
+    public final String coreGetValue() throws DeferredParsingException {
+        // TODO: this should also be applicable for other OptimizedParentNodes
+        if (content instanceof String) {
+            return (String)content;
+        } else {
+            // TODO: get the getTextContent feature back into the core model
+            StringBuilder buffer = new StringBuilder();
+            CoreChildNode child = (CoreChildNode)content;
+            while (child != null) {
+                buffer.append(((CoreCharacterData)child).coreGetData());
+                child = child.coreGetNextSibling();
+            }
+            return buffer.toString();
+//            return getTextContent();
+        }
+    }
+
+    public final void coreSetValue(String value) {
+        // TODO: what if arg is null?
+        // TODO: need to remove any existing children!
+        content = value;
+    }
+
+    public final CoreChildNode internalGetFirstChild() {
+        return (CoreChildNode)content;
+    }
+
+    public final void internalSetFirstChild(CoreChildNode child) {
+        content = child;
+    }
+
+    public final boolean coreIsComplete() {
+        return complete;
+    }
+
+    public final void internalSetComplete() {
+        complete = true;
+    }
+    
+    public final void coreBuild() throws DeferredParsingException {
+        if (!complete) {
+            // TODO: try to avoid the cast here
+            Document document = (Document)getDocument();
+            Builder builder = document.getBuilderFor(this);
+            do {
+                builder.next();
+            } while (!complete);
+        }
+    }
+    
+    public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
+        if (content == null) {
+            if (complete) {
+                return null;
+            } else {
+                // TODO: get rid of cast here
+                Builder builder = ((Document)getDocument()).getBuilderFor(this);
+                while (content == null && !complete) {
+                    builder.next();
+                }
+                return (CoreChildNode)content;
+            }
+        } else if (content instanceof String) {
+            CoreChildNode firstChild;
+            CoreDocument document = getDocument();
+            firstChild = document.getNodeFactory().createText(document, (String)content);
+            firstChild.internalSetParent(this);
+            content = firstChild;
+            return firstChild;
+        } else {
+            return (CoreChildNode)content;
+        }
+    }
+    
     public final CoreChildNode coreGetLastChild() throws DeferredParsingException {
         CoreChildNode previousChild = null;
         CoreChildNode child = coreGetFirstChild();
@@ -60,8 +172,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             }
         } while (current != null);
         
-        if (newChild instanceof BuilderTarget) {
-            ((BuilderTarget)newChild).coreBuild();
+        if (newChild instanceof CoreParentNode) {
+            ((CoreParentNode)newChild).coreBuild();
         }
     }
     

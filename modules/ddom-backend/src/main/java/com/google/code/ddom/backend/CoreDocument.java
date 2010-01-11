@@ -15,10 +15,9 @@
  */
 package com.google.code.ddom.backend;
 
-import com.google.code.ddom.stream.spi.FragmentSource;
 import com.google.code.ddom.stream.spi.Symbols;
 
-public interface CoreDocument extends BuilderTarget {
+public interface CoreDocument extends CoreParentNode {
     NodeFactory getNodeFactory();
     
     /**
@@ -28,8 +27,6 @@ public interface CoreDocument extends BuilderTarget {
      * @return the symbol table; may not be <code>null</code>
      */
     Symbols getSymbols();
-    
-    void coreSetContent(FragmentSource source);
     
     String coreGetInputEncoding() throws DeferredParsingException;
     void coreSetInputEncoding(String inputEncoding);

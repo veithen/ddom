@@ -18,16 +18,17 @@ package com.google.code.ddom.backend.linkedlist;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.stream.spi.FragmentSource;
+import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 
@@ -36,11 +37,7 @@ public class Document extends ParentNode implements CoreDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
     private final Symbols symbols;
-    @Deprecated // There can be several builders
-    private Builder builder;
     private List<Builder> builders = new LinkedList<Builder>();
-    private boolean complete;
-    private CoreChildNode firstChild;
     private int children;
     private String inputEncoding;
     private String xmlVersion;
@@ -49,25 +46,16 @@ public class Document extends ParentNode implements CoreDocument {
     private String documentURI;
 
     public Document(NodeFactory nodeFactory) {
+        super(true);
         this.nodeFactory = nodeFactory;
-        complete = true;
         symbols = new SymbolHashTable();
     }
 
-    public final void coreSetContent(FragmentSource source) {
-        // TODO: need to clear any existing content!
-        complete = false;
-        builder = new Builder(source.getProducer(), this, this);
-        builders.add(builder);
-        // TODO: need to decide how to handle symbol tables in a smart way here
-//        symbols = producer.getSymbols();
-    }
-
-    public final void next() throws DeferredParsingException {
-        builder.next();
+    public final void createBuilder(Producer producer, CoreParentNode target) {
+        builders.add(new Builder(producer, this, target));
     }
     
-    public final Builder getBuilderFor(BuilderTarget target) {
+    public final Builder getBuilderFor(CoreParentNode target) {
         for (Builder builder : builders) {
             if (builder.isBuilderFor(target)) {
                 return builder;
@@ -88,41 +76,19 @@ public class Document extends ParentNode implements CoreDocument {
         return this;
     }
 
-    public final boolean coreIsComplete() {
-        return complete;
-    }
-
-    public final void coreBuild() throws DeferredParsingException {
-        BuilderTargetHelper.coreBuild(this);
-    }
-
     public final void dispose() {
-        if (builder != null) {
+        for (Builder builder : builders) {
             builder.dispose();
         }
     }
 
-    public final void internalSetComplete() {
-        builder.dispose();
-        builder = null;
-        complete = true;
-    }
+    // TODO
+//    public final void internalSetComplete() {
+//        builder.dispose();
+//        builder = null;
+//        complete = true;
+//    }
     
-    public final CoreChildNode internalGetFirstChild() {
-        return firstChild;
-    }
-
-    public final void internalSetFirstChild(CoreChildNode child) {
-        firstChild = child;
-    }
-
-    public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
-        if (firstChild == null && !coreIsComplete()) {
-            next();
-        }
-        return firstChild;
-    }
-
     public final void notifyChildrenModified(int delta) {
         children += delta;
     }

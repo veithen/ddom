@@ -20,7 +20,6 @@ public interface CoreAttribute extends CoreCompactParentNode {
     void internalSetNextAttribute(CoreAttribute attr);
     void internalSetOwnerElement(CoreElement newOwner);
 
-    String coreGetValue() throws DeferredParsingException;
     CoreElement coreGetOwnerElement();
     
     /**

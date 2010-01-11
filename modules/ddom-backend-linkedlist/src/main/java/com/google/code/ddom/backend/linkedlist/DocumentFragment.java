@@ -18,25 +18,16 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class DocumentFragment extends ParentNode implements CoreDocumentFragment {
     private final CoreDocument document;
-    private CoreChildNode firstChild;
     private int children;
     
     public DocumentFragment(CoreDocument document) {
+        super(true);
         this.document = document;
-    }
-
-    public final void internalSetFirstChild(CoreChildNode child) {
-        this.firstChild = child;
-    }
-    
-    public final CoreChildNode coreGetFirstChild() {
-        return firstChild;
     }
 
     public final void notifyChildrenModified(int delta) {
@@ -54,13 +45,5 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
 
     public final CoreDocument getDocument() {
         return document;
-    }
-
-    public final boolean coreIsComplete() {
-        return true;
-    }
-
-    public final void coreBuild() throws DeferredParsingException {
-        // Nothing to do
     }
 }

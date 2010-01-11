@@ -15,14 +15,13 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreCharacterData;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
@@ -34,12 +33,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
      */
     private Object owner;
     
-    private Object value;
     private CoreAttribute nextAttribute;
 
     public Attribute(CoreDocument document, String value) {
+        super(value);
         owner = document;
-        this.value = value;
     }
     
     public final void internalSetNextAttribute(CoreAttribute attr) {
@@ -59,10 +57,6 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return nextAttribute;
     }
 
-    public final void internalSetFirstChild(CoreChildNode child) {
-        value = child;
-    }
-
     public final void notifyChildrenModified(int delta) {
         // Ignore this; we don't store the number of children
     }
@@ -74,26 +68,18 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
 
-    public final Object coreGetContent() {
-        return value;
-    }
-
     public final int coreGetChildCount() throws DeferredParsingException {
-        if (value instanceof String) {
+        if (coreGetContent() instanceof String) {
             return 1;
         } else {
             int length = 0;
-            for (CoreChildNode child = (CoreChildNode)value; child != null; child = child.coreGetNextSibling()) {
+            for (CoreChildNode child = coreGetFirstChild(); child != null; child = child.coreGetNextSibling()) {
                 length++;
             }
             return length;
         }
     }
 
-    public final CoreChildNode coreGetFirstChild() {
-        return CompactParentNodeHelper.getFirstChild(this);
-    }
-    
     public final CoreElement coreGetOwnerElement() {
         return owner instanceof CoreElement ? (CoreElement)owner : null;
     }
@@ -106,32 +92,6 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
 
-    public final String coreGetValue() throws DeferredParsingException {
-        // TODO: this should also be applicable for other OptimizedParentNodes
-        if (value instanceof String) {
-            return (String)value;
-        } else {
-            // TODO: get the getTextContent feature back into the core model
-            StringBuilder buffer = new StringBuilder();
-            CoreChildNode child = (CoreChildNode)value;
-            while (child != null) {
-                buffer.append(((CoreCharacterData)child).coreGetData());
-                child = child.coreGetNextSibling();
-            }
-            return buffer.toString();
-//            return getTextContent();
-        }
-    }
-
-    public final void coreSetValue(String value) {
-        // TODO: what if arg is null?
-        this.value = value;
-    }
-
-    public final boolean coreIsExpanded() {
-        return value instanceof CoreChildNode;
-    }
-
     public final void coreInsertAttributeAfter(CoreAttribute attr) {
         // TODO: throw exception if attribute already has an owner
         attr.internalSetOwnerElement(coreGetOwnerElement());
@@ -139,13 +99,5 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
             attr.internalSetNextAttribute(nextAttribute);
         }
         nextAttribute = attr;
-    }
-
-    public final boolean coreIsComplete() {
-        return true;
-    }
-
-    public final void coreBuild() throws DeferredParsingException {
-        // Nothing to do
     }
 }

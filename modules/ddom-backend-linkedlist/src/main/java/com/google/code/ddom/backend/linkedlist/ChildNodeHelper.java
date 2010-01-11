@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.BuilderTarget;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
@@ -28,20 +27,20 @@ public final class ChildNodeHelper {
     
     public static CoreChildNode coreGetNextSibling(CoreChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
-        // TODO: try to avoid the cast here
-        Document document = (Document)node.getDocument();
-        if (parent instanceof BuilderTarget) {
+        if (parent == null) {
+            return null;
+        } else {
+            // TODO: try to avoid the cast here
+            Document document = (Document)node.getDocument();
             CoreChildNode nextSibling = node.internalGetNextSibling();
             if (nextSibling == null && !parent.coreIsComplete()) {
-                Builder builder = document.getBuilderFor((BuilderTarget)parent);
+                Builder builder = document.getBuilderFor(parent);
                 do {
                     builder.next();
                     nextSibling = node.internalGetNextSibling();
                 } while (nextSibling == null && !parent.coreIsComplete());
             }
             return nextSibling;
-        } else {
-            return node.internalGetNextSibling();
         }
     }
     
