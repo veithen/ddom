@@ -18,6 +18,7 @@ package com.google.code.ddom.commons.cl;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -25,8 +26,6 @@ import java.util.SortedSet;
 import junit.framework.Assert;
 
 import org.junit.Test;
-
-import com.sun.tools.jdi.LinkedHashMap;
 
 public class ClassUtilsTest {
     interface I {}
