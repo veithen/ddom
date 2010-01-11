@@ -92,6 +92,10 @@ public class Document extends BuilderWrapperImpl implements CoreDocument {
         complete = true;
     }
     
+    public final CoreChildNode internalGetFirstChild() {
+        return firstChild;
+    }
+
     public final void internalSetFirstChild(CoreChildNode child) {
         firstChild = child;
     }

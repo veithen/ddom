@@ -99,6 +99,10 @@ public abstract class Element extends ParentNode implements CoreElement {
         return content;
     }
     
+    public final CoreChildNode internalGetFirstChild() {
+        return (CoreChildNode)content;
+    }
+
     public final void internalSetFirstChild(CoreChildNode child) {
         content = child;
     }
@@ -113,7 +117,7 @@ public abstract class Element extends ParentNode implements CoreElement {
     }
 
     public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
-        if (content == null && !complete) {
+        while (content == null && !complete) {
             document.next();
         }
         return CompactParentNodeHelper.getFirstChild(this);

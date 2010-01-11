@@ -142,6 +142,23 @@ public class Builder extends CallbackConsumer {
     private void appendNode(CoreChildNode node) {
         if (lastSibling == null) {
             parent.internalSetFirstChild(node);
+        } else if (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSibling() != null) {
+            // We get here if the previous node created by the builder has already been
+            // detached or moved elsewhere (potentially as a child of the same parent, but
+            // in a different position). This is possible because this is a type 2 builder.
+            // If this happens, we need to get again to the last materialized child of the
+            // node being built:
+            lastSibling = null;
+            CoreChildNode child = parent.internalGetFirstChild();
+            while (child != null) {
+                lastSibling = child;
+                child = child.internalGetNextSibling();
+            }
+            if (lastSibling == null) {
+                parent.internalSetFirstChild(node);
+            } else {
+                lastSibling.internalSetNextSibling(node);
+            }
         } else {
             lastSibling.internalSetNextSibling(node);
         }

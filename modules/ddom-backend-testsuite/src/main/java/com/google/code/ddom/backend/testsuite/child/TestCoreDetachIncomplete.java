@@ -40,6 +40,11 @@ public class TestCoreDetachIncomplete extends BackendTestCase {
         CoreElement a = (CoreElement)root.coreGetFirstChild();
         Assert.assertFalse(a.coreIsComplete());
         a.coreDetach();
+        if (builderType >= 2) {
+            assertFalse(a.coreIsComplete());
+        } else {
+            assertTrue(a.coreIsComplete());
+        }
         CoreNSAwareElement b = (CoreNSAwareElement)root.coreGetFirstChild();
         Assert.assertNotNull(b);
         Assert.assertEquals("b", b.coreGetLocalName());

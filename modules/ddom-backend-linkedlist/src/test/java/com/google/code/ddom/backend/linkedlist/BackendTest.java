@@ -22,6 +22,6 @@ import junit.framework.TestSuite;
 
 public class BackendTest extends TestCase {
     public static TestSuite suite() {
-        return BackendTestSuiteBuilder.suite(new NodeFactoryImpl(), 1);
+        return BackendTestSuiteBuilder.suite(new NodeFactoryImpl(), 2);
     }
 }

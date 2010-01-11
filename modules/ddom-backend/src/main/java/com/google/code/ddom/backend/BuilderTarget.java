@@ -16,5 +16,6 @@
 package com.google.code.ddom.backend;
 
 public interface BuilderTarget extends CoreParentNode {
+    CoreChildNode internalGetFirstChild();
     void internalSetComplete();
 }

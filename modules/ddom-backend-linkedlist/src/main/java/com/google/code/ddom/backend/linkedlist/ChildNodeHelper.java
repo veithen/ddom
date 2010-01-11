@@ -78,7 +78,10 @@ public final class ChildNodeHelper {
         CoreParentNode parent = node.coreGetParent();
         if (parent != null) {
             CoreChildNode previousSibling = node.coreGetPreviousSibling();
-            CoreChildNode nextSibling = node.coreGetNextSibling();
+            // We have a builder of type 2; thus we don't need to build
+            // the node being detached. Therefore we can use internalGetNextSibling
+            // instead of coreGetNextSibling.
+            CoreChildNode nextSibling = node.internalGetNextSibling();
             node.internalSetParent(null);
             node.internalSetNextSibling(null);
             if (previousSibling == null) {
