@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.collections.ArrayStack;
@@ -31,14 +30,14 @@ import com.google.code.ddom.stream.util.CallbackConsumer;
 public class Builder extends CallbackConsumer {
     private final Producer producer;
     private final Document document;
-    private final Stack<CoreParentNode> nodeStack = new ArrayStack<CoreParentNode>();
+    private final Stack<ParentNode> nodeStack = new ArrayStack<ParentNode>();
     private StreamException streamException;
-    private CoreParentNode parent; // The current node being built
+    private ParentNode parent; // The current node being built
     private CoreChildNode lastSibling; // The last child of the current node
     private CoreAttribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Producer producer, Document document, CoreParentNode target) {
+    public Builder(Producer producer, Document document, ParentNode target) {
         this.producer = producer;
         this.document = document;
         parent = target;
@@ -168,10 +167,10 @@ public class Builder extends CallbackConsumer {
         }
         parent.notifyChildrenModified(1);
         node.internalSetParent(parent);
-        if (node instanceof CoreElement) {
+        if (node instanceof Element) {
             // TODO: this assumes that elements are always created as incomplete
             nodeStack.push(parent);
-            parent = (CoreElement)node;
+            parent = (Element)node;
             lastSibling = null;
         } else {
             lastSibling = node;
@@ -191,7 +190,7 @@ public class Builder extends CallbackConsumer {
     }
     
     public final void nodeCompleted() {
-        parent.internalSetComplete();
+        parent.setComplete();
         if (nodeStack.isEmpty()) {
             parent = null;
         } else {

@@ -20,8 +20,6 @@ import java.util.Iterator;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public interface CoreParentNode extends CoreNode {
-    void internalSetComplete();
-    
     /**
      * Determine if this parent node is complete.
      * 

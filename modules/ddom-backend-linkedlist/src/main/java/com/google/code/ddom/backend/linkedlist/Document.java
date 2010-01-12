@@ -50,7 +50,7 @@ public class Document extends ParentNode implements CoreDocument {
         symbols = new SymbolHashTable();
     }
 
-    final void createBuilder(Producer producer, CoreParentNode target) {
+    final void createBuilder(Producer producer, ParentNode target) {
         builders.add(new Builder(producer, this, target));
     }
     

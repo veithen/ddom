@@ -107,7 +107,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return complete;
     }
 
-    public final void internalSetComplete() {
+    final void setComplete() {
         complete = true;
     }
     
