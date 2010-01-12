@@ -21,10 +21,12 @@ import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMText;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -112,6 +114,24 @@ public class ElementTest {
         OMNamespace ns = (OMNamespace)it.next();
         Assert.assertEquals("p", ns.getPrefix());
         Assert.assertEquals("urn:test", ns.getNamespaceURI());
+        Assert.assertFalse(it.hasNext());
+    }
+    
+    @Ignore
+    @Validated @Test
+    public void testAddAttributeFromOMAttributeWithExistingName() {
+        OMFactory factory = axiomUtil.createDocument().getOMFactory();
+        OMElement element = factory.createOMElement("test", null);
+        OMAttribute attr1 = factory.createOMAttribute("attr", null, "value1");
+        OMAttribute attr2 = factory.createOMAttribute("attr", null, "value2");
+        OMAttribute attr = element.addAttribute(attr1);
+        Assert.assertSame(attr1, attr);
+        attr = element.addAttribute(attr2);
+        Assert.assertSame(attr2, attr);
+        Iterator it = element.getAllAttributes();
+        Assert.assertTrue(it.hasNext());
+        attr = (OMAttribute)it.next();
+        Assert.assertSame(attr2, attr);
         Assert.assertFalse(it.hasNext());
     }
 }
