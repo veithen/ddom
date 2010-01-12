@@ -127,6 +127,14 @@ public class ElementTest {
     }
     
     @Validated @Test
+    public void testGetAttributeNSAfterSetAttributeWithoutPrefix() {
+        Document doc = domUtil.newDocument();
+        Element element = doc.createElement("test");
+        element.setAttribute("att", "value");
+        Assert.assertEquals("value", element.getAttributeNS(null, "att"));
+    }
+    
+    @Validated @Test
     public void testGetAttributeNSAfterSetAttributeWithPrefix() {
         Document doc = domUtil.parse(false, "<p:test xmlns:p='urn:ns'/>");
         Element element = doc.getDocumentElement();

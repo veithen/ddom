@@ -22,8 +22,8 @@ import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 
 /**
- * {@link AttributeMatcher} implementation that matches attributes based on the qualified name.
- * Parameters are defined as follows:
+ * {@link AttributeMatcher} implementation that matches attributes based on their name, i.e. based
+ * on the prefix and local name for namespace aware attributes. Parameters are defined as follows:
  * <dl>
  * <dt><code>namespaceURI</code>
  * <dd>Not used.
