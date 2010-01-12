@@ -17,6 +17,13 @@ package com.google.code.ddom.backend;
 
 public interface CoreAttribute extends CoreCompactParentNode {
     /**
+     * Get the owner element of this attribute.
+     * 
+     * @return the owner element of the attribute
+     */
+    CoreElement coreGetOwnerElement();
+    
+    /**
      * Get the attribute immediately following the current attribute.
      * 
      * @return the next attribute, or <code>null</code> if the attribute is the last attribute of
@@ -34,8 +41,6 @@ public interface CoreAttribute extends CoreCompactParentNode {
     
     void internalSetNextAttribute(CoreAttribute attr);
     void internalSetOwnerElement(CoreElement newOwner);
-
-    CoreElement coreGetOwnerElement();
     
     /**
      * Insert a new attribute after this instance. Note that this method will NOT check if the
