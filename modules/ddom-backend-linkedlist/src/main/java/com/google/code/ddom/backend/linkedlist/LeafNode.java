@@ -26,7 +26,7 @@ import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public abstract class LeafNode extends Node implements CoreLeafNode {
+public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
     private Document document;
     private CoreParentNode parent;
     private CoreChildNode nextSibling;

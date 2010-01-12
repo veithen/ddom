@@ -25,7 +25,7 @@ import com.google.code.ddom.backend.NoParentException;
 public final class ChildNodeHelper {
     private ChildNodeHelper() {}
     
-    public static CoreChildNode coreGetNextSibling(CoreChildNode node) throws DeferredParsingException {
+    public static CoreChildNode coreGetNextSibling(ChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
         if (parent == null) {
             return null;
@@ -44,7 +44,7 @@ public final class ChildNodeHelper {
         }
     }
     
-    public static CoreChildNode coreGetPreviousSibling(CoreChildNode node) throws DeferredParsingException {
+    public static CoreChildNode coreGetPreviousSibling(ChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
         if (parent == null) {
             return null;
@@ -59,7 +59,7 @@ public final class ChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingAfter(CoreChildNode node, CoreNode sibling) throws CoreModelException {
+    public static void coreInsertSiblingAfter(ChildNode node, CoreNode sibling) throws CoreModelException {
         CoreParentNode parent = node.coreGetParent();
         if (parent == null) {
             throw new NoParentException();
@@ -68,7 +68,7 @@ public final class ChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingBefore(CoreChildNode node, CoreNode sibling) throws CoreModelException {
+    public static void coreInsertSiblingBefore(ChildNode node, CoreNode sibling) throws CoreModelException {
         CoreParentNode parent = node.coreGetParent();
         if (parent == null) {
             throw new NoParentException();
@@ -77,7 +77,7 @@ public final class ChildNodeHelper {
         }
     }
     
-    public static void coreDetach(CoreChildNode node) throws DeferredParsingException {
+    public static void coreDetach(ChildNode node) throws DeferredParsingException {
         CoreParentNode parent = node.coreGetParent();
         if (parent != null) {
             CoreChildNode previousSibling = node.coreGetPreviousSibling();

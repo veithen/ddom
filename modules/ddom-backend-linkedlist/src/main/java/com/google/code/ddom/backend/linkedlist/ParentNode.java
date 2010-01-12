@@ -132,9 +132,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 return (CoreChildNode)content;
             }
         } else if (content instanceof String) {
-            CoreChildNode firstChild;
-            CoreDocument document = getDocument();
-            firstChild = document.getNodeFactory().createText(document, (String)content);
+            ChildNode firstChild = new Text(getDocument(), (String)content);
             firstChild.internalSetParent(this);
             content = firstChild;
             return firstChild;
@@ -231,7 +229,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 for (CoreChildNode node = firstNodeToInsert; node != null; node = node.coreGetNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
                     validateChildType(node, removeRefChild ? refChild : null);
-                    node.internalSetParent(this);
+                    ((ChildNode)node).internalSetParent(this);
                     lastNodeToInsert = node;
                 }
                 delta = fragment.coreGetChildCount();
@@ -240,7 +238,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 ((CoreChildNode)newChild).coreDetach();
                 firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
                 validateChildType(firstNodeToInsert, removeRefChild ? refChild : null);
-                firstNodeToInsert.internalSetParent(this);
+                ((ChildNode)firstNodeToInsert).internalSetParent(this);
                 delta = 1;
             } else {
                 throw new ChildTypeNotAllowedException();
@@ -261,7 +259,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             }
         }
         if (removeRefChild) {
-            refChild.internalSetParent(null);
+            ((ChildNode)refChild).internalSetParent(null);
         }
     }
 

@@ -142,7 +142,7 @@ public class Builder extends CallbackConsumer {
         appendNode(new EntityReference(document, name));
     }
     
-    private void appendNode(CoreChildNode node) {
+    private void appendNode(ChildNode node) {
         if (lastSibling == null) {
             parent.internalSetFirstChild(node);
         } else if (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSibling() != null) {

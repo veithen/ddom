@@ -39,7 +39,7 @@ import com.google.code.ddom.backend.Mapper;
 import com.google.code.ddom.backend.NodeFactory;
 
 @Implementation
-public abstract class Element extends ParentNode implements CoreElement {
+public abstract class Element extends ParentNode implements ChildNode, CoreElement {
     private final Document document;
     private int children;
     private CoreParentNode parent;
