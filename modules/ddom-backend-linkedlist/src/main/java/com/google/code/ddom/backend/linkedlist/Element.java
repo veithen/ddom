@@ -198,14 +198,7 @@ public abstract class Element extends ParentNode implements CoreElement {
 
     public final void coreRemoveAttribute(CoreAttribute attr) throws NodeNotFoundException {
         if (attr.coreGetOwnerElement() == this) {
-            CoreAttribute previousAttr = firstAttribute;
-            while (previousAttr != null) {
-                CoreAttribute nextAttr = previousAttr.coreGetNextAttribute();
-                if (nextAttr == attr) {
-                    break;
-                }
-                previousAttr = nextAttr;
-            }
+            CoreAttribute previousAttr = attr.coreGetPreviousAttribute();
             attr.internalSetOwnerElement(null);
             if (previousAttr == null) {
                 firstAttribute = attr.coreGetNextAttribute();

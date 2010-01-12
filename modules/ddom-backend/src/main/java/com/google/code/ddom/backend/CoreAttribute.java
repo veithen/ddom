@@ -16,7 +16,22 @@
 package com.google.code.ddom.backend;
 
 public interface CoreAttribute extends CoreCompactParentNode {
+    /**
+     * Get the attribute immediately following the current attribute.
+     * 
+     * @return the next attribute, or <code>null</code> if the attribute is the last attribute of
+     *         its owner element or if the attribute has no owner element
+     */
     CoreAttribute coreGetNextAttribute();
+    
+    /**
+     * Get the attribute immediately preceding the current attribute.
+     * 
+     * @return the previous attribute, or <code>null</code> if the attribute is the first attribute
+     *         of its owner element or if the attribute has no owner element
+     */
+    CoreAttribute coreGetPreviousAttribute();
+    
     void internalSetNextAttribute(CoreAttribute attr);
     void internalSetOwnerElement(CoreElement newOwner);
 

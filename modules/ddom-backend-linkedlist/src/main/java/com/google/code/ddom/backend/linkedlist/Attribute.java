@@ -56,6 +56,23 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return nextAttribute;
     }
 
+    public final CoreAttribute coreGetPreviousAttribute() {
+        if (owner instanceof Element) {
+            Element ownerElement = (Element)owner;
+            CoreAttribute previousAttr = ownerElement.coreGetFirstAttribute();
+            while (previousAttr != null) {
+                CoreAttribute nextAttr = previousAttr.coreGetNextAttribute();
+                if (nextAttr == this) {
+                    break;
+                }
+                previousAttr = nextAttr;
+            }
+            return previousAttr;
+        } else {
+            return null;
+        }
+    }
+
     public final void notifyChildrenModified(int delta) {
         // Ignore this; we don't store the number of children
     }
