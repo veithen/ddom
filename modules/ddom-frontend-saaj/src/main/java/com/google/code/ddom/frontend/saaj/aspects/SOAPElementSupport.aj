@@ -22,9 +22,8 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
+import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.IdentityMapper;
-import com.google.code.ddom.frontend.dom.support.DOMNamespaceDeclarationMatcher;
-import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 
@@ -80,7 +79,7 @@ public aspect SOAPElementSupport {
     }
 
     public SOAPElement SAAJSOAPElement.addNamespaceDeclaration(String prefix, String uri) throws SOAPException {
-        coreSetAttribute(DOMNamespaceDeclarationMatcher.INSTANCE, null, prefix, null, uri);
+        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
         return this;
     }
 

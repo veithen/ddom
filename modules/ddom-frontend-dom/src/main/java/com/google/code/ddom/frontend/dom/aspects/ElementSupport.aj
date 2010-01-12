@@ -31,7 +31,6 @@ import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.support.DOM1AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
-import com.google.code.ddom.frontend.dom.support.DOMNamespaceDeclarationMatcher;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.stream.spi.Symbols;
 
@@ -42,7 +41,7 @@ public aspect ElementSupport {
 
     public final Attr DOMElement.getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return (DOMAttribute)coreGetAttribute(DOMNamespaceDeclarationMatcher.INSTANCE, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : localName);
+            return (DOMAttribute)coreGetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : localName);
         } else {
             return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
         }
@@ -85,7 +84,7 @@ public aspect ElementSupport {
             localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            coreSetAttribute(DOMNamespaceDeclarationMatcher.INSTANCE, null, NSUtil.getDeclaredPrefix(localName, prefix), null, value);
+            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getDeclaredPrefix(localName, prefix), null, value);
         } else {
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
             coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);

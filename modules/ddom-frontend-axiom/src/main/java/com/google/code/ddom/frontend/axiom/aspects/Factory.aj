@@ -32,6 +32,7 @@ import org.apache.axiom.om.OMSourcedElement;
 import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
@@ -98,7 +99,7 @@ public aspect Factory {
         }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(this, namespaceURI, qname.getLocalPart(), prefix);
         if (prefix != null) {
-            element.coreAppendAttribute(nodeFactory.createNamespaceDeclaration(this, prefix, namespaceURI));
+            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
         }
         return element;
     }
