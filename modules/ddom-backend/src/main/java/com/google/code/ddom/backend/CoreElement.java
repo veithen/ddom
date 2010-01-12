@@ -73,7 +73,10 @@ public interface CoreElement extends CoreChildNode, CoreCompactParentNode {
     void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value);
     
     /**
-     * Create or replace an attribute based on a given {@link AttributeMatcher}.
+     * Add a new attribute or replace an existing attribute based on a given
+     * {@link AttributeMatcher}. If a matching attribute on this element is found, it is replaced by
+     * the specified attribute. If no matching attribute is found, then the specified attribute is
+     * added to this element.
      * 
      * @param matcher
      *            the {@link AttributeMatcher} implementation to use
