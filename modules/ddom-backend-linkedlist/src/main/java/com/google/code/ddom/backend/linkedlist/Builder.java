@@ -180,7 +180,7 @@ public class Builder extends CallbackConsumer {
         lastAttribute = null;
     }
     
-    private void appendAttribute(CoreAttribute attr) {
+    private void appendAttribute(Attribute attr) {
         Element element = (Element)parent;
         if (lastAttribute == null) {
             element.appendAttribute(attr);

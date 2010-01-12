@@ -48,9 +48,6 @@ public interface CoreAttribute extends CoreCompactParentNode {
      */
     CoreAttribute coreGetPreviousAttribute();
     
-    void internalSetNextAttribute(CoreAttribute attr);
-    void internalSetOwnerElement(CoreElement newOwner);
-    
     /**
      * Insert a new attribute after this instance. Note that this method will NOT check if the
      * element already has an attribute with the same name, and always insert the attribute.

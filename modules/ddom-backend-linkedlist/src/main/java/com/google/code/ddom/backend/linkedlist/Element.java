@@ -44,7 +44,7 @@ public abstract class Element extends ParentNode implements CoreElement {
     private int children;
     private CoreParentNode parent;
     private CoreChildNode nextSibling;
-    private CoreAttribute firstAttribute;
+    private Attribute firstAttribute;
 
     public Element(Document document, boolean complete) {
         super(complete);
@@ -67,7 +67,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         children += delta;
     }
 
-    final void setFirstAttribute(CoreAttribute firstAttribute) {
+    final void setFirstAttribute(Attribute firstAttribute) {
         this.firstAttribute = firstAttribute;
     }
 
@@ -149,7 +149,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         if (attr == null) {
             CoreDocument document = getDocument();
             NodeFactory factory = document.getNodeFactory();
-            CoreAttribute newAttr = matcher.createAttribute(factory, document, namespaceURI, name, prefix, value);
+            Attribute newAttr = (Attribute)matcher.createAttribute(factory, document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
                 appendAttribute(newAttr);
             } else {
@@ -160,37 +160,39 @@ public abstract class Element extends ParentNode implements CoreElement {
         }
     }
 
-    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr) {
-        CoreAttribute existingAttr = firstAttribute;
-        CoreAttribute previousAttr = null;
+    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr_) {
+        Attribute attr = (Attribute)attr_;
+        Attribute existingAttr = firstAttribute;
+        Attribute previousAttr = null;
         while (existingAttr != null && !matcher.matches(existingAttr, namespaceURI, name)) {
             previousAttr = existingAttr;
-            existingAttr = existingAttr.coreGetNextAttribute();
+            // TODO: get rid of cast here!
+            existingAttr = (Attribute)existingAttr.coreGetNextAttribute();
         }
-        attr.internalSetOwnerElement(this);
+        attr.setOwnerElement(this);
         if (existingAttr == null) {
             if (previousAttr == null) {
                 firstAttribute = attr;
             } else {
-                previousAttr.internalSetNextAttribute(attr);
+                previousAttr.setNextAttribute(attr);
             }
             return null;
         } else {
             if (previousAttr == null) {
                 firstAttribute = attr;
             } else {
-                previousAttr.internalSetNextAttribute(attr);
+                previousAttr.setNextAttribute(attr);
             }
-            existingAttr.internalSetOwnerElement(null);
-            attr.internalSetNextAttribute(existingAttr.coreGetNextAttribute());
-            existingAttr.internalSetNextAttribute(null);
+            existingAttr.setOwnerElement(null);
+            attr.setNextAttribute(existingAttr.coreGetNextAttribute());
+            existingAttr.setNextAttribute(null);
             return existingAttr;
         }
     }
 
-    final void appendAttribute(CoreAttribute attr) {
+    final void appendAttribute(Attribute attr) {
         // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
-        attr.internalSetOwnerElement(this);
+        attr.setOwnerElement(this);
         if (firstAttribute == null) {
             firstAttribute = attr;
         } else {

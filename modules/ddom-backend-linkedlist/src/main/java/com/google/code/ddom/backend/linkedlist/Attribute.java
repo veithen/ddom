@@ -39,11 +39,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         owner = document;
     }
     
-    public final void internalSetNextAttribute(CoreAttribute attr) {
+    final void setNextAttribute(CoreAttribute attr) {
         nextAttribute = attr;
     }
     
-    public final void internalSetOwnerElement(CoreElement newOwner) {
+    final void setOwnerElement(CoreElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
             owner = ((Element)owner).getDocument();
@@ -109,11 +109,12 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
 
-    public final void coreInsertAttributeAfter(CoreAttribute attr) {
+    public final void coreInsertAttributeAfter(CoreAttribute attr_) {
+        Attribute attr = (Attribute)attr_;
         // TODO: throw exception if attribute already has an owner
-        attr.internalSetOwnerElement(coreGetOwnerElement());
+        attr.setOwnerElement(coreGetOwnerElement());
         if (nextAttribute != null) {
-            attr.internalSetNextAttribute(nextAttribute);
+            attr.setNextAttribute(nextAttribute);
         }
         nextAttribute = attr;
     }
@@ -121,12 +122,12 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     public final boolean coreRemove() {
         if (owner instanceof Element) {
             Element ownerElement = (Element)owner;
-            CoreAttribute previousAttr = coreGetPreviousAttribute();
-            internalSetOwnerElement(null);
+            Attribute previousAttr = (Attribute)coreGetPreviousAttribute();
+            setOwnerElement(null);
             if (previousAttr == null) {
-                ownerElement.setFirstAttribute(coreGetNextAttribute());
+                ownerElement.setFirstAttribute((Attribute)nextAttribute);
             } else {
-                previousAttr.internalSetNextAttribute(coreGetNextAttribute());
+                previousAttr.setNextAttribute(coreGetNextAttribute());
             }
             return true;
         } else {
