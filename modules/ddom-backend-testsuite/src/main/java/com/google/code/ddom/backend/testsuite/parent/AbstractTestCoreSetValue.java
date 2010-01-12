@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.testsuite.compactparent;
+package com.google.code.ddom.backend.testsuite.parent;
 
 import org.junit.Assert;
 
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreCompactParentNode;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
@@ -29,12 +29,12 @@ public abstract class AbstractTestCoreSetValue extends BackendTestCase {
         super(config);
     }
 
-    protected abstract CoreCompactParentNode createNode(CoreDocument document);
+    protected abstract CoreParentNode createNode(CoreDocument document);
 
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreCompactParentNode element = createNode(document);
+        CoreParentNode element = createNode(document);
         element.coreSetValue("test");
         Assert.assertFalse(element.coreIsExpanded());
         CoreChildNode child = element.coreGetFirstChild();

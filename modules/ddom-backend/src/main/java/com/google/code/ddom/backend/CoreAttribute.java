@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend;
 
-public interface CoreAttribute extends CoreCompactParentNode {
+public interface CoreAttribute extends CoreParentNode {
     /**
      * Get the owner element of this attribute.
      * 

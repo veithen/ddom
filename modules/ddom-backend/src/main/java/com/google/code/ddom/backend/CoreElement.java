@@ -17,7 +17,7 @@ package com.google.code.ddom.backend;
 
 import java.util.Iterator;
 
-public interface CoreElement extends CoreChildNode, CoreCompactParentNode {
+public interface CoreElement extends CoreChildNode, CoreParentNode {
     /**
      * Get the first attribute of this element.
      * 

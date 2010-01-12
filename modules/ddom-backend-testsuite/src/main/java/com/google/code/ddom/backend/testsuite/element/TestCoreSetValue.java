@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.backend.testsuite.element;
 
-import com.google.code.ddom.backend.CoreCompactParentNode;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.google.code.ddom.backend.testsuite.compactparent.AbstractTestCoreSetValue;
+import com.google.code.ddom.backend.testsuite.parent.AbstractTestCoreSetValue;
 
 public class TestCoreSetValue extends AbstractTestCoreSetValue {
     public TestCoreSetValue(BackendTestSuiteConfig config) {
@@ -26,7 +26,7 @@ public class TestCoreSetValue extends AbstractTestCoreSetValue {
     }
 
     @Override
-    protected CoreCompactParentNode createNode(CoreDocument document) {
+    protected CoreParentNode createNode(CoreDocument document) {
         return nodeFactory.createElement(document, null, "element", null);
     }
 }
