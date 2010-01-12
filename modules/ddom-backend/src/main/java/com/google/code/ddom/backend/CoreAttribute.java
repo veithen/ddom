@@ -24,6 +24,15 @@ public interface CoreAttribute extends CoreCompactParentNode {
     CoreElement coreGetOwnerElement();
     
     /**
+     * Remove this attribute from its owner element.
+     * 
+     * @return <code>true</code> if the attribute had an owner element and has been removed from
+     *         that element; <code>false</code> if the attribute didn't have an owner element and no
+     *         changes have been made
+     */
+    boolean coreRemove();
+    
+    /**
      * Get the attribute immediately following the current attribute.
      * 
      * @return the next attribute, or <code>null</code> if the attribute is the last attribute of

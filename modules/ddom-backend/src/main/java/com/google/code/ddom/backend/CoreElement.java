@@ -100,8 +100,6 @@ public interface CoreElement extends CoreChildNode, CoreCompactParentNode {
      */
     void coreAppendAttribute(CoreAttribute attr);
     
-    void coreRemoveAttribute(CoreAttribute attr) throws NodeNotFoundException;
-    
     /**
      * Look up the namespace URI associated to the given prefix.
      * 

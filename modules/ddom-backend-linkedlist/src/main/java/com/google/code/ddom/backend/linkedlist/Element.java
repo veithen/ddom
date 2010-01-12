@@ -37,7 +37,6 @@ import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.Mapper;
 import com.google.code.ddom.backend.NodeFactory;
-import com.google.code.ddom.backend.NodeNotFoundException;
 
 @Implementation
 public abstract class Element extends ParentNode implements CoreElement {
@@ -66,6 +65,10 @@ public abstract class Element extends ParentNode implements CoreElement {
     
     public final void notifyChildrenModified(int delta) {
         children += delta;
+    }
+
+    final void setFirstAttribute(CoreAttribute firstAttribute) {
+        this.firstAttribute = firstAttribute;
     }
 
     @Override
@@ -193,20 +196,6 @@ public abstract class Element extends ParentNode implements CoreElement {
             firstAttribute = attr;
         } else {
             coreGetLastAttribute().coreInsertAttributeAfter(attr);
-        }
-    }
-
-    public final void coreRemoveAttribute(CoreAttribute attr) throws NodeNotFoundException {
-        if (attr.coreGetOwnerElement() == this) {
-            CoreAttribute previousAttr = attr.coreGetPreviousAttribute();
-            attr.internalSetOwnerElement(null);
-            if (previousAttr == null) {
-                firstAttribute = attr.coreGetNextAttribute();
-            } else {
-                previousAttr.internalSetNextAttribute(attr.coreGetNextAttribute());
-            }
-        } else {
-            throw new NodeNotFoundException();
         }
     }
 

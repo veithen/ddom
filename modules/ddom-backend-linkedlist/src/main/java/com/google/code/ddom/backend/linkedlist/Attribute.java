@@ -117,4 +117,20 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
         nextAttribute = attr;
     }
+
+    public final boolean coreRemove() {
+        if (owner instanceof Element) {
+            Element ownerElement = (Element)owner;
+            CoreAttribute previousAttr = coreGetPreviousAttribute();
+            internalSetOwnerElement(null);
+            if (previousAttr == null) {
+                ownerElement.setFirstAttribute(coreGetNextAttribute());
+            } else {
+                previousAttr.internalSetNextAttribute(coreGetNextAttribute());
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

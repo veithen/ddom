@@ -129,12 +129,13 @@ public aspect ElementSupport {
     }
 
     public final Attr DOMElement.removeAttributeNode(Attr oldAttr) throws DOMException {
-        try {
-            coreRemoveAttribute((DOMAttribute)oldAttr);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+        DOMAttribute attr = (DOMAttribute)oldAttr;
+        if (attr.coreGetOwnerElement() != this) {
+            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        } else {
+            attr.coreRemove();
         }
-        return oldAttr;
+        return attr;
     }
 
     public final void DOMElement.removeAttribute(String name) throws DOMException {
