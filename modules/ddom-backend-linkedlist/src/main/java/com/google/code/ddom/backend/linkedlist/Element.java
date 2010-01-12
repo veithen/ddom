@@ -151,7 +151,7 @@ public abstract class Element extends ParentNode implements CoreElement {
             NodeFactory factory = document.getNodeFactory();
             CoreAttribute newAttr = matcher.createAttribute(factory, document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
-                coreAppendAttribute(newAttr);
+                appendAttribute(newAttr);
             } else {
                 previousAttr.coreInsertAttributeAfter(newAttr);
             }
@@ -188,8 +188,7 @@ public abstract class Element extends ParentNode implements CoreElement {
         }
     }
 
-    // TODO: check if we still need this as public method
-    public final void coreAppendAttribute(CoreAttribute attr) {
+    final void appendAttribute(CoreAttribute attr) {
         // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
         attr.internalSetOwnerElement(this);
         if (firstAttribute == null) {

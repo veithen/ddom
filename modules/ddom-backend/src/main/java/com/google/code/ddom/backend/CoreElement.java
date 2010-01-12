@@ -94,16 +94,6 @@ public interface CoreElement extends CoreChildNode, CoreCompactParentNode {
     CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr);
     
     /**
-     * Add an attribute to this element. The attribute will be added after the last attribute
-     * currently existing on the element. Note that this method will NOT check if an attribute with
-     * the same name already exists, and always add the attribute.
-     * 
-     * @param attr
-     *            the attribute to add
-     */
-    void coreAppendAttribute(CoreAttribute attr);
-    
-    /**
      * Look up the namespace URI associated to the given prefix.
      * 
      * @param prefix

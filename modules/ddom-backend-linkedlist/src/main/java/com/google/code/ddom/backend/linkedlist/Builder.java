@@ -181,9 +181,9 @@ public class Builder extends CallbackConsumer {
     }
     
     private void appendAttribute(CoreAttribute attr) {
-        CoreElement element = (CoreElement)parent;
+        Element element = (Element)parent;
         if (lastAttribute == null) {
-            element.coreAppendAttribute(attr);
+            element.appendAttribute(attr);
         } else {
             lastAttribute.coreInsertAttributeAfter(attr);
         }
