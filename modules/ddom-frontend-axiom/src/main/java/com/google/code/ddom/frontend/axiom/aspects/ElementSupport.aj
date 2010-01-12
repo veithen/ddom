@@ -24,9 +24,11 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.IdentityMapper;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 
 public aspect ElementSupport {
     public void AxiomElement.setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
@@ -56,9 +58,9 @@ public aspect ElementSupport {
     }
     
     public OMAttribute AxiomElement.addAttribute(OMAttribute attr) {
-        // TODO: need to check for existing attribute
-        coreAppendAttribute((CoreAttribute)attr);
-        return null; // TODO
+        AxiomAttribute axiomAttr = (AxiomAttribute)attr;
+        coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr.coreGetNamespaceURI(), axiomAttr.coreGetLocalName(), axiomAttr);
+        return attr; // TODO
     }
     
     public OMAttribute AxiomElement.addAttribute(String attributeName, String value, OMNamespace ns) {

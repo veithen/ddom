@@ -26,7 +26,6 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMText;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -117,7 +116,6 @@ public class ElementTest {
         Assert.assertFalse(it.hasNext());
     }
     
-    @Ignore
     @Validated @Test
     public void testAddAttributeFromOMAttributeWithExistingName() {
         OMFactory factory = axiomUtil.createDocument().getOMFactory();
