@@ -74,22 +74,21 @@ public interface CoreParentNode extends CoreNode {
     void coreAppendChild(CoreNode newChild) throws CoreModelException;
     
     /**
-     * 
-     * @param newChild
-     * @param refChild
-     * @throws SelfRelationshipException if <code>newChild</code> and <code>refChild</code> are the same
+     * @deprecated Use {@link CoreChildNode#coreInsertSiblingAfter(CoreChildNode)}
      */
     void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
     
     /**
-     * 
-     * @param newChild
-     * @param refChild
-     * @throws SelfRelationshipException if <code>newChild</code> and <code>refChild</code> are the same
+     * @deprecated Use {@link CoreChildNode#coreInsertSiblingBefore(CoreChildNode)}
      */
     void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
     
+    /**
+     * @deprecated Use {@link CoreChildNode#coreDetach()}
+     */
     void coreRemoveChild(CoreChildNode child) throws CoreModelException;
+    
+    // TODO: need a more object oriented replacement for this
     void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
 
     <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type);

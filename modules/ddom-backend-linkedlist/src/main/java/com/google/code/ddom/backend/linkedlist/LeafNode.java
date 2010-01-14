@@ -17,10 +17,10 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreLeafNode;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
@@ -35,7 +35,7 @@ public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
         this.document = document;
     }
 
-    public final void internalSetParent(CoreParentNode parent) {
+    public final void setParent(CoreParentNode parent) {
         this.parent = parent;
     }
     
@@ -72,14 +72,22 @@ public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
         return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
-    public final void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingAfter(CoreChildNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingAfter(this, sibling);
     }
 
-    public final void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws CoreModelException {
+        ChildNodeHelper.coreInsertSiblingsAfter(this, fragment);
+    }
+
+    public final void coreInsertSiblingBefore(CoreChildNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
     }
     
+    public final void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws CoreModelException {
+        ChildNodeHelper.coreInsertSiblingsBefore(this, fragment);
+    }
+
     public final void coreDetach() throws DeferredParsingException {
         ChildNodeHelper.coreDetach(this);
     }

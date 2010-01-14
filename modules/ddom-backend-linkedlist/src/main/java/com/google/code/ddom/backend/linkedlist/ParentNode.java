@@ -133,7 +133,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             }
         } else if (content instanceof String) {
             ChildNode firstChild = new Text(getDocument(), (String)content);
-            firstChild.internalSetParent(this);
+            firstChild.setParent(this);
             content = firstChild;
             return firstChild;
         } else {
@@ -151,7 +151,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return previousChild;
     }
     
-    private void prepareNewChild(CoreChildNode newChild) throws CoreModelException {
+    void prepareNewChild(CoreChildNode newChild) throws CoreModelException {
         validateOwnerDocument(newChild);
         
         // Check that the new node is not an ancestor of this node
@@ -167,6 +167,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             }
         } while (current != null);
         
+        // TODO: should never or not always be necessary
         if (newChild instanceof CoreParentNode) {
             ((CoreParentNode)newChild).coreBuild();
         }
@@ -229,7 +230,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 for (CoreChildNode node = firstNodeToInsert; node != null; node = node.coreGetNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
                     validateChildType(node, removeRefChild ? refChild : null);
-                    ((ChildNode)node).internalSetParent(this);
+                    ((ChildNode)node).setParent(this);
                     lastNodeToInsert = node;
                 }
                 delta = fragment.coreGetChildCount();
@@ -238,7 +239,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 ((CoreChildNode)newChild).coreDetach();
                 firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
                 validateChildType(firstNodeToInsert, removeRefChild ? refChild : null);
-                ((ChildNode)firstNodeToInsert).internalSetParent(this);
+                ((ChildNode)firstNodeToInsert).setParent(this);
                 delta = 1;
             } else {
                 throw new ChildTypeNotAllowedException();
@@ -259,7 +260,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             }
         }
         if (removeRefChild) {
-            ((ChildNode)refChild).internalSetParent(null);
+            ((ChildNode)refChild).setParent(null);
         }
     }
 

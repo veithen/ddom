@@ -25,11 +25,11 @@ import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
-import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.CoreTextNode;
@@ -51,7 +51,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         this.document = document;
     }
 
-    public final void internalSetParent(CoreParentNode parent) {
+    public final void setParent(CoreParentNode parent) {
         this.parent = parent;
     }
     
@@ -109,14 +109,22 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         return ChildNodeHelper.coreGetPreviousSibling(this);
     }
 
-    public final void coreInsertSiblingAfter(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingAfter(CoreChildNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingAfter(this, sibling);
     }
 
-    public final void coreInsertSiblingBefore(CoreNode sibling) throws CoreModelException {
+    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws CoreModelException {
+        ChildNodeHelper.coreInsertSiblingsAfter(this, fragment);
+    }
+
+    public final void coreInsertSiblingBefore(CoreChildNode sibling) throws CoreModelException {
         ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
     }
     
+    public final void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws CoreModelException {
+        ChildNodeHelper.coreInsertSiblingsBefore(this, fragment);
+    }
+
     public final void coreDetach() throws DeferredParsingException {
         ChildNodeHelper.coreDetach(this);
     }

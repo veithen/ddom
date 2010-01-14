@@ -16,11 +16,12 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.NoParentException;
+import com.google.code.ddom.backend.SelfRelationshipException;
 
 public final class ChildNodeHelper {
     private ChildNodeHelper() {}
@@ -59,22 +60,42 @@ public final class ChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingAfter(ChildNode node, CoreNode sibling) throws CoreModelException {
-        CoreParentNode parent = node.coreGetParent();
+    public static void coreInsertSiblingAfter(ChildNode node, CoreChildNode sibling_) throws CoreModelException {
+        ChildNode sibling = (ChildNode)sibling_;
+        if (sibling == node) {
+            throw new SelfRelationshipException();
+        }
+        ParentNode parent = (ParentNode)node.coreGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
-            parent.coreInsertChildAfter(sibling, node);
+            parent.prepareNewChild(sibling);
+            sibling.coreDetach();
+            sibling.internalSetNextSibling(node.coreGetNextSibling());
+            node.internalSetNextSibling(sibling);
+            sibling.setParent(parent);
+            parent.notifyChildrenModified(1);
+//            parent.coreInsertChildAfter(sibling, node);
         }
     }
     
-    public static void coreInsertSiblingBefore(ChildNode node, CoreNode sibling) throws CoreModelException {
+    public static void coreInsertSiblingsAfter(ChildNode node, CoreDocumentFragment fragment) throws CoreModelException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public static void coreInsertSiblingBefore(ChildNode node, CoreChildNode sibling) throws CoreModelException {
         CoreParentNode parent = node.coreGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
             parent.coreInsertChildBefore(sibling, node);
         }
+    }
+    
+    public static void coreInsertSiblingsBefore(ChildNode node, CoreDocumentFragment fragment) throws CoreModelException {
+        // TODO
+        throw new UnsupportedOperationException();
     }
     
     public static void coreDetach(ChildNode node) throws DeferredParsingException {
@@ -85,7 +106,7 @@ public final class ChildNodeHelper {
             // the node being detached. Therefore we can use internalGetNextSibling
             // instead of coreGetNextSibling.
             CoreChildNode nextSibling = node.internalGetNextSibling();
-            node.internalSetParent(null);
+            node.setParent(null);
             node.internalSetNextSibling(null);
             if (previousSibling == null) {
                 parent.internalSetFirstChild(nextSibling);

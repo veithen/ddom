@@ -37,11 +37,7 @@ public aspect TextSupport {
         CoreParentNode parent = coreGetParent();
         if (parent != null) {
             try {
-                // TODO: use coreInsertSiblingAfter here!
-                newNode.internalSetNextSibling(coreGetNextSibling());
-                internalSetNextSibling(newNode);
-                newNode.internalSetParent(parent);
-                parent.notifyChildrenModified(1);
+                coreInsertSiblingAfter(newNode);
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }

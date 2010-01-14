@@ -166,7 +166,7 @@ public class Builder extends CallbackConsumer {
             lastSibling.internalSetNextSibling(node);
         }
         parent.notifyChildrenModified(1);
-        node.internalSetParent(parent);
+        node.setParent(parent);
         if (node instanceof Element) {
             // TODO: this assumes that elements are always created as incomplete
             nodeStack.push(parent);

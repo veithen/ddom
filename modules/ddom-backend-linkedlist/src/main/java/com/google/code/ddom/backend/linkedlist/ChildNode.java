@@ -19,5 +19,5 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreParentNode;
 
 interface ChildNode extends CoreChildNode {
-    void internalSetParent(CoreParentNode parent);
+    void setParent(CoreParentNode parent);
 }

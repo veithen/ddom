@@ -18,8 +18,8 @@ package com.google.code.ddom.frontend.axiom.aspects;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMNode;
 
+import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
@@ -46,7 +46,7 @@ public aspect ChildNodeSupport {
     
     public void AxiomChildNode.insertSiblingBefore(OMNode sibling) {
         try {
-            coreInsertSiblingBefore((CoreNode)sibling);
+            coreInsertSiblingBefore((CoreChildNode)sibling);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -54,7 +54,7 @@ public aspect ChildNodeSupport {
     
     public void AxiomChildNode.insertSiblingAfter(OMNode sibling) {
         try {
-            coreInsertSiblingAfter((CoreNode)sibling);
+            coreInsertSiblingAfter((CoreChildNode)sibling);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
