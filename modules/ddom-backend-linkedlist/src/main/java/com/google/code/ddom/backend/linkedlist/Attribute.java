@@ -100,6 +100,10 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return owner instanceof CoreElement ? (CoreElement)owner : null;
     }
 
+    public final boolean coreHasOwnerElement() {
+        return owner instanceof CoreElement;
+    }
+
     @Override
     final Document getDocument() {
         if (owner instanceof Document) {

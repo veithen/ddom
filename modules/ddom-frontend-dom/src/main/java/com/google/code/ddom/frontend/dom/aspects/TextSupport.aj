@@ -111,7 +111,7 @@ public aspect TextSupport {
         } else {
             newText = null;
         }
-        if (coreGetParent() != null) {
+        if (coreHasParent()) {
             try {
                 DOMTextNode first = getWholeTextStartNode();
                 DOMTextNode last = getWholeTextEndNode();

@@ -60,6 +60,10 @@ public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
         return parent;
     }
     
+    public final boolean coreHasParent() {
+        return parent != null;
+    }
+
     public final CoreElement coreGetParentElement() {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }

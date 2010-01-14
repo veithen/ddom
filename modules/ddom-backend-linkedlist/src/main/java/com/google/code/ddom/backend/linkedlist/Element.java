@@ -97,6 +97,10 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         return parent;
     }
     
+    public final boolean coreHasParent() {
+        return parent != null;
+    }
+
     public final CoreElement coreGetParentElement() {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }

@@ -16,7 +16,19 @@
 package com.google.code.ddom.backend;
 
 public interface CoreChildNode extends CoreNode {
+    /**
+     * Get the parent of this node.
+     * 
+     * @return the parent of this node
+     */
     CoreParentNode coreGetParent();
+    
+    /**
+     * Check if this node has a parent.
+     * 
+     * @return <code>true</code> if and only if this node currently has a parent
+     */
+    boolean coreHasParent();
     
     /**
      * Get the parent element of this node.

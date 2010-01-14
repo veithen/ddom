@@ -24,6 +24,13 @@ public interface CoreAttribute extends CoreParentNode {
     CoreElement coreGetOwnerElement();
     
     /**
+     * Check if this node has an owner element.
+     * 
+     * @return <code>true</code> if and only if this node currently has an owner element
+     */
+    boolean coreHasOwnerElement();
+    
+    /**
      * Remove this attribute from its owner element.
      * 
      * @return <code>true</code> if the attribute had an owner element and has been removed from
