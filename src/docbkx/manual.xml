@@ -1011,6 +1011,22 @@
                                 see that the guideline described here produces to the most natural implementation code.
                             </para>
                         </listitem>
+                        <listitem>
+                            <para>
+                                A method should only return a node instance if it is expected that the frontend code
+                                actually needs the returned reference. If this is not the case, the method should
+                                have a parameter that allows the frontend to specify if it requires a return value.
+                                For methods that return a reference that in some cases is only used in null checks,
+                                alternative methods returning booleans should be defined. An example for this is the
+                                method that returns the parent of a node.
+                            </para>
+                            <para>
+                                The rationale for this guideline is that some backend implementation not only defer
+                                parsing, but may also defer the instantiation of the objects representing the
+                                information items of the document. In that case, instatiation should only occur
+                                if the frontend really needs the reference to the node instance.
+                            </para>
+                        </listitem>
                     </orderedlist>
                 </section>
         </chapter>
