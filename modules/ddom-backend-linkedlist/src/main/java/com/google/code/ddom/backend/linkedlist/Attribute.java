@@ -78,7 +78,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
 
     @Override
-    protected final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
             throw new ChildTypeNotAllowedException();
         }

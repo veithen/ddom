@@ -69,13 +69,13 @@ public final class ChildNodeHelper {
         if (parent == null) {
             throw new NoParentException();
         } else {
+            parent.validateChildType(sibling, null);
             parent.prepareNewChild(sibling);
             sibling.coreDetach();
             sibling.internalSetNextSibling(node.coreGetNextSibling());
             node.internalSetNextSibling(sibling);
             sibling.setParent(parent);
             parent.notifyChildrenModified(1);
-//            parent.coreInsertChildAfter(sibling, node);
         }
     }
     

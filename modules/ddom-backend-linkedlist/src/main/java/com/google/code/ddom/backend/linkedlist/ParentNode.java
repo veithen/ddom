@@ -185,7 +185,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
      *             if the child is not allowed
      * @throws DeferredParsingException 
      */
-    protected abstract void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
+    abstract void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false
