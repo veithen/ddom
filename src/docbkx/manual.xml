@@ -958,6 +958,61 @@
                 <title>UML diagram</title>
                 
             </section>
+                <section>
+                    <title>Interface design</title>
+                    <para>
+                        The following principles and guidelines have been applied in the design of the
+                        Core Model API:
+                    </para>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                All interfaces representing nodes have names starting with <literal>Core</literal>.
+                                More precisely, this convention applies to all interfaces that (after weaving)
+                                may be implemented by a class that at the same time implements an interface
+                                from the frontend API. While not strictly necessary, this convention makes it
+                                easy to distinguish interfaces from the two APIs (e.g. <classname>CoreElement</classname>
+                                and DOM's <classname>Element</classname> interface).
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                All methods defined by the interfaces identified in the previous item have names
+                                starting with <literal>core</literal>. This is necessary to avoid any possible conflict
+                                with methods defined by frontend APIs.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                Several methods operate on more than one node. E.g., inserting a node requires
+                                references to two nodes, namely the node to insert and the node defining the
+                                position in the document (typically the future parent or sibling). In these cases
+                                there are several possible ways to define the method. Depending on the selected
+                                definition, the node on which the method must be invoked and the parameters
+                                passed to the call vary. E.g. a method that inserts a new sibling may either be
+                                defined such that it is invoked on the existing node or such that it is invoked
+                                on the node to be inserted.
+                            </para>
+                            <para>
+                                The guideline is to define methods such that they will be invoked on node instances
+                                already part of the tree (and that don't change position) and that the parameter
+                                represents the node to insert into the tree. In any case, redundancies such as
+                                in the definition of DOM's <methodname>insertBefore</methodname> method (which must
+                                be invoked on the parent node of the two nodes) should be strictly avoided.
+                            </para>
+                            <para>
+                                One of the rationale for this guideline is that before actually inserting the node into the
+                                tree, the Core Model implementation must make sure that it is an instance from the same
+                                model<footnote><para>Note that because of weaving, it is not sufficient for the node to belong
+                                to the same backend implementation.</para></footnote>, is owned by the same document and is
+                                detached. In most cases, the backend implementation will also have to cast the parameters
+                                of the method to the actual implementation classes. This can be conveniently combined
+                                with the same-model check. Taking these different aspects into account, one can easily
+                                see that the guideline described here produces to the most natural implementation code.
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </section>
         </chapter>
         <appendix>
             <title>XML grammar</title>
