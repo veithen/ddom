@@ -795,7 +795,7 @@
                     ...
                 </para>
             </section>
-            <section>
+            <section id="compact.parents">
                 <title>Compact parent nodes</title>
                 <para>
                     The Logical Content Model defines the children property as an ordered list
@@ -1029,6 +1029,122 @@
                         </listitem>
                     </orderedlist>
                 </section>
+        </chapter>
+        <chapter>
+            <title>A theoretical look at deferred parsing</title>
+            <section>
+                <title>Introduction</title>
+                <para>
+                    Deferred parsing applies to object model instances created from XML documents (or other sources
+                    providing sequences of XML events) and describes a feature by which the object model only
+                    pulls as much events from the underlying parser as necessary to satisfy the current request
+                    from the user code. This means that both the parsing and building of the internal representation
+                    of the data by the object model happens incrementally. This process is driven by the user
+                    code, but in way that is completely transparent to that code: simply, each time the user code
+                    requests a node instance that it has not yet visited, the object model may need to first
+                    pull new data from the parser and build the relevant nodes.
+                </para>
+                <para>
+                    A different concept that needs to be clearly distinguished from deferred parsing is
+                    deferred instantiation of nodes. Object models supporing this feature will defer the creation
+                    of a node instance until it is explicitly requested by the user code. For nodes that
+                    have not yet been instantiated, the object model will store the data in a more compact
+                    (i.e. memory efficient) form or in a form that is less expensive to process. 
+                </para>
+                <para>
+                    It is important to understand that the two concepts are really independent of each other:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Standard XML parsers don't support random access to XML data. In addition, in many cases,
+                            e.g. when receiving an XML message over the network, the underlying binary
+                            stream is sequential. Therefore the XML data is provided by the parser as a
+                            sequence of events. It is therefore natural to have object models that support
+                            deferred parsing while instantiating the nodes immediately upon receipt of the
+                            corresponding events. Obviously, such an object model will defer
+                            instantiation of the node instances for the part of the document that has not
+                            yet been parsed, but the important point is that it will always create all the
+                            node instances for the part of the document that has already been parsed, even
+                            for nodes that have not been requested explicitly by the user code.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            It is perfectly possible for an object model to parse the document in a single
+                            step, but to create the node instances only on demand, i.e. to support deferred
+                            instantiation without implementing deferred parsing. As mentioned above, this
+                            implies that the object model must store the information extracted from the
+                            document in some intermediary form (or at least to keep some sort of index,
+                            if the document is located in a storage that supports random access).
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    TODO: mention Axiom and Xerces deferred documents here
+                </para>
+                <para>
+                    In DDOM, all backends are expected to support deferred parsing<footnote><para>Though
+                    in principle there is nothing that would prevent a backend implementation from choosing not
+                    to support deferred parsing.</para></footnote>. Support for deferred instantiation is
+                    not mandatory and is an implementation choice. Note however that all backends should
+                    have support for compact parent nodes as described in <xref linkend="compact.parents"/>.
+                    Compact parent nodes implement a weaker form of deferred instantiation that provides
+                    some of the advantages of deferred instantiation without causing any additional overhead.
+                    The linked list backend supports both deferred parsing and compact parent nodes.
+                </para>
+                <para>
+                    In the present chapter we will primarily be concerned with the concept of
+                    deferred parsing and in general ignore the concept of deferred instantiation.
+                </para>
+            </section>
+            <section>
+                <title>Benefits of deferred parsing</title>
+            
+            </section>
+            <section>
+                <title>Concepts and definitions</title>
+                <para>
+                    First of all, it is clear that in an object model that supports deferred parsing,
+                    an object model instance must somehow remain connected to the parser, at least
+                    until the document has been completely consumed. We call <firstterm>builder</firstterm>
+                    the component responsible for mediating between the object model instance and
+                    the parser. The builder is triggered by the object model whenever the user code
+                    requests a node instance that is not yet available. The responsibility of the builder
+                    is then to pull events from the parser, create the corresponding node instances and insert
+                    these instances into the object model. In general, the object model code will invoke
+                    the builder repeatedly until the tree has reached a state where the request from the
+                    user code can be satisfied.
+                </para>
+                
+            </section>
+            
+            <section>
+                <title>What operations should force a node to be built?</title>
+                <para>
+                    Three possible types of builders:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Whenever the parent of the node changes or siblings are inserted after the node.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Whenever siblings are inserted after the node. --> the builder needs to maintain
+                            a node stack
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Never --> the builder needs to keep even more information: the siblings inserted
+                            immediately after the node + siblings added at the end
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </section>
+            
         </chapter>
         <appendix>
             <title>XML grammar</title>
@@ -1305,31 +1421,6 @@
                         all implementations.
                     </para>
                 </note>
-            </section>
-            <section>
-                <title>What operations should force a node to be built?</title>
-                <para>
-                    Three possible types of builders:
-                </para>
-                <itemizedlist>
-                    <listitem>
-                        <para>
-                            Whenever the parent of the node changes or siblings are inserted after the node.
-                        </para>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Whenever siblings are inserted after the node. --> the builder needs to maintain
-                            a node stack
-                        </para>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Never --> the builder needs to keep even more information: the siblings inserted
-                            immediately after the node + siblings added at the end
-                        </para>
-                    </listitem>
-                </itemizedlist>
             </section>
         </chapter>
         <chapter>
