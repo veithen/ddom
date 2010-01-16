@@ -32,7 +32,7 @@ public class TestCoreInsertSiblingAfterWithIncompleteParent extends BackendTestC
         CoreText text = nodeFactory.createText(document, "text1");
         CoreNSAwareElement a = (CoreNSAwareElement)document.coreGetDocumentElement().coreGetFirstChild();
         a.coreInsertSiblingAfter(text);
-        if (builderType == BUILDER_TYPE_2) {
+        if (builderType >= BUILDER_TYPE_2) {
             assertFalse(a.coreIsComplete());
         }
         assertSame(text, a.coreGetNextSibling());
