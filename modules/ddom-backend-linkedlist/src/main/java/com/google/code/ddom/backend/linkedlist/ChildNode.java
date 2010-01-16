@@ -21,6 +21,6 @@ public interface ChildNode extends LLNode, CoreChildNode {
     ParentNode internalGetParent();
     void internalSetParent(ParentNode parent);
     
-    ChildNode internalGetNextSibling();
+    ChildNode internalGetNextSiblingIfMaterialized();
     void internalSetNextSibling(ChildNode nextSibling);
 }

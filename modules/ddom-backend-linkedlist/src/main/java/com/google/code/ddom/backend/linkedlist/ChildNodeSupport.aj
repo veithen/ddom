@@ -48,7 +48,7 @@ public aspect ChildNodeSupport {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
-    public final ChildNode ChildNode.internalGetNextSibling() {
+    public final ChildNode ChildNode.internalGetNextSiblingIfMaterialized() {
         return nextSibling;
     }
 
@@ -80,7 +80,7 @@ public aspect ChildNodeSupport {
             ChildNode sibling = parent.internalGetFirstChild();
             while (sibling != null && sibling != this) {
                 previousSibling = sibling;
-                sibling = sibling.internalGetNextSibling();
+                sibling = sibling.internalGetNextSiblingIfMaterialized();
             }
             return sibling == null ? null : previousSibling;
         }
@@ -123,7 +123,7 @@ public aspect ChildNodeSupport {
                 int siblingCount = 0;
                 while (sibling != null) {
                     sibling.internalSetParent(parent);
-                    sibling = sibling.internalGetNextSibling();
+                    sibling = sibling.internalGetNextSiblingIfMaterialized();
                     siblingCount++;
                 }
                 fragment.internalSetFirstChild(null);
@@ -150,7 +150,7 @@ public aspect ChildNodeSupport {
             ChildNode node = parent.internalGetFirstChild();
             while (node != null && node != this) {
                 previousSibling = node;
-                node = node.internalGetNextSibling();
+                node = node.internalGetNextSiblingIfMaterialized();
             }
             sibling.internalSetNextSibling(this);
             if (previousSibling == null) {
