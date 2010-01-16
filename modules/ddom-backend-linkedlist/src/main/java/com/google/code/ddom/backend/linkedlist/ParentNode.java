@@ -146,6 +146,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         CoreChildNode child = coreGetFirstChild();
         while (child != null) {
             previousChild = child;
+            // TODO: this is suboptimal because it will repeatedly lookup the builder
             child = child.coreGetNextSibling();
         }
         return previousChild;
