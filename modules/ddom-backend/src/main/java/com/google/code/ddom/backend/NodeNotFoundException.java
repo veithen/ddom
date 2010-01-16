@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend;
 
+@Deprecated // Should be no longer necessary
 public class NodeNotFoundException extends CoreModelException {
     private static final long serialVersionUID = -7231268467516709733L;
 

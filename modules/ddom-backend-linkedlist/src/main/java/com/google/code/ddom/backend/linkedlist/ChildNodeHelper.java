@@ -94,8 +94,12 @@ public final class ChildNodeHelper {
     }
     
     public static void coreInsertSiblingsBefore(ChildNode node, CoreDocumentFragment fragment) throws CoreModelException {
-        // TODO
-        throw new UnsupportedOperationException();
+        CoreParentNode parent = node.coreGetParent();
+        if (parent == null) {
+            throw new NoParentException();
+        } else {
+            parent.coreInsertChildBefore(fragment, node);
+        }
     }
     
     public static void coreDetach(ChildNode node) throws DeferredParsingException {

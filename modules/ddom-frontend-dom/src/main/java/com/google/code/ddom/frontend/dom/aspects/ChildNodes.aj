@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
@@ -111,15 +112,25 @@ public aspect ChildNodes {
     }
 
     public final Node DOMParentNode.insertBefore(Node newChild, Node refChild) throws DOMException {
-        // Note: The specification of the insertBefore method says that "if refChild
-        // is null, insert newChild at the end of the list of children". That is, in this
-        // case the behavior is identical to appendChild. (This is covered by the DOM 1
-        // test suite)
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
         try {
-            coreInsertChildBefore((CoreNode)newChild, (CoreChildNode)refChild);
+            // Note: The specification of the insertBefore method says that "if refChild
+            // is null, insert newChild at the end of the list of children". That is, in this
+            // case the behavior is identical to appendChild. (This is covered by the DOM 1
+            // test suite)
+            if (refChild == null) {
+                coreAppendChild((CoreNode)newChild);
+            } else if (refChild.getParentNode() != this) {
+                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            } else if (newChild instanceof CoreChildNode) {
+                ((CoreChildNode)refChild).coreInsertSiblingBefore((CoreChildNode)newChild);
+            } else if (newChild instanceof CoreDocumentFragment) {
+                ((CoreChildNode)refChild).coreInsertSiblingsBefore((CoreDocumentFragment)newChild);
+            } else {
+                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+            }
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
