@@ -67,7 +67,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         // TODO: need to clear any existing content!
         complete = false;
         // TODO: getting the producer should be deferred!
-        getDocument().createBuilder(source.getProducer(), this);
+        internalGetDocument().createBuilder(source.getProducer(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }
@@ -113,7 +113,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     
     public final void coreBuild() throws DeferredParsingException {
         if (!complete) {
-            Builder builder = getDocument().getBuilderFor(this);
+            Builder builder = internalGetDocument().getBuilderFor(this);
             do {
                 builder.next();
             } while (!complete);
@@ -125,15 +125,15 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             if (complete) {
                 return null;
             } else {
-                Builder builder = getDocument().getBuilderFor(this);
+                Builder builder = internalGetDocument().getBuilderFor(this);
                 while (content == null && !complete) {
                     builder.next();
                 }
                 return (CoreChildNode)content;
             }
         } else if (content instanceof String) {
-            ChildNode firstChild = new Text(getDocument(), (String)content);
-            firstChild.setParent(this);
+            ChildNode firstChild = new Text(internalGetDocument(), (String)content);
+            firstChild.internalSetParent(this);
             content = firstChild;
             return firstChild;
         } else {
@@ -230,7 +230,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 for (CoreChildNode node = firstNodeToInsert; node != null; node = node.coreGetNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
                     validateChildType(node, removeRefChild ? refChild : null);
-                    ((ChildNode)node).setParent(this);
+                    ((ChildNode)node).internalSetParent(this);
                     lastNodeToInsert = node;
                 }
                 delta = fragment.coreGetChildCount();
@@ -239,7 +239,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 ((CoreChildNode)newChild).coreDetach();
                 firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
                 validateChildType(firstNodeToInsert, removeRefChild ? refChild : null);
-                ((ChildNode)firstNodeToInsert).setParent(this);
+                ((ChildNode)firstNodeToInsert).internalSetParent(this);
                 delta = 1;
             } else {
                 throw new ChildTypeNotAllowedException();
@@ -260,7 +260,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             }
         }
         if (removeRefChild) {
-            ((ChildNode)refChild).setParent(null);
+            ((ChildNode)refChild).internalSetParent(null);
         }
     }
 

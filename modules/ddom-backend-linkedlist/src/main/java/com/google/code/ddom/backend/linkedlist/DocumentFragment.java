@@ -42,8 +42,7 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         return children;
     }
 
-    @Override
-    final Document getDocument() {
+    public final Document internalGetDocument() {
         return document;
     }
 }

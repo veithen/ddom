@@ -28,14 +28,18 @@ import com.google.code.ddom.backend.Implementation;
 @Implementation
 public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
     private Document document;
-    private CoreParentNode parent;
+    private ParentNode parent;
     private CoreChildNode nextSibling;
     
     public LeafNode(Document document) {
         this.document = document;
     }
 
-    public final void setParent(CoreParentNode parent) {
+    public final ParentNode internalGetParent() {
+        return parent;
+    }
+    
+    public final void internalSetParent(ParentNode parent) {
         this.parent = parent;
     }
     
@@ -51,8 +55,7 @@ public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
         this.nextSibling = nextSibling;
     }
     
-    @Override
-    final Document getDocument() {
+    public final Document internalGetDocument() {
         return document;
     }
 

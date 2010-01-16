@@ -21,16 +21,14 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.WrongDocumentException;
 
 @Implementation
-public abstract class Node implements CoreNode {
+public abstract class Node implements LLNode {
     public final CoreDocument coreGetDocument() {
-        return getDocument();
+        return internalGetDocument();
     }
 
-    abstract Document getDocument();
-    
     public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
-        CoreDocument document1 = ((Node)node).getDocument(); // TODO: get rid of cast
-        CoreDocument document2 = getDocument();
+        CoreDocument document1 = ((Node)node).internalGetDocument(); // TODO: get rid of cast
+        CoreDocument document2 = internalGetDocument();
         if (document1 != null && document2 != null && document1 != document2) {
             throw new WrongDocumentException();
         }

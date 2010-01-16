@@ -15,9 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreNode;
 
-public interface ChildNode extends LLNode, CoreChildNode {
-    ParentNode internalGetParent();
-    void internalSetParent(ParentNode parent);
+public interface LLNode extends CoreNode {
+    Document internalGetDocument();
 }

@@ -41,13 +41,12 @@ import com.google.code.ddom.backend.NodeInUseException;
 import com.google.code.ddom.backend.NodeMigrationException;
 import com.google.code.ddom.backend.NodeMigrationPolicy;
 import com.google.code.ddom.backend.WrongDocumentException;
-import com.google.code.ddom.backend.NodeMigrationPolicy.Action;
 
 @Implementation
 public abstract class Element extends ParentNode implements ChildNode, CoreElement {
     private final Document document;
     private int children;
-    private CoreParentNode parent;
+    private ParentNode parent;
     private CoreChildNode nextSibling;
     private Attribute firstAttribute;
 
@@ -56,7 +55,11 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         this.document = document;
     }
 
-    public final void setParent(CoreParentNode parent) {
+    public final ParentNode internalGetParent() {
+        return parent;
+    }
+    
+    public final void internalSetParent(ParentNode parent) {
         this.parent = parent;
     }
     
@@ -93,8 +96,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         return firstAttribute;
     }
     
-    @Override
-    final Document getDocument() {
+    public final Document internalGetDocument() {
         return document;
     }
 
@@ -164,7 +166,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
             attr = attr.coreGetNextAttribute();
         }
         if (attr == null) {
-            CoreDocument document = getDocument();
+            CoreDocument document = internalGetDocument();
             NodeFactory factory = document.getNodeFactory();
             Attribute newAttr = (Attribute)matcher.createAttribute(factory, document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
@@ -179,7 +181,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
 
     private Attribute accept(CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
         boolean hasParent = coreAttr.coreHasOwnerElement();
-        boolean isForeignDocument = coreAttr.coreGetDocument() != getDocument();
+        boolean isForeignDocument = coreAttr.coreGetDocument() != internalGetDocument();
         boolean isForeignModel = !(coreAttr instanceof Attribute);
         if (hasParent || isForeignDocument || isForeignModel) {
             switch (policy.getAction(hasParent, isForeignDocument, isForeignModel)) {
@@ -315,7 +317,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
     }
 
     public final void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException {
-        CoreDocument document = getDocument();
+        CoreDocument document = internalGetDocument();
         // TODO: using a collection here is very bad!!
         List<CoreTextNode> textNodes = new ArrayList<CoreTextNode>();
         CoreChildNode child = coreGetFirstChild();

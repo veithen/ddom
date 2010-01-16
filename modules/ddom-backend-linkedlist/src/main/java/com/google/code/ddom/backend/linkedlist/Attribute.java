@@ -46,7 +46,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     final void setOwnerElement(CoreElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
-            owner = ((Element)owner).getDocument();
+            owner = ((Element)owner).internalGetDocument();
         } else {
             owner = newOwner;
         }
@@ -104,12 +104,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return owner instanceof CoreElement;
     }
 
-    @Override
-    final Document getDocument() {
+    public final Document internalGetDocument() {
         if (owner instanceof Document) {
             return (Document)owner;
         } else {
-            return ((Element)owner).getDocument();
+            return ((Element)owner).internalGetDocument();
         }
     }
 

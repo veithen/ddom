@@ -27,12 +27,12 @@ public final class ChildNodeHelper {
     private ChildNodeHelper() {}
     
     public static CoreChildNode coreGetNextSibling(ChildNode node) throws DeferredParsingException {
-        CoreParentNode parent = node.coreGetParent();
+        ParentNode parent = node.internalGetParent();
         if (parent == null) {
             return null;
         } else {
             // TODO: try to avoid the cast here
-            Document document = ((Node)node).getDocument();
+            Document document = ((Node)node).internalGetDocument();
             CoreChildNode nextSibling = node.internalGetNextSibling();
             if (nextSibling == null && !parent.coreIsComplete()) {
                 Builder builder = document.getBuilderFor(parent);
@@ -46,7 +46,7 @@ public final class ChildNodeHelper {
     }
     
     public static CoreChildNode coreGetPreviousSibling(ChildNode node) throws DeferredParsingException {
-        CoreParentNode parent = node.coreGetParent();
+        ParentNode parent = node.internalGetParent();
         if (parent == null) {
             return null;
         } else {
@@ -65,7 +65,7 @@ public final class ChildNodeHelper {
         if (sibling == node) {
             throw new SelfRelationshipException();
         }
-        ParentNode parent = (ParentNode)node.coreGetParent();
+        ParentNode parent = node.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
@@ -74,7 +74,7 @@ public final class ChildNodeHelper {
             sibling.coreDetach();
             sibling.internalSetNextSibling(node.coreGetNextSibling());
             node.internalSetNextSibling(sibling);
-            sibling.setParent(parent);
+            sibling.internalSetParent(parent);
             parent.notifyChildrenModified(1);
         }
     }
@@ -85,7 +85,7 @@ public final class ChildNodeHelper {
     }
     
     public static void coreInsertSiblingBefore(ChildNode node, CoreChildNode sibling) throws CoreModelException {
-        CoreParentNode parent = node.coreGetParent();
+        ParentNode parent = node.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
@@ -94,7 +94,7 @@ public final class ChildNodeHelper {
     }
     
     public static void coreInsertSiblingsBefore(ChildNode node, CoreDocumentFragment fragment) throws CoreModelException {
-        CoreParentNode parent = node.coreGetParent();
+        ParentNode parent = node.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
@@ -103,14 +103,14 @@ public final class ChildNodeHelper {
     }
     
     public static void coreDetach(ChildNode node) throws DeferredParsingException {
-        CoreParentNode parent = node.coreGetParent();
+        ParentNode parent = node.internalGetParent();
         if (parent != null) {
             CoreChildNode previousSibling = node.coreGetPreviousSibling();
             // We have a builder of type 2; thus we don't need to build
             // the node being detached. Therefore we can use internalGetNextSibling
             // instead of coreGetNextSibling.
             CoreChildNode nextSibling = node.internalGetNextSibling();
-            node.setParent(null);
+            node.internalSetParent(null);
             node.internalSetNextSibling(null);
             if (previousSibling == null) {
                 parent.internalSetFirstChild(nextSibling);
