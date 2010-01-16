@@ -60,10 +60,8 @@ public aspect ChildNodeSupport {
         if (parent == null) {
             return null;
         } else {
-            // TODO: try to avoid the cast here
-            Document document = internalGetDocument();
             if (nextSibling == null && !parent.coreIsComplete()) {
-                Builder builder = document.getBuilderFor(parent);
+                Builder builder = internalGetDocument().getBuilderFor(parent);
                 do {
                     builder.next();
                 } while (nextSibling == null && !parent.coreIsComplete());
