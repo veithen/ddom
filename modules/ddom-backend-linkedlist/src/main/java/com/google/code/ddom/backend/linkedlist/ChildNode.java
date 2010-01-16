@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreParentNode;
 
+// TODO: the default access modifier on the interface doesn't prevent the methods from being public; there may still be collisions
 interface ChildNode extends CoreChildNode {
     void setParent(CoreParentNode parent);
 }
