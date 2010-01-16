@@ -75,6 +75,7 @@ public class DocumentTest {
      * an inconsistent state.
      */
     @Test
+    // TODO: this should go to ddom-backend-testsuite
     public void testGracefulBehaviorAfterParseError() throws Exception {
         // TODO: do this properly (we should not allow passing XMLStreamReader instances to DeferredDocumentFactory, because we don't have control over the properties)
         InvocationCounter cter = new InvocationCounter();
