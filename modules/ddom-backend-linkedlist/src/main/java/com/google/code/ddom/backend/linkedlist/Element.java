@@ -44,7 +44,6 @@ import com.google.code.ddom.backend.WrongDocumentException;
 public abstract class Element extends ParentNode implements ChildNode, CoreElement {
     private final Document document;
     private int children;
-    private CoreChildNode nextSibling;
     private Attribute firstAttribute;
 
     public Element(Document document, boolean complete) {
@@ -52,14 +51,6 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         this.document = document;
     }
 
-    public final CoreChildNode internalGetNextSibling() {
-        return nextSibling;
-    }
-
-    public final void internalSetNextSibling(CoreChildNode nextSibling) {
-        this.nextSibling = nextSibling;
-    }
-    
     public final void notifyChildrenModified(int delta) {
         children += delta;
     }

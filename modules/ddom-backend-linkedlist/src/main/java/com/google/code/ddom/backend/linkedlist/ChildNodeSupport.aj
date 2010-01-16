@@ -26,6 +26,7 @@ import com.google.code.ddom.backend.SelfRelationshipException;
 
 public aspect ChildNodeSupport {
     private ParentNode ChildNode.parent;
+    private CoreChildNode ChildNode.nextSibling;
     
     public final ParentNode ChildNode.internalGetParent() {
         return parent;
@@ -47,18 +48,24 @@ public aspect ChildNodeSupport {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
+    public final CoreChildNode ChildNode.internalGetNextSibling() {
+        return nextSibling;
+    }
+
+    public final void ChildNode.internalSetNextSibling(CoreChildNode nextSibling) {
+        this.nextSibling = nextSibling;
+    }
+    
     public final CoreChildNode ChildNode.coreGetNextSibling() throws DeferredParsingException {
         if (parent == null) {
             return null;
         } else {
             // TODO: try to avoid the cast here
             Document document = internalGetDocument();
-            CoreChildNode nextSibling = internalGetNextSibling();
             if (nextSibling == null && !parent.coreIsComplete()) {
                 Builder builder = document.getBuilderFor(parent);
                 do {
                     builder.next();
-                    nextSibling = internalGetNextSibling();
                 } while (nextSibling == null && !parent.coreIsComplete());
             }
             return nextSibling;
@@ -91,7 +98,7 @@ public aspect ChildNodeSupport {
             parent.prepareNewChild(sibling);
             sibling.coreDetach();
             sibling.internalSetNextSibling(coreGetNextSibling());
-            internalSetNextSibling(sibling);
+            nextSibling = sibling;
             sibling.internalSetParent(parent);
             parent.notifyChildrenModified(1);
         }
@@ -124,13 +131,12 @@ public aspect ChildNodeSupport {
             // We have a builder of type 2; thus we don't need to build
             // the node being detached. Therefore we can use internalGetNextSibling
             // instead of coreGetNextSibling.
-            CoreChildNode nextSibling = internalGetNextSibling();
-            internalSetNextSibling(null);
             if (previousSibling == null) {
                 parent.internalSetFirstChild(nextSibling);
             } else {
                 previousSibling.internalSetNextSibling(nextSibling);
             }
+            nextSibling = null;
             parent.notifyChildrenModified(-1);
             parent = null;
         }
