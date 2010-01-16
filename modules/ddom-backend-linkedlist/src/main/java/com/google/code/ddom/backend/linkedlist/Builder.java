@@ -16,7 +16,6 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.collections.ArrayStack;
@@ -33,7 +32,7 @@ public class Builder extends CallbackConsumer {
     private final Stack<ParentNode> nodeStack = new ArrayStack<ParentNode>();
     private StreamException streamException;
     private ParentNode parent; // The current node being built
-    private CoreChildNode lastSibling; // The last child of the current node
+    private ChildNode lastSibling; // The last child of the current node
     private CoreAttribute lastAttribute;
     private boolean nodeAppended;
 
@@ -152,7 +151,7 @@ public class Builder extends CallbackConsumer {
             // If this happens, we need to get again to the last materialized child of the
             // node being built:
             lastSibling = null;
-            CoreChildNode child = parent.internalGetFirstChild();
+            ChildNode child = parent.internalGetFirstChild();
             while (child != null) {
                 lastSibling = child;
                 child = child.internalGetNextSibling();
@@ -194,7 +193,7 @@ public class Builder extends CallbackConsumer {
         if (nodeStack.isEmpty()) {
             parent = null;
         } else {
-            lastSibling = (CoreChildNode)parent;
+            lastSibling = (ChildNode)parent;
             // This is important for being a builder of type 2: instead of getting the
             // parent from the current node, we get it from the node stack.
             parent = nodeStack.pop();

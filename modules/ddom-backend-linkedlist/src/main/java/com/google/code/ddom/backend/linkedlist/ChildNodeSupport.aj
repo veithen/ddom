@@ -26,7 +26,7 @@ import com.google.code.ddom.backend.SelfRelationshipException;
 
 public aspect ChildNodeSupport {
     private ParentNode ChildNode.parent;
-    private CoreChildNode ChildNode.nextSibling;
+    private ChildNode ChildNode.nextSibling;
     
     public final ParentNode ChildNode.internalGetParent() {
         return parent;
@@ -48,11 +48,11 @@ public aspect ChildNodeSupport {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
-    public final CoreChildNode ChildNode.internalGetNextSibling() {
+    public final ChildNode ChildNode.internalGetNextSibling() {
         return nextSibling;
     }
 
-    public final void ChildNode.internalSetNextSibling(CoreChildNode nextSibling) {
+    public final void ChildNode.internalSetNextSibling(ChildNode nextSibling) {
         this.nextSibling = nextSibling;
     }
     
@@ -72,12 +72,12 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final CoreChildNode ChildNode.coreGetPreviousSibling() throws DeferredParsingException {
+    public final CoreChildNode ChildNode.coreGetPreviousSibling() {
         if (parent == null) {
             return null;
         } else {
-            CoreChildNode previousSibling = null;
-            CoreChildNode sibling = parent.coreGetFirstChild();
+            ChildNode previousSibling = null;
+            ChildNode sibling = parent.internalGetFirstChild();
             while (sibling != null && sibling != this) {
                 previousSibling = sibling;
                 sibling = sibling.internalGetNextSibling();
@@ -97,7 +97,8 @@ public aspect ChildNodeSupport {
             parent.validateChildType(sibling, null);
             parent.prepareNewChild(sibling);
             sibling.coreDetach();
-            sibling.internalSetNextSibling(coreGetNextSibling());
+            // TODO: get rid of cast here
+            sibling.internalSetNextSibling((ChildNode)coreGetNextSibling());
             nextSibling = sibling;
             sibling.internalSetParent(parent);
             parent.notifyChildrenModified(1);
@@ -134,7 +135,8 @@ public aspect ChildNodeSupport {
             if (previousSibling == null) {
                 parent.internalSetFirstChild(nextSibling);
             } else {
-                previousSibling.internalSetNextSibling(nextSibling);
+                // TODO: get rid of cast here
+                ((ChildNode)previousSibling).internalSetNextSibling(nextSibling);
             }
             nextSibling = null;
             parent.notifyChildrenModified(-1);

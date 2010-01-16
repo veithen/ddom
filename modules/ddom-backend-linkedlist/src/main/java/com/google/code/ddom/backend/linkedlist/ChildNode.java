@@ -20,4 +20,7 @@ import com.google.code.ddom.backend.CoreChildNode;
 public interface ChildNode extends LLNode, CoreChildNode {
     ParentNode internalGetParent();
     void internalSetParent(ParentNode parent);
+    
+    ChildNode internalGetNextSibling();
+    void internalSetNextSibling(ChildNode nextSibling);
 }

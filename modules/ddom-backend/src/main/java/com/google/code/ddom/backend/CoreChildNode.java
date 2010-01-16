@@ -80,7 +80,4 @@ public interface CoreChildNode extends CoreNode {
      * @throws DeferredParsingException 
      */
     void coreDetach() throws DeferredParsingException;
-    
-    CoreChildNode internalGetNextSibling();
-    void internalSetNextSibling(CoreChildNode nextSibling);
 }

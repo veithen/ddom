@@ -95,8 +95,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         content = value;
     }
 
-    public final CoreChildNode internalGetFirstChild() {
-        return (CoreChildNode)content;
+    public final ChildNode internalGetFirstChild() {
+        return (ChildNode)content;
     }
 
     public final void internalSetFirstChild(CoreChildNode child) {
@@ -216,7 +216,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             if (previousSibling == null) {
                 internalSetFirstChild(nextSibling);
             } else {
-                previousSibling.internalSetNextSibling(nextSibling);
+                ((ChildNode)previousSibling).internalSetNextSibling((ChildNode)nextSibling);
             }
             notifyChildrenModified(-1);
         } else {
@@ -253,10 +253,10 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             if (previousSibling == null) {
                 internalSetFirstChild(firstNodeToInsert);
             } else {
-                previousSibling.internalSetNextSibling(firstNodeToInsert);
+                ((ChildNode)previousSibling).internalSetNextSibling((ChildNode)firstNodeToInsert);
             }
             if (nextSibling != null) {
-                lastNodeToInsert.internalSetNextSibling(nextSibling);
+                ((ChildNode)lastNodeToInsert).internalSetNextSibling((ChildNode)nextSibling);
             }
         }
         if (removeRefChild) {
