@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteBuilder;
 
 import junit.framework.TestCase;
@@ -22,6 +23,6 @@ import junit.framework.TestSuite;
 
 public class BackendTest extends TestCase {
     public static TestSuite suite() {
-        return BackendTestSuiteBuilder.suite(new NodeFactoryImpl(), 2);
+        return BackendTestSuiteBuilder.suite(new NodeFactoryImpl(), BackendTestCase.BUILDER_TYPE_2);
     }
 }

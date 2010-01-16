@@ -29,6 +29,11 @@ import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
 
 public class BackendTestCase extends TestCase {
+    // We define constants for this so that we can easily locate tests that depend on the builder type
+    public static final int BUILDER_TYPE_1 = 1;
+    public static final int BUILDER_TYPE_2 = 2;
+    public static final int BUILDER_TYPE_3 = 3;
+    
     private final StreamFactory streamFactory = StreamFactory.getInstance(BackendTestCase.class.getClassLoader());
     
     protected final NodeFactory nodeFactory;
