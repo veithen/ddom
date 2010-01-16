@@ -23,12 +23,13 @@ import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreNSAwareAttribute;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.IdentityMapper;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.frontend.axiom.support.Policies;
 
 public aspect ElementSupport {
     public void AxiomElement.setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
@@ -59,7 +60,11 @@ public aspect ElementSupport {
     
     public OMAttribute AxiomElement.addAttribute(OMAttribute attr) {
         AxiomAttribute axiomAttr = (AxiomAttribute)attr;
-        coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr.coreGetNamespaceURI(), axiomAttr.coreGetLocalName(), axiomAttr);
+        try {
+            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr.coreGetNamespaceURI(), axiomAttr.coreGetLocalName(), axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
         return attr; // TODO
     }
     

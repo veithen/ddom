@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend;
+package com.google.code.ddom.frontend.axiom.support;
 
-/**
- * Indicates that a request to insert a node could not be fulfilled because the node belongs to a
- * different document. Whether or not this exception may be thrown by a method depends on the
- * provided {@link NodeMigrationPolicy} implementation.
- * 
- * @author Andreas Veithen
- */
-public class WrongDocumentException extends NodeMigrationException {
-    private static final long serialVersionUID = -7135259787609333075L;
+import com.google.code.ddom.backend.NodeMigrationPolicy;
 
-    public WrongDocumentException() {
-    }
-
-    public WrongDocumentException(String message) {
-        super(message);
-    }
+public final class Policies {
+    private Policies() {}
+    
+    public static final NodeMigrationPolicy ATTRIBUTE_MIGRATION_POLICY = new NodeMigrationPolicy() {
+        public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
+            return Action.CLONE;
+        }
+    };
 }

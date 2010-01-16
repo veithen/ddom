@@ -37,6 +37,11 @@ import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.Mapper;
 import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.NodeInUseException;
+import com.google.code.ddom.backend.NodeMigrationException;
+import com.google.code.ddom.backend.NodeMigrationPolicy;
+import com.google.code.ddom.backend.WrongDocumentException;
+import com.google.code.ddom.backend.NodeMigrationPolicy.Action;
 
 @Implementation
 public abstract class Element extends ParentNode implements ChildNode, CoreElement {
@@ -172,8 +177,44 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         }
     }
 
-    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr_) {
-        Attribute attr = (Attribute)attr_;
+    private Attribute accept(CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
+        boolean hasParent = coreAttr.coreHasOwnerElement();
+        boolean isForeignDocument = coreAttr.coreGetDocument() != getDocument();
+        boolean isForeignModel = !(coreAttr instanceof Attribute);
+        if (hasParent || isForeignDocument || isForeignModel) {
+            switch (policy.getAction(hasParent, isForeignDocument, isForeignModel)) {
+                case REJECT:
+                    if (isForeignDocument) {
+                        // Note that since isForeignModel implies isForeignDocument, we also get here
+                        // if isForeignModel is true.
+                        throw new WrongDocumentException();
+                    } else {
+                        // We get here if isForeignDocument and isForeignModel are false. Since at least
+                        // one of the three booleans must be true, this implies that hasParent is true.
+                        throw new NodeInUseException();
+                    }
+                case MOVE:
+                    if (isForeignDocument || isForeignModel) {
+                        // TODO
+                        throw new UnsupportedOperationException();
+                    } else {
+                        coreAttr.coreRemove();
+                        return (Attribute)coreAttr;
+                    }
+                case CLONE:
+                    // TODO
+                    throw new UnsupportedOperationException();
+                default:
+                    // Should never get here unless new values are added to the enum
+                    throw new IllegalStateException();
+            }
+        } else {
+            return (Attribute)coreAttr;
+        }
+    }
+    
+    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
+        Attribute attr = accept(coreAttr, policy);
         Attribute existingAttr = firstAttribute;
         Attribute previousAttr = null;
         while (existingAttr != null && !matcher.matches(existingAttr, namespaceURI, name)) {

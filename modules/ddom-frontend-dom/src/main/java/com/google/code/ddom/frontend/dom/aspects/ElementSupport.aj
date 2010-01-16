@@ -22,9 +22,7 @@ import org.w3c.dom.DOMException;
 
 import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
@@ -32,6 +30,7 @@ import com.google.code.ddom.frontend.dom.support.DOM1AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
+import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public aspect ElementSupport {
@@ -96,20 +95,11 @@ public aspect ElementSupport {
     }
     
     public final Attr DOMElement.setAttributeNodeNS(Attr _newAttr) throws DOMException {
-        try {
-            // TODO: shouldn't this be handled by the core model?
-            validateOwnerDocument((CoreNode)_newAttr);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
-        }
         DOMAttribute newAttr = (DOMAttribute)_newAttr;
-        CoreElement owner = newAttr.coreGetOwnerElement();
-        if (owner == this) {
+        if (newAttr.coreGetOwnerElement() == this) {
             // This means that the "new" attribute is already linked to the element
             // and replaces itself.
             return newAttr;
-        } else if (owner != null) {
-            throw DOMExceptionUtil.newDOMException(DOMException.INUSE_ATTRIBUTE_ERR);
         } else {
             String namespaceURI;
             String name = newAttr.getLocalName();
@@ -123,7 +113,11 @@ public aspect ElementSupport {
                 namespaceURI = newAttr.getNamespaceURI();
                 matcher = DOM2AttributeMatcher.INSTANCE;
             }
-            return (DOMAttribute)coreSetAttribute(matcher, namespaceURI, name, newAttr);
+            try {
+                return (DOMAttribute)coreSetAttribute(matcher, namespaceURI, name, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY);
+            } catch (CoreModelException ex) {
+                throw DOMExceptionUtil.translate(ex);
+            }
         }
     }
 

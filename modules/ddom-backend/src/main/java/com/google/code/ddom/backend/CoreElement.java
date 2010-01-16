@@ -88,10 +88,14 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
      * @param attr
      *            the new attribute to add
+     * @param policy
+     *            the policy to apply if the attribute already has an owner element or belongs to a
+     *            different document
      * @return the attribute that was replaced by the new attribute, or <code>null</code> if no
      *         matching attribute existed
+     * @throws NodeMigrationException 
      */
-    CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr);
+    CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException;
     
     /**
      * Look up the namespace URI associated to the given prefix.

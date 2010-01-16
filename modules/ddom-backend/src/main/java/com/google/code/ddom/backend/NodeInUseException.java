@@ -16,19 +16,19 @@
 package com.google.code.ddom.backend;
 
 /**
- * Indicates that a request to insert a node could not be fulfilled because the node belongs to a
- * different document. Whether or not this exception may be thrown by a method depends on the
- * provided {@link NodeMigrationPolicy} implementation.
+ * Indicates that a request to insert a node could not be fulfilled because the node is already
+ * owned by another node in the same document. Whether or not this exception may be thrown by a
+ * method depends on the provided {@link NodeMigrationPolicy} implementation.
  * 
  * @author Andreas Veithen
  */
-public class WrongDocumentException extends NodeMigrationException {
-    private static final long serialVersionUID = -7135259787609333075L;
+public class NodeInUseException extends NodeMigrationException {
+    private static final long serialVersionUID = 3857141874280465603L;
 
-    public WrongDocumentException() {
+    public NodeInUseException() {
     }
 
-    public WrongDocumentException(String message) {
+    public NodeInUseException(String message) {
         super(message);
     }
 }
