@@ -86,8 +86,8 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreInsertSiblingAfter(CoreChildNode sibling_) throws CoreModelException {
-        ChildNode sibling = (ChildNode)sibling_;
+    public final void ChildNode.coreInsertSiblingAfter(CoreChildNode coreSibling) throws CoreModelException {
+        ChildNode sibling = (ChildNode)coreSibling;
         if (sibling == this) {
             throw new SelfRelationshipException();
         }
@@ -111,11 +111,31 @@ public aspect ChildNodeSupport {
         throw new UnsupportedOperationException();
     }
     
-    public final void ChildNode.coreInsertSiblingBefore(CoreChildNode sibling) throws CoreModelException {
+    public final void ChildNode.coreInsertSiblingBefore(CoreChildNode coreSibling) throws CoreModelException {
+        ChildNode sibling = (ChildNode)coreSibling;
+        if (sibling == this) {
+            throw new SelfRelationshipException();
+        }
         if (parent == null) {
             throw new NoParentException();
         } else {
-            parent.coreInsertChildBefore(sibling, this);
+            parent.validateChildType(sibling, null);
+            parent.prepareNewChild(sibling);
+            sibling.coreDetach();
+            ChildNode previousSibling = null;
+            ChildNode node = parent.internalGetFirstChild();
+            while (node != null && node != this) {
+                previousSibling = node;
+                node = node.internalGetNextSibling();
+            }
+            sibling.internalSetNextSibling(this);
+            if (previousSibling == null) {
+                parent.internalSetFirstChild(sibling);
+            } else {
+                previousSibling.internalSetNextSibling(sibling);
+            }
+            sibling.internalSetParent(parent);
+            parent.notifyChildrenModified(1);
         }
     }
     
