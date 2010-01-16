@@ -18,31 +18,20 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreLeafNode;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
     private Document document;
-    private ParentNode parent;
     private CoreChildNode nextSibling;
     
     public LeafNode(Document document) {
         this.document = document;
     }
 
-    public final ParentNode internalGetParent() {
-        return parent;
-    }
-    
-    public final void internalSetParent(ParentNode parent) {
-        this.parent = parent;
-    }
-    
     public final void internalSetDocument(CoreDocument document) {
         this.document = (Document)document; // TODO: get rid of cast
     }
@@ -57,18 +46,6 @@ public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
     
     public final Document internalGetDocument() {
         return document;
-    }
-
-    public final CoreParentNode coreGetParent() {
-        return parent;
-    }
-    
-    public final boolean coreHasParent() {
-        return parent != null;
-    }
-
-    public final CoreElement coreGetParentElement() {
-        return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
     public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {

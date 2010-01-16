@@ -30,7 +30,6 @@ import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
-import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.DeferredParsingException;
@@ -46,7 +45,6 @@ import com.google.code.ddom.backend.WrongDocumentException;
 public abstract class Element extends ParentNode implements ChildNode, CoreElement {
     private final Document document;
     private int children;
-    private ParentNode parent;
     private CoreChildNode nextSibling;
     private Attribute firstAttribute;
 
@@ -55,14 +53,6 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         this.document = document;
     }
 
-    public final ParentNode internalGetParent() {
-        return parent;
-    }
-    
-    public final void internalSetParent(ParentNode parent) {
-        this.parent = parent;
-    }
-    
     public final CoreChildNode internalGetNextSibling() {
         return nextSibling;
     }
@@ -98,18 +88,6 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
     
     public final Document internalGetDocument() {
         return document;
-    }
-
-    public final CoreParentNode coreGetParent() {
-        return parent;
-    }
-    
-    public final boolean coreHasParent() {
-        return parent != null;
-    }
-
-    public final CoreElement coreGetParentElement() {
-        return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
     public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {
