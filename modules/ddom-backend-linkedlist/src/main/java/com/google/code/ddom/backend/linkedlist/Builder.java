@@ -16,7 +16,6 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.collections.ArrayStack;
 import com.google.code.ddom.collections.Stack;
@@ -42,8 +41,17 @@ public class Builder extends CallbackConsumer {
         parent = target;
     }
 
-    public final boolean isBuilderFor(CoreParentNode target) {
+    public final boolean isBuilderFor(ParentNode target) {
         return target == parent || nodeStack.contains(target);
+    }
+
+    public final boolean migrateBuilder(ParentNode from, ParentNode to) {
+        if (parent == from) {
+            parent = to;
+            return true;
+        } else {
+            return nodeStack.replace(from, to);
+        }
     }
     
     public final void next() throws DeferredParsingException {
@@ -142,10 +150,10 @@ public class Builder extends CallbackConsumer {
     }
     
     private void appendNode(ChildNode node) {
-        if (lastSibling == null) {
-            parent.internalSetFirstChild(node);
-        } else if (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSibling() != null) {
-            // We get here if the previous node created by the builder has already been
+        if (lastSibling == null && parent.internalGetFirstChild() != null
+                || lastSibling != null && (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSibling() != null)) {
+            // We get here if the children of the node being built have been modified
+            // without building the node, e.g. if the previous node created by the builder has already been
             // detached or moved elsewhere (potentially as a child of the same parent, but
             // in a different position). This is possible because this is a type 2 builder.
             // If this happens, we need to get again to the last materialized child of the
@@ -156,11 +164,9 @@ public class Builder extends CallbackConsumer {
                 lastSibling = child;
                 child = child.internalGetNextSibling();
             }
-            if (lastSibling == null) {
-                parent.internalSetFirstChild(node);
-            } else {
-                lastSibling.internalSetNextSibling(node);
-            }
+        }
+        if (lastSibling == null) {
+            parent.internalSetFirstChild(node);
         } else {
             lastSibling.internalSetNextSibling(node);
         }
@@ -189,7 +195,7 @@ public class Builder extends CallbackConsumer {
     }
     
     public final void nodeCompleted() {
-        parent.setComplete();
+        parent.setComplete(true);
         if (nodeStack.isEmpty()) {
             parent = null;
         } else {

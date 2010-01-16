@@ -29,4 +29,15 @@ public class ArrayStack<E> extends ArrayList<E> implements Stack<E> {
     public E pop() {
         return remove(size()-1);
     }
+
+    public boolean replace(E oldItem, E newItem) {
+        boolean replaced = false;
+        for (int i=0; i<size(); i++) {
+            if (get(i).equals(oldItem)) {
+                set(i, newItem);
+                replaced = true;
+            }
+        }
+        return true;
+    }
 }

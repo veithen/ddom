@@ -106,9 +106,33 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws CoreModelException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void ChildNode.coreInsertSiblingsAfter(CoreDocumentFragment coreFragment) throws CoreModelException {
+        DocumentFragment fragment = (DocumentFragment)coreFragment;
+        if (parent == null) {
+            throw new NoParentException();
+        } else {
+            // TODO: we need to validate the children types; note that this is especially tricky if the children will be added later during deferred parsing
+            validateOwnerDocument(fragment);
+            if (parent.coreIsComplete() && nextSibling == null && !coreFragment.coreIsComplete()) {
+                // This is a special case: we don't need to build the fragment, but only to move
+                // the already materialized children and then to migrate the builder. This is
+                // possible because we have a builder of type 2.
+                internalGetDocument().migrateBuilder(fragment, parent);
+                ChildNode sibling = fragment.internalGetFirstChild();
+                nextSibling = sibling;
+                int siblingCount = 0;
+                while (sibling != null) {
+                    sibling.internalSetParent(parent);
+                    sibling = sibling.internalGetNextSibling();
+                    siblingCount++;
+                }
+                fragment.internalSetFirstChild(null);
+                fragment.notifyChildrenModified(-siblingCount);
+                parent.notifyChildrenModified(siblingCount);
+            } else {
+                // TODO
+            }
+        }
     }
     
     public final void ChildNode.coreInsertSiblingBefore(CoreChildNode coreSibling) throws CoreModelException {

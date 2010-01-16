@@ -21,4 +21,5 @@ public interface Stack<E> extends Collection<E> {
     void push(E o);
     E pop();
     E peek();
+    boolean replace(E oldItem, E newItem);
 }

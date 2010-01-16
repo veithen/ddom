@@ -23,7 +23,6 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
@@ -54,10 +53,28 @@ public class Document extends ParentNode implements CoreDocument {
         builders.add(new Builder(producer, this, target));
     }
     
-    final Builder getBuilderFor(CoreParentNode target) {
+    final Builder getBuilderFor(ParentNode target) {
         for (Builder builder : builders) {
             if (builder.isBuilderFor(target)) {
                 return builder;
+            }
+        }
+        throw new IllegalArgumentException("No builder found for target");
+    }
+    
+    /**
+     * Reassign the builder linked to one node to another node. This is necessary if the content of
+     * a node is moved to another node without building the source node.
+     * 
+     * @param from
+     * @param to
+     */
+    final void migrateBuilder(ParentNode from, ParentNode to) {
+        for (Builder builder : builders) {
+            if (builder.migrateBuilder(from, to)) {
+                from.setComplete(true);
+                to.setComplete(false);
+                return;
             }
         }
         throw new IllegalArgumentException("No builder found for target");

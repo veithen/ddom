@@ -21,7 +21,6 @@ import com.google.code.ddom.backend.Axis;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreCharacterData;
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNSAwareElement;
@@ -107,8 +106,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return complete;
     }
 
-    final void setComplete() {
-        complete = true;
+    final void setComplete(boolean complete) {
+        this.complete = complete;
     }
     
     public final void coreBuild() throws DeferredParsingException {
