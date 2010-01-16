@@ -97,8 +97,9 @@ public aspect ChildNodeSupport {
             parent.validateChildType(sibling, null);
             parent.prepareNewChild(sibling);
             sibling.coreDetach();
-            // TODO: get rid of cast here
-            sibling.internalSetNextSibling((ChildNode)coreGetNextSibling());
+            // Note: since we have a builder of type 2, we don't need to materialize the next sibling
+            // and we can use nextSibling instead of coreGetNextSibling()
+            sibling.internalSetNextSibling(nextSibling);
             nextSibling = sibling;
             sibling.internalSetParent(parent);
             parent.notifyChildrenModified(1);

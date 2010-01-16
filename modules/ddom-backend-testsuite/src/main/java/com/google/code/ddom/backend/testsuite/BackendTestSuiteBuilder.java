@@ -37,6 +37,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnChild(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnSelf(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterWithIncompleteParent(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterWithInvalidChildType(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBefore(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnChild(config));
