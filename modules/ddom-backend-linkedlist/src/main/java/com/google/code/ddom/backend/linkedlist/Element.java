@@ -25,7 +25,6 @@ import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreDocumentType;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
@@ -88,34 +87,6 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
     
     public final Document internalGetDocument() {
         return document;
-    }
-
-    public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {
-        return ChildNodeHelper.coreGetNextSibling(this);
-    }
-
-    public final CoreChildNode coreGetPreviousSibling() throws DeferredParsingException {
-        return ChildNodeHelper.coreGetPreviousSibling(this);
-    }
-
-    public final void coreInsertSiblingAfter(CoreChildNode sibling) throws CoreModelException {
-        ChildNodeHelper.coreInsertSiblingAfter(this, sibling);
-    }
-
-    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws CoreModelException {
-        ChildNodeHelper.coreInsertSiblingsAfter(this, fragment);
-    }
-
-    public final void coreInsertSiblingBefore(CoreChildNode sibling) throws CoreModelException {
-        ChildNodeHelper.coreInsertSiblingBefore(this, sibling);
-    }
-    
-    public final void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws CoreModelException {
-        ChildNodeHelper.coreInsertSiblingsBefore(this, fragment);
-    }
-
-    public final void coreDetach() throws DeferredParsingException {
-        ChildNodeHelper.coreDetach(this);
     }
 
     public final CoreAttribute coreGetLastAttribute() {
