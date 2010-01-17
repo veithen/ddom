@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE appendix SYSTEM "manual.dtd">
+<appendix>
+    <title>XML grammar</title>
+    <para>
+        This appendix reproduces parts of the productions defined in <biblioref linkend="bib.xml"/>
+        and <biblioref linkend="bib.namespaces"/>
+        that are referenced in this document.
+    </para>
+    <section>
+        <title>XML 1.0</title>
+        <productionset>
+            <title>Characters and names</title>
+            <production id="NT-Char">
+                <lhs>Char</lhs>
+                <rhs>#x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]</rhs>
+            </production>
+            <production id="NT-NameStartChar">
+                <lhs>NameStartChar</lhs>
+                <rhs>":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]</rhs>
+            </production>
+            <production id="NT-NameChar">
+                <lhs>NameChar</lhs>
+                <rhs><nonterminal def="#NT-NameStartChar">NameStartChar</nonterminal> | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]</rhs>
+            </production>
+            <production id="NT-Name" xreflabel="&ntxs;Name&ntxe;">
+                <lhs>Name</lhs>
+                <rhs><nonterminal def="#NT-NameStartChar">NameStartChar</nonterminal> (<nonterminal def="#NT-NameChar">NameChar</nonterminal>)*</rhs>
+            </production>
+        </productionset>
+        <productionset>
+            <title>Document</title>
+            <production id="NT-document" xreflabel="&ntxs;document&ntxe;">
+                <lhs>document</lhs>
+                <rhs>
+                    <nonterminal def="#NT-prolog">prolog</nonterminal>
+                    <nonterminal def="#NT-element">element</nonterminal>
+                    <nonterminal def="#NT-Misc">Misc</nonterminal>*
+                </rhs>
+            </production>
+            <production id="NT-prolog">
+                <lhs>prolog</lhs>
+                <rhs>
+                    <nonterminal def="#NT-XMLDecl">XMLDecl</nonterminal>?
+                    <nonterminal def="#NT-Misc">Misc</nonterminal>*
+                    (<nonterminal def="#NT-doctypedecl">doctypedecl</nonterminal>
+                    <nonterminal def="#NT-Misc">Misc</nonterminal>*)?
+                </rhs>
+            </production>
+            <production id="NT-Misc">
+                <lhs>Misc</lhs>
+                <rhs>
+                    <nonterminal def="#NT-Comment">Comment</nonterminal>
+                  | <nonterminal def="#NT-PI">PI</nonterminal>
+                  | <nonterminal def="#NT-S">S</nonterminal>
+                </rhs>
+            </production>
+        </productionset>
+        <productionset>
+            <title>Element</title>
+            <production id="NT-element" xreflabel="&ntxs;element&ntxe;">
+                <lhs>element</lhs>
+                <rhs>
+                    <nonterminal def="#NT-EmptyElemTag">EmptyElemTag</nonterminal>
+                  | <nonterminal def="#NT-STag">STag</nonterminal>
+                    <nonterminal def="#NT-content">content</nonterminal>
+                    <nonterminal def="#NT-ETag">ETag</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-EmptyElemTag">
+                <lhs>EmptyElemTag</lhs>
+                <rhs>'&lt;' <nonterminal def="#NT-Name">Name</nonterminal> (<nonterminal def="#NT-S">S</nonterminal>
+                    <nonterminal def="#NT-Attribute">Attribute</nonterminal>)* <nonterminal def="#NT-S">S</nonterminal>? '/>'</rhs>
+            </production>
+            <production id="NT-STag">
+                <lhs>STag</lhs>
+                <rhs>'&lt;' <nonterminal def="#NT-Name">Name</nonterminal> (<nonterminal def="#NT-S">S</nonterminal>
+                    <nonterminal def="#NT-Attribute">Attribute</nonterminal>)* <nonterminal def="#NT-S">S</nonterminal>? '>'</rhs>
+            </production>
+            <production id="NT-ETag">
+                <lhs>ETag</lhs>
+                <rhs>'&lt;/' <nonterminal def="#NT-Name">Name</nonterminal> <nonterminal def="#NT-S">S</nonterminal>? '>'</rhs>
+            </production>
+            <production id="NT-Attribute" xreflabel="&ntxs;Attribute&ntxe;">
+                <lhs>Attribute</lhs>
+                <rhs>
+                    <nonterminal def="#NT-Name">Name</nonterminal>
+                    <nonterminal def="#NT-Eq">Eq</nonterminal>
+                    <nonterminal def="#NT-AttValue">AttValue</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-AttValue" xreflabel="&ntxs;AttValue&ntxe;">
+                <lhs>AttValue</lhs>
+                <rhs>
+                    '"' ([^&lt;&amp;"] | <nonterminal def="#NT-Reference">Reference</nonterminal>)* '"' 
+                    | "'" ([^&lt;&amp;'] | <nonterminal def="#NT-Reference">Reference</nonterminal>)* "'"
+                </rhs>
+            </production>
+            <production id="NT-content" xreflabel="&ntxs;content&ntxe;">
+                <lhs>content</lhs>
+                <rhs>
+                    <nonterminal def="#NT-CharData">CharData</nonterminal>?
+                    ((<nonterminal def="#NT-element">element</nonterminal>
+                    | <nonterminal def="#NT-Reference">Reference</nonterminal>
+                    | <nonterminal def="#NT-CDSect">CDSect</nonterminal>
+                    | <nonterminal def="#NT-PI">PI</nonterminal>
+                    | <nonterminal def="#NT-Comment">Comment</nonterminal>)
+                    <nonterminal def="#NT-CharData">CharData</nonterminal>?)*
+                </rhs>
+            </production>
+            <production id="NT-CharData">
+                <lhs>CharData</lhs>
+                <rhs>[^&lt;&amp;]* - ([^&lt;&amp;]* ']]&gt;' [^&lt;&amp;]*)</rhs>
+            </production>
+        </productionset>
+        <productionset>
+            <title>Character and entity references</title>
+            <production id="NT-Reference">
+                <lhs>Reference</lhs>
+                <rhs>
+                    <nonterminal def="#NT-EntityRef">EntityRef</nonterminal>
+                  | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
+                </rhs> 
+            </production>
+            <production id="NT-EntityRef" xreflabel="&ntxs;EntityRef&ntxe;">
+                <lhs>EntityRef</lhs>
+                <rhs>
+                    '&amp;' <nonterminal def="#NT-Name">Name</nonterminal> ';'
+                </rhs>
+            </production> 
+            <production id="NT-CharRef" xreflabel="&ntxs;CharRef&ntxe;">
+                <lhs>CharRef</lhs>
+                <rhs>'&amp;#' [0-9]+ ';' | '&amp;#x' [0-9a-fA-F]+ ';'</rhs>
+            </production>
+        </productionset>
+        <productionset>
+            <title>CDATA sections</title>
+            <production id="NT-CDSect" xreflabel="&ntxs;CDSect&ntxe;">
+                <lhs>CDSect</lhs>
+                <rhs>
+                    <nonterminal def="#NT-CDStart">CDStart</nonterminal>
+                    <nonterminal def="#NT-CData">CData</nonterminal>
+                    <nonterminal def="#NT-CDEnd">CDEnd</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-CDStart">
+                <lhs>CDStart</lhs>
+                <rhs>'&lt;![CDATA['</rhs>
+            </production>
+            <production id="NT-CData" xreflabel="&ntxs;CData&ntxe;">
+                <lhs>CData</lhs>
+                <rhs>(<nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* ']]&gt;' <nonterminal def="#NT-Char">Char</nonterminal>*))</rhs> 
+            </production>
+            <production id="NT-CDEnd">
+                <lhs>CDEnd</lhs>
+                <rhs>']]&gt;'</rhs>
+            </production>
+        </productionset>
+        <productionset>
+            <title>Comments</title>
+            <production id="NT-Comment" xreflabel="&ntxs;Comment&ntxe;">
+                <lhs>Comment</lhs>
+                <rhs>
+                    '&lt;!--' ((<nonterminal def="#NT-Char">Char</nonterminal> - '-') | ('-' (<nonterminal def="#NT-Char">Char</nonterminal> - '-')))* '-->'
+                </rhs>
+            </production>
+        </productionset>
+        <productionset>
+            <title>Processing instructions</title>
+            <production id="NT-PI" xreflabel="&ntxs;PI&ntxe;">
+                <lhs>PI</lhs>
+                <rhs>
+                    '&lt;?' <nonterminal def="#NT-PITarget">PITarget</nonterminal>
+                    (<nonterminal def="#NT-S">S</nonterminal> (<nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* '?>' <nonterminal def="#NT-Char">Char</nonterminal>*)))? '?>'
+                </rhs>
+            </production>
+            <production id="NT-PITarget" xreflabel="&ntxs;PITarget&ntxe;">
+                <lhs>PITarget</lhs>
+                <rhs>
+                    <nonterminal def="#NT-Name">Name</nonterminal> - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
+                </rhs>
+            </production>
+        </productionset>
+    </section>
+    <section>
+        <title>Namespaces in XML 1.0</title>
+        <productionset>
+            <title>Names</title>
+            <production id="NT-NCName" xreflabel="&ntxs;NCName&ntxe;">
+                <lhs>NCName</lhs> 
+                <rhs>
+                    <nonterminal def="#NT-Name">Name</nonterminal>
+                    - (<nonterminal def="#NT-Char">Char</nonterminal>* ':' <nonterminal def="#NT-Char">Char</nonterminal>*)
+                </rhs>
+            </production>
+            <production id="NT-QName">
+                <lhs>QName</lhs>
+                <rhs>
+                    <nonterminal def="#NT-PrefixedName">PrefixedName</nonterminal>
+                  | <nonterminal def="#NT-UnprefixedName">UnprefixedName</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-PrefixedName" xreflabel="&ntxs;PrefixedName&ntxe;">
+                <lhs>PrefixedName</lhs>
+                <rhs>
+                    <nonterminal def="#NT-Prefix">Prefix</nonterminal> ':' <nonterminal def="#NT-LocalPart">LocalPart</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-UnprefixedName">
+                <lhs>UnprefixedName</lhs>
+                <rhs>
+                    <nonterminal def="#NT-LocalPart">LocalPart</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-Prefix" xreflabel="&ntxs;Prefix&ntxe;">
+                <lhs>Prefix</lhs>
+                <rhs>
+                    <nonterminal def="#NT-NCName">NCName</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-LocalPart">
+                <lhs>LocalPart</lhs>
+                <rhs>
+                    <nonterminal def="#NT-NCName">NCName</nonterminal>
+                </rhs>
+            </production>
+        </productionset>
+    </section>
+</appendix>

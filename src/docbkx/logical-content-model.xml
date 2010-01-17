@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter SYSTEM "manual.dtd">
+<chapter id="lcm">
+    <title>The Logical Content Model</title>
+    <section>
+        <title>Introduction</title>
+        <para>
+            The <firstterm>Logical Content Model</firstterm> defines an abstract data set describing
+            the information contained in a well-formed XML document. The purpose is to provide a consistent
+            set of definitions used throughout the rest of the documentation. It is important to understand
+            that the Logical Content Model is not the same as the <firstterm>Object Model</firstterm> that
+            describes the data structures that are used to physically represent the content of an XML
+            document as Java objects. While similar in spirit, the Logical Content Model is also different
+            from the XML Information Set defined in <biblioref linkend="bib.infoset"/>. The Logical
+            Content Model can be best thought of as a model of the output of a typical XML parser, as well
+            as a model for the input of a typical XML serializer. The
+            following items give an overview of the relationship of the Logical Content Model to
+            the Object Model, XML Infoset and the output of an XML parser:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Since DDOM uses deferred parsing, the Object Model not only represents the the content
+                    of the XML document, but must keep track of the state of the underlying parser.
+                    On the other hand, the Logical Content Model is not concerned with deferred parsing and
+                    describes a view of the entire document.
+                </para>
+                <para>
+                    document fragments
+                </para>
+                <para>
+                    non coalesced text nodes
+                </para>
+                <para>
+                    namespace aware and unaware elements and attributes
+                </para>
+                <para>
+                    CDATA sections -> not in the infoset
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    In the Logical Content Model, attribute values and element content (i.e. text nodes)
+                    are described in term of lexical space. On the other hand, the Object Model may
+                    store this content by referring to the value space of the corresponding type.
+                    E.g. if the document is linked to an XML schema, then the Object Model may
+                    use a <classname>java.xml.namespace.QName</classname> object to store the content
+                    of an element or attribute declared with the <type>xs:QName</type> schema type.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    XML Infoset is not suitable to describe the output of a namespace unaware
+                    parser. In order to support Object Models which allow manipulation of
+                    XML in a namespace unaware way, the Logical Content Model defines specific
+                    information items for output of namespace unaware parsers.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </section>
+    <section>
+        <title>Information items</title>
+        <section id="lcm.document">
+            <title>The document information item</title>
+            
+            <variablelist>
+                <varlistentry>
+                    <term>children</term>
+                    <listitem>
+                        <para>
+                            An ordered list of child information items, in document order.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+        <section>
+            <title>The document type declaration information item</title>
+            
+        </section>
+        <section id="lcm.element">
+            <title>Element information items</title>
+
+            <variablelist>
+                <varlistentry>
+                    <term>children</term>
+                    <listitem>
+                        <para>
+                            An ordered list of child information items, in document order.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <section>
+                <title>Namepace aware element information items</title>
+                
+            </section>
+            <section>
+                <title>Namespace unaware element information item</title>
+                <para>
+                    A namespace unaware element information item is produced by a namespace unaware parser
+                    for each <xref linkend="NT-element"/>
+                    appearing in the document. It has the following properties:
+                </para>
+                <variablelist>
+                    <varlistentry>
+                        <term>name</term>
+                        <listitem>
+                            <para>
+                                The <xref linkend="NT-Name"/> of the element.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+                <para>
+                    When a namespace unaware element information item is serialized, it is written as-is, without
+                    consideration for the namespace declarations that are in scope at the location
+                    where the element is written.
+                </para>
+                <note>
+                    <para>
+                        This has important consequences if the resulting document is later
+                        parsed by a namespace aware parser. The behavior depends on the
+                        structure of its name:
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                If the name is an <xref linkend="NT-NCName"/>,
+                                the element will pick up the default namespace in scope. Since a default namespace
+                                always exists, the element is always namespace well-formed.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                If the name is a <xref linkend="NT-PrefixedName"/>,
+                                then it will pick up the namespace bound to the corresponding prefix.
+                                If no corresponding namespace declaration is in scope, the element
+                                is not namespace well-formed.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                Otherwise the element is never namespace well-formed.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                    <para>
+                        This implies that a namespace unaware element information item may never
+                        be considered to have a well-defined namespace.
+                    </para>
+                </note>
+            </section>
+        </section>
+        <section id="lcm.attribute">
+            <title>Attribute information items</title>
+            
+            <variablelist>
+                <varlistentry>
+                    <term>children</term>
+                    <listitem>
+                        <para>
+                            An ordered list of child information items, in document order.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <section>
+                <title>Namespace aware attribute information items</title>
+                
+            </section>
+            <section>
+                <title>Namespace unaware attribute information items</title>
+                <para>
+                    A namespace unaware attribute information item is produced by a namespace unaware parser
+                    for each <xref linkend="NT-Attribute"/>
+                    appearing in the document. It has the following properties:
+                </para>
+                <variablelist>
+                    <varlistentry>
+                        <term>name</term>
+                        <listitem>
+                            <para>
+                                The <xref linkend="NT-Name"/> of the attribute.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+                <para>
+                    When a namespace unaware attribute information item is serialized, it is written as-is, without
+                    consideration for the namespace declarations that are in scope at the location
+                    where the element is written.
+                </para>
+                <note>
+                    <para>
+                        The consequences of this are slightly different than for namespace unaware elements:
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                If the name is an <xref linkend="NT-NCName"/>,
+                                the attribute will be namespace well-formed and have no namespace.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                If the name is not an <xref linkend="NT-NCName"/>, then the attribute will be
+                                either not namespace well-formed or it will pick up the namespace of one
+                                of the namespace declarations in scope, exactly as for namespace unaware
+                                elements.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                    <para>
+                        The important point to note here is that in contrast to namespace unaware elements,
+                        a namespace unaware attribute has a well-defined namespace if its name is a
+                        <xref linkend="NT-NCName"/>. This is also true if the name is a
+                        <xref linkend="NT-PrefixedName"/>
+                        with <literal>xml</literal> as prefix, because this prefix is always implicitly
+                        bound to <literal>http://www.w3.org/XML/1998/namespace</literal> (and
+                        must not be bound to any other namespace).
+                        There is thus a partial equivalence between namespace unaware and
+                        namespace aware attribute information items.
+                    </para>
+                </note>
+            </section>
+        </section>
+        <section id="lcm.text">
+            <title>Text information items</title>
+            <para>
+                The <xref linkend="NT-document"/> production may be rewritten as follows:
+            </para>
+            <productionset>
+                <production id="NT-document-alt">
+                    <lhs>document</lhs>
+                    <rhs>
+                        <nonterminal def="#NT-XMLDecl">XMLDecl</nonterminal>?
+                        (<nonterminal def="#NT-Comment">Comment</nonterminal>
+                        | <nonterminal def="#NT-PI">PI</nonterminal>
+                        | <nonterminal def="#NT-DocText">DocText</nonterminal>)*
+                        (<nonterminal def="#NT-doctypedecl">doctypedecl</nonterminal>
+                         (<nonterminal def="#NT-Comment">Comment</nonterminal>
+                         | <nonterminal def="#NT-PI">PI</nonterminal>
+                         | <nonterminal def="#NT-DocText">DocText</nonterminal>)*)?
+                        <nonterminal def="#NT-element">element</nonterminal>
+                        (<nonterminal def="#NT-Comment">Comment</nonterminal>
+                        | <nonterminal def="#NT-PI">PI</nonterminal>
+                        | <nonterminal def="#NT-DocText">DocText</nonterminal>)*
+                    </rhs>
+                </production>
+                <production id="NT-DocText" xreflabel="&ntxs;DocText&ntxe;">
+                    <lhs>DocText</lhs>
+                    <rhs><nonterminal def="#NT-S">S</nonterminal></rhs>
+                </production>
+            </productionset>
+            <para>
+                The <xref linkend="NT-content"/> production appearing in <xref linkend="NT-element"/>
+                may be rewritten as follows:
+            </para>
+            <productionset>
+                <production id="NT-content-alt">
+                    <lhs>content</lhs>
+                    <rhs>
+                        <nonterminal def="#NT-ElemText">ElemText</nonterminal>?
+                        ((<nonterminal def="#NT-element">element</nonterminal>
+                        | <nonterminal def="#NT-DeclaredEntityRef">DeclaredEntityRef</nonterminal>
+                        | <nonterminal def="#NT-CDSect">CDSect</nonterminal>
+                        | <nonterminal def="#NT-PI">PI</nonterminal>
+                        | <nonterminal def="#NT-Comment">Comment</nonterminal>)
+                        <nonterminal def="#NT-ElemText">ElemText</nonterminal>?)*
+                    </rhs>
+                </production>
+                <production id="NT-ElemText" xreflabel="&ntxs;ElemText&ntxe;">
+                    <lhs>ElemText</lhs>
+                    <rhs>
+                        <nonterminal def="#NT-CharData">CharData</nonterminal>?
+                        ((<nonterminal def="#NT-CharRef">CharRef</nonterminal> | <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal>)
+                         <nonterminal def="#NT-CharData">CharData</nonterminal>?)*
+                    </rhs>
+                </production>
+                <production id="NT-PredefinedEntityRef" xreflabel="&ntxs;PredefinedEntityRef&ntxe;"> <!-- Concept defined in XML 1.0, 4.6 Predefined Entities -->
+                    <lhs>PredefinedEntityRef</lhs>
+                    <rhs>'&amp;amp;' | '&amp;lt;' | '&amp;gt;' | '&amp;apos;' | '&amp;quot;'</rhs>
+                </production>
+                <production id="NT-DeclaredEntityRef">
+                    <lhs>DeclaredEntityRef</lhs>
+                    <rhs><nonterminal def="#NT-EntityRef">EntityRef</nonterminal> - <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal></rhs>
+                </production>
+            </productionset>
+            <para>
+                In the same way, the <xref linkend="NT-AttValue"/> production can be transformed:
+            </para>
+            <productionset>
+                <production id="NT-AttValue-alt">
+                    <lhs>AttValue</lhs>
+                    <rhs>'"' <nonterminal def="#NT-AttValueContent1">AttValueContent1</nonterminal> '"' 
+                        | "'" <nonterminal def="#NT-AttValueContent2">AttValueContent2</nonterminal> "'"
+                    </rhs>
+                </production>
+                <production id="NT-AttValueContent1">
+                    <lhs>AttValueContent1</lhs>
+                    <rhs>
+                        <nonterminal def="#NT-AttText1">AttText1</nonterminal>?
+                        (<nonterminal def="#NT-DeclaredEntityRef">DeclaredEntityRef</nonterminal>
+                        <nonterminal def="#NT-AttText1">AttText1</nonterminal>?)*
+                    </rhs>
+                </production>
+                <production id="NT-AttValueContent2">
+                    <lhs>AttValueContent2</lhs>
+                    <rhs>
+                        <nonterminal def="#NT-AttText2">AttText2</nonterminal>?
+                        (<nonterminal def="#NT-DeclaredEntityRef">DeclaredEntityRef</nonterminal>
+                        <nonterminal def="#NT-AttText2">AttText2</nonterminal>?)*
+                    </rhs>
+                </production>
+                <production id="NT-AttText1" xreflabel="&ntxs;AttText1&ntxe;">
+                    <lhs>AttText1</lhs>
+                    <rhs>
+                        ([^&lt;&amp;"]
+                        | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
+                        | <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal>)*
+                    </rhs>
+                </production>
+                <production id="NT-AttText2" xreflabel="&ntxs;AttText2&ntxe;">
+                    <lhs>AttText2</lhs>
+                    <rhs>
+                        ([^&lt;&amp;']
+                        | <nonterminal def="#NT-CharRef">CharRef</nonterminal>
+                        | <nonterminal def="#NT-PredefinedEntityRef">PredefinedEntityRef</nonterminal>)*
+                    </rhs>
+                </production>
+            </productionset>
+            <para>
+                For CDATA sections:
+            </para>
+            <productionset>
+                <production id="NT-CDSect-alt" xreflabel="&ntxs;CDSect&ntxe;">
+                    <lhs>CDSect</lhs>
+                    <rhs>
+                        '&lt;![CDATA[' <nonterminal def="#NT-CData">CData</nonterminal> ']]&gt;'
+                    </rhs>
+                </production>
+                <production>
+                    <lhs>CData</lhs>
+                    <rhs>(<nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* ']]&gt;' <nonterminal def="#NT-Char">Char</nonterminal>*))</rhs> 
+                </production>
+            </productionset>
+            <para>
+                For comments:
+            </para>
+            <productionset>
+                <production id="NT-Comment-alt">
+                    <lhs>Comment</lhs>
+                    <rhs>
+                        '&lt;!--' <nonterminal def="#NT-CommentText">CommentText</nonterminal> '-->'
+                    </rhs>
+                </production>
+                <production id="NT-CommentText" xreflabel="&ntxs;CommentText&ntxe;">
+                    <lhs>CommentText</lhs>
+                    <rhs>
+                        ((<nonterminal def="#NT-Char">Char</nonterminal> - '-') | ('-' (<nonterminal def="#NT-Char">Char</nonterminal> - '-')))*
+                    </rhs>
+                </production>
+            </productionset>
+            <para>
+                For processing instructions:
+            </para>
+            <productionset>
+                <production id="NT-PI-alt">
+                    <lhs>PI</lhs>
+                    <rhs>
+                        '&lt;?' <nonterminal def="#NT-PITarget">PITarget</nonterminal>
+                        (<nonterminal def="#NT-S">S</nonterminal> <nonterminal def="#NT-PIText">PIText</nonterminal>)? '?>'
+                    </rhs>
+                </production>
+                <production id="NT-PIText" xreflabel="&ntxs;PIText&ntxe;">
+                    <lhs>PIText</lhs>
+                    <rhs>
+                        <nonterminal def="#NT-Char">Char</nonterminal>* - (<nonterminal def="#NT-Char">Char</nonterminal>* '?>' <nonterminal def="#NT-Char">Char</nonterminal>*)
+                    </rhs>
+                </production>
+            </productionset>
+            <para>
+                For every <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>, <xref linkend="NT-AttText1"/>, <xref linkend="NT-AttText2"/>,
+                <xref linkend="NT-CData"/><footnote><para>Note that <xref linkend="NT-CData"/> only appears
+                as part of <xref linkend="NT-CDSect"/>; thus the definition is consistent.</para></footnote>,
+                <xref linkend="NT-CommentText"/> and <xref linkend="NT-PIText"/> the
+                parser produces one or more text information items. They may thus appear as children of
+                <link linkend="lcm.document">document</link>, <link linkend="lcm.element">element</link>,
+                <link linkend="lcm.attribute">attribute</link>, <link linkend="lcm.cdata">CDATA section</link>,
+                <link linkend="lcm.comment">comment</link> and <link linkend="lcm.pi">processing instruction</link> information
+                items. The individual text information
+                items produced for a single <xref linkend="NT-DocText"/>, <xref linkend="NT-ElemText"/>,
+                <xref linkend="NT-AttText1"/>, <xref linkend="NT-AttText2"/>, <xref linkend="NT-CData"/>, <xref linkend="NT-CommentText"/>
+                or <xref linkend="NT-PIText"/> are called <firstterm>segments</firstterm>.
+                The concatenation of the content of these segments must equal the value of the token
+                after substitution of all <xref linkend="NT-CharRef"/> and <xref linkend="NT-PredefinedEntityRef"/> tokens
+                by their corresponding characters.
+                The way how tokens are split into segments is arbitrary and segment boundaries have
+                no syntactic meaning.
+            </para>
+            <para>
+                TODO: Evaluate what this means for section 3.3.3 "Attribute-Value Normalization" in the XML specs.
+            </para>
+        </section>
+        <section>
+            <title>Entity reference information items</title>
+            <para>
+                Unless the parser is configured to replace entity reference, an entity reference information item is
+                produced by the parser for every <xref linkend="NT-EntityRef"/>
+                which doesn't refer to one of the predefined entities <literal>amp</literal>, <literal>lt</literal>,
+                <literal>gt</literal>, <literal>apos</literal> or <literal>quot</literal>.
+                The entity reference information item has the following properties:
+            </para>
+            <variablelist>
+                <varlistentry id="prop-lcm.entityref.name" xreflabel="&lcmxs;name&lcmxe;">
+                    <term>name</term>
+                    <listitem>
+                        <para>
+                            The name of the entity [or a reference to an entity information item???]
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry id="prop-lcm.entityref.children" xreflabel="&lcmxs;children&lcmxe;">
+                    <term>children</term>
+                    <listitem>
+                        <para>
+                            An ordered list of child information items that describe the content of the
+                            entity reference after expansion.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <note>
+                <para>
+                    It is important to note that the <xref linkend="prop-lcm.entityref.children"/>
+                    of two entity reference information items having the same
+                    <xref linkend="prop-lcm.entityref.name"/> are not necessarily the same.
+                    The reason for this is that the <xref linkend="prop-lcm.nsaware.namespaceURI"/>
+                    of namespace aware elements and attributes generated during the entity
+                    expansion may depend on the namespace context in which the entity reference
+                    appears.
+                </para>
+            </note>
+            <para>
+                An entity reference information item is serialized as an <xref linkend="NT-EntityRef"/>
+                or, if the serializer is requested to do so, by replacing the entity reference by the content of the entity.
+            </para>
+        </section>
+        <section id="lcm.cdata">
+            <title>CDATA section information items</title>
+            <para>
+                A parser produces a CDATA section information item for every <xref linkend="NT-CDSect"/>.
+                It has the following properties: 
+            </para>
+            <variablelist>
+                <varlistentry>
+                    <term>children</term>
+                    <listitem>
+                        <para>
+                            An ordered list of child information items, in document order. This list
+                            may only contain <link linkend="lcm.text">text information items</link>.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <para>
+                When a CDATA section information item is serialized, a single <xref linkend="NT-CDSect"/> is
+                produced by concatenating the segments. It is the responsibility of the serializer to
+                enfore that the <xref linkend="NT-CData"/> does not contain the <literal>']]&gt;'</literal>
+                character sequence.
+            </para>
+        </section>
+        <section id="lcm.comment">
+            <title>Comment information items</title>
+            <para>
+                A parser produces a comment information item for every <xref linkend="NT-Comment"/>.
+                It has the following properties:
+            </para>
+            <variablelist>
+                <varlistentry>
+                    <term>children</term>
+                    <listitem>
+                        <para>
+                            An ordered list of child information items, in document order. This list
+                            may only contain <link linkend="lcm.text">text information items</link>.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+        <section id="lcm.pi">
+            <title>Processing instruction information items</title>
+            <para>
+                A parser produces a processing instruction information item for every
+                <xref linkend="NT-PI"/>. It has the following properties:
+            </para>
+            <variablelist>
+                <varlistentry>
+                    <term>target</term>
+                    <listitem>
+                        <para>
+                            The <xref linkend="NT-PITarget"/>.
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>children</term>
+                    <listitem>
+                        <para>
+                            An ordered list of child information items, in document order. This list
+                            may only contain <link linkend="lcm.text">text information items</link>.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+        <section>
+            <title>Unparsed entity information items</title>
+            
+        </section>
+        <section>
+            <title>Notation information items</title>
+            
+        </section>
+        <section>
+            <title>Namespace declaration information items</title>
+        
+        </section>
+    </section>
+    <section>
+        <title>Information item classification</title>
+        <para>
+            In <xref linkend="lcm.element"/> and <xref linkend="lcm.attribute"/>, we already
+            established two abstract classes of information items, namely element information
+            items and attribute information items. This section identifies several further
+            classifications that will prove to be useful.
+        </para>
+        <section>
+            <title>Parent, child and leaf information items</title>
+            <para>
+                Parent information items are information items that have a parent property.
+                Child information items are information items that have a children property.
+                Leaf information items are child information items that are not parent information
+                items.
+            </para>
+            <table id="tbl.lcm.parent-child-leaf">
+                <caption>Parent, child and leaf information items</caption>
+                <tgroup cols="4">
+                    <thead>
+                        <row>
+                            <entry>Information item</entry><entry>Parent</entry><entry>Child</entry><entry>Leaf</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>Document</entry><entry>X</entry><entry></entry><entry></entry>
+                        </row>
+                        <row>
+                            <entry>Document type declaration</entry><entry></entry><entry>X</entry><entry>X</entry>
+                        </row>
+                        <row>
+                            <entry>Element</entry><entry>X</entry><entry>X</entry><entry></entry>
+                        </row>
+                        <row>
+                            <entry>Attribute</entry><entry>X</entry><entry></entry><entry></entry>
+                        </row>
+                        <row>
+                            <entry>Text</entry><entry></entry><entry>X</entry><entry>X</entry>
+                        </row>
+                        <row>
+                            <entry>CDATA section</entry><entry>X</entry><entry>X</entry><entry></entry>
+                        </row>
+                        <row>
+                            <entry>Comment</entry><entry>X</entry><entry>X</entry><entry></entry>
+                        </row>
+                        <row>
+                            <entry>Processing instruction</entry><entry>X</entry><entry>X</entry><entry></entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+        <section>
+            <title>Namespace aware named information items</title>
+            
+            <para>
+                Common properties:
+            </para>
+            <variablelist>
+                <varlistentry id="prop-lcm.nsaware.namespaceURI" xreflabel="&lcmxs;namespaceURI&lcmxe;">
+                    <term>namespaceURI</term>
+                    <listitem>
+                        <para>
+                            The namespace URI of the named information item.
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </section>
+        <section>
+            <title>Namespace unaware named information items</title>
+            
+        </section>
+        <section>
+            <title>Character data information items</title>
+            
+        </section>
+        <section>
+            <title>Summary</title>
+            <para>
+                UML diagram here
+            </para>
+        </section>
+    </section>
+    <section>
+        <title>Syntactic structures not captured by the Logical Content Model</title>
+        
+    </section>
+    <section>
+        <title>Transformations of the Logical Content Model</title>
+        <section>
+            <title>Coalescing</title>
+            
+        </section>
+        <section>
+            <title>Entity reference expansion</title>
+            
+        </section>
+        <section>
+            <title>"Namespace repairing"</title>
+            
+        </section>
+    </section>
+    <section>
+        <title>Comparison with existing object models</title>
+        <section>
+            <title>DOM</title>
+            
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        DOM doesn't support CDATA segmentation.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            
+        </section>
+        <section>
+            <title>Axiom</title>
+            
+        </section>
+    </section>
+</chapter>

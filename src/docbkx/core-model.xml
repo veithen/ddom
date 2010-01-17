@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter SYSTEM "manual.dtd">
+<chapter>
+    <title>The Core Model</title>
+    <para>
+        The Core Model is a mapping of the Logical Content Model defined in <xref linkend="lcm"/>
+        into a set of interfaces in the Java language. The Core Model is thus an abstract API.
+        The mapping between the two models is mostly direct, but there are some slight
+        differences that will be explained in the following sections.
+    </para>
+    <section>
+        <title>Document fragments</title>
+        <para>
+            While the Logical Content Model is a model of the content of a well-formed
+            XML document, the Core Model is an API that allows user code to manipulate,
+            edit and create XML documents. To allow these manipulations, it is necessary
+            to introduce a node type that has no corresponding information item.
+            ...
+        </para>
+    </section>
+    <section id="compact.parents">
+        <title>Compact parent nodes</title>
+        <para>
+            The Logical Content Model defines the children property as an ordered list
+            of child information items. The direct transcription of this would be to
+            specify that a parent node is a node that has an ordered list of child nodes.
+            There are several reasons why this is too simplistic:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <xref linkend="tbl.lcm.parent-child-leaf"/> shows that most nodes are
+                    actually parent nodes. In practice however, many instances of parent
+                    nodes will only contain a single text node as their child. This is
+                    certainly true for attributes, CDATA sections, comments and
+                    processing instructions. Surprisingly, this is also true for elements,
+                    especially in SOAP messages. Indeed, in a typical Web service message,
+                    most elements are instances of simple schema types, and thus
+                    contain a single text information item (unless the element is empty or
+                    the parser decides to segment the value of the element).
+                </para>
+                <para>
+                    Storing this character data in separate node instances creates an
+                    overhead that in most cases is unnecessary because the text node will
+                    never be accessed directly. Instead, the application typically uses
+                    a method on the parent node to retrieve its text content.
+                    E.g. for elements, the following methods can be used, depending on
+                    the API:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            DOM: <methodname>Node#getTextContent()</methodname> invoked on
+                            the <classname>Element</classname> instance.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Axiom: <methodname>OMElement#getText()</methodname>.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            StAX: <methodname>XMLStreamReader#getElementText()</methodname>.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    In the case of attributes, CDATA sections, comments and processing
+                    instructions, some APIs even don't have methods to
+                    access the child nodes because they don't consider these nodes as
+                    parent nodes. Especially for attributes, the overhead created
+                    by storing their values in separate child nodes would be
+                    annoying.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    The Logical Content Model only captures the content of a document,
+                    but not its semantics. In particular, if the document is described
+                    by an XML schema, then for simple types, the Logical Content Model
+                    only refers to the lexical space but never to the value
+                    space of these types.
+                    To support frontends such as Axiom [and SDO??], it is necessary 
+                    to allow the Core Model to store content using objects other than
+                    strings.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    One of the design goals is to support sourced content.
+                    [TODO: (link to) definition here]
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            Therefore, the design of the Core Model specifies that the content of a parent
+            node may be stored in one of the following forms:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    As an order list of child nodes.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    As a <firstterm>value object</firstterm>, i.e. a single String object or
+                    an object of another type that has a well-defined mapping from value to lexical space. Examples are
+                    <classname>javax.xml.namespace.QName</classname> for <type>xs:QName</type>
+                    and <classname>javax.activation.DataHandler</classname> for <type>xs:base64Binary</type>.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    An object of type <classname>FragmentSource</classname>.
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            An instance that stores its content as an order list of child nodes is said to
+            be <firstterm>expanded</firstterm>. If it uses one of the other two representations,
+            it is said to be <firstterm>unexpanded</firstterm>. When the children of an
+            unexpanded parent node are queried, the node will be <firstterm>expanded</firstterm>,
+            i.e. the alternative representation will be replaced by an equivalent list of
+            child nodes. Node types supporting this mechanism are called
+            <firstterm>compact</firstterm>. Note that in the Core Model, all parent nodes
+            are compact [Well, not yet...].
+        </para>
+        <para>
+            If the content is stored using a <classname>FragmentSource</classname>, then
+            deferred parsing is used when the node is expanded. This means that after
+            expansion, the list of child nodes may be incomplete and only contain the
+            materialized child nodes. Of course this is transparent to the code
+            interacting with the Core Model.
+        </para>
+        <para>
+            In this context it is important not to confuse the concept
+            of "expanded" with the concept of "complete".
+            [TODO: elaborate a bit more; it is clear that an incomplete node may be expanded;
+            but may a complete node become incomplete when it is expanded?!?] 
+        </para>
+        <para>
+            TODO: specify what happens to value objects after expansion!
+        </para>
+    </section>
+    <section>
+        <title>Read-only nodes</title>
+        <para>
+            For consistency during serialization, modifying the descendants of an entity
+            reference node is disallowed. Since this is the only case of read-only nodes,
+            it is specified that a node is read-only if and only if it is an entity
+            reference node or a descendant of an entity reference node. It is the
+            responsibility of the backend to enforce this.
+        </para>
+        <para>
+            One can see that there are three different ways to implement this behavior:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Let the each node have an attribute that indicates
+                    if it is read-only and set this attribute appropriately.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Explicitly check if the node has an ancestor which is an entity
+                    reference.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Let parent nodes have an explicit flag and let leaf nodes (i.e. text nodes) check
+                    if they are children of a read-only node.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </section>
+    <section>
+        <title>UML diagram</title>
+        
+    </section>
+    <section>
+        <title>Interface design</title>
+        <para>
+            The following principles and guidelines have been applied in the design of the
+            Core Model API:
+        </para>
+        <orderedlist>
+            <listitem>
+                <para>
+                    All interfaces representing nodes have names starting with <literal>Core</literal>.
+                    More precisely, this convention applies to all interfaces that (after weaving)
+                    may be implemented by a class that at the same time implements an interface
+                    from the frontend API. While not strictly necessary, this convention makes it
+                    easy to distinguish interfaces from the two APIs (e.g. <classname>CoreElement</classname>
+                    and DOM's <classname>Element</classname> interface).
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    All methods defined by the interfaces identified in the previous item have names
+                    starting with <literal>core</literal>. This is necessary to avoid any possible conflict
+                    with methods defined by frontend APIs.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Several methods operate on more than one node. E.g., inserting a node requires
+                    references to two nodes, namely the node to insert and the node defining the
+                    position in the document (typically the future parent or sibling). In these cases
+                    there are several possible ways to define the method. Depending on the selected
+                    definition, the node on which the method must be invoked and the parameters
+                    passed to the call vary. E.g. a method that inserts a new sibling may either be
+                    defined such that it is invoked on the existing node or such that it is invoked
+                    on the node to be inserted.
+                </para>
+                <para>
+                    The guideline is to define methods such that they will be invoked on node instances
+                    already part of the tree (and that don't change position) and that the parameter
+                    represents the node to insert into the tree. In any case, redundancies such as
+                    in the definition of DOM's <methodname>insertBefore</methodname> method (which must
+                    be invoked on the parent node of the two nodes) should be strictly avoided.
+                </para>
+                <para>
+                    One of the rationale for this guideline is that before actually inserting the node into the
+                    tree, the Core Model implementation must make sure that it is an instance from the same
+                    model<footnote><para>Note that because of weaving, it is not sufficient for the node to belong
+                    to the same backend implementation.</para></footnote>, is owned by the same document and is
+                    detached. In most cases, the backend implementation will also have to cast the parameters
+                    of the method to the actual implementation classes. This can be conveniently combined
+                    with the same-model check. Taking these different aspects into account, one can easily
+                    see that the guideline described here produces to the most natural implementation code.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A method should only return a node instance if it is expected that the frontend code
+                    actually needs the returned reference. If this is not the case, the method should
+                    have a parameter that allows the frontend to specify if it requires a return value.
+                    For methods that return a reference that in some cases is only used in null checks,
+                    alternative methods returning booleans should be defined. An example for this is the
+                    method that returns the parent of a node.
+                </para>
+                <para>
+                    The rationale for this guideline is that some backend implementation not only defer
+                    parsing, but may also defer the instantiation of the objects representing the
+                    information items of the document. In that case, instatiation should only occur
+                    if the frontend really needs the reference to the node instance.
+                </para>
+            </listitem>
+        </orderedlist>
+    </section>
+</chapter>

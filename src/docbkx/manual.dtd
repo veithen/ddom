@@ -1,0 +1,8 @@
+<!ENTITY % docbook PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+
+%docbook;
+
+<!ENTITY ntxs "&#183;"> <!-- non terminal xref start -->
+<!ENTITY ntxe "&#183;"> <!-- non terminal xref end -->
+<!ENTITY lcmxs "&#9900;"> <!-- logical content model (property xref) start -->
+<!ENTITY lcmxe "&#9900;"> <!-- logical content model (property xref) end -->

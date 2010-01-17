@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter SYSTEM "manual.dtd">
+<chapter>
+    <title>The Logical Event Model</title>
+    <section>
+        <title>Definition</title>
+        <para>
+            TODO: Define the LEM by deriving it from the LCM
+        </para>
+    </section>
+    <section>
+        <title>Comparison with existing parsers and serializers</title>
+        <section>
+            <title>SAX</title>
+            
+        </section>
+        <section>
+            <title>StAX</title>
+            <section>
+                <title>The <classname>XMLStreamReader</classname> interface</title>
+                
+            </section>
+            <section>
+                <title>The <classname>XMLStreamWriter</classname> interface</title>
+                
+            </section>
+        </section>
+        <section>
+            <title>Xerces XNI</title>
+            
+        </section>
+    </section>
+</chapter>

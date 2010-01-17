@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter SYSTEM "manual.dtd">
+<chapter>
+    <title>A theoretical look at deferred parsing</title>
+    <section>
+        <title>Introduction</title>
+        <para>
+            Deferred parsing applies to object model instances created from XML documents (or other sources
+            providing sequences of XML events) and describes a feature by which the object model only
+            pulls as much events from the underlying parser as necessary to satisfy the current request
+            from the user code. This means that both the parsing and building of the internal representation
+            of the data by the object model happens incrementally. This process is driven by the user
+            code, but in way that is completely transparent to that code: simply, each time the user code
+            requests a node instance that it has not yet visited, the object model may need to first
+            pull new data from the parser and build the relevant nodes.
+        </para>
+        <para>
+            A different concept that needs to be clearly distinguished from deferred parsing is
+            deferred instantiation of nodes. Object models supporing this feature will defer the creation
+            of a node instance until it is explicitly requested by the user code. For nodes that
+            have not yet been instantiated, the object model will store the data in a more compact
+            (i.e. memory efficient) form or in a form that is less expensive to process. 
+        </para>
+        <para>
+            It is important to understand that the two concepts are really independent of each other:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Standard XML parsers don't support random access to XML data. In addition, in many cases,
+                    e.g. when receiving an XML message over the network, the underlying binary
+                    stream is sequential. Therefore the XML data is provided by the parser as a
+                    sequence of events. It is therefore natural to have object models that support
+                    deferred parsing while instantiating the nodes immediately upon receipt of the
+                    corresponding events. Obviously, such an object model will defer
+                    instantiation of the node instances for the part of the document that has not
+                    yet been parsed, but the important point is that it will always create all the
+                    node instances for the part of the document that has already been parsed, even
+                    for nodes that have not been requested explicitly by the user code.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    It is perfectly possible for an object model to parse the document in a single
+                    step, but to create the node instances only on demand, i.e. to support deferred
+                    instantiation without implementing deferred parsing. As mentioned above, this
+                    implies that the object model must store the information extracted from the
+                    document in some intermediary form (or at least to keep some sort of index,
+                    if the document is located in a storage that supports random access).
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            TODO: mention Axiom and Xerces deferred documents here
+        </para>
+        <para>
+            In DDOM, all backends are expected to support deferred parsing<footnote><para>Though
+            in principle there is nothing that would prevent a backend implementation from choosing not
+            to support deferred parsing.</para></footnote>. Support for deferred instantiation is
+            not mandatory and is an implementation choice. Note however that all backends should
+            have support for compact parent nodes as described in <xref linkend="compact.parents"/>.
+            Compact parent nodes implement a weaker form of deferred instantiation that provides
+            some of the advantages of deferred instantiation without causing any additional overhead.
+            The linked list backend supports both deferred parsing and compact parent nodes.
+        </para>
+        <para>
+            In the present chapter we will primarily be concerned with the concept of
+            deferred parsing and in general ignore the concept of deferred instantiation.
+        </para>
+    </section>
+    <section>
+        <title>Benefits of deferred parsing</title>
+    
+    </section>
+    <section>
+        <title>Concepts and definitions</title>
+        <para>
+            First of all, it is clear that in an object model that supports deferred parsing,
+            an object model instance must somehow remain connected to the parser, at least
+            until the document has been completely consumed. We call <firstterm>builder</firstterm>
+            the component responsible for mediating between the object model instance and
+            the parser. The builder is triggered by the object model whenever the user code
+            requests a node instance that is not yet available. The responsibility of the builder
+            is then to pull events from the parser, create the corresponding node instances and insert
+            these instances into the object model. In general, the object model code will invoke
+            the builder repeatedly until the tree has reached a state where the request from the
+            user code can be satisfied.
+        </para>
+        <para>
+            The essence of an XML object model is that there is a correspondence between node
+            instances and information items in the original document. To characterize the state
+            of these node instances with respect to deferred parsing, we use the following
+            definitions:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    A node is said to be <firstterm>materialized</firstterm> if the start event
+                    corresponding to that node has been processed.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A node is said to be <firstterm>built</firstterm> or <firstterm>complete</firstterm>
+                    if all events corresponding to that node have been processed.
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            There are some trivial corollaries that can be derived from these definitions and the
+            relationship between nodes and events:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    A node that is complete is always materialized.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    For node types that are classified as leaf nodes (e.g. text nodes), a node
+                    instance that is materialized is always complete.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    If a node is complete, then all its descendants are complete. Note that this
+                    assertion is true at the object model level only if the model instance is
+                    accessed read-only. If the object model instance is altered (more precisely,
+                    if the positions of nodes are changed), then the assertion is valid only
+                    if "descendants" is interpreted as meaning "descendants in the original
+                    document".
+                </para>
+                <para>
+                    The converse of this assertion is not true: a node can be incomplete even
+                    if all its descendants are complete. This is the case if the end event for
+                    that node has not yet been processed, i.e. if all descendants have been
+                    completely processed, but the object model doesn't "know" yet that there
+                    are no more descendents.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    If a node is incomplete, then all its ancestors (in the original document)
+                    are incomplete.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    The number of nodes that are materialized but incomplete is always equal
+                    to the tree depth at the position of the current event in the original document.
+                    Since in most documents the maximum depth doesn't exceed 10, the number
+                    of nodes in this state in any given object model instance is fairly limited.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    If a node is materialized, then all its preceding siblings (in the original
+                    document) are complete. More precisely, the set of nodes that are complete
+                    comprises all nodes preceding the materialized node (in document order) minus
+                    its ancestors.
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            From these properties it is easy to determine what kind of navigation operations will
+            cause an incomplete node to be built. E.g. navigating from one node to its next sibling
+            will cause the node to be built (assuming that the sibling relationship has not been
+            altered with respect to the original document). On the other hand, for operations that
+            alter the relationships between nodes, it is much less obvious to determine how they
+            will impact the status the nodes in the object model. Consider e.g. the case where the user code
+            attempts to detach a node that is not complete. Does the object model need to build
+            the node first? As we will see, the set of nodes that need to be built before a given
+            update operation can be executed depends on the implementation of the builder. The next
+            section will establish a classification of different builder types and analyze their
+            respective properties.
+        </para>
+    </section>
+    <section>
+        <title>Builder types</title>
+        <para>
+            Three possible types can be identified:
+        </para>
+        <variablelist>
+            <varlistentry>
+                <term>Type 1 builders</term>
+                <listitem>
+                    <para>
+                        A builder of type 1 only keeps a reference to the node instance corresponding
+                        to the last processed event. For example:
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                The last event was a start element event. The builder points to an
+                                incomplete element instance.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                The last event was a text event. The builder points to the corresponding
+                                text node.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                The last event was an end element event. The builder points to the
+                                corresponding element instance, which is now complete.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                    <para>
+                        If the builder is in a state where it points to an element (i.e. the last
+                        processed event was a start element or end element event), it will use the
+                        completion status of that element instance to determine if the next event
+                        will create the first child or the next sibling for that element.
+                    </para>
+                    <para>
+                        It is clear that for a builder of this type to work properly, the object
+                        model instance must not be altered in a way that would change the position
+                        of the current node referenced by the builder with respect to its position
+                        in the original document. E.g. before a node can be detached, the object
+                        model must make sure that this node is complete and that the next sibling
+                        is materialized (or that the parent node is complete if there are no
+                        more siblings). 
+                    </para>
+                    
+                    <para>
+                        
+                        Whenever the parent of the node changes or siblings are inserted after the node.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Type 2 builders</term>
+                <listitem>
+                    <para>
+                        Whenever siblings are inserted after the node. --> the builder needs to maintain
+                        a node stack
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Type 3 builders</term>
+                <listitem>
+                    <para>
+                        Never --> the builder needs to keep even more information: the siblings inserted
+                        immediately after the node + siblings added at the end
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+</chapter>

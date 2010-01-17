@@ -209,6 +209,7 @@
                                     </fileset>
                                 </copy>
                             </postProcess>
+                            <xincludeSupported>true</xincludeSupported>
                         </configuration>
                     </execution>
                 </executions>
