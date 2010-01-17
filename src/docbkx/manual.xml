@@ -80,6 +80,12 @@
                         this is strictly necessary.
                     </para>
                 </listitem>
+                <listitem>
+                    <para>
+                        Robust and reliable resource lifecycle management (e.g.: streams and parsers used in deferred parsing
+                        and sourced elements; DataHandlers in base64 encoded text nodes).
+                    </para>
+                </listitem>
             </itemizedlist>
             <para>
                 Medium priority design goals:
