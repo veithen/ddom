@@ -36,69 +36,76 @@
     <part>
         <title>Architecture</title>
         <chapter>
-            <title>Design goals</title>
-            <para>
-                High priority design goals:
-            </para>
-            <itemizedlist>
-                <listitem>
-                    <para>
-                        The amount of new APIs created by the project should be as low as possible. In most of the
-                        areas covered by this project, well defined, widely used and/or convenient APIs already
-                        exist:
-                    </para>
-                    <table>
-                        <tgroup cols="2">
-                            <thead>
-                                <row>
-                                    <entry>Area</entry><entry>Existing APIs/frameworks</entry>
-                                </row>
-                            </thead>
-                            <tbody>
-                                <row>
-                                    <entry>XML object models</entry>
-                                    <entry>DOM, Axiom, JDOM, DOM4J, XOM</entry>
-                                </row>
-                                <row>
-                                    <entry>SOAP object models</entry>
-                                    <entry>SAAJ, Axiom, Spring WS</entry>
-                                </row>
-                                <row>
-                                    <entry>XML data sources</entry>
-                                    <entry>JAXP (<classname>SAXSource</classname>, <classname>DOMSource</classname>,
-                                           <classname>StreamSource</classname>), SAX (<classname>InputSource</classname>)</entry>
-                                </row>
-                                <row>
-                                    <entry>XML data stream</entry>
-                                    <entry>StAX (pull), SAX (push)</entry>
-                                </row>
-                            </tbody>
-                        </tgroup>
-                    </table>
-                    <para>
-                        The project should leverage existing APIs as much as possible and only introduce new APIs where
-                        this is strictly necessary.
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        Robust and reliable resource lifecycle management (e.g.: streams and parsers used in deferred parsing
-                        and sourced elements; DataHandlers in base64 encoded text nodes).
-                    </para>
-                </listitem>
-            </itemizedlist>
-            <para>
-                Medium priority design goals:
-            </para>
-            <itemizedlist>
-                <listitem>
-                    <para>
-                        Many existing frameworks, in particular XML object models, are plagued by an issue related to
-                        the <literal>xsd:QName</literal> type as defined by section 3.2.18 of
-                        <biblioref linkend="bib.xmlschema.part2"/>.
-                    </para>
-                </listitem>
-            </itemizedlist>
+            <title>Introduction</title>
+            <section>
+                <title>Design goals</title>
+                <para>
+                    High priority design goals:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            The amount of new APIs created by the project should be as low as possible. In most of the
+                            areas covered by this project, well defined, widely used and/or convenient APIs already
+                            exist:
+                        </para>
+                        <table>
+                            <tgroup cols="2">
+                                <thead>
+                                    <row>
+                                        <entry>Area</entry><entry>Existing APIs/frameworks</entry>
+                                    </row>
+                                </thead>
+                                <tbody>
+                                    <row>
+                                        <entry>XML object models</entry>
+                                        <entry>DOM, Axiom, JDOM, DOM4J, XOM</entry>
+                                    </row>
+                                    <row>
+                                        <entry>SOAP object models</entry>
+                                        <entry>SAAJ, Axiom, Spring WS</entry>
+                                    </row>
+                                    <row>
+                                        <entry>XML data sources</entry>
+                                        <entry>JAXP (<classname>SAXSource</classname>, <classname>DOMSource</classname>,
+                                               <classname>StreamSource</classname>), SAX (<classname>InputSource</classname>)</entry>
+                                    </row>
+                                    <row>
+                                        <entry>XML data stream</entry>
+                                        <entry>StAX (pull), SAX (push)</entry>
+                                    </row>
+                                </tbody>
+                            </tgroup>
+                        </table>
+                        <para>
+                            The project should leverage existing APIs as much as possible and only introduce new APIs where
+                            this is strictly necessary.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Robust and reliable resource lifecycle management (e.g.: streams and parsers used in deferred parsing
+                            and sourced elements; DataHandlers in base64 encoded text nodes).
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    Medium priority design goals:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Many existing frameworks, in particular XML object models, are plagued by an issue related to
+                            the <literal>xsd:QName</literal> type as defined by section 3.2.18 of
+                            <biblioref linkend="bib.xmlschema.part2"/>.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </section>
+            <section>
+                <title>Lessons learned from Axiom</title>
+                
+            </section>
         </chapter>
         <chapter id="lcm">
             <title>The Logical Content Model</title>
