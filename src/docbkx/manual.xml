@@ -1116,35 +1116,171 @@
                     the builder repeatedly until the tree has reached a state where the request from the
                     user code can be satisfied.
                 </para>
-                
-            </section>
-            
-            <section>
-                <title>What operations should force a node to be built?</title>
                 <para>
-                    Three possible types of builders:
+                    The essence of an XML object model is that there is a correspondence between node
+                    instances and information items in the original document. To characterize the state
+                    of these node instances with respect to deferred parsing, we use the following
+                    definitions:
                 </para>
                 <itemizedlist>
                     <listitem>
                         <para>
-                            Whenever the parent of the node changes or siblings are inserted after the node.
+                            A node is said to be <firstterm>materialized</firstterm> if the start event
+                            corresponding to that node has been processed.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
-                            Whenever siblings are inserted after the node. --> the builder needs to maintain
-                            a node stack
-                        </para>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Never --> the builder needs to keep even more information: the siblings inserted
-                            immediately after the node + siblings added at the end
+                            A node is said to be <firstterm>built</firstterm> or <firstterm>complete</firstterm>
+                            if all events corresponding to that node have been processed.
                         </para>
                     </listitem>
                 </itemizedlist>
+                <para>
+                    There are some trivial corollaries that can be derived from these definitions and the
+                    relationship between nodes and events:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            A node that is complete is always materialized.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            For node types that are classified as leaf nodes (e.g. text nodes), a node
+                            instance that is materialized is always complete.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            If a node is complete, then all its descendants are complete. Note that this
+                            assertion is true at the object model level only if the model instance is
+                            accessed read-only. If the object model instance is altered (more precisely,
+                            if the positions of nodes are changed), then the assertion is valid only
+                            if "descendants" is interpreted as meaning "descendants in the original
+                            document".
+                        </para>
+                        <para>
+                            The converse of this assertion is not true: a node can be incomplete even
+                            if all its descendants are complete. This is the case if the end event for
+                            that node has not yet been processed, i.e. if all descendants have been
+                            completely processed, but the object model doesn't "know" yet that there
+                            are no more descendents.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            If a node is incomplete, then all its ancestors (in the original document)
+                            are incomplete.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            The number of nodes that are materialized but incomplete is always equal
+                            to the tree depth at the position of the current event in the original document.
+                            Since in most documents the maximum depth doesn't exceed 10, the number
+                            of nodes in this state in any given object model instance is fairly limited.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            If a node is materialized, then all its preceding siblings (in the original
+                            document) are complete. More precisely, the set of nodes that are complete
+                            comprises all nodes preceding the materialized node (in document order) minus
+                            its ancestors.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    From these properties it is easy to determine what kind of navigation operations will
+                    cause an incomplete node to be built. E.g. navigating from one node to its next sibling
+                    will cause the node to be built (assuming that the sibling relationship has not been
+                    altered with respect to the original document). On the other hand, for operations that
+                    alter the relationships between nodes, it is much less obvious to determine how they
+                    will impact the status the nodes in the object model. Consider e.g. the case where the user code
+                    attempts to detach a node that is not complete. Does the object model need to build
+                    the node first? As we will see, the set of nodes that need to be built before a given
+                    update operation can be executed depends on the implementation of the builder. The next
+                    section will establish a classification of different builder types and analyze their
+                    respective properties.
+                </para>
             </section>
-            
+            <section>
+                <title>Builder types</title>
+                <para>
+                    Three possible types can be identified:
+                </para>
+                <variablelist>
+                    <varlistentry>
+                        <term>Type 1 builders</term>
+                        <listitem>
+                            <para>
+                                A builder of type 1 only keeps a reference to the node instance corresponding
+                                to the last processed event. For example:
+                            </para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para>
+                                        The last event was a start element event. The builder points to an
+                                        incomplete element instance.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para>
+                                        The last event was a text event. The builder points to the corresponding
+                                        text node.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para>
+                                        The last event was an end element event. The builder points to the
+                                        corresponding element instance, which is now complete.
+                                    </para>
+                                </listitem>
+                            </itemizedlist>
+                            <para>
+                                If the builder is in a state where it points to an element (i.e. the last
+                                processed event was a start element or end element event), it will use the
+                                completion status of that element instance to determine if the next event
+                                will create the first child or the next sibling for that element.
+                            </para>
+                            <para>
+                                It is clear that for a builder of this type to work properly, the object
+                                model instance must not be altered in a way that would change the position
+                                of the current node referenced by the builder with respect to its position
+                                in the original document. E.g. before a node can be detached, the object
+                                model must make sure that this node is complete and that the next sibling
+                                is materialized (or that the parent node is complete if there are no
+                                more siblings). 
+                            </para>
+                            
+                            <para>
+                                
+                                Whenever the parent of the node changes or siblings are inserted after the node.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Type 2 builders</term>
+                        <listitem>
+                            <para>
+                                Whenever siblings are inserted after the node. --> the builder needs to maintain
+                                a node stack
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Type 3 builders</term>
+                        <listitem>
+                            <para>
+                                Never --> the builder needs to keep even more information: the siblings inserted
+                                immediately after the node + siblings added at the end
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+            </section>
         </chapter>
         <appendix>
             <title>XML grammar</title>
