@@ -24,7 +24,7 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-tests-wss4j</artifactId>
+    <artifactId>ddom-perftests-seismic</artifactId>
     <name>DDOM :: Performance tests :: Seismic service</name>
     <packaging>jar</packaging>
     <dependencies>
