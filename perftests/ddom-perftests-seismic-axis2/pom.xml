@@ -20,40 +20,18 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>ddom</artifactId>
+        <artifactId>perftests</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>perftests</artifactId>
-    <name>DDOM :: Performance tests</name>
-    <packaging>pom</packaging>
-    
-    <modules>
-        <module>ddom-perftests-seismic</module>
-        <module>ddom-perftests-seismic-axis2</module>
-    </modules>
-
-    <properties>
-        <jaxws.ri.version>2.1.7</jaxws.ri.version>
-    </properties>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.sun.xml.ws</groupId>
-                <artifactId>jaxws-rt</artifactId>
-                <version>${jaxws.ri.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>jaxws-maven-plugin</artifactId>
-                    <version>1.12</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>    
+    <artifactId>ddom-perftests-seismic-axis2</artifactId>
+    <name>DDOM :: Performance tests :: Seismic service :: Axis2</name>
+    <packaging>war</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ddom-perftests-seismic</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
 </project>
