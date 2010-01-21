@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Server policy for signing all messages, with certificates included in each
+ message -->
+<wsp:Policy wsu:Id="SignOnly" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+  <wsp:ExactlyOne>
+    <wsp:All>
+      <sp:AsymmetricBinding xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+        <wsp:Policy>
+          <sp:InitiatorToken>
+            <wsp:Policy>
+              <sp:X509Token sp:IncludeToken="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToRecipient"/>
+            </wsp:Policy>
+          </sp:InitiatorToken>
+          <sp:RecipientToken>
+            <wsp:Policy>
+              <sp:X509Token sp:IncludeToken="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToInitiator"/>
+            </wsp:Policy>
+          </sp:RecipientToken>
+          <sp:AlgorithmSuite>
+            <wsp:Policy>
+              <sp:TripleDesRsa15/>
+            </wsp:Policy>
+          </sp:AlgorithmSuite>
+          <sp:Layout>
+            <wsp:Policy>
+              <sp:Strict/>
+            </wsp:Policy>
+          </sp:Layout>
+          <sp:IncludeTimestamp/>
+          <sp:OnlySignEntireHeadersAndBody/>
+        </wsp:Policy>
+      </sp:AsymmetricBinding>
+      <sp:SignedParts xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+        <sp:Body/>
+      </sp:SignedParts>
+
+      <ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy"> 
+        <ramp:user>serverkey</ramp:user>
+        <ramp:passwordCallbackClass>com.sosnoski.ws.seismic.adb.PWCBHandler</ramp:passwordCallbackClass>
+        
+        <ramp:signatureCrypto>
+          <ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin">
+            <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type">JKS</ramp:property>
+            <ramp:property name="org.apache.ws.security.crypto.merlin.file">server.keystore</ramp:property>
+            <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.password">nosecret</ramp:property>
+          </ramp:crypto>
+        </ramp:signatureCrypto>
+        
+      </ramp:RampartConfig>
+
+    </wsp:All>
+  </wsp:ExactlyOne>
+</wsp:Policy>

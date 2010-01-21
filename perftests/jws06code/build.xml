@@ -1,0 +1,388 @@
+<?xml version="1.0" ?>
+
+<!-- ===========================================================================
+Ant build file for Apache Axis2 ADB unwrapped document/literal performance test
+program. This generates Java linkage and data classes from the WSDL, then merges
+in actual implementation classes set up for ADB. The directory structure is:
+
+ -client   Client code directory (use as root for IDE project)
+  +-bin    Binary class files
+  +-gen    Generated client code
+  +-impl   Supplied client implementation code
+ -server   Server code directory (use as root for IDE project)
+  +-bin    Binary class files
+  +-gen    Generated server code
+  +-impl   Supplied server implementation code
+============================================================================ -->
+
+<project default="prepare" basedir=".">
+  
+  <!-- Workaround for those IDEs that dont set ant.home as per the ant script -->
+  <property environment="env"/>
+  <property name="ant.home" value="env.ANT_HOME" />
+  
+  <!-- Get common settings -->
+  <property file="build.properties"/>
+  
+  <property name="axis-lib" location="${axis-home}/lib"/>
+  <property name="build-dir" location="${basedir}"/>
+  <property name="build-client" location="${build-dir}/client"/>
+  <property name="build-server" location="${build-dir}/server"/>
+  <property name="build-lib" location="${build-dir}/lib"/>
+  <property name="package-name" value="com.sosnoski.ws.seismic.adb"/>
+  <property name="package-path" value="com/sosnoski/ws/seismic/adb"/>
+  <property name="wsdl-path" value="./SeismicService.wsdl"/>
+  <property name="base-name" value="seismic"/>
+  
+  <path id="axis-classpath">
+    <fileset dir="${axis-home}/lib" includes="**/*.jar"/>
+    <fileset dir="${axis-home}/repository/modules" includes="*.mar"
+        excludes="scripting*,soapmonitor*"/>
+  </path>
+
+  <!-- Delete generated code and class files -->
+  <target name="clean">
+    <delete quiet="true" dir="${build-server}/bin"/>
+    <delete quiet="true" dir="${build-server}/gen"/>
+    <delete quiet="true" dir="${build-client}/bin"/>
+    <delete quiet="true" dir="${build-client}/gen"/>
+    <delete quiet="true">
+      <fileset dir="${build-dir}" includes="*.aar"/>
+    </delete>
+    <delete quiet="true" file="${build-dir}/services.xml"/>
+  </target>
+  
+  <!-- Compile the policy merge tool (only needed if tool modified) -->
+  <target name="compile-merge-tool">
+    <delete quiet="true" dir="${build-dir}/mergetool/bin"/>
+    <mkdir dir="${build-dir}/mergetool/bin"/>
+    <javac srcdir="${build-dir}/mergetool/src" destdir="${build-dir}/mergetool/bin"
+        nowarn="true" debug="true"/>
+  </target>
+
+  <!-- Generate Java from WSDL-->
+  <target name="generate">
+    <echo message="Running Codegen task for client"/>
+    <delete quiet="true" dir="${build-client}/gen"/>
+    <mkdir dir="${build-client}/gen"/>
+    <java classpathref="axis-classpath" fork="true"
+         classname="org.apache.axis2.wsdl.WSDL2Java">
+      <!-- -o parameter sets the output root directory -->
+      <arg value="-o"/>
+      <arg value="${build-client}/gen"/>
+      <!-- -p parameter gives the package for Axis2 code generation -->
+      <arg value="-p"/>
+      <arg value="${package-name}"/>
+      <!-- -d parameter selects the databinding framework -->
+      <arg value="-d"/>
+      <arg value="adb"/>
+      <!-- -u parameter unbundles data object classes -->
+      <arg value="-u"/>
+      <!-- -uw parameter unwraps the request messages -->
+<!--      <arg value="-uw"/>  -->
+      <!-- -s generates synchronous methods only -->
+      <arg value="-s"/>
+      <!-- -uri parameter provides the WSDL input -->
+      <arg value="-uri"/>
+      <arg value="${wsdl-path}"/>
+    </java>
+    <echo message="Running Codegen task for server"/>
+    <delete quiet="true" dir="${build-server}/gen"/>
+    <mkdir dir="${build-server}/gen"/>
+    <java classpathref="axis-classpath" fork="true"
+         classname="org.apache.axis2.wsdl.WSDL2Java">
+      <arg value="-o"/>
+      <arg value="${build-server}/gen"/>
+      <arg value="-p"/>
+      <arg value="${package-name}"/>
+      <arg value="-d"/>
+      <arg value="adb"/>
+      <!-- -ss parameter says generate server code -->
+      <arg value="-ss"/>
+      <!-- -ss parameter says generate server deployment files -->
+      <arg value="-sd"/>
+      <arg value="-u"/>
+<!--      <arg value="-uw"/>  -->
+      <arg value="-uri"/>
+      <arg value="${wsdl-path}"/>
+    </java>
+    
+    <!-- Replace implementation class in deployment descriptor -->
+    <replace file="${build-server}/gen/resources/services.xml"
+      token="Skeleton" value="Impl"/>
+      
+  </target>
+
+  <!-- Compile server code for deployment -->
+  <target name="compile-server">
+    <delete quiet="true" dir="${build-server}/bin"/>
+    <mkdir dir="${build-server}/bin"/>
+    
+    <!-- Compile the generated code -->
+    <javac srcdir="${build-server}/gen" destdir="${build-server}/bin"
+        nowarn="${nowarn}" debug="true">
+      <classpath>
+        <path refid="axis-classpath"/>
+        <pathelement path="${build-server}/bin"/>
+      </classpath>
+    </javac>
+    
+    <!-- Compile the implementation classes -->
+    <javac srcdir="${build-server}/impl" destdir="${build-server}/bin"
+        nowarn="${nowarn}" debug="true">
+      <classpath>
+        <path refid="axis-classpath"/>
+        <pathelement path="${build-server}/bin"/>
+      </classpath>
+    </javac>
+    
+    <!-- Copy data files across to classes tree -->
+    <copy todir="${build-server}/bin">
+      <fileset dir="${build-server}/impl" includes="*.txt,*.keystore"/>
+    </copy>
+    
+  </target>
+
+  <!-- Compile client code for execution -->
+  <target name="compile-client">
+    <delete quiet="true" dir="${build-client}/bin"/>
+    <mkdir dir="${build-client}/bin"/>
+    
+    <!-- Compile the generated code -->
+    <javac srcdir="${build-client}/gen" destdir="${build-client}/bin"
+        nowarn="${nowarn}" debug="true">
+      <classpath>
+        <path refid="axis-classpath"/>
+        <pathelement path="${build-client}/bin"/>
+      </classpath>
+    </javac>
+    
+    <!-- Compile the implementation classes -->
+    <javac srcdir="${build-client}/impl" destdir="${build-client}/bin"
+        nowarn="${nowarn}" debug="true">
+      <classpath>
+        <path refid="axis-classpath"/>
+        <pathelement path="${build-client}/bin"/>
+      </classpath>
+    </javac>
+    
+    <!-- Copy data files across to classes tree -->
+    <copy file="${build-dir}/log4j.properties" todir="${build-client}/bin"/>
+    <copy file="${build-client}/impl/client.keystore" todir="${build-client}/bin"/>
+  </target>
+
+  <!-- Package server code as .aar file without policy -->
+  <target name="package-plain">
+    
+    <!--Rename service in copy of generated services.xml -->
+    <copy file="${build-server}/gen/resources/services.xml" todir="${build-dir}"
+      overwrite="true"/>
+    <replace file="${build-dir}/services.xml"
+      token="name=&quot;SeismicAdb&quot;"
+      value="name=&quot;${base-name}-plain&quot;"/>
+    
+    <!-- Assemble the service .aar file -->
+    <delete quiet="true" file="${base-name}-plain.aar"/>
+    <jar jarfile="${base-name}-plain.aar" basedir="${build-server}/bin">
+      <metainf file="${build-dir}/services.xml"/>
+    </jar>
+  </target>
+
+  <!-- Package server code as .aar file with specified policy -->
+  <target name="package-policy">
+    
+    <!-- Merge server policy, and add module reference, to copy of generated
+      services.xml -->
+    <copy file="${build-server}/gen/resources/services.xml" todir="${build-dir}"
+      overwrite="true"/>
+    <java classname="com.sosnoski.ws.MergeServerPolicy">
+      <classpath>
+        <path refid="axis-classpath"/>
+        <pathelement path="${build-dir}/mergetool/bin"/>
+      </classpath>
+      <arg value="${build-dir}/services.xml"/>
+      <arg value="${build-dir}/${variant-name}-policy-server.xml"/>
+      <arg value="rampart"/>
+    </java>
+    
+    <!-- Also rename service in copy of services.xml -->
+    <replace file="${build-dir}/services.xml"
+      token="name=&quot;SeismicAdb&quot;"
+      value="name=&quot;${base-name}-${variant-name}&quot;"/>
+    
+    <!-- Assemble the service .aar file -->
+    <delete quiet="true" file="${base-name}-${variant-name}.aar"/>
+    <jar jarfile="${base-name}-${variant-name}.aar" basedir="${build-server}/bin">
+      <metainf file="${build-dir}/services.xml"/>
+    </jar>
+    
+  </target>
+  
+  <!-- Package server code with plain text UsernameToken policy -->
+  <target name="package-usernameplain">
+    <antcall target="package-policy">
+      <param name="variant-name" value="usernameplain"/>
+    </antcall>
+  </target>
+  
+  <!-- Package server code with hashed UsernameToken policy -->
+  <target name="package-usernamehash">
+    <antcall target="package-policy">
+      <param name="variant-name" value="usernamehash"/>
+    </antcall>
+  </target>
+  
+  <!-- Package server code with signing-only policy -->
+  <target name="package-sign">
+    <antcall target="package-policy">
+      <param name="variant-name" value="sign"/>
+    </antcall>
+  </target>
+  
+  <!-- Package server code with encryption-only policy -->
+  <target name="package-encr">
+    <antcall target="package-policy">
+      <param name="variant-name" value="encr"/>
+    </antcall>
+  </target>
+  
+  <!-- Package server code with signing and encryption policy -->
+  <target name="package-signencr">
+    <antcall target="package-policy">
+      <param name="variant-name" value="signencr"/>
+    </antcall>
+  </target>
+
+  <!-- Package server code as .aar file with secure conversation policy -->
+  <target name="package-secureconversation">
+    
+    <!-- Merge server policy, and add module reference, to copy of generated
+      services.xml -->
+    <copy file="${build-dir}/secureconversation-services.xml" tofile="${build-dir}/services.xml"
+      overwrite="true"/>
+    
+    <!-- Also rename service in copy of services.xml -->
+    <replace file="${build-dir}/services.xml"
+      token="name=&quot;SeismicAdb&quot;"
+      value="name=&quot;${base-name}-secureconversation&quot;"/>
+    
+    <!-- Assemble the service .aar file -->
+    <delete quiet="true" file="${base-name}-secureconversation.aar"/>
+    <jar jarfile="${base-name}-secureconversation.aar" basedir="${build-server}/bin">
+      <metainf file="${build-dir}/services.xml"/>
+    </jar>
+    
+  </target>
+
+  <!-- Run the test client without a policy -->
+  <target name="run-nopolicy">
+    <delete file="${build-client}/bin/policy.xml" quiet="true"/>
+    <java classname="com.sosnoski.ws.seismic.adb.Axis2LitClient" fork="true">
+      <jvmarg value="-Djavax.net.ssl.trustStore=${ssl-truststore-path}"/>
+      <jvmarg value="-Xms512M"/>
+      <jvmarg value="-Xmx512M"/>
+      <classpath path="${build-client}/bin"/>
+      <classpath refid="axis-classpath"/>
+      <arg value="${protocol}"/>
+      <arg value="${host-name}"/>
+      <arg value="${port}"/>
+      <arg value="${base-path}${base-name}-plain"/>
+      <arg value="${fraction}"/>
+      <arg value="${request-count}"/>
+      <arg value="quiet"/>
+    </java>
+  </target>
+  
+  <!-- Run client code with no policy and simple HTTP connection -->
+  <target name="run-plain">
+    <antcall target="run-nopolicy">
+      <param name="protocol" value="http"/>
+      <param name="port" value="${http-host-port}"/>
+    </antcall>
+  </target>
+  
+  <!-- Run client code with no policy and HTTPS connection -->
+  <target name="run-ssl">
+    <antcall target="run-nopolicy">
+      <param name="protocol" value="https"/>
+      <param name="port" value="${https-host-port}"/>
+    </antcall>
+  </target>
+
+  <!-- Run the test client with a policy -->
+  <target name="run-policy">  
+    <copy file="${variant-name}-policy-client.xml"
+      tofile="${build-client}/bin/policy.xml" overwrite="true"/>
+    <java classname="com.sosnoski.ws.seismic.adb.Axis2LitClient" fork="true">
+      <jvmarg value="-Djavax.net.ssl.trustStore=${ssl-truststore-path}"/>
+      <jvmarg value="-Xms512M"/>
+      <jvmarg value="-Xmx512M"/>
+      <classpath path="${build-client}/bin"/>
+      <classpath refid="axis-classpath"/>
+      <arg value="${protocol}"/>
+      <arg value="${host-name}"/>
+      <arg value="${port}"/>
+      <arg value="${base-path}${base-name}-${variant-name}"/>
+      <arg value="${fraction}"/>
+      <arg value="${request-count}"/>
+      <arg value="quiet"/>
+    </java>
+  </target>
+  
+  <!-- Run client code with plain text UsernameToken policy -->
+  <target name="run-usernameplain">
+    <antcall target="run-policy">
+      <param name="protocol" value="http"/>
+      <param name="port" value="${http-host-port}"/>
+      <param name="variant-name" value="usernameplain"/>
+    </antcall>
+  </target>
+  
+  <!-- Run client code with hashed UsernameToken policy -->
+  <target name="run-usernamehash">
+    <antcall target="run-policy">
+      <param name="protocol" value="http"/>
+      <param name="port" value="${http-host-port}"/>
+      <param name="variant-name" value="usernamehash"/>
+    </antcall>
+  </target>
+  
+  <!-- Run client code with signing-only policy -->
+  <target name="run-sign">
+    <antcall target="run-policy">
+      <param name="protocol" value="http"/>
+      <param name="port" value="${http-host-port}"/>
+      <param name="variant-name" value="sign"/>
+    </antcall>
+  </target>
+  
+  <!-- Run client code with encryption-only policy -->
+  <target name="run-encr">
+    <antcall target="run-policy">
+      <param name="protocol" value="http"/>
+      <param name="port" value="${http-host-port}"/>
+      <param name="variant-name" value="encr"/>
+    </antcall>
+  </target>
+  
+  <!-- Run client code with signing and encryption policy -->
+  <target name="run-signencr">
+    <antcall target="run-policy">
+      <param name="protocol" value="http"/>
+      <param name="port" value="${http-host-port}"/>
+      <param name="variant-name" value="signencr"/>
+    </antcall>
+  </target>
+  
+  <!-- Run client code with secure conversation policy -->
+  <target name="run-secureconversation">
+    <antcall target="run-policy">
+      <param name="protocol" value="http"/>
+      <param name="port" value="${http-host-port}"/>
+      <param name="variant-name" value="secureconversation"/>
+    </antcall>
+  </target>
+
+  <target name="prepare" depends="clean,generate,compile-client,compile-server,package-plain,package-usernameplain,package-usernamehash,package-sign,package-encr,package-signencr"/>
+
+</project>
