@@ -6,6 +6,7 @@
     <parameter name="enableSwA">false</parameter>
     <parameter name="disableREST" locked="false">true</parameter>
     <parameter name="disableSOAP12" locked="true">false</parameter>
+    <parameter name="servicePath">services</parameter>
 
     <threadContextMigrators>
         <threadContextMigrator listId="JAXWS-ThreadContextMigrator-List"
@@ -49,6 +50,8 @@
                         class="org.apache.axis2.builder.MultipartFormDataBuilder"/>
     </messageBuilders>
 
+    <transportReceiver name="http" class="org.apache.axis2.transport.http.SimpleHTTPServer"/>
+    
     <!-- >module ref="addressing"/ -->
 
     <phaseOrder type="InFlow">

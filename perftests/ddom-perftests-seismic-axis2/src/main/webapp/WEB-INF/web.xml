@@ -10,6 +10,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/services/*</url-pattern>
     </servlet-mapping>
 </web-app>
