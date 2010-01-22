@@ -113,9 +113,9 @@
   <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
  </wsdl:binding>
 
- <wsdl:service name="SeismicAdb">
-  <wsdl:port name="SeismicAdb" binding="wns:SeismicBinding">
-   <soap:address location="http://localhost:8080/axis2/XXX"/>
+ <wsdl:service name="Seismic">
+  <wsdl:port name="SeismicPort" binding="wns:SeismicBinding">
+   <soap:address location="REPLACE_WITH_ACTUAL_URI"/>
   </wsdl:port>
  </wsdl:service>
 
