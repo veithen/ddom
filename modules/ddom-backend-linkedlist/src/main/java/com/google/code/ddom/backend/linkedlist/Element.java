@@ -99,11 +99,12 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
     }
 
     public final void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) {
-        CoreAttribute attr = firstAttribute;
-        CoreAttribute previousAttr = null;
+        Attribute attr = firstAttribute;
+        Attribute previousAttr = null;
         while (attr != null && !matcher.matches(attr, namespaceURI, name)) {
             previousAttr = attr;
-            attr = attr.coreGetNextAttribute();
+            // TODO: avoid cast here
+            attr = (Attribute)attr.coreGetNextAttribute();
         }
         if (attr == null) {
             CoreDocument document = internalGetDocument();
@@ -112,7 +113,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
             if (previousAttr == null) {
                 appendAttribute(newAttr);
             } else {
-                previousAttr.coreInsertAttributeAfter(newAttr);
+                previousAttr.insertAttributeAfter(newAttr);
             }
         } else {
             matcher.update(attr, prefix, value);
@@ -191,7 +192,8 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         if (firstAttribute == null) {
             firstAttribute = attr;
         } else {
-            coreGetLastAttribute().coreInsertAttributeAfter(attr);
+            // TODO: avoid cast here
+            ((Attribute)coreGetLastAttribute()).insertAttributeAfter(attr);
         }
     }
 

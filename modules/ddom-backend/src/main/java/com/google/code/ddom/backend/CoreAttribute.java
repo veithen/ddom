@@ -54,14 +54,4 @@ public interface CoreAttribute extends CoreParentNode {
      *         of its owner element or if the attribute has no owner element
      */
     CoreAttribute coreGetPreviousAttribute();
-    
-    /**
-     * Insert a new attribute after this instance. Note that this method will NOT check if the
-     * element already has an attribute with the same name, and always insert the attribute.
-     * 
-     * @param attr
-     *            the new attribute
-     */
-    // TODO: check if we still need this as public method
-    void coreInsertAttributeAfter(CoreAttribute attr);
 }

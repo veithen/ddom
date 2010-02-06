@@ -32,7 +32,7 @@ public class Builder extends CallbackConsumer {
     private StreamException streamException;
     private ParentNode parent; // The current node being built
     private ChildNode lastSibling; // The last child of the current node
-    private CoreAttribute lastAttribute;
+    private Attribute lastAttribute;
     private boolean nodeAppended;
 
     public Builder(Producer producer, Document document, ParentNode target) {
@@ -189,7 +189,7 @@ public class Builder extends CallbackConsumer {
         if (lastAttribute == null) {
             element.appendAttribute(attr);
         } else {
-            lastAttribute.coreInsertAttributeAfter(attr);
+            lastAttribute.insertAttributeAfter(attr);
         }
         lastAttribute = attr;
     }

@@ -112,8 +112,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
 
-    public final void coreInsertAttributeAfter(CoreAttribute attr_) {
-        Attribute attr = (Attribute)attr_;
+    final void insertAttributeAfter(Attribute attr) {
         // TODO: throw exception if attribute already has an owner
         attr.setOwnerElement(coreGetOwnerElement());
         if (nextAttribute != null) {
