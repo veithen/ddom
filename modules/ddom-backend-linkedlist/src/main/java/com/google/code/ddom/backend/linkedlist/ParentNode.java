@@ -54,6 +54,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         this.complete = complete;
     }
 
+    abstract void notifyChildrenModified(int delta);
+
     public final Object coreGetContent() {
         return content;
     }
