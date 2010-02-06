@@ -16,7 +16,10 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.WrongDocumentException;
 
 public interface LLNode extends CoreNode {
     Document internalGetDocument();
+    
+    void validateOwnerDocument(CoreNode node) throws WrongDocumentException;
 }
