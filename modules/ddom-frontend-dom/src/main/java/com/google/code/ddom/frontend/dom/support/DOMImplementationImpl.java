@@ -20,9 +20,9 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
-import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 
 public class DOMImplementationImpl implements DOMImplementation {
     private final NodeFactory nodeFactory;
@@ -35,7 +35,7 @@ public class DOMImplementationImpl implements DOMImplementation {
         DOMDocument document = (DOMDocument)nodeFactory.createDocument();
         if (doctype != null) {
             if (doctype.getOwnerDocument() == null) {
-                ((CoreDocumentTypeDeclaration)doctype).internalSetDocument(document);
+                ((DOMDocumentType)doctype).attach(document);
             }
             document.appendChild(doctype);
         }
@@ -48,8 +48,7 @@ public class DOMImplementationImpl implements DOMImplementation {
     public DocumentType createDocumentType(String qualifiedName, String publicId, String systemId)
             throws DOMException {
         NSUtil.validateQualifiedName(qualifiedName);
-        CoreDocumentTypeDeclaration docType = nodeFactory.createDocumentTypeDeclaration(null, qualifiedName, publicId, systemId);
-        return (DocumentType)docType;
+        return new DocumentTypeImpl(this, qualifiedName, publicId, systemId);
     }
 
     public Object getFeature(String feature, String version) {

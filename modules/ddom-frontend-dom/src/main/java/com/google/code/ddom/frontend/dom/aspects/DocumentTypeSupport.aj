@@ -15,35 +15,16 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.NamedNodeMap;
-
 import com.google.code.ddom.frontend.dom.intf.*;
 
 public aspect DocumentTypeSupport {
-    public final String DOMDocumentTypeDeclaration.getName() {
-        return coreGetRootName();
+    private DOMDocumentType DOMDocumentTypeDeclaration.documentType;
+    
+    public final DOMDocumentType DOMDocumentTypeDeclaration.getDocumentType() {
+        return documentType;
     }
-
-    public final String DOMDocumentTypeDeclaration.getPublicId() {
-        return coreGetPublicId();
-    }
-
-    public final String DOMDocumentTypeDeclaration.getSystemId() {
-        return coreGetSystemId();
-    }
-
-    public final NamedNodeMap DOMDocumentTypeDeclaration.getEntities() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final String DOMDocumentTypeDeclaration.getInternalSubset() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final NamedNodeMap DOMDocumentTypeDeclaration.getNotations() {
-        // TODO
-        throw new UnsupportedOperationException();
+    
+    public final void DOMDocumentTypeDeclaration.setDocumentType(DOMDocumentType documentType) {
+        this.documentType = documentType;
     }
 }

@@ -29,7 +29,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMComment;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
-import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
 import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
@@ -106,9 +106,11 @@ public aspect Clone {
         throw new UnsupportedOperationException();
     }
 
-    public final Node DOMDocumentTypeDeclaration.cloneNode(boolean deep) {
-        CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createDocumentTypeDeclaration(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
+    public final Node DOMDocumentType.cloneNode(boolean deep) {
+        // TODO
+        throw new UnsupportedOperationException();
+//        CoreDocument document = coreGetDocument();
+//        return (Node)document.getNodeFactory().createDocumentTypeDeclaration(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
     
     public final Node DOMElement.cloneNode(boolean deep) {

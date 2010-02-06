@@ -42,12 +42,22 @@ public aspect Hierarchy {
         return (Document)coreGetDocument();
     }
     
+    public final Document DOMDocumentType.getOwnerDocument() {
+        DOMDocumentTypeDeclaration declaration = getDeclaration();
+        return declaration == null ? null : (Document)declaration.coreGetDocument();
+    }
+    
     public final Node DOMAttribute.getParentNode() {
         return null;
     }
 
     public final Node DOMCoreChildNode.getParentNode() {
         return (Node)coreGetParent();
+    }
+
+    public final Node DOMDocumentType.getParentNode() {
+        DOMDocumentTypeDeclaration declaration = getDeclaration();
+        return declaration == null ? null : (Node)declaration.coreGetParent();
     }
 
     public final Node DOMDocumentFragment.getParentNode() {

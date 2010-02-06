@@ -25,6 +25,7 @@ import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.EmptyNodeList;
+import com.google.code.ddom.frontend.dom.support.NodeUtil;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 
@@ -59,7 +60,7 @@ public aspect ChildNodes {
     
     public final Node DOMParentNode.getFirstChild() {
         try {
-            return (Node)coreGetFirstChild();
+            return NodeUtil.toDOM(coreGetFirstChild());
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -93,18 +94,31 @@ public aspect ChildNodes {
             for (int i=0; i<index && node != null; i++) {
                 node = node.coreGetNextSibling();
             }
-            return (Node)node;
+            return NodeUtil.toDOM(node);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
     }
 
+    private CoreNode DOMParentNode.toCore(Node node) {
+        if (node instanceof DOMDocumentType) {
+            DOMDocumentType doctype = (DOMDocumentType)node;
+            DOMDocumentTypeDeclaration declaration = doctype.getDeclaration();
+            if (declaration == null) {
+                declaration = doctype.attach((DOMDocument)coreGetDocument());
+            }
+            return declaration;
+        } else {
+            return (CoreNode)node;
+        }
+    }
+    
     public final Node DOMParentNode.appendChild(Node newChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
         try {
-            coreAppendChild((CoreNode)newChild);
+            coreAppendChild(toCore(newChild));
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -121,13 +135,13 @@ public aspect ChildNodes {
             // case the behavior is identical to appendChild. (This is covered by the DOM 1
             // test suite)
             if (refChild == null) {
-                coreAppendChild((CoreNode)newChild);
+                coreAppendChild(toCore(newChild));
             } else if (refChild.getParentNode() != this) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
             } else if (newChild instanceof CoreChildNode) {
-                ((CoreChildNode)refChild).coreInsertSiblingBefore((CoreChildNode)newChild);
+                ((CoreChildNode)toCore(refChild)).coreInsertSiblingBefore((CoreChildNode)toCore(newChild));
             } else if (newChild instanceof CoreDocumentFragment) {
-                ((CoreChildNode)refChild).coreInsertSiblingsBefore((CoreDocumentFragment)newChild);
+                ((CoreChildNode)toCore(refChild)).coreInsertSiblingsBefore((CoreDocumentFragment)newChild);
             } else {
                 throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
@@ -143,7 +157,7 @@ public aspect ChildNodes {
         }
         if (oldChild.getParentNode() == this) {
             try {
-                ((CoreChildNode)oldChild).coreDetach();
+                ((CoreChildNode)toCore(oldChild)).coreDetach();
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }
@@ -160,9 +174,10 @@ public aspect ChildNodes {
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
-        if (oldChild instanceof CoreChildNode) {
+        CoreNode coreOldChild = toCore(oldChild);
+        if (coreOldChild instanceof CoreChildNode) {
             try {
-                coreReplaceChild((CoreNode)newChild, (CoreChildNode)oldChild);
+                coreReplaceChild(toCore(newChild), (CoreChildNode)coreOldChild);
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }

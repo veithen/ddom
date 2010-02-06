@@ -20,6 +20,7 @@ import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.frontend.dom.support.NodeUtil;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 
@@ -54,7 +55,7 @@ public aspect Normalization {
         try {
             CoreChildNode child = coreGetFirstChild();
             while (child != null) {
-                ((DOMCoreNode)child).normalize(config);
+                NodeUtil.toDOM(child).normalize(config);
                 child = child.coreGetNextSibling();
             }
         } catch (CoreModelException ex) {

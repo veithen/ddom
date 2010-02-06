@@ -58,11 +58,11 @@ public aspect NodeValue {
         // Setting the node value has no effect
     }
 
-    public final String DOMDocumentTypeDeclaration.getNodeValue() throws DOMException {
+    public final String DOMDocumentType.getNodeValue() throws DOMException {
         return null;
     }
 
-    public final void DOMDocumentTypeDeclaration.setNodeValue(String nodeValue) throws DOMException {
+    public final void DOMDocumentType.setNodeValue(String nodeValue) throws DOMException {
         // Setting the node value has no effect
     }
 

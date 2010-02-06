@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
+import org.w3c.dom.DocumentType;
 
-public interface DOMDocumentTypeDeclaration extends CoreDocumentTypeDeclaration {
-    DOMDocumentType getDocumentType();
-    void setDocumentType(DOMDocumentType documentType);
+public interface DOMDocumentType extends DocumentType, DOMLeafNode {
+    DOMDocumentTypeDeclaration getDeclaration();
+    DOMDocumentTypeDeclaration attach(DOMDocument document);
 }

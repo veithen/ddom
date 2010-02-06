@@ -35,6 +35,7 @@ import com.google.code.ddom.frontend.dom.support.DOMConfigurationImpl;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
+import com.google.code.ddom.frontend.dom.support.NodeUtil;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
 import com.google.code.ddom.frontend.dom.intf.*;
@@ -123,7 +124,7 @@ public aspect DocumentSupport {
     
     public final DocumentType DOMDocument.getDoctype() {
         try {
-            return (DocumentType)coreGetDocumentTypeDeclaration();
+            return NodeUtil.toDOM(coreGetDocumentTypeDeclaration());
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

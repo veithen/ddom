@@ -45,7 +45,7 @@ public aspect NodeType {
         return Node.DOCUMENT_NODE;
     }
 
-    public final short DOMDocumentTypeDeclaration.getNodeType() {
+    public final short DOMDocumentType.getNodeType() {
         return Node.DOCUMENT_TYPE_NODE;
     }
 

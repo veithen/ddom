@@ -93,11 +93,11 @@ public aspect TextContent {
         // Setting textContent on a Document has no effect.
     }
 
-    public final String DOMDocumentTypeDeclaration.getTextContent() {
+    public final String DOMDocumentType.getTextContent() {
         return null;
     }
 
-    public final void DOMDocumentTypeDeclaration.setTextContent(@SuppressWarnings("unused") String textContent) {
+    public final void DOMDocumentType.setTextContent(@SuppressWarnings("unused") String textContent) {
         // Setting textContent on a DocumentType has no effect.
     }
 }

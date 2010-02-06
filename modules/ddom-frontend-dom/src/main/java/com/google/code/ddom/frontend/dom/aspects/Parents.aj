@@ -75,12 +75,12 @@ public aspect Parents {
     declare parents: @Implementation CoreNSUnawareElement+ implements DOMNSUnawareElement;
     declare parents: @Implementation CoreEntityReference+ implements DOMEntityReference;
     declare parents: @Implementation CoreParentNode+ implements DOMParentNode;
-    declare parents: @Implementation CoreLeafNode+ implements DOMLeafNode;
+//    declare parents: @Implementation CoreLeafNode+ implements DOMLeafNode;
     declare parents: @Implementation CoreNSAwareAttribute+ implements DOMNSAwareAttribute;
     declare parents: @Implementation CoreNSUnawareAttribute+ implements DOMNSUnawareAttribute;
-    declare parents: @Implementation CoreNode+ implements DOMCoreNode;
+//    declare parents: @Implementation CoreNode+ implements DOMCoreNode;
     declare parents: @Implementation CoreProcessingInstruction+ implements DOMProcessingInstruction;
-    declare parents: @Implementation CoreChildNode+ implements DOMCoreChildNode;
+//    declare parents: @Implementation CoreChildNode+ implements DOMCoreChildNode;
     declare parents: @Implementation CoreTextNode+ implements DOMTextNode;
     declare parents: @Implementation CoreText+ implements DOMText;
     declare parents: @Implementation CoreCDATASection+ implements DOMCDATASection;

@@ -22,7 +22,10 @@ import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.frontend.dom.support.NodeUtil;
 
 public aspect Sibling {
     public final Node DOMAttribute.getNextSibling() {
@@ -51,7 +54,7 @@ public aspect Sibling {
 
     public final Node DOMCoreChildNode.getNextSibling() {
         try {
-            return (Node)coreGetNextSibling();
+            return NodeUtil.toDOM(coreGetNextSibling());
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -59,7 +62,25 @@ public aspect Sibling {
 
     public final Node DOMCoreChildNode.getPreviousSibling() {
         try {
-            return (Node)coreGetPreviousSibling();
+            return NodeUtil.toDOM(coreGetPreviousSibling());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+    
+    public final Node DOMDocumentType.getNextSibling() {
+        try {
+            DOMDocumentTypeDeclaration declaration = getDeclaration();
+            return declaration == null ? null : NodeUtil.toDOM(declaration.coreGetNextSibling());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+    
+    public final Node DOMDocumentType.getPreviousSibling() {
+        try {
+            DOMDocumentTypeDeclaration declaration = getDeclaration();
+            return declaration == null ? null : NodeUtil.toDOM(declaration.coreGetPreviousSibling());
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

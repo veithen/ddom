@@ -43,7 +43,7 @@ public aspect NodeName {
         return "#document";
     }
 
-    public final String DOMDocumentTypeDeclaration.getNodeName() {
+    public final String DOMDocumentType.getNodeName() {
         return getName();
     }
 
