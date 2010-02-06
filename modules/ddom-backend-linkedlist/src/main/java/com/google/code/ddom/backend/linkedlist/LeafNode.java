@@ -15,22 +15,17 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreLeafNode;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
-    private Document document;
+    private final Document document;
     
     public LeafNode(Document document) {
         this.document = document;
     }
 
-    public final void internalSetDocument(CoreDocument document) {
-        this.document = (Document)document; // TODO: get rid of cast
-    }
-    
     public final Document internalGetDocument() {
         return document;
     }

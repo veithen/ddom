@@ -16,9 +16,6 @@
 package com.google.code.ddom.backend;
 
 public interface CoreDocumentTypeDeclaration extends CoreLeafNode {
-    // TODO: check if this is actually needed
-    void internalSetDocument(CoreDocument document);
-
     String coreGetRootName();
     String coreGetPublicId();
     String coreGetSystemId();
