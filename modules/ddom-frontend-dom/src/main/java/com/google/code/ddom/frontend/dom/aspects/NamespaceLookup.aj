@@ -21,12 +21,12 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMCharacterData;
-import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
+import com.google.code.ddom.frontend.dom.intf.DOMNode;
 import com.google.code.ddom.frontend.dom.intf.DOMProcessingInstruction;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
@@ -74,7 +74,7 @@ public aspect NamespaceLookup {
         return coreGetParentElement();
     }
     
-    public final String DOMCoreNode.lookupNamespaceURI(String prefix) {
+    public final String DOMNode.lookupNamespaceURI(String prefix) {
         try {
             CoreElement contextElement = getNamespaceContext();
             return contextElement == null ? null : contextElement.coreLookupNamespaceURI(prefix, false);
@@ -83,7 +83,7 @@ public aspect NamespaceLookup {
         }
     }
 
-    public final String DOMCoreNode.lookupPrefix(String namespaceURI) {
+    public final String DOMNode.lookupPrefix(String namespaceURI) {
         if (namespaceURI == null) {
             return null;
         } else {
@@ -96,7 +96,7 @@ public aspect NamespaceLookup {
         }
     }
 
-    public final boolean DOMCoreNode.isDefaultNamespace(String namespaceURI) {
+    public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
         try {
             CoreElement contextElement = getNamespaceContext();
             return contextElement == null ? false : ObjectUtils.equals(namespaceURI, contextElement.coreLookupNamespaceURI(null, false));

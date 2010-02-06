@@ -19,8 +19,21 @@ import java.util.Map;
 
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.frontend.dom.support.UserData;
 
 public interface DOMNode extends Node {
     Map<String,UserData> getUserDataMap(boolean create);
+    
+    /**
+     * Get the element that defines this node's namespace context. The returned element is used by
+     * the implementations of {@link Node#lookupNamespaceURI(String)},
+     * {@link Node#lookupPrefix(String)} and {@link Node#isDefaultNamespace(String)}. The
+     * implementation must be compatible with the provisions in appendix B of the DOM Level 3 Core
+     * specification.
+     * 
+     * @return the element defining the namespace context of this node or <code>null</code> if the
+     *         namespace context of this node is defined to be empty
+     */
+    CoreElement getNamespaceContext();
 }
