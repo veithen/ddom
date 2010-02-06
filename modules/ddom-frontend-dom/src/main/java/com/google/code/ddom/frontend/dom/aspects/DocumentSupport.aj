@@ -123,7 +123,7 @@ public aspect DocumentSupport {
     
     public final DocumentType DOMDocument.getDoctype() {
         try {
-            return (DocumentType)coreGetDocumentType();
+            return (DocumentType)coreGetDocumentTypeDeclaration();
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

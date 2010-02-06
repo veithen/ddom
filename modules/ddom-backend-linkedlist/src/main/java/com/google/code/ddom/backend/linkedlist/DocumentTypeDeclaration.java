@@ -15,16 +15,16 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class DocumentType extends LeafNode implements CoreDocumentType {
+public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTypeDeclaration {
     private final String rootName;
     private final String publicId;
     private final String systemId;
     
-    public DocumentType(Document document, String rootName, String publicId, String systemId) {
+    public DocumentTypeDeclaration(Document document, String rootName, String publicId, String systemId) {
         super(document);
         this.rootName = rootName;
         this.publicId = publicId;

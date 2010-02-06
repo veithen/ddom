@@ -25,7 +25,7 @@ import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
@@ -62,7 +62,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
     @Override
     final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         // TODO: need a test case here!
-        if (newChild instanceof CoreDocumentType) {
+        if (newChild instanceof CoreDocumentTypeDeclaration) {
             throw new ChildTypeNotAllowedException();
         }
     }

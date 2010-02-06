@@ -36,7 +36,7 @@ public interface NodeFactory {
      * @param document may be <code>null</code> (if called by {@link org.w3c.dom.DOMImplementation#createDocumentType(String, String, String)})
      * @return
      */
-    CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId);
+    CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId);
     
     CoreNSUnawareElement createElement(CoreDocument document, String tagName);
     

@@ -78,7 +78,7 @@ public class Builder extends CallbackConsumer {
     }
 
     public final void processDocumentType(String rootName, String publicId, String systemId) {
-        appendNode(new DocumentType(document, rootName, publicId, systemId));
+        appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId));
     }
     
     public final void processElement(String tagName) {

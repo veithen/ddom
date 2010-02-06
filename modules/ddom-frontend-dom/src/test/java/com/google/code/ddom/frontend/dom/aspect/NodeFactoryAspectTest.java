@@ -19,11 +19,11 @@ import junit.framework.AssertionFailedError;
 
 import org.junit.Test;
 
-import com.google.code.ddom.backend.linkedlist.DocumentType;
+import com.google.code.ddom.backend.linkedlist.DocumentTypeDeclaration;
 
 public class NodeFactoryAspectTest {
     @Test(expected=AssertionFailedError.class)
     public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentType(null, null, null, null);
+        new DocumentTypeDeclaration(null, null, null, null);
     }
 }

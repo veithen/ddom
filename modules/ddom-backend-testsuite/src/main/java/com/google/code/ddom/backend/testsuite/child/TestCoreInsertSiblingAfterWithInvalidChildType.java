@@ -17,7 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
@@ -33,7 +33,7 @@ public class TestCoreInsertSiblingAfterWithInvalidChildType extends BackendTestC
         CoreDocument document = nodeFactory.createDocument();
         CoreElement parent = nodeFactory.createElement(document, "test");
         CoreText text = nodeFactory.createText(document, "text1");
-        CoreDocumentType dtd = nodeFactory.createDocumentType(document, "root", null, null);
+        CoreDocumentTypeDeclaration dtd = nodeFactory.createDocumentTypeDeclaration(document, "root", null, null);
         parent.coreAppendChild(text);
         try {
             text.coreInsertSiblingAfter(dtd);

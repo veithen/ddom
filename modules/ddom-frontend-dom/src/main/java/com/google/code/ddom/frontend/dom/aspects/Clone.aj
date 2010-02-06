@@ -108,7 +108,7 @@ public aspect Clone {
 
     public final Node DOMDocumentType.cloneNode(boolean deep) {
         CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createDocumentType(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
+        return (Node)document.getNodeFactory().createDocumentTypeDeclaration(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
     
     public final Node DOMElement.cloneNode(boolean deep) {

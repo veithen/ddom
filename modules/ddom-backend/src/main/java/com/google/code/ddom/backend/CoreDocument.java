@@ -38,7 +38,7 @@ public interface CoreDocument extends CoreParentNode {
     void coreSetStandalone(boolean standalone);
     String coreGetDocumentURI() throws DeferredParsingException;
     void coreSetDocumentURI(String documentURI) throws DeferredParsingException;
-    CoreDocumentType coreGetDocumentType() throws DeferredParsingException;
+    CoreDocumentTypeDeclaration coreGetDocumentTypeDeclaration() throws DeferredParsingException;
     
     /**
      * Get the document element.

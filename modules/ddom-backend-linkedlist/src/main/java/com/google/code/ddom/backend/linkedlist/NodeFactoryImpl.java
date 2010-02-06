@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreComment;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreNSAwareAttribute;
@@ -35,8 +35,8 @@ public class NodeFactoryImpl implements NodeFactory {
         return new Document(this);
     }
 
-    public CoreDocumentType createDocumentType(CoreDocument document, String rootName, String publicId, String systemId) {
-        return new DocumentType((Document)document, rootName, publicId, systemId);
+    public CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId) {
+        return new DocumentTypeDeclaration((Document)document, rootName, publicId, systemId);
     }
 
     public CoreNSUnawareElement createElement(CoreDocument document, String tagName) {

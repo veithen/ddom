@@ -21,7 +21,7 @@ import java.util.List;
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
@@ -112,8 +112,8 @@ public class Document extends ParentNode implements CoreDocument {
     @Override
     final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
-        if (newChild instanceof CoreDocumentType) {
-            if (!(replacedChild instanceof CoreDocumentType || coreGetDocumentType() == null)) {
+        if (newChild instanceof CoreDocumentTypeDeclaration) {
+            if (!(replacedChild instanceof CoreDocumentTypeDeclaration || coreGetDocumentTypeDeclaration() == null)) {
                 throw new ChildTypeNotAllowedException("The document already has a document type node");
             }
         } else if (newChild instanceof CoreElement) {
@@ -191,12 +191,12 @@ public class Document extends ParentNode implements CoreDocument {
         return (CoreElement)child;
     }
 
-    public final CoreDocumentType coreGetDocumentType() throws DeferredParsingException {
+    public final CoreDocumentTypeDeclaration coreGetDocumentTypeDeclaration() throws DeferredParsingException {
         // TODO: we know that the document type node must appear before the document element; use this to avoid expansion of the complete document
         CoreChildNode child = coreGetFirstChild();
-        while (child != null && !(child instanceof CoreDocumentType)) {
+        while (child != null && !(child instanceof CoreDocumentTypeDeclaration)) {
             child = child.coreGetNextSibling();
         }
-        return (CoreDocumentType)child;
+        return (CoreDocumentTypeDeclaration)child;
     }
 }

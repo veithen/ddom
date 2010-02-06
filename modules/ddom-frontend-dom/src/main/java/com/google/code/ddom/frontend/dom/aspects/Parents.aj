@@ -22,7 +22,7 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreComment;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreDocumentType;
+import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreLeafNode;
@@ -69,7 +69,7 @@ public aspect Parents {
     declare parents: @Implementation CoreComment+ implements DOMComment;
     declare parents: @Implementation CoreDocumentFragment+ implements DOMDocumentFragment;
     declare parents: @Implementation CoreDocument+ implements DOMDocument;
-    declare parents: @Implementation CoreDocumentType+ implements DOMDocumentType;
+    declare parents: @Implementation CoreDocumentTypeDeclaration+ implements DOMDocumentType;
     declare parents: @Implementation CoreElement+ implements DOMElement;
     declare parents: @Implementation CoreNSAwareElement+ implements DOMNSAwareElement;
     declare parents: @Implementation CoreNSUnawareElement+ implements DOMNSUnawareElement;
