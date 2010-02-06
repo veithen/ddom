@@ -15,5 +15,5 @@
  */
 package com.google.code.ddom.backend;
 
-public interface CoreDocumentFragment extends CoreParentNode /*, BuilderTarget*/ {
+public interface CoreDocumentFragment extends CoreParentNode {
 }
