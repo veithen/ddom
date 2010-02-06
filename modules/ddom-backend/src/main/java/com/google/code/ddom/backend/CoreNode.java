@@ -19,7 +19,7 @@ public interface CoreNode {
     /**
      * Get the document to which this node belongs.
      * 
-     * @return the document; this will never be <code>null</code>    TODO: except for CoreDocumentType??
+     * @return the document; this will never be <code>null</code>
      */
     CoreDocument coreGetDocument();
 }
