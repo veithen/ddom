@@ -284,10 +284,6 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         merge(newChild, refChild, false);
     }
 
-    public final void coreRemoveChild(CoreChildNode child) throws CoreModelException {
-        merge(null, child, true);
-    }
-
     public final void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
         merge(newChild, oldChild, true);
     }

@@ -141,9 +141,9 @@ public aspect ChildNodes {
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
-        if (oldChild instanceof CoreChildNode) {
+        if (oldChild.getParentNode() == this) {
             try {
-                coreRemoveChild((CoreChildNode)oldChild);
+                ((CoreChildNode)oldChild).coreDetach();
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }
