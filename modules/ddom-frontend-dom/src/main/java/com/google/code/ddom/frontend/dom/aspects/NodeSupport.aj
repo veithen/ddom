@@ -17,6 +17,7 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.w3c.dom.DOMException;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -25,19 +26,23 @@ import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.*;
 
 public aspect NodeSupport {
-    public final boolean DOMCoreNode.isSupported(String feature, String version) {
-        return ((DOMDocument)coreGetDocument()).getImplementation().hasFeature(feature, version);
+    public final DOMImplementation DOMCoreNode.getDOMImplementation() {
+        return ((DOMDocument)coreGetDocument()).getImplementation();
+    }
+    
+    public final boolean DOMNode.isSupported(String feature, String version) {
+        return getDOMImplementation().hasFeature(feature, version);
     }
 
-    public final Object DOMCoreNode.getFeature(String feature, String version) {
+    public final Object DOMNode.getFeature(String feature, String version) {
         return this;
     }
 
-    public final boolean DOMCoreNode.isSameNode(Node other) {
+    public final boolean DOMNode.isSameNode(Node other) {
         return other == this;
     }
 
-    public final boolean DOMCoreNode.isEqualNode(Node other) {
+    public final boolean DOMNode.isEqualNode(Node other) {
         // Note: We may not assume that the "other" node has been created by DDOM. Therefore we
         //       must only use standard DOM methods on that node.
         if (getNodeType() != other.getNodeType()
@@ -68,12 +73,12 @@ public aspect NodeSupport {
         return true;
     }
 
-    public final String DOMCoreNode.getBaseURI() {
+    public final String DOMNode.getBaseURI() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final short DOMCoreNode.compareDocumentPosition(Node other) throws DOMException {
+    public final short DOMNode.compareDocumentPosition(Node other) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

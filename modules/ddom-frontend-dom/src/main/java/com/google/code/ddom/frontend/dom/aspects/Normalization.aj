@@ -30,7 +30,7 @@ import com.google.code.ddom.frontend.dom.intf.*;
  * @author Andreas Veithen
  */
 public aspect Normalization {
-    public final void DOMCoreNode.normalize() {
+    public final void DOMNode.normalize() {
         try {
             normalize(NormalizationConfig.DEFAULT);
         } catch (AbortNormalizationException ex) {

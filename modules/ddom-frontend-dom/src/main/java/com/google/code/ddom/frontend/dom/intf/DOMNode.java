@@ -17,6 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import java.util.Map;
 
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.backend.CoreElement;
@@ -36,4 +37,8 @@ public interface DOMNode extends Node {
      *         namespace context of this node is defined to be empty
      */
     CoreElement getNamespaceContext();
+
+    void normalize(NormalizationConfig config) throws AbortNormalizationException;
+    
+    DOMImplementation getDOMImplementation();
 }

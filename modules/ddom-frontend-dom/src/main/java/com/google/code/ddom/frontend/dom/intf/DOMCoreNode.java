@@ -25,5 +25,4 @@ import com.google.code.ddom.backend.CoreNode;
  * @author Andreas Veithen
  */
 public interface DOMCoreNode extends CoreNode, DOMNode {
-    void normalize(NormalizationConfig config) throws AbortNormalizationException;
 }
