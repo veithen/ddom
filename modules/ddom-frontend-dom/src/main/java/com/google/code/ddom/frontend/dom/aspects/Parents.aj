@@ -45,7 +45,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMComment;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
-import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
 import com.google.code.ddom.frontend.dom.intf.DOMLeafNode;
@@ -69,7 +69,7 @@ public aspect Parents {
     declare parents: @Implementation CoreComment+ implements DOMComment;
     declare parents: @Implementation CoreDocumentFragment+ implements DOMDocumentFragment;
     declare parents: @Implementation CoreDocument+ implements DOMDocument;
-    declare parents: @Implementation CoreDocumentTypeDeclaration+ implements DOMDocumentType;
+    declare parents: @Implementation CoreDocumentTypeDeclaration+ implements DOMDocumentTypeDeclaration;
     declare parents: @Implementation CoreElement+ implements DOMElement;
     declare parents: @Implementation CoreNSAwareElement+ implements DOMNSAwareElement;
     declare parents: @Implementation CoreNSUnawareElement+ implements DOMNSUnawareElement;

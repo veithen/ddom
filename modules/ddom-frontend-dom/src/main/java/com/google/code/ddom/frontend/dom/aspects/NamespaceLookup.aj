@@ -23,7 +23,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMCharacterData;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
-import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
 import com.google.code.ddom.frontend.dom.intf.DOMNode;
@@ -58,7 +58,7 @@ public aspect NamespaceLookup {
         return null;
     }
     
-    public final CoreElement DOMDocumentType.getNamespaceContext() {
+    public final CoreElement DOMDocumentTypeDeclaration.getNamespaceContext() {
         return null;
     }
     

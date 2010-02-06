@@ -88,11 +88,11 @@ public aspect TextContent {
         // Setting textContent on a Document has no effect.
     }
 
-    public final String DOMDocumentType.getTextContent() {
+    public final String DOMDocumentTypeDeclaration.getTextContent() {
         return null;
     }
 
-    public final void DOMDocumentType.setTextContent(@SuppressWarnings("unused") String textContent) {
+    public final void DOMDocumentTypeDeclaration.setTextContent(@SuppressWarnings("unused") String textContent) {
         // Setting textContent on a DocumentType has no effect.
     }
 
@@ -100,7 +100,7 @@ public aspect TextContent {
         return appendTo;
     }
 
-    public final CharSequence DOMDocumentType.collectTextContent(CharSequence appendTo) {
+    public final CharSequence DOMDocumentTypeDeclaration.collectTextContent(CharSequence appendTo) {
         throw new UnsupportedOperationException();
     }
 

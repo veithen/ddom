@@ -20,29 +20,29 @@ import org.w3c.dom.NamedNodeMap;
 import com.google.code.ddom.frontend.dom.intf.*;
 
 public aspect DocumentTypeSupport {
-    public final String DOMDocumentType.getName() {
+    public final String DOMDocumentTypeDeclaration.getName() {
         return coreGetRootName();
     }
 
-    public final String DOMDocumentType.getPublicId() {
+    public final String DOMDocumentTypeDeclaration.getPublicId() {
         return coreGetPublicId();
     }
 
-    public final String DOMDocumentType.getSystemId() {
+    public final String DOMDocumentTypeDeclaration.getSystemId() {
         return coreGetSystemId();
     }
 
-    public final NamedNodeMap DOMDocumentType.getEntities() {
+    public final NamedNodeMap DOMDocumentTypeDeclaration.getEntities() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final String DOMDocumentType.getInternalSubset() {
+    public final String DOMDocumentTypeDeclaration.getInternalSubset() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final NamedNodeMap DOMDocumentType.getNotations() {
+    public final NamedNodeMap DOMDocumentTypeDeclaration.getNotations() {
         // TODO
         throw new UnsupportedOperationException();
     }
