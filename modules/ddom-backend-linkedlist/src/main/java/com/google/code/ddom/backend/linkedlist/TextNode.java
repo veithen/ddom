@@ -16,11 +16,31 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreTextNode;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public abstract class TextNode extends CharacterData implements CoreTextNode {
     public TextNode(Document document, String data) {
         super(document, data);
+    }
+
+    @Override
+    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+        String data = coreGetData();
+        if (appendTo == null) {
+            return data;
+        } else {
+            StringBuilder builder;
+            if (appendTo instanceof String) {
+                String existing = (String)appendTo;
+                builder = new StringBuilder(existing.length() + data.length());
+                builder.append(existing);
+            } else {
+                builder = (StringBuilder)appendTo;
+            }
+            builder.append(data);
+            return builder;
+        }
     }
 }

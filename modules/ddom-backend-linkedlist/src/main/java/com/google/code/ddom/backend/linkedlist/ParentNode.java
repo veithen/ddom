@@ -96,6 +96,20 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         content = value;
     }
 
+    public final String coreGetTextContent() throws DeferredParsingException {
+        CharSequence content = collectTextContent(null);
+        return content == null ? "" : content.toString();
+    }
+    
+    @Override
+    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+        CharSequence content = appendTo;
+        for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
+            content = ((Node)node).collectTextContent(content);
+        }
+        return content;
+    }
+
     final ChildNode internalGetFirstChild() {
         return (ChildNode)content;
     }

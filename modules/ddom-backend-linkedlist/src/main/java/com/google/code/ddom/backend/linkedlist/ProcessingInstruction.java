@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreProcessingInstruction;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
@@ -43,5 +44,10 @@ public class ProcessingInstruction extends LeafNode implements CoreProcessingIns
 
     public final void coreSetData(String data) {
         this.data = data;
+    }
+
+    @Override
+    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+        return appendTo;
     }
 }

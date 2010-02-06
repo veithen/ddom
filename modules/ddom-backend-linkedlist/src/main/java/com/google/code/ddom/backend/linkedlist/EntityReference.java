@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
@@ -29,5 +30,11 @@ public class EntityReference extends LeafNode implements CoreEntityReference {
 
     public final String coreGetName() {
         return name;
+    }
+
+    @Override
+    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

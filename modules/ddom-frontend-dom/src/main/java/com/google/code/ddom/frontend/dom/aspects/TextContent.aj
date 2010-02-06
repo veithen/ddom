@@ -17,21 +17,18 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect TextContent {
-    static String doGetTextContent(DOMParentNode node) {
-        CharSequence content = node.collectTextContent(null);
-        return content == null ? "" : content.toString();
-    }
-    
     public final String DOMElement.getTextContent() {
-        return doGetTextContent(this);
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void DOMElement.setTextContent(String textContent) {
@@ -39,7 +36,11 @@ public aspect TextContent {
     }
 
     public final String DOMDocumentFragment.getTextContent() {
-        return doGetTextContent(this);
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void DOMDocumentFragment.setTextContent(String textContent) {
@@ -48,7 +49,11 @@ public aspect TextContent {
     }
 
     public final String DOMAttribute.getTextContent() {
-        return doGetTextContent(this);
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void DOMAttribute.setTextContent(String textContent) {
@@ -94,52 +99,5 @@ public aspect TextContent {
 
     public final void DOMDocumentTypeDeclaration.setTextContent(@SuppressWarnings("unused") String textContent) {
         // Setting textContent on a DocumentType has no effect.
-    }
-
-    public final CharSequence DOMComment.collectTextContent(CharSequence appendTo) {
-        return appendTo;
-    }
-
-    public final CharSequence DOMDocumentTypeDeclaration.collectTextContent(CharSequence appendTo) {
-        throw new UnsupportedOperationException();
-    }
-
-    public final CharSequence DOMEntityReference.collectTextContent(CharSequence appendTo) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final CharSequence DOMProcessingInstruction.collectTextContent(CharSequence appendTo) {
-        return appendTo;
-    }
-
-    public final CharSequence DOMParentNode.collectTextContent(CharSequence appendTo) {
-        try {
-            CharSequence content = appendTo;
-            for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
-                content = ((DOMCoreNode)node).collectTextContent(content);
-            }
-            return content;
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
-        }
-    }
-
-    public final CharSequence DOMTextNode.collectTextContent(CharSequence appendTo) {
-        String data = getData();
-        if (appendTo == null) {
-            return data;
-        } else {
-            StringBuilder builder;
-            if (appendTo instanceof String) {
-                String existing = (String)appendTo;
-                builder = new StringBuilder(existing.length() + data.length());
-                builder.append(existing);
-            } else {
-                builder = (StringBuilder)appendTo;
-            }
-            builder.append(data);
-            return builder;
-        }
     }
 }

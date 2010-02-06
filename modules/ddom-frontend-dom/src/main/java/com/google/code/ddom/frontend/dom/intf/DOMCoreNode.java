@@ -25,6 +25,5 @@ import com.google.code.ddom.backend.CoreNode;
  * @author Andreas Veithen
  */
 public interface DOMCoreNode extends CoreNode, DOMNode {
-    CharSequence collectTextContent(CharSequence appendTo);
     void normalize(NormalizationConfig config) throws AbortNormalizationException;
 }

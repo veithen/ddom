@@ -50,6 +50,8 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreSetValue(String value);
     
+    String coreGetTextContent() throws DeferredParsingException;
+    
     // TODO: specify behavior if the element neither has children nor a value
     boolean coreIsExpanded();
     

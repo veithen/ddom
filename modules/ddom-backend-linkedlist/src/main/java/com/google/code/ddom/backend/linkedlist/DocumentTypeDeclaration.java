@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
@@ -41,5 +42,10 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
 
     public final String coreGetSystemId() {
         return systemId;
+    }
+
+    @Override
+    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+        return appendTo;
     }
 }

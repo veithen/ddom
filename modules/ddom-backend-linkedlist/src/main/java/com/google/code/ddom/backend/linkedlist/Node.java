@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.WrongDocumentException;
 
@@ -33,4 +34,6 @@ public abstract class Node implements LLNode {
             throw new WrongDocumentException();
         }
     }
+
+    abstract CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException;
 }

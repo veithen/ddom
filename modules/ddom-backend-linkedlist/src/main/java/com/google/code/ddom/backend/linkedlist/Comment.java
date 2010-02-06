@@ -16,11 +16,17 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreComment;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
 public class Comment extends CharacterData implements CoreComment {
     public Comment(Document document, String data) {
         super(document, data);
+    }
+
+    @Override
+    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+        return appendTo;
     }
 }
