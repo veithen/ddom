@@ -165,6 +165,7 @@ public aspect ChildNodeSupport {
         if (parent == null) {
             throw new NoParentException();
         } else {
+            // TODO: replace this by specific code
             parent.coreInsertChildBefore(fragment, this);
         }
     }

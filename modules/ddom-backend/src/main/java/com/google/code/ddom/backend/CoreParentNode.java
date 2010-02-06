@@ -69,16 +69,6 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreAppendChild(CoreNode newChild) throws CoreModelException;
     
-    /**
-     * @deprecated Use {@link CoreChildNode#coreInsertSiblingAfter(CoreChildNode)}
-     */
-    void coreInsertChildAfter(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
-    
-    /**
-     * @deprecated Use {@link CoreChildNode#coreInsertSiblingBefore(CoreChildNode)}
-     */
-    void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException;
-    
     // TODO: need a more object oriented replacement for this
     void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
 
