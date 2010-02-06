@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,5 +41,14 @@ public class DocumentTypeTest {
         DocumentType documentType = domImpl.createDocumentType("root", null, null);
         documentType.setUserData("key", "value", null);
         domImpl.createDocument(null, "root", documentType);
+    }
+    
+    // Not @Validated since there is a bug in Xerces causing a NullPointerException
+    @Test
+    @Ignore // TODO: doesn't work yet
+    public void testIsSupportedBeforeDocumentCreation() {
+        DOMImplementation domImpl = domUtil.getDOMImplementation();
+        DocumentType documentType = domImpl.createDocumentType("root", null, null);
+        Assert.assertTrue(documentType.isSupported("Core", "2.0"));
     }
 }
