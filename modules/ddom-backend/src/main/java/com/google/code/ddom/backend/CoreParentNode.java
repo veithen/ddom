@@ -30,7 +30,6 @@ public interface CoreParentNode extends CoreNode {
     void coreBuild() throws DeferredParsingException;
     
     CoreChildNode internalGetFirstChild();
-    void internalSetFirstChild(CoreChildNode child);
     void notifyChildrenModified(int delta);
 
     /**
