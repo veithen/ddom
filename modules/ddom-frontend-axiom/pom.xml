@@ -32,25 +32,25 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-api</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-backend</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-backend-linkedlist</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-weaver</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -67,9 +67,9 @@
             <artifactId>aspectjrt</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-test-utils</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -78,9 +78,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-stream-wstx</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -29,9 +29,9 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.google.code.ddom</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-api</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

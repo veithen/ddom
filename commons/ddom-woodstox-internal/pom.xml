@@ -30,9 +30,9 @@
     <dependencies>
         <dependency>
             <!-- TODO: not good: we are in commons and ddom-stream is in modules; solve this later -->
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-stream</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>stax</groupId>
