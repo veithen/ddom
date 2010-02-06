@@ -20,19 +20,19 @@ import java.util.Map;
 
 import org.w3c.dom.UserDataHandler;
 
+import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
-import com.google.code.ddom.frontend.dom.intf.DOMNode;
 import com.google.code.ddom.frontend.dom.support.UserData;
 
 public aspect UserDataSupport {
-    private Map<DOMNode,Map<String,UserData>> DOMDocument.userDataMap;
+    private Map<DOMCoreNode,Map<String,UserData>> DOMDocument.userDataMap;
     
-    public final Map<String,UserData> DOMDocument.getUserDataMap(DOMNode node, boolean create) {
+    public final Map<String,UserData> DOMDocument.getUserDataMap(DOMCoreNode node, boolean create) {
         if (userDataMap == null) {
             if (!create) {
                 return null;
             }
-            userDataMap = new HashMap<DOMNode,Map<String,UserData>>();
+            userDataMap = new HashMap<DOMCoreNode,Map<String,UserData>>();
         }
         Map<String,UserData> mapForNode = userDataMap.get(node);
         if (mapForNode == null) {
@@ -45,7 +45,7 @@ public aspect UserDataSupport {
         return mapForNode;
     }
     
-    public final Object DOMNode.getUserData(String key) {
+    public final Object DOMCoreNode.getUserData(String key) {
         Map<String,UserData> userDataMap = ((DOMDocument)coreGetDocument()).getUserDataMap(this, false);
         if (userDataMap == null) {
             return null;
@@ -55,7 +55,7 @@ public aspect UserDataSupport {
         }
     }
 
-    public final Object DOMNode.setUserData(String key, Object data, UserDataHandler handler) {
+    public final Object DOMCoreNode.setUserData(String key, Object data, UserDataHandler handler) {
         UserData userData;
         if (data == null) {
             Map<String,UserData> userDataMap = ((DOMDocument)coreGetDocument()).getUserDataMap(this, false);

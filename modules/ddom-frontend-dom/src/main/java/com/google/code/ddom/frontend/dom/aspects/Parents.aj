@@ -54,7 +54,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
 import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareElement;
 import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
-import com.google.code.ddom.frontend.dom.intf.DOMNode;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
 import com.google.code.ddom.frontend.dom.intf.DOMProcessingInstruction;
 import com.google.code.ddom.frontend.dom.intf.DOMText;
@@ -78,7 +78,7 @@ public aspect Parents {
     declare parents: @Implementation CoreLeafNode+ implements DOMLeafNode;
     declare parents: @Implementation CoreNSAwareAttribute+ implements DOMNSAwareAttribute;
     declare parents: @Implementation CoreNSUnawareAttribute+ implements DOMNSUnawareAttribute;
-    declare parents: @Implementation CoreNode+ implements DOMNode;
+    declare parents: @Implementation CoreNode+ implements DOMCoreNode;
     declare parents: @Implementation CoreProcessingInstruction+ implements DOMProcessingInstruction;
     declare parents: @Implementation CoreChildNode+ implements DOMChildNode;
     declare parents: @Implementation CoreTextNode+ implements DOMTextNode;

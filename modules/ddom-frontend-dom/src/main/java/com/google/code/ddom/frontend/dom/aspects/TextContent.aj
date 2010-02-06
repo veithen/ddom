@@ -19,7 +19,7 @@ import org.w3c.dom.DOMException;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.frontend.dom.intf.DOMNode;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
@@ -117,7 +117,7 @@ public aspect TextContent {
         try {
             CharSequence content = appendTo;
             for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
-                content = ((DOMNode)node).collectTextContent(content);
+                content = ((DOMCoreNode)node).collectTextContent(content);
             }
             return content;
         } catch (CoreModelException ex) {

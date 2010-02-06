@@ -25,19 +25,19 @@ import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.*;
 
 public aspect NodeSupport {
-    public final boolean DOMNode.isSupported(String feature, String version) {
+    public final boolean DOMCoreNode.isSupported(String feature, String version) {
         return ((DOMDocument)coreGetDocument()).getImplementation().hasFeature(feature, version);
     }
 
-    public final Object DOMNode.getFeature(String feature, String version) {
+    public final Object DOMCoreNode.getFeature(String feature, String version) {
         return this;
     }
 
-    public final boolean DOMNode.isSameNode(Node other) {
+    public final boolean DOMCoreNode.isSameNode(Node other) {
         return other == this;
     }
 
-    public final boolean DOMNode.isEqualNode(Node other) {
+    public final boolean DOMCoreNode.isEqualNode(Node other) {
         // Note: We may not assume that the "other" node has been created by DDOM. Therefore we
         //       must only use standard DOM methods on that node.
         if (getNodeType() != other.getNodeType()
@@ -68,12 +68,12 @@ public aspect NodeSupport {
         return true;
     }
 
-    public final String DOMNode.getBaseURI() {
+    public final String DOMCoreNode.getBaseURI() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final short DOMNode.compareDocumentPosition(Node other) throws DOMException {
+    public final short DOMCoreNode.compareDocumentPosition(Node other) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
     }

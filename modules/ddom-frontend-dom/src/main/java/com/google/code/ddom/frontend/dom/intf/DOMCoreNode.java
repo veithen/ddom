@@ -20,7 +20,12 @@ import org.w3c.dom.Node;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreNode;
 
-public interface DOMNode extends CoreNode, Node {
+/**
+ * DOM {@link Node} that directly maps to a {@link CoreNode}.
+ * 
+ * @author Andreas Veithen
+ */
+public interface DOMCoreNode extends CoreNode, Node {
     CharSequence collectTextContent(CharSequence appendTo);
     void normalize(NormalizationConfig config) throws AbortNormalizationException;
     

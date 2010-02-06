@@ -19,6 +19,6 @@ import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.backend.CoreParentNode;
 
-public interface DOMParentNode extends CoreParentNode, NodeList, DOMNode {
+public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
 
 }
