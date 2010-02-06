@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -47,6 +48,15 @@ public abstract class JAXPDOMUtil extends DOMUtil {
             throw new Error(ex);
         } catch (IOException ex) {
             throw new Error(ex);
+        } catch (ParserConfigurationException ex) {
+            throw new Error(ex);
+        }
+    }
+
+    @Override
+    public DOMImplementation getDOMImplementation() {
+        try {
+            return createDocumentBuilderFactory().newDocumentBuilder().getDOMImplementation();
         } catch (ParserConfigurationException ex) {
             throw new Error(ex);
         }

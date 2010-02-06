@@ -26,6 +26,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
@@ -33,6 +34,7 @@ import org.xml.sax.InputSource;
 public abstract class DOMUtil {
     public abstract Document newDocument();
     public abstract Document parse(boolean namespaceAware, InputSource source);
+    public abstract DOMImplementation getDOMImplementation();
 
     public Document parse(boolean namespaceAware, String xml) {
         return parse(namespaceAware, new InputSource(new StringReader(xml)));

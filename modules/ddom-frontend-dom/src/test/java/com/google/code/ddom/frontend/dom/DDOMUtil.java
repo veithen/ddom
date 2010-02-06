@@ -15,11 +15,14 @@
  */
 package com.google.code.ddom.frontend.dom;
 
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
+import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
+import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 
 public class DDOMUtil extends DOMUtil {
@@ -38,5 +41,13 @@ public class DDOMUtil extends DOMUtil {
         Options options = new Options();
         options.set(NamespaceAwareness.get(namespaceAware));
         return (Document)DocumentHelper.newInstance().parse("dom", source, options);
+    }
+
+    @Override
+    public DOMImplementation getDOMImplementation() {
+        // TODO: need to find a better way to do this
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.addFrontend("dom");
+        return new DOMImplementationImpl(modelBuilder.buildNodeFactory());
     }
 }
