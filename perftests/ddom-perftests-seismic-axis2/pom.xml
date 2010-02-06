@@ -28,7 +28,7 @@
     <name>DDOM :: Performance tests :: Seismic service :: Axis2</name>
     <packaging>war</packaging>
     <properties>
-        <axis2.version>1.5.1</axis2.version>
+        <axis2.version>SNAPSHOT</axis2.version>
     </properties>
     <dependencies>
         <dependency>
@@ -49,6 +49,11 @@
         <dependency>
             <groupId>org.apache.axis2</groupId>
             <artifactId>axis2-jaxws</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-jaxws-aar-deployer</artifactId>
             <version>${axis2.version}</version>
         </dependency>
     </dependencies>

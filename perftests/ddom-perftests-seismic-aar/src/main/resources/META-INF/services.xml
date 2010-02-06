@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<service name="Seismic.SeismicPort">
+    <description>Seismic test service</description>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.jaxws.server.JAXWSMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.jaxws.server.JAXWSMessageReceiver"/>
+    </messageReceivers>
+    <parameter name="ServiceClass">com.sosnoski.ws.seismic.jaxws.SeismicImpl</parameter>
+</service>
