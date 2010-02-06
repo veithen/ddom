@@ -29,7 +29,6 @@ public interface CoreParentNode extends CoreNode {
     
     void coreBuild() throws DeferredParsingException;
     
-    CoreChildNode internalGetFirstChild();
     void notifyChildrenModified(int delta);
 
     /**

@@ -94,7 +94,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         content = value;
     }
 
-    public final ChildNode internalGetFirstChild() {
+    final ChildNode internalGetFirstChild() {
         return (ChildNode)content;
     }
 
