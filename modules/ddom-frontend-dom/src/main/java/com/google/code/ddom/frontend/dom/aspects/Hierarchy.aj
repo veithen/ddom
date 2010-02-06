@@ -38,11 +38,7 @@ public aspect Hierarchy {
         return (Document)coreGetDocument();
     }
 
-    public final Document DOMElement.getOwnerDocument() {
-        return (Document)coreGetDocument();
-    }
-
-    public final Document DOMLeafNode.getOwnerDocument() {
+    public final Document DOMCoreChildNode.getOwnerDocument() {
         return (Document)coreGetDocument();
     }
     
@@ -50,12 +46,7 @@ public aspect Hierarchy {
         return null;
     }
 
-    // TODO: should be possible to combine LeafNode and ElementImpl into a single case
-    public final Node DOMLeafNode.getParentNode() {
-        return (Node)coreGetParent();
-    }
-
-    public final Node DOMElement.getParentNode() {
+    public final Node DOMCoreChildNode.getParentNode() {
         return (Node)coreGetParent();
     }
 

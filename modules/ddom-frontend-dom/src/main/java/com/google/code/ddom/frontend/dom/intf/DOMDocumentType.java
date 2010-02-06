@@ -19,6 +19,6 @@ import org.w3c.dom.DocumentType;
 
 import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 
-public interface DOMDocumentType extends CoreDocumentTypeDeclaration, DocumentType, DOMLeafNode {
+public interface DOMDocumentType extends CoreDocumentTypeDeclaration, DocumentType, DOMCoreLeafNode {
 
 }

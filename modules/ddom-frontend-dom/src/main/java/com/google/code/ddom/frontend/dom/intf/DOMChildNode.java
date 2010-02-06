@@ -15,6 +15,6 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-public interface DOMLeafNode extends DOMChildNode {
+public interface DOMChildNode extends DOMNode {
 
 }

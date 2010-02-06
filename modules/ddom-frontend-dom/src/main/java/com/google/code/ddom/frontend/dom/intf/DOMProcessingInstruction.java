@@ -19,6 +19,6 @@ import org.w3c.dom.ProcessingInstruction;
 
 import com.google.code.ddom.backend.CoreProcessingInstruction;
 
-public interface DOMProcessingInstruction extends CoreProcessingInstruction, ProcessingInstruction, DOMLeafNode {
+public interface DOMProcessingInstruction extends CoreProcessingInstruction, ProcessingInstruction, DOMCoreLeafNode {
 
 }
