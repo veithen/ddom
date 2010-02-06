@@ -17,6 +17,6 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import com.google.code.ddom.backend.CoreLeafNode;
 
-public interface DOMLeafNode extends CoreLeafNode, DOMChildNode {
+public interface DOMLeafNode extends CoreLeafNode, DOMCoreChildNode {
 
 }

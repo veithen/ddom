@@ -19,7 +19,7 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
-import com.google.code.ddom.frontend.dom.intf.DOMChildNode;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
@@ -49,7 +49,7 @@ public aspect Sibling {
         return null;
     }
 
-    public final Node DOMChildNode.getNextSibling() {
+    public final Node DOMCoreChildNode.getNextSibling() {
         try {
             return (Node)coreGetNextSibling();
         } catch (CoreModelException ex) {
@@ -57,7 +57,7 @@ public aspect Sibling {
         }
     }
 
-    public final Node DOMChildNode.getPreviousSibling() {
+    public final Node DOMCoreChildNode.getPreviousSibling() {
         try {
             return (Node)coreGetPreviousSibling();
         } catch (CoreModelException ex) {

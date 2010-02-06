@@ -19,6 +19,6 @@ import org.w3c.dom.Element;
 
 import com.google.code.ddom.backend.CoreElement;
 
-public interface DOMElement extends CoreElement, Element, DOMParentNode, DOMChildNode {
+public interface DOMElement extends CoreElement, Element, DOMParentNode, DOMCoreChildNode {
 
 }

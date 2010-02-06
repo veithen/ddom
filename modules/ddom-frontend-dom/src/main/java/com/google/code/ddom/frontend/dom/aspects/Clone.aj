@@ -24,7 +24,7 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
-import com.google.code.ddom.frontend.dom.intf.DOMChildNode;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMComment;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
@@ -68,10 +68,10 @@ public aspect Clone {
     public final Node DOMParentNode.deepClone() {
         try {
             Node clone = shallowClone();
-            DOMChildNode child = (DOMChildNode)coreGetFirstChild();
+            DOMCoreChildNode child = (DOMCoreChildNode)coreGetFirstChild();
             while (child != null) {
                 clone.appendChild(child.cloneNode(true));
-                child = (DOMChildNode)child.coreGetNextSibling();
+                child = (DOMCoreChildNode)child.coreGetNextSibling();
             }
             return clone;
         } catch (CoreModelException ex) {

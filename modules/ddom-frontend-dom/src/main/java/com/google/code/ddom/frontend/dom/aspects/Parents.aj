@@ -41,7 +41,7 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMCharacterData;
-import com.google.code.ddom.frontend.dom.intf.DOMChildNode;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMComment;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
@@ -80,7 +80,7 @@ public aspect Parents {
     declare parents: @Implementation CoreNSUnawareAttribute+ implements DOMNSUnawareAttribute;
     declare parents: @Implementation CoreNode+ implements DOMCoreNode;
     declare parents: @Implementation CoreProcessingInstruction+ implements DOMProcessingInstruction;
-    declare parents: @Implementation CoreChildNode+ implements DOMChildNode;
+    declare parents: @Implementation CoreChildNode+ implements DOMCoreChildNode;
     declare parents: @Implementation CoreTextNode+ implements DOMTextNode;
     declare parents: @Implementation CoreText+ implements DOMText;
     declare parents: @Implementation CoreCDATASection+ implements DOMCDATASection;
