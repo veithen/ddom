@@ -23,6 +23,10 @@ import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.weaver.ModelWeaver;
 
+/**
+ * @goal weave
+ * @phase compile
+ */
 public class WeaverMojo extends AbstractMojo {
     /**
      * The backend to use. Note that the corresponding JARs must be added to the project
