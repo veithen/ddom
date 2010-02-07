@@ -32,7 +32,11 @@ public aspect AttributeSupport {
     }
 
     public void AxiomAttribute.setAttributeValue(String value) {
-        coreSetValue(value);
+        try {
+            coreSetValue(value);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public String AxiomAttribute.getAttributeType() {

@@ -56,6 +56,11 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         children += delta;
     }
 
+    @Override
+    final void notifyChildrenCleared() {
+        children = 0;
+    }
+
     final void setFirstAttribute(Attribute firstAttribute) {
         this.firstAttribute = firstAttribute;
     }

@@ -34,6 +34,11 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
     }
 
     @Override
+    final void notifyChildrenCleared() {
+        children = 0;
+    }
+
+    @Override
     void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) {
         // All node type are allowed
     }

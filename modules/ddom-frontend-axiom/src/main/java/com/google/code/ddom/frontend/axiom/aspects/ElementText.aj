@@ -17,11 +17,17 @@ package com.google.code.ddom.frontend.axiom.aspects;
 
 import javax.xml.namespace.QName;
 
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 public aspect ElementText {
     public void AxiomElement.setText(String text) {
-        coreSetValue(text);
+        try {
+            coreSetValue(text);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public void AxiomElement.setText(QName text) {

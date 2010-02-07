@@ -53,7 +53,12 @@ public interface AttributeMatcher {
         }
 
         public void update(CoreAttribute attr, String prefix, String value) {
-            attr.coreSetValue(value);
+            try {
+                attr.coreSetValue(value);
+            } catch (DeferredParsingException ex) {
+                // TODO
+                throw new RuntimeException(ex);
+            }
         }
     };
     

@@ -47,8 +47,16 @@ public interface CoreParentNode extends CoreNode {
      * 
      * @param value
      *            the value to set
+     * @throws DeferredParsingException 
      */
-    void coreSetValue(String value);
+    void coreSetValue(String value) throws DeferredParsingException;
+    
+    /**
+     * Remove all children from this node.
+     * 
+     * @throws DeferredParsingException 
+     */
+    void coreClear() throws DeferredParsingException;
     
     String coreGetTextContent() throws DeferredParsingException;
     

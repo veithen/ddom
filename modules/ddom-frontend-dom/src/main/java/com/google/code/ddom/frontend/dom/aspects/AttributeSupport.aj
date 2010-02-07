@@ -34,7 +34,11 @@ public aspect AttributeSupport {
     }
     
     public final void DOMAttribute.setValue(String value) throws DOMException {
-        coreSetValue(value);
+        try {
+            coreSetValue(value);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final Element DOMAttribute.getOwnerElement() {

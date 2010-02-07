@@ -59,6 +59,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     }
 
     abstract void notifyChildrenModified(int delta);
+    abstract void notifyChildrenCleared();
 
     public final Object coreGetContent() {
         return content;
@@ -94,10 +95,27 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         }
     }
 
-    public final void coreSetValue(String value) {
+    public final void coreSetValue(String value) throws DeferredParsingException {
         // TODO: what if arg is null?
-        // TODO: need to remove any existing children!
+        if (content != null) {
+            coreClear();
+        }
         content = value;
+        notifyChildrenModified(1);
+    }
+
+    public final void coreClear() throws DeferredParsingException {
+        if (content instanceof ChildNode) {
+            ChildNode child = (ChildNode)content;
+            do {
+                ChildNode next = (ChildNode)child.coreGetNextSibling();
+                child.internalSetParent(null);
+                child.internalSetNextSibling(null);
+                child = next;
+            } while (child != null);
+        }
+        content = null;
+        notifyChildrenCleared();
     }
 
     public final String coreGetTextContent() throws DeferredParsingException {

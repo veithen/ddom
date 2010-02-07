@@ -17,14 +17,13 @@ package com.google.code.ddom.backend.testsuite.parent;
 
 import org.junit.Assert;
 
-import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
-public class TestCoreSetValue extends ParentNodeTestCase {
-    public TestCoreSetValue(BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {
+public class TestCoreClear extends ParentNodeTestCase {
+    public TestCoreClear(BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {
         super(config, parentNodeFactory);
     }
 
@@ -32,12 +31,15 @@ public class TestCoreSetValue extends ParentNodeTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreParentNode parent = parentNodeFactory.createNode(document);
-        parent.coreSetValue("test");
-        Assert.assertFalse(parent.coreIsExpanded());
-        CoreChildNode child = parent.coreGetFirstChild();
-        Assert.assertTrue(child instanceof CoreText);
-        Assert.assertEquals("test", ((CoreText)child).coreGetData());
-        Assert.assertTrue(parent.coreIsExpanded());
-        Assert.assertEquals(1, parent.coreGetChildCount());
+        CoreText child1 = nodeFactory.createText(document, "text1");
+        CoreText child2 = nodeFactory.createText(document, "text2");
+        parent.coreAppendChild(child1);
+        parent.coreAppendChild(child2);
+        Assert.assertEquals(2, parent.coreGetChildCount());
+        parent.coreClear();
+        Assert.assertEquals(0, parent.coreGetChildCount());
+        Assert.assertNull(parent.coreGetFirstChild());
+        Assert.assertFalse(child1.coreHasParent());
+        Assert.assertFalse(child2.coreHasParent());
     }
 }

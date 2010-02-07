@@ -18,6 +18,7 @@ package com.google.code.ddom.frontend.dom.support;
 import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 
@@ -53,6 +54,11 @@ public final class DOM1AttributeMatcher implements AttributeMatcher {
     }
 
     public void update(CoreAttribute attr, String prefix, String value) {
-        attr.coreSetValue(value);
+        try {
+            attr.coreSetValue(value);
+        } catch (DeferredParsingException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
     }
 }

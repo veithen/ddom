@@ -110,6 +110,11 @@ public class Document extends ParentNode implements CoreDocument {
     }
 
     @Override
+    final void notifyChildrenCleared() {
+        children = 0;
+    }
+
+    @Override
     final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
         if (newChild instanceof CoreDocumentTypeDeclaration) {

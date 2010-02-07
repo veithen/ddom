@@ -78,6 +78,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
 
     @Override
+    final void notifyChildrenCleared() {
+        // Ignore this; we don't store the number of children
+    }
+
+    @Override
     final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
             throw new ChildTypeNotAllowedException();

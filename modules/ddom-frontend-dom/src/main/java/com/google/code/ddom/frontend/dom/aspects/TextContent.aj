@@ -32,7 +32,11 @@ public aspect TextContent {
     }
 
     public final void DOMElement.setTextContent(String textContent) {
-        coreSetValue(textContent);
+        try {
+            coreSetValue(textContent);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final String DOMDocumentFragment.getTextContent() {
@@ -57,7 +61,11 @@ public aspect TextContent {
     }
 
     public final void DOMAttribute.setTextContent(String textContent) {
-        coreSetValue(textContent);
+        try {
+            coreSetValue(textContent);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final String DOMCharacterData.getTextContent() {

@@ -51,7 +51,7 @@ public class BackendTestCase extends TestCase {
         setName(getClass().getName() + " [" + nameQualifier + "]");
     }
     
-    protected CoreDocument parse(String xml) {
+    protected final CoreDocument parse(String xml) {
         CoreDocument document = nodeFactory.createDocument();
         try {
             document.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)));
@@ -62,7 +62,7 @@ public class BackendTestCase extends TestCase {
         return document;
     }
     
-    protected CoreDocumentFragment parse(CoreDocument document, String xml) {
+    protected final CoreDocumentFragment parse(CoreDocument document, String xml) {
         CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
         try {
             fragment.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)));
