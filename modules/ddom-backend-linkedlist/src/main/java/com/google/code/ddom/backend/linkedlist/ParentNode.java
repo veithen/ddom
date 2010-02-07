@@ -306,14 +306,6 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         merge(newChild, null, false);
     }
 
-    // TODO: remove this
-    final void coreInsertChildBefore(CoreNode newChild, CoreChildNode refChild) throws CoreModelException {
-        if (newChild == refChild) {
-            throw new SelfRelationshipException();
-        }
-        merge(newChild, refChild, false);
-    }
-
     public final void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
         merge(newChild, oldChild, true);
     }
