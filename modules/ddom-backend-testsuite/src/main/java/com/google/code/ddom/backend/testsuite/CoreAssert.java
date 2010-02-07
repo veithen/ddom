@@ -28,4 +28,9 @@ public class CoreAssert {
         Assert.assertNull(node.coreGetPreviousSibling());
         Assert.assertNull(node.coreGetNextSibling());
     }
+    
+    public static void assertSiblings(CoreChildNode node1, CoreChildNode node2) throws DeferredParsingException {
+        Assert.assertSame(node2, node1.coreGetNextSibling());
+        Assert.assertSame(node1, node2.coreGetPreviousSibling());
+    }
 }

@@ -16,15 +16,15 @@
 package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreComment;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.CoreAssert;
 
-public class TestCoreInsertSiblingsBefore extends BackendTestCase {
-    public TestCoreInsertSiblingsBefore(BackendTestSuiteConfig config) {
+public class TestCoreInsertSiblingsBeforeWithoutPreviousSibling extends BackendTestCase {
+    public TestCoreInsertSiblingsBeforeWithoutPreviousSibling(BackendTestSuiteConfig config) {
         super(config);
     }
 
@@ -32,22 +32,22 @@ public class TestCoreInsertSiblingsBefore extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, null, "test", null);
-        CoreComment comment = nodeFactory.createComment(document, "test");
-        element.coreAppendChild(comment);
+        CoreChildNode child1 = nodeFactory.createCDATASection(document, "data");
+        CoreChildNode child2 = nodeFactory.createComment(document, "test");
+        element.coreAppendChild(child1);
+        element.coreAppendChild(child2);
         CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
         CoreChildNode fragmentChild1 = nodeFactory.createElement(document, null, "test", null);
         CoreChildNode fragmentChild2 = nodeFactory.createProcessingInstruction(document, "pi", "test");
         fragment.coreAppendChild(fragmentChild1);
         fragment.coreAppendChild(fragmentChild2);
-        comment.coreInsertSiblingsBefore(fragment);
-        assertSame(fragmentChild2, comment.coreGetPreviousSibling());
-        assertSame(comment, fragmentChild2.coreGetNextSibling());
-        assertSame(fragmentChild1, element.coreGetFirstChild());
-        assertEquals(3, element.coreGetChildCount());
+        child2.coreInsertSiblingsBefore(fragment);
+        CoreAssert.assertSiblings(child1, fragmentChild1);
+        CoreAssert.assertSiblings(fragmentChild2, child2);
+        assertEquals(4, element.coreGetChildCount());
         assertSame(element, fragmentChild1.coreGetParent());
         assertSame(element, fragmentChild2.coreGetParent());
-        // TODO: failure here
-//        assertEquals(0, fragment.coreGetChildCount());
-//        assertNull(fragment.coreGetFirstChild());
+        assertEquals(0, fragment.coreGetChildCount());
+        assertNull(fragment.coreGetFirstChild());
     }
 }

@@ -133,7 +133,7 @@ public aspect ChildNodeSupport {
                     siblingCount++;
                 }
                 fragment.internalSetFirstChild(null);
-                fragment.notifyChildrenModified(-siblingCount);
+                fragment.notifyChildrenCleared();
                 parent.notifyChildrenModified(siblingCount);
             } else {
                 // TODO
@@ -169,12 +169,32 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws CoreModelException {
+    public final void ChildNode.coreInsertSiblingsBefore(CoreDocumentFragment coreFragment) throws CoreModelException {
+        DocumentFragment fragment = (DocumentFragment)coreFragment;
         if (parent == null) {
             throw new NoParentException();
         } else {
-            // TODO: replace this by specific code
-            parent.coreInsertChildBefore(fragment, this);
+            // TODO: handle empty fragment?
+            fragment.coreBuild();
+            ChildNode node = (ChildNode)fragment.coreGetFirstChild();
+            ChildNode previousSibling = internalGetPreviousSibling();
+            if (previousSibling == null) {
+                parent.internalSetFirstChild(node);
+            } else {
+                previousSibling.internalSetNextSibling(node);
+            }
+            int nodeCount = 0;
+            ChildNode previousNode;
+            do {
+                node.internalSetParent(parent);
+                nodeCount++;
+                previousNode = node;
+                node = node.internalGetNextSibling();
+            } while (node != null);
+            previousNode.internalSetNextSibling(this);
+            fragment.internalSetFirstChild(null);
+            fragment.notifyChildrenCleared();
+            parent.notifyChildrenModified(nodeCount);
         }
     }
     
