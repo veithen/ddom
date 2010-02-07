@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.commons.io;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -23,19 +22,19 @@ import java.net.URLClassLoader;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.code.ddom.commons.Constants;
+
 public class URLUtilsTest {
-    private static final File testjar = new File("target/testjar").getAbsoluteFile();
-    
     @Test
     public void testListFolderWithFileProtocol() throws Exception {
-        URL[] urls = URLUtils.listFolder(testjar.toURL());
+        URL[] urls = URLUtils.listFolder(Constants.TESTJAR_DIR.toURL());
         Assert.assertEquals(1, urls.length);
         Assert.assertTrue(urls[0].toExternalForm().endsWith("activation.jar"));
     }
     
     @Test
     public void testListFolderWithJarProtocol() throws Exception {
-        ClassLoader cl = new URLClassLoader(new URL[] { new File(testjar, "activation.jar").toURL() });
+        ClassLoader cl = new URLClassLoader(new URL[] { Constants.ACTIVATION_JAR.toURL() });
         URL url = cl.getResource("javax/activation/DataSource.class");
         String file = url.getFile();
         URL folderUrl = new URL(url.getProtocol(), url.getHost(), url.getPort(), file.substring(0, file.length()-"DataSource.class".length()));

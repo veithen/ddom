@@ -15,10 +15,14 @@
  */
 package com.google.code.ddom.commons.cl;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.google.code.ddom.commons.Constants;
 
 public class PackageTest {
     @Test
@@ -27,5 +31,19 @@ public class PackageTest {
         Collection<Class<?>> classes = pkg.getClasses();
         Assert.assertTrue(classes.contains(ClassLoaderUtilsTest.class));
         Assert.assertTrue(classes.contains(DummyClass.class));
+    }
+    
+    /**
+     * Check that {@link Package#getClassNames()} lists classes in the specified package, but not in
+     * subpackages.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testNonRecursive() throws Exception {
+        ClassLoader cl = new URLClassLoader(new URL[] { Constants.ACTIVATION_JAR.toURL() });
+        Module module = Module.forClassName(cl, "javax.activation.DataSource");
+        Package pkg = module.getPackage("javax");
+        Assert.assertTrue(pkg.getClassNames().isEmpty());
     }
 }

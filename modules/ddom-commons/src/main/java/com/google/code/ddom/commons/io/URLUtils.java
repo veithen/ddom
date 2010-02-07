@@ -60,7 +60,7 @@ public class URLUtils {
                 while ((entry = zip.getNextEntry()) != null) {
                     if (!entry.isDirectory()) {
                         String entryName = entry.getName();
-                        if (entryName.startsWith(folder)) {
+                        if (entryName.startsWith(folder) && entryName.indexOf('/', folder.length()) == -1) {
                             urls.add(new URL(proto, null, archive + "!/" + entryName));
                         }
                     }
