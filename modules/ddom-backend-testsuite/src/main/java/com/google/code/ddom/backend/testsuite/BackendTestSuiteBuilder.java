@@ -95,6 +95,8 @@ public class BackendTestSuiteBuilder {
     }
     
     private static void addParentNodeTests(TestSuite suite, BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {
+        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreAppendChildFromWrongDocument(config, parentNodeFactory));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreAppendChildrenFromWrongDocument(config, parentNodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreClear(config, parentNodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreSetValue(config, parentNodeFactory));
         suite.addTest(new com.google.code.ddom.backend.testsuite.parent.TestCoreSetValueOnNodeWithChildren(config, parentNodeFactory));

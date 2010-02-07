@@ -66,7 +66,7 @@ public interface CoreParentNode extends CoreNode {
     CoreChildNode coreGetFirstChild() throws DeferredParsingException;
     CoreChildNode coreGetLastChild() throws DeferredParsingException;
     int coreGetChildCount() throws DeferredParsingException;
-    
+
     /**
      * Append a new child to the list of children of this parent node. If the node to be added
      * already has a parent node, it is first removed from this parent.
@@ -76,8 +76,18 @@ public interface CoreParentNode extends CoreNode {
      *            {@link CoreDocumentFragment}
      * @throws CoreModelException
      *             TODO: specify the exceptions
+     * @throws WrongDocumentException
+     *             if <code>newChild</code> belongs to a different document
      */
     void coreAppendChild(CoreChildNode newChild) throws CoreModelException;
+    
+    /**
+     * 
+     * @param newChildren
+     * @throws CoreModelException
+     * @throws WrongDocumentException
+     *             if <code>newChildren</code> belongs to a different document
+     */
     void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException;
 
     <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type);

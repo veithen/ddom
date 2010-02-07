@@ -307,6 +307,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     }
 
     public final void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException {
+        validateOwnerDocument(newChildren);
         merge(newChildren, null, false);
     }
 
