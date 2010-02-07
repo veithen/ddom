@@ -15,74 +15,66 @@
  */
 package com.google.code.ddom.commons.cl;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
-import com.google.code.ddom.commons.io.URLUtils;
-
-public class Package extends ClassCollection {
+// TODO: this should actually also be a ClassCollection
+public class Module {
+    private final ClassLoader classLoader;
     private final URL url;
-    private final String name;
     
-    Package(ClassLoader classLoader, URL url, String name) {
-        super(classLoader);
+    Module(ClassLoader classLoader, URL url) {
+        this.classLoader = classLoader;
         this.url = url;
-        this.name = name;
-    }
-    
-    @Override
-    public Collection<String> getClassNames() {
-        URL[] urlsInPackage;
-        try {
-            urlsInPackage = URLUtils.listFolder(url);
-        } catch (IOException ex) {
-            throw new ClassCollectionException(ex);
-        }
-        List<String> classesInPackage = new ArrayList<String>(urlsInPackage.length);
-        for (URL urlInPackage : urlsInPackage) {
-            String s = urlInPackage.getFile();
-            s = s.substring(s.lastIndexOf('/')+1);
-            if (s.endsWith(".class")) {
-                classesInPackage.add(name + "." + s.substring(0, s.length()-6));
-            }
-        }
-        return classesInPackage;
     }
 
-    public static Package forClassName(ClassLoader classLoader, String className) throws ClassNotFoundException {
+    /**
+     * Get the module that contains a given class.
+     * 
+     * @param classLoader
+     *            the class loader to use
+     * @param className
+     *            the name of the class
+     * @return the module containing the class
+     * @throws ClassNotFoundException
+     *             if the class was not found or an error occurred when attempting to build the URL
+     *             of the module
+     */
+    public static Module forClassName(ClassLoader classLoader, String className) throws ClassNotFoundException {
         String name = ClassLoaderUtils.getResourceNameForClassName(className);
         URL url = classLoader.getResource(name);
         if (url == null) {
             throw new ClassNotFoundException(className);
         } else {
-            String localName = name.substring(name.lastIndexOf('/')+1);
             String file = url.getFile();
-            if (file.endsWith(localName)) {
-                URL packageUrl;
+            if (file.endsWith(name)) {
                 try {
-                    packageUrl = new URL(url.getProtocol(), url.getHost(), url.getPort(),
-                            file.substring(0, file.length()-localName.length()));
+                    return new Module(classLoader, new URL(url.getProtocol(), url.getHost(), url.getPort(),
+                            file.substring(0, file.length()-name.length())));
                 } catch (MalformedURLException ex) {
                     throw new ClassNotFoundException(className, ex);
                 }
-                return new Package(classLoader, packageUrl, className.substring(0, className.lastIndexOf('.')));
             } else {
                 throw new ClassNotFoundException(className);
             }
         }
     }
-
-    public static Package forClass(Class<?> clazz) {
+    
+    public static Module forClass(Class<?> clazz) {
         try {
             return forClassName(clazz.getClassLoader(), clazz.getName());
         } catch (ClassNotFoundException ex) {
             // If we start from a Class object, we should never get a ClassNotFoundException,
             // except if something goes badly wrong. Thus throw an unchecked exception.
             throw new ClassCollectionException(ex);
+        }
+    }
+    
+    public Package getPackage(String name) {
+        try {
+            return new Package(classLoader, new URL(url, name.replace('.', '/')), name);
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException("Invalid package name", ex);
         }
     }
 }

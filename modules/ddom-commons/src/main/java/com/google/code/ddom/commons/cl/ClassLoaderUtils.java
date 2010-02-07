@@ -17,8 +17,6 @@ package com.google.code.ddom.commons.cl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 
@@ -61,38 +59,6 @@ public class ClassLoaderUtils {
             }
         } catch (IOException ex) {
             throw new ClassNotFoundException(className, ex);
-        }
-    }
-    
-    /**
-     * Get the URL of the module (JAR) that contains a given class.
-     * 
-     * @param classLoader
-     *            the class loader to use
-     * @param className
-     *            the name of the class
-     * @return the URL of the root folder of the module containing the class
-     * @throws ClassNotFoundException
-     *             if the class was not found or an error occurred when attempting to build the URL
-     *             of the module
-     */
-    public static URL getModuleForClassName(ClassLoader classLoader, String className) throws ClassNotFoundException {
-        String name = getResourceNameForClassName(className);
-        URL url = classLoader.getResource(name);
-        if (url == null) {
-            throw new ClassNotFoundException(className);
-        } else {
-            String file = url.getFile();
-            if (file.endsWith(name)) {
-                try {
-                    return new URL(url.getProtocol(), url.getHost(), url.getPort(),
-                            file.substring(0, file.length()-name.length()));
-                } catch (MalformedURLException ex) {
-                    throw new ClassNotFoundException(className, ex);
-                }
-            } else {
-                throw new ClassNotFoundException(className);
-            }
         }
     }
 }

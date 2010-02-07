@@ -15,8 +15,57 @@
  */
 package com.google.code.ddom.commons.cl;
 
+import java.util.AbstractCollection;
 import java.util.Collection;
+import java.util.Iterator;
 
-public interface ClassCollection {
-    Collection<Class<?>> getClasses(ClassLoader classLoader);
+public abstract class ClassCollection {
+    private static class ClassLoadingIterator implements Iterator<Class<?>> {
+        private final ClassLoader classLoader;
+        private final Iterator<String> parent;
+
+        public ClassLoadingIterator(ClassLoader classLoader, Iterator<String> parent) {
+            this.classLoader = classLoader;
+            this.parent = parent;
+        }
+
+        public boolean hasNext() {
+            return parent.hasNext();
+        }
+
+        public Class<?> next() {
+            try {
+                return classLoader.loadClass(parent.next());
+            } catch (ClassNotFoundException ex) {
+                throw new ClassCollectionException(ex);
+            }
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+    
+    final ClassLoader classLoader;
+    
+    public ClassCollection(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
+    public abstract Collection<String> getClassNames();
+    
+    public Collection<Class<?>> getClasses() {
+        final Collection<String> classNames = getClassNames();
+        return new AbstractCollection<Class<?>>() {
+            @Override
+            public Iterator<Class<?>> iterator() {
+                return new ClassLoadingIterator(classLoader, classNames.iterator());
+            }
+
+            @Override
+            public int size() {
+                return classNames.size();
+            }
+        };
+    }
 }

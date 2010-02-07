@@ -26,7 +26,7 @@ public class NameCheckTest {
     @Ignore @Test
     public void testImplClassImplementsInterfaceWithSameName() throws Exception {
         ClassLoader cl = NameCheckTest.class.getClassLoader();
-        for (Class<?> cls : Package.forClassName(cl,Document.class.getName()).getClasses(cl)) {
+        for (Class<?> cls : Package.forClassName(cl,Document.class.getName()).getClasses()) {
             String name = cls.getSimpleName();
             if (!name.equals("NodeFactoryImpl") && name.endsWith("Impl")) {
                 Class<?> expectedIface = Class.forName("com.google.code.ddom.spi.model.Core" + name.substring(0, name.length()-4));
