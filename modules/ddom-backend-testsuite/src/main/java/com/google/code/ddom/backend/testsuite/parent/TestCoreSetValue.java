@@ -24,17 +24,18 @@ import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
-public abstract class AbstractTestCoreSetValue extends BackendTestCase {
-    public AbstractTestCoreSetValue(BackendTestSuiteConfig config) {
-        super(config);
+public class TestCoreSetValue extends BackendTestCase {
+    private final ParentNodeFactory parentNodeFactory;
+    
+    public TestCoreSetValue(BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {
+        super(config, parentNodeFactory.getNodeClass().getSimpleName());
+        this.parentNodeFactory = parentNodeFactory;
     }
-
-    protected abstract CoreParentNode createNode(CoreDocument document);
 
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreParentNode element = createNode(document);
+        CoreParentNode element = parentNodeFactory.createNode(document);
         element.coreSetValue("test");
         Assert.assertFalse(element.coreIsExpanded());
         CoreChildNode child = element.coreGetFirstChild();

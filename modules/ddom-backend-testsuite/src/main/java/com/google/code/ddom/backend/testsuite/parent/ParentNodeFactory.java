@@ -13,20 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.testsuite.attribute;
+package com.google.code.ddom.backend.testsuite.parent;
 
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.google.code.ddom.backend.testsuite.parent.AbstractTestCoreSetValue;
 
-public class TestCoreSetValue extends AbstractTestCoreSetValue {
-    public TestCoreSetValue(BackendTestSuiteConfig config) {
-        super(config);
-    }
-
-    @Override
-    protected CoreParentNode createNode(CoreDocument document) {
-        return nodeFactory.createAttribute(document, null, "attr", null, null, null);
-    }
+public interface ParentNodeFactory {
+    Class<? extends CoreParentNode> getNodeClass();
+    CoreParentNode createNode(CoreDocument document);
 }
