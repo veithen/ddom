@@ -35,12 +35,12 @@ public class TestCoreSetValue extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreParentNode element = parentNodeFactory.createNode(document);
-        element.coreSetValue("test");
-        Assert.assertFalse(element.coreIsExpanded());
-        CoreChildNode child = element.coreGetFirstChild();
+        CoreParentNode parent = parentNodeFactory.createNode(document);
+        parent.coreSetValue("test");
+        Assert.assertFalse(parent.coreIsExpanded());
+        CoreChildNode child = parent.coreGetFirstChild();
         Assert.assertTrue(child instanceof CoreText);
         Assert.assertEquals("test", ((CoreText)child).coreGetData());
-        Assert.assertTrue(element.coreIsExpanded());
+        Assert.assertTrue(parent.coreIsExpanded());
     }
 }
