@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.commons.cl.ClassCollection;
+import com.google.code.ddom.commons.cl.Package;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.model.Backend;
 
@@ -22,5 +24,9 @@ import com.google.code.ddom.spi.model.Backend;
 public class LinkedListBackend implements Backend {
     public String getNodeFactoryClassName() {
         return NodeFactoryImpl.class.getName();
+    }
+
+    public ClassCollection getWeavableClasses() {
+        return Package.forClass(LinkedListBackend.class);
     }
 }

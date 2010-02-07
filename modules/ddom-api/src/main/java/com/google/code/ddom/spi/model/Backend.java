@@ -15,7 +15,16 @@
  */
 package com.google.code.ddom.spi.model;
 
+import com.google.code.ddom.commons.cl.ClassCollection;
+
 // TODO: move to LTW module
 public interface Backend {
     String getNodeFactoryClassName();
+    
+    /**
+     * Get the collection of classes that must be woven.
+     * 
+     * @return a collection of classes
+     */
+    ClassCollection getWeavableClasses();
 }

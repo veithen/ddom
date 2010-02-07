@@ -35,7 +35,6 @@ import org.aspectj.weaver.bcel.UnwovenClassFile;
 
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
 import com.google.code.ddom.commons.cl.ClassUtils;
-import com.google.code.ddom.commons.cl.Package;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
 
@@ -49,7 +48,7 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ClassNotFoundException {
         this.classLoader = classLoader;
         this.processor = processor;
-        Collection<Class<?>> classes = Package.forClassName(classLoader, backend.getNodeFactoryClassName()).getClasses();
+        Collection<Class<?>> classes = backend.getWeavableClasses().getClasses();
         classFiles = new UnwovenClassFile[classes.size()];
         int i = 0;
         // We sort the classes hierarchically to prevent BcelWeaver from emitting the same class
