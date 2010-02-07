@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.linkedlist;
+package com.google.code.ddom.backend.linkedlist.support;
 
 import com.google.code.ddom.backend.Axis;
-import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreParentNode;
 
-public class ChildrenByTypeIterator<T extends CoreChildNode> extends AbstractNodeIterator<T> {
-    public ChildrenByTypeIterator(CoreParentNode startNode, Axis axis, Class<T> type) {
-        super(startNode, type, axis);
+public class ElementsByLocalNameIterator extends AbstractNodeIterator<CoreNSAwareElement> {
+    private final String localName;
+
+    public ElementsByLocalNameIterator(CoreParentNode startNode, Axis axis, String localName) {
+        super(startNode, CoreNSAwareElement.class, axis);
+        this.localName = localName;
     }
 
     @Override
-    protected final boolean matches(T node) {
-        return true;
+    protected final boolean matches(CoreNSAwareElement node) {
+        return node.coreGetLocalName().equals(localName);
     }
 }

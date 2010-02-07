@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.linkedlist;
+package com.google.code.ddom.backend.linkedlist.support;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

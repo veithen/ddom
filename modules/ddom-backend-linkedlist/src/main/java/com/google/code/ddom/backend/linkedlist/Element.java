@@ -39,6 +39,7 @@ import com.google.code.ddom.backend.NodeInUseException;
 import com.google.code.ddom.backend.NodeMigrationException;
 import com.google.code.ddom.backend.NodeMigrationPolicy;
 import com.google.code.ddom.backend.WrongDocumentException;
+import com.google.code.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 
 @Implementation
 public abstract class Element extends ParentNode implements ChildNode, CoreElement {

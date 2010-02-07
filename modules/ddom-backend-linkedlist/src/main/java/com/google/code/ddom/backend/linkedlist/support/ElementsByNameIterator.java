@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.linkedlist;
+package com.google.code.ddom.backend.linkedlist.support;
+
+import org.apache.commons.lang.ObjectUtils;
 
 import com.google.code.ddom.backend.Axis;
 import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreParentNode;
 
-public class ElementsByLocalNameIterator extends AbstractNodeIterator<CoreNSAwareElement> {
+public class ElementsByNameIterator extends AbstractNodeIterator<CoreNSAwareElement> {
+    private final String namespaceURI;
     private final String localName;
 
-    public ElementsByLocalNameIterator(CoreParentNode startNode, Axis axis, String localName) {
+    public ElementsByNameIterator(CoreParentNode startNode, Axis axis, String namespaceURI, String localName) {
         super(startNode, CoreNSAwareElement.class, axis);
+        this.namespaceURI = namespaceURI;
         this.localName = localName;
     }
 
     @Override
     protected final boolean matches(CoreNSAwareElement node) {
-        return node.coreGetLocalName().equals(localName);
+        return ObjectUtils.equals(node.coreGetNamespaceURI(), namespaceURI) && node.coreGetLocalName().equals(localName);
     }
 }

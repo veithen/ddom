@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.linkedlist;
-
-import org.apache.commons.lang.ObjectUtils;
+package com.google.code.ddom.backend.linkedlist.support;
 
 import com.google.code.ddom.backend.Axis;
-import com.google.code.ddom.backend.CoreNSAwareElement;
+import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreParentNode;
 
-public class ElementsByNamespaceIterator extends AbstractNodeIterator<CoreNSAwareElement> {
-    private final String namespaceURI;
-
-    public ElementsByNamespaceIterator(CoreParentNode startNode, Axis axis, String namespaceURI) {
-        super(startNode, CoreNSAwareElement.class, axis);
-        this.namespaceURI = namespaceURI;
+public class ChildrenByTypeIterator<T extends CoreChildNode> extends AbstractNodeIterator<T> {
+    public ChildrenByTypeIterator(CoreParentNode startNode, Axis axis, Class<T> type) {
+        super(startNode, type, axis);
     }
 
     @Override
-    protected final boolean matches(CoreNSAwareElement node) {
-        return ObjectUtils.equals(node.coreGetNamespaceURI(), namespaceURI);
+    protected final boolean matches(T node) {
+        return true;
     }
 }

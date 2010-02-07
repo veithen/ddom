@@ -31,6 +31,10 @@ import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.SelfRelationshipException;
+import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
+import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
+import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
+import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 @Implementation
