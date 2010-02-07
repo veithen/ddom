@@ -108,7 +108,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         if (content instanceof ChildNode) {
             ChildNode child = (ChildNode)content;
             do {
-                ChildNode next = (ChildNode)child.coreGetNextSibling();
+                ChildNode next = child.internalGetNextSibling();
                 child.internalSetParent(null);
                 child.internalSetNextSibling(null);
                 child = next;

@@ -56,7 +56,7 @@ public aspect ChildNodeSupport {
         this.nextSibling = nextSibling;
     }
     
-    public final CoreChildNode ChildNode.coreGetNextSibling() throws DeferredParsingException {
+    public final ChildNode ChildNode.internalGetNextSibling() throws DeferredParsingException {
         if (parent == null) {
             return null;
         } else {
@@ -70,7 +70,11 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final CoreChildNode ChildNode.coreGetPreviousSibling() {
+    public final CoreChildNode ChildNode.coreGetNextSibling() throws DeferredParsingException {
+        return internalGetNextSibling();
+    }
+    
+    public final ChildNode ChildNode.internalGetPreviousSibling() {
         if (parent == null) {
             return null;
         } else {
@@ -82,6 +86,10 @@ public aspect ChildNodeSupport {
             }
             return sibling == null ? null : previousSibling;
         }
+    }
+    
+    public final CoreChildNode ChildNode.coreGetPreviousSibling() {
+        return internalGetPreviousSibling();
     }
     
     public final void ChildNode.coreInsertSiblingAfter(CoreChildNode coreSibling) throws CoreModelException {
@@ -172,15 +180,14 @@ public aspect ChildNodeSupport {
     
     public final void ChildNode.coreDetach() throws DeferredParsingException {
         if (parent != null) {
-            CoreChildNode previousSibling = coreGetPreviousSibling();
+            ChildNode previousSibling = internalGetPreviousSibling();
             // We have a builder of type 2; thus we don't need to build
             // the node being detached. Therefore we can use internalGetNextSibling
             // instead of coreGetNextSibling.
             if (previousSibling == null) {
                 parent.internalSetFirstChild(nextSibling);
             } else {
-                // TODO: get rid of cast here
-                ((ChildNode)previousSibling).internalSetNextSibling(nextSibling);
+                previousSibling.internalSetNextSibling(nextSibling);
             }
             nextSibling = null;
             parent.notifyChildrenModified(-1);
