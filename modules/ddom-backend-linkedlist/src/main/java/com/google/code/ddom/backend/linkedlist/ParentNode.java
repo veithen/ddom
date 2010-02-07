@@ -302,8 +302,12 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         }
     }
 
-    public final void coreAppendChild(CoreNode newChild) throws CoreModelException {
+    public final void coreAppendChild(CoreChildNode newChild) throws CoreModelException {
         merge(newChild, null, false);
+    }
+
+    public final void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException {
+        merge(newChildren, null, false);
     }
 
     public final void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {

@@ -118,13 +118,21 @@ public aspect ChildNodes {
             throw new NullPointerException("newChild must not be null");
         }
         try {
-            coreAppendChild(toCore(newChild));
+            CoreNode coreNewChild = toCore(newChild);
+            if (coreNewChild instanceof CoreChildNode) {
+                coreAppendChild((CoreChildNode)coreNewChild);
+            } else if (coreNewChild instanceof CoreDocumentFragment) {
+                coreAppendChildren((CoreDocumentFragment)coreNewChild);
+            } else {
+                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+            }
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
         return newChild;
     }
 
+    // TODO: apparently this is not tested with a DocumentType as newChild
     public final Node DOMParentNode.insertBefore(Node newChild, Node refChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
@@ -135,7 +143,7 @@ public aspect ChildNodes {
             // case the behavior is identical to appendChild. (This is covered by the DOM 1
             // test suite)
             if (refChild == null) {
-                coreAppendChild(toCore(newChild));
+                appendChild(newChild);
             } else if (refChild.getParentNode() != this) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
             } else if (newChild instanceof CoreChildNode) {

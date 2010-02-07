@@ -77,7 +77,8 @@ public interface CoreParentNode extends CoreNode {
      * @throws CoreModelException
      *             TODO: specify the exceptions
      */
-    void coreAppendChild(CoreNode newChild) throws CoreModelException;
+    void coreAppendChild(CoreChildNode newChild) throws CoreModelException;
+    void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException;
     
     // TODO: need a more object oriented replacement for this
     void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
