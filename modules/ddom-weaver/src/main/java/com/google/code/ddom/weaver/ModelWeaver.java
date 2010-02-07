@@ -17,6 +17,7 @@ package com.google.code.ddom.weaver;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,6 +35,7 @@ import org.aspectj.weaver.bcel.UnwovenClassFile;
 
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
 import com.google.code.ddom.commons.cl.ClassUtils;
+import com.google.code.ddom.commons.cl.Package;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
 
@@ -47,12 +49,12 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ClassNotFoundException {
         this.classLoader = classLoader;
         this.processor = processor;
-        Class<?>[] classes = ClassLoaderUtils.getClassesInPackage(classLoader, backend.getNodeFactoryClassName());
-        classFiles = new UnwovenClassFile[classes.length];
+        Collection<Class<?>> classes = Package.forClassName(classLoader, backend.getNodeFactoryClassName()).getClasses(classLoader);
+        classFiles = new UnwovenClassFile[classes.size()];
         int i = 0;
         // We sort the classes hierarchically to prevent BcelWeaver from emitting the same class
         // multiple times (this occurs if a subclass is woven before its superclass).
-        for (Class<?> clazz : ClassUtils.sortHierarchically(Arrays.asList(classes))) {
+        for (Class<?> clazz : ClassUtils.sortHierarchically(classes)) {
             String className = clazz.getName();
             classFiles[i++] = new UnwovenClassFile(
                     ClassLoaderUtils.getResourceNameForClassName(className),

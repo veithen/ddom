@@ -15,12 +15,8 @@
  */
 package com.google.code.ddom.commons.cl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.Collection;
 
-public class ClassLoaderUtilsTest {
-    @Test
-    public void testGetResourceNameForClassName() {
-        Assert.assertEquals("java/lang/String.class", ClassLoaderUtils.getResourceNameForClassName(String.class.getName()));
-    }
+public interface ClassCollection {
+    Collection<Class<?>> getClasses(ClassLoader classLoader);
 }

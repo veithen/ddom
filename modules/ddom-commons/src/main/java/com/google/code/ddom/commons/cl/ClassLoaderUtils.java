@@ -19,12 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-
-import com.google.code.ddom.commons.io.URLUtils;
 
 public class ClassLoaderUtils {
     private ClassLoaderUtils() {}
@@ -40,6 +36,17 @@ public class ClassLoaderUtils {
         return className.replace('.', '/') + ".class";
     }
 
+    /**
+     * Load the definition of a given class.
+     * 
+     * @param classLoader
+     *            the class loader to load the class from
+     * @param className
+     *            the name of the class
+     * @return the class definition, i.e. the content of the corresponding class file
+     * @throws ClassNotFoundException
+     *             if the class was not found or an error occurred when loading the class definition
+     */
     public static byte[] getClassDefinition(ClassLoader classLoader, String className) throws ClassNotFoundException {
         String resourceName = getResourceNameForClassName(className);
         InputStream in = classLoader.getResourceAsStream(resourceName);
@@ -58,46 +65,31 @@ public class ClassLoaderUtils {
     }
     
     /**
-     * Load all classes that are in the same package as a given class.
+     * Get the URL of the module (JAR) that contains a given class.
      * 
      * @param classLoader
-     *            the class loader
+     *            the class loader to use
      * @param className
      *            the name of the class
-     * @return an array with the classes in the package
+     * @return the URL of the root folder of the module containing the class
+     * @throws ClassNotFoundException
+     *             if the class was not found or an error occurred when attempting to build the URL
+     *             of the module
      */
-    public static Class<?>[] getClassesInPackage(ClassLoader classLoader, String className) throws ClassNotFoundException {
+    public static URL getModuleForClassName(ClassLoader classLoader, String className) throws ClassNotFoundException {
         String name = getResourceNameForClassName(className);
         URL url = classLoader.getResource(name);
         if (url == null) {
             throw new ClassNotFoundException(className);
         } else {
-            String localName = name.substring(name.lastIndexOf('/')+1);
             String file = url.getFile();
-            if (file.endsWith(localName)) {
-                URL packageUrl;
+            if (file.endsWith(name)) {
                 try {
-                    packageUrl = new URL(url.getProtocol(), url.getHost(), url.getPort(),
-                            file.substring(0, file.length()-localName.length()));
+                    return new URL(url.getProtocol(), url.getHost(), url.getPort(),
+                            file.substring(0, file.length()-name.length()));
                 } catch (MalformedURLException ex) {
                     throw new ClassNotFoundException(className, ex);
                 }
-                URL[] urlsInPackage;
-                try {
-                    urlsInPackage = URLUtils.listFolder(packageUrl);
-                } catch (IOException ex) {
-                    throw new ClassNotFoundException(className, ex);
-                }
-                List<Class<?>> classesInPackage = new ArrayList<Class<?>>(urlsInPackage.length);
-                String pkg = className.substring(0, className.lastIndexOf('.'));
-                for (URL urlInPackage : urlsInPackage) {
-                    String s = urlInPackage.getFile();
-                    s = s.substring(s.lastIndexOf('/')+1);
-                    if (s.endsWith(".class")) {
-                        classesInPackage.add(classLoader.loadClass(pkg + "." + s.substring(0, s.length()-6)));
-                    }
-                }
-                return classesInPackage.toArray(new Class<?>[classesInPackage.size()]);
             } else {
                 throw new ClassNotFoundException(className);
             }

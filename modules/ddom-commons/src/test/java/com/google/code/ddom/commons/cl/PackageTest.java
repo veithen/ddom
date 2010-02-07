@@ -15,12 +15,17 @@
  */
 package com.google.code.ddom.commons.cl;
 
+import java.util.Collection;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ClassLoaderUtilsTest {
+public class PackageTest {
     @Test
-    public void testGetResourceNameForClassName() {
-        Assert.assertEquals("java/lang/String.class", ClassLoaderUtils.getResourceNameForClassName(String.class.getName()));
+    public void testForClassName() throws Exception {
+        Package pkg = Package.forClassName(ClassLoaderUtilsTest.class.getClassLoader(), ClassLoaderUtilsTest.class.getName());
+        Collection<Class<?>> classes = pkg.getClasses(ClassLoaderUtilsTest.class.getClassLoader());
+        Assert.assertTrue(classes.contains(ClassLoaderUtilsTest.class));
+        Assert.assertTrue(classes.contains(DummyClass.class));
     }
 }

@@ -15,12 +15,10 @@
  */
 package com.google.code.ddom.commons.cl;
 
-import org.junit.Assert;
-import org.junit.Test;
+public class ClassCollectionException extends RuntimeException {
+    private static final long serialVersionUID = -3214099623095156968L;
 
-public class ClassLoaderUtilsTest {
-    @Test
-    public void testGetResourceNameForClassName() {
-        Assert.assertEquals("java/lang/String.class", ClassLoaderUtils.getResourceNameForClassName(String.class.getName()));
+    public ClassCollectionException(Throwable cause) {
+        super(cause);
     }
 }
