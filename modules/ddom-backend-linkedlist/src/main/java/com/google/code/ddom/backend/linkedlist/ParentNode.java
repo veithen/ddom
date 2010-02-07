@@ -310,7 +310,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         merge(newChildren, null, false);
     }
 
-    public final void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
+    final void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
         merge(newChild, oldChild, true);
     }
 

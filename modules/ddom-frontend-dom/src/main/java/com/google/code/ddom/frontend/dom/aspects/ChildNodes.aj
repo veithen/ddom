@@ -182,10 +182,16 @@ public aspect ChildNodes {
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
-        CoreNode coreOldChild = toCore(oldChild);
-        if (coreOldChild instanceof CoreChildNode) {
+        if (oldChild.getParentNode() == this) {
             try {
-                coreReplaceChild(toCore(newChild), (CoreChildNode)coreOldChild);
+                CoreNode coreNewChild = toCore(newChild);
+                if (coreNewChild instanceof CoreChildNode) {
+                    ((CoreChildNode)toCore(oldChild)).coreReplaceWith((CoreChildNode)coreNewChild);
+                } else if (coreNewChild instanceof CoreDocumentFragment) {
+                    ((CoreChildNode)toCore(oldChild)).coreReplaceWith((CoreDocumentFragment)coreNewChild);
+                } else {
+                    throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+                }
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }

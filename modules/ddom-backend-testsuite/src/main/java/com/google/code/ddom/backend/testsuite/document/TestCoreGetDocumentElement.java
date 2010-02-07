@@ -35,7 +35,7 @@ public class TestCoreGetDocumentElement extends BackendTestCase {
         document.coreAppendChild(element1);
         Assert.assertSame(element1, document.coreGetDocumentElement());
         CoreElement element2 = nodeFactory.createElement(document, null, "root2", null);
-        document.coreReplaceChild(element2, element1);
+        element1.coreReplaceWith(element2);
         Assert.assertSame(element2, document.coreGetDocumentElement());
     }
 }

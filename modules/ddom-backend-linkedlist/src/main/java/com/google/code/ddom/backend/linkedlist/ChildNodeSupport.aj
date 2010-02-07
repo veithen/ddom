@@ -214,4 +214,12 @@ public aspect ChildNodeSupport {
             parent = null;
         }
     }
+    
+    public final void ChildNode.coreReplaceWith(CoreChildNode newNode) throws CoreModelException {
+        parent.coreReplaceChild(newNode, this);
+    }
+    
+    public final void ChildNode.coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException {
+        parent.coreReplaceChild(newNodes, this);
+    }
 }

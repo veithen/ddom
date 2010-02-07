@@ -79,9 +79,6 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreAppendChild(CoreChildNode newChild) throws CoreModelException;
     void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException;
-    
-    // TODO: need a more object oriented replacement for this
-    void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException;
 
     <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
     Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);

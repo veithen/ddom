@@ -80,4 +80,7 @@ public interface CoreChildNode extends CoreNode {
      * @throws DeferredParsingException 
      */
     void coreDetach() throws DeferredParsingException;
+    
+    void coreReplaceWith(CoreChildNode newNode) throws CoreModelException;
+    void coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException;
 }
