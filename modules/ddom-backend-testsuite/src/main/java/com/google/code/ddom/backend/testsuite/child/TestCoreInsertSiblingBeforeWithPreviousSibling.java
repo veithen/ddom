@@ -20,9 +20,10 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.CoreAssert;
 
-public class TestCoreInsertSiblingAfter extends BackendTestCase {
-    public TestCoreInsertSiblingAfter(BackendTestSuiteConfig config) {
+public class TestCoreInsertSiblingBeforeWithPreviousSibling extends BackendTestCase {
+    public TestCoreInsertSiblingBeforeWithPreviousSibling(BackendTestSuiteConfig config) {
         super(config);
     }
 
@@ -33,9 +34,12 @@ public class TestCoreInsertSiblingAfter extends BackendTestCase {
         CoreText text1 = nodeFactory.createText(document, "text1");
         CoreText text2 = nodeFactory.createText(document, "text2");
         parent.coreAppendChild(text1);
-        text1.coreInsertSiblingAfter(text2);
-        assertEquals(2, parent.coreGetChildCount());
-        assertSame(parent, text2.coreGetParent());
-        assertSame(text2, parent.coreGetLastChild());
+        parent.coreAppendChild(text2);
+        CoreText newSibling = nodeFactory.createText(document, "sibling");
+        text2.coreInsertSiblingBefore(newSibling);
+        assertEquals(3, parent.coreGetChildCount());
+        assertSame(parent, newSibling.coreGetParent());
+        CoreAssert.assertSiblings(text1, newSibling);
+        CoreAssert.assertSiblings(newSibling, text2);
     }
 }

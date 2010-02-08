@@ -80,7 +80,7 @@ public aspect ChildNodeSupport {
         } else {
             ChildNode previousSibling = null;
             ChildNode sibling = parent.internalGetFirstChild();
-            while (sibling != null && sibling != this) {
+            while (sibling != this) {
                 previousSibling = sibling;
                 sibling = sibling.internalGetNextSiblingIfMaterialized();
             }
@@ -154,7 +154,7 @@ public aspect ChildNodeSupport {
             sibling.coreDetach();
             ChildNode previousSibling = null;
             ChildNode node = parent.internalGetFirstChild();
-            while (node != null && node != this) {
+            while (node != this) {
                 previousSibling = node;
                 node = node.internalGetNextSiblingIfMaterialized();
             }

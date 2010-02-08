@@ -16,26 +16,28 @@
 package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.backend.NoParentException;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 
-public class TestCoreInsertSiblingBefore extends BackendTestCase {
-    public TestCoreInsertSiblingBefore(BackendTestSuiteConfig config) {
+public class TestCoreInsertSiblingsBeforeOnOrphan extends BackendTestCase {
+    public TestCoreInsertSiblingsBeforeOnOrphan(BackendTestSuiteConfig config) {
         super(config);
     }
 
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement parent = nodeFactory.createElement(document, "test");
         CoreText text1 = nodeFactory.createText(document, "text1");
-        CoreText text2 = nodeFactory.createText(document, "text2");
-        parent.coreAppendChild(text1);
-        text1.coreInsertSiblingBefore(text2);
-        assertEquals(2, parent.coreGetChildCount());
-        assertSame(parent, text2.coreGetParent());
-        assertSame(text2, parent.coreGetFirstChild());
+        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
+        fragment.coreAppendChild(nodeFactory.createText(document, "text2"));
+        try {
+            text1.coreInsertSiblingsBefore(fragment);
+            fail("Expected NoParentException");
+        } catch (NoParentException ex) {
+            // Expected
+        }
     }
 }
