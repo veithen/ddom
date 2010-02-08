@@ -217,10 +217,19 @@ public aspect ChildNodeSupport {
     }
     
     public final void ChildNode.coreReplaceWith(CoreChildNode newNode) throws CoreModelException {
-        parent.coreReplaceChild(newNode, this);
+        if (parent == null) {
+            throw new NoParentException();
+        } else {
+            parent.coreReplaceChild(newNode, this);
+        }
     }
     
     public final void ChildNode.coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException {
-        parent.coreReplaceChild(newNodes, this);
+        if (parent == null) {
+            throw new NoParentException();
+        } else {
+            validateOwnerDocument(newNodes);
+            parent.coreReplaceChild(newNodes, this);
+        }
     }
 }

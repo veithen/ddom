@@ -58,6 +58,10 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeOnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeWithoutPreviousSibling(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeWithPreviousSibling(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreReplaceWith1FromWrongDocument(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreReplaceWith1OnOrphan(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreReplaceWith2FromWrongDocument(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreReplaceWith2OnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
