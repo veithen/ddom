@@ -36,6 +36,7 @@ public class BackendTestSuiteBuilder {
         TestSuite suite = new TestSuite();
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetach(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetachIncomplete(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterFromWrongDocument(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnChild(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnSelf(config));
@@ -43,14 +44,17 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterWithInvalidChildType(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterWithNextSibling(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterWithoutNextSibling(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeFromWrongDocument(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnChild(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeOnSelf(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeWithInvalidChildType(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeWithoutPreviousSibling(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingBeforeWithPreviousSibling(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsAfterFromWrongDocument(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsAfterOnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsAfterWithIncomplete(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeFromWrongDocument(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeOnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeWithoutPreviousSibling(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeWithPreviousSibling(config));

@@ -175,6 +175,7 @@ public aspect ChildNodeSupport {
             throw new NoParentException();
         } else {
             // TODO: handle empty fragment?
+            validateOwnerDocument(fragment);
             fragment.coreBuild();
             ChildNode node = (ChildNode)fragment.coreGetFirstChild();
             ChildNode previousSibling = internalGetPreviousSibling();
