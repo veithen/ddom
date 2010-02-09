@@ -216,11 +216,24 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreReplaceWith(CoreChildNode newNode) throws CoreModelException {
+    public final void ChildNode.coreReplaceWith(CoreChildNode coreNewNode) throws CoreModelException {
+        ChildNode newNode = (ChildNode)coreNewNode;
         if (parent == null) {
             throw new NoParentException();
-        } else {
-            parent.coreReplaceChild(newNode, this);
+        } else if (newNode != this) {
+            parent.validateChildType(newNode, this);
+            parent.prepareNewChild(newNode);
+            newNode.coreDetach();
+            ChildNode previousSibling = internalGetPreviousSibling();
+            if (previousSibling == null) {
+                parent.internalSetFirstChild(newNode);
+            } else {
+                previousSibling.internalSetNextSibling(newNode);
+            }
+            newNode.internalSetNextSibling(nextSibling);
+            newNode.internalSetParent(parent);
+            nextSibling = null;
+            parent = null;
         }
     }
     

@@ -81,6 +81,16 @@ public interface CoreChildNode extends CoreNode {
      */
     void coreDetach() throws DeferredParsingException;
     
+    /**
+     * Replace this node by another node. If the replacing node has a parent, it will be detached
+     * from its parent. If both nodes are the same, then this method does nothing.
+     * 
+     * @param newNode
+     *            the replacing node
+     * @throws CoreModelException
+     *             TODO
+     */
     void coreReplaceWith(CoreChildNode newNode) throws CoreModelException;
+    
     void coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException;
 }
