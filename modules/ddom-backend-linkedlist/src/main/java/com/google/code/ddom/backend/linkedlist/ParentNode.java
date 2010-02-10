@@ -57,8 +57,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         this.complete = complete;
     }
 
-    abstract void notifyChildrenModified(int delta);
-    abstract void notifyChildrenCleared();
+    abstract void internalNotifyChildrenModified(int delta);
+    abstract void internalNotifyChildrenCleared();
 
     public final Object coreGetContent() {
         return content;
@@ -72,7 +72,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         // TODO: need to clear any existing content!
         complete = false;
         // TODO: getting the producer should be deferred!
-        internalGetDocument().createBuilder(source.getProducer(), this);
+        internalGetDocument().internalCreateBuilder(source.getProducer(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }
@@ -100,7 +100,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             coreClear();
         }
         content = value;
-        notifyChildrenModified(1);
+        internalNotifyChildrenModified(1);
     }
 
     public final void coreClear() throws DeferredParsingException {
@@ -114,19 +114,19 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             } while (child != null);
         }
         content = null;
-        notifyChildrenCleared();
+        internalNotifyChildrenCleared();
     }
 
     public final String coreGetTextContent() throws DeferredParsingException {
-        CharSequence content = collectTextContent(null);
+        CharSequence content = internalCollectTextContent(null);
         return content == null ? "" : content.toString();
     }
     
     @Override
-    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
         CharSequence content = appendTo;
         for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
-            content = ((Node)node).collectTextContent(content);
+            content = ((Node)node).internalCollectTextContent(content);
         }
         return content;
     }
@@ -143,13 +143,13 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return complete;
     }
 
-    final void setComplete(boolean complete) {
+    final void internalSetComplete(boolean complete) {
         this.complete = complete;
     }
     
     public final void coreBuild() throws DeferredParsingException {
         if (!complete) {
-            Builder builder = internalGetDocument().getBuilderFor(this);
+            Builder builder = internalGetDocument().internalGetBuilderFor(this);
             do {
                 builder.next();
             } while (!complete);
@@ -161,7 +161,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             if (complete) {
                 return null;
             } else {
-                Builder builder = internalGetDocument().getBuilderFor(this);
+                Builder builder = internalGetDocument().internalGetBuilderFor(this);
                 while (content == null && !complete) {
                     builder.next();
                 }
@@ -188,8 +188,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return previousChild;
     }
     
-    void prepareNewChild(CoreChildNode newChild) throws CoreModelException {
-        validateOwnerDocument(newChild);
+    void internalPrepareNewChild(CoreChildNode newChild) throws CoreModelException {
+        internalValidateOwnerDocument(newChild);
         
         // Check that the new node is not an ancestor of this node
         CoreParentNode current = this;
@@ -222,7 +222,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
      *             if the child is not allowed
      * @throws DeferredParsingException 
      */
-    abstract void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
+    abstract void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false
@@ -230,7 +230,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     // removeChild:  newChild == null, refChild != null, removeRefChild == true
     private void merge(CoreNode newChild, CoreChildNode refChild, boolean removeRefChild) throws CoreModelException {
         if (newChild instanceof CoreChildNode) {
-            prepareNewChild((CoreChildNode)newChild);
+            internalPrepareNewChild((CoreChildNode)newChild);
         }
         CoreChildNode previousSibling; // The sibling that will precede the new child
         CoreChildNode nextSibling; // The sibling that will follow the new child
@@ -255,7 +255,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             } else {
                 ((ChildNode)previousSibling).internalSetNextSibling((ChildNode)nextSibling);
             }
-            notifyChildrenModified(-1);
+            internalNotifyChildrenModified(-1);
         } else {
             CoreChildNode firstNodeToInsert;
             CoreChildNode lastNodeToInsert;
@@ -266,7 +266,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 lastNodeToInsert = null;
                 for (CoreChildNode node = firstNodeToInsert; node != null; node = node.coreGetNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
-                    validateChildType(node, removeRefChild ? refChild : null);
+                    internalValidateChildType(node, removeRefChild ? refChild : null);
                     ((ChildNode)node).internalSetParent(this);
                     lastNodeToInsert = node;
                 }
@@ -275,7 +275,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             } else if (newChild instanceof CoreChildNode) {
                 ((CoreChildNode)newChild).coreDetach();
                 firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
-                validateChildType(firstNodeToInsert, removeRefChild ? refChild : null);
+                internalValidateChildType(firstNodeToInsert, removeRefChild ? refChild : null);
                 ((ChildNode)firstNodeToInsert).internalSetParent(this);
                 delta = 1;
             } else {
@@ -285,7 +285,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 delta--;
             }
             if (delta != 0) {
-                notifyChildrenModified(delta);
+                internalNotifyChildrenModified(delta);
             }
             if (previousSibling == null) {
                 internalSetFirstChild(firstNodeToInsert);
@@ -306,7 +306,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     }
 
     public final void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException {
-        validateOwnerDocument(newChildren);
+        internalValidateOwnerDocument(newChildren);
         merge(newChildren, null, false);
     }
 

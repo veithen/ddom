@@ -26,7 +26,7 @@ public abstract class TextNode extends CharacterData implements CoreTextNode {
     }
 
     @Override
-    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
         String data = coreGetData();
         if (appendTo == null) {
             return data;

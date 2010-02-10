@@ -45,7 +45,7 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
     }
 
     @Override
-    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
         return appendTo;
     }
 }

@@ -27,7 +27,7 @@ public abstract class Node implements LLNode {
         return internalGetDocument();
     }
 
-    public final void validateOwnerDocument(CoreNode node) throws WrongDocumentException {
+    public final void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException {
         CoreDocument document1 = ((Node)node).internalGetDocument(); // TODO: get rid of cast
         CoreDocument document2 = internalGetDocument();
         if (document1 != null && document2 != null && document1 != document2) {
@@ -35,5 +35,5 @@ public abstract class Node implements LLNode {
         }
     }
 
-    abstract CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException;
+    abstract CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException;
 }

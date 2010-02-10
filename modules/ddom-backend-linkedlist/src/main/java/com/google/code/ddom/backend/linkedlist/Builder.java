@@ -170,7 +170,7 @@ public class Builder extends CallbackConsumer {
         } else {
             lastSibling.internalSetNextSibling(node);
         }
-        parent.notifyChildrenModified(1);
+        parent.internalNotifyChildrenModified(1);
         node.internalSetParent(parent);
         if (node instanceof Element) {
             // TODO: this assumes that elements are always created as incomplete
@@ -195,7 +195,7 @@ public class Builder extends CallbackConsumer {
     }
     
     public final void nodeCompleted() {
-        parent.setComplete(true);
+        parent.internalSetComplete(true);
         if (nodeStack.isEmpty()) {
             parent = null;
         } else {

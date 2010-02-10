@@ -73,17 +73,17 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
 
-    public final void notifyChildrenModified(int delta) {
+    public final void internalNotifyChildrenModified(int delta) {
         // Ignore this; we don't store the number of children
     }
 
     @Override
-    final void notifyChildrenCleared() {
+    final void internalNotifyChildrenCleared() {
         // Ignore this; we don't store the number of children
     }
 
     @Override
-    final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
             throw new ChildTypeNotAllowedException();
         }

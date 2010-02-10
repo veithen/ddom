@@ -29,17 +29,17 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         this.document = document;
     }
 
-    public final void notifyChildrenModified(int delta) {
+    public final void internalNotifyChildrenModified(int delta) {
         children += delta;
     }
 
     @Override
-    final void notifyChildrenCleared() {
+    final void internalNotifyChildrenCleared() {
         children = 0;
     }
 
     @Override
-    void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) {
+    void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) {
         // All node type are allowed
     }
 

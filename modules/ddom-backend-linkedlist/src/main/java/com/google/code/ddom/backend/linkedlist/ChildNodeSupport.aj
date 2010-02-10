@@ -61,7 +61,7 @@ public aspect ChildNodeSupport {
             return null;
         } else {
             if (nextSibling == null && !parent.coreIsComplete()) {
-                Builder builder = internalGetDocument().getBuilderFor(parent);
+                Builder builder = internalGetDocument().internalGetBuilderFor(parent);
                 do {
                     builder.next();
                 } while (nextSibling == null && !parent.coreIsComplete());
@@ -100,15 +100,15 @@ public aspect ChildNodeSupport {
         if (parent == null) {
             throw new NoParentException();
         } else {
-            parent.validateChildType(sibling, null);
-            parent.prepareNewChild(sibling);
+            parent.internalValidateChildType(sibling, null);
+            parent.internalPrepareNewChild(sibling);
             sibling.coreDetach();
             // Note: since we have a builder of type 2, we don't need to materialize the next sibling
             // and we can use nextSibling instead of coreGetNextSibling()
             sibling.internalSetNextSibling(nextSibling);
             nextSibling = sibling;
             sibling.internalSetParent(parent);
-            parent.notifyChildrenModified(1);
+            parent.internalNotifyChildrenModified(1);
         }
     }
     
@@ -118,12 +118,12 @@ public aspect ChildNodeSupport {
             throw new NoParentException();
         } else {
             // TODO: we need to validate the children types; note that this is especially tricky if the children will be added later during deferred parsing
-            validateOwnerDocument(fragment);
+            internalValidateOwnerDocument(fragment);
             if (parent.coreIsComplete() && nextSibling == null && !fragment.coreIsComplete()) {
                 // This is a special case: we don't need to build the fragment, but only to move
                 // the already materialized children and then to migrate the builder. This is
                 // possible because we have a builder of type 2.
-                internalGetDocument().migrateBuilder(fragment, parent);
+                internalGetDocument().internalMigrateBuilder(fragment, parent);
                 ChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 nextSibling = node;
                 int nodeCount = 0;
@@ -133,8 +133,8 @@ public aspect ChildNodeSupport {
                     nodeCount++;
                 }
                 fragment.internalSetFirstChild(null);
-                fragment.notifyChildrenCleared();
-                parent.notifyChildrenModified(nodeCount);
+                fragment.internalNotifyChildrenCleared();
+                parent.internalNotifyChildrenModified(nodeCount);
             } else {
                 // TODO
             }
@@ -149,8 +149,8 @@ public aspect ChildNodeSupport {
         if (parent == null) {
             throw new NoParentException();
         } else {
-            parent.validateChildType(sibling, null);
-            parent.prepareNewChild(sibling);
+            parent.internalValidateChildType(sibling, null);
+            parent.internalPrepareNewChild(sibling);
             sibling.coreDetach();
             ChildNode previousSibling = null;
             ChildNode node = parent.internalGetFirstChildIfMaterialized();
@@ -165,7 +165,7 @@ public aspect ChildNodeSupport {
                 previousSibling.internalSetNextSibling(sibling);
             }
             sibling.internalSetParent(parent);
-            parent.notifyChildrenModified(1);
+            parent.internalNotifyChildrenModified(1);
         }
     }
     
@@ -175,7 +175,7 @@ public aspect ChildNodeSupport {
             throw new NoParentException();
         } else {
             // TODO: handle empty fragment?
-            validateOwnerDocument(fragment);
+            internalValidateOwnerDocument(fragment);
             fragment.coreBuild();
             ChildNode node = (ChildNode)fragment.coreGetFirstChild(); // TODO: internal... method here
             ChildNode previousSibling = internalGetPreviousSibling();
@@ -194,8 +194,8 @@ public aspect ChildNodeSupport {
             } while (node != null);
             previousNode.internalSetNextSibling(this);
             fragment.internalSetFirstChild(null);
-            fragment.notifyChildrenCleared();
-            parent.notifyChildrenModified(nodeCount);
+            fragment.internalNotifyChildrenCleared();
+            parent.internalNotifyChildrenModified(nodeCount);
         }
     }
     
@@ -211,7 +211,7 @@ public aspect ChildNodeSupport {
                 previousSibling.internalSetNextSibling(nextSibling);
             }
             nextSibling = null;
-            parent.notifyChildrenModified(-1);
+            parent.internalNotifyChildrenModified(-1);
             parent = null;
         }
     }
@@ -221,8 +221,8 @@ public aspect ChildNodeSupport {
         if (parent == null) {
             throw new NoParentException();
         } else if (newNode != this) {
-            parent.validateChildType(newNode, this);
-            parent.prepareNewChild(newNode);
+            parent.internalValidateChildType(newNode, this);
+            parent.internalPrepareNewChild(newNode);
             newNode.coreDetach();
             ChildNode previousSibling = internalGetPreviousSibling();
             if (previousSibling == null) {
@@ -242,12 +242,12 @@ public aspect ChildNodeSupport {
         if (parent == null) {
             throw new NoParentException();
         } else {
-            validateOwnerDocument(newNodes);
+            internalValidateOwnerDocument(newNodes);
             ChildNode previousSibling = internalGetPreviousSibling();
             int nodeCount = 0;
             if (parent.coreIsComplete() && nextSibling == null && !fragment.coreIsComplete()) {
                 // This is the same case as considered in coreInsertSiblingsAfter
-                internalGetDocument().migrateBuilder(fragment, parent);
+                internalGetDocument().internalMigrateBuilder(fragment, parent);
                 ChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 if (previousSibling == null) {
                     parent.internalSetFirstChild(node);
@@ -276,9 +276,9 @@ public aspect ChildNodeSupport {
                 } while (node != null);
                 previousNode.internalSetNextSibling(nextSibling);
             }
-            parent.notifyChildrenModified(nodeCount-1);
+            parent.internalNotifyChildrenModified(nodeCount-1);
             fragment.internalSetFirstChild(null);
-            fragment.notifyChildrenCleared();
+            fragment.internalNotifyChildrenCleared();
             parent = null;
         }
     }

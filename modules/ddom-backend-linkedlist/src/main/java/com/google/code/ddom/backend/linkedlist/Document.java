@@ -49,11 +49,11 @@ public class Document extends ParentNode implements CoreDocument {
         symbols = new SymbolHashTable();
     }
 
-    final void createBuilder(Producer producer, ParentNode target) {
+    final void internalCreateBuilder(Producer producer, ParentNode target) {
         builders.add(new Builder(producer, this, target));
     }
     
-    final Builder getBuilderFor(ParentNode target) {
+    final Builder internalGetBuilderFor(ParentNode target) {
         for (Builder builder : builders) {
             if (builder.isBuilderFor(target)) {
                 return builder;
@@ -69,11 +69,11 @@ public class Document extends ParentNode implements CoreDocument {
      * @param from
      * @param to
      */
-    final void migrateBuilder(ParentNode from, ParentNode to) {
+    final void internalMigrateBuilder(ParentNode from, ParentNode to) {
         for (Builder builder : builders) {
             if (builder.migrateBuilder(from, to)) {
-                from.setComplete(true);
-                to.setComplete(false);
+                from.internalSetComplete(true);
+                to.internalSetComplete(false);
                 return;
             }
         }
@@ -105,17 +105,17 @@ public class Document extends ParentNode implements CoreDocument {
 //        complete = true;
 //    }
     
-    public final void notifyChildrenModified(int delta) {
+    public final void internalNotifyChildrenModified(int delta) {
         children += delta;
     }
 
     @Override
-    final void notifyChildrenCleared() {
+    final void internalNotifyChildrenCleared() {
         children = 0;
     }
 
     @Override
-    final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
+    final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
         if (newChild instanceof CoreDocumentTypeDeclaration) {
             if (!(replacedChild instanceof CoreDocumentTypeDeclaration || coreGetDocumentTypeDeclaration() == null)) {

@@ -33,7 +33,7 @@ public class EntityReference extends LeafNode implements CoreEntityReference {
     }
 
     @Override
-    final CharSequence collectTextContent(CharSequence appendTo) throws DeferredParsingException {
+    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
         // TODO
         throw new UnsupportedOperationException();
     }

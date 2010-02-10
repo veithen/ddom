@@ -52,12 +52,12 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
         this.document = document;
     }
 
-    public final void notifyChildrenModified(int delta) {
+    public final void internalNotifyChildrenModified(int delta) {
         children += delta;
     }
 
     @Override
-    final void notifyChildrenCleared() {
+    final void internalNotifyChildrenCleared() {
         children = 0;
     }
 
@@ -66,7 +66,7 @@ public abstract class Element extends ParentNode implements ChildNode, CoreEleme
     }
 
     @Override
-    final void validateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         // TODO: need a test case here!
         if (newChild instanceof CoreDocumentTypeDeclaration) {
             throw new ChildTypeNotAllowedException();

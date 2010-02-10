@@ -21,5 +21,5 @@ import com.google.code.ddom.backend.WrongDocumentException;
 public interface LLNode extends CoreNode {
     Document internalGetDocument();
     
-    void validateOwnerDocument(CoreNode node) throws WrongDocumentException;
+    void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException;
 }
