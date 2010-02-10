@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreNode;
-import com.google.code.ddom.backend.WrongDocumentException;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.stream.spi.Producer;
 
-public interface LLNode extends CoreNode {
-    LLDocument internalGetDocument();
-    
-    void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException;
+public interface LLDocument extends LLParentNode, CoreDocument {
+    void internalCreateBuilder(Producer producer, LLParentNode target);
+    Builder internalGetBuilderFor(LLParentNode target);
+    void internalMigrateBuilder(LLParentNode from, LLParentNode to);
 }

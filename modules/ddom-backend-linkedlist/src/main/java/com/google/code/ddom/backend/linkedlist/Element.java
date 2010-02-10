@@ -56,8 +56,7 @@ public abstract class Element extends ParentNode implements LLChildNode, CoreEle
         children += delta;
     }
 
-    @Override
-    final void internalNotifyChildrenCleared() {
+    public final void internalNotifyChildrenCleared() {
         children = 0;
     }
 
@@ -65,8 +64,7 @@ public abstract class Element extends ParentNode implements LLChildNode, CoreEle
         this.firstAttribute = firstAttribute;
     }
 
-    @Override
-    final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         // TODO: need a test case here!
         if (newChild instanceof CoreDocumentTypeDeclaration) {
             throw new ChildTypeNotAllowedException();
@@ -82,7 +80,7 @@ public abstract class Element extends ParentNode implements LLChildNode, CoreEle
         return firstAttribute;
     }
     
-    public final Document internalGetDocument() {
+    public final LLDocument internalGetDocument() {
         return document;
     }
 

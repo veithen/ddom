@@ -19,8 +19,8 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 
 public interface LLChildNode extends LLNode, CoreChildNode {
-    ParentNode internalGetParent();
-    void internalSetParent(ParentNode parent);
+    LLParentNode internalGetParent();
+    void internalSetParent(LLParentNode parent);
     
     LLChildNode internalGetNextSiblingIfMaterialized();
     void internalSetNextSibling(LLChildNode nextSibling);

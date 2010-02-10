@@ -37,7 +37,7 @@ import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterat
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 @Implementation
-public abstract class ParentNode extends Node implements CoreParentNode {
+public abstract class ParentNode extends Node implements LLParentNode {
     /**
      * The content of this node. This is a {@link CoreChildNode} if the node is expanded, a
      * {@link FragmentSource} if the content is sourced or a {@link String} if the value has been
@@ -56,9 +56,6 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     public ParentNode(boolean complete) {
         this.complete = complete;
     }
-
-    abstract void internalNotifyChildrenModified(int delta);
-    abstract void internalNotifyChildrenCleared();
 
     public final Object coreGetContent() {
         return content;
@@ -131,11 +128,11 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return content;
     }
 
-    final LLChildNode internalGetFirstChildIfMaterialized() {
+    public final LLChildNode internalGetFirstChildIfMaterialized() {
         return (LLChildNode)content;
     }
 
-    final void internalSetFirstChild(CoreChildNode child) {
+    public final void internalSetFirstChild(CoreChildNode child) {
         content = child;
     }
 
@@ -143,7 +140,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return complete;
     }
 
-    final void internalSetComplete(boolean complete) {
+    public final void internalSetComplete(boolean complete) {
         this.complete = complete;
     }
     
@@ -168,7 +165,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 return (CoreChildNode)content;
             }
         } else if (content instanceof String) {
-            LLChildNode firstChild = new Text(internalGetDocument(), (String)content);
+            // TODO: no cast here
+            LLChildNode firstChild = new Text((Document)internalGetDocument(), (String)content);
             firstChild.internalSetParent(this);
             content = firstChild;
             return firstChild;
@@ -188,7 +186,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return previousChild;
     }
     
-    void internalPrepareNewChild(CoreChildNode newChild) throws CoreModelException {
+    public void internalPrepareNewChild(CoreChildNode newChild) throws CoreModelException {
         internalValidateOwnerDocument(newChild);
         
         // Check that the new node is not an ancestor of this node
@@ -209,20 +207,6 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             ((CoreParentNode)newChild).coreBuild();
         }
     }
-    
-    /**
-     * Check if the given node is allowed as a child.
-     * 
-     * @param newChild
-     *            the child that will be added
-     * @param replacedChild
-     *            the child that will be replaced by the new node, or <code>null</code> if the new
-     *            child will be inserted and doesn't replace any existing node
-     * @throws ChildTypeNotAllowedException
-     *             if the child is not allowed
-     * @throws DeferredParsingException 
-     */
-    abstract void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
     // appendChild:  newChild != null, refChild == null, removeRefChild == false

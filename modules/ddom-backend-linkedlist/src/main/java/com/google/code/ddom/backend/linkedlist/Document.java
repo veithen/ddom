@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.DeferredParsingException;
@@ -31,7 +30,7 @@ import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 
 @Implementation
-public class Document extends ParentNode implements CoreDocument {
+public class Document extends ParentNode implements LLDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final NodeFactory nodeFactory;
     private final Symbols symbols;
@@ -49,11 +48,11 @@ public class Document extends ParentNode implements CoreDocument {
         symbols = new SymbolHashTable();
     }
 
-    final void internalCreateBuilder(Producer producer, ParentNode target) {
+    public final void internalCreateBuilder(Producer producer, LLParentNode target) {
         builders.add(new Builder(producer, this, target));
     }
     
-    final Builder internalGetBuilderFor(ParentNode target) {
+    public final Builder internalGetBuilderFor(LLParentNode target) {
         for (Builder builder : builders) {
             if (builder.isBuilderFor(target)) {
                 return builder;
@@ -69,7 +68,7 @@ public class Document extends ParentNode implements CoreDocument {
      * @param from
      * @param to
      */
-    final void internalMigrateBuilder(ParentNode from, ParentNode to) {
+    public final void internalMigrateBuilder(LLParentNode from, LLParentNode to) {
         for (Builder builder : builders) {
             if (builder.migrateBuilder(from, to)) {
                 from.internalSetComplete(true);
@@ -88,7 +87,7 @@ public class Document extends ParentNode implements CoreDocument {
         return symbols;
     }
 
-    public final Document internalGetDocument() {
+    public final LLDocument internalGetDocument() {
         return this;
     }
 
@@ -109,13 +108,11 @@ public class Document extends ParentNode implements CoreDocument {
         children += delta;
     }
 
-    @Override
-    final void internalNotifyChildrenCleared() {
+    public final void internalNotifyChildrenCleared() {
         children = 0;
     }
 
-    @Override
-    final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
         if (newChild instanceof CoreDocumentTypeDeclaration) {
             if (!(replacedChild instanceof CoreDocumentTypeDeclaration || coreGetDocumentTypeDeclaration() == null)) {

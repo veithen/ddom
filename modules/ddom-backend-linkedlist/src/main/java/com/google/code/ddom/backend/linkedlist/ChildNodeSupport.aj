@@ -25,14 +25,14 @@ import com.google.code.ddom.backend.NoParentException;
 import com.google.code.ddom.backend.SelfRelationshipException;
 
 public aspect ChildNodeSupport {
-    private ParentNode LLChildNode.parent;
+    private LLParentNode LLChildNode.parent;
     private LLChildNode LLChildNode.nextSibling;
     
-    public final ParentNode LLChildNode.internalGetParent() {
+    public final LLParentNode LLChildNode.internalGetParent() {
         return parent;
     }
     
-    public final void LLChildNode.internalSetParent(ParentNode parent) {
+    public final void LLChildNode.internalSetParent(LLParentNode parent) {
         this.parent = parent;
     }
     

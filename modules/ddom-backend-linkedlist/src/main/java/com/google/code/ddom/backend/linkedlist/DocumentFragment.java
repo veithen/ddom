@@ -33,13 +33,11 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         children += delta;
     }
 
-    @Override
-    final void internalNotifyChildrenCleared() {
+    public final void internalNotifyChildrenCleared() {
         children = 0;
     }
 
-    @Override
-    void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) {
+    public void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) {
         // All node type are allowed
     }
 
@@ -47,7 +45,7 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         return children;
     }
 
-    public final Document internalGetDocument() {
+    public final LLDocument internalGetDocument() {
         return document;
     }
 }

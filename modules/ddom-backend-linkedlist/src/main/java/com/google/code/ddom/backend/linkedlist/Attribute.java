@@ -77,13 +77,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         // Ignore this; we don't store the number of children
     }
 
-    @Override
-    final void internalNotifyChildrenCleared() {
+    public final void internalNotifyChildrenCleared() {
         // Ignore this; we don't store the number of children
     }
 
-    @Override
-    final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
         if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
             throw new ChildTypeNotAllowedException();
         }
@@ -109,7 +107,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return owner instanceof CoreElement;
     }
 
-    public final Document internalGetDocument() {
+    public final LLDocument internalGetDocument() {
         if (owner instanceof Document) {
             return (Document)owner;
         } else {

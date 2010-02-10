@@ -26,7 +26,7 @@ public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode
         this.document = document;
     }
 
-    public final Document internalGetDocument() {
+    public final LLDocument internalGetDocument() {
         return document;
     }
 }

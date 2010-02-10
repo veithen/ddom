@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.collections.ArrayStack;
 import com.google.code.ddom.collections.Stack;
@@ -28,24 +27,24 @@ import com.google.code.ddom.stream.util.CallbackConsumer;
 public class Builder extends CallbackConsumer {
     private final Producer producer;
     private final Document document;
-    private final Stack<ParentNode> nodeStack = new ArrayStack<ParentNode>();
+    private final Stack<LLParentNode> nodeStack = new ArrayStack<LLParentNode>();
     private StreamException streamException;
-    private ParentNode parent; // The current node being built
+    private LLParentNode parent; // The current node being built
     private LLChildNode lastSibling; // The last child of the current node
     private Attribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Producer producer, Document document, ParentNode target) {
+    public Builder(Producer producer, Document document, LLParentNode target) {
         this.producer = producer;
         this.document = document;
         parent = target;
     }
 
-    public final boolean isBuilderFor(ParentNode target) {
+    public final boolean isBuilderFor(LLParentNode target) {
         return target == parent || nodeStack.contains(target);
     }
 
-    public final boolean migrateBuilder(ParentNode from, ParentNode to) {
+    public final boolean migrateBuilder(LLParentNode from, LLParentNode to) {
         if (parent == from) {
             parent = to;
             return true;
