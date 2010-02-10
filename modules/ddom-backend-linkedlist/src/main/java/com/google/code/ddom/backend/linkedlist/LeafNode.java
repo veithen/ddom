@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.CoreLeafNode;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public abstract class LeafNode extends Node implements ChildNode, CoreLeafNode {
+public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode {
     private final Document document;
     
     public LeafNode(Document document) {

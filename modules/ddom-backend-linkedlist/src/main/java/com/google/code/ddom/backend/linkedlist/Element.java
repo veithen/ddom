@@ -42,7 +42,7 @@ import com.google.code.ddom.backend.WrongDocumentException;
 import com.google.code.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 
 @Implementation
-public abstract class Element extends ParentNode implements ChildNode, CoreElement {
+public abstract class Element extends ParentNode implements LLChildNode, CoreElement {
     private final Document document;
     private int children;
     private Attribute firstAttribute;

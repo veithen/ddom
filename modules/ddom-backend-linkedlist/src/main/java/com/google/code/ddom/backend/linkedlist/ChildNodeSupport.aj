@@ -25,38 +25,38 @@ import com.google.code.ddom.backend.NoParentException;
 import com.google.code.ddom.backend.SelfRelationshipException;
 
 public aspect ChildNodeSupport {
-    private ParentNode ChildNode.parent;
-    private ChildNode ChildNode.nextSibling;
+    private ParentNode LLChildNode.parent;
+    private LLChildNode LLChildNode.nextSibling;
     
-    public final ParentNode ChildNode.internalGetParent() {
+    public final ParentNode LLChildNode.internalGetParent() {
         return parent;
     }
     
-    public final void ChildNode.internalSetParent(ParentNode parent) {
+    public final void LLChildNode.internalSetParent(ParentNode parent) {
         this.parent = parent;
     }
     
-    public final CoreParentNode ChildNode.coreGetParent() {
+    public final CoreParentNode LLChildNode.coreGetParent() {
         return parent;
     }
 
-    public final boolean ChildNode.coreHasParent() {
+    public final boolean LLChildNode.coreHasParent() {
         return parent != null;
     }
 
-    public final CoreElement ChildNode.coreGetParentElement() {
+    public final CoreElement LLChildNode.coreGetParentElement() {
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
-    public final ChildNode ChildNode.internalGetNextSiblingIfMaterialized() {
+    public final LLChildNode LLChildNode.internalGetNextSiblingIfMaterialized() {
         return nextSibling;
     }
 
-    public final void ChildNode.internalSetNextSibling(ChildNode nextSibling) {
+    public final void LLChildNode.internalSetNextSibling(LLChildNode nextSibling) {
         this.nextSibling = nextSibling;
     }
     
-    public final ChildNode ChildNode.internalGetNextSibling() throws DeferredParsingException {
+    public final LLChildNode LLChildNode.internalGetNextSibling() throws DeferredParsingException {
         if (parent == null) {
             return null;
         } else {
@@ -70,16 +70,16 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final CoreChildNode ChildNode.coreGetNextSibling() throws DeferredParsingException {
+    public final CoreChildNode LLChildNode.coreGetNextSibling() throws DeferredParsingException {
         return internalGetNextSibling();
     }
     
-    public final ChildNode ChildNode.internalGetPreviousSibling() {
+    public final LLChildNode LLChildNode.internalGetPreviousSibling() {
         if (parent == null) {
             return null;
         } else {
-            ChildNode previousSibling = null;
-            ChildNode sibling = parent.internalGetFirstChildIfMaterialized();
+            LLChildNode previousSibling = null;
+            LLChildNode sibling = parent.internalGetFirstChildIfMaterialized();
             while (sibling != this) {
                 previousSibling = sibling;
                 sibling = sibling.internalGetNextSiblingIfMaterialized();
@@ -88,12 +88,12 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final CoreChildNode ChildNode.coreGetPreviousSibling() {
+    public final CoreChildNode LLChildNode.coreGetPreviousSibling() {
         return internalGetPreviousSibling();
     }
     
-    public final void ChildNode.coreInsertSiblingAfter(CoreChildNode coreSibling) throws CoreModelException {
-        ChildNode sibling = (ChildNode)coreSibling;
+    public final void LLChildNode.coreInsertSiblingAfter(CoreChildNode coreSibling) throws CoreModelException {
+        LLChildNode sibling = (LLChildNode)coreSibling;
         if (sibling == this) {
             throw new SelfRelationshipException();
         }
@@ -112,7 +112,7 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreInsertSiblingsAfter(CoreDocumentFragment coreFragment) throws CoreModelException {
+    public final void LLChildNode.coreInsertSiblingsAfter(CoreDocumentFragment coreFragment) throws CoreModelException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
         if (parent == null) {
             throw new NoParentException();
@@ -124,7 +124,7 @@ public aspect ChildNodeSupport {
                 // the already materialized children and then to migrate the builder. This is
                 // possible because we have a builder of type 2.
                 internalGetDocument().internalMigrateBuilder(fragment, parent);
-                ChildNode node = fragment.internalGetFirstChildIfMaterialized();
+                LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 nextSibling = node;
                 int nodeCount = 0;
                 while (node != null) {
@@ -141,8 +141,8 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreInsertSiblingBefore(CoreChildNode coreSibling) throws CoreModelException {
-        ChildNode sibling = (ChildNode)coreSibling;
+    public final void LLChildNode.coreInsertSiblingBefore(CoreChildNode coreSibling) throws CoreModelException {
+        LLChildNode sibling = (LLChildNode)coreSibling;
         if (sibling == this) {
             throw new SelfRelationshipException();
         }
@@ -152,8 +152,8 @@ public aspect ChildNodeSupport {
             parent.internalValidateChildType(sibling, null);
             parent.internalPrepareNewChild(sibling);
             sibling.coreDetach();
-            ChildNode previousSibling = null;
-            ChildNode node = parent.internalGetFirstChildIfMaterialized();
+            LLChildNode previousSibling = null;
+            LLChildNode node = parent.internalGetFirstChildIfMaterialized();
             while (node != this) {
                 previousSibling = node;
                 node = node.internalGetNextSiblingIfMaterialized();
@@ -169,7 +169,7 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreInsertSiblingsBefore(CoreDocumentFragment coreFragment) throws CoreModelException {
+    public final void LLChildNode.coreInsertSiblingsBefore(CoreDocumentFragment coreFragment) throws CoreModelException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
         if (parent == null) {
             throw new NoParentException();
@@ -177,15 +177,15 @@ public aspect ChildNodeSupport {
             // TODO: handle empty fragment?
             internalValidateOwnerDocument(fragment);
             fragment.coreBuild();
-            ChildNode node = (ChildNode)fragment.coreGetFirstChild(); // TODO: internal... method here
-            ChildNode previousSibling = internalGetPreviousSibling();
+            LLChildNode node = (LLChildNode)fragment.coreGetFirstChild(); // TODO: internal... method here
+            LLChildNode previousSibling = internalGetPreviousSibling();
             if (previousSibling == null) {
                 parent.internalSetFirstChild(node);
             } else {
                 previousSibling.internalSetNextSibling(node);
             }
             int nodeCount = 0;
-            ChildNode previousNode;
+            LLChildNode previousNode;
             do {
                 node.internalSetParent(parent);
                 previousNode = node;
@@ -199,9 +199,9 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreDetach() throws DeferredParsingException {
+    public final void LLChildNode.coreDetach() throws DeferredParsingException {
         if (parent != null) {
-            ChildNode previousSibling = internalGetPreviousSibling();
+            LLChildNode previousSibling = internalGetPreviousSibling();
             // We have a builder of type 2; thus we don't need to build
             // the node being detached. Therefore we can use internalGetNextSibling
             // instead of coreGetNextSibling.
@@ -216,15 +216,15 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreReplaceWith(CoreChildNode coreNewNode) throws CoreModelException {
-        ChildNode newNode = (ChildNode)coreNewNode;
+    public final void LLChildNode.coreReplaceWith(CoreChildNode coreNewNode) throws CoreModelException {
+        LLChildNode newNode = (LLChildNode)coreNewNode;
         if (parent == null) {
             throw new NoParentException();
         } else if (newNode != this) {
             parent.internalValidateChildType(newNode, this);
             parent.internalPrepareNewChild(newNode);
             newNode.coreDetach();
-            ChildNode previousSibling = internalGetPreviousSibling();
+            LLChildNode previousSibling = internalGetPreviousSibling();
             if (previousSibling == null) {
                 parent.internalSetFirstChild(newNode);
             } else {
@@ -237,18 +237,18 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void ChildNode.coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException {
+    public final void LLChildNode.coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException {
         DocumentFragment fragment = (DocumentFragment)newNodes;
         if (parent == null) {
             throw new NoParentException();
         } else {
             internalValidateOwnerDocument(newNodes);
-            ChildNode previousSibling = internalGetPreviousSibling();
+            LLChildNode previousSibling = internalGetPreviousSibling();
             int nodeCount = 0;
             if (parent.coreIsComplete() && nextSibling == null && !fragment.coreIsComplete()) {
                 // This is the same case as considered in coreInsertSiblingsAfter
                 internalGetDocument().internalMigrateBuilder(fragment, parent);
-                ChildNode node = fragment.internalGetFirstChildIfMaterialized();
+                LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 if (previousSibling == null) {
                     parent.internalSetFirstChild(node);
                 } else {
@@ -261,13 +261,13 @@ public aspect ChildNodeSupport {
                 }
             } else {
                 fragment.coreBuild(); // Avoids repetitive lookup of builder; anyway we need all nodes
-                ChildNode node = (ChildNode)fragment.coreGetFirstChild(); // TODO: internal... method here
+                LLChildNode node = (LLChildNode)fragment.coreGetFirstChild(); // TODO: internal... method here
                 if (previousSibling == null) {
                     parent.internalSetFirstChild(node);
                 } else {
                     previousSibling.internalSetNextSibling(node);
                 }
-                ChildNode previousNode;
+                LLChildNode previousNode;
                 do {
                     node.internalSetParent(parent);
                     previousNode = node;

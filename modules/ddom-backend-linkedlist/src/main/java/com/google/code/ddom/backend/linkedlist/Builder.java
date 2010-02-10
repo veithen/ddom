@@ -31,7 +31,7 @@ public class Builder extends CallbackConsumer {
     private final Stack<ParentNode> nodeStack = new ArrayStack<ParentNode>();
     private StreamException streamException;
     private ParentNode parent; // The current node being built
-    private ChildNode lastSibling; // The last child of the current node
+    private LLChildNode lastSibling; // The last child of the current node
     private Attribute lastAttribute;
     private boolean nodeAppended;
 
@@ -149,7 +149,7 @@ public class Builder extends CallbackConsumer {
         appendNode(new EntityReference(document, name));
     }
     
-    private void appendNode(ChildNode node) {
+    private void appendNode(LLChildNode node) {
         if (lastSibling == null && parent.internalGetFirstChildIfMaterialized() != null
                 || lastSibling != null && (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSiblingIfMaterialized() != null)) {
             // We get here if the children of the node being built have been modified
@@ -159,7 +159,7 @@ public class Builder extends CallbackConsumer {
             // If this happens, we need to get again to the last materialized child of the
             // node being built:
             lastSibling = null;
-            ChildNode child = parent.internalGetFirstChildIfMaterialized();
+            LLChildNode child = parent.internalGetFirstChildIfMaterialized();
             while (child != null) {
                 lastSibling = child;
                 child = child.internalGetNextSiblingIfMaterialized();
@@ -199,7 +199,7 @@ public class Builder extends CallbackConsumer {
         if (nodeStack.isEmpty()) {
             parent = null;
         } else {
-            lastSibling = (ChildNode)parent;
+            lastSibling = (LLChildNode)parent;
             // This is important for being a builder of type 2: instead of getting the
             // parent from the current node, we get it from the node stack.
             parent = nodeStack.pop();

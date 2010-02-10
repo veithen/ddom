@@ -104,10 +104,10 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     }
 
     public final void coreClear() throws DeferredParsingException {
-        if (content instanceof ChildNode) {
-            ChildNode child = (ChildNode)content;
+        if (content instanceof LLChildNode) {
+            LLChildNode child = (LLChildNode)content;
             do {
-                ChildNode next = child.internalGetNextSibling();
+                LLChildNode next = child.internalGetNextSibling();
                 child.internalSetParent(null);
                 child.internalSetNextSibling(null);
                 child = next;
@@ -131,8 +131,8 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return content;
     }
 
-    final ChildNode internalGetFirstChildIfMaterialized() {
-        return (ChildNode)content;
+    final LLChildNode internalGetFirstChildIfMaterialized() {
+        return (LLChildNode)content;
     }
 
     final void internalSetFirstChild(CoreChildNode child) {
@@ -168,7 +168,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 return (CoreChildNode)content;
             }
         } else if (content instanceof String) {
-            ChildNode firstChild = new Text(internalGetDocument(), (String)content);
+            LLChildNode firstChild = new Text(internalGetDocument(), (String)content);
             firstChild.internalSetParent(this);
             content = firstChild;
             return firstChild;
@@ -253,7 +253,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             if (previousSibling == null) {
                 internalSetFirstChild(nextSibling);
             } else {
-                ((ChildNode)previousSibling).internalSetNextSibling((ChildNode)nextSibling);
+                ((LLChildNode)previousSibling).internalSetNextSibling((LLChildNode)nextSibling);
             }
             internalNotifyChildrenModified(-1);
         } else {
@@ -267,7 +267,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 for (CoreChildNode node = firstNodeToInsert; node != null; node = node.coreGetNextSibling()) {
                     // TODO: if validateChildType throws an exception, this will leave the DOM tree in a corrupt state!
                     internalValidateChildType(node, removeRefChild ? refChild : null);
-                    ((ChildNode)node).internalSetParent(this);
+                    ((LLChildNode)node).internalSetParent(this);
                     lastNodeToInsert = node;
                 }
                 delta = fragment.coreGetChildCount();
@@ -276,7 +276,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
                 ((CoreChildNode)newChild).coreDetach();
                 firstNodeToInsert = lastNodeToInsert = (CoreChildNode)newChild;
                 internalValidateChildType(firstNodeToInsert, removeRefChild ? refChild : null);
-                ((ChildNode)firstNodeToInsert).internalSetParent(this);
+                ((LLChildNode)firstNodeToInsert).internalSetParent(this);
                 delta = 1;
             } else {
                 throw new ChildTypeNotAllowedException();
@@ -290,14 +290,14 @@ public abstract class ParentNode extends Node implements CoreParentNode {
             if (previousSibling == null) {
                 internalSetFirstChild(firstNodeToInsert);
             } else {
-                ((ChildNode)previousSibling).internalSetNextSibling((ChildNode)firstNodeToInsert);
+                ((LLChildNode)previousSibling).internalSetNextSibling((LLChildNode)firstNodeToInsert);
             }
             if (nextSibling != null) {
-                ((ChildNode)lastNodeToInsert).internalSetNextSibling((ChildNode)nextSibling);
+                ((LLChildNode)lastNodeToInsert).internalSetNextSibling((LLChildNode)nextSibling);
             }
         }
         if (removeRefChild) {
-            ((ChildNode)refChild).internalSetParent(null);
+            ((LLChildNode)refChild).internalSetParent(null);
         }
     }
 

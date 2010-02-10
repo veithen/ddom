@@ -18,14 +18,14 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 
-public interface ChildNode extends LLNode, CoreChildNode {
+public interface LLChildNode extends LLNode, CoreChildNode {
     ParentNode internalGetParent();
     void internalSetParent(ParentNode parent);
     
-    ChildNode internalGetNextSiblingIfMaterialized();
-    void internalSetNextSibling(ChildNode nextSibling);
+    LLChildNode internalGetNextSiblingIfMaterialized();
+    void internalSetNextSibling(LLChildNode nextSibling);
     
     // Type safe variants of several core model methods
-    ChildNode internalGetNextSibling() throws DeferredParsingException;
-    ChildNode internalGetPreviousSibling();
+    LLChildNode internalGetNextSibling() throws DeferredParsingException;
+    LLChildNode internalGetPreviousSibling();
 }
