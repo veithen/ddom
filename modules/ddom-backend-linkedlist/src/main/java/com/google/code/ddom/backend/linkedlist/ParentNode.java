@@ -30,7 +30,6 @@ import com.google.code.ddom.backend.CyclicRelationshipException;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
-import com.google.code.ddom.backend.SelfRelationshipException;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
@@ -132,7 +131,7 @@ public abstract class ParentNode extends Node implements CoreParentNode {
         return content;
     }
 
-    final ChildNode internalGetFirstChild() {
+    final ChildNode internalGetFirstChildIfMaterialized() {
         return (ChildNode)content;
     }
 
@@ -309,10 +308,6 @@ public abstract class ParentNode extends Node implements CoreParentNode {
     public final void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException {
         validateOwnerDocument(newChildren);
         merge(newChildren, null, false);
-    }
-
-    final void coreReplaceChild(CoreNode newChild, CoreChildNode oldChild) throws CoreModelException {
-        merge(newChild, oldChild, true);
     }
 
     public final <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {

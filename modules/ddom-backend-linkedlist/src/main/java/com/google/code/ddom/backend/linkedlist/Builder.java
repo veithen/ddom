@@ -150,7 +150,7 @@ public class Builder extends CallbackConsumer {
     }
     
     private void appendNode(ChildNode node) {
-        if (lastSibling == null && parent.internalGetFirstChild() != null
+        if (lastSibling == null && parent.internalGetFirstChildIfMaterialized() != null
                 || lastSibling != null && (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSiblingIfMaterialized() != null)) {
             // We get here if the children of the node being built have been modified
             // without building the node, e.g. if the previous node created by the builder has already been
@@ -159,7 +159,7 @@ public class Builder extends CallbackConsumer {
             // If this happens, we need to get again to the last materialized child of the
             // node being built:
             lastSibling = null;
-            ChildNode child = parent.internalGetFirstChild();
+            ChildNode child = parent.internalGetFirstChildIfMaterialized();
             while (child != null) {
                 lastSibling = child;
                 child = child.internalGetNextSiblingIfMaterialized();
