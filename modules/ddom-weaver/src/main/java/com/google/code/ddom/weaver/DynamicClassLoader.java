@@ -20,7 +20,7 @@ public class DynamicClassLoader extends ClassLoader implements ClassDefinitionPr
         super(parent);
     }
 
-    public void processClassDefinition(String name, byte[] data) {
-        defineClass(name, data, 0, data.length);
+    public void processClassDefinition(String name, byte[] definition) {
+        defineClass(name, definition, 0, definition.length);
     }
 }

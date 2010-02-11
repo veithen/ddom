@@ -16,5 +16,13 @@
 package com.google.code.ddom.weaver;
 
 public interface ClassDefinitionProcessor {
-    void processClassDefinition(String name, byte[] data);
+    /**
+     * Process a class definition.
+     * 
+     * @param name
+     *            the fully qualified class name
+     * @param definition
+     *            the class definition, i.e. the content of the class file
+     */
+    void processClassDefinition(String name, byte[] definition);
 }
