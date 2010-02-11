@@ -23,11 +23,43 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Locates provider implementations.
+ * 
+ * @see Provider
+ * 
+ * @author Andreas Veithen
+ */
 public class ProviderFinder {
     private ProviderFinder() {}
     
-    public static <T> Map<String,T> find(ClassLoader classLoader, Class<T> providerClass) throws ProviderFinderException {
-        String resourceName = "META-INF/services/" + providerClass.getName();
+    /**
+     * Find all provider implementations visible to a given class loader. The method uses the
+     * standard service discovery mechanism (based on <tt>META-INF/services</tt>), but in addition
+     * expects all implementations to have a {@link Provider} annotation.
+     * 
+     * @param <T>
+     *            the provider type
+     * @param classLoader
+     *            the class loader to load provider implementations from
+     * @param providerType
+     *            the provider type (interface)
+     * @return A map containing the discovered provider implementation instances. The key is the
+     *         provider name as specified by {@link Provider#name()}. If no providers are found, an
+     *         empty map is returned.
+     * @throws ProviderFinderException
+     *             if one of the following occurs:
+     *             <ul>
+     *             <li>A resource found in <tt>META-INF/services/</tt> referred to a non existing
+     *             class, to a class that doesn't implement the provider interface or to a class
+     *             that doesn't have a {@link Provider} annotation.
+     *             <li>Two implementations with the same {@link Provider#name()} were found.
+     *             <li>Another error occurred while reading the resources or instantiating a
+     *             provider implementation.
+     *             </ul>
+     */
+    public static <T> Map<String,T> find(ClassLoader classLoader, Class<T> providerType) throws ProviderFinderException {
+        String resourceName = "META-INF/services/" + providerType.getName();
         Enumeration<URL> resources;
         try {
             resources = classLoader.getResources(resourceName);
@@ -45,11 +77,11 @@ public class ProviderFinder {
                         if (line.length() != 0 && line.charAt(0) != '#') {
                             Class<? extends T> clazz;
                             try {
-                                clazz = classLoader.loadClass(line).asSubclass(providerClass);
+                                clazz = classLoader.loadClass(line).asSubclass(providerType);
                             } catch (ClassNotFoundException ex) {
                                 throw new ProviderFinderException("Class " + line + " not found");
                             } catch (ClassCastException ex) {
-                                throw new ProviderFinderException("Class " + line + " is not of type " + providerClass.getName());
+                                throw new ProviderFinderException("Class " + line + " is not of type " + providerType.getName());
                             }
                             Provider providerAnnotation = clazz.getAnnotation(Provider.class);
                             if (providerAnnotation == null) {
