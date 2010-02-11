@@ -45,7 +45,7 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
     private final ClassDefinitionProcessor processor;
     private final UnwovenClassFile[] classFiles;
     
-    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ClassNotFoundException {
+    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
         this.classLoader = classLoader;
         this.processor = processor;
         Collection<Class<?>> classes = backend.getWeavableClasses().getClasses();
@@ -55,14 +55,19 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
         // multiple times (this occurs if a subclass is woven before its superclass).
         for (Class<?> clazz : ClassUtils.sortHierarchically(classes)) {
             String className = clazz.getName();
+            byte[] definition;
+            try {
+                definition = ClassLoaderUtils.getClassDefinition(classLoader, className);
+            } catch (ClassNotFoundException ex) {
+                throw new ModelWeaverException("Unable to load definition for class " + className, ex);
+            }
             classFiles[i++] = new UnwovenClassFile(
                     ClassLoaderUtils.getResourceNameForClassName(className),
-                    className,
-                    ClassLoaderUtils.getClassDefinition(classLoader, className));
+                    className, definition);
         }
     }
 
-    public void weave(Map<String,Frontend> frontends) {
+    public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
         BcelWorld world = new BcelWorld(classLoader, this, null);
         BcelWeaver weaver = new BcelWeaver(world);
         for (UnwovenClassFile classFile : classFiles) {
@@ -77,7 +82,7 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
         try {
             weaver.weave(this);
         } catch (IOException ex) {
-            throw new RuntimeException(ex); // TODO
+            throw new ModelWeaverException(ex);
         }
     }
 
@@ -94,7 +99,11 @@ public class ModelWeaver implements IClassFileProvider, IWeaveRequestor, IMessag
     }
 
     public void acceptResult(IUnwovenClassFile result) {
-        processor.processClassDefinition(result.getClassName(), result.getBytes());
+        try {
+            processor.processClassDefinition(result.getClassName(), result.getBytes());
+        } catch (ClassDefinitionProcessorException ex) {
+            throw new RuntimeException(ex); // TODO
+        }
     }
 
     public void addingTypeMungers() {}

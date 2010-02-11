@@ -15,16 +15,21 @@
  */
 package com.google.code.ddom.weaver;
 
-public interface ClassDefinitionProcessor {
-    /**
-     * Process a class definition.
-     * 
-     * @param name
-     *            the fully qualified class name
-     * @param definition
-     *            the class definition, i.e. the content of the class file
-     * @throws ClassDefinitionProcessorException
-     *             if an error occurs while processing the class definition
-     */
-    void processClassDefinition(String name, byte[] definition) throws ClassDefinitionProcessorException;
+public class ModelWeaverException extends Exception {
+    private static final long serialVersionUID = -6050829748835910693L;
+
+    public ModelWeaverException() {
+    }
+
+    public ModelWeaverException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ModelWeaverException(String message) {
+        super(message);
+    }
+
+    public ModelWeaverException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -49,8 +49,7 @@ public class DynamicModelLoader implements ModelLoader {
         
         String[] frontendIds = definition.getFrontends();
         Map<String,Frontend> frontends = new LinkedHashMap<String,Frontend>();
-        for (int i=0; i<frontendIds.length; i++) {
-            String frontendId = frontendIds[i];
+        for (String frontendId : frontendIds) {
             Frontend frontend = frontendMap.get(frontendId);
             if (frontend == null) {
                 return null;
