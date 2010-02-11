@@ -23,7 +23,6 @@ import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.CoreNSUnawareAttribute;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 
 /**
@@ -61,8 +60,8 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
         }
     }
 
-    public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
-        return factory.createAttribute(document, namespaceURI, name, prefix, value, null);
+    public CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+        return document.coreCreateAttribute(namespaceURI, name, prefix, value, null);
     }
 
     public void update(CoreAttribute attr, String prefix, String value) {

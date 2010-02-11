@@ -48,8 +48,8 @@ public interface AttributeMatcher {
             }
         }
 
-        public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
-            return factory.createNamespaceDeclaration(document, name, value);
+        public CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+            return document.coreCreateNamespaceDeclaration(name, value);
         }
 
         public void update(CoreAttribute attr, String prefix, String value) {
@@ -87,8 +87,6 @@ public interface AttributeMatcher {
      * <code>prefix</code> and <code>value</code> parameters are those passed to
      * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, String, String)}.
      * 
-     * @param factory
-     *            the node factory to use
      * @param document
      *            the document in which the attribute is created
      * @param namespaceURI
@@ -101,7 +99,7 @@ public interface AttributeMatcher {
      *            see above
      * @return
      */
-    CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value);
+    CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value);
     
     /**
      * Update an existing attribute. The values of the <code>prefix</code> and <code>value</code>

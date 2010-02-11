@@ -35,7 +35,7 @@ import com.google.code.ddom.stream.spi.Symbols;
 public aspect Create {
     public final Element DOMDocument.createElement(String tagName) throws DOMException {
         NSUtil.validateName(tagName);
-        return (Element)getNodeFactory().createElement(this, tagName);
+        return (Element)coreCreateElement(tagName);
     }
     
     public final Element DOMDocument.createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
@@ -53,12 +53,12 @@ public aspect Create {
         }
         namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
         NSUtil.validateNamespace(namespaceURI, prefix);
-        return (Element)getNodeFactory().createElement(this, namespaceURI, localName, prefix);
+        return (Element)coreCreateElement(namespaceURI, localName, prefix);
     }
     
     public final Attr DOMDocument.createAttribute(String name) throws DOMException {
         NSUtil.validateName(name);
-        return (Attr)getNodeFactory().createAttribute(this, name, null, null);
+        return (Attr)coreCreateAttribute(name, null, null);
     }
 
     public final Attr DOMDocument.createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
@@ -75,35 +75,35 @@ public aspect Create {
             localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return (Attr)getNodeFactory().createNamespaceDeclaration(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
+            return (Attr)coreCreateNamespaceDeclaration(NSUtil.getDeclaredPrefix(localName, prefix), null);
         } else {
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-            return (Attr)getNodeFactory().createAttribute(this, namespaceURI, localName, prefix, null, null);
+            return (Attr)coreCreateAttribute(namespaceURI, localName, prefix, null, null);
         }
     }
 
     public final ProcessingInstruction DOMDocument.createProcessingInstruction(String target, String data) throws DOMException {
         NSUtil.validateName(target);
-        return (ProcessingInstruction)getNodeFactory().createProcessingInstruction(this, target, data);
+        return (ProcessingInstruction)coreCreateProcessingInstruction(target, data);
     }
     
     public final DocumentFragment DOMDocument.createDocumentFragment() {
-        return (DocumentFragment)getNodeFactory().createDocumentFragment(this);
+        return (DocumentFragment)coreCreateDocumentFragment();
     }
 
     public final Text DOMDocument.createTextNode(String data) {
-        return (Text)getNodeFactory().createText(this, data);
+        return (Text)coreCreateText(data);
     }
 
     public final Comment DOMDocument.createComment(String data) {
-        return (Comment)getNodeFactory().createComment(this, data);
+        return (Comment)coreCreateComment(data);
     }
 
     public final CDATASection DOMDocument.createCDATASection(String data) throws DOMException {
-        return (CDATASection)getNodeFactory().createCDATASection(this, data);
+        return (CDATASection)coreCreateCDATASection(data);
     }
 
     public final EntityReference DOMDocument.createEntityReference(String name) throws DOMException {
-        return (EntityReference)getNodeFactory().createEntityReference(this, name);
+        return (EntityReference)coreCreateEntityReference(name);
     }
 }

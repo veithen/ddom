@@ -48,4 +48,43 @@ public interface CoreDocument extends CoreParentNode {
      * @throws DeferredParsingException 
      */
     CoreElement coreGetDocumentElement() throws DeferredParsingException;
+    
+    /**
+     * 
+     * @param document
+     * @return
+     */
+    CoreDocumentTypeDeclaration coreCreateDocumentTypeDeclaration(String rootName, String publicId, String systemId);
+    
+    CoreNSUnawareElement coreCreateElement(String tagName);
+    
+    /**
+     * Create a namespace aware element.
+     * 
+     * @param namespaceURI the namespace URI of the element, or <code>null</code> if the element has no
+     *                     namespace
+     * @param localName the local part of the element's name
+     * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
+     * @param complete
+     * @return the element
+     */
+    CoreNSAwareElement coreCreateElement(String namespaceURI, String localName, String prefix);
+    
+    CoreNSUnawareAttribute coreCreateAttribute(String name, String value, String type);
+    
+    CoreNSAwareAttribute coreCreateAttribute(String namespaceURI, String localName, String prefix, String value, String type);
+    
+    CoreNamespaceDeclaration coreCreateNamespaceDeclaration(String prefix, String namespaceURI);
+    
+    CoreProcessingInstruction coreCreateProcessingInstruction(String target, String data);
+    
+    CoreDocumentFragment coreCreateDocumentFragment();
+
+    CoreText coreCreateText(String data);
+
+    CoreComment coreCreateComment(String data);
+
+    CoreCDATASection coreCreateCDATASection(String data);
+
+    CoreEntityReference coreCreateEntityReference(String name);
 }

@@ -138,42 +138,42 @@ public aspect DocumentSupport {
             case Node.ELEMENT_NODE:
                 Element element = (Element)node;
                 // TODO: detect DOM 1 elements (as with attributes)
-                importedNode = (Node)getNodeFactory().createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
+                importedNode = (Node)coreCreateElement(element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
                 importChildren = deep;
                 break;
             case Node.ATTRIBUTE_NODE:
                 Attr attr = (Attr)node;
                 String localName = attr.getLocalName();
                 if (localName == null) {
-                    importedNode = (Node)getNodeFactory().createAttribute(this, attr.getName(), null, null);
+                    importedNode = (Node)coreCreateAttribute(attr.getName(), null, null);
                 } else {
-                    importedNode = (Node)getNodeFactory().createAttribute(this, attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
+                    importedNode = (Node)coreCreateAttribute(attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
                 }
                 importChildren = true;
                 break;
             case Node.COMMENT_NODE:
-                importedNode = (Node)getNodeFactory().createComment(this, node.getNodeValue());
+                importedNode = (Node)coreCreateComment(node.getNodeValue());
                 importChildren = false;
                 break;
             case Node.TEXT_NODE:
-                importedNode = (Node)getNodeFactory().createText(this, node.getNodeValue());
+                importedNode = (Node)coreCreateText(node.getNodeValue());
                 importChildren = false;
                 break;
             case Node.CDATA_SECTION_NODE:
-                importedNode = (Node)getNodeFactory().createCDATASection(this, node.getNodeValue());
+                importedNode = (Node)coreCreateCDATASection(node.getNodeValue());
                 importChildren = false;
                 break;
             case Node.PROCESSING_INSTRUCTION_NODE:
                 ProcessingInstruction pi = (ProcessingInstruction)node;
-                importedNode = (Node)getNodeFactory().createProcessingInstruction(this, pi.getTarget(), pi.getData());
+                importedNode = (Node)coreCreateProcessingInstruction(pi.getTarget(), pi.getData());
                 importChildren = false;
                 break;
             case Node.DOCUMENT_FRAGMENT_NODE:
-                importedNode = (Node)getNodeFactory().createDocumentFragment(this);
+                importedNode = (Node)coreCreateDocumentFragment();
                 importChildren = deep;
                 break;
             case Node.ENTITY_REFERENCE_NODE:
-                importedNode = (Node)getNodeFactory().createEntityReference(this, node.getNodeName());
+                importedNode = (Node)coreCreateEntityReference(node.getNodeName());
                 importChildren = false;
                 break;
             default:

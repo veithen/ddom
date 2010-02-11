@@ -19,7 +19,6 @@ import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 
 /**
@@ -49,8 +48,8 @@ public final class DOM1AttributeMatcher implements AttributeMatcher {
         return name.equals(((DOMAttribute)attr).getName());
     }
 
-    public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
-        return factory.createAttribute(document, name, value, null);
+    public CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+        return document.coreCreateAttribute(name, value, null);
     }
 
     public void update(CoreAttribute attr, String prefix, String value) {

@@ -52,7 +52,7 @@ public class DocumentTypeImpl implements DOMDocumentType {
         if (declaration != null) {
             throw new IllegalStateException();
         }
-        declaration = (DOMDocumentTypeDeclaration)document.getNodeFactory().createDocumentTypeDeclaration(document, name, publicId, systemId);
+        declaration = (DOMDocumentTypeDeclaration)document.coreCreateDocumentTypeDeclaration(name, publicId, systemId);
         name = null;
         publicId = null;
         systemId = null;

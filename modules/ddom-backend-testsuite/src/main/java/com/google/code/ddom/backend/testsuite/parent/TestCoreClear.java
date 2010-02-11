@@ -31,8 +31,8 @@ public class TestCoreClear extends ParentNodeTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreParentNode parent = parentNodeFactory.createNode(document);
-        CoreText child1 = nodeFactory.createText(document, "text1");
-        CoreText child2 = nodeFactory.createText(document, "text2");
+        CoreText child1 = document.coreCreateText("text1");
+        CoreText child2 = document.coreCreateText("text2");
         parent.coreAppendChild(child1);
         parent.coreAppendChild(child2);
         Assert.assertEquals(2, parent.coreGetChildCount());

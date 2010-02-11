@@ -31,10 +31,10 @@ public class TestCoreReplaceWith2FromWrongDocument extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document1 = nodeFactory.createDocument();
         CoreDocument document2 = nodeFactory.createDocument();
-        CoreChildNode node1 = nodeFactory.createComment(document1, "test");
+        CoreChildNode node1 = document1.coreCreateComment("test");
         document1.coreAppendChild(node1);
-        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document2);
-        fragment.coreAppendChild(nodeFactory.createComment(document2, "test"));
+        CoreDocumentFragment fragment = document2.coreCreateDocumentFragment();
+        fragment.coreAppendChild(document2.coreCreateComment("test"));
         try {
             node1.coreReplaceWith(fragment);
             fail("Expected WrongDocumentException");

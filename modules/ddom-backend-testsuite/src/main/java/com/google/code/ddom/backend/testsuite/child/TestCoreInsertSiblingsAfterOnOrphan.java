@@ -30,9 +30,9 @@ public class TestCoreInsertSiblingsAfterOnOrphan extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreText text1 = nodeFactory.createText(document, "text1");
-        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
-        fragment.coreAppendChild(nodeFactory.createText(document, "text2"));
+        CoreText text1 = document.coreCreateText("text1");
+        CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
+        fragment.coreAppendChild(document.coreCreateText("text2"));
         try {
             text1.coreInsertSiblingsAfter(fragment);
             fail("Expected NoParentException");

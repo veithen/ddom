@@ -29,8 +29,8 @@ public class TestCoreReplaceWith1OnOrphan extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreChildNode node1 = nodeFactory.createComment(document, "test");
-        CoreChildNode node2 = nodeFactory.createComment(document, "test");
+        CoreChildNode node1 = document.coreCreateComment("test");
+        CoreChildNode node2 = document.coreCreateComment("test");
         try {
             node1.coreReplaceWith(node2);
             fail("Expected NoParentException");

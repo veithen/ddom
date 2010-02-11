@@ -31,7 +31,7 @@ public class TestCoreAppendChildFromWrongDocument extends ParentNodeTestCase {
         CoreDocument document1 = nodeFactory.createDocument();
         CoreParentNode parent = parentNodeFactory.createNode(document1);
         CoreDocument document2 = nodeFactory.createDocument();
-        CoreChildNode child = nodeFactory.createText(document2, "text");
+        CoreChildNode child = document2.coreCreateText("text");
         try {
             parent.coreAppendChild(child);
             fail("Expected WrongDocumentException");

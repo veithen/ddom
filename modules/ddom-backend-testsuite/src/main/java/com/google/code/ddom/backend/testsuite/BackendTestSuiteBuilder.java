@@ -71,7 +71,7 @@ public class BackendTestSuiteBuilder {
             }
             
             public CoreNSAwareNamedNode create(CoreDocument document, String namespaceURI, String localName, String prefix) {
-                return document.getNodeFactory().createElement(document, namespaceURI, localName, prefix);
+                return document.coreCreateElement(namespaceURI, localName, prefix);
             }
         });
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
@@ -80,7 +80,7 @@ public class BackendTestSuiteBuilder {
             }
             
             public CoreNSAwareNamedNode create(CoreDocument document, String namespaceURI, String localName, String prefix) {
-                return document.getNodeFactory().createAttribute(document, namespaceURI, localName, prefix, "test", "CDATA");
+                return document.coreCreateAttribute(namespaceURI, localName, prefix, "test", "CDATA");
             }
         });
         addParentNodeTests(suite, config, new ParentNodeFactory() {
@@ -89,7 +89,7 @@ public class BackendTestSuiteBuilder {
             }
             
             public CoreParentNode createNode(CoreDocument document) {
-                return document.getNodeFactory().createAttribute(document, null, "attr", null, null, null);
+                return document.coreCreateAttribute(null, "attr", null, null, null);
             }
         });
         addParentNodeTests(suite, config, new ParentNodeFactory() {
@@ -98,7 +98,7 @@ public class BackendTestSuiteBuilder {
             }
             
             public CoreParentNode createNode(CoreDocument document) {
-                return document.getNodeFactory().createElement(document, null, "element", null);
+                return document.coreCreateElement(null, "element", null);
             }
         });
         return suite;

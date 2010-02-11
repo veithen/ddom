@@ -112,8 +112,7 @@ public abstract class Element extends ParentNode implements LLChildNode, CoreEle
         }
         if (attr == null) {
             CoreDocument document = internalGetDocument();
-            NodeFactory factory = document.getNodeFactory();
-            Attribute newAttr = (Attribute)matcher.createAttribute(factory, document, namespaceURI, name, prefix, value);
+            Attribute newAttr = (Attribute)matcher.createAttribute(document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
                 appendAttribute(newAttr);
             } else {
@@ -302,7 +301,7 @@ public abstract class Element extends ParentNode implements LLChildNode, CoreEle
                         buffer.append(textNode.coreGetData());
                     }
                     CoreTextNode first = textNodes.get(0);
-                    CoreText newTextNode = document.getNodeFactory().createText(document, buffer.toString());
+                    CoreText newTextNode = document.coreCreateText(buffer.toString());
                     try {
                         first.coreInsertSiblingBefore(newTextNode);
                     } catch (CoreModelException ex) {

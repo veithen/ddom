@@ -19,10 +19,8 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
@@ -51,13 +49,11 @@ public aspect Clone {
     }
     
     public final Node DOMNSAwareAttribute.shallowClone() {
-        CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createAttribute(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
+        return (Node)coreGetDocument().coreCreateAttribute(coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
     
     public final Node DOMNSUnawareAttribute.shallowClone() {
-        CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createAttribute(document, coreGetName(), null, coreGetType());
+        return (Node)coreGetDocument().coreCreateAttribute(coreGetName(), null, coreGetType());
     }
 
     public final Node DOMNamespaceDeclaration.shallowClone() {
@@ -82,8 +78,7 @@ public aspect Clone {
     public abstract Node DOMParentNode.shallowClone();
 
     public final Node DOMComment.cloneNode(boolean deep) {
-        CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createComment(document, getData());
+        return (Node)coreGetDocument().coreCreateComment(getData());
     }
 
     public final Node DOMDocumentFragment.cloneNode(boolean deep) {
@@ -92,8 +87,7 @@ public aspect Clone {
     }
 
     public final Node DOMDocumentFragment.shallowClone() {
-        CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createDocumentFragment(document);
+        return (Node)coreGetDocument().coreCreateDocumentFragment();
     }
     
     public final Node DOMDocument.cloneNode(boolean deep) {
@@ -132,25 +126,19 @@ public aspect Clone {
     public abstract CoreElement DOMElement.shallowCloneWithoutAttributes();
 
     public final CoreElement DOMNSAwareElement.shallowCloneWithoutAttributes() {
-        CoreDocument document = coreGetDocument();
-        NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
+        return coreGetDocument().coreCreateElement(coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
     }
     
     public final CoreElement DOMNSUnawareElement.shallowCloneWithoutAttributes() {
-        CoreDocument document = coreGetDocument();
-        NodeFactory factory = document.getNodeFactory();
-        return factory.createElement(document, coreGetName());
+        return coreGetDocument().coreCreateElement(coreGetName());
     }
 
     public final Node DOMEntityReference.cloneNode(boolean deep) {
-        CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createEntityReference(document, coreGetName());
+        return (Node)coreGetDocument().coreCreateEntityReference(coreGetName());
     }
 
     public final Node DOMProcessingInstruction.cloneNode(boolean deep) {
-        CoreDocument document = coreGetDocument();
-        return (Node)document.getNodeFactory().createProcessingInstruction(document, getTarget(), getData());
+        return (Node)coreGetDocument().coreCreateProcessingInstruction(getTarget(), getData());
     }
 
     public final Node DOMTextNode.cloneNode(boolean deep) {
@@ -158,12 +146,10 @@ public aspect Clone {
     }
     
     public final DOMTextNode DOMText.createNewTextNode(String data) {
-        CoreDocument document = coreGetDocument();
-        return (DOMTextNode)document.getNodeFactory().createText(document, data);
+        return (DOMTextNode)coreGetDocument().coreCreateText(data);
     }
 
     public final DOMTextNode DOMCDATASection.createNewTextNode(String data) {
-        CoreDocument document = coreGetDocument();
-        return (DOMTextNode)document.getNodeFactory().createCDATASection(document, data);
+        return (DOMTextNode)coreGetDocument().coreCreateCDATASection(data);
     }
 }

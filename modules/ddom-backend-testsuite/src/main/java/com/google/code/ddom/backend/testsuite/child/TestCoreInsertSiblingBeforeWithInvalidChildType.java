@@ -31,9 +31,9 @@ public class TestCoreInsertSiblingBeforeWithInvalidChildType extends BackendTest
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement parent = nodeFactory.createElement(document, "test");
-        CoreText text = nodeFactory.createText(document, "text1");
-        CoreDocumentTypeDeclaration dtd = nodeFactory.createDocumentTypeDeclaration(document, "root", null, null);
+        CoreElement parent = document.coreCreateElement("test");
+        CoreText text = document.coreCreateText("text1");
+        CoreDocumentTypeDeclaration dtd = document.coreCreateDocumentTypeDeclaration("root", null, null);
         parent.coreAppendChild(text);
         try {
             text.coreInsertSiblingBefore(dtd);

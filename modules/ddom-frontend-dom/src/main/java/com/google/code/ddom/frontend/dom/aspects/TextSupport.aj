@@ -107,7 +107,7 @@ public aspect TextSupport {
         DOMTextNode newText;
         if (content.length() > 0) {
             CoreDocument document = coreGetDocument();
-            newText = (DOMTextNode)document.getNodeFactory().createText(document, content);
+            newText = (DOMTextNode)document.coreCreateText(content);
         } else {
             newText = null;
         }

@@ -63,7 +63,7 @@ public class BackendTestCase extends TestCase {
     }
     
     protected final CoreDocumentFragment parse(CoreDocument document, String xml) {
-        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
+        CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
         try {
             fragment.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)));
         } catch (StreamException ex) {

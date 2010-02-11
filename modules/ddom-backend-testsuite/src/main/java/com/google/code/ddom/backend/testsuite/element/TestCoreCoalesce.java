@@ -35,18 +35,18 @@ public class TestCoreCoalesce extends BackendTestCase {
     @Override
     protected void runTest() throws Exception {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = nodeFactory.createElement(document, "test");
-        CoreText text1 = nodeFactory.createText(document, "A");
+        CoreElement element = document.coreCreateElement("test");
+        CoreText text1 = document.coreCreateText("A");
         element.coreAppendChild(text1);
-        CoreText text2 = nodeFactory.createText(document, "B");
+        CoreText text2 = document.coreCreateText("B");
         element.coreAppendChild(text2);
-        CoreCDATASection cdata = nodeFactory.createCDATASection(document, "C");
+        CoreCDATASection cdata = document.coreCreateCDATASection("C");
         element.coreAppendChild(cdata);
-        CoreText text3 = nodeFactory.createText(document, "D");
+        CoreText text3 = document.coreCreateText("D");
         element.coreAppendChild(text3);
-        CoreComment comment = nodeFactory.createComment(document, "test");
+        CoreComment comment = document.coreCreateComment("test");
         element.coreAppendChild(comment);
-        CoreText text4 = nodeFactory.createText(document, "E");
+        CoreText text4 = document.coreCreateText("E");
         element.coreAppendChild(text4);
         element.coreCoalesce(true);
         

@@ -30,12 +30,12 @@ public class TestCoreInsertSiblingAfterWithNextSibling extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement parent = nodeFactory.createElement(document, "test");
-        CoreText text1 = nodeFactory.createText(document, "text1");
-        CoreText text2 = nodeFactory.createText(document, "text2");
+        CoreElement parent = document.coreCreateElement("test");
+        CoreText text1 = document.coreCreateText("text1");
+        CoreText text2 = document.coreCreateText("text2");
         parent.coreAppendChild(text1);
         parent.coreAppendChild(text2);
-        CoreText newSibling = nodeFactory.createText(document, "sibling");
+        CoreText newSibling = document.coreCreateText("sibling");
         text1.coreInsertSiblingAfter(newSibling);
         assertEquals(3, parent.coreGetChildCount());
         assertSame(parent, newSibling.coreGetParent());

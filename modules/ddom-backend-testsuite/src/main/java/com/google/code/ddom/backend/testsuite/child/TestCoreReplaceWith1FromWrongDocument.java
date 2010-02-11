@@ -30,9 +30,9 @@ public class TestCoreReplaceWith1FromWrongDocument extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document1 = nodeFactory.createDocument();
         CoreDocument document2 = nodeFactory.createDocument();
-        CoreChildNode node1 = nodeFactory.createComment(document1, "test");
+        CoreChildNode node1 = document1.coreCreateComment("test");
         document1.coreAppendChild(node1);
-        CoreChildNode node2 = nodeFactory.createComment(document2, "test");
+        CoreChildNode node2 = document2.coreCreateComment("test");
         try {
             node1.coreReplaceWith(node2);
             fail("Expected WrongDocumentException");

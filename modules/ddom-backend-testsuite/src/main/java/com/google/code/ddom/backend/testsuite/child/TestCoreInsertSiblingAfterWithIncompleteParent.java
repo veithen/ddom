@@ -29,7 +29,7 @@ public class TestCoreInsertSiblingAfterWithIncompleteParent extends BackendTestC
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = parse("<root><a>test</a><b>test</b></root>");
-        CoreText text = nodeFactory.createText(document, "text1");
+        CoreText text = document.coreCreateText("text1");
         CoreNSAwareElement a = (CoreNSAwareElement)document.coreGetDocumentElement().coreGetFirstChild();
         a.coreInsertSiblingAfter(text);
         if (builderType >= BUILDER_TYPE_2) {

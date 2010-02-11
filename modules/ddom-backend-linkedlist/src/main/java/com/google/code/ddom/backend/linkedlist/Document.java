@@ -19,9 +19,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.code.ddom.backend.ChildTypeNotAllowedException;
+import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreComment;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
+import com.google.code.ddom.backend.CoreNSAwareElement;
+import com.google.code.ddom.backend.CoreNSUnawareAttribute;
+import com.google.code.ddom.backend.CoreNSUnawareElement;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
+import com.google.code.ddom.backend.CoreProcessingInstruction;
+import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeFactory;
@@ -200,5 +212,53 @@ public class Document extends ParentNode implements LLDocument {
             child = child.coreGetNextSibling();
         }
         return (CoreDocumentTypeDeclaration)child;
+    }
+
+    public final CoreDocumentTypeDeclaration coreCreateDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
+        return new DocumentTypeDeclaration(this, rootName, publicId, systemId);
+    }
+
+    public final CoreNSUnawareElement coreCreateElement(String tagName) {
+        return new NSUnawareElement(this, tagName, true);
+    }
+    
+    public final CoreNSAwareElement coreCreateElement(String namespaceURI, String localName, String prefix) {
+        return new NSAwareElement(this, namespaceURI, localName, prefix, true);
+    }
+    
+    public final CoreNSUnawareAttribute coreCreateAttribute(String name, String value, String type) {
+        return new NSUnawareAttribute(this, name, value, type);
+    }
+    
+    public final CoreNSAwareAttribute coreCreateAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+        return new NSAwareAttribute(this, namespaceURI, localName, prefix, value, type);
+    }
+    
+    public final CoreNamespaceDeclaration coreCreateNamespaceDeclaration(String prefix, String namespaceURI) {
+        return new NamespaceDeclaration(this, prefix, namespaceURI);
+    }
+    
+    public final CoreProcessingInstruction coreCreateProcessingInstruction(String target, String data) {
+        return new ProcessingInstruction(this, target, data);
+    }
+    
+    public final CoreDocumentFragment coreCreateDocumentFragment() {
+        return new DocumentFragment(this);
+    }
+
+    public final CoreText coreCreateText(String data) {
+        return new Text(this, data);
+    }
+
+    public final CoreComment coreCreateComment(String data) {
+        return new Comment(this, data);
+    }
+
+    public final CoreCDATASection coreCreateCDATASection(String data) {
+        return new CDATASection(this, data);
+    }
+
+    public final CoreEntityReference coreCreateEntityReference(String name) {
+        return new EntityReference(this, name);
     }
 }

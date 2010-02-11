@@ -44,8 +44,8 @@ public final class AxiomAttributeMatcher implements AttributeMatcher {
         }
     }
 
-    public CoreAttribute createAttribute(NodeFactory factory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
-        return factory.createAttribute(document, namespaceURI, name, prefix, value, null);
+    public CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+        return document.coreCreateAttribute(namespaceURI, name, prefix, value, null);
     }
 
     public void update(CoreAttribute attr, String prefix, String value) {

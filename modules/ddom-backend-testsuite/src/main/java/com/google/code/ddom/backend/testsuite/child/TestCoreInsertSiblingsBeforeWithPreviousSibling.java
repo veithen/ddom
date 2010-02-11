@@ -32,12 +32,12 @@ public class TestCoreInsertSiblingsBeforeWithPreviousSibling extends BackendTest
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = nodeFactory.createElement(document, null, "test", null);
-        CoreComment comment = nodeFactory.createComment(document, "test");
+        CoreElement element = document.coreCreateElement(null, "test", null);
+        CoreComment comment = document.coreCreateComment("test");
         element.coreAppendChild(comment);
-        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
-        CoreChildNode fragmentChild1 = nodeFactory.createElement(document, null, "test", null);
-        CoreChildNode fragmentChild2 = nodeFactory.createProcessingInstruction(document, "pi", "test");
+        CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
+        CoreChildNode fragmentChild1 = document.coreCreateElement(null, "test", null);
+        CoreChildNode fragmentChild2 = document.coreCreateProcessingInstruction("pi", "test");
         fragment.coreAppendChild(fragmentChild1);
         fragment.coreAppendChild(fragmentChild2);
         comment.coreInsertSiblingsBefore(fragment);
