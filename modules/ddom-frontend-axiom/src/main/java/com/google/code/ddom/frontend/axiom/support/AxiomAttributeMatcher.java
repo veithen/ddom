@@ -23,7 +23,6 @@ import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.backend.CoreNSUnawareAttribute;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.NodeFactory;
 
 // TODO: once the code in here has been stabilized, check if it can be merged with DOM2AttributeMatcher
 public final class AxiomAttributeMatcher implements AttributeMatcher {

@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
@@ -37,11 +37,11 @@ public class BackendTestCase extends TestCase {
     
     private final StreamFactory streamFactory = StreamFactory.getInstance(BackendTestCase.class.getClassLoader());
     
-    protected final NodeFactory nodeFactory;
+    protected final DocumentFactory documentFactory;
     protected final int builderType;
     
     public BackendTestCase(BackendTestSuiteConfig config) {
-        nodeFactory = config.getNodeFactory();
+        documentFactory = config.getNodeFactory();
         builderType = config.getBuilderType();
         setName(getClass().getName());
     }
@@ -52,7 +52,7 @@ public class BackendTestCase extends TestCase {
     }
     
     protected final CoreDocument parse(String xml) {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         try {
             document.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)));
         } catch (StreamException ex) {

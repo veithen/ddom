@@ -31,7 +31,7 @@ public class TestCoreInsertSiblingsAfterWithIncomplete extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreElement element = document.coreCreateElement(null, "test", null);
         CoreComment comment = document.coreCreateComment("test");
         element.coreAppendChild(comment);

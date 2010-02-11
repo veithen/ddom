@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 
 public interface ModelLoader {
@@ -26,5 +26,5 @@ public interface ModelLoader {
      * @return the model, or <code>null</code> if the model could not be loaded
      */
     // TODO: document that the loader is not responsible for caching the returned instance
-    NodeFactory loadModel(ModelDefinition definition) throws ModelLoaderException;
+    DocumentFactory loadModel(ModelDefinition definition) throws ModelLoaderException;
 }

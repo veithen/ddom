@@ -34,7 +34,7 @@ import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.Mapper;
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.backend.NodeInUseException;
 import com.google.code.ddom.backend.NodeMigrationException;
 import com.google.code.ddom.backend.NodeMigrationPolicy;

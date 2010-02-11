@@ -28,9 +28,9 @@ public class TestCoreAppendChildrenFromWrongDocument extends ParentNodeTestCase 
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document1 = nodeFactory.createDocument();
+        CoreDocument document1 = documentFactory.createDocument();
         CoreParentNode parent = parentNodeFactory.createNode(document1);
-        CoreDocument document2 = nodeFactory.createDocument();
+        CoreDocument document2 = documentFactory.createDocument();
         CoreDocumentFragment fragment = document2.coreCreateDocumentFragment();
         fragment.coreAppendChild(document2.coreCreateText("text"));
         try {

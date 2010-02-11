@@ -30,7 +30,7 @@ public class TestCoreInsertSiblingAfterWithInvalidChildType extends BackendTestC
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreElement parent = document.coreCreateElement("test");
         CoreText text = document.coreCreateText("text1");
         CoreDocumentTypeDeclaration dtd = document.coreCreateDocumentTypeDeclaration("root", null, null);

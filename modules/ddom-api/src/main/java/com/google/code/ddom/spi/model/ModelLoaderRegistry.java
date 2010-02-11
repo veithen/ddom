@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.ProviderFinder;
@@ -32,7 +32,7 @@ public class ModelLoaderRegistry {
     private static final ClassLoaderLocal<ModelLoaderRegistry> registries = new ClassLoaderLocal<ModelLoaderRegistry>();
     
     private final List<ModelLoader> loaders;
-    private final Map<ModelDefinition,NodeFactory> modelCache = new ConcurrentHashMap<ModelDefinition,NodeFactory>();
+    private final Map<ModelDefinition,DocumentFactory> modelCache = new ConcurrentHashMap<ModelDefinition,DocumentFactory>();
 
     private ModelLoaderRegistry(List<ModelLoader> loaders) {
         this.loaders = loaders;
@@ -59,24 +59,24 @@ public class ModelLoaderRegistry {
         }));
     }
     
-    public NodeFactory getNodeFactory(ModelDefinition model) {
-        NodeFactory nodeFactory = modelCache.get(model);
-        if (nodeFactory == null) {
+    public DocumentFactory getDocumentFactory(ModelDefinition model) {
+        DocumentFactory documentFactory = modelCache.get(model);
+        if (documentFactory == null) {
             for (ModelLoader loader : loaders) {
                 try {
-                    nodeFactory = loader.loadModel(model);
-                    if (nodeFactory != null) {
+                    documentFactory = loader.loadModel(model);
+                    if (documentFactory != null) {
                         break;
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace(); // TODO
                 }
             }
-            if (nodeFactory == null) {
+            if (documentFactory == null) {
                 throw new RuntimeException(); // TODO
             }
-            modelCache.put(model, nodeFactory);
+            modelCache.put(model, documentFactory);
         }
-        return nodeFactory;
+        return documentFactory;
     }
 }

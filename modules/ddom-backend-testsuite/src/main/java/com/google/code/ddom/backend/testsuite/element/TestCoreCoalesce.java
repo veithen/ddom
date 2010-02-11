@@ -34,7 +34,7 @@ public class TestCoreCoalesce extends BackendTestCase {
 
     @Override
     protected void runTest() throws Exception {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreElement element = document.coreCreateElement("test");
         CoreText text1 = document.coreCreateText("A");
         element.coreAppendChild(text1);

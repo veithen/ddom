@@ -30,8 +30,8 @@ public class TestCoreInsertSiblingsAfterFromWrongDocument extends BackendTestCas
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document1 = nodeFactory.createDocument();
-        CoreDocument document2 = nodeFactory.createDocument();
+        CoreDocument document1 = documentFactory.createDocument();
+        CoreDocument document2 = documentFactory.createDocument();
         CoreElement parent = document1.coreCreateElement("test");
         CoreText text1 = document1.coreCreateText("text1");
         CoreDocumentFragment fragment = document2.coreCreateDocumentFragment();

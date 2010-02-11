@@ -20,19 +20,19 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 
 public class DOMImplementationImpl implements DOMImplementation {
-    private final NodeFactory nodeFactory;
+    private final DocumentFactory documentFactory;
     
-    public DOMImplementationImpl(NodeFactory nodeFactory) {
-        this.nodeFactory = nodeFactory;
+    public DOMImplementationImpl(DocumentFactory documentFactory) {
+        this.documentFactory = documentFactory;
     }
     
     public Document createDocument(String namespaceURI, String qualifiedName, DocumentType doctype) throws DOMException {
-        DOMDocument document = (DOMDocument)nodeFactory.createDocument();
+        DOMDocument document = (DOMDocument)documentFactory.createDocument();
         if (doctype != null) {
             if (doctype.getOwnerDocument() == null) {
                 ((DOMDocumentType)doctype).attach(document);

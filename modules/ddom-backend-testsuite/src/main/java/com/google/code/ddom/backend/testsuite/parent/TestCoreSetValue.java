@@ -30,7 +30,7 @@ public class TestCoreSetValue extends ParentNodeTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreParentNode parent = parentNodeFactory.createNode(document);
         parent.coreSetValue("test");
         Assert.assertFalse(parent.coreIsExpanded());

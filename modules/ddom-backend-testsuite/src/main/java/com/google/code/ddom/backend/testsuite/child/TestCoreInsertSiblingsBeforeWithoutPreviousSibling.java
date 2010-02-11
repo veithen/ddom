@@ -30,7 +30,7 @@ public class TestCoreInsertSiblingsBeforeWithoutPreviousSibling extends BackendT
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreElement element = document.coreCreateElement(null, "test", null);
         CoreChildNode child1 = document.coreCreateCDATASection("data");
         CoreChildNode child2 = document.coreCreateComment("test");

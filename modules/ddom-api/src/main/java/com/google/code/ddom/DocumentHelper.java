@@ -17,7 +17,7 @@ package com.google.code.ddom;
 
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
@@ -58,7 +58,7 @@ public class DocumentHelper {
     }
     
     public Object newDocument(ModelDefinition model) {
-        return modelLoaderRegistry.getNodeFactory(model).createDocument();
+        return modelLoaderRegistry.getDocumentFactory(model).createDocument();
     }
     
     public Object newDocument(String frontend) {
@@ -68,7 +68,7 @@ public class DocumentHelper {
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
     public Object parse(ModelDefinition model, Object source, Options options, boolean preserve) {
         // TODO: check for null here!
-        NodeFactory nodeFactory = modelLoaderRegistry.getNodeFactory(model);
+        DocumentFactory documentFactory = modelLoaderRegistry.getDocumentFactory(model);
         OptionsTracker tracker = options.createTracker();
         Producer producer;
         try {
@@ -83,7 +83,7 @@ public class DocumentHelper {
             throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         document.coreSetContent(new SimpleFragmentSource(producer));
         return document;
     }

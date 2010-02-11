@@ -48,6 +48,6 @@ public class DDOMUtil extends DOMUtil {
         // TODO: need to find a better way to do this
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.addFrontend("dom");
-        return new DOMImplementationImpl(modelBuilder.buildNodeFactory());
+        return new DOMImplementationImpl(modelBuilder.buildDocumentFactory());
     }
 }

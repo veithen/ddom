@@ -29,7 +29,7 @@ public class TestCoreGetDocumentElement extends BackendTestCase {
 
     @Override
     protected void runTest() throws Exception {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         Assert.assertNull(document.coreGetDocumentElement());
         CoreElement element1 = document.coreCreateElement(null, "root1", null);
         document.coreAppendChild(element1);

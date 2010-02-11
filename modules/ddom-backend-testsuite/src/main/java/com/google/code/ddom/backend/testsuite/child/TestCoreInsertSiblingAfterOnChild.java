@@ -29,7 +29,7 @@ public class TestCoreInsertSiblingAfterOnChild extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreElement element = document.coreCreateElement(null, "test", null);
         CoreText text = document.coreCreateText("test");
         element.coreAppendChild(text);

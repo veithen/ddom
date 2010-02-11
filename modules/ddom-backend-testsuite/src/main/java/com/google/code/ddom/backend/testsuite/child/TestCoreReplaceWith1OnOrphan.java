@@ -28,7 +28,7 @@ public class TestCoreReplaceWith1OnOrphan extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreChildNode node1 = document.coreCreateComment("test");
         CoreChildNode node2 = document.coreCreateComment("test");
         try {

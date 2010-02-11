@@ -17,7 +17,7 @@ package com.google.code.ddom.backend;
 
 /**
  * Node factory. The frontend code MUST use this interface to create new nodes. To do so, it MUST
- * obtain an instance using {@link CoreDocument#getNodeFactory()}. On the other hand, the frontend
+ * obtain an instance using {@link CoreDocument#getDocumentFactory()}. On the other hand, the frontend
  * MUST NOT assume that all nodes are created using this factory. The backend internally MAY create
  * nodes without using this factory, in particular during deferred parsing. Thus, frontend aspects
  * SHOULD NOT apply advices to this interface or its implementing classes.
@@ -28,6 +28,6 @@ package com.google.code.ddom.backend;
  * 
  * @author Andreas Veithen
  */
-public interface NodeFactory {
+public interface DocumentFactory {
     CoreDocument createDocument();
 }

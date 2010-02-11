@@ -15,14 +15,11 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.testsuite.BackendTestCase;
-import com.google.code.ddom.backend.testsuite.BackendTestSuiteBuilder;
+import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.backend.DocumentFactory;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-public class BackendTest extends TestCase {
-    public static TestSuite suite() {
-        return BackendTestSuiteBuilder.suite(new DocumentFactoryImpl(), BackendTestCase.BUILDER_TYPE_2);
+public class DocumentFactoryImpl implements DocumentFactory {
+    public CoreDocument createDocument() {
+        return new Document(this);
     }
 }

@@ -46,7 +46,7 @@ public aspect DocumentSupport {
     
     public final DOMImplementation DOMDocument.getImplementation() {
         if (domImplementation == null) {
-            domImplementation = new DOMImplementationImpl(getNodeFactory());
+            domImplementation = new DOMImplementationImpl(getDocumentFactory());
         }
         return domImplementation;
     }

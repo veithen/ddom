@@ -19,7 +19,7 @@ import com.google.code.ddom.commons.cl.ClassCollection;
 
 // TODO: move to LTW module
 public interface Backend {
-    String getNodeFactoryClassName();
+    String getDocumentFactoryClassName();
     
     /**
      * Get the collection of classes that must be woven.

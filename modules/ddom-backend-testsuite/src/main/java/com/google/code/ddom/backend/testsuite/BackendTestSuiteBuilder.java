@@ -24,15 +24,15 @@ import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreTypedAttribute;
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.backend.testsuite.nsaware.NSAwareNamedNodeFactory;
 import com.google.code.ddom.backend.testsuite.parent.ParentNodeFactory;
 
 public class BackendTestSuiteBuilder {
     private BackendTestSuiteBuilder() {}
     
-    public static TestSuite suite(NodeFactory nodeFactory, int builderType) {
-        BackendTestSuiteConfig config = new BackendTestSuiteConfig(nodeFactory, builderType);
+    public static TestSuite suite(DocumentFactory documentFactory, int builderType) {
+        BackendTestSuiteConfig config = new BackendTestSuiteConfig(documentFactory, builderType);
         TestSuite suite = new TestSuite();
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetach(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreDetachIncomplete(config));
@@ -65,7 +65,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreReplaceWith2OnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
-        addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
+        addNSAwareNamedNodeTests(suite, documentFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareElement.class;
             }
@@ -74,7 +74,7 @@ public class BackendTestSuiteBuilder {
                 return document.coreCreateElement(namespaceURI, localName, prefix);
             }
         });
-        addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
+        addNSAwareNamedNodeTests(suite, documentFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareAttribute.class;
             }
@@ -104,7 +104,7 @@ public class BackendTestSuiteBuilder {
         return suite;
     }
     
-    private static void addNSAwareNamedNodeTests(TestSuite suite, NodeFactory nodeFactory, NSAwareNamedNodeFactory namedNodeFactory) {
+    private static void addNSAwareNamedNodeTests(TestSuite suite, DocumentFactory documentFactory, NSAwareNamedNodeFactory namedNodeFactory) {
     }
     
     private static void addParentNodeTests(TestSuite suite, BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {

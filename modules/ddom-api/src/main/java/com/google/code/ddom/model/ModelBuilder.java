@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 
 // TODO: rename this ModelConfigurator?
@@ -40,9 +40,9 @@ public class ModelBuilder {
         return new ModelDefinition(backend, new TreeSet<String>(frontends));
     }
     
-    public NodeFactory buildNodeFactory() {
+    public DocumentFactory buildDocumentFactory() {
         // TODO: make class loader configurable
-        return ModelLoaderRegistry.getInstance(ModelBuilder.class.getClassLoader()).getNodeFactory(buildModelDefinition());
+        return ModelLoaderRegistry.getInstance(ModelBuilder.class.getClassLoader()).getDocumentFactory(buildModelDefinition());
     }
     
     public static ModelDefinition buildModelDefinition(String frontend) {

@@ -28,8 +28,8 @@ public class TestCoreReplaceWith1FromWrongDocument extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document1 = nodeFactory.createDocument();
-        CoreDocument document2 = nodeFactory.createDocument();
+        CoreDocument document1 = documentFactory.createDocument();
+        CoreDocument document2 = documentFactory.createDocument();
         CoreChildNode node1 = document1.coreCreateComment("test");
         document1.coreAppendChild(node1);
         CoreChildNode node2 = document2.coreCreateComment("test");

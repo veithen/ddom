@@ -22,8 +22,8 @@ import com.google.code.ddom.spi.model.Backend;
 
 @Provider(name="linkedlist")
 public class LinkedListBackend implements Backend {
-    public String getNodeFactoryClassName() {
-        return NodeFactoryImpl.class.getName();
+    public String getDocumentFactoryClassName() {
+        return DocumentFactoryImpl.class.getName();
     }
 
     public ClassCollection getWeavableClasses() {

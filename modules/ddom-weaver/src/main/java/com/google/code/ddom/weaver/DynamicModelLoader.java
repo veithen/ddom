@@ -18,7 +18,7 @@ package com.google.code.ddom.weaver;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
@@ -41,7 +41,7 @@ public class DynamicModelLoader implements ModelLoader {
         this.frontendMap = frontends;
     }
     
-    public NodeFactory loadModel(ModelDefinition definition) throws ModelLoaderException {
+    public DocumentFactory loadModel(ModelDefinition definition) throws ModelLoaderException {
         Backend backend = backendMap.get(definition.getBackend());
         if (backend == null) {
             return null;
@@ -68,7 +68,7 @@ public class DynamicModelLoader implements ModelLoader {
 //                }
 //            }
             weaver.weave(frontends);
-            return (NodeFactory)classLoader.loadClass(backend.getNodeFactoryClassName()).newInstance();
+            return (DocumentFactory)classLoader.loadClass(backend.getDocumentFactoryClassName()).newInstance();
         } catch (Exception ex) {
             throw new ModelLoaderException(ex);
         }

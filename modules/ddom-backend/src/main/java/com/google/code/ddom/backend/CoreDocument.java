@@ -18,7 +18,7 @@ package com.google.code.ddom.backend;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public interface CoreDocument extends CoreParentNode {
-    NodeFactory getNodeFactory();
+    DocumentFactory getDocumentFactory();
     
     /**
      * Get the symbol table used by this document. The symbol table may be used to avoid creation of

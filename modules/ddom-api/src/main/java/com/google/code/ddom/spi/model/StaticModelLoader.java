@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.backend.NodeFactory;
+import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 
 /**
@@ -25,7 +25,7 @@ import com.google.code.ddom.model.ModelDefinition;
  */
 public class StaticModelLoader implements ModelLoader {
 
-    public NodeFactory loadModel(ModelDefinition definition) {
+    public DocumentFactory loadModel(ModelDefinition definition) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -29,7 +29,7 @@ public class TestCoreReplaceWith2OnOrphan extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
+        CoreDocument document = documentFactory.createDocument();
         CoreChildNode node1 = document.coreCreateComment("test");
         CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
         fragment.coreAppendChild(document.coreCreateComment("test"));
