@@ -7,6 +7,12 @@
         <para>
             TODO: Define the LEM by deriving it from the LCM
         </para>
+        <para>
+            TODO: Issue: because attribute order doesn't matter, a namespace can be used before
+            it is defined; this means that a parser can't deliver events for individual attributes
+            in streaming mode (if one assumes that these events are defined to contain information
+            about the namespace URI)
+        </para>
     </section>
     <section>
         <title>Comparison with existing parsers and serializers</title>
