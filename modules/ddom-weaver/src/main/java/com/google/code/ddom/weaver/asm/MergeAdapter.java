@@ -14,11 +14,13 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class MergeAdapter extends ClassAdapter {
     private final MixinInfo mixinInfo;
+    private final SourceMapper sourceMapper;
     private String cname;
     
-    public MergeAdapter(ClassVisitor cv, MixinInfo mixinInfo) {
+    public MergeAdapter(ClassVisitor cv, MixinInfo mixinInfo, SourceMapper sourceMapper) {
         super(cv);
         this.mixinInfo = mixinInfo;
+        this.sourceMapper = sourceMapper;
     }
     
     @Override
@@ -40,8 +42,12 @@ public class MergeAdapter extends ClassAdapter {
             String[] exceptions = new String[mn.exceptions.size()];
             mn.exceptions.toArray(exceptions);
             MethodVisitor mv = cv.visitMethod(mn.access, mn.name, mn.desc, mn.signature, exceptions);
-            mn.instructions.resetLabels();
-            mn.accept(new RemappingMethodAdapter(mn.access, mn.desc, mv, new SimpleRemapper(mixinInfo.getName(), cname)));
+            if (mv != null) {
+                mn.instructions.resetLabels();
+                mv = sourceMapper.getMethodAdapter(mixinInfo.getSourceInfo(), mv);
+                mv = new RemappingMethodAdapter(mn.access, mn.desc, mv, new SimpleRemapper(mixinInfo.getName(), cname));
+                mn.accept(mv);
+            }
         }
         super.visitEnd();
     }

@@ -20,7 +20,7 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-public class AbstractMethodVisitor implements MethodVisitor {
+public abstract class AbstractMethodVisitor implements MethodVisitor {
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         return null;
     }

@@ -21,7 +21,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-public class AbstractClassVisitor implements ClassVisitor {
+public abstract class AbstractClassVisitor implements ClassVisitor {
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
     }
 
