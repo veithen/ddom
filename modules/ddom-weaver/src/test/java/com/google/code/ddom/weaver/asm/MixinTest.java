@@ -5,9 +5,9 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.commons.EmptyVisitor;
 
 import com.google.code.ddom.weaver.DynamicClassLoader;
+import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
 
 public class MixinTest {
     @Test
@@ -15,13 +15,13 @@ public class MixinTest {
         ClassLoader parentClassLoader = Test.class.getClassLoader();
         DynamicClassLoader targetClassLoader = new DynamicClassLoader(parentClassLoader);
         MixinInfo mixin = new MixinInfo();
-        SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder(mixin);
-        new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/BaseMixin.class")).accept(sourceInfoBuilder, 0);
+        SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
+        new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/BaseMixin.class")).accept(new ClassVisitorTee(mixin, sourceInfoBuilder), 0);
         SourceInfo sourceInfo = sourceInfoBuilder.getSourceInfo();
         System.out.println("absoluteSourceFile = " + sourceInfo.getAbsoluteSourceFile());
         System.out.println("maxLine = " + sourceInfo.getMaxLine());
         
-        SourceInfoBuilder sourceInfoAdapter2 = new SourceInfoBuilder(new EmptyVisitor());
+        SourceInfoBuilder sourceInfoAdapter2 = new SourceInfoBuilder();
         new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/Base.class")).accept(sourceInfoAdapter2, 0);
         
         ClassReader cr = new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/Base.class"));

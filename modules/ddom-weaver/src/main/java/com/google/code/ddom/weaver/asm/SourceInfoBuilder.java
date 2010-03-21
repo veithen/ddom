@@ -15,52 +15,39 @@
  */
 package com.google.code.ddom.weaver.asm;
 
-import org.objectweb.asm.ClassAdapter;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.commons.EmptyVisitor;
+
+import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
+import com.google.code.ddom.weaver.asm.util.AbstractMethodVisitor;
 
 /**
- * Class adapter that extracts information about source code references. In particular, it
+ * Class visitor that extracts information about source code references. In particular, it
  * calculates the maximum line number.
  */
-public class SourceInfoBuilder extends ClassAdapter {
+public class SourceInfoBuilder extends AbstractClassVisitor {
     private String name;
     private String source;
     private String debug;
     int maxLine;
     private SourceInfo sourceInfo;
     
-    public SourceInfoBuilder(ClassVisitor cv) {
-        super(cv);
-    }
-
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        super.visit(version, access, name, signature, superName, interfaces);
         this.name = name;
     }
 
     @Override
     public void visitSource(String source, String debug) {
-        super.visitSource(source, debug);
         this.source = source;
         this.debug = debug;
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        if (mv == null) {
-            mv = new EmptyVisitor();
-        }
-        return new MethodAdapter(mv) {
-
+        return new AbstractMethodVisitor() {
             @Override
             public void visitLineNumber(int line, Label start) {
-                super.visitLineNumber(line, start);
                 if (line > maxLine) {
                     maxLine = line;
                 }
@@ -70,7 +57,6 @@ public class SourceInfoBuilder extends ClassAdapter {
 
     @Override
     public void visitEnd() {
-        super.visitEnd();
         sourceInfo = new SourceInfo(name.substring(0, name.lastIndexOf('/')+1) + source, maxLine);
     }
 
