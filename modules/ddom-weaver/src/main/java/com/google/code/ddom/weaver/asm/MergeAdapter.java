@@ -41,7 +41,7 @@ public class MergeAdapter extends ClassAdapter {
             mn.exceptions.toArray(exceptions);
             MethodVisitor mv = cv.visitMethod(mn.access, mn.name, mn.desc, mn.signature, exceptions);
             mn.instructions.resetLabels();
-            mn.accept(new RemappingMethodAdapter(mn.access, mn.desc, mv, new SimpleRemapper(cname, mixinInfo.getName())));
+            mn.accept(new RemappingMethodAdapter(mn.access, mn.desc, mv, new SimpleRemapper(mixinInfo.getName(), cname)));
         }
         super.visitEnd();
     }

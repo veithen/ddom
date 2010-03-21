@@ -5,9 +5,9 @@ import java.util.List;
 
 @Mixin(IBase.class)
 public abstract class BaseMixin implements IBase, IBaseMixin {
-    private final List<String> someList = new LinkedList<String>();
+    private final List<String> list = new LinkedList<String>();
     
-    public void mixin(String arg) {
-        
+    public void addItem(String item) {
+//        list.add(item);
     }
 }
