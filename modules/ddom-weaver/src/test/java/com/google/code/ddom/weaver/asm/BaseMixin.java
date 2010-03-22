@@ -8,6 +8,6 @@ public abstract class BaseMixin implements IBase, IBaseMixin {
     private final List<String> list = new LinkedList<String>();
     
     public void addItem(String item) {
-//        list.add(item);
+        list.add(item);
     }
 }

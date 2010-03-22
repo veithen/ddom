@@ -12,11 +12,13 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.google.code.ddom.weaver.asm.util.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
+import com.google.code.ddom.weaver.asm.util.ConstructorToMethodConverter;
 
 public class MixinInfo extends ClassVisitorTee {
     static final Logger log = Logger.getLogger(MixinInfo.class.getName());
@@ -57,7 +59,7 @@ public class MixinInfo extends ClassVisitorTee {
             if (name.equals("<init>")) {
                 if (desc.equals("()V")) {
                     init = new MethodNode(access, name, desc, signature, exceptions);
-                    return init;
+                    return new ConstructorToMethodConverter(init);
                 } else {
                     log.warning("Encountered non default constructor");
                     return null;
@@ -112,5 +114,9 @@ public class MixinInfo extends ClassVisitorTee {
 
     public SourceInfo getSourceInfo() {
         return sourceInfoBuilder.getSourceInfo();
+    }
+    
+    public InsnList getInitInstructions() {
+        return init.instructions;
     }
 }

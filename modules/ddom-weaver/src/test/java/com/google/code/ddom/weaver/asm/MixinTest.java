@@ -1,10 +1,12 @@
 package com.google.code.ddom.weaver.asm;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.util.TraceClassVisitor;
 
 import com.google.code.ddom.weaver.DynamicClassLoader;
 
@@ -20,11 +22,11 @@ public class MixinTest {
         new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/Base.class")).accept(sourceInfoAdapter2, 0);
         
         ClassReader cr = new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/Base.class"));
-        ClassWriter cw = new ClassWriter(cr, 0);
+        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         SourceMapper sourceMapper = new SourceMapper();
         sourceMapper.addSourceInfo(sourceInfoAdapter2.getSourceInfo());
         sourceMapper.addSourceInfo(mixin.getSourceInfo());
-        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(cw, mixin, sourceMapper)), 0);
+        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(new TraceClassVisitor(cw, new PrintWriter(System.out)), mixin, sourceMapper)), 0);
         targetClassLoader.processClassDefinition("com.google.code.ddom.weaver.asm.Base", cw.toByteArray());
         
         IBase base = (IBase)targetClassLoader.loadClass("com.google.code.ddom.weaver.asm.Base").newInstance();
