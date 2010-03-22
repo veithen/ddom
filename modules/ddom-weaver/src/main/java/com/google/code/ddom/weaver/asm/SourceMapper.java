@@ -12,6 +12,8 @@ import org.objectweb.asm.MethodVisitor;
 /**
  * Implements JSR-45 source mapping.
  */
+// TODO: In addition to JSR-45 we should support some convention like AspectJ [1] that enables the developer to easily interpret stack traces on environments that don't support JSR-45
+//       [1] http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html
 public class SourceMapper {
     static class Mapping {
         SourceInfo sourceInfo;
@@ -46,6 +48,7 @@ public class SourceMapper {
                 smap.append("\nWeaver\n*S Weaver\n*F\n");
                 for (int i = 0; i<mappings.length; i++) {
                     Mapping mapping = mappings[i];
+                    // TODO: we should only use absolute file names if necessary
                     smap.append("+ ");
                     smap.append(i+1);
                     smap.append(' ');
