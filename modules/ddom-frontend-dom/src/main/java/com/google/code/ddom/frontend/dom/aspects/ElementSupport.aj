@@ -19,6 +19,7 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
+import org.w3c.dom.NamedNodeMap;
 
 import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.CoreAttribute;
@@ -26,6 +27,7 @@ import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.support.AttributesNamedNodeMap;
 import com.google.code.ddom.frontend.dom.support.DOM1AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
@@ -34,6 +36,14 @@ import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public aspect ElementSupport {
+    public final boolean DOMElement.hasAttributes() {
+        return coreGetFirstAttribute() != null;
+    }
+
+    public final NamedNodeMap DOMElement.getAttributes() {
+        return new AttributesNamedNodeMap(this);
+    }
+    
     public final Attr DOMElement.getAttributeNode(String name) {
         return (DOMAttribute)coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
     }

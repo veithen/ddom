@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,36 +23,11 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
-import com.google.code.ddom.frontend.dom.support.EmptyNodeList;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 
-import com.google.code.ddom.frontend.dom.intf.*;
-
-/**
- * Aspect implementing {@link Node#getFirstChild()}, {@link Node#getLastChild()}, {@link Node#hasChildNodes()},
- * {@link Node#getChildNodes()}, {@link Node#appendChild(Node)}, {@link Node#insertBefore(Node, Node)},
- * {@link Node#removeChild(Node)} and {@link Node#replaceChild(Node, Node)}.
- * 
- * @author Andreas Veithen
- */
-public aspect ChildNodes {
-    public final Node DOMLeafNode.getFirstChild() {
-        return null;
-    }
-    
-    public final Node DOMLeafNode.getLastChild() {
-        return null;
-    }
-
-    public final boolean DOMLeafNode.hasChildNodes() {
-        return false;
-    }
-    
-    public final NodeList DOMLeafNode.getChildNodes() {
-        return EmptyNodeList.INSTANCE;
-    }
-
+public aspect ParentNodeSupport {
     public final boolean DOMParentNode.hasChildNodes() {
         // TODO: not the best way if content is optimized
         return getFirstChild() != null;
@@ -201,19 +176,4 @@ public aspect ChildNodes {
         }
     }
 
-    public final Node DOMLeafNode.appendChild(@SuppressWarnings("unused") Node newChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
-    }
-
-    public final Node DOMLeafNode.insertBefore(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node refChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-    }
-
-    public final Node DOMLeafNode.removeChild(@SuppressWarnings("unused") Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-    }
-
-    public final Node DOMLeafNode.replaceChild(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-    }
 }

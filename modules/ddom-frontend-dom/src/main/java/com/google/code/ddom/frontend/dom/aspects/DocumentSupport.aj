@@ -23,6 +23,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -112,6 +113,14 @@ public aspect DocumentSupport {
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
+    }
+
+    public final boolean DOMDocument.hasAttributes() {
+        return false;
+    }
+
+    public final NamedNodeMap DOMDocument.getAttributes() {
+        return null;
     }
 
     public final Element DOMDocument.getDocumentElement() {

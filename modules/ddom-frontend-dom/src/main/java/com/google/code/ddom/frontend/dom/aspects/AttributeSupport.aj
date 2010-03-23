@@ -17,6 +17,7 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
@@ -25,6 +26,14 @@ import com.google.code.ddom.frontend.dom.intf.DOMTypedAttribute;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect AttributeSupport {
+    public final boolean DOMAttribute.hasAttributes() {
+        return false;
+    }
+
+    public final NamedNodeMap DOMAttribute.getAttributes() {
+        return null;
+    }
+    
     public final String DOMAttribute.getValue() {
         try {
             return coreGetValue();
