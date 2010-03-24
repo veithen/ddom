@@ -268,4 +268,14 @@ public aspect DocumentSupport {
         // TODO
         throw new UnsupportedOperationException();
     }
+
+    public final Node DOMDocument.cloneNode(boolean deep) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public final Node DOMDocument.shallowClone() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

@@ -15,26 +15,10 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import com.google.code.ddom.frontend.dom.intf.DOMTypedAttribute;
 
-import com.google.code.ddom.frontend.dom.intf.*;
-
-public aspect DocumentFragmentSupport {
-    public final boolean DOMDocumentFragment.hasAttributes() {
-        return false;
-    }
-
-    public final NamedNodeMap DOMDocumentFragment.getAttributes() {
-        return null;
-    }
-
-    public final Node DOMDocumentFragment.cloneNode(boolean deep) {
-        // TODO: check this (maybe a fragment is always deeply cloned?)
-        return deep ? deepClone() : shallowClone();
-    }
-
-    public final Node DOMDocumentFragment.shallowClone() {
-        return (Node)coreGetDocument().coreCreateDocumentFragment();
+public aspect TypedAttributeSupport {
+    public final boolean DOMTypedAttribute.isId() {
+        return "ID".equals(coreGetType());
     }
 }

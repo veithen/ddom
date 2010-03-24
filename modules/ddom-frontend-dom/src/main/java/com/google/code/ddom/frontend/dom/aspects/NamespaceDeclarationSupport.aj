@@ -15,26 +15,17 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
 
-public aspect DocumentFragmentSupport {
-    public final boolean DOMDocumentFragment.hasAttributes() {
+public aspect NamespaceDeclarationSupport {
+    public final boolean DOMNamespaceDeclaration.isId() {
         return false;
     }
 
-    public final NamedNodeMap DOMDocumentFragment.getAttributes() {
+    public final Node DOMNamespaceDeclaration.shallowClone() {
+        // TODO Auto-generated method stub
         return null;
-    }
-
-    public final Node DOMDocumentFragment.cloneNode(boolean deep) {
-        // TODO: check this (maybe a fragment is always deeply cloned?)
-        return deep ? deepClone() : shallowClone();
-    }
-
-    public final Node DOMDocumentFragment.shallowClone() {
-        return (Node)coreGetDocument().coreCreateDocumentFragment();
     }
 }

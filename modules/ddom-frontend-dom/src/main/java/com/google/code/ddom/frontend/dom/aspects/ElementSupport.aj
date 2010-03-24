@@ -20,9 +20,11 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
@@ -183,4 +185,22 @@ public aspect ElementSupport {
             ((CoreTypedAttribute)idAttr).coreSetType(isId ? "ID" : "CDATA");
         }
     }
+
+    public final Node DOMElement.cloneNode(boolean deep) {
+        return deep ? deepClone() : shallowClone();
+    }
+
+    // TODO: review return type (should be DOMNode)
+    public final Node DOMElement.shallowClone() {
+        CoreElement clone = shallowCloneWithoutAttributes();
+        CoreAttribute attr = coreGetFirstAttribute();
+        while (attr != null) {
+            // TODO: this could be optimized
+            ((DOMElement)clone).setAttributeNode((Attr)((Attr)attr).cloneNode(false));
+            attr = attr.coreGetNextAttribute();
+        }
+        return (Node)clone;
+    }
+    
+    public abstract CoreElement DOMElement.shallowCloneWithoutAttributes();
 }

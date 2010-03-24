@@ -18,11 +18,10 @@ package com.google.code.ddom.frontend.dom.aspects;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
-import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
-import com.google.code.ddom.frontend.dom.intf.DOMTypedAttribute;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect AttributeSupport {
@@ -59,11 +58,9 @@ public aspect AttributeSupport {
         return true;
     }
 
-    public final boolean DOMTypedAttribute.isId() {
-        return "ID".equals(coreGetType());
-    }
-
-    public final boolean DOMNamespaceDeclaration.isId() {
-        return false;
+    public final Node DOMAttribute.cloneNode(boolean deep) {
+        // TODO: optimize!
+        // Attributes are always deep cloned
+        return deepClone();
     }
 }

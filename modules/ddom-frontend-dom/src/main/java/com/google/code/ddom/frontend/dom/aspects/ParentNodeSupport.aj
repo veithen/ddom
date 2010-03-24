@@ -176,4 +176,19 @@ public aspect ParentNodeSupport {
         }
     }
 
+    public final Node DOMParentNode.deepClone() {
+        try {
+            Node clone = shallowClone();
+            DOMCoreChildNode child = (DOMCoreChildNode)coreGetFirstChild();
+            while (child != null) {
+                clone.appendChild(child.cloneNode(true));
+                child = (DOMCoreChildNode)child.coreGetNextSibling();
+            }
+            return clone;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+    
+    public abstract Node DOMParentNode.shallowClone();
 }

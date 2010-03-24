@@ -29,6 +29,7 @@ public class DOMFrontend implements Frontend {
                 "com.google.code.ddom.frontend.dom.aspects.AttributeSupport",
                 "com.google.code.ddom.frontend.dom.aspects.CharacterDataSupport",
                 "com.google.code.ddom.frontend.dom.aspects.Clone",
+                "com.google.code.ddom.frontend.dom.aspects.CommentSupport",
                 "com.google.code.ddom.frontend.dom.aspects.Create",
                 "com.google.code.ddom.frontend.dom.aspects.DocumentFragmentSupport",
                 "com.google.code.ddom.frontend.dom.aspects.DocumentSupport",
@@ -38,12 +39,15 @@ public class DOMFrontend implements Frontend {
                 "com.google.code.ddom.frontend.dom.aspects.Hierarchy",
                 "com.google.code.ddom.frontend.dom.aspects.LeafNodeSupport",
                 "com.google.code.ddom.frontend.dom.aspects.NamedNodeSupport",
+                "com.google.code.ddom.frontend.dom.aspects.NamespaceDeclarationSupport",
                 "com.google.code.ddom.frontend.dom.aspects.NamespaceLookup",
                 "com.google.code.ddom.frontend.dom.aspects.NodeName",
                 "com.google.code.ddom.frontend.dom.aspects.NodeSupport",
                 "com.google.code.ddom.frontend.dom.aspects.NodeType",
                 "com.google.code.ddom.frontend.dom.aspects.NodeValue",
                 "com.google.code.ddom.frontend.dom.aspects.Normalization",
+                "com.google.code.ddom.frontend.dom.aspects.NSAwareAttributeSupport",
+                "com.google.code.ddom.frontend.dom.aspects.NSUnawareAttributeSupport",
                 "com.google.code.ddom.frontend.dom.aspects.ParentNodeSupport",
                 "com.google.code.ddom.frontend.dom.aspects.Parents",
                 "com.google.code.ddom.frontend.dom.aspects.ProcessingInstructionSupport",
@@ -51,6 +55,7 @@ public class DOMFrontend implements Frontend {
                 "com.google.code.ddom.frontend.dom.aspects.Sibling",
                 "com.google.code.ddom.frontend.dom.aspects.TextContent",
                 "com.google.code.ddom.frontend.dom.aspects.TextSupport",
+                "com.google.code.ddom.frontend.dom.aspects.TypedAttributeSupport",
                 "com.google.code.ddom.frontend.dom.aspects.UserDataSupport" });
     }
 }
