@@ -27,12 +27,29 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
+import com.google.code.ddom.commons.dag.EdgeRelation;
+import com.google.code.ddom.commons.dag.TopologicalSort;
 import com.google.code.ddom.weaver.ClassDefinitionProcessor;
 import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
 
 public class Reactor {
+    private static final EdgeRelation<WeavableClassInfo> inheritanceRelation = new EdgeRelation<WeavableClassInfo>() {
+        public boolean isEdge(WeavableClassInfo from, WeavableClassInfo to) {
+            if (to.isInterface()) {
+                for (ClassInfo iface : from.getInterfaces()) {
+                    if (iface == to) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                return from.getSuperclass() == to;
+            }
+        }
+    };
+    
     private final ClassLoader classLoader;
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
@@ -83,8 +100,13 @@ public class Reactor {
     }
     
     public void weave(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
+        // We need to sort the weavable classes so that defineClass doesn't complain when
+        // a DynamicClassLoader is used.
+        List<WeavableClassInfo> weavableClasses = new ArrayList<WeavableClassInfo>(weavableClassInfoBuilders.size());
         for (String className : weavableClassInfoBuilders.keySet()) {
-            WeavableClassInfo weavableClass = (WeavableClassInfo)getClassInfo(className);
+            weavableClasses.add((WeavableClassInfo)getClassInfo(className));
+        }
+        for (WeavableClassInfo weavableClass : TopologicalSort.sort(weavableClasses, inheritanceRelation)) {
             List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
             for (MixinInfo mixin : mixins) {
                 ClassInfo target = mixin.getTarget();

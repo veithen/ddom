@@ -40,6 +40,10 @@ public class ClassInfo {
         return superclass;
     }
 
+    public ClassInfo[] getInterfaces() {
+        return interfaces;
+    }
+
     public boolean isAssignableFrom(ClassInfo classInfo) {
         if (classInfo == this) {
             return true;
