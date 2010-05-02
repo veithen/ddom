@@ -36,6 +36,7 @@ import com.google.code.ddom.weaver.asm.util.ConstructorToMethodConverter;
 class MixinInfoBuilder extends AbstractClassVisitor {
     private static final Logger log = Logger.getLogger(MixinInfo.class.getName());
     
+    private final Reactor reactor;
     private final SourceInfoBuilder sourceInfoBuilder;
     private String name;
     Type target;
@@ -44,7 +45,8 @@ class MixinInfoBuilder extends AbstractClassVisitor {
     private final List<MethodNode> methods = new ArrayList<MethodNode>();
     private MethodNode init;
 
-    public MixinInfoBuilder(SourceInfoBuilder sourceInfoBuilder) {
+    public MixinInfoBuilder(Reactor reactor, SourceInfoBuilder sourceInfoBuilder) {
+        this.reactor = reactor;
         this.sourceInfoBuilder = sourceInfoBuilder;
     }
 
@@ -105,7 +107,7 @@ class MixinInfoBuilder extends AbstractClassVisitor {
         System.out.println("contributedInterfaces = " + contributedInterfaces);
     }
     
-    public MixinInfo build() {
-        return new MixinInfo(name, contributedInterfaces, init, fields, methods, sourceInfoBuilder.getSourceInfo());
+    public MixinInfo build() throws ClassNotFoundException {
+        return new MixinInfo(name, reactor.getClassInfo(target.getClassName()), contributedInterfaces, init, fields, methods, sourceInfoBuilder.getSourceInfo());
     }
 }

@@ -16,7 +16,7 @@
 package com.google.code.ddom.weaver.asm;
 
 public class NonWeavableClassInfo extends ClassInfo {
-    public NonWeavableClassInfo(ClassInfo superclass, ClassInfo[] interfaces) {
-        super(superclass, interfaces);
+    public NonWeavableClassInfo(String name, ClassInfo superclass, ClassInfo[] interfaces) {
+        super(name, superclass, interfaces);
     }
 }

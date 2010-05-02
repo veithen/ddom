@@ -16,11 +16,37 @@
 package com.google.code.ddom.weaver.asm;
 
 public class ClassInfo {
+    private final String name;
     private final ClassInfo superclass;
     private final ClassInfo[] interfaces;
     
-    public ClassInfo(ClassInfo superclass, ClassInfo[] interfaces) {
+    public ClassInfo(String name, ClassInfo superclass, ClassInfo[] interfaces) {
+        this.name = name;
         this.superclass = superclass;
         this.interfaces = interfaces;
+    }
+    
+    public ClassInfo getSuperclass() {
+        return superclass;
+    }
+
+    public boolean isAssignableFrom(ClassInfo classInfo) {
+        if (classInfo == this) {
+            return true;
+        }
+        if (classInfo.superclass != null && (classInfo.superclass == this || isAssignableFrom(classInfo.superclass))) {
+            return true;
+        }
+        for (ClassInfo iface : classInfo.interfaces) {
+            if (iface == this || isAssignableFrom(iface)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

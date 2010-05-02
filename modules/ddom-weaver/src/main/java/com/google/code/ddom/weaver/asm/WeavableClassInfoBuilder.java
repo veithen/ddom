@@ -19,17 +19,21 @@ import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private final Reactor reactor;
+    private final byte[] classDefinition;
     private final SourceInfoBuilder sourceInfoBuilder;
+    private String name;
     private String superName;
     private String[] interfaceNames;
     
-    public WeavableClassInfoBuilder(Reactor reactor, SourceInfoBuilder sourceInfoBuilder) {
+    public WeavableClassInfoBuilder(Reactor reactor, byte[] classDefinition, SourceInfoBuilder sourceInfoBuilder) {
         this.reactor = reactor;
+        this.classDefinition = classDefinition;
         this.sourceInfoBuilder = sourceInfoBuilder;
     }
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        this.name = name;
         this.superName = superName;
         interfaceNames = interfaces;
     }
@@ -39,7 +43,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = reactor.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
-        return new WeavableClassInfo(reactor.getClassInfo(Util.internalNameToClassName(superName)),
-                interfaces, sourceInfoBuilder.getSourceInfo());
+        return new WeavableClassInfo(Util.internalNameToClassName(name), reactor.getClassInfo(Util.internalNameToClassName(superName)),
+                interfaces, classDefinition, sourceInfoBuilder.getSourceInfo());
     }
 }

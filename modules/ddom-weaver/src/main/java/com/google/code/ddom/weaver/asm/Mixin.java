@@ -23,5 +23,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 public @interface Mixin {
+    /**
+     * Get the target type. The mixin will be applied to classes implementing the specified
+     * interface.
+     * 
+     * @return the target type
+     */
     Class<?> value();
 }

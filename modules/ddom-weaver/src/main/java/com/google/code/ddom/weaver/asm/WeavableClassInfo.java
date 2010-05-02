@@ -16,11 +16,17 @@
 package com.google.code.ddom.weaver.asm;
 
 public class WeavableClassInfo extends ClassInfo {
+    private final byte[] classDefinition;
     private final SourceInfo sourceInfo;
     
-    public WeavableClassInfo(ClassInfo superclass, ClassInfo[] interfaces, SourceInfo sourceInfo) {
-        super(superclass, interfaces);
+    public WeavableClassInfo(String name, ClassInfo superclass, ClassInfo[] interfaces, byte[] classDefinition, SourceInfo sourceInfo) {
+        super(name, superclass, interfaces);
+        this.classDefinition = classDefinition;
         this.sourceInfo = sourceInfo;
+    }
+
+    public byte[] getClassDefinition() {
+        return classDefinition;
     }
 
     public SourceInfo getSourceInfo() {

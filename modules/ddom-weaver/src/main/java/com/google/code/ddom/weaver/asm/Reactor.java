@@ -17,45 +17,44 @@ package com.google.code.ddom.weaver.asm;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.util.TraceClassVisitor;
 
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
+import com.google.code.ddom.weaver.ClassDefinitionProcessor;
+import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
 
 public class Reactor {
     private final ClassLoader classLoader;
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
+    private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
     
     public Reactor(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
     public void loadWeavableClass(String className) throws ClassNotFoundException, IOException {
+        byte[] classDefinition = ClassLoaderUtils.getClassDefinition(classLoader, className);
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
-        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, sourceInfoBuilder);
-        InputStream in = ClassLoaderUtils.getClassDefinitionAsStream(classLoader, className);
-        try {
-            new ClassReader(in).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
-        } finally {
-            in.close();
-        }
+        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinition, sourceInfoBuilder);
+        new ClassReader(classDefinition).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
         weavableClassInfoBuilders.put(className, builder);
     }
     
-    public MixinInfo loadMixin(String className) throws ClassNotFoundException, IOException {
+    public void loadMixin(String className) throws ClassNotFoundException, IOException {
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
-        MixinInfoBuilder builder = new MixinInfoBuilder(sourceInfoBuilder);
-        InputStream in = ClassLoaderUtils.getClassDefinitionAsStream(classLoader, className);
-        try {
-            new ClassReader(in).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
-        } finally {
-            in.close();
-        }
-        return builder.build();
+        MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder);
+        new ClassReader(ClassLoaderUtils.getClassDefinition(classLoader, className)).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
+        mixins.add(builder.build());
     }
     
     public ClassInfo getClassInfo(String className) throws ClassNotFoundException {
@@ -74,12 +73,40 @@ public class Reactor {
                 for (int i=0; i<interfaces.length; i++) {
                     interfaceInfos[i] = getClassInfo(interfaces[i].getName());
                 }
-                classInfo = new NonWeavableClassInfo(
+                classInfo = new NonWeavableClassInfo(className,
                         superclass == null ? null : getClassInfo(clazz.getSuperclass().getName()),
                         interfaceInfos);
             }
             classInfos.put(className, classInfo);
             return classInfo;
         }
+    }
+    
+    public void weave(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
+        for (String className : weavableClassInfoBuilders.keySet()) {
+            WeavableClassInfo weavableClass = (WeavableClassInfo)getClassInfo(className);
+            List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
+            for (MixinInfo mixin : mixins) {
+                ClassInfo target = mixin.getTarget();
+                if (target.isAssignableFrom(weavableClass) && !target.isAssignableFrom(weavableClass.getSuperclass())) {
+                    selectedMixins.add(mixin);
+                }
+            }
+            weave(processor, weavableClass, selectedMixins);
+        }
+    }
+    
+    private void weave(ClassDefinitionProcessor processor, WeavableClassInfo weavableClass, List<MixinInfo> mixins) throws ClassDefinitionProcessorException {
+        System.out.println("Weaving " + weavableClass + "; mixins: " + mixins);
+        ClassReader cr = new ClassReader(weavableClass.getClassDefinition());
+        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        SourceMapper sourceMapper = new SourceMapper();
+        sourceMapper.addSourceInfo(weavableClass.getSourceInfo());
+        for (MixinInfo mixin : mixins) {
+            sourceMapper.addSourceInfo(mixin.getSourceInfo());
+        }
+        MixinInfo mixin = mixins.get(0); // TODO
+        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(new TraceClassVisitor(cw, new PrintWriter(System.out)), mixin, sourceMapper)), 0);
+        processor.processClassDefinition("com.google.code.ddom.weaver.asm.Base", cw.toByteArray());
     }
 }
