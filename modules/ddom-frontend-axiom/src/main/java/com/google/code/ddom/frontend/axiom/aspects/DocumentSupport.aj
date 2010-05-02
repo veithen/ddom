@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,33 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
-import org.apache.axiom.om.OMElement;
+import javax.xml.namespace.QName;
 
+import org.apache.axiom.ext.stax.datahandler.DataHandlerProvider;
+import org.apache.axiom.om.OMAttribute;
+import org.apache.axiom.om.OMComment;
+import org.apache.axiom.om.OMContainer;
+import org.apache.axiom.om.OMDataSource;
+import org.apache.axiom.om.OMDocType;
+import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMProcessingInstruction;
+import org.apache.axiom.om.OMSourcedElement;
+import org.apache.axiom.om.OMText;
+import org.apache.axiom.om.OMXMLParserWrapper;
+
+import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.frontend.axiom.support.NSUtil;
+import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 
 public aspect DocumentSupport {
+    private int AxiomDocument.nextGeneratedPrefix = 1;
+    
     public String AxiomDocument.getXMLVersion() {
         try {
             return coreGetXmlVersion();
@@ -70,5 +90,151 @@ public aspect DocumentSupport {
     
     public void AxiomDocument.setOMDocumentElement(@SuppressWarnings("unused") OMElement rootElement) {
         throw new UnsupportedOperationException("This operation is unsupported because it is ill-defined in the Axiom API");
+    }
+
+    public OMDocument AxiomDocument.createOMDocument() {
+        // TODO: check if we should support this operation
+        throw new UnsupportedOperationException();
+    }
+
+    public OMDocument AxiomDocument.createOMDocument(OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns) {
+        return (OMElement)coreCreateElement(NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns));
+    }
+
+    public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns, OMContainer parent) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMElement AxiomDocument.createOMElement(String localName, OMNamespace ns, OMContainer parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public OMSourcedElement AxiomDocument.createOMElement(OMDataSource source, String localName, OMNamespace ns) {
+        throw new UnsupportedOperationException();
+    }
+
+    public OMSourcedElement AxiomDocument.createOMElement(OMDataSource source, QName qname) {
+        throw new UnsupportedOperationException();
+    }
+
+    public OMElement AxiomDocument.createOMElement(String localName, String namespaceURI, String namespacePrefix) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMElement AxiomDocument.createOMElement(QName qname, OMContainer parent) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMElement AxiomDocument.createOMElement(QName qname) {
+        String namespaceURI = NSUtil.getNamespaceURI(qname);
+        String prefix = NSUtil.getPrefix(qname);
+        if (prefix == null && namespaceURI != null) {
+            prefix = generatePrefix();
+        }
+        AxiomElement element = (AxiomElement)coreCreateElement(namespaceURI, qname.getLocalPart(), prefix);
+        if (prefix != null) {
+            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+        }
+        return element;
+    }
+
+    public OMNamespace AxiomDocument.createOMNamespace(String uri, String prefix) {
+        if (uri == null) {
+            throw new IllegalArgumentException();
+        }
+        return new OMNamespaceImpl(uri, prefix);
+    }
+
+    public OMText AxiomDocument.createOMText(OMContainer parent, String text) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(OMContainer parent, OMText source) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public OMText AxiomDocument.createOMText(OMContainer parent, QName text) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(OMContainer parent, String text, int type) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(OMContainer parent, char[] charArary, int type) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(OMContainer parent, QName text, int type) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(String s) {
+        return (OMText)coreCreateText(s);
+    }
+
+    public OMText AxiomDocument.createOMText(String s, int type) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(String s, String mimeType, boolean optimize) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(Object dataHandler, boolean optimize) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(OMContainer parent, String s, String mimeType, boolean optimize) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(String contentID, DataHandlerProvider dataHandlerProvider, boolean optimize) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMText AxiomDocument.createOMText(String contentID, OMContainer parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public OMAttribute AxiomDocument.createOMAttribute(String localName, OMNamespace ns, String value) {
+        return (OMAttribute)coreCreateAttribute(NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns), value, "CDATA");
+    }
+
+    public OMDocType AxiomDocument.createOMDocType(OMContainer parent, String content) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMProcessingInstruction AxiomDocument.createOMProcessingInstruction(OMContainer parent, String piTarget, String piData) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMComment AxiomDocument.createOMComment(OMContainer parent, String content) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public String AxiomDocument.generatePrefix() {
+        return "ns" + nextGeneratedPrefix++;
     }
 }

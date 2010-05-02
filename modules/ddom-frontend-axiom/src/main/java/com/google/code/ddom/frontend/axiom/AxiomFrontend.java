@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,23 +29,20 @@ public class AxiomFrontend implements Frontend {
         List<String> aspects = new ArrayList<String>();
         aspects.addAll(Arrays.asList(new String[] {
                 "com.google.code.ddom.frontend.axiom.aspects.AttributeSupport",
+                "com.google.code.ddom.frontend.axiom.aspects.CDATASectionSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.ChildNodeSupport",
+                "com.google.code.ddom.frontend.axiom.aspects.CommentSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.ContainerSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.DeferredParsing",
-                "com.google.code.ddom.frontend.axiom.aspects.Deprecated",
                 "com.google.code.ddom.frontend.axiom.aspects.DocumentSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.ElementSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.ElementText",
-                "com.google.code.ddom.frontend.axiom.aspects.Factory",
-                "com.google.code.ddom.frontend.axiom.aspects.GeneratePrefix",
-                "com.google.code.ddom.frontend.axiom.aspects.LineNumber",
+                "com.google.code.ddom.frontend.axiom.aspects.LeafNodeSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.NamedNodeSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.NamespaceDeclarations",
-                "com.google.code.ddom.frontend.axiom.aspects.NodeType",
+                "com.google.code.ddom.frontend.axiom.aspects.NamespaceDeclarationSupport",
+                "com.google.code.ddom.frontend.axiom.aspects.NodeSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.Parents",
                 "com.google.code.ddom.frontend.axiom.aspects.ProcessingInstructionSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.QNameCaching", // TODO: should be configurable
-                "com.google.code.ddom.frontend.axiom.aspects.Serialization",
+                "com.google.code.ddom.frontend.axiom.aspects.TextNodeSupport",
                 "com.google.code.ddom.frontend.axiom.aspects.TextSupport",
         }));
         if (!frontends.containsKey("dom")) {

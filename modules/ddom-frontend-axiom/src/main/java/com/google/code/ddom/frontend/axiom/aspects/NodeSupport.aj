@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,21 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
-import org.apache.axiom.om.OMXMLParserWrapper;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
+import org.apache.axiom.om.OMFactory;
 
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
-import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
-import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
-import com.google.code.ddom.frontend.axiom.intf.AxiomLeafNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
-public aspect DeferredParsing {
+public aspect NodeSupport {
+    public OMFactory AxiomNode.getOMFactory() {
+        return (OMFactory)coreGetDocument();
+    }
+
     public void AxiomNode.close(boolean build) {
         CoreDocument document = coreGetDocument();
         if (build) {
@@ -40,48 +43,17 @@ public aspect DeferredParsing {
         // TODO
 //        document.dispose();
     }
-    
-    public boolean AxiomContainer.isComplete() {
-        return coreIsComplete();
-    }
-    
-    public boolean AxiomLeafNode.isComplete() {
-        // A leaf node is always complete
-        return true;
-    }
-    
-    public void AxiomContainer.build() {
-        try {
-            coreBuild();
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-    }
-    
-    public void AxiomLeafNode.build() {
-        // Do nothing: a leaf node is always complete
-    }
-    
-    public void AxiomChildNode.buildWithAttachments() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
-    public void AxiomChildNode.discard() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
-    public void AxiomContainer.buildNext() {
-        // TODO
-        throw new UnsupportedOperationException();
+
+    public void AxiomNode.serialize(XMLStreamWriter xmlWriter) throws XMLStreamException {
+        serialize(xmlWriter, true);
     }
 
-    public void AxiomElement.setBuilder(OMXMLParserWrapper wrapper) {
-        throw new UnsupportedOperationException();
+    public void AxiomNode.serializeAndConsume(XMLStreamWriter xmlWriter) throws XMLStreamException {
+        serialize(xmlWriter, false);
     }
     
-    public OMXMLParserWrapper AxiomElement.getBuilder() {
-        return null;
+    public void AxiomNode.serialize(XMLStreamWriter xmlWriter, boolean cache) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

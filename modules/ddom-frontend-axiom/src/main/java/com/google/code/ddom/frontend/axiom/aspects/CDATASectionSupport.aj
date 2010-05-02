@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
-import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
+import org.apache.axiom.om.OMNode;
 
-public aspect GeneratePrefix {
-    private int AxiomDocument.nextGeneratedPrefix = 1;
-    
-    public String AxiomDocument.generatePrefix() {
-        return "ns" + nextGeneratedPrefix++;
+import com.google.code.ddom.frontend.axiom.intf.AxiomCDATASection;
+
+public aspect CDATASectionSupport {
+    public final int AxiomCDATASection.getType() {
+        return OMNode.CDATA_SECTION_NODE;
     }
 }

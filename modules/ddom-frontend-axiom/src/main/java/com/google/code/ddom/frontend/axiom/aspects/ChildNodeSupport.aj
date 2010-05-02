@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,5 +67,15 @@ public aspect ChildNodeSupport {
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
+    }
+    
+    public void AxiomChildNode.buildWithAttachments() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomChildNode.discard() {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

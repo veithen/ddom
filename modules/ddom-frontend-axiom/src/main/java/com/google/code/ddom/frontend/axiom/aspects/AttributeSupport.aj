@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.google.code.ddom.frontend.axiom.aspects;
 
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.backend.CoreModelException;
@@ -54,5 +55,9 @@ public aspect AttributeSupport {
     public OMElement AxiomAttribute.getOwner() {
         // TODO
         throw new UnsupportedOperationException();
+    }
+    
+    public OMFactory AxiomAttribute.getOMFactory() {
+        return (OMFactory)coreGetDocument();
     }
 }

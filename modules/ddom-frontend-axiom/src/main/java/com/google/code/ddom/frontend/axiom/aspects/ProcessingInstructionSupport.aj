@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
+import org.apache.axiom.om.OMNode;
+
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 
 /**
@@ -36,5 +38,9 @@ public aspect ProcessingInstructionSupport {
 
     public String AxiomProcessingInstruction.getValue() {
         return coreGetData();
+    }
+    
+    public final int AxiomProcessingInstruction.getType() {
+        return OMNode.PI_NODE;
     }
 }

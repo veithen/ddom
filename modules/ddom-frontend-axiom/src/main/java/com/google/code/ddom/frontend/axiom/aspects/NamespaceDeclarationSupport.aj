@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,21 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
-import javax.xml.namespace.QName;
+import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 
-public aspect ElementText {
-    public void AxiomElement.setText(String text) {
+public aspect NamespaceDeclarationSupport {
+    public OMNamespace AxiomNamespaceDeclaration.getOMNamespace() {
         try {
-            coreSetValue(text);
+            // TODO: inefficient
+            // TODO: handle null namespaces/prefixes
+            return new OMNamespaceImpl(coreGetDeclaredNamespaceURI(), coreGetDeclaredPrefix());
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
-    }
-
-    public void AxiomElement.setText(QName text) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public String AxiomElement.getText() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
-    public QName AxiomElement.getTextAsQName() {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 }

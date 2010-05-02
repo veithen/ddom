@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,20 @@ import java.io.Writer;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
 
-import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomLeafNode;
 
-/**
- * Aspect implementing methods that are deprecated in the Axiom API and throwing
- * {@link UnsupportedOperationException}.
- * 
- * @author Andreas Veithen
- */
-public aspect Deprecated {
+public aspect LeafNodeSupport {
+    public boolean AxiomLeafNode.isComplete() {
+        // A leaf node is always complete
+        return true;
+    }
+    
+    public void AxiomLeafNode.build() {
+        // Do nothing: a leaf node is always complete
+    }
+
     public void AxiomLeafNode.serialize(@SuppressWarnings("unused") OutputStream output) throws XMLStreamException {
         throw new UnsupportedOperationException();
     }
@@ -62,10 +63,6 @@ public aspect Deprecated {
     }
 
     public void AxiomLeafNode.serializeAndConsume(@SuppressWarnings("unused") Writer writer, @SuppressWarnings("unused") OMOutputFormat format) throws XMLStreamException {
-        throw new UnsupportedOperationException();
-    }
-    
-    public void AxiomElement.setFirstChild(@SuppressWarnings("unused") OMNode node) {
         throw new UnsupportedOperationException();
     }
 }

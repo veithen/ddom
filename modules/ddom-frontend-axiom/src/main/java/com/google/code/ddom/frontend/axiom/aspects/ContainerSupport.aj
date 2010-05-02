@@ -15,12 +15,16 @@
  */
 package com.google.code.ddom.frontend.axiom.aspects;
 
+import java.io.OutputStream;
+import java.io.Writer;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
+import org.apache.axiom.om.OMOutputFormat;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
@@ -67,5 +71,62 @@ public aspect ContainerSupport {
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
+    }
+    
+    public boolean AxiomContainer.isComplete() {
+        return coreIsComplete();
+    }
+    
+    public void AxiomContainer.build() {
+        try {
+            coreBuild();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+    
+    public void AxiomContainer.buildNext() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public void AxiomContainer.serialize(OutputStream output) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomContainer.serialize(Writer writer) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomContainer.serialize(OutputStream output, OMOutputFormat format) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomContainer.serialize(Writer writer, OMOutputFormat format) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomContainer.serializeAndConsume(OutputStream output) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomContainer.serializeAndConsume(Writer writer) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomContainer.serializeAndConsume(OutputStream output, OMOutputFormat format) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void AxiomContainer.serializeAndConsume(Writer writer, OMOutputFormat format) throws XMLStreamException {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }
