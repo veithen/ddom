@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.backend.CoreParentNode;
 
 public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
-
+    Node deepClone();
+    void normalizeChildren(NormalizationConfig config) throws AbortNormalizationException;
 }

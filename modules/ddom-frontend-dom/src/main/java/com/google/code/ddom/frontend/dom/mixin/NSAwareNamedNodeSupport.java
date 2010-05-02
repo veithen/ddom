@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.aspects;
+package com.google.code.ddom.frontend.dom.mixin;
 
 import javax.xml.XMLConstants;
 
@@ -23,16 +23,16 @@ import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 
-public aspect NSAwareNamedNodeSupport {
-    public final String DOMNSAwareNamedNode.getNamespaceURI() {
+public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
+    public final String getNamespaceURI() {
         return coreGetNamespaceURI();
     }
     
-    public final String DOMNSAwareNamedNode.getPrefix() {
+    public final String getPrefix() {
         return coreGetPrefix();
     }
     
-    public final void DOMNSAwareNamedNode.setPrefix(String prefix) throws DOMException {
+    public final void setPrefix(String prefix) throws DOMException {
         String namespaceURI = getNamespaceURI();
         if (namespaceURI == null) {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
@@ -48,11 +48,11 @@ public aspect NSAwareNamedNodeSupport {
         }
     }
     
-    public final String DOMNSAwareNamedNode.getLocalName() {
+    public final String getLocalName() {
         return coreGetLocalName();
     }
 
-    public String DOMNSAwareNamedNode.internalGetName() {
+    public String internalGetName() {
         String prefix = getPrefix();
         String localName = getLocalName();
         if (prefix == null) {

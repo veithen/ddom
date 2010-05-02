@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.intf;
+package com.google.code.ddom.frontend.dom.mixin;
 
-import java.util.Map;
+import com.google.code.ddom.frontend.dom.intf.DOMTypedAttribute;
 
-import org.w3c.dom.Document;
-
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.frontend.dom.support.UserData;
-
-public interface DOMDocument extends CoreDocument, Document, DOMParentNode {
-    int getStructureVersion();
-    Map<String,UserData> getUserDataMap(DOMCoreNode node, boolean create);
+public abstract class TypedAttributeSupport implements DOMTypedAttribute {
+    public final boolean isId() {
+        return "ID".equals(coreGetType());
+    }
 }

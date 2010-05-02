@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.intf;
+package com.google.code.ddom.frontend.dom.mixin;
 
-import java.util.Map;
+import org.w3c.dom.Node;
 
-import org.w3c.dom.Document;
+import com.google.code.ddom.frontend.dom.intf.DOMText;
+import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.frontend.dom.support.UserData;
+public abstract class TextSupport implements DOMText {
+    public final DOMTextNode createNewTextNode(String data) {
+        return (DOMTextNode)coreGetDocument().coreCreateText(data);
+    }
 
-public interface DOMDocument extends CoreDocument, Document, DOMParentNode {
-    int getStructureVersion();
-    Map<String,UserData> getUserDataMap(DOMCoreNode node, boolean create);
+    public final short getNodeType() {
+        return Node.TEXT_NODE;
+    }
+
+    public final String getNodeName() {
+        return "#text";
+    }
 }

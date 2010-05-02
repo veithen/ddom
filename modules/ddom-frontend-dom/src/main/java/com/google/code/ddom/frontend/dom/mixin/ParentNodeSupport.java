@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.aspects;
+package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
@@ -23,19 +23,25 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
-import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
+import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
+import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagName;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagNameNS;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 
-public aspect ParentNodeSupport {
-    public final boolean DOMParentNode.hasChildNodes() {
+public abstract class ParentNodeSupport implements DOMParentNode {
+    public final boolean hasChildNodes() {
         // TODO: not the best way if content is optimized
         return getFirstChild() != null;
     }
     
-    public final Node DOMParentNode.getFirstChild() {
+    public final Node getFirstChild() {
         try {
             return NodeUtil.toDOM(coreGetFirstChild());
         } catch (CoreModelException ex) {
@@ -43,7 +49,7 @@ public aspect ParentNodeSupport {
         }
     }
     
-    public final Node DOMParentNode.getLastChild() {
+    public final Node getLastChild() {
         try {
             return (Node)coreGetLastChild();
         } catch (CoreModelException ex) {
@@ -51,11 +57,11 @@ public aspect ParentNodeSupport {
         }
     }
     
-    public final NodeList DOMParentNode.getChildNodes() {
+    public final NodeList getChildNodes() {
         return this;
     }
     
-    public final int DOMParentNode.getLength() {
+    public final int getLength() {
         try {
             return coreGetChildCount();
         } catch (CoreModelException ex) {
@@ -63,7 +69,7 @@ public aspect ParentNodeSupport {
         }
     }
     
-    public final Node DOMParentNode.item(int index) {
+    public final Node item(int index) {
         try {
             // TODO: need unit test to check that this works when parsing is deferred
             // TODO: wrong result for negavite indexes
@@ -77,7 +83,7 @@ public aspect ParentNodeSupport {
         }
     }
 
-    private CoreNode DOMParentNode.toCore(Node node) {
+    private CoreNode toCore(Node node) {
         if (node instanceof DOMDocumentType) {
             DOMDocumentType doctype = (DOMDocumentType)node;
             DOMDocumentTypeDeclaration declaration = doctype.getDeclaration();
@@ -90,7 +96,7 @@ public aspect ParentNodeSupport {
         }
     }
     
-    public final Node DOMParentNode.appendChild(Node newChild) throws DOMException {
+    public final Node appendChild(Node newChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
@@ -110,7 +116,7 @@ public aspect ParentNodeSupport {
     }
 
     // TODO: apparently this is not tested with a DocumentType as newChild
-    public final Node DOMParentNode.insertBefore(Node newChild, Node refChild) throws DOMException {
+    public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
@@ -136,7 +142,7 @@ public aspect ParentNodeSupport {
         return newChild;
     }
 
-    public final Node DOMParentNode.removeChild(Node oldChild) throws DOMException {
+    public final Node removeChild(Node oldChild) throws DOMException {
         if (oldChild == null) {
             throw new NullPointerException("oldChild must not be null");
         }
@@ -152,7 +158,7 @@ public aspect ParentNodeSupport {
         }
     }
 
-    public final Node DOMParentNode.replaceChild(Node newChild, Node oldChild) throws DOMException {
+    public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {
         if (newChild == null) {
             throw new NullPointerException("newChild must not be null");
         }
@@ -178,7 +184,7 @@ public aspect ParentNodeSupport {
         }
     }
 
-    public final Node DOMParentNode.deepClone() {
+    public final Node deepClone() {
         try {
             Node clone = shallowClone();
             DOMCoreChildNode child = (DOMCoreChildNode)coreGetFirstChild();
@@ -192,17 +198,17 @@ public aspect ParentNodeSupport {
         }
     }
     
-    public abstract Node DOMParentNode.shallowClone();
+    public abstract Node shallowClone();
     
-    public final NodeList DOMParentNode.getElementsByTagName(String tagname) {
+    public final NodeList getElementsByTagName(String tagname) {
         return new ElementsByTagName((DOMDocument)coreGetDocument(), this, tagname);
     }
 
-    public final NodeList DOMParentNode.getElementsByTagNameNS(String namespaceURI, String localName) {
+    public final NodeList getElementsByTagNameNS(String namespaceURI, String localName) {
         return new ElementsByTagNameNS((DOMDocument)coreGetDocument(), this, namespaceURI, localName);
     }
     
-    public void DOMParentNode.normalizeChildren(NormalizationConfig config) throws AbortNormalizationException {
+    public void normalizeChildren(NormalizationConfig config) throws AbortNormalizationException {
         try {
             CoreChildNode child = coreGetFirstChild();
             while (child != null) {

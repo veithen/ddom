@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.intf;
+package com.google.code.ddom.frontend.dom.mixin;
 
-import java.util.Map;
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareElement;
 
-import org.w3c.dom.Document;
-
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.frontend.dom.support.UserData;
-
-public interface DOMDocument extends CoreDocument, Document, DOMParentNode {
-    int getStructureVersion();
-    Map<String,UserData> getUserDataMap(DOMCoreNode node, boolean create);
+public abstract class NSUnawareElementSupport implements DOMNSUnawareElement {
+    public final CoreElement shallowCloneWithoutAttributes() {
+        return coreGetDocument().coreCreateElement(coreGetName());
+    }
+    
+    public final String getTagName() {
+        return coreGetName();
+    }
 }

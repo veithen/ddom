@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.intf;
+package com.google.code.ddom.frontend.dom.mixin;
 
-import java.util.Map;
+import org.w3c.dom.Node;
 
-import org.w3c.dom.Document;
+import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
+import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.frontend.dom.support.UserData;
+public abstract class CDATASectionSupport implements DOMCDATASection {
+    public final DOMTextNode createNewTextNode(String data) {
+        return (DOMTextNode)coreGetDocument().coreCreateCDATASection(data);
+    }
 
-public interface DOMDocument extends CoreDocument, Document, DOMParentNode {
-    int getStructureVersion();
-    Map<String,UserData> getUserDataMap(DOMCoreNode node, boolean create);
+    public final short getNodeType() {
+        return Node.CDATA_SECTION_NODE;
+    }
+
+    public final String getNodeName() {
+        return "#cdata-section";
+    }
 }

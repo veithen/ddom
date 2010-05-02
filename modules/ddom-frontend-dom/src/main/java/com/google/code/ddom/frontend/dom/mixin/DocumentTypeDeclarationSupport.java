@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.intf;
+package com.google.code.ddom.frontend.dom.mixin;
 
-import com.google.code.ddom.backend.CoreNSAwareNamedNode;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 
-public interface DOMNSAwareNamedNode extends CoreNSAwareNamedNode {
-    String internalGetName();
+public abstract class DocumentTypeDeclarationSupport implements DOMDocumentTypeDeclaration {
+    private DOMDocumentType documentType;
+    
+    public final DOMDocumentType getDocumentType() {
+        return documentType;
+    }
+    
+    public final void setDocumentType(DOMDocumentType documentType) {
+        this.documentType = documentType;
+    }
 }
