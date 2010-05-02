@@ -16,6 +16,7 @@
 package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -62,5 +63,13 @@ public aspect AttributeSupport {
         // TODO: optimize!
         // Attributes are always deep cloned
         return deepClone();
+    }
+
+    public final Document DOMAttribute.getOwnerDocument() {
+        return (Document)coreGetDocument();
+    }
+    
+    public final Node DOMAttribute.getParentNode() {
+        return null;
     }
 }

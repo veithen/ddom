@@ -19,7 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
@@ -95,5 +97,22 @@ public class DocumentTypeImpl implements DOMDocumentType {
     public final NamedNodeMap getNotations() {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final Node cloneNode(boolean deep) {
+        // TODO
+        throw new UnsupportedOperationException();
+//        CoreDocument document = coreGetDocument();
+//        return (Node)document.getNodeFactory().createDocumentTypeDeclaration(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
+    }
+
+    public final Document getOwnerDocument() {
+        DOMDocumentTypeDeclaration declaration = getDeclaration();
+        return declaration == null ? null : (Document)declaration.coreGetDocument();
+    }
+
+    public final Node getParentNode() {
+        DOMDocumentTypeDeclaration declaration = getDeclaration();
+        return declaration == null ? null : (Node)declaration.coreGetParent();
     }
 }

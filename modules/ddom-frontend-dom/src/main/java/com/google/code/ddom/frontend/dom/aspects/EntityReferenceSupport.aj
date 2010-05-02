@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
-import com.google.code.ddom.frontend.dom.intf.DOMText;
+import org.w3c.dom.Node;
+import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
 
-public aspect TextSupport {
-    public final DOMTextNode DOMText.createNewTextNode(String data) {
-        return (DOMTextNode)coreGetDocument().coreCreateText(data);
+public aspect EntityReferenceSupport {
+    public final Node DOMEntityReference.cloneNode(boolean deep) {
+        return (Node)coreGetDocument().coreCreateEntityReference(coreGetName());
     }
 }

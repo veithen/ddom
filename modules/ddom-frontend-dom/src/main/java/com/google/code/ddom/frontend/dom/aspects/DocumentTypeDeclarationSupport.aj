@@ -19,7 +19,7 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 
-public aspect DocumentTypeSupport {
+public aspect DocumentTypeDeclarationSupport {
     private DOMDocumentType DOMDocumentTypeDeclaration.documentType;
     
     public final DOMDocumentType DOMDocumentTypeDeclaration.getDocumentType() {
@@ -28,12 +28,5 @@ public aspect DocumentTypeSupport {
     
     public final void DOMDocumentTypeDeclaration.setDocumentType(DOMDocumentType documentType) {
         this.documentType = documentType;
-    }
-
-    public final Node DOMDocumentType.cloneNode(boolean deep) {
-        // TODO
-        throw new UnsupportedOperationException();
-//        CoreDocument document = coreGetDocument();
-//        return (Node)document.getNodeFactory().createDocumentTypeDeclaration(document, coreGetRootName(), coreGetPublicId(), coreGetSystemId());
     }
 }

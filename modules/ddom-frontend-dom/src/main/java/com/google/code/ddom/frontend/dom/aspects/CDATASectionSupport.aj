@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 package com.google.code.ddom.frontend.dom.aspects;
 
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
-import com.google.code.ddom.frontend.dom.intf.DOMText;
+import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 
-public aspect TextSupport {
-    public final DOMTextNode DOMText.createNewTextNode(String data) {
-        return (DOMTextNode)coreGetDocument().coreCreateText(data);
+public aspect CDATASectionSupport {
+    public final DOMTextNode DOMCDATASection.createNewTextNode(String data) {
+        return (DOMTextNode)coreGetDocument().coreCreateCDATASection(data);
     }
 }

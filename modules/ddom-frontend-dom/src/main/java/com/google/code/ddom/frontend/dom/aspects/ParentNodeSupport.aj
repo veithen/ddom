@@ -25,6 +25,8 @@ import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.frontend.dom.support.ElementsByTagName;
+import com.google.code.ddom.frontend.dom.support.ElementsByTagNameNS;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 
 public aspect ParentNodeSupport {
@@ -191,4 +193,12 @@ public aspect ParentNodeSupport {
     }
     
     public abstract Node DOMParentNode.shallowClone();
+    
+    public final NodeList DOMParentNode.getElementsByTagName(String tagname) {
+        return new ElementsByTagName((DOMDocument)coreGetDocument(), this, tagname);
+    }
+
+    public final NodeList DOMParentNode.getElementsByTagNameNS(String namespaceURI, String localName) {
+        return new ElementsByTagNameNS((DOMDocument)coreGetDocument(), this, namespaceURI, localName);
+    }
 }

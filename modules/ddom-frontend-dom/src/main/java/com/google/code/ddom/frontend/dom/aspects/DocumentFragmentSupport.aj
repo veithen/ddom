@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -36,5 +37,13 @@ public aspect DocumentFragmentSupport {
 
     public final Node DOMDocumentFragment.shallowClone() {
         return (Node)coreGetDocument().coreCreateDocumentFragment();
+    }
+
+    public final Document DOMDocumentFragment.getOwnerDocument() {
+        return (Document)coreGetDocument();
+    }
+
+    public final Node DOMDocumentFragment.getParentNode() {
+        return null;
     }
 }

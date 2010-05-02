@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,17 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 
-import com.google.code.ddom.frontend.dom.intf.*;
 
-public aspect ProcessingInstructionSupport {
-    public final String DOMProcessingInstruction.getData() {
-        return coreGetData();
+public aspect CoreChildNodeSupport {
+    public final Document DOMCoreChildNode.getOwnerDocument() {
+        return (Document)coreGetDocument();
     }
-
-    public final void DOMProcessingInstruction.setData(String data) throws DOMException {
-        coreSetData(data);
-    }
-
-    public final String DOMProcessingInstruction.getTarget() {
-        return coreGetTarget();
-    }
-
-    public final Node DOMProcessingInstruction.cloneNode(boolean deep) {
-        return (Node)coreGetDocument().coreCreateProcessingInstruction(getTarget(), getData());
+    
+    public final Node DOMCoreChildNode.getParentNode() {
+        return (Node)coreGetParent();
     }
 }
