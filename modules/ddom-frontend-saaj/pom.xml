@@ -82,24 +82,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/mixin/*</exclude>
-                            </excludes>
-                        </configuration>                        
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>
