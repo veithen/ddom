@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,5 @@ import java.util.Map;
 // TODO: move to LTW module
 public interface Frontend {
     // TODO: we should hide the context/configuration data (current parameters) behind some class to allow for extensibility in the future
-    @Deprecated
-    List<String> getAspectClasses(Map<String,Frontend> frontends);
-    
     List<String> getMixins(Map<String,Frontend> frontends);
 }

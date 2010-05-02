@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,16 +25,6 @@ import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="saaj")
 public class SAAJFrontend extends DOMFrontend {
-    @Override
-    public List<String> getAspectClasses(Map<String,Frontend> frontends) {
-        List<String> aspects = new ArrayList<String>(super.getAspectClasses(frontends));
-        aspects.add("com.google.code.ddom.frontend.saaj.aspects.AttributeAsName");
-        aspects.add("com.google.code.ddom.frontend.saaj.aspects.NodeSupport");
-        aspects.add("com.google.code.ddom.frontend.saaj.aspects.Parents");
-        aspects.add("com.google.code.ddom.frontend.saaj.aspects.SOAPElementSupport");
-        return aspects;
-    }
-    
     @Override
     public List<String> getMixins(Map<String,Frontend> frontends) {
         List<String> aspects = new ArrayList<String>(super.getMixins(frontends));

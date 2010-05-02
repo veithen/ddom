@@ -25,32 +25,6 @@ import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="axiom")
 public class AxiomFrontend implements Frontend {
-    public List<String> getAspectClasses(Map<String,Frontend> frontends) {
-        List<String> aspects = new ArrayList<String>();
-        aspects.addAll(Arrays.asList(new String[] {
-                "com.google.code.ddom.frontend.axiom.aspects.AttributeSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.CDATASectionSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.ChildNodeSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.CommentSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.ContainerSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.DocumentSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.ElementSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.LeafNodeSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.NamedNodeSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.NamespaceDeclarationSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.NodeSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.Parents",
-                "com.google.code.ddom.frontend.axiom.aspects.ProcessingInstructionSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.QNameCaching", // TODO: should be configurable
-                "com.google.code.ddom.frontend.axiom.aspects.TextNodeSupport",
-                "com.google.code.ddom.frontend.axiom.aspects.TextSupport",
-        }));
-        if (!frontends.containsKey("dom")) {
-            aspects.add("com.google.code.ddom.frontend.axiom.aspects.DOMCompatibleMethods");
-        }
-        return aspects;
-    }
-
     public List<String> getMixins(Map<String,Frontend> frontends) {
         List<String> mixins = new ArrayList<String>();
         mixins.addAll(Arrays.asList(new String[] {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,36 +24,6 @@ import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="dom")
 public class DOMFrontend implements Frontend {
-    public List<String> getAspectClasses(Map<String,Frontend> frontends) {
-        return Arrays.asList(new String[] {
-                "com.google.code.ddom.frontend.dom.aspects.AttributeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.CDATASectionSupport",
-                "com.google.code.ddom.frontend.dom.aspects.CharacterDataSupport",
-                "com.google.code.ddom.frontend.dom.aspects.CommentSupport",
-                "com.google.code.ddom.frontend.dom.aspects.CoreChildNodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.CoreNodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.DocumentFragmentSupport",
-                "com.google.code.ddom.frontend.dom.aspects.DocumentSupport",
-                "com.google.code.ddom.frontend.dom.aspects.DocumentTypeDeclarationSupport",
-                "com.google.code.ddom.frontend.dom.aspects.ElementSupport",
-                "com.google.code.ddom.frontend.dom.aspects.EntityReferenceSupport",
-                "com.google.code.ddom.frontend.dom.aspects.LeafNodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NamespaceDeclarationSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NSAwareAttributeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NSAwareElementSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NSAwareNamedNodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NSUnawareAttributeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NSUnawareElementSupport",
-                "com.google.code.ddom.frontend.dom.aspects.NSUnawareNamedNodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.ParentNodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.Parents",
-                "com.google.code.ddom.frontend.dom.aspects.ProcessingInstructionSupport",
-                "com.google.code.ddom.frontend.dom.aspects.TextNodeSupport",
-                "com.google.code.ddom.frontend.dom.aspects.TextSupport",
-                "com.google.code.ddom.frontend.dom.aspects.TypedAttributeSupport" });
-    }
-
     public List<String> getMixins(Map<String,Frontend> frontends) {
         return Arrays.asList(new String[] {
                 "com.google.code.ddom.frontend.dom.mixin.AttributeSupport",
