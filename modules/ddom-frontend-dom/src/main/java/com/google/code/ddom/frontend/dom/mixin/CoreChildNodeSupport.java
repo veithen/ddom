@@ -18,11 +18,14 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreChildNode.class)
 public abstract class CoreChildNodeSupport implements DOMCoreChildNode {
     public final Document getOwnerDocument() {
         return (Document)coreGetDocument();

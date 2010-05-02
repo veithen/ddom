@@ -17,10 +17,13 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.backend.CoreCharacterData;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.frontend.dom.intf.DOMCharacterData;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreCharacterData.class)
 public abstract class CharacterDataSupport implements DOMCharacterData {
     public final String getData() {
         return coreGetData();

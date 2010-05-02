@@ -17,9 +17,12 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.frontend.dom.intf.DOMText;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreText.class)
 public abstract class TextSupport implements DOMText {
     public final DOMTextNode createNewTextNode(String data) {
         return (DOMTextNode)coreGetDocument().coreCreateText(data);

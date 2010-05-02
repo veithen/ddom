@@ -38,12 +38,14 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 import com.google.code.ddom.backend.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMConfigurationImpl;
@@ -52,11 +54,11 @@ import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 import com.google.code.ddom.frontend.dom.support.UserData;
+import com.google.code.ddom.spi.model.Mixin;
 import com.google.code.ddom.stream.spi.Symbols;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
-import com.google.code.ddom.frontend.dom.intf.*;
-
+@Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements DOMDocument {
     private DOMImplementationImpl domImplementation;
     private final DOMConfigurationImpl domConfig = new DOMConfigurationImpl();

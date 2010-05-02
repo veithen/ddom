@@ -17,9 +17,12 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreCDATASection.class)
 public abstract class CDATASectionSupport implements DOMCDATASection {
     public final DOMTextNode createNewTextNode(String data) {
         return (DOMTextNode)coreGetDocument().coreCreateCDATASection(data);

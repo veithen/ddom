@@ -19,10 +19,13 @@ import java.util.Map;
 
 import org.w3c.dom.DOMImplementation;
 
+import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.support.UserData;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreNode.class)
 public abstract class CoreNodeSupport implements DOMCoreNode {
     public final Map<String,UserData> getUserDataMap(boolean create) {
         return ((DOMDocument)coreGetDocument()).getUserDataMap(this, create);

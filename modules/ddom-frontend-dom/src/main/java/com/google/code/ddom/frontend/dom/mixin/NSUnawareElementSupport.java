@@ -16,8 +16,11 @@
 package com.google.code.ddom.frontend.dom.mixin;
 
 import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreNSUnawareElement;
 import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareElement;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreNSUnawareElement.class)
 public abstract class NSUnawareElementSupport implements DOMNSUnawareElement {
     public final CoreElement shallowCloneWithoutAttributes() {
         return coreGetDocument().coreCreateElement(coreGetName());

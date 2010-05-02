@@ -60,7 +60,7 @@ class MixinInfoBuilder extends AbstractClassVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        if (desc.equals("Lcom/google/code/ddom/weaver/asm/Mixin;")) {
+        if (desc.equals("Lcom/google/code/ddom/spi/model/Mixin;")) {
             return new AbstractAnnotationVisitor() {
                 @Override
                 public void visit(String name, Object value) {

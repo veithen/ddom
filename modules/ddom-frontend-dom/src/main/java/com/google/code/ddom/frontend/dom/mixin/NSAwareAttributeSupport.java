@@ -17,8 +17,11 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMNSAwareAttribute;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreNSAwareAttribute.class)
 public abstract class NSAwareAttributeSupport implements DOMNSAwareAttribute {
     public final Node shallowClone() {
         return (Node)coreGetDocument().coreCreateAttribute(coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());

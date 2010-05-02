@@ -23,6 +23,7 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
@@ -34,7 +35,9 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagName;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagNameNS;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreParentNode.class)
 public abstract class ParentNodeSupport implements DOMParentNode {
     public final boolean hasChildNodes() {
         // TODO: not the best way if content is optimized

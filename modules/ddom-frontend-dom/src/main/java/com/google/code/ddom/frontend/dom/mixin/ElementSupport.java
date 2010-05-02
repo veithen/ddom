@@ -38,8 +38,10 @@ import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.Policies;
+import com.google.code.ddom.spi.model.Mixin;
 import com.google.code.ddom.stream.spi.Symbols;
 
+@Mixin(CoreElement.class)
 public abstract class ElementSupport implements DOMElement {
     public final boolean hasAttributes() {
         return coreGetFirstAttribute() != null;
