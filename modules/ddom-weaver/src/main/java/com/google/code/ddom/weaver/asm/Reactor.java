@@ -107,14 +107,16 @@ public class Reactor {
             weavableClasses.add((WeavableClassInfo)getClassInfo(className));
         }
         for (WeavableClassInfo weavableClass : TopologicalSort.sort(weavableClasses, inheritanceRelation)) {
-            List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
-            for (MixinInfo mixin : mixins) {
-                ClassInfo target = mixin.getTarget();
-                if (target.isAssignableFrom(weavableClass) && !target.isAssignableFrom(weavableClass.getSuperclass())) {
-                    selectedMixins.add(mixin);
+            if (!weavableClass.isInterface()) {
+                List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
+                for (MixinInfo mixin : mixins) {
+                    ClassInfo target = mixin.getTarget();
+                    if (target.isAssignableFrom(weavableClass) && !target.isAssignableFrom(weavableClass.getSuperclass())) {
+                        selectedMixins.add(mixin);
+                    }
                 }
+                weave(processor, weavableClass, selectedMixins);
             }
-            weave(processor, weavableClass, selectedMixins);
         }
     }
     
