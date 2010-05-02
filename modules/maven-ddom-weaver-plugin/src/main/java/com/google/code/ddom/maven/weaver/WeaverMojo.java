@@ -30,7 +30,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
-import com.google.code.ddom.weaver.ModelWeaver;
+import com.google.code.ddom.weaver.asm.ModelWeaver;
 import com.google.code.ddom.weaver.ModelWeaverException;
 
 /**

@@ -50,4 +50,30 @@ public class AxiomFrontend implements Frontend {
         }
         return aspects;
     }
+
+    public List<String> getMixins(Map<String,Frontend> frontends) {
+        List<String> mixins = new ArrayList<String>();
+        mixins.addAll(Arrays.asList(new String[] {
+                "com.google.code.ddom.frontend.axiom.mixin.AttributeSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.CDATASectionSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.ChildNodeSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.CommentSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.ContainerSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.DocumentSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.ElementSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.LeafNodeSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.NamedNodeSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.NamespaceDeclarationSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.NodeSupport",
+//                "com.google.code.ddom.frontend.axiom.aspects.Parents",
+                "com.google.code.ddom.frontend.axiom.mixin.ProcessingInstructionSupport",
+//                "com.google.code.ddom.frontend.axiom.aspects.QNameCaching", // TODO: should be configurable
+                "com.google.code.ddom.frontend.axiom.mixin.TextNodeSupport",
+                "com.google.code.ddom.frontend.axiom.mixin.TextSupport",
+        }));
+//        if (!frontends.containsKey("dom")) {
+//            mixins.add("com.google.code.ddom.frontend.axiom.aspects.DOMCompatibleMethods");
+//        }
+        return mixins;
+    }
 }

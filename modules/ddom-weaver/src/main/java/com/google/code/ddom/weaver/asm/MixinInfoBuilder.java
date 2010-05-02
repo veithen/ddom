@@ -29,6 +29,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.util.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.util.ConstructorToMethodConverter;
@@ -97,17 +98,13 @@ class MixinInfoBuilder extends AbstractClassVisitor {
         }
     }
 
-    @Override
-    public void visitEnd() {
+    public MixinInfo build() throws ClassNotFoundException, ModelWeaverException {
+        if (target == null) {
+            throw new ModelWeaverException(name + " is missing a @Mixin annotation");
+        }
         if (!contributedInterfaces.remove(target.getInternalName())) {
             log.warning("Mixin class doesn't implement target interface");
         }
-        System.out.println("name = " + name);
-        System.out.println("target = " + target.getInternalName());
-        System.out.println("contributedInterfaces = " + contributedInterfaces);
-    }
-    
-    public MixinInfo build() throws ClassNotFoundException {
         return new MixinInfo(name, reactor.getClassInfo(target.getClassName()), contributedInterfaces, init, fields, methods, sourceInfoBuilder.getSourceInfo());
     }
 }

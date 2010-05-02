@@ -24,5 +24,8 @@ import java.util.Map;
 // TODO: move to LTW module
 public interface Frontend {
     // TODO: we should hide the context/configuration data (current parameters) behind some class to allow for extensibility in the future
+    @Deprecated
     List<String> getAspectClasses(Map<String,Frontend> frontends);
+    
+    List<String> getMixins(Map<String,Frontend> frontends);
 }

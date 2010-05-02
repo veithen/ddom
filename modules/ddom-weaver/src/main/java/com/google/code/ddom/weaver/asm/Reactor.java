@@ -29,6 +29,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 import com.google.code.ddom.commons.cl.ClassLoaderUtils;
 import com.google.code.ddom.weaver.ClassDefinitionProcessor;
 import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
+import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
 
 public class Reactor {
@@ -49,7 +50,7 @@ public class Reactor {
         weavableClassInfoBuilders.put(className, builder);
     }
     
-    public void loadMixin(String className) throws ClassNotFoundException, IOException {
+    public void loadMixin(String className) throws ClassNotFoundException, IOException, ModelWeaverException {
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
         MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder);
         new ClassReader(ClassLoaderUtils.getClassDefinition(classLoader, className)).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
