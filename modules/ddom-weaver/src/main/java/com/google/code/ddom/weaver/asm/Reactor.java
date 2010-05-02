@@ -46,6 +46,18 @@ public class Reactor {
         weavableClassInfoBuilders.put(className, builder);
     }
     
+    public MixinInfo loadMixin(String className) throws ClassNotFoundException, IOException {
+        SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
+        MixinInfoBuilder builder = new MixinInfoBuilder(sourceInfoBuilder);
+        InputStream in = ClassLoaderUtils.getClassDefinitionAsStream(classLoader, className);
+        try {
+            new ClassReader(in).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
+        } finally {
+            in.close();
+        }
+        return builder.build();
+    }
+    
     public ClassInfo getClassInfo(String className) throws ClassNotFoundException {
         ClassInfo classInfo = classInfos.get(className);
         if (classInfo != null) {

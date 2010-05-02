@@ -20,8 +20,7 @@ public class MixinTest {
         ClassInfo baseClassInfo = reactor.getClassInfo("com.google.code.ddom.weaver.asm.Base");
         
         DynamicClassLoader targetClassLoader = new DynamicClassLoader(parentClassLoader);
-        MixinInfo mixin = new MixinInfo();
-        new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/BaseMixin.class")).accept(mixin, 0);
+        MixinInfo mixin = reactor.loadMixin("com.google.code.ddom.weaver.asm.BaseMixin");
         
         ClassReader cr = new ClassReader(parentClassLoader.getResourceAsStream("com/google/code/ddom/weaver/asm/Base.class"));
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
