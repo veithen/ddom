@@ -58,7 +58,7 @@ public class DynamicModelLoader implements ModelLoader {
         }
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         try {
-            ModelWeaver weaver = new ModelWeaver(parentClassLoader, classLoader, backend);
+            com.google.code.ddom.weaver.asm.ModelWeaver weaver = new com.google.code.ddom.weaver.asm.ModelWeaver(parentClassLoader, classLoader, backend);
             // Aspects must be loaded into the child class loader. Otherwise the code in these aspects
             // will not see the woven backend classes. 
 //            for (Frontend frontend : frontends) {
