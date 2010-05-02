@@ -92,6 +92,11 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/mixin/*</exclude>
+                            </excludes>
+                        </configuration>                        
                     </execution>
                 </executions>
             </plugin>

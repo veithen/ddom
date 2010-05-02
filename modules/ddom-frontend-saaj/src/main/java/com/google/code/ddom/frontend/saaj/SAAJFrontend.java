@@ -34,4 +34,13 @@ public class SAAJFrontend extends DOMFrontend {
         aspects.add("com.google.code.ddom.frontend.saaj.aspects.SOAPElementSupport");
         return aspects;
     }
+    
+    @Override
+    public List<String> getMixins(Map<String,Frontend> frontends) {
+        List<String> aspects = new ArrayList<String>(super.getMixins(frontends));
+        aspects.add("com.google.code.ddom.frontend.saaj.mixin.NodeSupport");
+        aspects.add("com.google.code.ddom.frontend.saaj.mixin.NSAwareAttributeSupport");
+        aspects.add("com.google.code.ddom.frontend.saaj.mixin.SOAPElementSupport");
+        return aspects;
+    }
 }
