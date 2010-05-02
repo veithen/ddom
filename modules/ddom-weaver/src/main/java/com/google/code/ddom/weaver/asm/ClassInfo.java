@@ -17,15 +17,25 @@ package com.google.code.ddom.weaver.asm;
 
 public class ClassInfo {
     private final String name;
+    private final boolean isInterface;
     private final ClassInfo superclass;
     private final ClassInfo[] interfaces;
     
-    public ClassInfo(String name, ClassInfo superclass, ClassInfo[] interfaces) {
+    public ClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces) {
         this.name = name;
+        this.isInterface = isInterface;
         this.superclass = superclass;
         this.interfaces = interfaces;
     }
     
+    public String getName() {
+        return name;
+    }
+
+    public boolean isInterface() {
+        return isInterface;
+    }
+
     public ClassInfo getSuperclass() {
         return superclass;
     }

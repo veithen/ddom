@@ -73,7 +73,7 @@ public class Reactor {
                 for (int i=0; i<interfaces.length; i++) {
                     interfaceInfos[i] = getClassInfo(interfaces[i].getName());
                 }
-                classInfo = new NonWeavableClassInfo(className,
+                classInfo = new NonWeavableClassInfo(className, clazz.isInterface(),
                         superclass == null ? null : getClassInfo(clazz.getSuperclass().getName()),
                         interfaceInfos);
             }
@@ -99,13 +99,13 @@ public class Reactor {
     private void weave(ClassDefinitionProcessor processor, WeavableClassInfo weavableClass, List<MixinInfo> mixins) throws ClassDefinitionProcessorException {
         System.out.println("Weaving " + weavableClass + "; mixins: " + mixins);
         ClassReader cr = new ClassReader(weavableClass.getClassDefinition());
-        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        ClassWriter cw = new ReactorAwareClassWriter(this, cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         SourceMapper sourceMapper = new SourceMapper();
         sourceMapper.addSourceInfo(weavableClass.getSourceInfo());
         for (MixinInfo mixin : mixins) {
             sourceMapper.addSourceInfo(mixin.getSourceInfo());
         }
         cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(new TraceClassVisitor(cw, new PrintWriter(System.out)), mixins, sourceMapper)), 0);
-        processor.processClassDefinition("com.google.code.ddom.weaver.asm.Base", cw.toByteArray());
+        processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
     }
 }

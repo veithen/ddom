@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.weaver.asm;
 
+import org.objectweb.asm.Opcodes;
+
 import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
@@ -22,6 +24,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private final byte[] classDefinition;
     private final SourceInfoBuilder sourceInfoBuilder;
     private String name;
+    private boolean isInterface;
     private String superName;
     private String[] interfaceNames;
     
@@ -34,6 +37,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         this.name = name;
+        isInterface = (access & Opcodes.ACC_INTERFACE) != 0;
         this.superName = superName;
         interfaceNames = interfaces;
     }
@@ -43,7 +47,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = reactor.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
-        return new WeavableClassInfo(Util.internalNameToClassName(name), reactor.getClassInfo(Util.internalNameToClassName(superName)),
+        return new WeavableClassInfo(Util.internalNameToClassName(name), isInterface, reactor.getClassInfo(Util.internalNameToClassName(superName)),
                 interfaces, classDefinition, sourceInfoBuilder.getSourceInfo());
     }
 }

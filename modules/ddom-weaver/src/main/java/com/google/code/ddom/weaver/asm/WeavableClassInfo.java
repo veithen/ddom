@@ -19,8 +19,8 @@ public class WeavableClassInfo extends ClassInfo {
     private final byte[] classDefinition;
     private final SourceInfo sourceInfo;
     
-    public WeavableClassInfo(String name, ClassInfo superclass, ClassInfo[] interfaces, byte[] classDefinition, SourceInfo sourceInfo) {
-        super(name, superclass, interfaces);
+    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, byte[] classDefinition, SourceInfo sourceInfo) {
+        super(name, isInterface, superclass, interfaces);
         this.classDefinition = classDefinition;
         this.sourceInfo = sourceInfo;
     }

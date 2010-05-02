@@ -21,4 +21,8 @@ public class Util {
     public static String internalNameToClassName(String internalName) {
         return internalName.replace('/', '.');
     }
+    
+    public static String classNameToInternalName(String className) {
+        return className.replace('.', '/');
+    }
 }
