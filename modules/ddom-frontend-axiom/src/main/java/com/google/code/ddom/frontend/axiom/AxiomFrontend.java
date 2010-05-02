@@ -71,9 +71,10 @@ public class AxiomFrontend implements Frontend {
                 "com.google.code.ddom.frontend.axiom.mixin.TextNodeSupport",
                 "com.google.code.ddom.frontend.axiom.mixin.TextSupport",
         }));
-//        if (!frontends.containsKey("dom")) {
-//            mixins.add("com.google.code.ddom.frontend.axiom.aspects.DOMCompatibleMethods");
-//        }
+        if (!frontends.containsKey("dom")) {
+            mixins.add("com.google.code.ddom.frontend.axiom.mixin.dom.NamedNodeSupport");
+            mixins.add("com.google.code.ddom.frontend.axiom.mixin.dom.ProcessingInstructionSupport");
+        }
         return mixins;
     }
 }

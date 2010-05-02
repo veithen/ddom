@@ -13,42 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.mixin;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axiom.om.OMNamespace;
+package com.google.code.ddom.frontend.axiom.mixin.dom;
 
 import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamedNode;
 import com.google.code.ddom.spi.model.Mixin;
 
-/**
- * 
- * 
- * Note that {@link AxiomNamedNode#getLocalName()} is defined by
- * {@link com.google.code.ddom.frontend.axiom.mixin.dom.NamedNodeSupport}.
- * 
- * @author Andreas Veithen
- */
 @Mixin(CoreNSAwareNamedNode.class)
 public abstract class NamedNodeSupport implements AxiomNamedNode {
-    public final void setLocalName(String localName) {
-        coreSetLocalName(localName);
-    }
-    
-    public final OMNamespace getNamespace() {
-        String namespaceURI = coreGetNamespaceURI();
-        // TODO: handle null prefix!
-        return namespaceURI == null ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
-    }
-
-    public final void setNamespace(OMNamespace namespace) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
-    public final QName getQName() {
-        return coreGetQName();
+    public final String getLocalName() {
+        return coreGetLocalName();
     }
 }

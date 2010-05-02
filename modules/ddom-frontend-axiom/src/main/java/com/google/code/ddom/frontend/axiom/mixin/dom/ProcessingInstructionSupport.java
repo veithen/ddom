@@ -13,37 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.mixin;
-
-import org.apache.axiom.om.OMNode;
+package com.google.code.ddom.frontend.axiom.mixin.dom;
 
 import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.spi.model.Mixin;
 
-/**
- * 
- * 
- * Note that {@link AxiomProcessingInstruction#getTarget()} is defined by
- * {@link com.google.code.ddom.frontend.axiom.mixin.dom.ProcessingInstructionSupport}.
- * 
- * @author Andreas Veithen
- */
 @Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements AxiomProcessingInstruction {
-    public void setTarget(String target) {
-        coreSetTarget(target);
-    }
-
-    public void setValue(String value) {
-        coreSetData(value);
-    }
-
-    public String getValue() {
-        return coreGetData();
-    }
-    
-    public final int getType() {
-        return OMNode.PI_NODE;
+    public String getTarget() {
+        return coreGetTarget();
     }
 }
