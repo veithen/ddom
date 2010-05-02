@@ -18,10 +18,13 @@ package com.google.code.ddom.frontend.axiom.mixin;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreNamespaceDeclaration.class)
 public abstract class NamespaceDeclarationSupport implements AxiomNamespaceDeclaration {
     public OMNamespace getOMNamespace() {
         try {

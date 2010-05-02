@@ -32,13 +32,16 @@ import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 import com.google.code.ddom.backend.AttributeMatcher;
+import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements AxiomDocument {
     private int nextGeneratedPrefix = 1;
     

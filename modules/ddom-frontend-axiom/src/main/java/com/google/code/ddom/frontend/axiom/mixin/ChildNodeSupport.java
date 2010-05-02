@@ -22,7 +22,9 @@ import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreChildNode.class)
 public abstract class ChildNodeSupport implements AxiomChildNode {
     public OMContainer getParent() {
         return (OMContainer)coreGetParent();

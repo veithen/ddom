@@ -20,8 +20,11 @@ import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMNamespace;
 
+import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreTextNode.class)
 public abstract class TextNodeSupport implements AxiomTextNode {
     public String getText() {
         return coreGetData();

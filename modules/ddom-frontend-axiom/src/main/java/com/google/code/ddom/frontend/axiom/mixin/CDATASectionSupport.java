@@ -17,8 +17,11 @@ package com.google.code.ddom.frontend.axiom.mixin;
 
 import org.apache.axiom.om.OMNode;
 
+import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.frontend.axiom.intf.AxiomCDATASection;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreCDATASection.class)
 public abstract class CDATASectionSupport implements AxiomCDATASection {
     public final int getType() {
         return OMNode.CDATA_SECTION_NODE;

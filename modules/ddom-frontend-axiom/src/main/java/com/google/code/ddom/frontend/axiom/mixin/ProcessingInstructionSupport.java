@@ -17,7 +17,9 @@ package com.google.code.ddom.frontend.axiom.mixin;
 
 import org.apache.axiom.om.OMNode;
 
+import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
+import com.google.code.ddom.spi.model.Mixin;
 
 /**
  * 
@@ -27,6 +29,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
  * 
  * @author Andreas Veithen
  */
+@Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements AxiomProcessingInstruction {
     public void setTarget(String target) {
         coreSetTarget(target);

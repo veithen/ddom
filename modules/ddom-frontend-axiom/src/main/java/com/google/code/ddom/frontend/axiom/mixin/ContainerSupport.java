@@ -28,9 +28,12 @@ import org.apache.axiom.om.OMOutputFormat;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreParentNode.class)
 public abstract class ContainerSupport implements AxiomContainer {
     public OMNode getFirstOMChild() {
         try {

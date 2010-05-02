@@ -17,8 +17,11 @@ package com.google.code.ddom.frontend.axiom.mixin;
 
 import org.apache.axiom.om.OMNode;
 
+import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreText.class)
 public abstract class TextSupport implements AxiomText {
     public final int getType() {
         return OMNode.TEXT_NODE;

@@ -27,6 +27,7 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.IdentityMapper;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
@@ -36,7 +37,9 @@ import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.google.code.ddom.frontend.axiom.support.Policies;
+import com.google.code.ddom.spi.model.Mixin;
 
+@Mixin(CoreElement.class)
 public abstract class ElementSupport implements AxiomElement {
     private int lineNumber;
     
