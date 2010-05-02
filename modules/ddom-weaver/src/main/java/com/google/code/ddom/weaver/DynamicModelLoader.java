@@ -24,6 +24,7 @@ import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
 import com.google.code.ddom.spi.model.ModelLoader;
 import com.google.code.ddom.spi.model.ModelLoaderException;
+import com.google.code.ddom.weaver.asm.ModelWeaver;
 
 /**
  * {@link ModelLoader} implementation that creates models using load time weaving.
@@ -58,7 +59,7 @@ public class DynamicModelLoader implements ModelLoader {
         }
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         try {
-            com.google.code.ddom.weaver.asm.ModelWeaver weaver = new com.google.code.ddom.weaver.asm.ModelWeaver(parentClassLoader, classLoader, backend);
+            ModelWeaver weaver = new ModelWeaver(parentClassLoader, classLoader, backend);
             // Aspects must be loaded into the child class loader. Otherwise the code in these aspects
             // will not see the woven backend classes. 
 //            for (Frontend frontend : frontends) {
