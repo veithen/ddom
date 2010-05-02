@@ -19,13 +19,13 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.spi.model.Mixin;
 
-@Mixin(CoreAttribute.class)
+@Mixin(CoreNSAwareAttribute.class)
 public abstract class AttributeSupport implements AxiomAttribute {
     public String getAttributeValue() {
         try {
