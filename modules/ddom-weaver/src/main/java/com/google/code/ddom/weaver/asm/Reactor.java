@@ -16,7 +16,6 @@
 package com.google.code.ddom.weaver.asm;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,8 +104,7 @@ public class Reactor {
         for (MixinInfo mixin : mixins) {
             sourceMapper.addSourceInfo(mixin.getSourceInfo());
         }
-        MixinInfo mixin = mixins.get(0); // TODO
-        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(new TraceClassVisitor(cw, new PrintWriter(System.out)), mixin, sourceMapper)), 0);
+        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(new TraceClassVisitor(cw, new PrintWriter(System.out)), mixins, sourceMapper)), 0);
         processor.processClassDefinition("com.google.code.ddom.weaver.asm.Base", cw.toByteArray());
     }
 }
