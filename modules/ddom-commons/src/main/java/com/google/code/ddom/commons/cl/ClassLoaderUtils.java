@@ -46,11 +46,7 @@ public class ClassLoaderUtils {
      *             if the class was not found or an error occurred when loading the class definition
      */
     public static byte[] getClassDefinition(ClassLoader classLoader, String className) throws ClassNotFoundException {
-        String resourceName = getResourceNameForClassName(className);
-        InputStream in = classLoader.getResourceAsStream(resourceName);
-        if (in == null) {
-            throw new ClassNotFoundException(className);
-        }
+        InputStream in = getClassDefinitionAsStream(classLoader, className);
         try {
             try {
                 return IOUtils.toByteArray(in);
@@ -59,6 +55,16 @@ public class ClassLoaderUtils {
             }
         } catch (IOException ex) {
             throw new ClassNotFoundException(className, ex);
+        }
+    }
+
+    public static InputStream getClassDefinitionAsStream(ClassLoader classLoader, String className) throws ClassNotFoundException {
+        String resourceName = getResourceNameForClassName(className);
+        InputStream in = classLoader.getResourceAsStream(resourceName);
+        if (in == null) {
+            throw new ClassNotFoundException(className);
+        } else {
+            return in;
         }
     }
 }
