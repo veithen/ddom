@@ -22,4 +22,8 @@ public aspect NSUnawareElementSupport {
     public final CoreElement DOMNSUnawareElement.shallowCloneWithoutAttributes() {
         return coreGetDocument().coreCreateElement(coreGetName());
     }
+    
+    public final String DOMNSUnawareElement.getTagName() {
+        return coreGetName();
+    }
 }

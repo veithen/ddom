@@ -21,14 +21,17 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.TypeInfo;
 
 import com.google.code.ddom.backend.AttributeMatcher;
 import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreTypedAttribute;
+import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.AttributesNamedNodeMap;
 import com.google.code.ddom.frontend.dom.support.DOM1AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
@@ -203,4 +206,54 @@ public aspect ElementSupport {
     }
     
     public abstract CoreElement DOMElement.shallowCloneWithoutAttributes();
+
+    public final String DOMElement.getTextContent() {
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void DOMElement.setTextContent(String textContent) {
+        try {
+            coreSetValue(textContent);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final short DOMElement.getNodeType() {
+        return Node.ELEMENT_NODE;
+    }
+
+    public final String DOMElement.getNodeValue() throws DOMException {
+        return null;
+    }
+
+    public final void DOMElement.setNodeValue(String nodeValue) throws DOMException {
+        // Setting the node value has no effect
+    }
+
+    public final String DOMElement.getNodeName() {
+        return getTagName();
+    }
+
+    public final CoreElement DOMElement.getNamespaceContext() {
+        return this;
+    }
+    
+    public final void DOMElement.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        try {
+            coreCoalesce(!config.isKeepCDATASections());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        normalizeChildren(config);
+    }
+
+    public final TypeInfo DOMElement.getSchemaTypeInfo() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

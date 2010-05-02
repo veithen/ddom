@@ -15,11 +15,46 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
+
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect EntityReferenceSupport {
     public final Node DOMEntityReference.cloneNode(boolean deep) {
         return (Node)coreGetDocument().coreCreateEntityReference(coreGetName());
+    }
+
+    public final String DOMEntityReference.getTextContent() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final void DOMEntityReference.setTextContent(@SuppressWarnings("unused") String textContent) {
+        throw DOMExceptionUtil.newDOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR);
+    }
+
+    public final short DOMEntityReference.getNodeType() {
+        return Node.ENTITY_REFERENCE_NODE;
+    }
+    
+    public final String DOMEntityReference.getNodeValue() throws DOMException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final void DOMEntityReference.setNodeValue(String nodeValue) throws DOMException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final String DOMEntityReference.getNodeName() {
+        return coreGetName();
+    }
+    
+    public final CoreElement DOMEntityReference.getNamespaceContext() {
+        return coreGetParentElement();
     }
 }

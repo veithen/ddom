@@ -15,11 +15,21 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.w3c.dom.Node;
+
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 
 public aspect CDATASectionSupport {
     public final DOMTextNode DOMCDATASection.createNewTextNode(String data) {
         return (DOMTextNode)coreGetDocument().coreCreateCDATASection(data);
+    }
+
+    public final short DOMCDATASection.getNodeType() {
+        return Node.CDATA_SECTION_NODE;
+    }
+
+    public final String DOMCDATASection.getNodeName() {
+        return "#cdata-section";
     }
 }

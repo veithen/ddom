@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,20 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.TypeInfo;
+import java.util.Map;
 
-import com.google.code.ddom.frontend.dom.intf.*;
+import org.w3c.dom.DOMImplementation;
 
-public aspect SchemaTypeInfo {
-    public final TypeInfo DOMAttribute.getSchemaTypeInfo() {
-        // TODO
-        throw new UnsupportedOperationException();
+import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.support.UserData;
+
+public aspect CoreNodeSupport {
+    public final Map<String,UserData> DOMCoreNode.getUserDataMap(boolean create) {
+        return ((DOMDocument)coreGetDocument()).getUserDataMap(this, create);
     }
-
-    public final TypeInfo DOMElement.getSchemaTypeInfo() {
-        // TODO
-        throw new UnsupportedOperationException();
+    
+    public final DOMImplementation DOMCoreNode.getDOMImplementation() {
+        return ((DOMDocument)coreGetDocument()).getImplementation();
     }
 }

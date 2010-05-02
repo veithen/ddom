@@ -22,4 +22,8 @@ public aspect NSAwareElementSupport {
     public final CoreElement DOMNSAwareElement.shallowCloneWithoutAttributes() {
         return coreGetDocument().coreCreateElement(coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
     }
+    
+    public final String DOMNSAwareElement.getTagName() {
+        return internalGetName();
+    }
 }

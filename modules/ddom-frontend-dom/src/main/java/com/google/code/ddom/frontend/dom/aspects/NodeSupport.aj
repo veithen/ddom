@@ -15,21 +15,26 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import java.util.Map;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.UserDataHandler;
 
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 
 import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.frontend.dom.support.UserData;
 
 public aspect NodeSupport {
-    public final DOMImplementation DOMCoreNode.getDOMImplementation() {
-        return ((DOMDocument)coreGetDocument()).getImplementation();
-    }
-    
     public final boolean DOMNode.isSupported(String feature, String version) {
         return getDOMImplementation().hasFeature(feature, version);
     }
@@ -81,5 +86,70 @@ public aspect NodeSupport {
     public final short DOMNode.compareDocumentPosition(Node other) throws DOMException {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final Object DOMNode.getUserData(String key) {
+        Map<String,UserData> userDataMap = getUserDataMap(false);
+        if (userDataMap == null) {
+            return null;
+        } else {
+            UserData userData = userDataMap.get(key);
+            return userData == null ? null : userData.getData();
+        }
+    }
+
+    public final Object DOMNode.setUserData(String key, Object data, UserDataHandler handler) {
+        UserData userData;
+        if (data == null) {
+            Map<String,UserData> userDataMap = getUserDataMap(false);
+            if (userDataMap != null) {
+                userData = userDataMap.remove(key);
+            } else {
+                userData = null;
+            }
+        } else {
+            Map<String,UserData> userDataMap = getUserDataMap(true);
+            userData = userDataMap.put(key, new UserData(data, handler));
+        }
+        return userData == null ? null : userData.getData();
+    }
+    
+    public final String DOMNode.lookupNamespaceURI(String prefix) {
+        try {
+            CoreElement contextElement = getNamespaceContext();
+            return contextElement == null ? null : contextElement.coreLookupNamespaceURI(prefix, false);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final String DOMNode.lookupPrefix(String namespaceURI) {
+        if (namespaceURI == null) {
+            return null;
+        } else {
+            try {
+                CoreElement contextElement = getNamespaceContext();
+                return contextElement == null ? null : contextElement.coreLookupPrefix(namespaceURI, false);
+            } catch (CoreModelException ex) {
+                throw DOMExceptionUtil.translate(ex);
+            }
+        }
+    }
+
+    public final boolean DOMNode.isDefaultNamespace(String namespaceURI) {
+        try {
+            CoreElement contextElement = getNamespaceContext();
+            return contextElement == null ? false : ObjectUtils.equals(namespaceURI, contextElement.coreLookupNamespaceURI(null, false));
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void DOMNode.normalize() {
+        try {
+            normalize(NormalizationConfig.DEFAULT);
+        } catch (AbortNormalizationException ex) {
+            // Do nothing, just abort.
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 import com.google.code.ddom.frontend.dom.intf.*;
@@ -68,5 +69,25 @@ public aspect CharacterDataSupport {
             throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         return data.substring(offset, Math.min(offset + count, data.length()));
+    }
+
+    public final String DOMCharacterData.getTextContent() {
+        return coreGetData();
+    }
+
+    public final void DOMCharacterData.setTextContent(String textContent) {
+        coreSetData(textContent);
+    }
+    
+    public final String DOMCharacterData.getNodeValue() throws DOMException {
+        return getData();
+    }
+
+    public final void DOMCharacterData.setNodeValue(String nodeValue) throws DOMException {
+        this.setData(nodeValue);
+    }
+    
+    public final CoreElement DOMCharacterData.getNamespaceContext() {
+        return coreGetParentElement();
     }
 }

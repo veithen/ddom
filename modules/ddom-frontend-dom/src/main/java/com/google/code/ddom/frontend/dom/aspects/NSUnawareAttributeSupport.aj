@@ -23,4 +23,8 @@ public aspect NSUnawareAttributeSupport {
     public final Node DOMNSUnawareAttribute.shallowClone() {
         return (Node)coreGetDocument().coreCreateAttribute(coreGetName(), null, coreGetType());
     }
+    
+    public final String DOMNSUnawareAttribute.getName() {
+        return coreGetName();
+    }
 }

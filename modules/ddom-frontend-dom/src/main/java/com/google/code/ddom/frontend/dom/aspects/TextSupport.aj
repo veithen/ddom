@@ -15,11 +15,21 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.w3c.dom.Node;
+
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.frontend.dom.intf.DOMText;
 
 public aspect TextSupport {
     public final DOMTextNode DOMText.createNewTextNode(String data) {
         return (DOMTextNode)coreGetDocument().coreCreateText(data);
+    }
+
+    public final short DOMText.getNodeType() {
+        return Node.TEXT_NODE;
+    }
+
+    public final String DOMText.getNodeName() {
+        return "#text";
     }
 }

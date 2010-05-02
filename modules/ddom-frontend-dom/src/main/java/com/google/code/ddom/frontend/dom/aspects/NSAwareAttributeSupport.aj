@@ -23,4 +23,8 @@ public aspect NSAwareAttributeSupport {
     public final Node DOMNSAwareAttribute.shallowClone() {
         return (Node)coreGetDocument().coreCreateAttribute(coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
+    
+    public final String DOMNSAwareAttribute.getName() {
+        return internalGetName();
+    }
 }

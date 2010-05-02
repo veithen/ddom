@@ -64,4 +64,24 @@ public aspect LeafNodeSupport {
     public final Node DOMLeafNode.replaceChild(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node oldChild) throws DOMException {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
+
+    public final String DOMLeafNode.getNamespaceURI() {
+        return null;
+    }
+
+    public final String DOMLeafNode.getPrefix() {
+        return null;
+    }
+
+    public final void DOMLeafNode.setPrefix(String prefix) throws DOMException {
+        // Ignored
+    }
+
+    public final String DOMLeafNode.getLocalName() {
+        return null;
+    }
+    
+    public final void DOMLeafNode.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        
+    }
 }

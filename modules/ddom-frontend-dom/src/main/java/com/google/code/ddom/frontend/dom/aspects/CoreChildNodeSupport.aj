@@ -17,8 +17,11 @@ package com.google.code.ddom.frontend.dom.aspects;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 
+import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.frontend.dom.support.NodeUtil;
 
 public aspect CoreChildNodeSupport {
     public final Document DOMCoreChildNode.getOwnerDocument() {
@@ -27,5 +30,21 @@ public aspect CoreChildNodeSupport {
     
     public final Node DOMCoreChildNode.getParentNode() {
         return (Node)coreGetParent();
+    }
+
+    public final Node DOMCoreChildNode.getNextSibling() {
+        try {
+            return NodeUtil.toDOM(coreGetNextSibling());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final Node DOMCoreChildNode.getPreviousSibling() {
+        try {
+            return NodeUtil.toDOM(coreGetPreviousSibling());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 }

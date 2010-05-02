@@ -15,11 +15,15 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect DocumentFragmentSupport {
     public final boolean DOMDocumentFragment.hasAttributes() {
@@ -45,5 +49,66 @@ public aspect DocumentFragmentSupport {
 
     public final Node DOMDocumentFragment.getParentNode() {
         return null;
+    }
+
+    public final String DOMDocumentFragment.getTextContent() {
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void DOMDocumentFragment.setTextContent(String textContent) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final Node DOMDocumentFragment.getNextSibling() {
+        return null;
+    }
+
+    public final Node DOMDocumentFragment.getPreviousSibling() {
+        return null;
+    }
+
+    public final short DOMDocumentFragment.getNodeType() {
+        return Node.DOCUMENT_FRAGMENT_NODE;
+    }
+
+    public final String DOMDocumentFragment.getNodeValue() throws DOMException {
+        return null;
+    }
+
+    public final void DOMDocumentFragment.setNodeValue(String nodeValue) throws DOMException {
+        // Setting the node value has no effect
+    }
+
+    public final String DOMDocumentFragment.getNodeName() {
+        return "#document-fragment";
+    }
+    
+    public final CoreElement DOMDocumentFragment.getNamespaceContext() {
+        return null;
+    }
+
+    public final String DOMDocumentFragment.getNamespaceURI() {
+        return null;
+    }
+
+    public final String DOMDocumentFragment.getPrefix() {
+        return null;
+    }
+
+    public final void DOMDocumentFragment.setPrefix(String prefix) throws DOMException {
+        // Ignored
+    }
+
+    public final String DOMDocumentFragment.getLocalName() {
+        return null;
+    }
+    
+    public final void DOMDocumentFragment.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        normalizeChildren(config);
     }
 }

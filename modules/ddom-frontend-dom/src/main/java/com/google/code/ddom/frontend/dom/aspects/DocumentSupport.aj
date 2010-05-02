@@ -15,7 +15,9 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.XMLConstants;
 
@@ -36,15 +38,20 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNSAwareNamedNode;
 import com.google.code.ddom.backend.CoreTypedAttribute;
+import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMConfigurationImpl;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
+import com.google.code.ddom.frontend.dom.support.UserData;
 import com.google.code.ddom.stream.spi.Symbols;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 
@@ -53,6 +60,7 @@ import com.google.code.ddom.frontend.dom.intf.*;
 public aspect DocumentSupport {
     private DOMImplementationImpl DOMDocument.domImplementation;
     private final DOMConfigurationImpl DOMDocument.domConfig = new DOMConfigurationImpl();
+    private Map<DOMCoreNode,Map<String,UserData>> DOMDocument.userDataMap;
     
     public final DOMImplementation DOMDocument.getImplementation() {
         if (domImplementation == null) {
@@ -373,5 +381,91 @@ public aspect DocumentSupport {
     
     public final Node DOMDocument.getParentNode() {
         return null;
+    }
+
+    public final Map<String,UserData> DOMDocument.getUserDataMap(DOMCoreNode node, boolean create) {
+        if (userDataMap == null) {
+            if (!create) {
+                return null;
+            }
+            userDataMap = new HashMap<DOMCoreNode,Map<String,UserData>>();
+        }
+        Map<String,UserData> mapForNode = userDataMap.get(node);
+        if (mapForNode == null) {
+            if (!create) {
+                return null;
+            }
+            mapForNode = new HashMap<String,UserData>();
+            userDataMap.put(node, mapForNode);
+        }
+        return mapForNode;
+    }
+
+    public final String DOMDocument.getTextContent() {
+        return null;
+    }
+
+    public final void DOMDocument.setTextContent(@SuppressWarnings("unused") String textContent) {
+        // Setting textContent on a Document has no effect.
+    }
+
+    public final Node DOMDocument.getNextSibling() {
+        return null;
+    }
+
+    public final Node DOMDocument.getPreviousSibling() {
+        return null;
+    }
+
+    public final short DOMDocument.getNodeType() {
+        return Node.DOCUMENT_NODE;
+    }
+
+    public final String DOMDocument.getNodeValue() throws DOMException {
+        return null;
+    }
+
+    public final void DOMDocument.setNodeValue(String nodeValue) throws DOMException {
+        // Setting the node value has no effect
+    }
+
+    public final String DOMDocument.getNodeName() {
+        return "#document";
+    }
+    
+    public final CoreElement DOMDocument.getNamespaceContext() {
+        try {
+            return coreGetDocumentElement();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+    
+    public final String DOMDocument.getNamespaceURI() {
+        return null;
+    }
+
+    public final String DOMDocument.getPrefix() {
+        return null;
+    }
+
+    public final void DOMDocument.setPrefix(String prefix) throws DOMException {
+        // Ignored
+    }
+
+    public final String DOMDocument.getLocalName() {
+        return null;
+    }
+    
+    public final void DOMDocument.normalizeDocument() {
+        try {
+            normalize((NormalizationConfig)getDomConfig());
+        } catch (AbortNormalizationException ex) {
+            // Do nothing, just abort.
+        }
+    }
+    
+    public final void DOMDocument.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        normalizeChildren(config);
     }
 }

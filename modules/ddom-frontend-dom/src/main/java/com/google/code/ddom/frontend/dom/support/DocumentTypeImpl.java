@@ -18,11 +18,14 @@ package com.google.code.ddom.frontend.dom.support;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.backend.CoreElement;
+import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
@@ -114,5 +117,51 @@ public class DocumentTypeImpl implements DOMDocumentType {
     public final Node getParentNode() {
         DOMDocumentTypeDeclaration declaration = getDeclaration();
         return declaration == null ? null : (Node)declaration.coreGetParent();
+    }
+
+    public final String getTextContent() {
+        return null;
+    }
+
+    public final void setTextContent(@SuppressWarnings("unused") String textContent) {
+        // Setting textContent on a DocumentType has no effect.
+    }
+    
+    public final Node getNextSibling() {
+        try {
+            DOMDocumentTypeDeclaration declaration = getDeclaration();
+            return declaration == null ? null : NodeUtil.toDOM(declaration.coreGetNextSibling());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+    
+    public final Node getPreviousSibling() {
+        try {
+            DOMDocumentTypeDeclaration declaration = getDeclaration();
+            return declaration == null ? null : NodeUtil.toDOM(declaration.coreGetPreviousSibling());
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final short getNodeType() {
+        return Node.DOCUMENT_TYPE_NODE;
+    }
+
+    public final String getNodeValue() throws DOMException {
+        return null;
+    }
+
+    public final void setNodeValue(String nodeValue) throws DOMException {
+        // Setting the node value has no effect
+    }
+
+    public final String getNodeName() {
+        return getName();
+    }
+    
+    public final CoreElement getNamespaceContext() {
+        return null;
     }
 }

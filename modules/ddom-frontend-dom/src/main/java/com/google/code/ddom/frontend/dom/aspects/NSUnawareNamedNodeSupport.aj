@@ -15,20 +15,25 @@
  */
 package com.google.code.ddom.frontend.dom.aspects;
 
-import org.w3c.dom.Node;
+import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.frontend.dom.intf.DOMComment;
+import com.google.code.ddom.frontend.dom.intf.*;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
-public aspect CommentSupport {
-    public final Node DOMComment.cloneNode(boolean deep) {
-        return (Node)coreGetDocument().coreCreateComment(getData());
+public aspect NSUnawareNamedNodeSupport {
+    public final String DOMNSUnawareNamedNode.getNamespaceURI() {
+        return null;
     }
-
-    public final short DOMComment.getNodeType() {
-        return Node.COMMENT_NODE;
+    
+    public final String DOMNSUnawareNamedNode.getPrefix() {
+        return null;
     }
-
-    public final String DOMComment.getNodeName() {
-        return "#comment";
+    
+    public final void DOMNSUnawareNamedNode.setPrefix(String prefix) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+    }
+    
+    public final String DOMNSUnawareNamedNode.getLocalName() {
+        return null;
     }
 }

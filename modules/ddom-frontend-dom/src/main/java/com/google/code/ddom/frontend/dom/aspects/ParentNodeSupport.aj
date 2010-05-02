@@ -201,4 +201,16 @@ public aspect ParentNodeSupport {
     public final NodeList DOMParentNode.getElementsByTagNameNS(String namespaceURI, String localName) {
         return new ElementsByTagNameNS((DOMDocument)coreGetDocument(), this, namespaceURI, localName);
     }
+    
+    private void DOMParentNode.normalizeChildren(NormalizationConfig config) throws AbortNormalizationException {
+        try {
+            CoreChildNode child = coreGetFirstChild();
+            while (child != null) {
+                NodeUtil.toDOM(child).normalize(config);
+                child = child.coreGetNextSibling();
+            }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
 }

@@ -20,9 +20,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.TypeInfo;
 
+import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 public aspect AttributeSupport {
@@ -71,5 +75,58 @@ public aspect AttributeSupport {
     
     public final Node DOMAttribute.getParentNode() {
         return null;
+    }
+
+    public final String DOMAttribute.getTextContent() {
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void DOMAttribute.setTextContent(String textContent) {
+        try {
+            coreSetValue(textContent);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final Node DOMAttribute.getNextSibling() {
+        return null;
+    }
+
+    public final Node DOMAttribute.getPreviousSibling() {
+        return null;
+    }
+
+    public final short DOMAttribute.getNodeType() {
+        return Node.ATTRIBUTE_NODE;
+    }
+
+    public final String DOMAttribute.getNodeValue() throws DOMException {
+        return getValue();
+    }
+
+    public final void DOMAttribute.setNodeValue(String nodeValue) throws DOMException {
+        setValue(nodeValue);
+    }
+
+    public final String DOMAttribute.getNodeName() {
+        return getName();
+    }
+    
+    public final CoreElement DOMAttribute.getNamespaceContext() {
+        return coreGetOwnerElement();
+    }
+    
+    public final void DOMAttribute.normalize(NormalizationConfig config) throws AbortNormalizationException {
+        normalizeChildren(config);
+    }
+
+    public final TypeInfo DOMAttribute.getSchemaTypeInfo() {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }
