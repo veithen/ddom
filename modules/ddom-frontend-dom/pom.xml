@@ -61,10 +61,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
@@ -116,68 +112,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/mixin/*</exclude>
-                            </excludes>
-                        </configuration>                        
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>iajc-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"/>
-                                <iajc srcdir="src/main/java"
-                                      source="1.5"
-                                      classpathRef="maven.compile.classpath"
-                                      destDir="${project.build.outputDirectory}">
-                                    <include name="**/*.aj"/>
-                                </iajc>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>iajc-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties"/>
-                                <iajc sourceroots="src/test/aspects"
-                                      source="1.5"
-                                      classpathRef="maven.test.classpath"
-                                      destDir="${project.build.testOutputDirectory}"/>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjtools</artifactId>
-                        <version>1.6.5</version>
-                    </dependency>
-                </dependencies>
-            </plugin -->
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>

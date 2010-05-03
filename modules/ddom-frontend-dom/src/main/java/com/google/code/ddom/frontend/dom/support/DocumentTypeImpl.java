@@ -18,17 +18,22 @@ package com.google.code.ddom.frontend.dom.support;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.UserDataHandler;
 
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
+import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 
 public class DocumentTypeImpl implements DOMDocumentType {
     private DOMDocumentTypeDeclaration declaration;
@@ -163,5 +168,136 @@ public class DocumentTypeImpl implements DOMDocumentType {
     
     public final CoreElement getNamespaceContext() {
         return null;
+    }
+
+    public final boolean hasAttributes() {
+        return false;
+    }
+
+    public final NamedNodeMap getAttributes() {
+        return null;
+    }
+
+    public final Node getFirstChild() {
+        return null;
+    }
+    
+    public final Node getLastChild() {
+        return null;
+    }
+
+    public final boolean hasChildNodes() {
+        return false;
+    }
+    
+    public final NodeList getChildNodes() {
+        return EmptyNodeList.INSTANCE;
+    }
+
+    public final Node appendChild(@SuppressWarnings("unused") Node newChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+    }
+
+    public final Node insertBefore(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node refChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+    }
+
+    public final Node removeChild(@SuppressWarnings("unused") Node oldChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+    }
+
+    public final Node replaceChild(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node oldChild) throws DOMException {
+        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+    }
+
+    public final String getNamespaceURI() {
+        return null;
+    }
+
+    public final String getPrefix() {
+        return null;
+    }
+
+    public final void setPrefix(String prefix) throws DOMException {
+        // Ignored
+    }
+
+    public final String getLocalName() {
+        return null;
+    }
+    
+    public final void normalize(NormalizationConfig config) throws AbortNormalizationException {
+        
+    }
+
+    public final boolean isSupported(String feature, String version) {
+        return getDOMImplementation().hasFeature(feature, version);
+    }
+
+    public final Object getFeature(String feature, String version) {
+        return this;
+    }
+
+    public final boolean isSameNode(Node other) {
+        return other == this;
+    }
+
+    public final boolean isEqualNode(Node other) {
+        // We know that for any DOCUMENT_TYPE_NODE, localName, namespaceURI, prefix and nodeValue
+        // are null, so no need to compare them
+        return other.getNodeType() == Node.DOCUMENT_TYPE_NODE
+                && ObjectUtils.equals(other.getNodeName(), getNodeName());
+    }
+
+    public final String getBaseURI() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final short compareDocumentPosition(Node other) throws DOMException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final Object getUserData(String key) {
+        Map<String,UserData> userDataMap = getUserDataMap(false);
+        if (userDataMap == null) {
+            return null;
+        } else {
+            UserData userData = userDataMap.get(key);
+            return userData == null ? null : userData.getData();
+        }
+    }
+
+    public final Object setUserData(String key, Object data, UserDataHandler handler) {
+        UserData userData;
+        if (data == null) {
+            Map<String,UserData> userDataMap = getUserDataMap(false);
+            if (userDataMap != null) {
+                userData = userDataMap.remove(key);
+            } else {
+                userData = null;
+            }
+        } else {
+            Map<String,UserData> userDataMap = getUserDataMap(true);
+            userData = userDataMap.put(key, new UserData(data, handler));
+        }
+        return userData == null ? null : userData.getData();
+    }
+    
+    public final String lookupNamespaceURI(String prefix) {
+        return null;
+    }
+
+    public final String lookupPrefix(String namespaceURI) {
+        return null;
+    }
+
+    public final boolean isDefaultNamespace(String namespaceURI) {
+        return false;
+    }
+
+    public final void normalize() {
+        // Nothing to do
     }
 }

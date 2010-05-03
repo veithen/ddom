@@ -47,7 +47,6 @@ public class DOMFrontend implements Frontend {
                 "com.google.code.ddom.frontend.dom.mixin.NSUnawareElementSupport",
                 "com.google.code.ddom.frontend.dom.mixin.NSUnawareNamedNodeSupport",
                 "com.google.code.ddom.frontend.dom.mixin.ParentNodeSupport",
-//                "com.google.code.ddom.frontend.dom.aspects.Parents",
                 "com.google.code.ddom.frontend.dom.mixin.ProcessingInstructionSupport",
                 "com.google.code.ddom.frontend.dom.mixin.TextNodeSupport",
                 "com.google.code.ddom.frontend.dom.mixin.TextSupport",
