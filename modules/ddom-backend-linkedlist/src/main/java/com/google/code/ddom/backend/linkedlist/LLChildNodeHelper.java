@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,70 +17,37 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.NoParentException;
 import com.google.code.ddom.backend.SelfRelationshipException;
 
-public aspect ChildNodeSupport {
-    private LLParentNode LLChildNode.parent;
-    private LLChildNode LLChildNode.nextSibling;
+public final class LLChildNodeHelper {
+    private LLChildNodeHelper() {}
     
-    public final LLParentNode LLChildNode.internalGetParent() {
-        return parent;
-    }
-    
-    public final void LLChildNode.internalSetParent(LLParentNode parent) {
-        this.parent = parent;
-    }
-    
-    public final CoreParentNode LLChildNode.coreGetParent() {
-        return parent;
-    }
-
-    public final boolean LLChildNode.coreHasParent() {
-        return parent != null;
-    }
-
-    public final CoreElement LLChildNode.coreGetParentElement() {
-        return parent instanceof CoreElement ? (CoreElement)parent : null;
-    }
-
-    public final LLChildNode LLChildNode.internalGetNextSiblingIfMaterialized() {
-        return nextSibling;
-    }
-
-    public final void LLChildNode.internalSetNextSibling(LLChildNode nextSibling) {
-        this.nextSibling = nextSibling;
-    }
-    
-    public final LLChildNode LLChildNode.internalGetNextSibling() throws DeferredParsingException {
+    public static LLChildNode internalGetNextSibling(LLChildNode that) throws DeferredParsingException {
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             return null;
         } else {
-            if (nextSibling == null && !parent.coreIsComplete()) {
-                Builder builder = internalGetDocument().internalGetBuilderFor(parent);
+            if (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete()) {
+                Builder builder = that.internalGetDocument().internalGetBuilderFor(parent);
                 do {
                     builder.next();
-                } while (nextSibling == null && !parent.coreIsComplete());
+                } while (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete());
             }
-            return nextSibling;
+            return that.internalGetNextSiblingIfMaterialized();
         }
     }
     
-    public final CoreChildNode LLChildNode.coreGetNextSibling() throws DeferredParsingException {
-        return internalGetNextSibling();
-    }
-    
-    public final LLChildNode LLChildNode.internalGetPreviousSibling() {
+    public static LLChildNode internalGetPreviousSibling(LLChildNode that) {
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             return null;
         } else {
             LLChildNode previousSibling = null;
             LLChildNode sibling = parent.internalGetFirstChildIfMaterialized();
-            while (sibling != this) {
+            while (sibling != that) {
                 previousSibling = sibling;
                 sibling = sibling.internalGetNextSiblingIfMaterialized();
             }
@@ -88,15 +55,12 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final CoreChildNode LLChildNode.coreGetPreviousSibling() {
-        return internalGetPreviousSibling();
-    }
-    
-    public final void LLChildNode.coreInsertSiblingAfter(CoreChildNode coreSibling) throws CoreModelException {
+    public static void coreInsertSiblingAfter(LLChildNode that, CoreChildNode coreSibling) throws CoreModelException {
         LLChildNode sibling = (LLChildNode)coreSibling;
-        if (sibling == this) {
+        if (sibling == that) {
             throw new SelfRelationshipException();
         }
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
@@ -105,27 +69,28 @@ public aspect ChildNodeSupport {
             sibling.coreDetach();
             // Note: since we have a builder of type 2, we don't need to materialize the next sibling
             // and we can use nextSibling instead of coreGetNextSibling()
-            sibling.internalSetNextSibling(nextSibling);
-            nextSibling = sibling;
+            sibling.internalSetNextSibling(that.internalGetNextSiblingIfMaterialized());
+            that.internalSetNextSibling(sibling);
             sibling.internalSetParent(parent);
             parent.internalNotifyChildrenModified(1);
         }
     }
     
-    public final void LLChildNode.coreInsertSiblingsAfter(CoreDocumentFragment coreFragment) throws CoreModelException {
+    public static void coreInsertSiblingsAfter(LLChildNode that, CoreDocumentFragment coreFragment) throws CoreModelException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
             // TODO: we need to validate the children types; note that this is especially tricky if the children will be added later during deferred parsing
-            internalValidateOwnerDocument(fragment);
-            if (parent.coreIsComplete() && nextSibling == null && !fragment.coreIsComplete()) {
+            that.internalValidateOwnerDocument(fragment);
+            if (parent.coreIsComplete() && that.internalGetNextSiblingIfMaterialized() == null && !fragment.coreIsComplete()) {
                 // This is a special case: we don't need to build the fragment, but only to move
                 // the already materialized children and then to migrate the builder. This is
                 // possible because we have a builder of type 2.
-                internalGetDocument().internalMigrateBuilder(fragment, parent);
+                that.internalGetDocument().internalMigrateBuilder(fragment, parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
-                nextSibling = node;
+                that.internalSetNextSibling(node);
                 int nodeCount = 0;
                 while (node != null) {
                     node.internalSetParent(parent);
@@ -141,11 +106,12 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void LLChildNode.coreInsertSiblingBefore(CoreChildNode coreSibling) throws CoreModelException {
+    public static void coreInsertSiblingBefore(LLChildNode that, CoreChildNode coreSibling) throws CoreModelException {
         LLChildNode sibling = (LLChildNode)coreSibling;
-        if (sibling == this) {
+        if (sibling == that) {
             throw new SelfRelationshipException();
         }
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
@@ -154,11 +120,11 @@ public aspect ChildNodeSupport {
             sibling.coreDetach();
             LLChildNode previousSibling = null;
             LLChildNode node = parent.internalGetFirstChildIfMaterialized();
-            while (node != this) {
+            while (node != that) {
                 previousSibling = node;
                 node = node.internalGetNextSiblingIfMaterialized();
             }
-            sibling.internalSetNextSibling(this);
+            sibling.internalSetNextSibling(that);
             if (previousSibling == null) {
                 parent.internalSetFirstChild(sibling);
             } else {
@@ -169,16 +135,17 @@ public aspect ChildNodeSupport {
         }
     }
     
-    public final void LLChildNode.coreInsertSiblingsBefore(CoreDocumentFragment coreFragment) throws CoreModelException {
+    public static void coreInsertSiblingsBefore(LLChildNode that, CoreDocumentFragment coreFragment) throws CoreModelException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
             // TODO: handle empty fragment?
-            internalValidateOwnerDocument(fragment);
+            that.internalValidateOwnerDocument(fragment);
             fragment.coreBuild();
             LLChildNode node = (LLChildNode)fragment.coreGetFirstChild(); // TODO: internal... method here
-            LLChildNode previousSibling = internalGetPreviousSibling();
+            LLChildNode previousSibling = that.internalGetPreviousSibling();
             if (previousSibling == null) {
                 parent.internalSetFirstChild(node);
             } else {
@@ -192,62 +159,65 @@ public aspect ChildNodeSupport {
                 node = node.internalGetNextSibling();
                 nodeCount++;
             } while (node != null);
-            previousNode.internalSetNextSibling(this);
+            previousNode.internalSetNextSibling(that);
             fragment.internalSetFirstChild(null);
             fragment.internalNotifyChildrenCleared();
             parent.internalNotifyChildrenModified(nodeCount);
         }
     }
     
-    public final void LLChildNode.coreDetach() throws DeferredParsingException {
+    public static void coreDetach(LLChildNode that) throws DeferredParsingException {
+        LLParentNode parent = that.internalGetParent();
         if (parent != null) {
-            LLChildNode previousSibling = internalGetPreviousSibling();
+            LLChildNode previousSibling = that.internalGetPreviousSibling();
             // We have a builder of type 2; thus we don't need to build
             // the node being detached. Therefore we can use internalGetNextSibling
             // instead of coreGetNextSibling.
             if (previousSibling == null) {
-                parent.internalSetFirstChild(nextSibling);
+                parent.internalSetFirstChild(that.internalGetNextSiblingIfMaterialized());
             } else {
-                previousSibling.internalSetNextSibling(nextSibling);
+                previousSibling.internalSetNextSibling(that.internalGetNextSiblingIfMaterialized());
             }
-            nextSibling = null;
+            that.internalSetNextSibling(null);
             parent.internalNotifyChildrenModified(-1);
-            parent = null;
+            that.internalSetParent(null);
         }
     }
     
-    public final void LLChildNode.coreReplaceWith(CoreChildNode coreNewNode) throws CoreModelException {
+    public static void coreReplaceWith(LLChildNode that, CoreChildNode coreNewNode) throws CoreModelException {
         LLChildNode newNode = (LLChildNode)coreNewNode;
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
-        } else if (newNode != this) {
-            parent.internalValidateChildType(newNode, this);
+        } else if (newNode != that) {
+            parent.internalValidateChildType(newNode, that);
             parent.internalPrepareNewChild(newNode);
             newNode.coreDetach();
-            LLChildNode previousSibling = internalGetPreviousSibling();
+            LLChildNode previousSibling = that.internalGetPreviousSibling();
             if (previousSibling == null) {
                 parent.internalSetFirstChild(newNode);
             } else {
                 previousSibling.internalSetNextSibling(newNode);
             }
-            newNode.internalSetNextSibling(nextSibling);
+            newNode.internalSetNextSibling(that.internalGetNextSiblingIfMaterialized());
             newNode.internalSetParent(parent);
-            nextSibling = null;
-            parent = null;
+            that.internalSetNextSibling(null);
+            that.internalSetParent(null);
         }
     }
     
-    public final void LLChildNode.coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException {
+    public static void coreReplaceWith(LLChildNode that, CoreDocumentFragment newNodes) throws CoreModelException {
         DocumentFragment fragment = (DocumentFragment)newNodes;
+        LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
-            internalValidateOwnerDocument(newNodes);
-            LLChildNode previousSibling = internalGetPreviousSibling();
+            that.internalValidateOwnerDocument(newNodes);
+            LLChildNode previousSibling = that.internalGetPreviousSibling();
             int nodeCount = 0;
-            if (parent.coreIsComplete() && nextSibling == null && !fragment.coreIsComplete()) {
+            if (parent.coreIsComplete() && that.internalGetNextSiblingIfMaterialized() == null && !fragment.coreIsComplete()) {
                 // This is the same case as considered in coreInsertSiblingsAfter
-                internalGetDocument().internalMigrateBuilder(fragment, parent);
+                that.internalGetDocument().internalMigrateBuilder(fragment, parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 if (previousSibling == null) {
                     parent.internalSetFirstChild(node);
@@ -274,12 +244,12 @@ public aspect ChildNodeSupport {
                     node = node.internalGetNextSibling();
                     nodeCount++;
                 } while (node != null);
-                previousNode.internalSetNextSibling(nextSibling);
+                previousNode.internalSetNextSibling(that.internalGetNextSiblingIfMaterialized());
             }
             parent.internalNotifyChildrenModified(nodeCount-1);
             fragment.internalSetFirstChild(null);
             fragment.internalNotifyChildrenCleared();
-            parent = null;
+            that.internalSetParent(null);
         }
     }
 }
