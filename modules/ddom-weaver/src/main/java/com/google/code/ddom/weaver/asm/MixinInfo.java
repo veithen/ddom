@@ -24,17 +24,17 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class MixinInfo {
     private final String name;
-    private final ClassInfo target;
+    private final List<ClassInfo> targets;
     private final Set<String> contributedInterfaces;
     private final MethodNode init;
     private final List<FieldNode> fields;
     private final List<MethodNode> methods;
     private final SourceInfo sourceInfo;
     
-    public MixinInfo(String name, ClassInfo target, Set<String> contributedInterfaces,
+    public MixinInfo(String name, List<ClassInfo> targets, Set<String> contributedInterfaces,
             MethodNode init, List<FieldNode> fields, List<MethodNode> methods, SourceInfo sourceInfo) {
         this.name = name;
-        this.target = target;
+        this.targets = targets;
         this.contributedInterfaces = contributedInterfaces;
         this.init = init;
         this.fields = fields;
@@ -46,8 +46,8 @@ public class MixinInfo {
         return name;
     }
 
-    public ClassInfo getTarget() {
-        return target;
+    public List<ClassInfo> getTargets() {
+        return targets;
     }
 
     public List<FieldNode> getFields() {

@@ -110,9 +110,11 @@ public class Reactor {
             if (!weavableClass.isInterface()) {
                 List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
                 for (MixinInfo mixin : mixins) {
-                    ClassInfo target = mixin.getTarget();
-                    if (target.isAssignableFrom(weavableClass) && !target.isAssignableFrom(weavableClass.getSuperclass())) {
-                        selectedMixins.add(mixin);
+                    for (ClassInfo target : mixin.getTargets()) {
+                        if (target.isAssignableFrom(weavableClass) && !target.isAssignableFrom(weavableClass.getSuperclass())) {
+                            selectedMixins.add(mixin);
+                            break;
+                        }
                     }
                 }
                 weave(processor, weavableClass, selectedMixins);

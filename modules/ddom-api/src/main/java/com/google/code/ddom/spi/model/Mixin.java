@@ -24,10 +24,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Mixin {
     /**
-     * Get the target type. The mixin will be applied to classes implementing the specified
-     * interface.
+     * Get the target type. The mixin will be applied to classes implementing one or more of the
+     * specified interfaces.
      * 
      * @return the target type
      */
-    Class<?> value();
+    Class<?>[] value();
 }

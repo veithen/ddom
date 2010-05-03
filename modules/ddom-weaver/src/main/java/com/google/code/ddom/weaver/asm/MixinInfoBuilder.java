@@ -40,7 +40,7 @@ class MixinInfoBuilder extends AbstractClassVisitor {
     private final Reactor reactor;
     private final SourceInfoBuilder sourceInfoBuilder;
     private String name;
-    Type target;
+    private final List<Type> targetTypes = new ArrayList<Type>();
     private final Set<String> contributedInterfaces = new HashSet<String>();
     private final List<FieldNode> fields = new ArrayList<FieldNode>();
     private final List<MethodNode> methods = new ArrayList<MethodNode>();
@@ -61,12 +61,16 @@ class MixinInfoBuilder extends AbstractClassVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (desc.equals("Lcom/google/code/ddom/spi/model/Mixin;")) {
+            final List<Type> targetTypes = this.targetTypes;
             return new AbstractAnnotationVisitor() {
                 @Override
+                public AnnotationVisitor visitArray(String name) {
+                    return name.equals("value") ? this : null;
+                }
+
+                @Override
                 public void visit(String name, Object value) {
-                    if (name.equals("value")) {
-                        MixinInfoBuilder.this.target = (Type)value;
-                    }
+                    targetTypes.add((Type)value);
                 }
             };
         } else {
@@ -99,12 +103,17 @@ class MixinInfoBuilder extends AbstractClassVisitor {
     }
 
     public MixinInfo build() throws ClassNotFoundException, ModelWeaverException {
-        if (target == null) {
-            throw new ModelWeaverException(name + " is missing a @Mixin annotation");
+        if (targetTypes.isEmpty()) {
+            throw new ModelWeaverException(name + " is missing a @Mixin annotation or the value of the @Mixin annotation is an empty array");
         }
-        if (!contributedInterfaces.remove(target.getInternalName())) {
-            log.warning("Mixin class doesn't implement target interface");
+        // TODO: do we still need this?
+//        if (!contributedInterfaces.remove(target.getInternalName())) {
+//            log.warning("Mixin class doesn't implement target interface");
+//        }
+        List<ClassInfo> targets = new ArrayList<ClassInfo>(targetTypes.size());
+        for (Type type : targetTypes) {
+            targets.add(reactor.getClassInfo(type.getClassName()));
         }
-        return new MixinInfo(name, reactor.getClassInfo(target.getClassName()), contributedInterfaces, init, fields, methods, sourceInfoBuilder.getSourceInfo());
+        return new MixinInfo(name, targets, contributedInterfaces, init, fields, methods, sourceInfoBuilder.getSourceInfo());
     }
 }
