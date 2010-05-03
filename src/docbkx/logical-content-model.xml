@@ -80,22 +80,71 @@
         </section>
         <section id="lcm.element">
             <title>Element information items</title>
-
+            <para>
+                There are two types of element information items: namespace aware and namespace
+                unaware element information items. Both may represent an <xref linkend="NT-element"/>
+                appearing in an XML document. Whether a namespace aware or unaware element information
+                item for a given <xref linkend="NT-element"/> depends on the configuration of
+                the parser.
+            </para>
+            <para>
+                Both types of element information items have the following properties:
+            </para>
             <variablelist>
-                <varlistentry>
+                <varlistentry id="prop-lcm.element.attributes" xreflabel="&lcmxs;attributes&lcmxe;">
+                    <term>attributes</term>
+                    <listitem>
+                        <para>
+                            An ordered list of <link linkend="lcm.attribute">attribute information
+                            items</link>, in document order.
+                        </para>
+                        <note>
+                            <para>
+                                We define this property to be an ordered list even though the order
+                                of attributes in an XML document doesn't have any semantic meaning.
+                            </para>
+                        </note>
+                    </listitem>
+                </varlistentry>
+                <varlistentry id="prop-lcm.element.children" xreflabel="&lcmxs;children&lcmxe;">
                     <term>children</term>
                     <listitem>
                         <para>
                             An ordered list of child information items, in document order.
+                            TODO: specify types
                         </para>
                     </listitem>
                 </varlistentry>
             </variablelist>
-            <section>
+            <section id="lcm.nswareelement">
                 <title>Namepace aware element information items</title>
-                
+                <para>
+                    A namespace aware element information item is produced by a namespace aware parser
+                    for each <xref linkend="NT-element"/>
+                    appearing in the document. It has the following properties:
+                </para>
+                <variablelist>
+                    <varlistentry id="prop-lcm.element.prefix" xreflabel="&lcmxs;prefix&lcmxe;">
+                        <term>prefix</term>
+                        <listitem>
+                            <para></para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry id="prop-lcm.element.namespaceURI" xreflabel="&lcmxs;namespaceURI&lcmxe;">
+                        <term>namespaceURI</term>
+                        <listitem>
+                            <para></para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry id="prop-lcm.element.localName" xreflabel="&lcmxs;localName&lcmxe;">
+                        <term>localName</term>
+                        <listitem>
+                            <para></para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
             </section>
-            <section>
+            <section id="lcm.nsunawareelement">
                 <title>Namespace unaware element information item</title>
                 <para>
                     A namespace unaware element information item is produced by a namespace unaware parser
@@ -103,7 +152,7 @@
                     appearing in the document. It has the following properties:
                 </para>
                 <variablelist>
-                    <varlistentry>
+                    <varlistentry id="prop-lcm.element.name" xreflabel="&lcmxs;name&lcmxe;">
                         <term>name</term>
                         <listitem>
                             <para>
@@ -165,11 +214,11 @@
                     </listitem>
                 </varlistentry>
             </variablelist>
-            <section>
+            <section id="lcm.nsawareattribute">
                 <title>Namespace aware attribute information items</title>
                 
             </section>
-            <section>
+            <section id="lcm.nsunawareattribute">
                 <title>Namespace unaware attribute information items</title>
                 <para>
                     A namespace unaware attribute information item is produced by a namespace unaware parser
@@ -177,7 +226,7 @@
                     appearing in the document. It has the following properties:
                 </para>
                 <variablelist>
-                    <varlistentry>
+                    <varlistentry id="prop-lcm.attribute.name" xreflabel="&lcmxs;name&lcmxe;">
                         <term>name</term>
                         <listitem>
                             <para>
@@ -223,6 +272,26 @@
                         namespace aware attribute information items.
                     </para>
                 </note>
+            </section>
+            <section id="lcm.nsdecl">
+                <title>Namespace declaration information items</title>
+                
+                <variablelist>
+                    <varlistentry id="prop-lcm.nsdecl.prefix" xreflabel="&lcmxs;prefix&lcmxe;">
+                        <term>prefix</term>
+                        <listitem>
+                            <para>
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry id="prop-lcm.nsdecl.namespaceURI" xreflabel="&lcmxs;namespaceURI&lcmxe;">
+                        <term>namespaceURI</term>
+                        <listitem>
+                            <para>
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
             </section>
         </section>
         <section id="lcm.text">
@@ -522,10 +591,6 @@
         <section>
             <title>Notation information items</title>
             
-        </section>
-        <section>
-            <title>Namespace declaration information items</title>
-        
         </section>
     </section>
     <section>

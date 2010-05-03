@@ -5,8 +5,86 @@
     <section>
         <title>Definition</title>
         <para>
-            TODO: Define the LEM by deriving it from the LCM
+            In the Logical Content Model, an information item may have properties that refer to
+            other information items or even to collections of information items. It therefore
+            defines a hierarchical data structure. The Logical Event Model on the other hand
+            defines a representation of a well-formed XML document as sequence of events where
+            each event may only have properties of scalar types (including strings).
+            In addition we require that both models contain the same information, i.e. that there
+            is a bijection between LCM instances and LEM instances.
         </para>
+        <para>
+            Deriving the LEM from the LCM is pretty straightforward and amounts to "flatten"
+            the hierarchical data structures of the LCM.
+        </para>
+        
+        
+        <table>
+            <tgroup cols="2">
+                <thead>
+                    <row>
+                        <entry>Event type</entry>
+                        <entry>Properties</entry>
+                        <entry>Derived from</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>Start of namespace aware element</entry>
+                        <entry><xref linkend="prop-lcm.element.prefix"/>, <xref linkend="prop-lcm.element.namespaceURI"/>, <xref linkend="prop-lcm.element.localName"/></entry>
+                        <entry><link linkend="lcm.nsawarelement">namespace aware element information item</link></entry>
+                    </row>
+                    <row>
+                        <entry>Start of namespace unaware element</entry>
+                        <entry><xref linkend="prop-lcm.element.name"/></entry>
+                        <entry><link linkend="lcm.nsunawareelement">namespace unaware element information item</link></entry>
+                    </row>
+                    <row>
+                        <entry>Start of namespace aware attribute</entry>
+                        <entry></entry>
+                        <entry><link linkend="lcm.nsawareattribute">namespace aware attribute information item</link></entry>
+                    </row>
+                    <row>
+                        <entry>Start of namespace unaware attribute</entry>
+                        <entry></entry>
+                        <entry><link linkend="lcm.nsunawareattribute">namespace unaware attribute information item</link></entry>
+                    </row>
+                    <row>
+                        <entry>Namespace declaration</entry>
+                        <entry><xref linkend="prop-lcm.nsdecl.prefix"/>, <xref linkend="prop-lcm.nsdecl.namespaceURI"/></entry>
+                        <entry><link linkend="lcm.nsdecl">namespace declaration information item</link></entry>
+                    </row>
+                    <row>
+                        <entry>Start of element content</entry>
+                        <entry>None</entry>
+                        <entry><link linkend="lcm.element">element information item</link></entry>
+                    </row>
+                    <row>
+                        <entry>End of element</entry>
+                        <entry>None</entry>
+                        <entry><link linkend="lcm.element">element information item</link></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <para>
+            Comments:
+        </para>
+        <orderedlist>
+            <listitem>
+                <para>
+                    There is no end of attribute event. The content of an attribute ends with a
+                    start of namespace aware attribute, start of namespace unaware attribute, namespace declaration
+                    or start of element content event.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    TODO: should a start of element content event always be present or only if there is actually a content??
+                </para>
+            </listitem>
+        </orderedlist>
+        
         <para>
             TODO: Issue: because attribute order doesn't matter, a namespace can be used before
             it is defined; this means that a parser can't deliver events for individual attributes
