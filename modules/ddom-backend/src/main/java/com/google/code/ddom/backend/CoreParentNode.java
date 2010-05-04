@@ -47,7 +47,10 @@ public interface CoreParentNode extends CoreNode {
      * 
      * @param value
      *            the value to set
-     * @throws DeferredParsingException 
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing. This may happen because the method
+     *             needs to discard all existing children of the node and this may require the
+     *             parser to be advanced to the end of this node.
      */
     void coreSetValue(String value) throws DeferredParsingException;
     
