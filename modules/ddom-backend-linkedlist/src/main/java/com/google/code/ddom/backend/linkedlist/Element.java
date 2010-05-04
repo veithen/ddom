@@ -25,12 +25,10 @@ import com.google.code.ddom.backend.CoreAttribute;
 import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreModelException;
 import com.google.code.ddom.backend.CoreNamespaceDeclaration;
-import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.DeferredParsingException;
@@ -43,24 +41,11 @@ import com.google.code.ddom.backend.WrongDocumentException;
 import com.google.code.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 
 @Implementation
-public abstract class Element extends ParentNode implements LLChildNode, CoreElement {
-    private final Document document;
-    private LLParentNode parent;
-    private LLChildNode nextSibling;
-    private int children;
+public abstract class Element extends Container implements LLChildNode, CoreElement {
     private Attribute firstAttribute;
 
     public Element(Document document, boolean complete) {
-        super(complete);
-        this.document = document;
-    }
-
-    public final void internalNotifyChildrenModified(int delta) {
-        children += delta;
-    }
-
-    public final void internalNotifyChildrenCleared() {
-        children = 0;
+        super(document, complete);
     }
 
     final void setFirstAttribute(Attribute firstAttribute) {
@@ -74,19 +59,10 @@ public abstract class Element extends ParentNode implements LLChildNode, CoreEle
         }
     }
 
-    public final int coreGetChildCount() throws DeferredParsingException {
-        coreBuild();
-        return children;
-    }
-
     public final CoreAttribute coreGetFirstAttribute() {
         return firstAttribute;
     }
     
-    public final LLDocument internalGetDocument() {
-        return document;
-    }
-
     public final CoreAttribute coreGetLastAttribute() {
         CoreAttribute previousAttribute = null;
         CoreAttribute attribute = firstAttribute;
@@ -326,77 +302,5 @@ public abstract class Element extends ParentNode implements LLChildNode, CoreEle
 
     public final <T extends CoreAttribute,S> Iterator<S> coreGetAttributesByType(Class<T> type, Mapper<T,S> mapper) {
         return new AttributesByTypeIterator<T,S>(this, type, mapper);
-    }
-
-    public final LLParentNode internalGetParent() {
-        return parent;
-    }
-    
-    public final void internalSetParent(LLParentNode parent) {
-        this.parent = parent;
-    }
-    
-    public final CoreParentNode coreGetParent() {
-        return parent;
-    }
-
-    public final boolean coreHasParent() {
-        return parent != null;
-    }
-
-    public final CoreElement coreGetParentElement() {
-        return parent instanceof CoreElement ? (CoreElement)parent : null;
-    }
-
-    public final LLChildNode internalGetNextSiblingIfMaterialized() {
-        return nextSibling;
-    }
-
-    public final void internalSetNextSibling(LLChildNode nextSibling) {
-        this.nextSibling = nextSibling;
-    }
-    
-    public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {
-        return internalGetNextSibling();
-    }
-    
-    public final CoreChildNode coreGetPreviousSibling() {
-        return internalGetPreviousSibling();
-    }
-    
-    public final LLChildNode internalGetNextSibling() throws DeferredParsingException {
-        return LLChildNodeHelper.internalGetNextSibling(this);
-    }
-
-    public final LLChildNode internalGetPreviousSibling() {
-        return LLChildNodeHelper.internalGetPreviousSibling(this);
-    }
-
-    public final void coreInsertSiblingAfter(CoreChildNode sibling) throws CoreModelException {
-        LLChildNodeHelper.coreInsertSiblingAfter(this, sibling);
-    }
-
-    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws CoreModelException {
-        LLChildNodeHelper.coreInsertSiblingsAfter(this, fragment);
-    }
-
-    public final void coreInsertSiblingBefore(CoreChildNode sibling) throws CoreModelException {
-        LLChildNodeHelper.coreInsertSiblingBefore(this, sibling);
-    }
-
-    public final void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws CoreModelException {
-        LLChildNodeHelper.coreInsertSiblingsBefore(this, fragment);
-    }
-
-    public final void coreDetach() throws DeferredParsingException {
-        LLChildNodeHelper.coreDetach(this);
-    }
-
-    public final void coreReplaceWith(CoreChildNode newNode) throws CoreModelException {
-        LLChildNodeHelper.coreReplaceWith(this, newNode);
-    }
-
-    public final void coreReplaceWith(CoreDocumentFragment newNodes) throws CoreModelException {
-        LLChildNodeHelper.coreReplaceWith(this, newNodes);
     }
 }
