@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
@@ -35,6 +36,9 @@ import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
 
 public class Reactor {
+    // TODO: introduce system property for this
+    private static final boolean dump = false;
+    
     private static final EdgeRelation<WeavableClassInfo> inheritanceRelation = new EdgeRelation<WeavableClassInfo>() {
         public boolean isEdge(WeavableClassInfo from, WeavableClassInfo to) {
             if (to.isInterface()) {
@@ -131,7 +135,11 @@ public class Reactor {
         for (MixinInfo mixin : mixins) {
             sourceMapper.addSourceInfo(mixin.getSourceInfo());
         }
-        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(new TraceClassVisitor(cw, new PrintWriter(System.out)), mixins, sourceMapper)), 0);
+        ClassVisitor out = cw;
+        if (dump) {
+            out = new TraceClassVisitor(out, new PrintWriter(System.out));
+        }
+        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper)), 0);
         processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
     }
 }
