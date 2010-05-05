@@ -70,7 +70,7 @@ public class DynamicModelLoader implements ModelLoader {
             weaver.weave(frontends);
             return (DocumentFactory)classLoader.loadClass(backend.getDocumentFactoryClassName()).newInstance();
         } catch (Exception ex) {
-            throw new ModelLoaderException(ex);
+            throw new ModelLoaderException("Failed to weave model", ex);
         }
     }
 }

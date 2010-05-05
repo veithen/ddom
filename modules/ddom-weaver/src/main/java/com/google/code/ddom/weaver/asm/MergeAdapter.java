@@ -57,6 +57,18 @@ public class MergeAdapter extends ClassAdapter {
     private final SourceMapper sourceMapper;
     private Remapper remapper;
     
+    /**
+     * The set of methods that have already been written to the output class. Used to detect method
+     * collisions.
+     */
+    private final Set<String> seenMethods = new HashSet<String>();
+    
+    /**
+     * The set of fields that have already been written to the output class. Used to detect field
+     * collisions.
+     */
+    private final Set<String> seenFields = new HashSet<String>();
+    
     public MergeAdapter(ClassVisitor cv, List<MixinInfo> mixins, SourceMapper sourceMapper) {
         super(cv);
         this.mixins = mixins;
@@ -83,6 +95,7 @@ public class MergeAdapter extends ClassAdapter {
         if (log.isLoggable(Level.FINER)) {
             log.finer("Visiting method " + name + desc + " from base class");
         }
+        seenMethods.add(name + desc);
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
         if (visitor != null) {
             visitor = new RemappingMethodAdapter(access, desc, visitor, remapper);
@@ -118,6 +131,7 @@ public class MergeAdapter extends ClassAdapter {
         if (log.isLoggable(Level.FINER)) {
             log.finer("Visiting field " + name + " from base class");
         }
+        seenFields.add(name);
         return super.visitField(access, name, desc, signature, value);
     }
 
@@ -128,11 +142,17 @@ public class MergeAdapter extends ClassAdapter {
                 if (log.isLoggable(Level.FINER)) {
                     log.finer("Merging field " + field.name + " from mixin " + mixin.getName());
                 }
+                if (!seenFields.add(field.name)) {
+                    throw new ReactorException("Duplicate field " + field.name);
+                }
                 field.accept(this);
             }
             for (MethodNode mn : mixin.getMethods()) {
                 if (log.isLoggable(Level.FINER)) {
                     log.finer("Merging method " + mn.name + mn.desc + " from mixin " + mixin.getName());
+                }
+                if (!seenMethods.add(mn.name + mn.desc)) {
+                    throw new ReactorException("Method " + mn.name + mn.desc + " of mixin " + mixin.getName() + " collides with a method declared in the base class or another mixin");
                 }
                 String[] exceptions = new String[mn.exceptions.size()];
                 mn.exceptions.toArray(exceptions);

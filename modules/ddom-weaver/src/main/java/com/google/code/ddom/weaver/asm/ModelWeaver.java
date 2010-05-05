@@ -51,6 +51,10 @@ public class ModelWeaver {
                 }
             }
             reactor.weave(processor);
+        } catch (ReactorException ex) {
+            ModelWeaverException ex2 = new ModelWeaverException(ex.getMessage(), ex.getCause());
+            ex2.setStackTrace(ex.getStackTrace());
+            throw ex2;
         } catch (ClassNotFoundException ex) {
             throw new ModelWeaverException(ex);
         } catch (IOException ex) {
