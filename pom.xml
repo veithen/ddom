@@ -212,6 +212,22 @@
                             <xincludeSupported>true</xincludeSupported>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>manual-pdf</id>
+                        <goals>
+                            <goal>generate-pdf</goal>
+                        </goals>
+                        <phase>pre-site</phase>
+                        <configuration>
+                            <includes>manual.xml</includes>
+                            <foCustomization>src/docbkx/xsl/fo.xsl</foCustomization>
+                            <postProcess>
+                                <copy file="target/docbkx/pdf/manaul.pdf"
+                                      tofile="target/site/manual.pdf"/>
+                            </postProcess>
+                            <xincludeSupported>true</xincludeSupported>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

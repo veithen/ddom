@@ -27,6 +27,10 @@
                 <lhs>Name</lhs>
                 <rhs><nonterminal def="#NT-NameStartChar">NameStartChar</nonterminal> (<nonterminal def="#NT-NameChar">NameChar</nonterminal>)*</rhs>
             </production>
+            <production id="NT-S">
+                <lhs>S</lhs>
+                <rhs>(#x20 | #x9 | #xD | #xA)+</rhs>
+            </production>
         </productionset>
         <productionset>
             <title>Document</title>
@@ -55,6 +59,30 @@
                   | <nonterminal def="#NT-S">S</nonterminal>
                 </rhs>
             </production>
+            <production id="NT-XMLDecl">
+                <lhs>XMLDecl</lhs>
+                <rhs>
+                    '&lt;?xml'
+                    <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-VersionInfo">VersionInfo</nonterminal> 
+                    <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-EncodingDecl">EncodingDecl</nonterminal>?
+                    <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NS-SDDecl">SDDecl</nonterminal>?
+                    <nonterminal def="#NT-S">S</nonterminal>?
+                    '?>'
+                </rhs>
+            </production>
+            <production id="NT-doctypedecl">
+                <lhs>doctypedecl</lhs>
+                <rhs>
+                    '&lt;!DOCTYPE'
+                    <nonterminal def="#NT-S">S</nonterminal>
+                    <nonterminal def="#NT-Name">Name</nonterminal> 
+                    (<nonterminal def="#NT-S">S</nonterminal>
+                     <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-ExternalID">ExternalID</nonterminal>)?
+                    <nonterminal def="#NT-S">S</nonterminal>?
+                    ('[' <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-intSubset">intSubset</nonterminal> ']'
+                     <nonterminal def="#NT-S">S</nonterminal>?)? '>'
+                </rhs>
+            </production> 
         </productionset>
         <productionset>
             <title>Element</title>
@@ -87,6 +115,12 @@
                     <nonterminal def="#NT-Name">Name</nonterminal>
                     <nonterminal def="#NT-Eq">Eq</nonterminal>
                     <nonterminal def="#NT-AttValue">AttValue</nonterminal>
+                </rhs>
+            </production>
+            <production id="NT-Eq">
+                <lhs>Eq</lhs>
+                <rhs>
+                    <nonterminal def="#NT-S">S</nonterminal>? '=' <nonterminal def="#NT-S">S</nonterminal>?
                 </rhs>
             </production>
             <production id="NT-AttValue" xreflabel="&ntxs;AttValue&ntxe;">
