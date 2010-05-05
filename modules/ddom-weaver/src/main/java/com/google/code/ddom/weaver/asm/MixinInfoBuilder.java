@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -96,6 +97,9 @@ class MixinInfoBuilder extends AbstractClassVisitor {
                 return null;
             }
         } else {
+            if ((access & Opcodes.ACC_ABSTRACT) != 0) {
+                throw new ReactorException("Mixin " + this.name + " declares an abstract method " + name + desc + ". This is disallowed; use an interface instead.");
+            }
             MethodNode method = new MethodNode(access, name, desc, signature, exceptions);
             methods.add(method);
             return method;

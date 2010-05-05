@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 import com.google.code.ddom.backend.CoreParentNode;
 
 public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
+    Node shallowClone();
     Node deepClone();
     void normalizeChildren(NormalizationConfig config) throws AbortNormalizationException;
 }

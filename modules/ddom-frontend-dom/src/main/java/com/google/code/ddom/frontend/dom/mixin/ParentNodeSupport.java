@@ -201,8 +201,6 @@ public abstract class ParentNodeSupport implements DOMParentNode {
         }
     }
     
-    public abstract Node shallowClone();
-    
     public final NodeList getElementsByTagName(String tagname) {
         return new ElementsByTagName((DOMDocument)coreGetDocument(), this, tagname);
     }

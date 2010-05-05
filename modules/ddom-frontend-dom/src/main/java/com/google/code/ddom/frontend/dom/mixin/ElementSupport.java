@@ -207,8 +207,6 @@ public abstract class ElementSupport implements DOMElement {
         return (Node)clone;
     }
     
-    public abstract CoreElement shallowCloneWithoutAttributes();
-
     public final String getTextContent() {
         try {
             return coreGetTextContent();
