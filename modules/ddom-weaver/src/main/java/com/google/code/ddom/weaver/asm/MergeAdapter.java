@@ -22,9 +22,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
@@ -48,6 +51,8 @@ import org.objectweb.asm.tree.MethodNode;
  * </ul>
  */
 public class MergeAdapter extends ClassAdapter {
+    private static final Logger log = Logger.getLogger(MergeAdapter.class.getName());
+    
     final List<MixinInfo> mixins;
     private final SourceMapper sourceMapper;
     private Remapper remapper;
@@ -75,6 +80,9 @@ public class MergeAdapter extends ClassAdapter {
     
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        if (log.isLoggable(Level.FINER)) {
+            log.finer("Visiting method " + name + desc + " from base class");
+        }
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
         if (visitor != null) {
             visitor = new RemappingMethodAdapter(access, desc, visitor, remapper);
@@ -106,13 +114,26 @@ public class MergeAdapter extends ClassAdapter {
     }
 
     @Override
+    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+        if (log.isLoggable(Level.FINER)) {
+            log.finer("Visiting field " + name + " from base class");
+        }
+        return super.visitField(access, name, desc, signature, value);
+    }
+
+    @Override
     public void visitEnd() {
         for (MixinInfo mixin : mixins) {
             for (FieldNode field : mixin.getFields()) {
-                System.out.println(field.name);
+                if (log.isLoggable(Level.FINER)) {
+                    log.finer("Merging field " + field.name + " from mixin " + mixin.getName());
+                }
                 field.accept(this);
             }
             for (MethodNode mn : mixin.getMethods()) {
+                if (log.isLoggable(Level.FINER)) {
+                    log.finer("Merging method " + mn.name + mn.desc + " from mixin " + mixin.getName());
+                }
                 String[] exceptions = new String[mn.exceptions.size()];
                 mn.exceptions.toArray(exceptions);
                 MethodVisitor mv = cv.visitMethod(mn.access, mn.name, mn.desc, mn.signature, exceptions);
