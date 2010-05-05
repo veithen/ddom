@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter SYSTEM "manual.dtd">
+<chapter id="weaver">
+    <title>The weaver</title>
+    <section>
+        <title>Mixins</title>
+        <para>
+            A mixin is a public abstract class annotated with the <classname>@Mixin</classname>
+            annotation. The value of the annotation defines the <firstterm>target(s)</firstterm>
+            of the mixin, specifying to which classes the mixin will be applied. Consider a
+            mixin <classname>M</classname> with target <classname>T</classname> and a class
+            <classname>C</classname>, both supplied to the weaver. The weaver will apply
+            <classname>M</classname> to <classname>C</classname> if and only if
+            <classname>C</classname> implements <classname>T</classname><footnote><para>More precisely, if
+            <classname>C</classname> is assignable to <classname>T</classname>.</para></footnote>
+            and the superclass of <classname>C</classname> does not implement <classname>T</classname>.
+            The second condition makes sure that the mixin is only applied at a single level of the
+            class hierarchy. For example, consider <classname>D</classname>, subclass of
+            <classname>C</classname> implementing <classname>T</classname>. In this class
+            hierarchy, the mixin will be applied to <classname>C</classname>, but not to
+            <classname>D</classname>. The reason is of course that the methods that the mixin
+            adds to <classname>C</classname> will already be available to <classname>D</classname>
+            by inheritance.
+        </para>
+        <para>
+            In general, a mixin will implement the target interface or a superinterface of
+            the target<footnote><para>In the case of a mixin with multiple targets,
+            this will typically be a superinterface common to all target interfaces.</para></footnote>.
+            This allows the mixin to invoke methods implemented by the classes to which
+            it is applied. All other interfaces implemented by the mixin class are called
+            <firstterm>contributed interfaces</firstterm>.
+        </para>
+        <para>
+            When a mixin <classname>M</classname> is applied to a class <classname>C</classname>,
+            the weaver will enhance <classname>C</classname> in the following way:
+        </para>
+        <orderedlist>
+            <listitem>
+                <para>
+                    All methods declared by <classname>M</classname> are added to
+                    <classname>C</classname>.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    All fields declared by <classname>M</classname> are added to
+                    <classname>C</classname>.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    The contributed interfaces declared by <classname>M</classname>
+                    are added to the list of interfaces implemented by <classname>C</classname>,
+                    except for the interfaces already implemented by <classname>C</classname>.
+                </para>
+            </listitem>
+        </orderedlist>
+        <note>
+            <para>
+                While this list is complete from a conceptual point of view, there are a
+                couple of other things that the weaver must do to make this actually work:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        The code in the constructor (more precisely, the <methodname>&lt;init&gt;</methodname>
+                        method) of <classname>M</classname> is merged into the constructor(s) of <classname>C</classname>. 
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        All references to <classname>M</classname> in the bytecode are substituted by
+                        references to <classname>C</classname>.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        In the case of build-time weaving, the enhanced classes are relocated
+                        to avoid class loading conflicts with the original classes.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </note>
+        <para>
+            As explained above, a mixin is simply a Java class with a particular annotation. There
+            are however some additional constraints that cannot be checked at compile time, but
+            that the weaver will verify:
+        </para>
+        <orderedlist>
+            <listitem>
+                <para>
+                    A mixin class must not have a superclass.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A mixin class must have a single constructor, and this constructor
+                    must be the default (public, no-arg) constructor.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A mixin must not declare abstract methods. Any abstract
+                    method should be defined using a contributed interface. More generally,
+                    a method declared by a mixin should either be private or defined by a
+                    contributed interface. In addition, all public methods should be
+                    final. There are several reasons for these constraints:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            The fact that a mixin <classname>M</classname> is applied to
+                            a class <classname>C</classname> doesn't imply that at runtime,
+                            <classname>C</classname> may be cast to <classname>M</classname>.
+                            Therefore, in general there should be no code referencing a mixin directly
+                            (outside of the mixin itself). This means that the methods declared by
+                            <classname>M</classname> can only be invoked through a contributed
+                            interface.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Consider a mixin <classname>M1</classname> applied to <classname>C1</classname>
+                            and another mixin <classname>M2</classname> applied to <classname>C2</classname>,
+                            with <classname>C1</classname> being the superclass of <classname>C2</classname>.
+                            If <classname>M1</classname> and <classname>M2</classname> declare a method
+                            with the same name and signature, then at runtime, the method declared by
+                            <classname>M2</classname> will actually override the corresponding method
+                            in <classname>M1</classname>, even though this is not the case when
+                            <classname>M2</classname> is compiled.
+                        </para>
+                        <para>
+                            There is nothing wrong with this, but the fact is that this (pseudo) inheritance
+                            relationship will not be recognized by any development tool. This would
+                            make it very hard to understand the code, because it is not easy to see when
+                            a method declared by a mixin overrides a method in another mixin. However,
+                            if the method is defined by an interface, then at least the development tool
+                            can link all implementations of that method to the definition in the interface (so that
+                            e.g. in Eclipse it is possible to use the "References" feature).
+                        </para>
+                        <para>
+                            Declaring public methods as final wherever possible is a good practice
+                            because unintentionally overriding the method in a mixin will be detected
+                            at runtime by the Java verifier.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </listitem>
+        </orderedlist>
+    </section>
+</chapter>

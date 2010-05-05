@@ -39,6 +39,7 @@
     </part>
     <part>
         <title>Developer guide</title>
+        <xi:include href="weaver.xml"/>
         <xi:include href="backend-dev.xml"/>
         <xi:include href="background-material.xml"/>
     </part>
