@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,44 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreCDATASection;
+import com.google.code.ddom.backend.CoreChildNode;
+import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
 
 @Implementation
-public class CDATASection extends TextNode implements CoreCDATASection {
+public class CDATASection extends Container implements CoreCDATASection {
     public CDATASection(Document document, String data) {
-        super(document, data);
+        super(document, true);
+        try {
+            coreSetValue(data);
+        } catch (DeferredParsingException e) {
+            throw new RuntimeException(e); // TODO
+        }
+    }
+
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)
+            throws ChildTypeNotAllowedException, DeferredParsingException {
+        if (!(newChild instanceof CoreText)) {
+            throw new ChildTypeNotAllowedException();
+        }
+    }
+
+    public String coreGetData() {
+        try {
+            return coreGetTextContent();
+        } catch (DeferredParsingException e) {
+            throw new RuntimeException(e); // TODO
+        }
+    }
+
+    public void coreSetData(String data) {
+        try {
+            coreSetValue(data);
+        } catch (DeferredParsingException e) {
+            throw new RuntimeException(e); // TODO
+        }
     }
 }
