@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -36,6 +38,8 @@ import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
 
 public class Reactor {
+    private static final Logger log = Logger.getLogger(Reactor.class.getName());
+    
     // TODO: introduce system property for this
     private static final boolean dump = false;
     
@@ -127,19 +131,28 @@ public class Reactor {
     }
     
     private void weave(ClassDefinitionProcessor processor, WeavableClassInfo weavableClass, List<MixinInfo> mixins) throws ClassDefinitionProcessorException {
-        System.out.println("Weaving " + weavableClass + "; mixins: " + mixins);
-        ClassReader cr = new ClassReader(weavableClass.getClassDefinition());
-        ClassWriter cw = new ReactorAwareClassWriter(this, cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        SourceMapper sourceMapper = new SourceMapper();
-        sourceMapper.addSourceInfo(weavableClass.getSourceInfo());
-        for (MixinInfo mixin : mixins) {
-            sourceMapper.addSourceInfo(mixin.getSourceInfo());
+        if (mixins.isEmpty()) {
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Copying unmodified class " + weavableClass);
+            }
+            processor.processClassDefinition(weavableClass.getName(), weavableClass.getClassDefinition());
+        } else {
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Weaving " + weavableClass + "; mixins: " + mixins);
+            }
+            ClassReader cr = new ClassReader(weavableClass.getClassDefinition());
+            ClassWriter cw = new ReactorAwareClassWriter(this, cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+            SourceMapper sourceMapper = new SourceMapper();
+            sourceMapper.addSourceInfo(weavableClass.getSourceInfo());
+            for (MixinInfo mixin : mixins) {
+                sourceMapper.addSourceInfo(mixin.getSourceInfo());
+            }
+            ClassVisitor out = cw;
+            if (dump) {
+                out = new TraceClassVisitor(out, new PrintWriter(System.out));
+            }
+            cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper)), 0);
+            processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
         }
-        ClassVisitor out = cw;
-        if (dump) {
-            out = new TraceClassVisitor(out, new PrintWriter(System.out));
-        }
-        cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper)), 0);
-        processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
     }
 }
