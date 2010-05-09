@@ -41,6 +41,12 @@ public class Module {
      *             of the module
      */
     public static Module forClassName(ClassLoader classLoader, String className) throws ClassNotFoundException {
+        if (classLoader == null) {
+            // A null class loader means the bootstrap class loader. In this case we use the
+            // system class loader. This is safe since we can assume that the system class
+            // loader uses parent first as delegation policy.
+            classLoader = ClassLoader.getSystemClassLoader();
+        }
         String name = ClassLoaderUtils.getResourceNameForClassName(className);
         URL url = classLoader.getResource(name);
         if (url == null) {

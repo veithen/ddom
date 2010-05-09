@@ -15,9 +15,6 @@
  */
 package com.google.code.ddom.commons.cl;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class ClassLoaderUtils {
     private ClassLoaderUtils() {}
     
@@ -30,52 +27,5 @@ public class ClassLoaderUtils {
      */
     public static String getResourceNameForClassName(String className) {
         return className.replace('.', '/') + ".class";
-    }
-
-    /**
-     * Get the URL corresponding to the root folder of the classpath entry from which a given
-     * resource is loaded. This URL can be used to load other resources from the same classpath
-     * entry (JAR file or directory).
-     * 
-     * @param classLoader the class loader from which the resource is available
-     * @param resource the resource to inspect
-     * @return the root URL or <code>null</code> if the resource can't be found or if it is not
-     *         possible to determine the root URL
-     */
-    public static URL getRootUrlForResource(ClassLoader classLoader, String resource) {
-        if (classLoader == null) {
-            // A null class loader means the bootstrap class loader. In this case we use the
-            // system class loader. This is safe since we can assume that the system class
-            // loader uses parent first as delegation policy.
-            classLoader = ClassLoader.getSystemClassLoader();
-        }
-        URL url = classLoader.getResource(resource);
-        if (url == null) {
-            return null;
-        }
-        String file = url.getFile();
-        if (file.endsWith(resource)) {
-            try {
-                return new URL(url.getProtocol(), url.getHost(), url.getPort(),
-                        file.substring(0, file.length()-resource.length()));
-            } catch (MalformedURLException ex) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-     * Get the URL corresponding to the root folder of the classpath entry from which a given class
-     * is loaded.
-     * 
-     * @param cls
-     *            the class to inspect
-     * @return the root URL or <code>null</code> if it is not possible to determine the root URL
-     */
-    public static URL getRootUrlForClass(Class<?> cls) {
-        return getRootUrlForResource(cls.getClassLoader(),
-                cls.getName().replace('.', '/') + ".class");
     }
 }

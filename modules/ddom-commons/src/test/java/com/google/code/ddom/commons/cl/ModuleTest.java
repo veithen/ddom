@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,5 +25,10 @@ public class ModuleTest {
         Module module = Module.forClass(ModuleTest.class);
         Package pkg = module.getPackage(ModuleTest.class.getPackage().getName());
         Assert.assertTrue(pkg.getClasses().contains(ModuleTest.class));
+    }
+    
+    @Test
+    public void testClassFromBootstrapClassLoader() {
+        Assert.assertNotNull(Module.forClass(String.class));
     }
 }
