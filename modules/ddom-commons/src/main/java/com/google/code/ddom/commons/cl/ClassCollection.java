@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,9 @@ import java.util.Iterator;
 
 public abstract class ClassCollection {
     private static class ClassLoadingIterator implements Iterator<Class<?>> {
-        private final ClassLoader classLoader;
-        private final Iterator<String> parent;
+        private final Iterator<ClassRef> parent;
 
-        public ClassLoadingIterator(ClassLoader classLoader, Iterator<String> parent) {
-            this.classLoader = classLoader;
+        public ClassLoadingIterator(Iterator<ClassRef> parent) {
             this.parent = parent;
         }
 
@@ -35,7 +33,8 @@ public abstract class ClassCollection {
 
         public Class<?> next() {
             try {
-                return classLoader.loadClass(parent.next());
+                ClassRef classRef = parent.next();
+                return classRef.getClassLoader().loadClass(classRef.getClassName());
             } catch (ClassNotFoundException ex) {
                 throw new ClassCollectionException(ex);
             }
@@ -46,25 +45,19 @@ public abstract class ClassCollection {
         }
     }
     
-    final ClassLoader classLoader;
-    
-    public ClassCollection(ClassLoader classLoader) {
-        this.classLoader = classLoader;
-    }
-
-    public abstract Collection<String> getClassNames();
+    public abstract Collection<ClassRef> getClassRefs();
     
     public Collection<Class<?>> getClasses() {
-        final Collection<String> classNames = getClassNames();
+        final Collection<ClassRef> classRefs = getClassRefs();
         return new AbstractCollection<Class<?>>() {
             @Override
             public Iterator<Class<?>> iterator() {
-                return new ClassLoadingIterator(classLoader, classNames.iterator());
+                return new ClassLoadingIterator(classRefs.iterator());
             }
 
             @Override
             public int size() {
-                return classNames.size();
+                return classRefs.size();
             }
         };
     }

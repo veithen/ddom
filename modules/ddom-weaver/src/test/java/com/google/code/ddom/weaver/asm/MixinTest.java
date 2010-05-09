@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.DynamicClassLoader;
 
 public class MixinTest {
@@ -12,8 +13,8 @@ public class MixinTest {
         ClassLoader parentClassLoader = Test.class.getClassLoader();
         
         Reactor reactor = new Reactor(parentClassLoader);
-        reactor.loadWeavableClass("com.google.code.ddom.weaver.asm.Base");
-        reactor.loadMixin("com.google.code.ddom.weaver.asm.BaseMixin");
+        reactor.loadWeavableClass(new ClassRef(Base.class));
+        reactor.loadMixin(new ClassRef(BaseMixin.class));
         
         DynamicClassLoader targetClassLoader = new DynamicClassLoader(parentClassLoader);
         

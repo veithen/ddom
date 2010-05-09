@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,29 +25,30 @@ import java.util.List;
 import com.google.code.ddom.commons.io.URLUtils;
 
 public class Package extends ClassCollection {
+    private final ClassLoader classLoader;
     private final URL url;
     private final String name;
     
     Package(ClassLoader classLoader, URL url, String name) {
-        super(classLoader);
+        this.classLoader = classLoader;
         this.url = url;
         this.name = name;
     }
     
     @Override
-    public Collection<String> getClassNames() {
+    public Collection<ClassRef> getClassRefs() {
         URL[] urlsInPackage;
         try {
             urlsInPackage = URLUtils.listFolder(url);
         } catch (IOException ex) {
             throw new ClassCollectionException(ex);
         }
-        List<String> classesInPackage = new ArrayList<String>(urlsInPackage.length);
+        List<ClassRef> classesInPackage = new ArrayList<ClassRef>(urlsInPackage.length);
         for (URL urlInPackage : urlsInPackage) {
             String s = urlInPackage.getFile();
             s = s.substring(s.lastIndexOf('/')+1);
             if (s.endsWith(".class")) {
-                classesInPackage.add(name + "." + s.substring(0, s.length()-6));
+                classesInPackage.add(new ClassRef(classLoader, name + "." + s.substring(0, s.length()-6)));
             }
         }
         return classesInPackage;

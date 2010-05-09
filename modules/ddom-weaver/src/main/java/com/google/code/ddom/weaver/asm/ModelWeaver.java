@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
+import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
 import com.google.code.ddom.weaver.ClassDefinitionProcessor;
@@ -26,15 +27,17 @@ import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.ModelWeaverException;
 
 public class ModelWeaver {
+    private final ClassLoader classLoader;
     private final ClassDefinitionProcessor processor;
     private final Reactor reactor;
     
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
+        this.classLoader = classLoader;
         this.processor = processor;
         reactor = new Reactor(classLoader);
-        for (String className : backend.getWeavableClasses().getClassNames()) {
+        for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
             try {
-                reactor.loadWeavableClass(className);
+                reactor.loadWeavableClass(classRef);
             } catch (ClassNotFoundException ex) {
                 throw new ModelWeaverException(ex);
             } catch (IOException ex) {
@@ -47,7 +50,7 @@ public class ModelWeaver {
         try {
             for (Frontend frontend : frontends.values()) {
                 for (String mixin : frontend.getMixins(Collections.unmodifiableMap(frontends))) {
-                    reactor.loadMixin(mixin);
+                    reactor.loadMixin(new ClassRef(classLoader, mixin));
                 }
             }
             reactor.weave(processor);

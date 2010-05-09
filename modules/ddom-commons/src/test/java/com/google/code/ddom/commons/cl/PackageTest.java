@@ -44,6 +44,6 @@ public class PackageTest {
         ClassLoader cl = new URLClassLoader(new URL[] { Constants.ACTIVATION_JAR.toURL() });
         Module module = Module.forClassName(cl, "javax.activation.DataSource");
         Package pkg = module.getPackage("javax");
-        Assert.assertTrue(pkg.getClassNames().isEmpty());
+        Assert.assertTrue(pkg.getClassRefs().isEmpty());
     }
 }

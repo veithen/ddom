@@ -15,12 +15,8 @@
  */
 package com.google.code.ddom.commons.cl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import org.apache.commons.io.IOUtils;
 
 public class ClassLoaderUtils {
     private ClassLoaderUtils() {}
@@ -36,40 +32,6 @@ public class ClassLoaderUtils {
         return className.replace('.', '/') + ".class";
     }
 
-    /**
-     * Load the definition of a given class.
-     * 
-     * @param classLoader
-     *            the class loader to load the class from
-     * @param className
-     *            the name of the class
-     * @return the class definition, i.e. the content of the corresponding class file
-     * @throws ClassNotFoundException
-     *             if the class was not found or an error occurred when loading the class definition
-     */
-    public static byte[] getClassDefinition(ClassLoader classLoader, String className) throws ClassNotFoundException {
-        InputStream in = getClassDefinitionAsStream(classLoader, className);
-        try {
-            try {
-                return IOUtils.toByteArray(in);
-            } finally {
-                in.close();
-            }
-        } catch (IOException ex) {
-            throw new ClassNotFoundException(className, ex);
-        }
-    }
-
-    public static InputStream getClassDefinitionAsStream(ClassLoader classLoader, String className) throws ClassNotFoundException {
-        String resourceName = getResourceNameForClassName(className);
-        InputStream in = classLoader.getResourceAsStream(resourceName);
-        if (in == null) {
-            throw new ClassNotFoundException(className);
-        } else {
-            return in;
-        }
-    }
-    
     /**
      * Get the URL corresponding to the root folder of the classpath entry from which a given
      * resource is loaded. This URL can be used to load other resources from the same classpath

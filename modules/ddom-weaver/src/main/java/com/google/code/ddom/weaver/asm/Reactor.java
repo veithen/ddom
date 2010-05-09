@@ -29,7 +29,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-import com.google.code.ddom.commons.cl.ClassLoaderUtils;
+import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.commons.dag.EdgeRelation;
 import com.google.code.ddom.commons.dag.TopologicalSort;
 import com.google.code.ddom.weaver.ClassDefinitionProcessor;
@@ -67,18 +67,18 @@ public class Reactor {
         this.classLoader = classLoader;
     }
 
-    public void loadWeavableClass(String className) throws ClassNotFoundException, IOException {
-        byte[] classDefinition = ClassLoaderUtils.getClassDefinition(classLoader, className);
+    public void loadWeavableClass(ClassRef classRef) throws ClassNotFoundException, IOException {
+        byte[] classDefinition = classRef.getClassDefinition();
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
         WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinition, sourceInfoBuilder);
         new ClassReader(classDefinition).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
-        weavableClassInfoBuilders.put(className, builder);
+        weavableClassInfoBuilders.put(classRef.getClassName(), builder);
     }
     
-    public void loadMixin(String className) throws ClassNotFoundException, IOException, ModelWeaverException {
+    public void loadMixin(ClassRef classRef) throws ClassNotFoundException, IOException, ModelWeaverException {
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
         MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder);
-        new ClassReader(ClassLoaderUtils.getClassDefinition(classLoader, className)).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
+        new ClassReader(classRef.getClassDefinition()).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
         mixins.add(builder.build());
     }
     
