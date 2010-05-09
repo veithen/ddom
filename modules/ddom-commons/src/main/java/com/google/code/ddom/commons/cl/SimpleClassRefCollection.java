@@ -15,11 +15,17 @@
  */
 package com.google.code.ddom.commons.cl;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
-public interface ClassCollection {
-    Collection<ClassRef> getClassRefs();
+public final class SimpleClassRefCollection extends AbstractClassRefCollection {
+    private final List<ClassRef> classRefs = new ArrayList<ClassRef>();
+
+    public void add(ClassRef classRef) {
+        classRefs.add(classRef);
+    }
     
-    // TODO: need to specify when exceptions may be thrown (during execution of this method and/or when requesting items from the collection)
-    Collection<Class<?>> getClasses();
+    public List<ClassRef> getClassRefs() {
+        return classRefs;
+    }
 }

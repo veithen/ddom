@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.google.code.ddom.commons.io.URLUtils;
 
-public class Package extends ClassCollection {
+public final class Package extends AbstractClassRefCollection {
     private final ClassLoader classLoader;
     private final URL url;
     private final String name;
@@ -35,7 +35,6 @@ public class Package extends ClassCollection {
         this.name = name;
     }
     
-    @Override
     public Collection<ClassRef> getClassRefs() {
         URL[] urlsInPackage;
         try {
