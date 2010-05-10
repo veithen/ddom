@@ -15,40 +15,23 @@
  */
 package com.google.code.ddom.frontend.axiom;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
+import com.google.code.ddom.commons.cl.ClassCollection;
+import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
+import com.google.code.ddom.commons.cl.Module;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="axiom")
 public class AxiomFrontend implements Frontend {
-    public List<String> getMixins(Map<String,Frontend> frontends) {
-        List<String> mixins = new ArrayList<String>();
-        mixins.addAll(Arrays.asList(new String[] {
-                "com.google.code.ddom.frontend.axiom.mixin.AttributeSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.CDATASectionSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.ChildNodeSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.CommentSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.ContainerSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.DocumentSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.ElementSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.LeafNodeSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.NamedNodeSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.NamespaceDeclarationSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.NodeSupport",
-//                "com.google.code.ddom.frontend.axiom.aspects.Parents",
-                "com.google.code.ddom.frontend.axiom.mixin.ProcessingInstructionSupport",
-//                "com.google.code.ddom.frontend.axiom.aspects.QNameCaching", // TODO: should be configurable
-                "com.google.code.ddom.frontend.axiom.mixin.TextNodeSupport",
-                "com.google.code.ddom.frontend.axiom.mixin.TextSupport",
-        }));
+    public ClassCollection getMixins(Map<String,Frontend> frontends) {
+        ClassCollectionAggregate aggregate = new ClassCollectionAggregate();
+        Module module = Module.forClass(AxiomFrontend.class);
+        aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin"));
         if (!frontends.containsKey("dom")) {
-            mixins.add("com.google.code.ddom.frontend.axiom.mixin.dom.NamedNodeSupport");
-            mixins.add("com.google.code.ddom.frontend.axiom.mixin.dom.ProcessingInstructionSupport");
+            aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin.dom"));
         }
-        return mixins;
+        return aggregate;
     }
 }

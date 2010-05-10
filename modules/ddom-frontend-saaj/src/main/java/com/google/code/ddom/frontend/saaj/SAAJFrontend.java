@@ -15,10 +15,11 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
+import com.google.code.ddom.commons.cl.ClassCollection;
+import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
+import com.google.code.ddom.commons.cl.Module;
 import com.google.code.ddom.frontend.dom.DOMFrontend;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.model.Frontend;
@@ -26,11 +27,10 @@ import com.google.code.ddom.spi.model.Frontend;
 @Provider(name="saaj")
 public class SAAJFrontend extends DOMFrontend {
     @Override
-    public List<String> getMixins(Map<String,Frontend> frontends) {
-        List<String> aspects = new ArrayList<String>(super.getMixins(frontends));
-        aspects.add("com.google.code.ddom.frontend.saaj.mixin.NodeSupport");
-        aspects.add("com.google.code.ddom.frontend.saaj.mixin.NSAwareAttributeSupport");
-        aspects.add("com.google.code.ddom.frontend.saaj.mixin.SOAPElementSupport");
-        return aspects;
+    public ClassCollection getMixins(Map<String,Frontend> frontends) {
+        ClassCollectionAggregate aggregate = new ClassCollectionAggregate();
+        aggregate.add(super.getMixins(frontends));
+        aggregate.add(Module.forClass(SAAJFrontend.class).getPackage("com.google.code.ddom.frontend.saaj.mixin"));
+        return aggregate;
     }
 }

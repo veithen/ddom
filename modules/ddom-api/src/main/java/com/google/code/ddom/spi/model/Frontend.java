@@ -15,8 +15,9 @@
  */
 package com.google.code.ddom.spi.model;
 
-import java.util.List;
 import java.util.Map;
+
+import com.google.code.ddom.commons.cl.ClassCollection;
 
 // TODO: this API is a bit simplistic; we need at least to support the following features:
 //        - a frontend configuration (so that aspects can be selected dynamically)
@@ -24,5 +25,5 @@ import java.util.Map;
 // TODO: move to LTW module
 public interface Frontend {
     // TODO: we should hide the context/configuration data (current parameters) behind some class to allow for extensibility in the future
-    List<String> getMixins(Map<String,Frontend> frontends);
+    ClassCollection getMixins(Map<String,Frontend> frontends);
 }

@@ -27,12 +27,10 @@ import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.ModelWeaverException;
 
 public class ModelWeaver {
-    private final ClassLoader classLoader;
     private final ClassDefinitionProcessor processor;
     private final Reactor reactor;
     
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
-        this.classLoader = classLoader;
         this.processor = processor;
         reactor = new Reactor(classLoader);
         for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
@@ -49,8 +47,8 @@ public class ModelWeaver {
     public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
         try {
             for (Frontend frontend : frontends.values()) {
-                for (String mixin : frontend.getMixins(Collections.unmodifiableMap(frontends))) {
-                    reactor.loadMixin(new ClassRef(classLoader, mixin));
+                for (ClassRef classRef : frontend.getMixins(Collections.unmodifiableMap(frontends)).getClassRefs()) {
+                    reactor.loadMixin(classRef);
                 }
             }
             reactor.weave(processor);
