@@ -78,7 +78,7 @@ public class Module {
     
     public Package getPackage(String name) {
         try {
-            return new Package(classLoader, new URL(url, name.replace('.', '/')), name);
+            return new Package(classLoader, new URL(url, name.replace('.', '/') + "/"), name);
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException("Invalid package name", ex);
         }

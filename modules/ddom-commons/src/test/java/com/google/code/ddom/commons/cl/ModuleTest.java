@@ -15,16 +15,36 @@
  */
 package com.google.code.ddom.commons.cl;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.google.code.ddom.commons.Constants;
+
 public class ModuleTest {
     @Test
-    public void test() {
+    public void testGetPackageFromDirModule() {
+        // Test classes are always loaded from a directory
         Module module = Module.forClass(ModuleTest.class);
         Package pkg = module.getPackage(ModuleTest.class.getPackage().getName());
         Assert.assertTrue(pkg.getClasses().contains(ModuleTest.class));
+    }
+    
+    @Test
+    public void testGetPackageFromJarModule() throws Exception {
+        ClassLoader cl = new URLClassLoader(new URL[] { Constants.ACTIVATION_JAR.toURL() });
+        Module module = Module.forClassName(cl, "javax.activation.DataSource");
+        Package pkg = module.getPackage("javax.activation");
+        boolean found = false;
+        for (ClassRef classRef : pkg.getClassRefs()) {
+            if (classRef.getClassName().equals("javax.activation.DataHandler")) {
+                found = true;
+            }
+        }
+        Assert.assertTrue(found);
     }
     
     @Test
