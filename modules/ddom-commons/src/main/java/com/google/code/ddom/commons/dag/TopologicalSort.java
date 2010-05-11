@@ -29,7 +29,7 @@ import java.util.Set;
 public class TopologicalSort {
     private TopologicalSort() {}
     
-    private static <T> void visit(Collection<T> vertices, EdgeRelation<T> edgeRelation, List<T> result, Set<T> visited, T vertex) {
+    private static <T> void visit(Collection<T> vertices, EdgeRelation<? super T> edgeRelation, List<T> result, Set<T> visited, T vertex) {
         if (visited.add(vertex)) {
             for (T vertex2 : vertices) {
                 if (vertex2 != vertex && edgeRelation.isEdge(vertex, vertex2)) {
@@ -48,7 +48,7 @@ public class TopologicalSort {
      * @param edgeRelation the relation defining the edges of the graph
      * @return the topologically sorted list of vertices, where the vertices with no incoming edges come first
      */
-    public static <T> List<T> sort(Collection<T> vertices, EdgeRelation<T> edgeRelation) {
+    public static <T> List<T> sort(Collection<T> vertices, EdgeRelation<? super T> edgeRelation) {
         List<T> result = new ArrayList<T>(vertices.size());
         Set<T> visited = new HashSet<T>();
         for (T vertex : vertices) {

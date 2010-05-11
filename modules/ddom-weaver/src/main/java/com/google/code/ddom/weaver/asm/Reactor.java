@@ -43,8 +43,8 @@ public class Reactor {
     // TODO: introduce system property for this
     private static final boolean dump = false;
     
-    private static final EdgeRelation<WeavableClassInfo> inheritanceRelation = new EdgeRelation<WeavableClassInfo>() {
-        public boolean isEdge(WeavableClassInfo from, WeavableClassInfo to) {
+    private static final EdgeRelation<ClassInfo> inheritanceRelation = new EdgeRelation<ClassInfo>() {
+        public boolean isEdge(ClassInfo from, ClassInfo to) {
             if (to.isInterface()) {
                 for (ClassInfo iface : from.getInterfaces()) {
                     if (iface == to) {
