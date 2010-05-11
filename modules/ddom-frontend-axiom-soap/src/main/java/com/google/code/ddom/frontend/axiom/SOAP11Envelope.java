@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
  */
 package com.google.code.ddom.frontend.axiom;
 
-import com.google.code.ddom.backend.ext.ModelExtension;
-
-@ModelExtension(SOAPEnvelope.class)
-public @interface SOAP11Envelope {
+public interface SOAP11Envelope extends SOAPEnvelope {
 
 }
