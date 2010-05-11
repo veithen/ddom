@@ -37,8 +37,8 @@ public class ReactorAwareClassWriter extends ClassWriter {
         try {
             c = reactor.getClassInfo(Util.internalNameToClassName(type1));
             d = reactor.getClassInfo(Util.internalNameToClassName(type2));
-        } catch (Exception e) {
-            throw new RuntimeException(e.toString());
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
         }
         if (c.isAssignableFrom(d)) {
             return type1;
