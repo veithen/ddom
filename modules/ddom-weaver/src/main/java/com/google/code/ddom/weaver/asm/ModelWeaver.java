@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.weaver.asm;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -38,8 +37,6 @@ public class ModelWeaver {
                 reactor.loadWeavableClass(classRef);
             } catch (ClassNotFoundException ex) {
                 throw new ModelWeaverException(ex);
-            } catch (IOException ex) {
-                throw new ModelWeaverException(ex);
             }
         }
     }
@@ -57,8 +54,6 @@ public class ModelWeaver {
             ex2.setStackTrace(ex.getStackTrace());
             throw ex2;
         } catch (ClassNotFoundException ex) {
-            throw new ModelWeaverException(ex);
-        } catch (IOException ex) {
             throw new ModelWeaverException(ex);
         } catch (ClassDefinitionProcessorException ex) {
             throw new ModelWeaverException(ex); // TODO

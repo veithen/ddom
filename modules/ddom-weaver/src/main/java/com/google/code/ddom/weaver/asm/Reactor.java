@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.weaver.asm;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +66,7 @@ public class Reactor {
         this.classLoader = classLoader;
     }
 
-    public void loadWeavableClass(ClassRef classRef) throws ClassNotFoundException, IOException {
+    public void loadWeavableClass(ClassRef classRef) throws ClassNotFoundException {
         byte[] classDefinition = classRef.getClassDefinition();
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
         WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinition, sourceInfoBuilder);
@@ -75,7 +74,7 @@ public class Reactor {
         weavableClassInfoBuilders.put(classRef.getClassName(), builder);
     }
     
-    public void loadMixin(ClassRef classRef) throws ClassNotFoundException, IOException, ModelWeaverException {
+    public void loadMixin(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
         MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder);
         new ClassReader(classRef.getClassDefinition()).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
