@@ -61,6 +61,9 @@ public class Reactor {
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
     private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
+    private final List<ClassInfo> modelExtensions = new ArrayList<ClassInfo>();
+    private List<WeavableClassInfo> weavableClasses;
+
     
     public Reactor(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -81,7 +84,20 @@ public class Reactor {
         mixins.add(builder.build());
     }
     
+    public void loadModelExtension(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
+        ClassInfo modelExtension = getClassInfo(classRef);
+        if (modelExtension.getInterfaces().length != 1) {
+            throw new ModelWeaverException("A model extension interface must have exactly one superinterface");
+        }
+        modelExtensions.add(modelExtension);
+    }
+    
     public ClassInfo getClassInfo(String className) throws ClassNotFoundException {
+        return getClassInfo(new ClassRef(classLoader, className));
+    }
+    
+    public ClassInfo getClassInfo(ClassRef classRef) throws ClassNotFoundException {
+        String className = classRef.getClassName();
         ClassInfo classInfo = classInfos.get(className);
         if (classInfo != null) {
             return classInfo;
@@ -90,15 +106,15 @@ public class Reactor {
             if (builder != null) {
                 classInfo = builder.build();
             } else {
-                Class<?> clazz = classLoader.loadClass(className);
+                Class<?> clazz = classRef.load();
                 Class<?> superclass = clazz.getSuperclass();
                 Class<?>[] interfaces = clazz.getInterfaces();
                 ClassInfo[] interfaceInfos = new ClassInfo[interfaces.length];
                 for (int i=0; i<interfaces.length; i++) {
-                    interfaceInfos[i] = getClassInfo(interfaces[i].getName());
+                    interfaceInfos[i] = getClassInfo(new ClassRef(interfaces[i]));
                 }
                 classInfo = new NonWeavableClassInfo(className, clazz.isInterface(),
-                        superclass == null ? null : getClassInfo(clazz.getSuperclass().getName()),
+                        superclass == null ? null : getClassInfo(new ClassRef(clazz.getSuperclass())),
                         interfaceInfos);
             }
             classInfos.put(className, classInfo);
@@ -106,13 +122,56 @@ public class Reactor {
         }
     }
     
-    public void weave(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
-        // We need to sort the weavable classes so that defineClass doesn't complain when
-        // a DynamicClassLoader is used.
-        List<WeavableClassInfo> weavableClasses = new ArrayList<WeavableClassInfo>(weavableClassInfoBuilders.size());
+    public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
+        resolveWeavableClasses();
+        generateModelExtensionClasses();
+        weave(processor);
+    }
+    
+    private void resolveWeavableClasses() throws ClassNotFoundException {
+        weavableClasses = new ArrayList<WeavableClassInfo>(weavableClassInfoBuilders.size());
         for (String className : weavableClassInfoBuilders.keySet()) {
             weavableClasses.add((WeavableClassInfo)getClassInfo(className));
         }
+    }
+    
+    private boolean isModelExtension(ClassInfo classInfo) {
+        String className = classInfo.getName();
+        for (ClassInfo ci : modelExtensions) {
+            if (className.equals(ci.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private List<WeavableClassInfo> getImplementations(ClassInfo iface) {
+        List<WeavableClassInfo> implementations = new ArrayList<WeavableClassInfo>();
+        for (WeavableClassInfo candidate : weavableClasses) {
+            if (iface.isAssignableFrom(candidate)) {
+                implementations.add(candidate);
+            }
+        }
+        return implementations;
+    }
+    
+    private void generateModelExtensionClasses() {
+        // We need to sort the model extensions so that defineClass doesn't complain (in case
+        // a DynamicClassLoader is used).
+        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensions, inheritanceRelation)) {
+            // The number of super interface has already been validated by loadModelExtension
+            ClassInfo superInterface = modelExtension.getInterfaces()[0];
+            if (isModelExtension(superInterface)) {
+                
+            } else {
+                
+            }
+        }
+    }
+    
+    private void weave(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
+        // We need to sort the weavable classes so that defineClass doesn't complain when
+        // a DynamicClassLoader is used.
         for (WeavableClassInfo weavableClass : TopologicalSort.sort(weavableClasses, inheritanceRelation)) {
             if (!weavableClass.isInterface()) {
                 List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();

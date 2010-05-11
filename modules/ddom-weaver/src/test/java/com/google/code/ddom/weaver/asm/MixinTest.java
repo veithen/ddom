@@ -18,7 +18,7 @@ public class MixinTest {
         
         DynamicClassLoader targetClassLoader = new DynamicClassLoader(parentClassLoader);
         
-        reactor.weave(targetClassLoader);
+        reactor.generateModel(targetClassLoader);
         
         IBase base = (IBase)targetClassLoader.loadClass("com.google.code.ddom.weaver.asm.Base").newInstance();
         System.out.println(Arrays.asList(base.getClass().getInterfaces()));

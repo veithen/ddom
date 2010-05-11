@@ -29,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 public class ClassRef {
     private final ClassLoader classLoader;
     private final String className;
+    private Class<?> clazz;
     
     public ClassRef(ClassLoader classLoader, String className) {
         this.classLoader = classLoader;
@@ -38,6 +39,7 @@ public class ClassRef {
     public ClassRef(Class<?> clazz) {
         this.classLoader = clazz.getClassLoader();
         this.className = clazz.getName();
+        this.clazz = clazz;
     }
 
     public ClassLoader getClassLoader() {
@@ -76,5 +78,12 @@ public class ClassRef {
         } else {
             return in;
         }
+    }
+    
+    public synchronized Class<?> load() throws ClassNotFoundException {
+        if (clazz == null) {
+            clazz = classLoader.loadClass(className);
+        }
+        return clazz;
     }
 }

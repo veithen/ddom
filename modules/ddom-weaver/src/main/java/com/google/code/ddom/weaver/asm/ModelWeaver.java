@@ -48,7 +48,7 @@ public class ModelWeaver {
                     reactor.loadMixin(classRef);
                 }
             }
-            reactor.weave(processor);
+            reactor.generateModel(processor);
         } catch (ReactorException ex) {
             ModelWeaverException ex2 = new ModelWeaverException(ex.getMessage(), ex.getCause());
             ex2.setStackTrace(ex.getStackTrace());
