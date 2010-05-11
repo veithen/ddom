@@ -148,4 +148,44 @@
             </listitem>
         </orderedlist>
     </section>
+    <section>
+        <title>Model extensions</title>
+        <para>
+            A back-end only defines a single class for each type of information item. E.g. a comment
+            information item is always represented by an instance of the same class, which is an
+            implementation of the <classname>CoreComment</classname> interface. However, some front-ends
+            need to introduce specialized classes for particular information item instances. E.g. a
+            front-end that supports SOAP would require a distinct class to represent the element
+            information item for a SOAP envelope. This feature is called a <firstterm>model
+            extension</firstterm>.
+            Since the front-end code must only refer to the Core Model interfaces, it cannot introduce
+            subclasses of the concrete classes defined by the back-end. Therefore, the only possible
+            way to create model extensions is to let the weaver generate the appropriate subclasses dynamically.
+        </para>
+        <para>
+            A model extension is defined by a set of interfaces that satisfy the following requirements:
+        </para>
+        <orderedlist>
+            <listitem>
+                <para>
+                    Every interface has one and only one superinterface.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    One and only one of the interfaces extends an existing Core Model interface
+                    assignable to <classname>CoreNode</classname>.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    All other interfaces must extend another interface of the same model extension.
+                </para>
+            </listitem>
+        </orderedlist>
+        <para>
+            Thus, the class diagram of a model extension is a tree with a single root, where only the
+            root has an inheritance relationship with an interface outside of the model extension.
+        </para>
+    </section>
 </chapter>
