@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom;
+package com.google.code.ddom.frontend.axiom.soap.ext;
 
-import com.google.code.ddom.backend.CoreNSAwareElement;
-
-public interface SOAPEnvelope extends CoreNSAwareElement {
+public interface SOAP12Envelope extends SOAPEnvelope {
 
 }
