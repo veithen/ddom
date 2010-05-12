@@ -163,7 +163,8 @@
             way to create model extensions is to let the weaver generate the appropriate subclasses dynamically.
         </para>
         <para>
-            A model extension is defined by a set of interfaces that satisfy the following requirements:
+            A model extension is defined by a set of interfaces (called <firstterm>model extension
+            interfaces</firstterm>) that satisfy the following requirements:
         </para>
         <orderedlist>
             <listitem>
@@ -173,19 +174,21 @@
             </listitem>
             <listitem>
                 <para>
-                    One and only one of the interfaces extends an existing Core Model interface
-                    assignable to <classname>CoreNode</classname>.
+                    One or more of the interfaces extend an existing Core Model interface
+                    assignable to <classname>CoreNode</classname>. The Core Model interface
+                    being extended must be the same for all of these model extension interfaces.
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    All other interfaces must extend another interface of the same model extension.
+                    Model extension interfaces not extending a Core Model interface must extend
+                    another interface of the same model extension.
                 </para>
             </listitem>
         </orderedlist>
         <para>
-            Thus, the class diagram of a model extension is a tree with a single root, where only the
-            root has an inheritance relationship with an interface outside of the model extension.
+            Thus, the class diagram of a model extension is a tree with a single root, which is
+            a Core Model interface assignable to <classname>CoreNode</classname>.
         </para>
     </section>
 </chapter>
