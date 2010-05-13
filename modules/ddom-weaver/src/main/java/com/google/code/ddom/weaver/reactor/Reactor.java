@@ -68,10 +68,11 @@ public class Reactor {
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
     private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
-    private final List<ClassInfo> modelExtensions = new ArrayList<ClassInfo>();
+    private final List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>();
     private final List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>();
     private List<WeavableClassInfo> weavableClasses;
     private Map<ClassInfo,WeavableClassInfo> implementations;
+    private Map<ClassInfo,ModelExtension> modelExtensions;
     
     public Reactor(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -97,7 +98,7 @@ public class Reactor {
         if (modelExtension.getInterfaces().length != 1) {
             throw new ModelWeaverException("A model extension interface must have exactly one superinterface");
         }
-        modelExtensions.add(modelExtension);
+        modelExtensionInterfaces.add(modelExtension);
     }
     
     public void addRequiredImplementation(ClassRef iface) throws ClassNotFoundException {
@@ -136,7 +137,7 @@ public class Reactor {
     
     public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException, ModelWeaverException {
         resolveWeavableClasses();
-        generateModelExtensionClasses();
+        resolveModelExtensions();
         weave(processor);
     }
     
@@ -176,8 +177,9 @@ public class Reactor {
     }
     
     private boolean isModelExtension(ClassInfo classInfo) {
+        // TODO: do we really need this, or is equals (identity) enough???
         String className = classInfo.getName();
-        for (ClassInfo ci : modelExtensions) {
+        for (ClassInfo ci : modelExtensionInterfaces) {
             if (className.equals(ci.getName())) {
                 return true;
             }
@@ -185,27 +187,36 @@ public class Reactor {
         return false;
     }
     
-    private List<WeavableClassInfo> getImplementations(ClassInfo iface) {
+    public List<WeavableClassInfo> getImplementations(ClassInfo iface) {
         List<WeavableClassInfo> implementations = new ArrayList<WeavableClassInfo>();
         for (WeavableClassInfo candidate : weavableClasses) {
-            if (iface.isAssignableFrom(candidate)) {
+            if (candidate.isImplementation() && iface.isAssignableFrom(candidate)) {
                 implementations.add(candidate);
             }
         }
         return implementations;
     }
     
-    private void generateModelExtensionClasses() {
+    private void resolveModelExtensions() throws ModelWeaverException {
         // We need to sort the model extensions so that defineClass doesn't complain (in case
         // a DynamicClassLoader is used).
-        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensions, inheritanceRelation)) {
-            // The number of super interface has already been validated by loadModelExtension
-            ClassInfo superInterface = modelExtension.getInterfaces()[0];
-            if (isModelExtension(superInterface)) {
-                
-            } else {
-                
+//        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
+        modelExtensions = new HashMap<ClassInfo,ModelExtension>();
+        for (ClassInfo iface : modelExtensionInterfaces) {
+            ClassInfo root = iface;
+            do {
+                // The number of super interface has already been validated by loadModelExtension
+                root = root.getInterfaces()[0];
+            } while (isModelExtension(root));
+            ModelExtension modelExtension = modelExtensions.get(root);
+            if (modelExtension == null) {
+                modelExtension = new ModelExtension(root);
+                modelExtensions.put(root, modelExtension);
             }
+            modelExtension.addExtensionInterface(iface);
+        }
+        for (ModelExtension modelExtension : modelExtensions.values()) {
+            modelExtension.resolve(this);
         }
     }
     
