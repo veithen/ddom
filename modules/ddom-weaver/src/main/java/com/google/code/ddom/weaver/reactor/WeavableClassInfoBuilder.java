@@ -24,7 +24,7 @@ import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private final Reactor reactor;
-    private final byte[] classDefinition;
+    private final ClassDefinitionSource classDefinitionSource;
     private final SourceInfoBuilder sourceInfoBuilder;
     private String name;
     private boolean isInterface;
@@ -32,15 +32,15 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private String[] interfaceNames;
     private boolean isImplementation;
     
-    public WeavableClassInfoBuilder(Reactor reactor, byte[] classDefinition, SourceInfoBuilder sourceInfoBuilder) {
+    public WeavableClassInfoBuilder(Reactor reactor, ClassDefinitionSource classDefinitionSource, SourceInfoBuilder sourceInfoBuilder) {
         this.reactor = reactor;
-        this.classDefinition = classDefinition;
+        this.classDefinitionSource = classDefinitionSource;
         this.sourceInfoBuilder = sourceInfoBuilder;
     }
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        this.name = name;
+        this.name = Util.internalNameToClassName(name);
         isInterface = (access & Opcodes.ACC_INTERFACE) != 0;
         this.superName = superName;
         interfaceNames = interfaces;
@@ -55,12 +55,16 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         return null;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public WeavableClassInfo build() throws ClassNotFoundException {
         ClassInfo[] interfaces = new ClassInfo[interfaceNames.length];
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = reactor.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
-        return new WeavableClassInfo(Util.internalNameToClassName(name), isInterface, reactor.getClassInfo(Util.internalNameToClassName(superName)),
-                interfaces, classDefinition, sourceInfoBuilder.getSourceInfo(), isImplementation);
+        return new WeavableClassInfo(name, isInterface, reactor.getClassInfo(Util.internalNameToClassName(superName)),
+                interfaces, classDefinitionSource, sourceInfoBuilder.getSourceInfo(), isImplementation);
     }
 }

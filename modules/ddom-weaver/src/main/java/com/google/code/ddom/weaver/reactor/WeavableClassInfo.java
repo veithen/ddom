@@ -18,19 +18,19 @@ package com.google.code.ddom.weaver.reactor;
 import com.google.code.ddom.weaver.jsr45.SourceInfo;
 
 public class WeavableClassInfo extends ClassInfo {
-    private final byte[] classDefinition;
+    private final ClassDefinitionSource classDefinitionSource;
     private final SourceInfo sourceInfo;
     private final boolean isImplementation;
     
-    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, byte[] classDefinition, SourceInfo sourceInfo, boolean isImplementation) {
+    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, ClassDefinitionSource classDefinitionSource, SourceInfo sourceInfo, boolean isImplementation) {
         super(name, isInterface, superclass, interfaces);
-        this.classDefinition = classDefinition;
+        this.classDefinitionSource = classDefinitionSource;
         this.sourceInfo = sourceInfo;
         this.isImplementation = isImplementation;
     }
 
-    public byte[] getClassDefinition() {
-        return classDefinition;
+    public ClassDefinitionSource getClassDefinitionSource() {
+        return classDefinitionSource;
     }
 
     public SourceInfo getSourceInfo() {

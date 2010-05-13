@@ -79,11 +79,14 @@ public class Reactor {
     }
 
     public void loadWeavableClass(ClassRef classRef) throws ClassNotFoundException {
-        byte[] classDefinition = classRef.getClassDefinition();
+        loadWeavableClass(new CompiledClass(classRef.getClassDefinition()));
+    }
+    
+    public void loadWeavableClass(ClassDefinitionSource classDefinitionSource) {
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
-        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinition, sourceInfoBuilder);
-        new ClassReader(classDefinition).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
-        weavableClassInfoBuilders.put(classRef.getClassName(), builder);
+        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinitionSource, sourceInfoBuilder);
+        classDefinitionSource.accept(new ClassVisitorTee(sourceInfoBuilder, builder));
+        weavableClassInfoBuilders.put(builder.getName(), builder);
     }
     
     public void loadMixin(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
@@ -244,13 +247,12 @@ public class Reactor {
             if (log.isLoggable(Level.FINE)) {
                 log.fine("Copying unmodified class " + weavableClass);
             }
-            processor.processClassDefinition(weavableClass.getName(), weavableClass.getClassDefinition());
+            processor.processClassDefinition(weavableClass.getName(), weavableClass.getClassDefinitionSource().getClassDefinition(this));
         } else {
             if (log.isLoggable(Level.FINE)) {
                 log.fine("Weaving " + weavableClass + "; mixins: " + mixins);
             }
-            ClassReader cr = new ClassReader(weavableClass.getClassDefinition());
-            ClassWriter cw = new ReactorAwareClassWriter(this, cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+            ClassWriter cw = new ReactorAwareClassWriter(this, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
             SourceMapper sourceMapper = new SourceMapper();
             sourceMapper.addSourceInfo(weavableClass.getSourceInfo());
             for (MixinInfo mixin : mixins) {
@@ -260,7 +262,7 @@ public class Reactor {
             if (dump) {
                 out = new TraceClassVisitor(out, new PrintWriter(System.out));
             }
-            cr.accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper)), 0);
+            weavableClass.getClassDefinitionSource().accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper)));
             processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
         }
     }
