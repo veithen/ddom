@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<context>
+<context version="5.1.2.620">
     <scope name="My Project" type="Project">
+        <stereotype name="Unrestricted"/>
         <workspace>
             <element name="modules/api/src/main/java" type="JavaRootDirectory"/>
             <element name="modules/api/target/classes" type="JavaRootDirectory"/>
@@ -10,6 +11,8 @@
             <element name="modules/dom-utils/target/classes" type="JavaRootDirectory"/>
             <element name="modules/jaxp/src/main/java" type="JavaRootDirectory"/>
             <element name="modules/jaxp/target/classes" type="JavaRootDirectory"/>
+            <element name="modules/ddom-weaver/src/main/java" type="JavaRootDirectory"/>
+            <element name="modules/ddom-weaver/target/classes" type="JavaRootDirectory"/>
         </workspace>
     </scope>
     <scope name="External" type="External">
@@ -18,10 +21,7 @@
         </element>
     </scope>
     <scope name="Global" type="Global">
-        <element name="Configuration" type="Configuration">
-            <element name="CycleAnalysisAsymmetrical" type="ConfigurationSwitchDisabled"/>
-            <element name="CycleAnalysisDepthSourceFile" type="ConfigurationSwitchDisabled"/>
-        </element>
+        <element name="Configuration" type="Configuration"/>
         <element name="Filter" type="TypeFilter">
             <element name="**" type="IncludeTypePattern"/>
         </element>
