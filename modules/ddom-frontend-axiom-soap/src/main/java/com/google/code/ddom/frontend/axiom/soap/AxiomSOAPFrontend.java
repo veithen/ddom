@@ -19,9 +19,9 @@ import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.Module;
+import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.axiom.AxiomFrontend;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="axiom-soap")
 public class AxiomSOAPFrontend extends AxiomFrontend {

@@ -20,9 +20,9 @@ import org.apache.axiom.om.OMNode;
 
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreChildNode.class)
 public abstract class ChildNodeSupport implements AxiomChildNode {

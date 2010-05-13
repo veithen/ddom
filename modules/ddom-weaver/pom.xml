@@ -34,6 +34,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-frontend</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-backend</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>asm</groupId>
             <artifactId>asm</artifactId>
             <version>3.2</version>

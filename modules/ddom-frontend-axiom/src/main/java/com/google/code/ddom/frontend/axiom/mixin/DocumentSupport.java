@@ -34,12 +34,12 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements AxiomDocument {

@@ -20,8 +20,8 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreProcessingInstruction;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMProcessingInstruction;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements DOMProcessingInstruction {

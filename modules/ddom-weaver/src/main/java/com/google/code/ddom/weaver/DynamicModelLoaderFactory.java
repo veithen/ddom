@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.weaver;
 
+import com.google.code.ddom.backend.Backend;
+import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.spi.ProviderFinder;
-import com.google.code.ddom.spi.model.Backend;
-import com.google.code.ddom.spi.model.Frontend;
 import com.google.code.ddom.spi.model.ModelLoader;
 import com.google.code.ddom.spi.model.ModelLoaderFactory;
 

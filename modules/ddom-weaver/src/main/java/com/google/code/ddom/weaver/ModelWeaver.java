@@ -18,6 +18,7 @@ package com.google.code.ddom.weaver;
 import java.util.Collections;
 import java.util.Map;
 
+import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreComment;
@@ -30,8 +31,7 @@ import com.google.code.ddom.core.CoreNSUnawareElement;
 import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.CoreText;
-import com.google.code.ddom.spi.model.Backend;
-import com.google.code.ddom.spi.model.Frontend;
+import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
 

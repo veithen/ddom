@@ -21,9 +21,9 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.core.CoreNamespaceDeclaration;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreNamespaceDeclaration.class)
 public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclaration {

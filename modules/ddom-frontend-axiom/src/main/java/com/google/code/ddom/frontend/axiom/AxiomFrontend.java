@@ -21,8 +21,8 @@ import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.EmptyClassCollection;
 import com.google.code.ddom.commons.cl.Module;
+import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.model.Frontend;
 
 @Provider(name="axiom")
 public class AxiomFrontend implements Frontend {

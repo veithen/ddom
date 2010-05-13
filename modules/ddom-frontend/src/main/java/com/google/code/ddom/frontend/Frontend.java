@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.frontend;
 
 import java.util.Map;
 
@@ -22,7 +22,6 @@ import com.google.code.ddom.commons.cl.ClassCollection;
 // TODO: this API is a bit simplistic; we need at least to support the following features:
 //        - a frontend configuration (so that aspects can be selected dynamically)
 //        - we need to be able to mix frontends and to support dependencies (e.g. SAAJ -> DOM)
-// TODO: move to LTW module
 public interface Frontend {
     // TODO: we should hide the context/configuration data (current parameters) behind some class to allow for extensibility in the future
     ClassCollection getMixins(Map<String,Frontend> frontends);

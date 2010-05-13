@@ -19,9 +19,9 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.soap.SOAPHeader;
 
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAPEnvelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(SOAPEnvelope.class)
 public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {

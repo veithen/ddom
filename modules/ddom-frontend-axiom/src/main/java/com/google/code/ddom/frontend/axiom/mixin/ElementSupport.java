@@ -30,6 +30,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.IdentityMapper;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
@@ -37,7 +38,6 @@ import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.google.code.ddom.frontend.axiom.support.Policies;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class ElementSupport implements AxiomElement {

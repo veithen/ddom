@@ -20,10 +20,10 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreChildNode.class)
 public abstract class CoreChildNodeSupport implements DOMCoreChildNode {

@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.Package;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.spi.model.Backend;
 
 @Provider(name="linkedlist")
 public class LinkedListBackend implements Backend {

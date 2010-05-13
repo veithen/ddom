@@ -43,6 +43,7 @@ import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareNamedNode;
 import com.google.code.ddom.core.CoreTypedAttribute;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
@@ -54,7 +55,6 @@ import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 import com.google.code.ddom.frontend.dom.support.UserData;
-import com.google.code.ddom.spi.model.Mixin;
 import com.google.code.ddom.stream.spi.Symbols;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 

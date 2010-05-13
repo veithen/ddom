@@ -26,12 +26,12 @@ import org.w3c.dom.UserDataHandler;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNode;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMNode;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.UserData;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreNode.class)
 public abstract class NodeSupport implements DOMNode {

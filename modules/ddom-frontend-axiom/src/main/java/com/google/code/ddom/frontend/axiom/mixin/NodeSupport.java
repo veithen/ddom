@@ -23,9 +23,9 @@ import org.apache.axiom.om.OMFactory;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNode;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreNode.class)
 public abstract class NodeSupport implements AxiomNode {

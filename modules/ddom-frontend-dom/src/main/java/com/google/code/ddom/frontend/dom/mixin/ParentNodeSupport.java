@@ -26,6 +26,7 @@ import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNode;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
@@ -37,7 +38,6 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagName;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagNameNS;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin({CoreElement.class, CoreAttribute.class, CoreDocument.class, CoreDocumentFragment.class})
 public abstract class ParentNodeSupport implements DOMParentNode {

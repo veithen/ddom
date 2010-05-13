@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.backend;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
 
-// TODO: move to LTW module
 public interface Backend {
     String getDocumentFactoryClassName();
     

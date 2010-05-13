@@ -25,11 +25,11 @@ import org.w3c.dom.TypeInfo;
 import com.google.code.ddom.core.CoreAttribute;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreAttribute.class)
 public abstract class AttributeSupport implements DOMAttribute {

@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class NSAwareElementSupport implements DOMNSAwareElement {

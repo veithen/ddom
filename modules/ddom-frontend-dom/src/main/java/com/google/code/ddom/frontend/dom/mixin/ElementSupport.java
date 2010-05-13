@@ -28,6 +28,7 @@ import com.google.code.ddom.core.CoreAttribute;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreTypedAttribute;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
@@ -38,7 +39,6 @@ import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.Policies;
-import com.google.code.ddom.spi.model.Mixin;
 import com.google.code.ddom.stream.spi.Symbols;
 
 @Mixin(CoreElement.class)

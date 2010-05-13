@@ -24,9 +24,9 @@ import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.CoreTextNode;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
-import com.google.code.ddom.spi.model.Mixin;
 
 @Mixin(CoreTextNode.class)
 public abstract class TextNodeSupport implements DOMTextNode {

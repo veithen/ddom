@@ -20,8 +20,8 @@ import javax.xml.namespace.QName;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.core.CoreNSAwareNamedNode;
+import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamedNode;
-import com.google.code.ddom.spi.model.Mixin;
 
 /**
  * 
