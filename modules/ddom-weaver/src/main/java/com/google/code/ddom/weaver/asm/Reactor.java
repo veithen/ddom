@@ -165,6 +165,9 @@ public class Reactor {
             missingImplementations.removeAll(implementations.keySet());
             throw new ModelWeaverException("The implementations for the following interfaces have not been found: " + missingImplementations);
         }
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Implementation map: " + implementations);
+        }
     }
     
     private boolean isModelExtension(ClassInfo classInfo) {
