@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.reactor;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+
+import com.google.code.ddom.weaver.asm.Util;
 
 public class ReactorAwareClassWriter extends ClassWriter {
     private final Reactor reactor;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver;
 
 import java.util.Collections;
 import java.util.Map;
@@ -32,9 +32,8 @@ import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
-import com.google.code.ddom.weaver.ClassDefinitionProcessor;
-import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
-import com.google.code.ddom.weaver.ModelWeaverException;
+import com.google.code.ddom.weaver.reactor.Reactor;
+import com.google.code.ddom.weaver.reactor.ReactorException;
 
 public class ModelWeaver {
     private final ClassDefinitionProcessor processor;

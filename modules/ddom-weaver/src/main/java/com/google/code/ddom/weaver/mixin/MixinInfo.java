@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.mixin;
 
 import java.util.List;
 import java.util.Set;
@@ -21,6 +21,9 @@ import java.util.Set;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
+
+import com.google.code.ddom.weaver.jsr45.SourceInfo;
+import com.google.code.ddom.weaver.reactor.ClassInfo;
 
 public class MixinInfo {
     private final String name;

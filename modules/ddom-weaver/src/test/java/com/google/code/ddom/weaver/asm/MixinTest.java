@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.DynamicClassLoader;
+import com.google.code.ddom.weaver.reactor.Reactor;
 
 public class MixinTest {
     @Test

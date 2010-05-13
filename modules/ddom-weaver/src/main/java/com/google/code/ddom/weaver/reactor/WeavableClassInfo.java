@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.reactor;
+
+import com.google.code.ddom.weaver.jsr45.SourceInfo;
 
 public class WeavableClassInfo extends ClassInfo {
     private final byte[] classDefinition;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.mixin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,11 +31,14 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.google.code.ddom.weaver.ModelWeaverException;
-import com.google.code.ddom.weaver.asm.util.AbstractAnnotationVisitor;
-import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
-import com.google.code.ddom.weaver.asm.util.ConstructorToMethodConverter;
+import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
+import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
+import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
+import com.google.code.ddom.weaver.reactor.ClassInfo;
+import com.google.code.ddom.weaver.reactor.Reactor;
+import com.google.code.ddom.weaver.reactor.ReactorException;
 
-class MixinInfoBuilder extends AbstractClassVisitor {
+public class MixinInfoBuilder extends AbstractClassVisitor {
     private static final Logger log = Logger.getLogger(MixinInfo.class.getName());
     
     private final Reactor reactor;

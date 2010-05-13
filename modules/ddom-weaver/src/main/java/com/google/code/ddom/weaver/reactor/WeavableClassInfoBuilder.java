@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.reactor;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Opcodes;
 
-import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
+import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
+import com.google.code.ddom.weaver.asm.Util;
+import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private final Reactor reactor;

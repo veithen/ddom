@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.reactor;
 
 public class NonWeavableClassInfo extends ClassInfo {
     public NonWeavableClassInfo(String name, boolean isInterface, ClassInfo superclass,

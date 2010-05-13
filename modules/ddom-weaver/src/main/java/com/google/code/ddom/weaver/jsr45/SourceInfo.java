@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.jsr45;
 
-/**
- * Unchecked exception used to report errors in ASM visitors.
- * 
- * @author Andreas Veithen
- */
-public class ReactorException extends RuntimeException {
-    private static final long serialVersionUID = -3662951959197710605L;
-
-    public ReactorException(String message, Throwable cause) {
-        super(message, cause);
+public class SourceInfo {
+    private final String absoluteSourceFile;
+    private final int maxLine;
+    
+    public SourceInfo(String absoluteSourceFile, int maxLine) {
+        this.absoluteSourceFile = absoluteSourceFile;
+        this.maxLine = maxLine;
     }
-
-    public ReactorException(String message) {
-        super(message);
+    
+    public String getSourceFile() {
+        return absoluteSourceFile.substring(absoluteSourceFile.lastIndexOf('/') + 1);
     }
-
-    public ReactorException(Throwable cause) {
-        super(cause);
+    
+    public String getAbsoluteSourceFile() {
+        return absoluteSourceFile;
+    }
+    
+    public int getMaxLine() {
+        return maxLine;
     }
 }

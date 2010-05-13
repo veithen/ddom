@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.asm;
+package com.google.code.ddom.weaver.reactor;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -36,7 +36,12 @@ import com.google.code.ddom.commons.dag.TopologicalSort;
 import com.google.code.ddom.weaver.ClassDefinitionProcessor;
 import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.ModelWeaverException;
-import com.google.code.ddom.weaver.asm.util.ClassVisitorTee;
+import com.google.code.ddom.weaver.asm.ClassVisitorTee;
+import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
+import com.google.code.ddom.weaver.jsr45.SourceMapper;
+import com.google.code.ddom.weaver.mixin.MergeAdapter;
+import com.google.code.ddom.weaver.mixin.MixinInfo;
+import com.google.code.ddom.weaver.mixin.MixinInfoBuilder;
 
 public class Reactor {
     private static final Logger log = Logger.getLogger(Reactor.class.getName());
