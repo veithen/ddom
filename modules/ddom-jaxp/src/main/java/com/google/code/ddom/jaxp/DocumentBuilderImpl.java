@@ -32,9 +32,9 @@ import org.xml.sax.SAXParseException;
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
@@ -48,7 +48,11 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public DOMImplementation getDOMImplementation() {
         // TODO: check if this is consistent with the rest of the code
-        return new DOMImplementationImpl((DocumentFactory)ModelLoaderRegistry.getInstance().getDocumentFactory(ModelBuilder.buildModelDefinition("dom")));
+        try {
+            return new DOMImplementationImpl(ModelLoaderRegistry.getInstance().getDocumentFactory(ModelBuilder.buildModelDefinition("dom")));
+        } catch (ModelLoaderException ex) {
+            throw new RuntimeException(ex); // TODO
+        }
     }
 
     @Override

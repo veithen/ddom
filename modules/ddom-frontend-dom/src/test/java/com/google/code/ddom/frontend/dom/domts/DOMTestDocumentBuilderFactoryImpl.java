@@ -28,9 +28,9 @@ import org.w3c.domts.DocumentBuilderSetting;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.stream.options.CoalescingFeature;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
@@ -101,7 +101,11 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
         // TODO: check this
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.addFrontend("dom");
-        return new DOMImplementationImpl((DocumentFactory)modelBuilder.buildDocumentFactory());
+        try {
+            return new DOMImplementationImpl(modelBuilder.buildDocumentFactory());
+        } catch (ModelLoaderException ex) {
+            throw new Error(ex);
+        }
     }
 
     @Override
