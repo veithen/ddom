@@ -42,6 +42,8 @@ public class URLUtils {
         String file = folderUrl.getFile(); 
         if (proto.equals("file")) {
             File[] files = new File(file).listFiles();
+            // TODO: this will cause a NullPointerException if the directory doesn't exist;
+            //       need to specify if in that case we return an empty array or null
             URL[] urls = new URL[files.length];
             for (int i=0; i<files.length; i++) {
                 urls[i] = files[i].toURL();
