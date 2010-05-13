@@ -20,51 +20,42 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>ddom</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>modules</artifactId>
-    <name>DDOM :: Modules</name>
-    <packaging>pom</packaging>
-    
-    <modules>
-        <module>ddom-api</module>
-        <module>ddom-backend</module>
-        <module>ddom-backend-linkedlist</module>
-        <module>ddom-backend-testsuite</module>
-        <module>ddom-commons</module>
-        <module>ddom-dom-utils</module>
-        <module>ddom-frontend-axiom</module>
-        <module>ddom-frontend-axiom-soap</module>
-        <module>ddom-frontend-dom</module>
-        <module>ddom-frontend-saaj</module>
-        <module>ddom-jaxp</module>
-        <module>ddom-model-dom</module>
-        <module>ddom-spi</module>
-        <module>ddom-spring-ws</module>
-        <module>ddom-stream</module>
-        <module>ddom-stream-dom</module>
-        <module>ddom-stream-sax</module>
-        <module>ddom-stream-stax</module>
-        <module>ddom-stream-utils</module>
-        <module>ddom-stream-wstx</module>
-        <module>ddom-test-utils</module>
-        <module>ddom-weaver</module>
-        <module>maven-ddom-weaver-plugin</module>
-    </modules>
-    
+    <artifactId>ddom-model-dom</artifactId>
+    <name>DDOM :: Modules :: Model :: DOM</name>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-backend-linkedlist</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-frontend-dom</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
-                <inherited>true</inherited>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>maven-ddom-weaver-plugin</artifactId>
+                <version>${project.version}</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>weave</goal>
                         </goals>
+                        <configuration>
+                            <backend>linkedlist</backend>
+                            <frontends>
+                                <frontend>dom</frontend>
+                            </frontends>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
