@@ -27,5 +27,5 @@ public interface Frontend {
     // TODO: we should hide the context/configuration data (current parameters) behind some class to allow for extensibility in the future
     ClassCollection getMixins(Map<String,Frontend> frontends);
     
-    ClassCollection getModelExtensions();
+    ClassCollection getModelExtensionInterfaces();
 }

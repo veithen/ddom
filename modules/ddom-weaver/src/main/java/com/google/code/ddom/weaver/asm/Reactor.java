@@ -87,7 +87,7 @@ public class Reactor {
         mixins.add(builder.build());
     }
     
-    public void loadModelExtension(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
+    public void loadModelExtensionInterface(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
         ClassInfo modelExtension = getClassInfo(classRef);
         if (modelExtension.getInterfaces().length != 1) {
             throw new ModelWeaverException("A model extension interface must have exactly one superinterface");

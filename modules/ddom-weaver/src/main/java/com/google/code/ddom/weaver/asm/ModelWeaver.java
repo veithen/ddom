@@ -69,6 +69,9 @@ public class ModelWeaver {
                 for (ClassRef classRef : frontend.getMixins(Collections.unmodifiableMap(frontends)).getClassRefs()) {
                     reactor.loadMixin(classRef);
                 }
+                for (ClassRef classRef : frontend.getModelExtensionInterfaces().getClassRefs()) {
+                    reactor.loadModelExtensionInterface(classRef);
+                }
             }
             reactor.generateModel(processor);
         } catch (ReactorException ex) {

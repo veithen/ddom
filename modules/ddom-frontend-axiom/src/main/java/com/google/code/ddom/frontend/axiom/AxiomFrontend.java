@@ -36,7 +36,7 @@ public class AxiomFrontend implements Frontend {
         return aggregate;
     }
 
-    public ClassCollection getModelExtensions() {
+    public ClassCollection getModelExtensionInterfaces() {
         return EmptyClassCollection.INSTANCE;
     }
 }

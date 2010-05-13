@@ -29,7 +29,7 @@ public class DOMFrontend implements Frontend {
         return Module.forClass(DOMFrontend.class).getPackage("com.google.code.ddom.frontend.dom.mixin");
     }
 
-    public ClassCollection getModelExtensions() {
+    public ClassCollection getModelExtensionInterfaces() {
         return EmptyClassCollection.INSTANCE;
     }
 }
