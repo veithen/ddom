@@ -30,19 +30,19 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
+import com.google.code.ddom.weaver.asm.ErrorHandler;
 import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
-import com.google.code.ddom.weaver.reactor.ClassInfo;
-import com.google.code.ddom.weaver.reactor.Reactor;
-import com.google.code.ddom.weaver.reactor.ReactorException;
+import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class MixinInfoBuilder extends AbstractClassVisitor {
     private static final Logger log = Logger.getLogger(MixinInfo.class.getName());
     
-    private final Reactor reactor;
+    private final ClassRealm realm;
     private final SourceInfoBuilder sourceInfoBuilder;
+    private final ErrorHandler errorHandler;
     private String name;
     private final List<Type> targetTypes = new ArrayList<Type>();
     private final Set<String> contributedInterfaces = new HashSet<String>();
@@ -50,9 +50,10 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
     private final List<MethodNode> methods = new ArrayList<MethodNode>();
     private MethodNode init;
 
-    public MixinInfoBuilder(Reactor reactor, SourceInfoBuilder sourceInfoBuilder) {
-        this.reactor = reactor;
+    public MixinInfoBuilder(ClassRealm realm, SourceInfoBuilder sourceInfoBuilder, ErrorHandler errorHandler) {
+        this.realm = realm;
         this.sourceInfoBuilder = sourceInfoBuilder;
+        this.errorHandler = errorHandler;
     }
 
     @Override
@@ -101,7 +102,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
             }
         } else {
             if ((access & Opcodes.ACC_ABSTRACT) != 0) {
-                throw new ReactorException("Mixin " + this.name + " declares an abstract method " + name + desc + ". This is disallowed; use an interface instead.");
+                errorHandler.handleError("Mixin " + this.name + " declares an abstract method " + name + desc + ". This is disallowed; use an interface instead.");
             }
             MethodNode method = new MethodNode(access, name, desc, signature, exceptions);
             methods.add(method);
@@ -109,17 +110,21 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
         }
     }
 
-    public MixinInfo build() throws ClassNotFoundException, ModelWeaverException {
+    @Override
+    public void visitEnd() {
         if (targetTypes.isEmpty()) {
-            throw new ModelWeaverException(name + " is missing a @Mixin annotation or the value of the @Mixin annotation is an empty array");
+            errorHandler.handleError(name + " is missing a @Mixin annotation or the value of the @Mixin annotation is an empty array");
         }
+    }
+
+    public MixinInfo build() throws ClassNotFoundException {
         // TODO: do we still need this?
 //        if (!contributedInterfaces.remove(target.getInternalName())) {
 //            log.warning("Mixin class doesn't implement target interface");
 //        }
         List<ClassInfo> targets = new ArrayList<ClassInfo>(targetTypes.size());
         for (Type type : targetTypes) {
-            targets.add(reactor.getClassInfo(type.getClassName()));
+            targets.add(realm.getClassInfo(type.getClassName()));
         }
         return new MixinInfo(name, targets, contributedInterfaces, init, fields, methods, sourceInfoBuilder.getSourceInfo());
     }

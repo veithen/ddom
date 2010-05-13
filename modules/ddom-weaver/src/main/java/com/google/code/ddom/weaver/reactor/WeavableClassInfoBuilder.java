@@ -21,6 +21,7 @@ import org.objectweb.asm.Opcodes;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
+import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private final Reactor reactor;

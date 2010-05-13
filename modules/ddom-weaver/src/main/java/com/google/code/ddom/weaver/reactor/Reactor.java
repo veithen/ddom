@@ -42,8 +42,10 @@ import com.google.code.ddom.weaver.jsr45.SourceMapper;
 import com.google.code.ddom.weaver.mixin.MergeAdapter;
 import com.google.code.ddom.weaver.mixin.MixinInfo;
 import com.google.code.ddom.weaver.mixin.MixinInfoBuilder;
+import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
-public class Reactor {
+public class Reactor implements ClassRealm {
     private static final Logger log = Logger.getLogger(Reactor.class.getName());
     
     // TODO: introduce system property for this
@@ -91,7 +93,7 @@ public class Reactor {
     
     public void loadMixin(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
-        MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder);
+        MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder, SimpleErrorHandler.INSTANCE);
         new ClassReader(classRef.getClassDefinition()).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
         mixins.add(builder.build());
     }
@@ -262,7 +264,7 @@ public class Reactor {
             if (dump) {
                 out = new TraceClassVisitor(out, new PrintWriter(System.out));
             }
-            weavableClass.getClassDefinitionSource().accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper)));
+            weavableClass.getClassDefinitionSource().accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper, SimpleErrorHandler.INSTANCE)));
             processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
         }
     }

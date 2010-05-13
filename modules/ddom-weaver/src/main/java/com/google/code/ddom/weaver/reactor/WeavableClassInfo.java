@@ -16,6 +16,7 @@
 package com.google.code.ddom.weaver.reactor;
 
 import com.google.code.ddom.weaver.jsr45.SourceInfo;
+import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class WeavableClassInfo extends ClassInfo {
     private final ClassDefinitionSource classDefinitionSource;

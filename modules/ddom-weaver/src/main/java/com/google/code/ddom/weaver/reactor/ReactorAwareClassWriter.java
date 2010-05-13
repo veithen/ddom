@@ -19,6 +19,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import com.google.code.ddom.weaver.asm.Util;
+import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class ReactorAwareClassWriter extends ClassWriter {
     private final Reactor reactor;

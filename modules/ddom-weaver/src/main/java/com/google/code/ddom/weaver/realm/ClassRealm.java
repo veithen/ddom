@@ -13,13 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.reactor;
+package com.google.code.ddom.weaver.realm;
 
-import com.google.code.ddom.weaver.realm.ClassInfo;
-
-public class NonWeavableClassInfo extends ClassInfo {
-    public NonWeavableClassInfo(String name, boolean isInterface, ClassInfo superclass,
-            ClassInfo[] interfaces) {
-        super(name, isInterface, superclass, interfaces);
-    }
+public interface ClassRealm {
+    ClassInfo getClassInfo(String className) throws ClassNotFoundException;
 }

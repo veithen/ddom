@@ -40,8 +40,8 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.google.code.ddom.weaver.asm.ErrorHandler;
 import com.google.code.ddom.weaver.jsr45.SourceMapper;
-import com.google.code.ddom.weaver.reactor.ReactorException;
 
 /**
  * Class adapter that merges a set of mixins into a given target class. This consists in the
@@ -58,6 +58,7 @@ public class MergeAdapter extends ClassAdapter {
     
     final List<MixinInfo> mixins;
     private final SourceMapper sourceMapper;
+    private final ErrorHandler errorHandler;
     private Remapper remapper;
     
     /**
@@ -72,10 +73,11 @@ public class MergeAdapter extends ClassAdapter {
      */
     private final Set<String> seenFields = new HashSet<String>();
     
-    public MergeAdapter(ClassVisitor cv, List<MixinInfo> mixins, SourceMapper sourceMapper) {
+    public MergeAdapter(ClassVisitor cv, List<MixinInfo> mixins, SourceMapper sourceMapper, ErrorHandler errorHandler) {
         super(cv);
         this.mixins = mixins;
         this.sourceMapper = sourceMapper;
+        this.errorHandler = errorHandler;
     }
     
     @Override
@@ -146,7 +148,7 @@ public class MergeAdapter extends ClassAdapter {
                     log.finer("Merging field " + field.name + " from mixin " + mixin.getName());
                 }
                 if (!seenFields.add(field.name)) {
-                    throw new ReactorException("Duplicate field " + field.name);
+                    errorHandler.handleError("Duplicate field " + field.name);
                 }
                 field.accept(this);
             }
@@ -155,7 +157,7 @@ public class MergeAdapter extends ClassAdapter {
                     log.finer("Merging method " + mn.name + mn.desc + " from mixin " + mixin.getName());
                 }
                 if (!seenMethods.add(mn.name + mn.desc)) {
-                    throw new ReactorException("Method " + mn.name + mn.desc + " of mixin " + mixin.getName() + " collides with a method declared in the base class or another mixin");
+                    errorHandler.handleError("Method " + mn.name + mn.desc + " of mixin " + mixin.getName() + " collides with a method declared in the base class or another mixin");
                 }
                 String[] exceptions = new String[mn.exceptions.size()];
                 mn.exceptions.toArray(exceptions);

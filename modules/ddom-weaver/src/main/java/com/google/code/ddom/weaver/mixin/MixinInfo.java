@@ -23,7 +23,7 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.google.code.ddom.weaver.jsr45.SourceInfo;
-import com.google.code.ddom.weaver.reactor.ClassInfo;
+import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class MixinInfo {
     private final String name;

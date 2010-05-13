@@ -15,11 +15,14 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
-import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.asm.ErrorHandler;
 
-public class NonWeavableClassInfo extends ClassInfo {
-    public NonWeavableClassInfo(String name, boolean isInterface, ClassInfo superclass,
-            ClassInfo[] interfaces) {
-        super(name, isInterface, superclass, interfaces);
+public class SimpleErrorHandler implements ErrorHandler {
+    public static final SimpleErrorHandler INSTANCE = new SimpleErrorHandler();
+    
+    private SimpleErrorHandler() {}
+    
+    public void handleError(String message) {
+        throw new ReactorException(message);
     }
 }
