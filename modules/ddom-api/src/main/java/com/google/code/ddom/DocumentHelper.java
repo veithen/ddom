@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
@@ -58,7 +59,11 @@ public class DocumentHelper {
     }
     
     public Object newDocument(ModelDefinition model) {
-        return modelLoaderRegistry.getDocumentFactory(model).createDocument();
+        try {
+            return modelLoaderRegistry.getDocumentFactory(model).createDocument();
+        } catch (ModelLoaderException ex) {
+            throw new DocumentHelperException(ex);
+        }
     }
     
     public Object newDocument(String frontend) {
@@ -68,7 +73,12 @@ public class DocumentHelper {
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
     public Object parse(ModelDefinition model, Object source, Options options, boolean preserve) {
         // TODO: check for null here!
-        DocumentFactory documentFactory = modelLoaderRegistry.getDocumentFactory(model);
+        DocumentFactory documentFactory;
+        try {
+            documentFactory = modelLoaderRegistry.getDocumentFactory(model);
+        } catch (ModelLoaderException ex) {
+            throw new DocumentHelperException(ex);
+        }
         OptionsTracker tracker = options.createTracker();
         Producer producer;
         try {

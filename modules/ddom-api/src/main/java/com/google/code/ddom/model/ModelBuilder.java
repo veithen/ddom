@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 
 // TODO: rename this ModelConfigurator?
@@ -40,7 +41,7 @@ public class ModelBuilder {
         return new ModelDefinition(backend, new TreeSet<String>(frontends));
     }
     
-    public DocumentFactory buildDocumentFactory() {
+    public DocumentFactory buildDocumentFactory() throws ModelLoaderException {
         // TODO: make class loader configurable
         return ModelLoaderRegistry.getInstance(ModelBuilder.class.getClassLoader()).getDocumentFactory(buildModelDefinition());
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,7 @@ package com.google.code.ddom.spi.model;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,19 +30,19 @@ import com.google.code.ddom.spi.ProviderFinderException;
 public class ModelLoaderRegistry {
     private static final ClassLoaderLocal<ModelLoaderRegistry> registries = new ClassLoaderLocal<ModelLoaderRegistry>();
     
-    private final List<ModelLoader> loaders;
+    private final Map<String,ModelLoader> loaders;
     private final Map<ModelDefinition,DocumentFactory> modelCache = new ConcurrentHashMap<ModelDefinition,DocumentFactory>();
 
-    private ModelLoaderRegistry(List<ModelLoader> loaders) {
+    private ModelLoaderRegistry(Map<String,ModelLoader> loaders) {
         this.loaders = loaders;
     }
     
     public static ModelLoaderRegistry getInstance(ClassLoader classLoader) {
         ModelLoaderRegistry registry = registries.get(classLoader);
         if (registry == null) {
-            List<ModelLoader> loaders = new ArrayList<ModelLoader>();
+            Map<String,ModelLoader> loaders = new HashMap<String,ModelLoader>();
             for (Map.Entry<String,ModelLoaderFactory> entry : ProviderFinder.find(classLoader, ModelLoaderFactory.class).entrySet()) {
-                loaders.add(entry.getValue().createModelLoader(classLoader));
+                loaders.put(entry.getKey(), entry.getValue().createModelLoader(classLoader));
             }
             registry = new ModelLoaderRegistry(loaders);
             registries.put(classLoader, registry);
@@ -59,21 +58,26 @@ public class ModelLoaderRegistry {
         }));
     }
     
-    public DocumentFactory getDocumentFactory(ModelDefinition model) {
+    public DocumentFactory getDocumentFactory(ModelDefinition model) throws ModelLoaderException {
         DocumentFactory documentFactory = modelCache.get(model);
         if (documentFactory == null) {
-            for (ModelLoader loader : loaders) {
+            if (loaders.isEmpty()) {
+                throw new ModelLoaderException("Unable to create document factory; no model loaders have been registered");
+            }
+            for (ModelLoader loader : loaders.values()) {
                 try {
                     documentFactory = loader.loadModel(model);
                     if (documentFactory != null) {
                         break;
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace(); // TODO
+                } catch (ModelLoaderException ex) {
+                    throw ex;
+                } catch (Throwable ex) {
+                    throw new ModelLoaderException("Model loader threw unexpected exception", ex);
                 }
             }
             if (documentFactory == null) {
-                throw new RuntimeException(); // TODO
+                throw new ModelLoaderException("Unable to create document factory; none of the registered model loaders (" + loaders.keySet() + ") was able to load the model");
             }
             modelCache.put(model, documentFactory);
         }
