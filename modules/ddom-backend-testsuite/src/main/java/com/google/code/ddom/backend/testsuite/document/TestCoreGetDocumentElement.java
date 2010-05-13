@@ -17,10 +17,10 @@ package com.google.code.ddom.backend.testsuite.document;
 
 import org.junit.Assert;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreElement;
 
 public class TestCoreGetDocumentElement extends BackendTestCase {
     public TestCoreGetDocumentElement(BackendTestSuiteConfig config) {

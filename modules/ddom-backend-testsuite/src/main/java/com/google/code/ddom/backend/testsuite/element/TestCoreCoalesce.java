@@ -17,15 +17,15 @@ package com.google.code.ddom.backend.testsuite.element;
 
 import org.junit.Assert;
 
-import com.google.code.ddom.backend.CoreCDATASection;
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreComment;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
+import com.google.code.ddom.core.CoreCDATASection;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreComment;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreText;
 
 public class TestCoreCoalesce extends BackendTestCase {
     public TestCoreCoalesce(BackendTestSuiteConfig config) {

@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.NoParentException;
-import com.google.code.ddom.backend.SelfRelationshipException;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.NoParentException;
+import com.google.code.ddom.core.SelfRelationshipException;
 
 public final class LLChildNodeHelper {
     private LLChildNodeHelper() {}

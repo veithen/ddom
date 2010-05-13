@@ -17,10 +17,10 @@ package com.google.code.ddom.backend.testsuite.parent;
 
 import org.junit.Assert;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.CoreText;
 
 public class TestCoreClear extends ParentNodeTestCase {
     public TestCoreClear(BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {

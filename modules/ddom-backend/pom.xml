@@ -30,7 +30,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-stream</artifactId>
+            <artifactId>ddom-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

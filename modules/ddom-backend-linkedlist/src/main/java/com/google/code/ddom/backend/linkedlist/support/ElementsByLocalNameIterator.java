@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist.support;
 
-import com.google.code.ddom.backend.Axis;
-import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.CoreParentNode;
 
 public class ElementsByLocalNameIterator extends AbstractNodeIterator<CoreNSAwareElement> {
     private final String localName;

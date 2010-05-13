@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.support;
 
-import com.google.code.ddom.backend.NodeMigrationPolicy;
+import com.google.code.ddom.core.NodeMigrationPolicy;
 
 public final class Policies {
     private Policies() {}

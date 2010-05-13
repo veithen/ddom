@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.Attr;
 
-import com.google.code.ddom.backend.CoreAttribute;
+import com.google.code.ddom.core.CoreAttribute;
 
 public interface DOMAttribute extends CoreAttribute, Attr, DOMParentNode {
 

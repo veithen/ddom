@@ -17,8 +17,8 @@ package com.google.code.ddom.backend.testsuite;
 
 import org.junit.Assert;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.DeferredParsingException;
 
 public class CoreAssert {
     private CoreAssert() {}

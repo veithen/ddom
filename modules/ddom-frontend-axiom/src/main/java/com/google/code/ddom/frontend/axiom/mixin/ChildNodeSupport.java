@@ -18,8 +18,8 @@ package com.google.code.ddom.frontend.axiom.mixin;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMNode;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.spi.model.Mixin;

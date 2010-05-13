@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.backend.CoreComment;
+import com.google.code.ddom.core.CoreComment;
 import com.google.code.ddom.frontend.dom.intf.DOMComment;
 import com.google.code.ddom.spi.model.Mixin;
 

@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
+import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 
 public interface DOMDocumentTypeDeclaration extends CoreDocumentTypeDeclaration {
     DOMDocumentType getDocumentType();

@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.backend.testsuite.child;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.NoParentException;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreText;
+import com.google.code.ddom.core.NoParentException;
 
 public class TestCoreInsertSiblingBeforeOnOrphan extends BackendTestCase {
     public TestCoreInsertSiblingBeforeOnOrphan(BackendTestSuiteConfig config) {

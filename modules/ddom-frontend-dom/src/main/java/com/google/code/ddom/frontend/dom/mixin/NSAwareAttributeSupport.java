@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.backend.CoreNSAwareAttribute;
+import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMNSAwareAttribute;
 import com.google.code.ddom.spi.model.Mixin;
 

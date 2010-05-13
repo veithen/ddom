@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
+import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;

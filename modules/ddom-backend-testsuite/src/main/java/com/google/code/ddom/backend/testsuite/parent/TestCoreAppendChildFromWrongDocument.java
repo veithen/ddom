@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.backend.testsuite.parent;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.WrongDocumentException;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.WrongDocumentException;
 
 public class TestCoreAppendChildFromWrongDocument extends ParentNodeTestCase {
     public TestCoreAppendChildFromWrongDocument(BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {

@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 
 /**

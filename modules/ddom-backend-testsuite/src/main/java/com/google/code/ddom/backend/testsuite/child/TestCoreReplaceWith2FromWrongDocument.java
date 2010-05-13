@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.backend.testsuite.child;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.WrongDocumentException;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.core.WrongDocumentException;
 
 public class TestCoreReplaceWith2FromWrongDocument extends BackendTestCase {
     public TestCoreReplaceWith2FromWrongDocument(BackendTestSuiteConfig config) {

@@ -18,7 +18,7 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNode;
 import com.google.code.ddom.spi.model.Mixin;
 

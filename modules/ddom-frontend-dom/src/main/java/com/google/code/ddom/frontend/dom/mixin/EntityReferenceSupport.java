@@ -18,8 +18,8 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreEntityReference;
 import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.spi.model.Mixin;

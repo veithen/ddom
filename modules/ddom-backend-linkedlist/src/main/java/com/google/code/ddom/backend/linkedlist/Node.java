@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNode;
-import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.WrongDocumentException;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreNode;
+import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.WrongDocumentException;
 
 public abstract class Node implements LLNode {
     public final CoreDocument coreGetDocument() {

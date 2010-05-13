@@ -22,9 +22,9 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.backend.AttributeMatcher;
-import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.IdentityMapper;
+import com.google.code.ddom.core.AttributeMatcher;
+import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.IdentityMapper;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.spi.model.Mixin;

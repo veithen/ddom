@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.frontend.dom.support;
 
-import com.google.code.ddom.backend.AttributeMatcher;
-import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.core.AttributeMatcher;
+import com.google.code.ddom.core.CoreAttribute;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 
 /**

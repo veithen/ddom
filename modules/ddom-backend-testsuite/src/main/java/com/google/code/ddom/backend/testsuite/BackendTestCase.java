@@ -22,9 +22,9 @@ import org.junit.Assert;
 import junit.framework.TestCase;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;

@@ -25,17 +25,17 @@ import java.lang.annotation.Target;
  * This annotation must be applied to one and only one implementation of the following
  * interfaces:
  * <ul>
- * <li>{@link CoreCDATASection}
- * <li>{@link CoreComment}
- * <li>{@link CoreDocumentTypeDeclaration}
- * <li>{@link CoreEntityReference}
- * <li>{@link CoreNamespaceDeclaration}
- * <li>{@link CoreNSAwareAttribute}
- * <li>{@link CoreNSAwareElement}
- * <li>{@link CoreNSUnawareAttribute}
- * <li>{@link CoreNSUnawareElement}
- * <li>{@link CoreProcessingInstruction}
- * <li>{@link CoreText}
+ * <li>{@link com.google.code.ddom.core.CoreCDATASection}
+ * <li>{@link com.google.code.ddom.core.CoreComment}
+ * <li>{@link com.google.code.ddom.core.CoreDocumentTypeDeclaration}
+ * <li>{@link com.google.code.ddom.core.CoreEntityReference}
+ * <li>{@link com.google.code.ddom.core.CoreNamespaceDeclaration}
+ * <li>{@link com.google.code.ddom.core.CoreNSAwareAttribute}
+ * <li>{@link com.google.code.ddom.core.CoreNSAwareElement}
+ * <li>{@link com.google.code.ddom.core.CoreNSUnawareAttribute}
+ * <li>{@link com.google.code.ddom.core.CoreNSUnawareElement}
+ * <li>{@link com.google.code.ddom.core.CoreProcessingInstruction}
+ * <li>{@link com.google.code.ddom.core.CoreText}
  * </ul>
  * The weaver uses this information to generate the model extension classes.
  * 

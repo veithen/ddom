@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.backend.testsuite.child;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.CoreText;
 
 public class TestCoreInsertSiblingAfterWithIncompleteParent extends BackendTestCase {
     public TestCoreInsertSiblingAfterWithIncompleteParent(BackendTestSuiteConfig config) {

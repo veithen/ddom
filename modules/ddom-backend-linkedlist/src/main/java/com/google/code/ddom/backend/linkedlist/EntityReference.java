@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreEntityReference;
-import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreEntityReference;
+import com.google.code.ddom.core.DeferredParsingException;
 
 @Implementation
 public class EntityReference extends LeafNode implements CoreEntityReference {

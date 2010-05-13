@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.frontend.dom.support.UserData;
 
 public interface DOMDocument extends CoreDocument, Document, DOMParentNode {

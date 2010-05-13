@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreText;
 
 @Implementation
 public class Text extends TextNode implements CoreText {

@@ -17,12 +17,12 @@ package com.google.code.ddom.frontend.axiom.support;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.backend.AttributeMatcher;
-import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNSAwareAttribute;
-import com.google.code.ddom.backend.CoreNSUnawareAttribute;
-import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.core.AttributeMatcher;
+import com.google.code.ddom.core.CoreAttribute;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreNSAwareAttribute;
+import com.google.code.ddom.core.CoreNSUnawareAttribute;
+import com.google.code.ddom.core.DeferredParsingException;
 
 // TODO: once the code in here has been stabilized, check if it can be merged with DOM2AttributeMatcher
 public final class AxiomAttributeMatcher implements AttributeMatcher {

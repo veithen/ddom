@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.stream.spi.Producer;
 
 public interface LLDocument extends LLParentNode, CoreDocument {

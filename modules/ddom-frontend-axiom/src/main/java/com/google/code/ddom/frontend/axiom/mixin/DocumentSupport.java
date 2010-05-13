@@ -31,9 +31,9 @@ import org.apache.axiom.om.OMSourcedElement;
 import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-import com.google.code.ddom.backend.AttributeMatcher;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.core.AttributeMatcher;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;

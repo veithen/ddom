@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMSerializable;
 
-import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.core.CoreNode;
 
 public interface AxiomNode extends CoreNode, OMSerializable, AxiomInformationItem {
 

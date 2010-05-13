@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.mixin.dom;
 
-import com.google.code.ddom.backend.CoreNSAwareNamedNode;
+import com.google.code.ddom.core.CoreNSAwareNamedNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamedNode;
 import com.google.code.ddom.spi.model.Mixin;
 

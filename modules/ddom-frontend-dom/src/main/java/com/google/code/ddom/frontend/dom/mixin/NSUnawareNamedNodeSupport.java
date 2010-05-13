@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.backend.CoreNSUnawareNamedNode;
+import com.google.code.ddom.core.CoreNSUnawareNamedNode;
 import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareNamedNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.spi.model.Mixin;

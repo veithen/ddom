@@ -15,13 +15,13 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreLeafNode;
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreLeafNode;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.DeferredParsingException;
 
 public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode {
     private final Document document;

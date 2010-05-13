@@ -17,16 +17,16 @@ package com.google.code.ddom.backend.testsuite;
 
 import junit.framework.TestSuite;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreNSAwareAttribute;
-import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.CoreNSAwareNamedNode;
-import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.CoreTypedAttribute;
-import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.backend.testsuite.nsaware.NSAwareNamedNodeFactory;
 import com.google.code.ddom.backend.testsuite.parent.ParentNodeFactory;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreNSAwareAttribute;
+import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.CoreNSAwareNamedNode;
+import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.CoreTypedAttribute;
+import com.google.code.ddom.core.DocumentFactory;
 
 public class BackendTestSuiteBuilder {
     private BackendTestSuiteBuilder() {}

@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.ext;
 
-import com.google.code.ddom.backend.CoreNSAwareElement;
+import com.google.code.ddom.core.CoreNSAwareElement;
 
 public interface SOAPEnvelope extends CoreNSAwareElement {
 

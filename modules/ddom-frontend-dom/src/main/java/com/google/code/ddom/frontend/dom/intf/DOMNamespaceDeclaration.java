@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.backend.CoreNamespaceDeclaration;
+import com.google.code.ddom.core.CoreNamespaceDeclaration;
 
 public interface DOMNamespaceDeclaration extends CoreNamespaceDeclaration, DOMAttribute {
 

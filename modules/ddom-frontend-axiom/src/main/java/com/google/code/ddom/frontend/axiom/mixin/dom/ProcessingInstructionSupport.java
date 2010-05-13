@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.mixin.dom;
 
-import com.google.code.ddom.backend.CoreProcessingInstruction;
+import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.spi.model.Mixin;
 

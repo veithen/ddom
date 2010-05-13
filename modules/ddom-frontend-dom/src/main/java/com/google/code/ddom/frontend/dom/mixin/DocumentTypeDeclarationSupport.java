@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.mixin;
 
-import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
+import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.google.code.ddom.spi.model.Mixin;

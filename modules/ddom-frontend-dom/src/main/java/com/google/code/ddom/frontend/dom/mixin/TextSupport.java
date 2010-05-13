@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.frontend.dom.intf.DOMText;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.spi.model.Mixin;

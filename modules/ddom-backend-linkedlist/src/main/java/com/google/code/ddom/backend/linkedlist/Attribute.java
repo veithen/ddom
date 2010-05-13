@@ -15,13 +15,13 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.ChildTypeNotAllowedException;
-import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreEntityReference;
-import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.CoreAttribute;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreEntityReference;
+import com.google.code.ddom.core.CoreText;
+import com.google.code.ddom.core.DeferredParsingException;
 
 public abstract class Attribute extends ParentNode implements CoreAttribute {
     /**

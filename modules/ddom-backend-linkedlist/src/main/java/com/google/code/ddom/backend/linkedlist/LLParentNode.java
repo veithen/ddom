@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.ChildTypeNotAllowedException;
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.DeferredParsingException;
+import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.DeferredParsingException;
 
 public interface LLParentNode extends LLNode, CoreParentNode {
     void internalNotifyChildrenModified(int delta);

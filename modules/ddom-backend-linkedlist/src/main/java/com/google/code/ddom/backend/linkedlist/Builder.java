@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.collections.ArrayStack;
 import com.google.code.ddom.collections.Stack;
+import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;

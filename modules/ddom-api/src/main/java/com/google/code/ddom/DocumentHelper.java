@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.ModelLoaderException;

@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreNode;
-import com.google.code.ddom.backend.WrongDocumentException;
+import com.google.code.ddom.core.CoreNode;
+import com.google.code.ddom.core.WrongDocumentException;
 
 public interface LLNode extends CoreNode {
     LLDocument internalGetDocument();

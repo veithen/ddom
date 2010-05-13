@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist.support;
 
-import com.google.code.ddom.backend.Axis;
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreParentNode;
+import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreParentNode;
 
 public class ChildrenByTypeIterator<T extends CoreChildNode> extends AbstractNodeIterator<T> {
     public ChildrenByTypeIterator(CoreParentNode startNode, Axis axis, Class<T> type) {

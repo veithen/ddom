@@ -37,12 +37,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.backend.CoreAttribute;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNSAwareNamedNode;
-import com.google.code.ddom.backend.CoreTypedAttribute;
+import com.google.code.ddom.core.CoreAttribute;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreNSAwareNamedNode;
+import com.google.code.ddom.core.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;

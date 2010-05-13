@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.backend.CoreNSAwareAttribute;
+import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.spi.model.Mixin;
 

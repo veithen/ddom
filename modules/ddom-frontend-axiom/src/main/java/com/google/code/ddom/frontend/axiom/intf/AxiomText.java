@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.intf;
 
-import com.google.code.ddom.backend.CoreText;
+import com.google.code.ddom.core.CoreText;
 
 public interface AxiomText extends CoreText, AxiomTextNode {
 

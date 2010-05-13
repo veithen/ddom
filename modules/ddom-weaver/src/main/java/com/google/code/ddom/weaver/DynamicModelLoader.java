@@ -18,7 +18,7 @@ package com.google.code.ddom.weaver;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;

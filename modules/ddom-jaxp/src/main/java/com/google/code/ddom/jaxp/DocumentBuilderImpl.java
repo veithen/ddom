@@ -31,7 +31,7 @@ import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.backend.CoreDocument;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.spi.model.ModelLoaderException;

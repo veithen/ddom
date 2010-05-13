@@ -21,13 +21,13 @@ import java.util.ResourceBundle;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CyclicRelationshipException;
-import com.google.code.ddom.backend.ChildTypeNotAllowedException;
-import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.NodeInUseException;
-import com.google.code.ddom.backend.NodeNotFoundException;
-import com.google.code.ddom.backend.WrongDocumentException;
+import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CyclicRelationshipException;
+import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.NodeInUseException;
+import com.google.code.ddom.core.NodeNotFoundException;
+import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.frontend.dom.DOMDeferredParsingException;
 
 public final class DOMExceptionUtil {

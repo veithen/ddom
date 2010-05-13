@@ -20,7 +20,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.backend.CoreLeafNode;
+import com.google.code.ddom.core.CoreLeafNode;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMLeafNode;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;

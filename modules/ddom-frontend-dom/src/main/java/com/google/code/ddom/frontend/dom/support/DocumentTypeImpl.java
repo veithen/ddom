@@ -27,8 +27,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;

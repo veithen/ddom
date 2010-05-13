@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreComment;
-import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreComment;
+import com.google.code.ddom.core.DeferredParsingException;
 
 @Implementation
 public class Comment extends CharacterData implements CoreComment {

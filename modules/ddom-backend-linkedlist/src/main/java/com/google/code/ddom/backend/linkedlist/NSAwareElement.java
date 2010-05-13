@@ -17,8 +17,8 @@ package com.google.code.ddom.backend.linkedlist;
 
 import javax.xml.namespace.QName;
 
-import com.google.code.ddom.backend.CoreNSAwareElement;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreNSAwareElement;
 
 @Implementation
 public class NSAwareElement extends Element implements CoreNSAwareElement {

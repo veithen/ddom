@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.testsuite;
 
-import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.core.DocumentFactory;
 
 public final class BackendTestSuiteConfig {
     private final DocumentFactory documentFactory;

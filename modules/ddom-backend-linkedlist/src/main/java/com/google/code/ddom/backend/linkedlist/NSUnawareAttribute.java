@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreNSUnawareAttribute;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreNSUnawareAttribute;
 
 @Implementation
 public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareAttribute {

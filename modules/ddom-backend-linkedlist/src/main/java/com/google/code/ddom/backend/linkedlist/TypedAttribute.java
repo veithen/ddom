@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreTypedAttribute;
+import com.google.code.ddom.core.CoreTypedAttribute;
 
 public abstract class TypedAttribute extends Attribute implements CoreTypedAttribute {
     private String type;

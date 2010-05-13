@@ -33,8 +33,8 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.backend.CoreNSUnawareAttribute;
-import com.google.code.ddom.backend.CoreNSUnawareElement;
+import com.google.code.ddom.core.CoreNSUnawareAttribute;
+import com.google.code.ddom.core.CoreNSUnawareElement;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;

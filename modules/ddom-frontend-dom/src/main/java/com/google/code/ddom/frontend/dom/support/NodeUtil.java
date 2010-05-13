@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.dom.support;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
-import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
+import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.google.code.ddom.frontend.dom.intf.DOMNode;

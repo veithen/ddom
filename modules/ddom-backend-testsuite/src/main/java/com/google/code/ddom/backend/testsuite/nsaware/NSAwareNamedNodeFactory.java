@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.testsuite.nsaware;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreNSAwareNamedNode;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreNSAwareNamedNode;
 
 public interface NSAwareNamedNodeFactory {
     Class<? extends CoreNSAwareNamedNode> getNodeClass();

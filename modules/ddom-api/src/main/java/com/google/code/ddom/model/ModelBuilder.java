@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 

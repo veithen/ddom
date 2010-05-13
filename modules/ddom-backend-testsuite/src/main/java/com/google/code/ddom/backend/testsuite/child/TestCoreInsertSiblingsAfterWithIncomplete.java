@@ -15,14 +15,14 @@
  */
 package com.google.code.ddom.backend.testsuite.child;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreComment;
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreElement;
-import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreComment;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreProcessingInstruction;
 
 public class TestCoreInsertSiblingsAfterWithIncomplete extends BackendTestCase {
     public TestCoreInsertSiblingsAfterWithIncomplete(BackendTestSuiteConfig config) {

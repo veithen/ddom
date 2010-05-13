@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.ChildTypeNotAllowedException;
-import com.google.code.ddom.backend.CoreCDATASection;
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreText;
-import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.CoreCDATASection;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreText;
+import com.google.code.ddom.core.DeferredParsingException;
 
 @Implementation
 public class CDATASection extends Container implements CoreCDATASection {

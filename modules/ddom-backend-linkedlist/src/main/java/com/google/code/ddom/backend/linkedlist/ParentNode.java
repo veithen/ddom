@@ -17,22 +17,22 @@ package com.google.code.ddom.backend.linkedlist;
 
 import java.util.Iterator;
 
-import com.google.code.ddom.backend.Axis;
-import com.google.code.ddom.backend.ChildTypeNotAllowedException;
-import com.google.code.ddom.backend.CoreCharacterData;
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.CoreNode;
-import com.google.code.ddom.backend.CoreParentNode;
-import com.google.code.ddom.backend.CyclicRelationshipException;
-import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
+import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.CoreCharacterData;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.CoreNode;
+import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.CyclicRelationshipException;
+import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.NodeNotFoundException;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public abstract class ParentNode extends Node implements LLParentNode {

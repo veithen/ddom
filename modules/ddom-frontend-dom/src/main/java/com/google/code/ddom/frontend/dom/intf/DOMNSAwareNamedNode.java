@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.backend.CoreNSAwareNamedNode;
+import com.google.code.ddom.core.CoreNSAwareNamedNode;
 
 public interface DOMNSAwareNamedNode extends CoreNSAwareNamedNode {
     String internalGetName();

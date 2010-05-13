@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreNSUnawareElement;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreNSUnawareElement;
 
 @Implementation
 public class NSUnawareElement extends Element implements CoreNSUnawareElement {

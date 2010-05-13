@@ -27,9 +27,9 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNSAwareElement;
-import com.google.code.ddom.backend.IdentityMapper;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.IdentityMapper;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;

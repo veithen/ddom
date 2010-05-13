@@ -18,8 +18,8 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.backend.CoreChildNode;
-import com.google.code.ddom.backend.CoreModelException;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;

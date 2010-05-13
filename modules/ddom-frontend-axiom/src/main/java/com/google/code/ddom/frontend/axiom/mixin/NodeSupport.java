@@ -20,9 +20,9 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMFactory;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.CoreModelException;
-import com.google.code.ddom.backend.CoreNode;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.spi.model.Mixin;

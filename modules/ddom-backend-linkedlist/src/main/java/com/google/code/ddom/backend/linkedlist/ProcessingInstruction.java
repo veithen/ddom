@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreProcessingInstruction;
-import com.google.code.ddom.backend.DeferredParsingException;
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreProcessingInstruction;
+import com.google.code.ddom.core.DeferredParsingException;
 
 @Implementation
 public class ProcessingInstruction extends LeafNode implements CoreProcessingInstruction {

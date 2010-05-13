@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.intf;
 
-import com.google.code.ddom.backend.CoreLeafNode;
+import com.google.code.ddom.core.CoreLeafNode;
 
 public interface AxiomLeafNode extends CoreLeafNode, AxiomChildNode {
 

@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.CoreDocument;
-import com.google.code.ddom.backend.DocumentFactory;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.DocumentFactory;
 
 public class DocumentFactoryImpl implements DocumentFactory {
     public CoreDocument createDocument() {
