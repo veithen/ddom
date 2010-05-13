@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.weaver.asm;
 
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.google.code.ddom.weaver.asm.util.AbstractClassVisitor;
@@ -27,6 +28,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private boolean isInterface;
     private String superName;
     private String[] interfaceNames;
+    private boolean isImplementation;
     
     public WeavableClassInfoBuilder(Reactor reactor, byte[] classDefinition, SourceInfoBuilder sourceInfoBuilder) {
         this.reactor = reactor;
@@ -42,12 +44,21 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         interfaceNames = interfaces;
     }
 
+    @Override
+    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        if (desc.equals("Lcom/google/code/ddom/backend/Implementation;")) {
+            isImplementation = true;
+        }
+        // No need to actually get the details of the annotation => always return null
+        return null;
+    }
+
     public WeavableClassInfo build() throws ClassNotFoundException {
         ClassInfo[] interfaces = new ClassInfo[interfaceNames.length];
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = reactor.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
         return new WeavableClassInfo(Util.internalNameToClassName(name), isInterface, reactor.getClassInfo(Util.internalNameToClassName(superName)),
-                interfaces, classDefinition, sourceInfoBuilder.getSourceInfo());
+                interfaces, classDefinition, sourceInfoBuilder.getSourceInfo(), isImplementation);
     }
 }

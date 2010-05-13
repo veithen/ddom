@@ -17,9 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreDocumentFragment;
-import com.google.code.ddom.backend.Implementation;
 
-@Implementation
 public class DocumentFragment extends ParentNode implements CoreDocumentFragment {
     private final Document document;
     private int children;

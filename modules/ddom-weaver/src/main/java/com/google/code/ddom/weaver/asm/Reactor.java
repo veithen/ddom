@@ -18,8 +18,10 @@ package com.google.code.ddom.weaver.asm;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,8 +64,9 @@ public class Reactor {
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
     private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
     private final List<ClassInfo> modelExtensions = new ArrayList<ClassInfo>();
+    private final List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>();
     private List<WeavableClassInfo> weavableClasses;
-
+    private Map<ClassInfo,WeavableClassInfo> implementations;
     
     public Reactor(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -90,6 +93,10 @@ public class Reactor {
             throw new ModelWeaverException("A model extension interface must have exactly one superinterface");
         }
         modelExtensions.add(modelExtension);
+    }
+    
+    public void addRequiredImplementation(ClassRef iface) throws ClassNotFoundException {
+        requiredImplementations.add(getClassInfo(iface));
     }
     
     public ClassInfo getClassInfo(String className) throws ClassNotFoundException {
@@ -122,16 +129,41 @@ public class Reactor {
         }
     }
     
-    public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
+    public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException, ModelWeaverException {
         resolveWeavableClasses();
         generateModelExtensionClasses();
         weave(processor);
     }
     
-    private void resolveWeavableClasses() throws ClassNotFoundException {
+    private void resolveWeavableClasses() throws ClassNotFoundException, ModelWeaverException {
         weavableClasses = new ArrayList<WeavableClassInfo>(weavableClassInfoBuilders.size());
+        implementations = new HashMap<ClassInfo,WeavableClassInfo>();
         for (String className : weavableClassInfoBuilders.keySet()) {
-            weavableClasses.add((WeavableClassInfo)getClassInfo(className));
+            WeavableClassInfo weavableClass = (WeavableClassInfo)getClassInfo(className);
+            if (weavableClass.isImplementation()) {
+                boolean found = false;
+                for (ClassInfo iface : requiredImplementations) {
+                    if (iface.isAssignableFrom(weavableClass)) {
+                        ClassInfo impl = implementations.get(iface);
+                        if (impl != null) {
+                            throw new ModelWeaverException("Duplicate implementation: an implementation of " + iface + " has already been found, namely " + impl);
+                        } else {
+                            implementations.put(iface, weavableClass);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    throw new ModelWeaverException("The class " + weavableClass + " was annotated with @Implementation, but this is not expected");
+                }
+            }
+            weavableClasses.add(weavableClass);
+        }
+        if (implementations.size() != requiredImplementations.size()) {
+            Set<ClassInfo> missingImplementations = new HashSet<ClassInfo>(requiredImplementations);
+            missingImplementations.removeAll(implementations.keySet());
+            throw new ModelWeaverException("The implementations for the following interfaces have not been found: " + missingImplementations);
         }
     }
     

@@ -22,7 +22,6 @@ import com.google.code.ddom.backend.ChildTypeNotAllowedException;
 import com.google.code.ddom.backend.CoreCDATASection;
 import com.google.code.ddom.backend.CoreChildNode;
 import com.google.code.ddom.backend.CoreComment;
-import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreDocumentFragment;
 import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.backend.CoreElement;
@@ -35,13 +34,11 @@ import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.CoreProcessingInstruction;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.DocumentFactory;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 
-@Implementation
 public class Document extends ParentNode implements LLDocument {
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final DocumentFactory documentFactory;

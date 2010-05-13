@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.CoreParentNode;
 import com.google.code.ddom.backend.CyclicRelationshipException;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.NodeNotFoundException;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
@@ -36,7 +35,6 @@ import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
-@Implementation
 public abstract class ParentNode extends Node implements LLParentNode {
     /**
      * The content of this node. This is a {@link CoreChildNode} if the node is expanded, a

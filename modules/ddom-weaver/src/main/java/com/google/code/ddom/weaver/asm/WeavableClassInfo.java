@@ -18,11 +18,13 @@ package com.google.code.ddom.weaver.asm;
 public class WeavableClassInfo extends ClassInfo {
     private final byte[] classDefinition;
     private final SourceInfo sourceInfo;
+    private final boolean isImplementation;
     
-    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, byte[] classDefinition, SourceInfo sourceInfo) {
+    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, byte[] classDefinition, SourceInfo sourceInfo, boolean isImplementation) {
         super(name, isInterface, superclass, interfaces);
         this.classDefinition = classDefinition;
         this.sourceInfo = sourceInfo;
+        this.isImplementation = isImplementation;
     }
 
     public byte[] getClassDefinition() {
@@ -31,5 +33,9 @@ public class WeavableClassInfo extends ClassInfo {
 
     public SourceInfo getSourceInfo() {
         return sourceInfo;
+    }
+    
+    public boolean isImplementation() {
+        return isImplementation;
     }
 }

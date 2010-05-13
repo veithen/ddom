@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,7 @@ import com.google.code.ddom.backend.CoreElement;
 import com.google.code.ddom.backend.CoreEntityReference;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.Implementation;
 
-@Implementation
 public abstract class Attribute extends ParentNode implements CoreAttribute {
     /**
      * The owner of the attribute. This is either a {@link Document} if the attribute is not linked

@@ -18,6 +18,17 @@ package com.google.code.ddom.weaver.asm;
 import java.util.Collections;
 import java.util.Map;
 
+import com.google.code.ddom.backend.CoreCDATASection;
+import com.google.code.ddom.backend.CoreComment;
+import com.google.code.ddom.backend.CoreDocumentTypeDeclaration;
+import com.google.code.ddom.backend.CoreEntityReference;
+import com.google.code.ddom.backend.CoreNSAwareAttribute;
+import com.google.code.ddom.backend.CoreNSAwareElement;
+import com.google.code.ddom.backend.CoreNSUnawareAttribute;
+import com.google.code.ddom.backend.CoreNSUnawareElement;
+import com.google.code.ddom.backend.CoreNamespaceDeclaration;
+import com.google.code.ddom.backend.CoreProcessingInstruction;
+import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.spi.model.Backend;
 import com.google.code.ddom.spi.model.Frontend;
@@ -32,12 +43,23 @@ public class ModelWeaver {
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
         this.processor = processor;
         reactor = new Reactor(classLoader);
-        for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
-            try {
+        try {
+            reactor.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreComment.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
+            reactor.addRequiredImplementation(new ClassRef(CoreEntityReference.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreNamespaceDeclaration.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreNSAwareAttribute.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreNSAwareElement.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreNSUnawareAttribute.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
+            reactor.addRequiredImplementation(new ClassRef(CoreText.class));
+            for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
                 reactor.loadWeavableClass(classRef);
-            } catch (ClassNotFoundException ex) {
-                throw new ModelWeaverException(ex);
             }
+        } catch (ClassNotFoundException ex) {
+            throw new ModelWeaverException(ex);
         }
     }
 

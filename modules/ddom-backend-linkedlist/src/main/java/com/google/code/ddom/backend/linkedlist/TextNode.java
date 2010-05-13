@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.Implementation;
 
-@Implementation
 public abstract class TextNode extends CharacterData implements CoreTextNode {
     public TextNode(Document document, String data) {
         super(document, data);

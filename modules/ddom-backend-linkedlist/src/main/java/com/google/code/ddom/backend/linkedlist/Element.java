@@ -32,7 +32,6 @@ import com.google.code.ddom.backend.CoreNamespaceDeclaration;
 import com.google.code.ddom.backend.CoreText;
 import com.google.code.ddom.backend.CoreTextNode;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.Mapper;
 import com.google.code.ddom.backend.NodeInUseException;
 import com.google.code.ddom.backend.NodeMigrationException;
@@ -40,7 +39,6 @@ import com.google.code.ddom.backend.NodeMigrationPolicy;
 import com.google.code.ddom.backend.WrongDocumentException;
 import com.google.code.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 
-@Implementation
 public abstract class Element extends Container implements LLChildNode, CoreElement {
     private Attribute firstAttribute;
 

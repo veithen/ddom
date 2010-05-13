@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,8 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.CoreDocument;
 import com.google.code.ddom.backend.CoreNode;
 import com.google.code.ddom.backend.DeferredParsingException;
-import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.backend.WrongDocumentException;
 
-@Implementation
 public abstract class Node implements LLNode {
     public final CoreDocument coreGetDocument() {
         return internalGetDocument();
