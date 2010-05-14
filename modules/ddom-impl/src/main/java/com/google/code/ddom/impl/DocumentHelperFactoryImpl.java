@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom;
-
-import java.io.StringReader;
-
-import org.apache.axiom.om.OMDocument;
+package com.google.code.ddom.impl;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.spi.model.ModelLoaderRegistry;
+import com.google.code.ddom.stream.spi.StreamFactory;
 
-public class DDOMAxiomUtil implements AxiomUtil {
-    public static final DDOMAxiomUtil INSTANCE = new DDOMAxiomUtil();
-    
-    private final DocumentHelper factory = DocumentHelperFactory.INSTANCE.newInstance();
-
-    private DDOMAxiomUtil() {}
-    
-    public OMDocument createDocument() {
-        return (OMDocument)factory.newDocument("axiom");
+public class DocumentHelperFactoryImpl extends DocumentHelperFactory {
+    @Override
+    public DocumentHelper getDefaultInstance() {
+        // TODO
+        return null;
     }
-
-    public OMDocument parse(String xml) {
-        return (OMDocument)factory.parse("axiom", new StringReader(xml));
+    
+    @Override
+    public DocumentHelper newInstance(ClassLoader classLoader) {
+        return new DocumentHelperImpl(ModelLoaderRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
+    }
+    
+    @Override
+    public DocumentHelper newInstance() {
+        return new DocumentHelperImpl(ModelLoaderRegistry.getInstance(), StreamFactory.getInstance());
     }
 }

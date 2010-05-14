@@ -19,7 +19,7 @@ import javax.xml.soap.SOAPElement;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 
 public class DDOMSAAJUtil extends SAAJUtil {
     public static final DDOMSAAJUtil INSTANCE = new DDOMSAAJUtil();
@@ -28,7 +28,7 @@ public class DDOMSAAJUtil extends SAAJUtil {
     
     @Override
     public SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix) {
-        Document document = (Document)DocumentHelper.newInstance().newDocument("saaj");
+        Document document = (Document)DocumentHelperFactory.INSTANCE.newInstance().newDocument("saaj");
         return (SOAPElement)document.createElementNS(namespaceURI, prefix == null ? localName : prefix + ":" + localName);
     }
 }

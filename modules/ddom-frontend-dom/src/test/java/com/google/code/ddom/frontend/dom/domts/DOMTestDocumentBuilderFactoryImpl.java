@@ -26,7 +26,7 @@ import org.w3c.domts.DOMTestIncompatibleException;
 import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
-import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
@@ -94,12 +94,12 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
     @Override
     public Document load(URL url) throws DOMTestLoadException {
         // TODO: need to cleanup somehow
-        return (Document)DocumentHelper.newInstance().parse(DOM, url, options);
+        return (Document)DocumentHelperFactory.INSTANCE.newInstance().parse(DOM, url, options);
     }
 
     @Override
     public DOMImplementation getDOMImplementation() {
-        return DocumentHelper.newInstance().getAPIObject(DOM, DOMImplementation.class);
+        return DocumentHelperFactory.INSTANCE.newInstance().getAPIObject(DOM, DOMImplementation.class);
     }
 
     @Override

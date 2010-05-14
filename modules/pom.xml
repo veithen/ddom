@@ -41,6 +41,7 @@
         <module>ddom-frontend-axiom-soap</module>
         <module>ddom-frontend-dom</module>
         <module>ddom-frontend-saaj</module>
+        <module>ddom-impl</module>
         <module>ddom-jaxp</module>
         <module>ddom-model-dom</module>
         <module>ddom-spi</module>

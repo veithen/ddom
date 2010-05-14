@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ import org.apache.ws.security.message.WSSecUsernameToken;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.tests.wss4j.receiver.ReceiverTest;
 
 public class SenderTest {
     @Test
     public void testUsernameToken() throws Exception {
-        Document doc = (Document)DocumentHelper.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
+        Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
         WSSecUsernameToken builder = new WSSecUsernameToken();
         builder.setUserInfo("user", "password");
         WSSecHeader secHeader = new WSSecHeader();

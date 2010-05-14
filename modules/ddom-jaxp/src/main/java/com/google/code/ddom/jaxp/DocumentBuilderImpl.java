@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.model.ModelBuilder;
@@ -47,7 +48,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     
     @Override
     public DOMImplementation getDOMImplementation() {
-        return DocumentHelper.newInstance().getAPIObject(DOM, DOMImplementation.class);
+        return DocumentHelperFactory.INSTANCE.newInstance().getAPIObject(DOM, DOMImplementation.class);
     }
 
     @Override
@@ -66,13 +67,13 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public Document newDocument() {
         // TODO: do this properly
-        return (Document)DocumentHelper.newInstance().newDocument(DOM);
+        return (Document)DocumentHelperFactory.INSTANCE.newInstance().newDocument(DOM);
     }
 
     @Override
     public Document parse(InputSource is) throws SAXException, IOException {
         // TODO: catch StreamException/DeferredParsingException and translate to SAXException
-        DocumentHelper documentHelper = DocumentHelper.newInstance();
+        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
         CoreDocument document = (CoreDocument)documentHelper.parse(DOM, is, options);
         documentHelper.buildDocument(document);
         // TODO: close the reader and the underlying stream

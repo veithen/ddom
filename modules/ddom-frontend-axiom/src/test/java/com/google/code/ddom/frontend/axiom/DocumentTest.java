@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package com.google.code.ddom.frontend.axiom;
 import org.apache.axiom.om.OMDocument;
 import org.junit.Test;
 
-import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 
 public class DocumentTest {
     @Test
     public void test() {
-        OMDocument document = (OMDocument)DocumentHelper.newInstance().newDocument("axiom");
+        OMDocument document = (OMDocument)DocumentHelperFactory.INSTANCE.newInstance().newDocument("axiom");
     }
 }

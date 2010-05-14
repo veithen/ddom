@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.w3c.dom.Document;
 
 import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.xsltts.Filters;
 import com.google.code.ddom.xsltts.StrictErrorListener;
 import com.google.code.ddom.xsltts.XSLTConformanceTest;
@@ -42,7 +43,7 @@ import com.google.code.ddom.xsltts.XSLTConformanceTestSuite;
 
 public class XSLTTestCase extends TestCase {
     private static final DocumentBuilder refDocumentBuilder;
-    private static final DocumentHelper documentHelper = DocumentHelper.newInstance();
+    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
     
     static {
         DocumentBuilderFactory documentBuilderFactory = new DocumentBuilderFactoryImpl();

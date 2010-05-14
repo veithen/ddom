@@ -20,6 +20,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
@@ -35,7 +36,7 @@ public class DDOMUtil extends DOMUtil {
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.addFrontend("dom");
         modelDefinition = modelBuilder.buildModelDefinition();
-        documentHelper = DocumentHelper.newInstance();
+        documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
     }
     
     @Override

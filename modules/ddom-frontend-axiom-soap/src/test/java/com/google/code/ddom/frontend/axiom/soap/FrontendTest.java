@@ -17,11 +17,11 @@ package com.google.code.ddom.frontend.axiom.soap;
 
 import org.junit.Test;
 
-import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 
 public class FrontendTest {
     @Test
     public void test() {
-        DocumentHelper.newInstance().newDocument("axiom-soap");
+        DocumentHelperFactory.INSTANCE.newInstance().newDocument("axiom-soap");
     }
 }

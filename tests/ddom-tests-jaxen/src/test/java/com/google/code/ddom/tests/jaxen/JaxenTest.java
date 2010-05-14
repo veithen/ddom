@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.jaxen.Navigator;
 import org.jaxen.dom.DocumentNavigator;
 import org.jaxen.test.XPathTestBase;
 
-import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 
 public class JaxenTest extends XPathTestBase {
     public JaxenTest(String name) {
@@ -42,7 +42,7 @@ public class JaxenTest extends XPathTestBase {
             public Object getDocument(String url) throws FunctionCallException {
                 // TODO: we need to properly close the input stream/parser somewhere
                 InputStream in = JaxenTest.class.getClassLoader().getResourceAsStream(url);
-                return DocumentHelper.newInstance().parse("dom", in);
+                return DocumentHelperFactory.INSTANCE.newInstance().parse("dom", in);
             }
         };
     }
