@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 
 public interface ModelLoader {
@@ -26,5 +25,5 @@ public interface ModelLoader {
      * @return the model, or <code>null</code> if the model could not be loaded
      */
     // TODO: document that the loader is not responsible for caching the returned instance
-    DocumentFactory loadModel(ModelDefinition definition) throws ModelLoaderException;
+    Model loadModel(ModelDefinition definition) throws ModelLoaderException;
 }

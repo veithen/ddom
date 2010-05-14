@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +21,26 @@ import org.xml.sax.InputSource;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
-import com.google.code.ddom.spi.model.ModelLoaderException;
+import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 
 public class DDOMUtil extends DOMUtil {
     public static final DDOMUtil INSTANCE = new DDOMUtil();
     
-    private DDOMUtil() {}
+    private final ModelDefinition modelDefinition;
+    private final DocumentHelper documentHelper;
+    
+    private DDOMUtil() {
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.addFrontend("dom");
+        modelDefinition = modelBuilder.buildModelDefinition();
+        documentHelper = DocumentHelper.newInstance();
+    }
     
     @Override
     public Document newDocument() {
-        return (Document)DocumentHelper.newInstance().newDocument("dom");
+        return (Document)documentHelper.newDocument(modelDefinition);
     }
 
     @Override
@@ -41,18 +48,11 @@ public class DDOMUtil extends DOMUtil {
         // TODO: need to cleanup somehow
         Options options = new Options();
         options.set(NamespaceAwareness.get(namespaceAware));
-        return (Document)DocumentHelper.newInstance().parse("dom", source, options);
+        return (Document)documentHelper.parse(modelDefinition, source, options);
     }
 
     @Override
     public DOMImplementation getDOMImplementation() {
-        // TODO: need to find a better way to do this
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.addFrontend("dom");
-        try {
-            return new DOMImplementationImpl(modelBuilder.buildDocumentFactory());
-        } catch (ModelLoaderException ex) {
-            throw new Error(ex);
-        }
+        return documentHelper.getAPIObject(modelDefinition, DOMImplementation.class);
     }
 }

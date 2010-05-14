@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.google.code.ddom.core.DocumentFactory;
-import com.google.code.ddom.spi.model.ModelLoaderException;
-import com.google.code.ddom.spi.model.ModelLoaderRegistry;
-
 // TODO: rename this ModelConfigurator?
 public class ModelBuilder {
     private String backend = "linkedlist";
@@ -39,11 +35,6 @@ public class ModelBuilder {
     
     public ModelDefinition buildModelDefinition() {
         return new ModelDefinition(backend, new TreeSet<String>(frontends));
-    }
-    
-    public DocumentFactory buildDocumentFactory() throws ModelLoaderException {
-        // TODO: make class loader configurable
-        return ModelLoaderRegistry.getInstance(ModelBuilder.class.getClassLoader()).getDocumentFactory(buildModelDefinition());
     }
     
     public static ModelDefinition buildModelDefinition(String frontend) {

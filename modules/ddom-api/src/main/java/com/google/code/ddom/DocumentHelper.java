@@ -18,6 +18,7 @@ package com.google.code.ddom;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.model.ModelBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.ModelLoaderException;
@@ -60,7 +61,7 @@ public class DocumentHelper {
     
     public Object newDocument(ModelDefinition model) {
         try {
-            return modelLoaderRegistry.getDocumentFactory(model).createDocument();
+            return modelLoaderRegistry.getModel(model).getDocumentFactory().createDocument();
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
         }
@@ -75,7 +76,7 @@ public class DocumentHelper {
         // TODO: check for null here!
         DocumentFactory documentFactory;
         try {
-            documentFactory = modelLoaderRegistry.getDocumentFactory(model);
+            documentFactory = modelLoaderRegistry.getModel(model).getDocumentFactory();
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
         }
@@ -110,6 +111,10 @@ public class DocumentHelper {
         return parse(frontend, source, options, true);
     }
     
+    public Object parse(ModelDefinition modelDefinition, Object source, Options options) {
+        return parse(modelDefinition, source, options, true);
+    }
+    
     public Object parse(String frontend, Object source) {
         return parse(frontend, source, new Options(), true);
     }
@@ -125,5 +130,14 @@ public class DocumentHelper {
     
     public void disposeDocument(Object document) {
         // TODO
+    }
+    
+    public <T> T getAPIObject(ModelDefinition modelDefinition, Class<T> clazz) {
+        try {
+            APIObjectFactory apiObjectFactory = modelLoaderRegistry.getModel(modelDefinition).getAPIObjectFactory();
+            return apiObjectFactory == null ? null : clazz.cast(apiObjectFactory.getAPIObject(clazz));
+        } catch (ModelLoaderException ex) {
+            throw new DocumentHelperException(ex);
+        }
     }
 }

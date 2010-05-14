@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@ import org.xml.sax.SAXParseException;
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
-import com.google.code.ddom.spi.model.ModelLoaderException;
-import com.google.code.ddom.spi.model.ModelLoaderRegistry;
+import com.google.code.ddom.model.ModelDefinition;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
+    private static final ModelDefinition DOM = ModelBuilder.buildModelDefinition("dom");
+    
     private final Options options;
     private ErrorHandler errorHandler;
 
@@ -47,12 +47,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     
     @Override
     public DOMImplementation getDOMImplementation() {
-        // TODO: check if this is consistent with the rest of the code
-        try {
-            return new DOMImplementationImpl(ModelLoaderRegistry.getInstance().getDocumentFactory(ModelBuilder.buildModelDefinition("dom")));
-        } catch (ModelLoaderException ex) {
-            throw new RuntimeException(ex); // TODO
-        }
+        return DocumentHelper.newInstance().getAPIObject(DOM, DOMImplementation.class);
     }
 
     @Override
@@ -71,14 +66,14 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     @Override
     public Document newDocument() {
         // TODO: do this properly
-        return (Document)DocumentHelper.newInstance().newDocument("dom");
+        return (Document)DocumentHelper.newInstance().newDocument(DOM);
     }
 
     @Override
     public Document parse(InputSource is) throws SAXException, IOException {
         // TODO: catch StreamException/DeferredParsingException and translate to SAXException
         DocumentHelper documentHelper = DocumentHelper.newInstance();
-        CoreDocument document = (CoreDocument)documentHelper.parse("dom", is, options);
+        CoreDocument document = (CoreDocument)documentHelper.parse(DOM, is, options);
         documentHelper.buildDocument(document);
         // TODO: close the reader and the underlying stream
         return (Document)document;

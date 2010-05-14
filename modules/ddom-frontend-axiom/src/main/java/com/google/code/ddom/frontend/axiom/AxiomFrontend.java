@@ -21,6 +21,8 @@ import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.EmptyClassCollection;
 import com.google.code.ddom.commons.cl.Module;
+import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.spi.Provider;
 
@@ -38,5 +40,9 @@ public class AxiomFrontend implements Frontend {
 
     public ClassCollection getModelExtensionInterfaces() {
         return EmptyClassCollection.INSTANCE;
+    }
+
+    public APIObjectFactory getAPIObjectFactory(DocumentFactory documentFactory) {
+        return null;
     }
 }

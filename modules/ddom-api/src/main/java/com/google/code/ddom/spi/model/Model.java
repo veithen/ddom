@@ -15,18 +15,23 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.frontend.APIObjectFactory;
 
-/**
- * {@link ModelLoader} implementation that loads precompiled models.
- * 
- * @author Andreas Veithen
- */
-public class StaticModelLoader implements ModelLoader {
-
-    public Model loadModel(ModelDefinition definition) {
-        // TODO Auto-generated method stub
-        return null;
+public class Model {
+    private final DocumentFactory documentFactory;
+    private final APIObjectFactory apiObjectFactory;
+    
+    public Model(DocumentFactory documentFactory, APIObjectFactory apiObjectFactory) {
+        this.documentFactory = documentFactory;
+        this.apiObjectFactory = apiObjectFactory;
     }
 
+    public DocumentFactory getDocumentFactory() {
+        return documentFactory;
+    }
+
+    public APIObjectFactory getAPIObjectFactory() {
+        return apiObjectFactory;
+    }
 }

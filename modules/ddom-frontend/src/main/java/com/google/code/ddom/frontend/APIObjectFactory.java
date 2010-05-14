@@ -13,20 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.google.code.ddom.frontend;
 
-import com.google.code.ddom.model.ModelDefinition;
-
-/**
- * {@link ModelLoader} implementation that loads precompiled models.
- * 
- * @author Andreas Veithen
- */
-public class StaticModelLoader implements ModelLoader {
-
-    public Model loadModel(ModelDefinition definition) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+public interface APIObjectFactory {
+    Object getAPIObject(Class<?> clazz);
 }

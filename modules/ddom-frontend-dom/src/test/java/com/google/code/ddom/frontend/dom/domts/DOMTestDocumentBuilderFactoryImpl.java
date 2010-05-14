@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,8 @@ import org.w3c.domts.DocumentBuilderSetting;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.model.ModelBuilder;
-import com.google.code.ddom.spi.model.ModelLoaderException;
+import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.stream.options.CoalescingFeature;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
@@ -65,6 +64,8 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
         strategies.put("validating", new SimpleStrategy(ValidationPolicy.ENABLE, ValidationPolicy.DISABLE));
     }
     
+    private static final ModelDefinition DOM = ModelBuilder.buildModelDefinition("dom");
+    
     private final Options options;
     
     public DOMTestDocumentBuilderFactoryImpl(DocumentBuilderSetting[] settings) throws DOMTestIncompatibleException {
@@ -93,19 +94,12 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
     @Override
     public Document load(URL url) throws DOMTestLoadException {
         // TODO: need to cleanup somehow
-        return (Document)DocumentHelper.newInstance().parse("dom", url, options);
+        return (Document)DocumentHelper.newInstance().parse(DOM, url, options);
     }
 
     @Override
     public DOMImplementation getDOMImplementation() {
-        // TODO: check this
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.addFrontend("dom");
-        try {
-            return new DOMImplementationImpl(modelBuilder.buildDocumentFactory());
-        } catch (ModelLoaderException ex) {
-            throw new Error(ex);
-        }
+        return DocumentHelper.newInstance().getAPIObject(DOM, DOMImplementation.class);
     }
 
     @Override

@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
-import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
@@ -31,7 +30,7 @@ public class ModelLoaderRegistry {
     private static final ClassLoaderLocal<ModelLoaderRegistry> registries = new ClassLoaderLocal<ModelLoaderRegistry>();
     
     private final Map<String,ModelLoader> loaders;
-    private final Map<ModelDefinition,DocumentFactory> modelCache = new ConcurrentHashMap<ModelDefinition,DocumentFactory>();
+    private final Map<ModelDefinition,Model> modelCache = new ConcurrentHashMap<ModelDefinition,Model>();
 
     private ModelLoaderRegistry(Map<String,ModelLoader> loaders) {
         this.loaders = loaders;
@@ -58,16 +57,16 @@ public class ModelLoaderRegistry {
         }));
     }
     
-    public DocumentFactory getDocumentFactory(ModelDefinition model) throws ModelLoaderException {
-        DocumentFactory documentFactory = modelCache.get(model);
-        if (documentFactory == null) {
+    public Model getModel(ModelDefinition modelDefinition) throws ModelLoaderException {
+        Model model = modelCache.get(modelDefinition);
+        if (model == null) {
             if (loaders.isEmpty()) {
-                throw new ModelLoaderException("Unable to create document factory; no model loaders have been registered");
+                throw new ModelLoaderException("Unable to create model; no model loaders have been registered");
             }
             for (ModelLoader loader : loaders.values()) {
                 try {
-                    documentFactory = loader.loadModel(model);
-                    if (documentFactory != null) {
+                    model = loader.loadModel(modelDefinition);
+                    if (model != null) {
                         break;
                     }
                 } catch (ModelLoaderException ex) {
@@ -76,11 +75,11 @@ public class ModelLoaderRegistry {
                     throw new ModelLoaderException("Model loader threw unexpected exception", ex);
                 }
             }
-            if (documentFactory == null) {
-                throw new ModelLoaderException("Unable to create document factory; none of the registered model loaders (" + loaders.keySet() + ") was able to load the model");
+            if (model == null) {
+                throw new ModelLoaderException("Unable to create model; none of the registered model loaders (" + loaders.keySet() + ") was able to load the model");
             }
-            modelCache.put(model, documentFactory);
+            modelCache.put(modelDefinition, model);
         }
-        return documentFactory;
+        return model;
     }
 }

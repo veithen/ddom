@@ -20,8 +20,10 @@ import java.util.Map;
 
 import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoader;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 
@@ -41,7 +43,7 @@ public class DynamicModelLoader implements ModelLoader {
         this.frontendMap = frontends;
     }
     
-    public DocumentFactory loadModel(ModelDefinition definition) throws ModelLoaderException {
+    public Model loadModel(ModelDefinition definition) throws ModelLoaderException {
         Backend backend = backendMap.get(definition.getBackend());
         if (backend == null) {
             return null;
@@ -56,6 +58,7 @@ public class DynamicModelLoader implements ModelLoader {
             }
             frontends.put(frontendId, frontend);
         }
+        DocumentFactory documentFactory;
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         try {
             ModelWeaver weaver = new ModelWeaver(parentClassLoader, classLoader, backend);
@@ -67,9 +70,18 @@ public class DynamicModelLoader implements ModelLoader {
 //                }
 //            }
             weaver.weave(frontends);
-            return (DocumentFactory)classLoader.loadClass(backend.getDocumentFactoryClassName()).newInstance();
+            documentFactory = (DocumentFactory)classLoader.loadClass(backend.getDocumentFactoryClassName()).newInstance();
         } catch (Exception ex) {
             throw new ModelLoaderException("Failed to weave model", ex);
         }
+        APIObjectFactory apiObjectFactory = null;
+        for (Frontend frontend : frontends.values()) {
+            apiObjectFactory = frontend.getAPIObjectFactory(documentFactory);
+            // TODO: we should obviously not just take the first one...
+            if (apiObjectFactory != null) {
+                break;
+            }
+        }
+        return new Model(documentFactory, apiObjectFactory);
     }
 }
