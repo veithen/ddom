@@ -31,7 +31,6 @@
     <modules>
         <module>ddom-collections</module>
         <module>ddom-domts</module>
-        <module>ddom-jaxen-testsuite</module>
         <module>ddom-oasis-xslt-testsuite</module>
         <module>ddom-woodstox-internal</module>
         <module>ddom-xmlts</module>

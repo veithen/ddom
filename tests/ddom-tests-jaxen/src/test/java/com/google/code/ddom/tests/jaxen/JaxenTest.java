@@ -17,33 +17,29 @@ package com.google.code.ddom.tests.jaxen;
 
 import java.io.InputStream;
 
-import org.jaxen.FunctionCallException;
+import org.apache.axiom.test.jaxen.JaxenXPathTestBase;
 import org.jaxen.Navigator;
 import org.jaxen.dom.DocumentNavigator;
-import org.jaxen.test.XPathTestBase;
 
 import com.google.code.ddom.DocumentHelperFactory;
 
-public class JaxenTest extends XPathTestBase {
+public class JaxenTest extends JaxenXPathTestBase {
     public JaxenTest(String name) {
         super(name);
     }
 
     @Override
-    protected Object getDocument(String url) throws Exception {
-        // This method is never used in XPathTestBase
-        throw new UnsupportedOperationException();
+    protected Navigator createNavigator() {
+        return new DocumentNavigator();
     }
 
     @Override
-    protected Navigator getNavigator() {
-        return new DocumentNavigator() {
-            @Override
-            public Object getDocument(String url) throws FunctionCallException {
-                // TODO: we need to properly close the input stream/parser somewhere
-                InputStream in = JaxenTest.class.getClassLoader().getResourceAsStream(url);
-                return DocumentHelperFactory.INSTANCE.newInstance().parse("dom", in);
-            }
-        };
+    protected Object loadDocument(InputStream in) throws Exception {
+        return DocumentHelperFactory.INSTANCE.newInstance().parse("dom", in);
+    }
+
+    @Override
+    protected void releaseDocument(Object document) {
+        DocumentHelperFactory.INSTANCE.newInstance().disposeDocument(document);
     }
 }
