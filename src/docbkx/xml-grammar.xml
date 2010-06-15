@@ -63,9 +63,9 @@
                 <lhs>XMLDecl</lhs>
                 <rhs>
                     '&lt;?xml'
-                    <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-VersionInfo">VersionInfo</nonterminal> 
-                    <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-EncodingDecl">EncodingDecl</nonterminal>?
-                    <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NS-SDDecl">SDDecl</nonterminal>?
+                    <nonterminal def="#NT-VersionInfo">VersionInfo</nonterminal> 
+                    <nonterminal def="#NT-EncodingDecl">EncodingDecl</nonterminal>?
+                    <!-- nonterminal def="#NS-SDDecl" -->SDDecl<!-- /nonterminal -->?
                     <nonterminal def="#NT-S">S</nonterminal>?
                     '?>'
                 </rhs>
@@ -77,12 +77,28 @@
                     <nonterminal def="#NT-S">S</nonterminal>
                     <nonterminal def="#NT-Name">Name</nonterminal> 
                     (<nonterminal def="#NT-S">S</nonterminal>
-                     <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-ExternalID">ExternalID</nonterminal>)?
+                     <!-- nonterminal def="#NT-ExternalID" -->ExternalID<!-- /nonterminal -->)?
                     <nonterminal def="#NT-S">S</nonterminal>?
-                    ('[' <nonterminal def="http://www.w3.org/TR/2008/REC-xml-20081126/#NT-intSubset">intSubset</nonterminal> ']'
+                    ('[' <!-- nonterminal def="#NT-intSubset" -->intSubset<!-- /nonterminal --> ']'
                      <nonterminal def="#NT-S">S</nonterminal>?)? '>'
                 </rhs>
-            </production> 
+            </production>
+            <production id="NT-VersionInfo">
+                <lhs>VersionInfo</lhs>
+                <rhs>
+                    <nonterminal def="#NT-S">S</nonterminal> 'version' <nonterminal def="#NT-Eq">Eq</nonterminal>
+                    ("'" <!-- nonterminal def="#NT-VersionNum" -->VersionNum<!-- /nonterminal --> "'"
+                    | '"' <!-- nonterminal def="#NT-VersionNum" -->VersionNum<!-- /nonterminal --> '"')
+                </rhs>
+            </production>
+            <production id="NT-EncodingDecl">
+                <lhs>EncodingDecl</lhs>
+                <rhs>
+                    <nonterminal def="#NT-S">S</nonterminal> 'encoding' <nonterminal def="#NT-Eq">Eq</nonterminal>
+                    ('"' <!-- nonterminal def="#NT-EncName" -->EncName<!-- /nonterminal --> '"'
+                    | "'" <!-- nonterminal def="#NT-EncName" -->EncName<!-- /nonterminal --> "'" )
+                </rhs>
+            </production>
         </productionset>
         <productionset>
             <title>Element</title>
