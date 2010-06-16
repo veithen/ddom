@@ -87,17 +87,25 @@
                 <lhs>VersionInfo</lhs>
                 <rhs>
                     <nonterminal def="#NT-S">S</nonterminal> 'version' <nonterminal def="#NT-Eq">Eq</nonterminal>
-                    ("'" <!-- nonterminal def="#NT-VersionNum" -->VersionNum<!-- /nonterminal --> "'"
-                    | '"' <!-- nonterminal def="#NT-VersionNum" -->VersionNum<!-- /nonterminal --> '"')
+                    ("'" <nonterminal def="#NT-VersionNum">VersionNum</nonterminal> "'"
+                    | '"' <nonterminal def="#NT-VersionNum">VersionNum</nonterminal> '"')
                 </rhs>
+            </production>
+            <production id="NT-VersionNum" xreflabel="&ntxs;VersionNum&ntxe;">
+                <lhs>VersionNum</lhs>
+                <rhs>'1.' [0-9]+</rhs>
             </production>
             <production id="NT-EncodingDecl">
                 <lhs>EncodingDecl</lhs>
                 <rhs>
                     <nonterminal def="#NT-S">S</nonterminal> 'encoding' <nonterminal def="#NT-Eq">Eq</nonterminal>
-                    ('"' <!-- nonterminal def="#NT-EncName" -->EncName<!-- /nonterminal --> '"'
-                    | "'" <!-- nonterminal def="#NT-EncName" -->EncName<!-- /nonterminal --> "'" )
+                    ('"' <nonterminal def="#NT-EncName">EncName</nonterminal> '"'
+                    | "'" <nonterminal def="#NT-EncName">EncName</nonterminal> "'" )
                 </rhs>
+            </production>
+            <production id="NT-EncName" xreflabel="&ntxs;EncName&ntxe;">
+                <lhs>EncName</lhs>
+                <rhs>[A-Za-z] ([A-Za-z0-9._] | '-')*</rhs>
             </production>
         </productionset>
         <productionset>

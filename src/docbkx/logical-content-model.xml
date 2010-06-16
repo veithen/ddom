@@ -62,19 +62,68 @@
         <title>Information items</title>
         <section id="lcm.document">
             <title>The document information item</title>
-            
+            <para>
+                A document information item represents a <xref linkend="NT-document"/> and has the following
+                properties:
+            </para>
             <variablelist>
                 <varlistentry>
                     <term>children</term>
                     <listitem>
                         <para>
-                            An ordered list of child information items, in document order.
+                            An ordered list of child information items, in document order. This list may
+                            contain information items of the following type:
+                        </para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    A <link linkend="lcm.dtd">document type declaration information item</link>. 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    An <link linkend="lcm.element">element information item</link> representing
+                                    the document element.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <link linkend="lcm.text">Text information items</link> (which must only
+                                    contain whitespace).
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <link linkend="lcm.comment">Comment information items</link>.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <link linkend="lcm.pi">Processing instruction information items</link>.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>version</term>
+                    <listitem>
+                        <para>
+                            Holds the <xref linkend="NT-VersionNum"/>.
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>encoding</term>
+                    <listitem>
+                        <para>
+                            Holds the <xref linkend="NT-EncName"/>.
                         </para>
                     </listitem>
                 </varlistentry>
             </variablelist>
         </section>
-        <section>
+        <section id="lcm.dtd">
             <title>The document type declaration information item</title>
             
         </section>
@@ -683,7 +732,33 @@
         
     </section>
     <section>
+        <title>Well-formedness with respect to namespaces</title>
+        <para>
+            As noted in [...], the properties of a namespace aware named information item
+            are redundant. Therefore, an instance of the Logical Content Model is not
+            necessarily well formed with respect to namespaces<footnote><para>Except if it is the result
+            of parsing an XML document that is well formed with respect to namespaces.</para></footnote>.
+            Indeed, it is possible for a namespace aware named information item to have
+            a prefix that it not bound to the namespaceURI in the namespace context where
+            the information item appears. This situation may arise when applying a transformation
+            to a given Logical Content Model instance.
+        </para>
+        <para>
+            Note that even a transformation as simple as adding a new namespace aware element information
+            item may cause the Logical Content Model instance to loose its namespace well-formedness,
+            because the prefix of the new element information item is not necessarily bound to the
+            expected namespaceURI.
+        </para>
+    </section>
+    <section>
         <title>Transformations of the Logical Content Model</title>
+        <section>
+            <title>General considerations</title>
+            <para>
+                In general: namespace URI + local name needs to be preserved; implication
+                for adding namespace aware named information items and namespace declarations
+            </para>
+        </section>
         <section>
             <title>Coalescing</title>
             
