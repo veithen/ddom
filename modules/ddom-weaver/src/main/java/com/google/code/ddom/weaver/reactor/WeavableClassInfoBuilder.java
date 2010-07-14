@@ -22,9 +22,10 @@ import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
-    private final Reactor reactor;
+    private final ClassRealm realm;
     private final ClassDefinitionSource classDefinitionSource;
     private final SourceInfoBuilder sourceInfoBuilder;
     private String name;
@@ -33,8 +34,8 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private String[] interfaceNames;
     private boolean isImplementation;
     
-    public WeavableClassInfoBuilder(Reactor reactor, ClassDefinitionSource classDefinitionSource, SourceInfoBuilder sourceInfoBuilder) {
-        this.reactor = reactor;
+    public WeavableClassInfoBuilder(ClassRealm realm, ClassDefinitionSource classDefinitionSource, SourceInfoBuilder sourceInfoBuilder) {
+        this.realm = realm;
         this.classDefinitionSource = classDefinitionSource;
         this.sourceInfoBuilder = sourceInfoBuilder;
     }
@@ -63,9 +64,9 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     public WeavableClassInfo build() throws ClassNotFoundException {
         ClassInfo[] interfaces = new ClassInfo[interfaceNames.length];
         for (int i=0; i<interfaces.length; i++) {
-            interfaces[i] = reactor.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
+            interfaces[i] = realm.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
-        return new WeavableClassInfo(name, isInterface, reactor.getClassInfo(Util.internalNameToClassName(superName)),
+        return new WeavableClassInfo(name, isInterface, realm.getClassInfo(Util.internalNameToClassName(superName)),
                 interfaces, classDefinitionSource, sourceInfoBuilder.getSourceInfo(), isImplementation);
     }
 }
