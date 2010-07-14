@@ -192,6 +192,14 @@ public class Reactor implements ClassRealm {
         return false;
     }
     
+    /**
+     * Get all weavable classes that are annotated with
+     * {@link com.google.code.ddom.backend.Implementation} and implement (are assignable to) a given
+     * interface.
+     * 
+     * @param iface
+     * @return
+     */
     public List<WeavableClassInfo> getImplementations(ClassInfo iface) {
         List<WeavableClassInfo> implementations = new ArrayList<WeavableClassInfo>();
         for (WeavableClassInfo candidate : weavableClasses) {
@@ -226,10 +234,11 @@ public class Reactor implements ClassRealm {
     }
     
     private void weave(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
-        // We need to sort the weavable classes so that defineClass doesn't complain when
-        // a DynamicClassLoader is used.
+        // We need to sort the weavable classes so that we can satisfy the ClassDefinitionProcessor
+        // contract.
         for (WeavableClassInfo weavableClass : TopologicalSort.sort(weavableClasses, inheritanceRelation)) {
             if (!weavableClass.isInterface()) {
+                // Select the mixins that apply to weavableClass
                 List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
                 for (MixinInfo mixin : mixins) {
                     for (ClassInfo target : mixin.getTargets()) {
@@ -239,6 +248,7 @@ public class Reactor implements ClassRealm {
                         }
                     }
                 }
+                // Weave the class. Note that the weave method will take care of the case where no mixins apply.
                 weave(processor, weavableClass, selectedMixins);
             }
         }

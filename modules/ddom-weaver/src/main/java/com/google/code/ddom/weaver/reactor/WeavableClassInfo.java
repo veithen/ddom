@@ -18,6 +18,10 @@ package com.google.code.ddom.weaver.reactor;
 import com.google.code.ddom.weaver.jsr45.SourceInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
+/**
+ * Describes a weavable class. A weavable class is simply a class submitted to the weaver and that
+ * may be woven. The weaver will decide whether the class actually needs to be woven or not.
+ */
 public class WeavableClassInfo extends ClassInfo {
     private final ClassDefinitionSource classDefinitionSource;
     private final SourceInfo sourceInfo;
@@ -38,6 +42,12 @@ public class WeavableClassInfo extends ClassInfo {
         return sourceInfo;
     }
     
+    /**
+     * Determine if the class is annotated with {@link com.google.code.ddom.backend.Implementation}.
+     * 
+     * @return <code>true</code> iff the class has the
+     *         {@link com.google.code.ddom.backend.Implementation} annotation
+     */
     public boolean isImplementation() {
         return isImplementation;
     }

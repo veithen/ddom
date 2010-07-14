@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,13 @@
  */
 package com.google.code.ddom.weaver;
 
+/**
+ * Class loader that accepts class definitions and loads them. This class simply exposes the
+ * protected {@link ClassLoader#defineClass(String, byte[])} through the
+ * {@link ClassDefinitionProcessor} interface. Note that this only works because the contract of
+ * {@link ClassDefinitionProcessor} specifies that superclasses and implemented interfaces must be
+ * submitted first.
+ */
 public class DynamicClassLoader extends ClassLoader implements ClassDefinitionProcessor {
     public DynamicClassLoader(ClassLoader parent) {
         super(parent);
