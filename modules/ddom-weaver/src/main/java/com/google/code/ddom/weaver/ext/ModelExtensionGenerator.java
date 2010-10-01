@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassRef;
+import com.google.code.ddom.weaver.implementation.ImplementationMap;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
@@ -80,10 +81,16 @@ public class ModelExtensionGenerator {
     }
     
     void generateExtensions(WeavableClassInjector injector) {
+        for (WeavableClassInfo implementation : reactor.get(ImplementationMap.class).getImplementations()) {
+            injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(implementation));
+        }
         for (ModelExtension modelExtension : modelExtensions) {
             for (WeavableClassInfo implementation : modelExtension.getImplementations()) {
+                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), null)));
                 for (ClassInfo iface : modelExtension.getExtensionInterfaces()) {
-                    injector.loadWeavableClass(new ModelExtensionClass(implementation, modelExtension.getRootInterface(), iface));
+                    ModelExtensionClassInfo info = new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), iface);
+                    injector.loadWeavableClass(new ModelExtensionClass(info));
+                    injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(info));
                 }
             }
         }

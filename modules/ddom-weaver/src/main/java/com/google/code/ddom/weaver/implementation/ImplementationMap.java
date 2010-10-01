@@ -85,4 +85,8 @@ public class ImplementationMap {
         }
         return implementations;
     }
+
+    public List<WeavableClassInfo> getImplementations() {
+        return new ArrayList<WeavableClassInfo>(implementationMap.values());
+    }
 }

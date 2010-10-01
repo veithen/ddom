@@ -26,44 +26,61 @@ import com.google.code.ddom.weaver.implementation.ConstructorInfo;
 import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
-class ModelExtensionClass extends GeneratedClass {
+class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
     private final ModelExtensionClassInfo info;
-
-    ModelExtensionClass(ModelExtensionClassInfo info) {
+    
+    ModelExtensionFactoryDelegateImplementation(ModelExtensionClassInfo info) {
         this.info = info;
     }
-    
+
     public void accept(ClassVisitor classVisitor) {
         ImplementationInfo implementationInfo = info.getImplementation().get(ImplementationInfo.class);
-        String name = Util.classNameToInternalName(info.getClassName());
-        String superName = Util.classNameToInternalName(info.getSuperClassName());
+        String factoryName = Util.classNameToInternalName(info.getFactoryDelegateImplementationClassName());
         classVisitor.visit(
                 Opcodes.V1_5,
                 Opcodes.ACC_PUBLIC,
-                name,
+                factoryName,
                 null,
-                superName,
-                new String[] { Util.classNameToInternalName(info.getExtensionInterface().getName()) });
-        for (ConstructorInfo constructor : implementationInfo.getConstructors()) {
-            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", constructor.getDescriptor(), constructor.getSignature(), constructor.getExceptions());
+                "java/lang/Object",
+                new String[] {  });
+        String className = Util.classNameToInternalName(info.getClassName());
+        {
+            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
             if (mv != null) {
                 mv.visitCode();
                 Label l0 = new Label();
                 mv.visitLabel(l0);
                 mv.visitVarInsn(Opcodes.ALOAD, 0);
+                mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+                mv.visitInsn(Opcodes.RETURN);
+                Label l1 = new Label();
+                mv.visitLabel(l1);
+                mv.visitLocalVariable("this", "L" + className + ";", null, l0, l1, 0);
+                mv.visitMaxs(1, 1);
+                mv.visitEnd();
+            }
+        }
+        for (ConstructorInfo constructor : implementationInfo.getConstructors()) {
+            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "create", constructor.getDescriptor(), constructor.getSignature(), constructor.getExceptions());
+            if (mv != null) {
+                mv.visitCode();
+                Label l0 = new Label();
+                mv.visitLabel(l0);
+                mv.visitTypeInsn(Opcodes.NEW, className);
+                mv.visitInsn(Opcodes.DUP);
                 Type[] argumentTypes = constructor.getArgumentTypes();
                 for (int i=0; i<argumentTypes.length; i++) {
                     mv.visitVarInsn(argumentTypes[i].getOpcode(Opcodes.ILOAD), i+1);
                 }
-                mv.visitMethodInsn(Opcodes.INVOKESPECIAL, superName, "<init>", constructor.getDescriptor());
+                mv.visitMethodInsn(Opcodes.INVOKESPECIAL, className, "<init>", constructor.getDescriptor());
                 mv.visitInsn(Opcodes.RETURN);
                 Label l1 = new Label();
                 mv.visitLabel(l1);
-                mv.visitLocalVariable("this", "L" + name + ";", null, l0, l1, 0);
+                mv.visitLocalVariable("this", "L" + factoryName + ";", null, l0, l1, 0);
                 for (int i=0; i<argumentTypes.length; i++) {
                     mv.visitLocalVariable("arg" + i, argumentTypes[i].getDescriptor(), null, l0, l1, i+1);
                 }
-                mv.visitMaxs(argumentTypes.length + 1, argumentTypes.length + 1);
+                mv.visitMaxs(argumentTypes.length + 2, argumentTypes.length + 1);
                 mv.visitEnd();
             }
         }
