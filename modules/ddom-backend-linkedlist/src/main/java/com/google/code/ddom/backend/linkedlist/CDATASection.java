@@ -22,7 +22,7 @@ import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.DeferredParsingException;
 
-@Implementation
+// @Implementation
 public class CDATASection extends Container implements CoreCDATASection {
     public CDATASection(Document document, String data) {
         super(document, true);

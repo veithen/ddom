@@ -42,7 +42,7 @@ public class ImplementationPlugin extends ReactorPlugin {
 
     @Override
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
-        return new ImplementationAnnotationExtractor(reactor.get(ImplementationMap.class));
+        return new ImplementationAnnotationExtractor(reactor, reactor.get(ImplementationMap.class));
     }
 
     @Override

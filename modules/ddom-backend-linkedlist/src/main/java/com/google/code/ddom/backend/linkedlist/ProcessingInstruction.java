@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.DeferredParsingException;
 
-@Implementation
+// @Implementation
 public class ProcessingInstruction extends LeafNode implements CoreProcessingInstruction {
     private String target;
     private String data;

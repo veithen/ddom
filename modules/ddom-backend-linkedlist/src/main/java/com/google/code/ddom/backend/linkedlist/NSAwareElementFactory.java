@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.Implementation;
-import com.google.code.ddom.core.CoreNSUnawareAttribute;
-
-// @Implementation
-public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareAttribute {
-    private final String name;
-
-    public NSUnawareAttribute(Document document, String name, String value, String type) {
-        super(document, value, type);
-        this.name = name;
-    }
-
-    public final String coreGetName() {
-        return name;
-    }
+public interface NSAwareElementFactory {
+    NSAwareElement create(Class<?> extensionInterface, Document document, String namespaceURI, String localName, String prefix, boolean complete);
 }

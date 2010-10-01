@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreComment;
 import com.google.code.ddom.core.DeferredParsingException;
 
-@Implementation
+// @Implementation
 public class Comment extends CharacterData implements CoreComment {
     public Comment(Document document, String data) {
         super(document, data);

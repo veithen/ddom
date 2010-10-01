@@ -18,7 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSUnawareElement;
 
-@Implementation
+// @Implementation
 public class NSUnawareElement extends Element implements CoreNSUnawareElement {
     private final String tagName;
 

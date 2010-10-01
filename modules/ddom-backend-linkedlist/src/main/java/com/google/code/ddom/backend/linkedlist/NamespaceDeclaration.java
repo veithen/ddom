@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.DeferredParsingException;
 
-@Implementation
+// @Implementation
 public class NamespaceDeclaration extends Attribute implements CoreNamespaceDeclaration {
     private String declaredPrefix;
 

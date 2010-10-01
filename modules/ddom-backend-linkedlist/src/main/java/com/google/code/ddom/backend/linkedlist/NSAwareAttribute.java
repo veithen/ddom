@@ -20,7 +20,7 @@ import javax.xml.namespace.QName;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSAwareAttribute;
 
-@Implementation
+// @Implementation
 public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttribute {
     private String namespaceURI;
     private String localName;

@@ -16,11 +16,13 @@
 package com.google.code.ddom.weaver.reactor;
 
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.util.CheckClassAdapter;
 
 public abstract class GeneratedClass implements ClassDefinitionSource {
     public final byte[] getClassDefinition(Reactor reactor) {
         ClassWriter cw = new ReactorAwareClassWriter(reactor, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        accept(cw);
+        // TODO: the verifier should be optional
+        accept(new CheckClassAdapter(cw));
         return cw.toByteArray();
     }
 }

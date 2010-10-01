@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.core.DeferredParsingException;
 
-@Implementation
+// @Implementation
 public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTypeDeclaration {
     private final String rootName;
     private final String publicId;

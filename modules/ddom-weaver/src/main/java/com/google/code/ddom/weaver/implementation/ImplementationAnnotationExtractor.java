@@ -15,17 +15,29 @@
  */
 package com.google.code.ddom.weaver.implementation;
 
-import org.objectweb.asm.AnnotationVisitor;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+
+import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
+import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 
 class ImplementationAnnotationExtractor extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
+    private final Reactor reactor;
     private final ImplementationMap implementationMap;
     private boolean isImplementation;
-
-    ImplementationAnnotationExtractor(ImplementationMap implementationMap) {
+    String factoryInterfaceName;
+    private List<ConstructorInfo> constructors;
+    
+    ImplementationAnnotationExtractor(Reactor reactor, ImplementationMap implementationMap) {
+        this.reactor = reactor;
         this.implementationMap = implementationMap;
     }
 
@@ -33,14 +45,32 @@ class ImplementationAnnotationExtractor extends AbstractClassVisitor implements 
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (desc.equals("Lcom/google/code/ddom/backend/Implementation;")) {
             isImplementation = true;
+            constructors = new ArrayList<ConstructorInfo>();
+            return new AbstractAnnotationVisitor() {
+                @Override
+                public void visit(String name, Object value) {
+                    factoryInterfaceName = ((Type)value).getClassName();
+                }
+            };
+        } else {
+            return null;
         }
-        // No need to actually get the details of the annotation => always return null
+    }
+
+    @Override
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        if (isImplementation && name.equals("<init>") && access == Opcodes.ACC_PUBLIC) {
+            constructors.add(new ConstructorInfo(desc, signature, exceptions));
+        }
         return null;
     }
 
     public void process(WeavableClassInfo classInfo) {
         if (isImplementation) {
+            classInfo.set(new ImplementationInfo(reactor.getClassInfo(factoryInterfaceName), constructors));
             implementationMap.addImplementation(classInfo);
+        } else {
+            classInfo.set(ImplementationInfo.class, null);
         }
     }
 }

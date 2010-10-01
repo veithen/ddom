@@ -44,5 +44,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 public @interface Implementation {
-
+    Class<?> factory();
 }

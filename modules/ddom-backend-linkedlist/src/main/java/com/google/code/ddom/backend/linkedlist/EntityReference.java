@@ -19,7 +19,7 @@ import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreEntityReference;
 import com.google.code.ddom.core.DeferredParsingException;
 
-@Implementation
+// @Implementation
 public class EntityReference extends LeafNode implements CoreEntityReference {
     private String name;
     

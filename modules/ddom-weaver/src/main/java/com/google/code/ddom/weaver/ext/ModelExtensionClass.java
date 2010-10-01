@@ -16,9 +16,14 @@
 package com.google.code.ddom.weaver.ext;
 
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 import com.google.code.ddom.weaver.asm.Util;
+import com.google.code.ddom.weaver.implementation.ConstructorInfo;
+import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
@@ -39,15 +44,40 @@ class ModelExtensionClass extends GeneratedClass {
     }
     
     public void accept(ClassVisitor classVisitor) {
+        ImplementationInfo implementationInfo = implementation.get(ImplementationInfo.class);
         ClassInfo superInterface = extensionInterface.getInterfaces()[0];
+        String name = Util.classNameToInternalName(getModelExtensionClassName(extensionInterface));
+        String superName = Util.classNameToInternalName(superInterface == rootInterface ? implementation.getName() : getModelExtensionClassName(superInterface));
         classVisitor.visit(
                 Opcodes.V1_5,
                 Opcodes.ACC_PUBLIC,
-                Util.classNameToInternalName(getModelExtensionClassName(extensionInterface)),
+                name,
                 null,
-                Util.classNameToInternalName(superInterface == rootInterface ? implementation.getName() : getModelExtensionClassName(superInterface)),
+                superName,
                 new String[] { Util.classNameToInternalName(extensionInterface.getName()) });
-        
+        for (ConstructorInfo constructor : implementationInfo.getConstructors()) {
+            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", constructor.getDescriptor(), constructor.getSignature(), constructor.getExceptions());
+            if (mv != null) {
+                mv.visitCode();
+                Label l0 = new Label();
+                mv.visitLabel(l0);
+                mv.visitVarInsn(Opcodes.ALOAD, 0);
+                Type[] argumentTypes = constructor.getArgumentTypes();
+                for (int i=0; i<argumentTypes.length; i++) {
+                    mv.visitVarInsn(argumentTypes[i].getOpcode(Opcodes.ILOAD), i+1);
+                }
+                mv.visitMethodInsn(Opcodes.INVOKESPECIAL, superName, "<init>", constructor.getDescriptor());
+                mv.visitInsn(Opcodes.RETURN);
+                Label l1 = new Label();
+                mv.visitLabel(l1);
+                mv.visitLocalVariable("this", "L" + name + ";", null, l0, l1, 0);
+                for (int i=0; i<argumentTypes.length; i++) {
+                    mv.visitLocalVariable("arg" + i, argumentTypes[i].getDescriptor(), null, l0, l1, i+1);
+                }
+                mv.visitMaxs(argumentTypes.length + 1, argumentTypes.length + 1);
+                mv.visitEnd();
+            }
+        }
         classVisitor.visitEnd();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import javax.xml.namespace.QName;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSAwareElement;
 
-@Implementation
+@Implementation(factory=NSAwareElementFactory.class)
 public class NSAwareElement extends Element implements CoreNSAwareElement {
     private String namespaceURI;
     private String localName;

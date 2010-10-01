@@ -48,17 +48,17 @@ public class ModelWeaver {
         reactor = new Reactor(classLoader);
         reactor.addPlugin(new JSR45Plugin());
         ImplementationPlugin implementationPlugin = new ImplementationPlugin();
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreComment.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreEntityReference.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNamespaceDeclaration.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareAttribute.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreComment.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreEntityReference.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNamespaceDeclaration.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareAttribute.class));
         implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareElement.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareAttribute.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareAttribute.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
+//        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
         reactor.addPlugin(implementationPlugin);
         reactor.addPlugin(new ModelExtensionPlugin());
         try {
