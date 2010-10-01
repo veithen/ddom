@@ -44,7 +44,7 @@ import com.google.code.ddom.weaver.mixin.MixinInfoBuilder;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
-public class Reactor extends PropertySupport implements ClassRealm {
+public class Reactor extends PropertySupport implements ClassRealm, WeavableClassInjector {
     private static final Logger log = Logger.getLogger(Reactor.class.getName());
     
     // TODO: introduce system property for this
@@ -146,6 +146,9 @@ public class Reactor extends PropertySupport implements ClassRealm {
         resolveWeavableClasses();
         for (ReactorPlugin plugin : plugins) {
             plugin.resolve(this);
+        }
+        for (ReactorPlugin plugin : plugins) {
+            plugin.generateWeavableClasses(this, this);
         }
         weave(processor);
     }

@@ -23,11 +23,14 @@ import java.util.Map;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
+import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
+import com.google.code.ddom.weaver.reactor.WeavableClassInjector;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class ModelExtensionGenerator {
     private final Reactor reactor;
     private final List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>();
+    private List<ModelExtension> modelExtensions;
 
     ModelExtensionGenerator(Reactor reactor) {
         this.reactor = reactor;
@@ -56,22 +59,33 @@ public class ModelExtensionGenerator {
         // We need to sort the model extensions so that defineClass doesn't complain (in case
         // a DynamicClassLoader is used).
 //        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
-        Map<ClassInfo,ModelExtension> modelExtensions = new HashMap<ClassInfo,ModelExtension>();
+        Map<ClassInfo,ModelExtension> modelExtensionMap = new HashMap<ClassInfo,ModelExtension>();
         for (ClassInfo iface : modelExtensionInterfaces) {
             ClassInfo root = iface;
             do {
                 // The number of super interface has already been validated by loadModelExtension
                 root = root.getInterfaces()[0];
             } while (isModelExtension(root));
-            ModelExtension modelExtension = modelExtensions.get(root);
+            ModelExtension modelExtension = modelExtensionMap.get(root);
             if (modelExtension == null) {
                 modelExtension = new ModelExtension(root);
-                modelExtensions.put(root, modelExtension);
+                modelExtensionMap.put(root, modelExtension);
             }
             modelExtension.addExtensionInterface(iface);
         }
-        for (ModelExtension modelExtension : modelExtensions.values()) {
+        modelExtensions = new ArrayList<ModelExtension>(modelExtensionMap.values());
+        for (ModelExtension modelExtension : modelExtensions) {
             modelExtension.resolve(reactor);
+        }
+    }
+    
+    void generateExtensions(WeavableClassInjector injector) {
+        for (ModelExtension modelExtension : modelExtensions) {
+            for (WeavableClassInfo implementation : modelExtension.getImplementations()) {
+                for (ClassInfo iface : modelExtension.getExtensionInterfaces()) {
+                    injector.loadWeavableClass(new ModelExtensionClass(implementation, iface));
+                }
+            }
         }
     }
 }

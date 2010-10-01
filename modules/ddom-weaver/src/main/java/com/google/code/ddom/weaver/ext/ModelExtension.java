@@ -52,4 +52,12 @@ class ModelExtension {
                     + "\n  Implementations: " + implementations);
         }
     }
+
+    List<WeavableClassInfo> getImplementations() {
+        return implementations;
+    }
+
+    List<ClassInfo> getExtensionInterfaces() {
+        return extensionInterfaces;
+    }
 }

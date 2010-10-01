@@ -17,6 +17,7 @@ package com.google.code.ddom.weaver.ext;
 
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
+import com.google.code.ddom.weaver.reactor.WeavableClassInjector;
 
 public class ModelExtensionPlugin extends ReactorPlugin {
     @Override
@@ -27,5 +28,10 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     @Override
     public void resolve(Reactor reactor) {
         reactor.get(ModelExtensionGenerator.class).resolve();
+    }
+
+    @Override
+    public void generateWeavableClasses(Reactor reactor, WeavableClassInjector weavableClassInjector) {
+        reactor.get(ModelExtensionGenerator.class).generateExtensions(weavableClassInjector);
     }
 }

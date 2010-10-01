@@ -15,17 +15,12 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
-public abstract class ReactorPlugin {
-    public void init(Reactor reactor) {
-    }
-    
-    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
-        return null;
-    }
-    
-    public void resolve(Reactor reactor) {
-    }
-    
-    public void generateWeavableClasses(Reactor reactor, WeavableClassInjector weavableClassInjector) {
-    }
+/**
+ * Interface allowing a {@link ReactorPlugin} to inject additional weavable
+ * classes into the reactor.
+ * 
+ * @author Andreas Veithen
+ */
+public interface WeavableClassInjector {
+    void loadWeavableClass(ClassDefinitionSource classDefinitionSource);
 }
