@@ -15,67 +15,18 @@
  */
 package com.google.code.ddom.weaver.ext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
-import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class ModelExtensionPlugin extends ReactorPlugin {
-    private final List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>();
-    private Reactor reactor;
-    private Map<ClassInfo,ModelExtension> modelExtensions;
-
     @Override
     public void init(Reactor reactor) {
-        this.reactor = reactor;
+        reactor.set(new ModelExtensionGenerator(reactor));
     }
 
-    public void loadModelExtensionInterface(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
-        ClassInfo modelExtension = reactor.getClassInfo(classRef);
-        if (modelExtension.getInterfaces().length != 1) {
-            throw new ModelWeaverException("A model extension interface must have exactly one superinterface");
-        }
-        modelExtensionInterfaces.add(modelExtension);
-    }
-    
-    private boolean isModelExtension(ClassInfo classInfo) {
-        // TODO: do we really need this, or is equals (identity) enough???
-        String className = classInfo.getName();
-        for (ClassInfo ci : modelExtensionInterfaces) {
-            if (className.equals(ci.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
     @Override
     public void resolve(Reactor reactor) throws ModelWeaverException {
-        // We need to sort the model extensions so that defineClass doesn't complain (in case
-        // a DynamicClassLoader is used).
-//        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
-        modelExtensions = new HashMap<ClassInfo,ModelExtension>();
-        for (ClassInfo iface : modelExtensionInterfaces) {
-            ClassInfo root = iface;
-            do {
-                // The number of super interface has already been validated by loadModelExtension
-                root = root.getInterfaces()[0];
-            } while (isModelExtension(root));
-            ModelExtension modelExtension = modelExtensions.get(root);
-            if (modelExtension == null) {
-                modelExtension = new ModelExtension(root);
-                modelExtensions.put(root, modelExtension);
-            }
-            modelExtension.addExtensionInterface(iface);
-        }
-        for (ModelExtension modelExtension : modelExtensions.values()) {
-            modelExtension.resolve(reactor);
-        }
+        reactor.get(ModelExtensionGenerator.class).resolve();
     }
 }

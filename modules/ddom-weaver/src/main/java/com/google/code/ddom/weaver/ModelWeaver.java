@@ -32,6 +32,7 @@ import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.frontend.Frontend;
+import com.google.code.ddom.weaver.ext.ModelExtensionGenerator;
 import com.google.code.ddom.weaver.ext.ModelExtensionPlugin;
 import com.google.code.ddom.weaver.implementation.ImplementationPlugin;
 import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
@@ -41,7 +42,6 @@ import com.google.code.ddom.weaver.reactor.ReactorException;
 public class ModelWeaver {
     private final ClassDefinitionProcessor processor;
     private final Reactor reactor;
-    private final ModelExtensionPlugin modelExtensionPlugin;
     
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException, ClassNotFoundException {
         this.processor = processor;
@@ -60,8 +60,7 @@ public class ModelWeaver {
         implementationPlugin.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
         implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
         reactor.addPlugin(implementationPlugin);
-        modelExtensionPlugin = new ModelExtensionPlugin();
-        reactor.addPlugin(modelExtensionPlugin);
+        reactor.addPlugin(new ModelExtensionPlugin());
         try {
             for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
                 reactor.loadWeavableClass(classRef);
@@ -73,12 +72,13 @@ public class ModelWeaver {
 
     public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
         try {
+            ModelExtensionGenerator modelExtensionGenerator = reactor.get(ModelExtensionGenerator.class);
             for (Frontend frontend : frontends.values()) {
                 for (ClassRef classRef : frontend.getMixins(Collections.unmodifiableMap(frontends)).getClassRefs()) {
                     reactor.loadMixin(classRef);
                 }
                 for (ClassRef classRef : frontend.getModelExtensionInterfaces().getClassRefs()) {
-                    modelExtensionPlugin.loadModelExtensionInterface(classRef);
+                    modelExtensionGenerator.loadModelExtensionInterface(classRef);
                 }
             }
             reactor.generateModel(processor);
