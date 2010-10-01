@@ -23,22 +23,21 @@ import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.implementation.ConstructorInfo;
 import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
-import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 
 class ModelExtensionFactoryDelegateInterface extends GeneratedClass {
-    private final WeavableClassInfo implementation;
+    private final ModelExtensionFactoryDelegateInfo info;
     
-    ModelExtensionFactoryDelegateInterface(WeavableClassInfo implementation) {
-        this.implementation = implementation;
+    ModelExtensionFactoryDelegateInterface(ModelExtensionFactoryDelegateInfo info) {
+        this.info = info;
     }
 
     public void accept(ClassVisitor classVisitor) {
-        ImplementationInfo implementationInfo = implementation.get(ImplementationInfo.class);
-        String factoryName = Util.classNameToInternalName(implementation.getName() + "__FactoryDelegate");
+        ImplementationInfo implementationInfo = info.getImplementation().get(ImplementationInfo.class);
+        String factoryName = Util.classNameToInternalName(info.getClassName());
         // TODO: the reactor currently has an issue with interfaces
         classVisitor.visit(
                 Opcodes.V1_5,
-                Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT /*| Opcodes.ACC_INTERFACE*/,
+                Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE,
                 factoryName,
                 null,
                 "java/lang/Object",

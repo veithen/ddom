@@ -82,15 +82,16 @@ public class ModelExtensionGenerator {
     
     void generateExtensions(WeavableClassInjector injector) {
         for (WeavableClassInfo implementation : reactor.get(ImplementationMap.class).getImplementations()) {
-            injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(implementation));
+            injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(new ModelExtensionFactoryDelegateInfo(implementation)));
         }
         for (ModelExtension modelExtension : modelExtensions) {
             for (WeavableClassInfo implementation : modelExtension.getImplementations()) {
-                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), null)));
+                ModelExtensionFactoryDelegateInfo modelExtensionFactoryDelegateInfo = new ModelExtensionFactoryDelegateInfo(implementation);
+                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(modelExtensionFactoryDelegateInfo, new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), null)));
                 for (ClassInfo iface : modelExtension.getExtensionInterfaces()) {
-                    ModelExtensionClassInfo info = new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), iface);
-                    injector.loadWeavableClass(new ModelExtensionClass(info));
-                    injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(info));
+                    ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), iface);
+                    injector.loadWeavableClass(new ModelExtensionClass(modelExtensionClassInfo));
+                    injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(modelExtensionFactoryDelegateInfo, modelExtensionClassInfo));
                 }
             }
         }

@@ -169,7 +169,9 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
         // We need to sort the weavable classes so that we can satisfy the ClassDefinitionProcessor
         // contract.
         for (WeavableClassInfo weavableClass : TopologicalSort.sort(weavableClasses, inheritanceRelation)) {
-            if (!weavableClass.isInterface()) {
+            if (weavableClass.isInterface()) {
+                processor.processClassDefinition(weavableClass.getName(), weavableClass.getClassDefinitionSource().getClassDefinition(this));
+            } else {
                 // Select the mixins that apply to weavableClass
                 List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
                 for (MixinInfo mixin : mixins) {

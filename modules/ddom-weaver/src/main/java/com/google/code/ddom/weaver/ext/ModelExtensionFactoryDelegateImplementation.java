@@ -27,23 +27,25 @@ import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
 class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
-    private final ModelExtensionClassInfo info;
+    private final ModelExtensionFactoryDelegateInfo modelExtensionFactoryDelegateInfo;
+    private final ModelExtensionClassInfo modelExtensionClassInfo;
     
-    ModelExtensionFactoryDelegateImplementation(ModelExtensionClassInfo info) {
-        this.info = info;
+    ModelExtensionFactoryDelegateImplementation(ModelExtensionFactoryDelegateInfo modelExtensionFactoryDelegateInfo, ModelExtensionClassInfo modelExtensionClassInfo) {
+        this.modelExtensionFactoryDelegateInfo = modelExtensionFactoryDelegateInfo;
+        this.modelExtensionClassInfo = modelExtensionClassInfo;
     }
 
     public void accept(ClassVisitor classVisitor) {
-        ImplementationInfo implementationInfo = info.getImplementation().get(ImplementationInfo.class);
-        String factoryName = Util.classNameToInternalName(info.getFactoryDelegateImplementationClassName());
+        ImplementationInfo implementationInfo = modelExtensionClassInfo.getImplementation().get(ImplementationInfo.class);
+        String factoryName = Util.classNameToInternalName(modelExtensionClassInfo.getFactoryDelegateImplementationClassName());
         classVisitor.visit(
                 Opcodes.V1_5,
                 Opcodes.ACC_PUBLIC,
                 factoryName,
                 null,
                 "java/lang/Object",
-                new String[] {  });
-        String className = Util.classNameToInternalName(info.getClassName());
+                new String[] { Util.classNameToInternalName(modelExtensionFactoryDelegateInfo.getClassName()) });
+        String className = Util.classNameToInternalName(modelExtensionClassInfo.getClassName());
         {
             MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
             if (mv != null) {
