@@ -17,7 +17,6 @@ package com.google.code.ddom.weaver.reactor;
 
 import java.util.List;
 
-import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
@@ -33,7 +32,6 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private boolean isInterface;
     private String superName;
     private String[] interfaceNames;
-    private boolean isImplementation;
     
     public WeavableClassInfoBuilder(ClassRealm realm, ClassDefinitionSource classDefinitionSource, List<WeavableClassInfoBuilderCollaborator> collaborators) {
         this.realm = realm;
@@ -49,15 +47,6 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         interfaceNames = interfaces;
     }
 
-    @Override
-    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        if (desc.equals("Lcom/google/code/ddom/backend/Implementation;")) {
-            isImplementation = true;
-        }
-        // No need to actually get the details of the annotation => always return null
-        return null;
-    }
-
     public String getName() {
         return name;
     }
@@ -68,7 +57,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
             interfaces[i] = realm.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
         WeavableClassInfo classInfo = new WeavableClassInfo(name, isInterface, realm.getClassInfo(Util.internalNameToClassName(superName)),
-                interfaces, classDefinitionSource, isImplementation);
+                interfaces, classDefinitionSource);
         for (WeavableClassInfoBuilderCollaborator collaborator : collaborators) {
             collaborator.process(classInfo);
         }

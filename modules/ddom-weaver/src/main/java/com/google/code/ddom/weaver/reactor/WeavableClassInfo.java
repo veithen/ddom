@@ -27,12 +27,10 @@ import com.google.code.ddom.weaver.realm.ClassInfo;
 public final class WeavableClassInfo extends ClassInfo {
     private final ClassDefinitionSource classDefinitionSource;
     private final Map<Class<?>,Object> properties = new HashMap<Class<?>,Object>();
-    private final boolean isImplementation;
     
-    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, ClassDefinitionSource classDefinitionSource, boolean isImplementation) {
+    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, ClassDefinitionSource classDefinitionSource) {
         super(name, isInterface, superclass, interfaces);
         this.classDefinitionSource = classDefinitionSource;
-        this.isImplementation = isImplementation;
     }
 
     public ClassDefinitionSource getClassDefinitionSource() {
@@ -52,15 +50,5 @@ public final class WeavableClassInfo extends ClassInfo {
     
     public <T> T get(Class<T> key) {
         return key.cast(properties.get(key));
-    }
-    
-    /**
-     * Determine if the class is annotated with {@link com.google.code.ddom.backend.Implementation}.
-     * 
-     * @return <code>true</code> iff the class has the
-     *         {@link com.google.code.ddom.backend.Implementation} annotation
-     */
-    public boolean isImplementation() {
-        return isImplementation;
     }
 }

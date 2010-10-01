@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.reactor;
+package com.google.code.ddom.weaver.implementation;
 
-public abstract class ReactorPlugin {
-    public void init(Reactor reactor) {
-    }
+public class ImplementationInfo {
+    private final boolean isImplementation;
     
-    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
-        return null;
+    ImplementationInfo(boolean isImplementation) {
+        this.isImplementation = isImplementation;
+    }
+
+    /**
+     * Determine if the class is annotated with {@link com.google.code.ddom.backend.Implementation}.
+     * 
+     * @return <code>true</code> iff the class has the
+     *         {@link com.google.code.ddom.backend.Implementation} annotation
+     */
+    public boolean isImplementation() {
+        return isImplementation;
     }
 }

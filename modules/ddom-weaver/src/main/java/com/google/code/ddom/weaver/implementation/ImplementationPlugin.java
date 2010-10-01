@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.reactor;
+package com.google.code.ddom.weaver.implementation;
 
-public abstract class ReactorPlugin {
-    public void init(Reactor reactor) {
-    }
-    
+import com.google.code.ddom.weaver.reactor.ReactorPlugin;
+import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
+
+public class ImplementationPlugin extends ReactorPlugin {
+    @Override
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
-        return null;
+        return new ImplementationAnnotationExtractor();
     }
 }
