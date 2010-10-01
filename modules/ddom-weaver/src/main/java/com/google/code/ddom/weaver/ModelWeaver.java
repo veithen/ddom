@@ -32,6 +32,7 @@ import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.frontend.Frontend;
+import com.google.code.ddom.weaver.ext.ModelExtensionPlugin;
 import com.google.code.ddom.weaver.implementation.ImplementationPlugin;
 import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
 import com.google.code.ddom.weaver.reactor.Reactor;
@@ -40,12 +41,15 @@ import com.google.code.ddom.weaver.reactor.ReactorException;
 public class ModelWeaver {
     private final ClassDefinitionProcessor processor;
     private final Reactor reactor;
+    private final ModelExtensionPlugin modelExtensionPlugin;
     
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
         this.processor = processor;
         reactor = new Reactor(classLoader);
         reactor.addPlugin(new JSR45Plugin());
         reactor.addPlugin(new ImplementationPlugin());
+        modelExtensionPlugin = new ModelExtensionPlugin();
+        reactor.addPlugin(modelExtensionPlugin);
         try {
             reactor.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
             reactor.addRequiredImplementation(new ClassRef(CoreComment.class));
@@ -73,7 +77,7 @@ public class ModelWeaver {
                     reactor.loadMixin(classRef);
                 }
                 for (ClassRef classRef : frontend.getModelExtensionInterfaces().getClassRefs()) {
-                    reactor.loadModelExtensionInterface(classRef);
+                    modelExtensionPlugin.loadModelExtensionInterface(classRef);
                 }
             }
             reactor.generateModel(processor);

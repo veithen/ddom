@@ -73,11 +73,9 @@ public class Reactor implements ClassRealm {
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
     private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
-    private final List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>();
     private final List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>();
     private List<WeavableClassInfo> weavableClasses;
     private Map<ClassInfo,WeavableClassInfo> implementations;
-    private Map<ClassInfo,ModelExtension> modelExtensions;
     
     public Reactor(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -112,14 +110,6 @@ public class Reactor implements ClassRealm {
         MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder, SimpleErrorHandler.INSTANCE);
         new ClassReader(classRef.getClassDefinition()).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
         mixins.add(builder.build());
-    }
-    
-    public void loadModelExtensionInterface(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
-        ClassInfo modelExtension = getClassInfo(classRef);
-        if (modelExtension.getInterfaces().length != 1) {
-            throw new ModelWeaverException("A model extension interface must have exactly one superinterface");
-        }
-        modelExtensionInterfaces.add(modelExtension);
     }
     
     public void addRequiredImplementation(ClassRef iface) throws ClassNotFoundException {
@@ -158,7 +148,9 @@ public class Reactor implements ClassRealm {
     
     public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException, ModelWeaverException {
         resolveWeavableClasses();
-        resolveModelExtensions();
+        for (ReactorPlugin plugin : plugins) {
+            plugin.resolve();
+        }
         weave(processor);
     }
     
@@ -197,17 +189,6 @@ public class Reactor implements ClassRealm {
         }
     }
     
-    private boolean isModelExtension(ClassInfo classInfo) {
-        // TODO: do we really need this, or is equals (identity) enough???
-        String className = classInfo.getName();
-        for (ClassInfo ci : modelExtensionInterfaces) {
-            if (className.equals(ci.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
     /**
      * Get all weavable classes that are annotated with
      * {@link com.google.code.ddom.backend.Implementation} and implement (are assignable to) a given
@@ -224,29 +205,6 @@ public class Reactor implements ClassRealm {
             }
         }
         return implementations;
-    }
-    
-    private void resolveModelExtensions() throws ModelWeaverException {
-        // We need to sort the model extensions so that defineClass doesn't complain (in case
-        // a DynamicClassLoader is used).
-//        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
-        modelExtensions = new HashMap<ClassInfo,ModelExtension>();
-        for (ClassInfo iface : modelExtensionInterfaces) {
-            ClassInfo root = iface;
-            do {
-                // The number of super interface has already been validated by loadModelExtension
-                root = root.getInterfaces()[0];
-            } while (isModelExtension(root));
-            ModelExtension modelExtension = modelExtensions.get(root);
-            if (modelExtension == null) {
-                modelExtension = new ModelExtension(root);
-                modelExtensions.put(root, modelExtension);
-            }
-            modelExtension.addExtensionInterface(iface);
-        }
-        for (ModelExtension modelExtension : modelExtensions.values()) {
-            modelExtension.resolve(this);
-        }
     }
     
     private void weave(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
