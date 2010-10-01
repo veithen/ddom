@@ -17,6 +17,7 @@ package com.google.code.ddom.weaver.reactor;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
     private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
-    private List<WeavableClassInfo> weavableClasses;
+    private final List<WeavableClassInfo> weavableClasses = new ArrayList<WeavableClassInfo>();
     
     public Reactor(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -119,7 +120,10 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
         } else {
             WeavableClassInfoBuilder builder = weavableClassInfoBuilders.get(className);
             if (builder != null) {
-                classInfo = builder.build();
+                WeavableClassInfo weavableClassInfo = builder.build();
+                weavableClassInfoBuilders.remove(className);
+                weavableClasses.add(weavableClassInfo);
+                classInfo = weavableClassInfo;
             } else {
                 Class<?> clazz;
                 try {
@@ -150,14 +154,14 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
         for (ReactorPlugin plugin : plugins) {
             plugin.generateWeavableClasses(this, this);
         }
+        resolveWeavableClasses();
         weave(processor);
     }
     
     private void resolveWeavableClasses() throws ClassNotFoundException, ModelWeaverException {
-        weavableClasses = new ArrayList<WeavableClassInfo>(weavableClassInfoBuilders.size());
-        for (String className : weavableClassInfoBuilders.keySet()) {
-            WeavableClassInfo weavableClass = (WeavableClassInfo)getClassInfo(className);
-            weavableClasses.add(weavableClass);
+        Collection<String> classes = weavableClassInfoBuilders.keySet();
+        while (!classes.isEmpty()) {
+            getClassInfo(classes.iterator().next());
         }
     }
     

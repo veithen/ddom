@@ -83,7 +83,7 @@ public class ModelExtensionGenerator {
         for (ModelExtension modelExtension : modelExtensions) {
             for (WeavableClassInfo implementation : modelExtension.getImplementations()) {
                 for (ClassInfo iface : modelExtension.getExtensionInterfaces()) {
-                    injector.loadWeavableClass(new ModelExtensionClass(implementation, iface));
+                    injector.loadWeavableClass(new ModelExtensionClass(implementation, modelExtension.getRootInterface(), iface));
                 }
             }
         }

@@ -53,6 +53,10 @@ class ModelExtension {
         }
     }
 
+    ClassInfo getRootInterface() {
+        return rootInterface;
+    }
+
     List<WeavableClassInfo> getImplementations() {
         return implementations;
     }
