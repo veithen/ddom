@@ -15,12 +15,39 @@
  */
 package com.google.code.ddom.weaver.implementation;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.code.ddom.commons.cl.ClassRef;
+import com.google.code.ddom.weaver.ModelWeaverException;
+import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
+import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class ImplementationPlugin extends ReactorPlugin {
+    private final List<ClassRef> requiredImplementations = new ArrayList<ClassRef>();
+    
+    public void addRequiredImplementation(ClassRef iface) throws ClassNotFoundException {
+        requiredImplementations.add(iface);
+    }
+    
     @Override
-    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
-        return new ImplementationAnnotationExtractor();
+    public void init(Reactor reactor) throws ClassNotFoundException, ModelWeaverException {
+        List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>(this.requiredImplementations.size());
+        for (ClassRef classRef : this.requiredImplementations) {
+            requiredImplementations.add(reactor.getClassInfo(classRef));
+        }
+        reactor.set(new ImplementationMap(requiredImplementations));
+    }
+
+    @Override
+    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
+        return new ImplementationAnnotationExtractor(reactor.get(ImplementationMap.class));
+    }
+
+    @Override
+    public void resolve(Reactor reactor) throws ModelWeaverException {
+        reactor.get(ImplementationMap.class).validate();
     }
 }

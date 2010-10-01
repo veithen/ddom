@@ -56,7 +56,7 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     }
     
     @Override
-    public void resolve() throws ModelWeaverException {
+    public void resolve(Reactor reactor) throws ModelWeaverException {
         // We need to sort the model extensions so that defineClass doesn't complain (in case
         // a DynamicClassLoader is used).
 //        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {

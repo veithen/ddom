@@ -110,6 +110,8 @@ public class WeaverMojo extends AbstractMojo {
             weaver.weave(frontendImpls);
         } catch (ModelWeaverException ex) {
             throw new MojoExecutionException("Weaving failed", ex);
+        } catch (ClassNotFoundException ex) {
+            throw new MojoExecutionException("Weaving failed", ex);
         }
     }
 }

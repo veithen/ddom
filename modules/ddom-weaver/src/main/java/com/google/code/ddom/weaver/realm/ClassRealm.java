@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom.weaver.realm;
 
+import com.google.code.ddom.weaver.ModelWeaverException;
+
 public interface ClassRealm {
-    ClassInfo getClassInfo(String className) throws ClassNotFoundException;
+    // TODO: ModelWeaverException ain't good!
+    ClassInfo getClassInfo(String className) throws ClassNotFoundException, ModelWeaverException;
 }

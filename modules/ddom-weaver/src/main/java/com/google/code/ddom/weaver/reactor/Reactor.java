@@ -18,10 +18,8 @@ package com.google.code.ddom.weaver.reactor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,7 +45,7 @@ import com.google.code.ddom.weaver.mixin.MixinInfoBuilder;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
-public class Reactor implements ClassRealm {
+public class Reactor extends PropertySupport implements ClassRealm {
     private static final Logger log = Logger.getLogger(Reactor.class.getName());
     
     // TODO: introduce system property for this
@@ -73,15 +71,13 @@ public class Reactor implements ClassRealm {
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
     private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
-    private final List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>();
     private List<WeavableClassInfo> weavableClasses;
-    private Map<ClassInfo,WeavableClassInfo> implementations;
     
     public Reactor(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
-    public void addPlugin(ReactorPlugin plugin) {
+    public void addPlugin(ReactorPlugin plugin) throws ClassNotFoundException, ModelWeaverException {
         plugin.init(this);
         plugins.add(plugin);
     }
@@ -93,7 +89,7 @@ public class Reactor implements ClassRealm {
     public void loadWeavableClass(ClassDefinitionSource classDefinitionSource) {
         List<WeavableClassInfoBuilderCollaborator> collaborators = new ArrayList<WeavableClassInfoBuilderCollaborator>(plugins.size());
         for (ReactorPlugin plugin : plugins) {
-            WeavableClassInfoBuilderCollaborator collaborator = plugin.newWeavableClassInfoBuilderCollaborator();
+            WeavableClassInfoBuilderCollaborator collaborator = plugin.newWeavableClassInfoBuilderCollaborator(this);
             if (collaborator != null) {
                 collaborators.add(collaborator);
             }
@@ -112,15 +108,11 @@ public class Reactor implements ClassRealm {
         mixins.add(builder.build());
     }
     
-    public void addRequiredImplementation(ClassRef iface) throws ClassNotFoundException {
-        requiredImplementations.add(getClassInfo(iface));
-    }
-    
-    public ClassInfo getClassInfo(String className) throws ClassNotFoundException {
+    public ClassInfo getClassInfo(String className) throws ClassNotFoundException, ModelWeaverException {
         return getClassInfo(new ClassRef(classLoader, className));
     }
     
-    public ClassInfo getClassInfo(ClassRef classRef) throws ClassNotFoundException {
+    public ClassInfo getClassInfo(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
         String className = classRef.getClassName();
         ClassInfo classInfo = classInfos.get(className);
         if (classInfo != null) {
@@ -149,43 +141,16 @@ public class Reactor implements ClassRealm {
     public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException, ModelWeaverException {
         resolveWeavableClasses();
         for (ReactorPlugin plugin : plugins) {
-            plugin.resolve();
+            plugin.resolve(this);
         }
         weave(processor);
     }
     
     private void resolveWeavableClasses() throws ClassNotFoundException, ModelWeaverException {
         weavableClasses = new ArrayList<WeavableClassInfo>(weavableClassInfoBuilders.size());
-        implementations = new HashMap<ClassInfo,WeavableClassInfo>();
         for (String className : weavableClassInfoBuilders.keySet()) {
             WeavableClassInfo weavableClass = (WeavableClassInfo)getClassInfo(className);
-            if (weavableClass.get(ImplementationInfo.class).isImplementation()) {
-                boolean found = false;
-                for (ClassInfo iface : requiredImplementations) {
-                    if (iface.isAssignableFrom(weavableClass)) {
-                        ClassInfo impl = implementations.get(iface);
-                        if (impl != null) {
-                            throw new ModelWeaverException("Duplicate implementation: an implementation of " + iface + " has already been found, namely " + impl);
-                        } else {
-                            implementations.put(iface, weavableClass);
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                if (!found) {
-                    throw new ModelWeaverException("The class " + weavableClass + " was annotated with @Implementation, but this is not expected");
-                }
-            }
             weavableClasses.add(weavableClass);
-        }
-        if (implementations.size() != requiredImplementations.size()) {
-            Set<ClassInfo> missingImplementations = new HashSet<ClassInfo>(requiredImplementations);
-            missingImplementations.removeAll(implementations.keySet());
-            throw new ModelWeaverException("The implementations for the following interfaces have not been found: " + missingImplementations);
-        }
-        if (log.isLoggable(Level.FINE)) {
-            log.fine("Implementation map: " + implementations);
         }
     }
     

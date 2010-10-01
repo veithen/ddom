@@ -30,6 +30,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.ErrorHandler;
@@ -117,7 +118,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
         }
     }
 
-    public MixinInfo build() throws ClassNotFoundException {
+    public MixinInfo build() throws ClassNotFoundException, ModelWeaverException {
         // TODO: do we still need this?
 //        if (!contributedInterfaces.remove(target.getInternalName())) {
 //            log.warning("Mixin class doesn't implement target interface");

@@ -15,16 +15,24 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
-import org.objectweb.asm.ClassVisitor;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
+public class PropertySupport {
+    private final Map<Class<?>,Object> properties = new HashMap<Class<?>,Object>();
 
-/**
- * Extracts additional information from a weavable class and adds it to the
- * {@link WeavableClassInfo}.
- * 
- * @author Andreas Veithen
- */
-public interface WeavableClassInfoBuilderCollaborator extends ClassVisitor {
-    void process(WeavableClassInfo classInfo) throws ModelWeaverException;
+    public void set(Class<?> key, Object object) {
+        if (properties.containsKey(key)) {
+            throw new IllegalStateException("A property for " + key.getName() + " is already present");
+        }
+        properties.put(key, object);
+    }
+    
+    public void set(Object object) {
+        set(object.getClass(), object);
+    }
+    
+    public <T> T get(Class<T> key) {
+        return key.cast(properties.get(key));
+    }
 }

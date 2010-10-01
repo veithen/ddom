@@ -43,25 +43,26 @@ public class ModelWeaver {
     private final Reactor reactor;
     private final ModelExtensionPlugin modelExtensionPlugin;
     
-    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
+    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException, ClassNotFoundException {
         this.processor = processor;
         reactor = new Reactor(classLoader);
         reactor.addPlugin(new JSR45Plugin());
-        reactor.addPlugin(new ImplementationPlugin());
+        ImplementationPlugin implementationPlugin = new ImplementationPlugin();
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreComment.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreEntityReference.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNamespaceDeclaration.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareAttribute.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareElement.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareAttribute.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
+        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
+        reactor.addPlugin(implementationPlugin);
         modelExtensionPlugin = new ModelExtensionPlugin();
         reactor.addPlugin(modelExtensionPlugin);
         try {
-            reactor.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreComment.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
-            reactor.addRequiredImplementation(new ClassRef(CoreEntityReference.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreNamespaceDeclaration.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreNSAwareAttribute.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreNSAwareElement.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreNSUnawareAttribute.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
-            reactor.addRequiredImplementation(new ClassRef(CoreText.class));
             for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
                 reactor.loadWeavableClass(classRef);
             }

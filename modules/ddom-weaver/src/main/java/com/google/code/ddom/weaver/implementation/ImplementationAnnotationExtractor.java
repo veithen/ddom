@@ -17,12 +17,18 @@ package com.google.code.ddom.weaver.implementation;
 
 import org.objectweb.asm.AnnotationVisitor;
 
+import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 
 class ImplementationAnnotationExtractor extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
+    private final ImplementationMap implementationMap;
     private boolean isImplementation;
+
+    ImplementationAnnotationExtractor(ImplementationMap implementationMap) {
+        this.implementationMap = implementationMap;
+    }
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
@@ -33,7 +39,10 @@ class ImplementationAnnotationExtractor extends AbstractClassVisitor implements 
         return null;
     }
 
-    public void process(WeavableClassInfo classInfo) {
+    public void process(WeavableClassInfo classInfo) throws ModelWeaverException {
         classInfo.set(new ImplementationInfo(isImplementation));
+        if (isImplementation) {
+            implementationMap.addImplementation(classInfo);
+        }
     }
 }
