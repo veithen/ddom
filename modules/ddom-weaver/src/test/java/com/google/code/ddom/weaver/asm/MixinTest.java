@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.DynamicClassLoader;
+import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
 import com.google.code.ddom.weaver.reactor.Reactor;
 
 public class MixinTest {
@@ -14,6 +15,7 @@ public class MixinTest {
         ClassLoader parentClassLoader = Test.class.getClassLoader();
         
         Reactor reactor = new Reactor(parentClassLoader);
+        reactor.addPlugin(new JSR45Plugin());
         reactor.loadWeavableClass(new ClassRef(Base.class));
         reactor.loadMixin(new ClassRef(BaseMixin.class));
         

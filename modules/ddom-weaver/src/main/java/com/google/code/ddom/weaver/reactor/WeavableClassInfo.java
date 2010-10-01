@@ -15,22 +15,23 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
-import com.google.code.ddom.weaver.jsr45.SourceInfo;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
 /**
  * Describes a weavable class. A weavable class is simply a class submitted to the weaver and that
  * may be woven. The weaver will decide whether the class actually needs to be woven or not.
  */
-public class WeavableClassInfo extends ClassInfo {
+public final class WeavableClassInfo extends ClassInfo {
     private final ClassDefinitionSource classDefinitionSource;
-    private final SourceInfo sourceInfo;
+    private final Map<Class<?>,Object> properties = new HashMap<Class<?>,Object>();
     private final boolean isImplementation;
     
-    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, ClassDefinitionSource classDefinitionSource, SourceInfo sourceInfo, boolean isImplementation) {
+    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, ClassDefinitionSource classDefinitionSource, boolean isImplementation) {
         super(name, isInterface, superclass, interfaces);
         this.classDefinitionSource = classDefinitionSource;
-        this.sourceInfo = sourceInfo;
         this.isImplementation = isImplementation;
     }
 
@@ -38,8 +39,19 @@ public class WeavableClassInfo extends ClassInfo {
         return classDefinitionSource;
     }
 
-    public SourceInfo getSourceInfo() {
-        return sourceInfo;
+    public void set(Class<?> key, Object object) {
+        if (properties.containsKey(key)) {
+            throw new IllegalStateException("A property for " + key.getName() + " is already present");
+        }
+        properties.put(key, object);
+    }
+    
+    public void set(Object object) {
+        set(object.getClass(), object);
+    }
+    
+    public <T> T get(Class<T> key) {
+        return key.cast(properties.get(key));
     }
     
     /**

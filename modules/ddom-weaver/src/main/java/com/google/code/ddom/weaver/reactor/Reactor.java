@@ -37,6 +37,7 @@ import com.google.code.ddom.weaver.ClassDefinitionProcessor;
 import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.ClassVisitorTee;
+import com.google.code.ddom.weaver.jsr45.SourceInfo;
 import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 import com.google.code.ddom.weaver.jsr45.SourceMapper;
 import com.google.code.ddom.weaver.mixin.MergeAdapter;
@@ -67,6 +68,7 @@ public class Reactor implements ClassRealm {
     };
     
     private final ClassLoader classLoader;
+    private final List<ReactorPlugin> plugins = new ArrayList<ReactorPlugin>();
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
     private final Map<String,ClassInfo> classInfos = new HashMap<String,ClassInfo>();
     private final List<MixinInfo> mixins = new ArrayList<MixinInfo>();
@@ -80,14 +82,26 @@ public class Reactor implements ClassRealm {
         this.classLoader = classLoader;
     }
 
+    public void addPlugin(ReactorPlugin plugin) {
+        plugins.add(plugin);
+    }
+    
     public void loadWeavableClass(ClassRef classRef) throws ClassNotFoundException {
         loadWeavableClass(new CompiledClass(classRef.getClassDefinition()));
     }
     
     public void loadWeavableClass(ClassDefinitionSource classDefinitionSource) {
-        SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
-        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinitionSource, sourceInfoBuilder);
-        classDefinitionSource.accept(new ClassVisitorTee(sourceInfoBuilder, builder));
+        List<WeavableClassInfoBuilderCollaborator> collaborators = new ArrayList<WeavableClassInfoBuilderCollaborator>(plugins.size());
+        for (ReactorPlugin plugin : plugins) {
+            WeavableClassInfoBuilderCollaborator collaborator = plugin.newWeavableClassInfoBuilderCollaborator();
+            if (collaborator != null) {
+                collaborators.add(collaborator);
+            }
+        }
+        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinitionSource, collaborators);
+        ClassVisitorTee tee = new ClassVisitorTee(builder);
+        tee.addVisitors(collaborators);
+        classDefinitionSource.accept(tee);
         weavableClassInfoBuilders.put(builder.getName(), builder);
     }
     
@@ -266,7 +280,7 @@ public class Reactor implements ClassRealm {
             }
             ClassWriter cw = new ReactorAwareClassWriter(this, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
             SourceMapper sourceMapper = new SourceMapper();
-            sourceMapper.addSourceInfo(weavableClass.getSourceInfo());
+            sourceMapper.addSourceInfo(weavableClass.get(SourceInfo.class));
             for (MixinInfo mixin : mixins) {
                 sourceMapper.addSourceInfo(mixin.getSourceInfo());
             }

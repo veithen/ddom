@@ -16,6 +16,7 @@
 package com.google.code.ddom.weaver.asm;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +35,10 @@ public class ClassVisitorTee implements ClassVisitor {
 
     public void addVisitor(ClassVisitor visitor) {
         visitors.add(visitor);
+    }
+    
+    public void addVisitors(Collection<? extends ClassVisitor> visitors) {
+        this.visitors.addAll(visitors);
     }
     
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {

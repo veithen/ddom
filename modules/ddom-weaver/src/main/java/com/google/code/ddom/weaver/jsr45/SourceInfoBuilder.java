@@ -20,12 +20,14 @@ import org.objectweb.asm.MethodVisitor;
 
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.AbstractMethodVisitor;
+import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
+import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 
 /**
  * Class visitor that extracts information about source code references. In particular, it
  * calculates the maximum line number.
  */
-public class SourceInfoBuilder extends AbstractClassVisitor {
+public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
     private String name;
     private String source;
     private String debug;
@@ -60,7 +62,12 @@ public class SourceInfoBuilder extends AbstractClassVisitor {
         sourceInfo = new SourceInfo(name.substring(0, name.lastIndexOf('/')+1) + source, maxLine);
     }
 
+    // TODO: this should eventually disappear
     public SourceInfo getSourceInfo() {
         return sourceInfo;
+    }
+
+    public void process(WeavableClassInfo classInfo) {
+        classInfo.set(sourceInfo);
     }
 }

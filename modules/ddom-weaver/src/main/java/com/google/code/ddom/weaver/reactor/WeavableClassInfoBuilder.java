@@ -15,29 +15,30 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
+import java.util.List;
+
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.Util;
-import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private final ClassRealm realm;
     private final ClassDefinitionSource classDefinitionSource;
-    private final SourceInfoBuilder sourceInfoBuilder;
+    private final List<WeavableClassInfoBuilderCollaborator> collaborators;
     private String name;
     private boolean isInterface;
     private String superName;
     private String[] interfaceNames;
     private boolean isImplementation;
     
-    public WeavableClassInfoBuilder(ClassRealm realm, ClassDefinitionSource classDefinitionSource, SourceInfoBuilder sourceInfoBuilder) {
+    public WeavableClassInfoBuilder(ClassRealm realm, ClassDefinitionSource classDefinitionSource, List<WeavableClassInfoBuilderCollaborator> collaborators) {
         this.realm = realm;
         this.classDefinitionSource = classDefinitionSource;
-        this.sourceInfoBuilder = sourceInfoBuilder;
+        this.collaborators = collaborators;
     }
 
     @Override
@@ -66,7 +67,11 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = realm.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
-        return new WeavableClassInfo(name, isInterface, realm.getClassInfo(Util.internalNameToClassName(superName)),
-                interfaces, classDefinitionSource, sourceInfoBuilder.getSourceInfo(), isImplementation);
+        WeavableClassInfo classInfo = new WeavableClassInfo(name, isInterface, realm.getClassInfo(Util.internalNameToClassName(superName)),
+                interfaces, classDefinitionSource, isImplementation);
+        for (WeavableClassInfoBuilderCollaborator collaborator : collaborators) {
+            collaborator.process(classInfo);
+        }
+        return classInfo;
     }
 }
