@@ -27,11 +27,11 @@ import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
 class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
-    private final ModelExtensionFactoryDelegateInfo modelExtensionFactoryDelegateInfo;
+    private final ModelExtensionFactoryInfo modelExtensionFactoryInfo;
     private final ModelExtensionClassInfo modelExtensionClassInfo;
     
-    ModelExtensionFactoryDelegateImplementation(ModelExtensionFactoryDelegateInfo modelExtensionFactoryDelegateInfo, ModelExtensionClassInfo modelExtensionClassInfo) {
-        this.modelExtensionFactoryDelegateInfo = modelExtensionFactoryDelegateInfo;
+    ModelExtensionFactoryDelegateImplementation(ModelExtensionFactoryInfo modelExtensionFactoryInfo, ModelExtensionClassInfo modelExtensionClassInfo) {
+        this.modelExtensionFactoryInfo = modelExtensionFactoryInfo;
         this.modelExtensionClassInfo = modelExtensionClassInfo;
     }
 
@@ -44,7 +44,7 @@ class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
                 factoryName,
                 null,
                 "java/lang/Object",
-                new String[] { Util.classNameToInternalName(modelExtensionFactoryDelegateInfo.getClassName()) });
+                new String[] { Util.classNameToInternalName(modelExtensionFactoryInfo.getDelegateInterfaceName()) });
         String className = Util.classNameToInternalName(modelExtensionClassInfo.getClassName());
         {
             MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);

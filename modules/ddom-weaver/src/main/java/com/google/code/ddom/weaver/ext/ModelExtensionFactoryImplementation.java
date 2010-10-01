@@ -16,35 +16,51 @@
 package com.google.code.ddom.weaver.ext;
 
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.google.code.ddom.weaver.asm.Util;
-import com.google.code.ddom.weaver.implementation.ConstructorInfo;
 import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
-class ModelExtensionFactoryDelegateInterface extends GeneratedClass {
+public class ModelExtensionFactoryImplementation extends GeneratedClass {
     private final ModelExtensionFactoryInfo info;
-    
-    ModelExtensionFactoryDelegateInterface(ModelExtensionFactoryInfo info) {
+
+    ModelExtensionFactoryImplementation(ModelExtensionFactoryInfo info) {
         this.info = info;
     }
 
     public void accept(ClassVisitor classVisitor) {
-        ImplementationInfo implementationInfo = info.getImplementation().get(ImplementationInfo.class);
-        String factoryName = Util.classNameToInternalName(info.getDelegateInterfaceName());
-        // TODO: the reactor currently has an issue with interfaces
+        String name = Util.classNameToInternalName(info.getImplementation().get(ImplementationInfo.class).getFactoryInterface().getName() + "__Impl");
         classVisitor.visit(
                 Opcodes.V1_5,
-                Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT | Opcodes.ACC_INTERFACE,
-                factoryName,
+                Opcodes.ACC_PUBLIC,
+                name,
                 null,
                 "java/lang/Object",
                 new String[0]);
-        for (ConstructorInfo constructor : implementationInfo.getConstructors()) {
-            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT, "create", constructor.getDescriptor(), constructor.getSignature(), constructor.getExceptions());
+        {
+            FieldVisitor fw = classVisitor.visitField(Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL, "delegates", "Ljava/util/Map;", null, null);
+            if (fw != null) {
+                fw.visitEnd();
+            }
+        }
+        {
+            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PRIVATE, "<init>", "()V", null, null);
             if (mv != null) {
+                mv.visitCode();
+                Label l0 = new Label();
+                mv.visitLabel(l0);
+                mv.visitVarInsn(Opcodes.ALOAD, 0);
+                mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+                
+                mv.visitInsn(Opcodes.RETURN);
+                Label l1 = new Label();
+                mv.visitLabel(l1);
+                mv.visitLocalVariable("this", "L" + name + ";", null, l0, l1, 0);
+                mv.visitMaxs(1, 1);
                 mv.visitEnd();
             }
         }

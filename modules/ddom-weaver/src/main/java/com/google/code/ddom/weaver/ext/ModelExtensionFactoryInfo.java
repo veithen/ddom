@@ -17,10 +17,10 @@ package com.google.code.ddom.weaver.ext;
 
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 
-class ModelExtensionFactoryDelegateInfo {
+class ModelExtensionFactoryInfo {
     private final WeavableClassInfo implementation;
 
-    ModelExtensionFactoryDelegateInfo(WeavableClassInfo implementation) {
+    ModelExtensionFactoryInfo(WeavableClassInfo implementation) {
         this.implementation = implementation;
     }
 
@@ -28,7 +28,7 @@ class ModelExtensionFactoryDelegateInfo {
         return implementation;
     }
 
-    public String getClassName() {
+    public String getDelegateInterfaceName() {
         return implementation.getName() + "__FactoryDelegate";
     }
 }
