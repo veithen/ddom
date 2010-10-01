@@ -24,17 +24,17 @@ import org.junit.Test;
 public class ModelDefinitionTest {
     @Test
     public void testEqualsAndHashCode() {
-        ModelBuilder modelBuilder1 = new ModelBuilder();
-        modelBuilder1.setBackend("backend");
-        modelBuilder1.addFrontend("frontend1");
-        modelBuilder1.addFrontend("frontend2");
-        ModelDefinition model1 = modelBuilder1.buildModelDefinition();
+        ModelDefinitionBuilder modelDefinitionBuilder1 = new ModelDefinitionBuilder();
+        modelDefinitionBuilder1.setBackend("backend");
+        modelDefinitionBuilder1.addFrontend("frontend1");
+        modelDefinitionBuilder1.addFrontend("frontend2");
+        ModelDefinition model1 = modelDefinitionBuilder1.buildModelDefinition();
 
-        ModelBuilder modelBuilder2 = new ModelBuilder();
-        modelBuilder2.setBackend("backend");
-        modelBuilder2.addFrontend("frontend2");
-        modelBuilder2.addFrontend("frontend1");
-        ModelDefinition model2 = modelBuilder2.buildModelDefinition();
+        ModelDefinitionBuilder modelDefinitionBuilder2 = new ModelDefinitionBuilder();
+        modelDefinitionBuilder2.setBackend("backend");
+        modelDefinitionBuilder2.addFrontend("frontend2");
+        modelDefinitionBuilder2.addFrontend("frontend1");
+        ModelDefinition model2 = modelDefinitionBuilder2.buildModelDefinition();
         
         Set<ModelDefinition> set = new HashSet<ModelDefinition>();
         set.add(model1);

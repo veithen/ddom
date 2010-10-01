@@ -23,7 +23,7 @@ import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.frontend.APIObjectFactory;
-import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
@@ -51,7 +51,7 @@ public class DocumentHelperImpl implements DocumentHelper {
     }
     
     public Object newDocument(String frontend) {
-        return newDocument(ModelBuilder.buildModelDefinition(frontend));
+        return newDocument(ModelDefinitionBuilder.buildModelDefinition(frontend));
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
@@ -83,7 +83,7 @@ public class DocumentHelperImpl implements DocumentHelper {
     }
 
     public Object parse(String frontend, Object source, Options options, boolean preserve) {
-        return parse(ModelBuilder.buildModelDefinition(frontend), source, options, preserve);
+        return parse(ModelDefinitionBuilder.buildModelDefinition(frontend), source, options, preserve);
     }
     
     public Object parse(String frontend, Object source, boolean preserve) {

@@ -22,7 +22,7 @@ import org.xml.sax.InputSource;
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 
@@ -33,9 +33,9 @@ public class DDOMUtil extends DOMUtil {
     private final DocumentHelper documentHelper;
     
     private DDOMUtil() {
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.addFrontend("dom");
-        modelDefinition = modelBuilder.buildModelDefinition();
+        ModelDefinitionBuilder modelDefinitionBuilder = new ModelDefinitionBuilder();
+        modelDefinitionBuilder.addFrontend("dom");
+        modelDefinition = modelDefinitionBuilder.buildModelDefinition();
         documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
     }
     

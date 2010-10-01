@@ -28,7 +28,7 @@ import org.w3c.domts.DocumentBuilderSetting;
 
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.stream.options.CoalescingFeature;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
@@ -64,7 +64,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
         strategies.put("validating", new SimpleStrategy(ValidationPolicy.ENABLE, ValidationPolicy.DISABLE));
     }
     
-    private static final ModelDefinition DOM = ModelBuilder.buildModelDefinition("dom");
+    private static final ModelDefinition DOM = ModelDefinitionBuilder.buildModelDefinition("dom");
     
     private final Options options;
     

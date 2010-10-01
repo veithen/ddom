@@ -18,7 +18,14 @@ package com.google.code.ddom.model;
 import java.io.Serializable;
 import java.util.SortedSet;
 
-// TODO: rename this Model?
+/**
+ * A model definition. A model is defined by a back-end implementation and a set
+ * of one or more front-end implementations.
+ * <p>
+ * This is an immutable class that can be used as a cache key.
+ * 
+ * @author Andreas Veithen
+ */
 public class ModelDefinition implements Serializable {
     private static final long serialVersionUID = -5835186734017759182L;
     
@@ -38,36 +45,18 @@ public class ModelDefinition implements Serializable {
         return frontends.toArray(new String[frontends.size()]);
     }
 
-    // TODO: clean this up
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((backend == null) ? 0 : backend.hashCode());
-        result = prime * result + ((frontends == null) ? 0 : frontends.hashCode());
-        return result;
+        return backend.hashCode() + frontends.hashCode() * 31;
     }
 
-    // TODO: clean this up
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+        if (obj instanceof ModelDefinition) {
+            ModelDefinition other = (ModelDefinition)obj;
+            return backend.equals(other.backend) && frontends.equals(other.frontends);
+        } else {
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ModelDefinition other = (ModelDefinition) obj;
-        if (backend == null) {
-            if (other.backend != null)
-                return false;
-        } else if (!backend.equals(other.backend))
-            return false;
-        if (frontends == null) {
-            if (other.frontends != null)
-                return false;
-        } else if (!frontends.equals(other.frontends))
-            return false;
-        return true;
+        }
     }
 }

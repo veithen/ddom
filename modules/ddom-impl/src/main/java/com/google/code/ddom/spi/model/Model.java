@@ -18,6 +18,12 @@ package com.google.code.ddom.spi.model;
 import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.frontend.APIObjectFactory;
 
+/**
+ * Represents a (woven) model corresponding to a given
+ * {@link com.google.code.ddom.model.ModelDefinition}.
+ * 
+ * @author Andreas Veithen
+ */
 public class Model {
     private final DocumentFactory documentFactory;
     private final APIObjectFactory apiObjectFactory;

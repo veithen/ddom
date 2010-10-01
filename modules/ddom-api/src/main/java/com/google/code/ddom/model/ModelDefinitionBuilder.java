@@ -20,16 +20,22 @@ import java.util.List;
 import java.util.TreeSet;
 
 // TODO: rename this ModelConfigurator?
-public class ModelBuilder {
+public class ModelDefinitionBuilder {
     private String backend = "linkedlist";
     private List<String> frontends = new ArrayList<String>();
 
     public void setBackend(String backend) {
+        if (backend == null) {
+            throw new IllegalArgumentException("backend may not be null");
+        }
         this.backend = backend;
     }
     
     // TODO: this method should have a parameter to pass properties to the frontend
     public void addFrontend(String frontend) {
+        if (frontend == null) {
+            throw new IllegalArgumentException("frontend may not be null");
+        }
         frontends.add(frontend);
     }
     
@@ -38,7 +44,7 @@ public class ModelBuilder {
     }
     
     public static ModelDefinition buildModelDefinition(String frontend) {
-        ModelBuilder builder = new ModelBuilder();
+        ModelDefinitionBuilder builder = new ModelDefinitionBuilder();
         builder.addFrontend(frontend);
         return builder.buildModelDefinition();
     }

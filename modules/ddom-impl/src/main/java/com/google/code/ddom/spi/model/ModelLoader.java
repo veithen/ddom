@@ -17,6 +17,11 @@ package com.google.code.ddom.spi.model;
 
 import com.google.code.ddom.model.ModelDefinition;
 
+/**
+ * Produces a {@link Model} from a given {@link ModelDefinition}.
+ * 
+ * @author Andreas Veithen
+ */
 public interface ModelLoader {
     /**
      * Load the model corresponding to a given definition.

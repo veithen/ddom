@@ -33,11 +33,11 @@ import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.model.ModelBuilder;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
-    private static final ModelDefinition DOM = ModelBuilder.buildModelDefinition("dom");
+    private static final ModelDefinition DOM = ModelDefinitionBuilder.buildModelDefinition("dom");
     
     private final Options options;
     private ErrorHandler errorHandler;
