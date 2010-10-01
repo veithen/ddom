@@ -26,7 +26,7 @@ import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
-public class ModelExtension {
+class ModelExtension {
     private static final Logger log = Logger.getLogger(ModelExtension.class.getName());
     
     private final ClassInfo rootInterface;
