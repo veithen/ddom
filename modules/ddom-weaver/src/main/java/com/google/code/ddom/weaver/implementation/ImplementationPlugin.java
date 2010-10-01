@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
@@ -33,7 +32,7 @@ public class ImplementationPlugin extends ReactorPlugin {
     }
     
     @Override
-    public void init(Reactor reactor) throws ClassNotFoundException, ModelWeaverException {
+    public void init(Reactor reactor) {
         List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>(this.requiredImplementations.size());
         for (ClassRef classRef : this.requiredImplementations) {
             requiredImplementations.add(reactor.getClassInfo(classRef));
@@ -47,7 +46,7 @@ public class ImplementationPlugin extends ReactorPlugin {
     }
 
     @Override
-    public void resolve(Reactor reactor) throws ModelWeaverException {
+    public void resolve(Reactor reactor) {
         reactor.get(ImplementationMap.class).validate();
     }
 }

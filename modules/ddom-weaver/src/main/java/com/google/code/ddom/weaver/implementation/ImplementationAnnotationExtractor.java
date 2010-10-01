@@ -17,7 +17,6 @@ package com.google.code.ddom.weaver.implementation;
 
 import org.objectweb.asm.AnnotationVisitor;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
@@ -39,7 +38,7 @@ class ImplementationAnnotationExtractor extends AbstractClassVisitor implements 
         return null;
     }
 
-    public void process(WeavableClassInfo classInfo) throws ModelWeaverException {
+    public void process(WeavableClassInfo classInfo) {
         if (isImplementation) {
             implementationMap.addImplementation(classInfo);
         }

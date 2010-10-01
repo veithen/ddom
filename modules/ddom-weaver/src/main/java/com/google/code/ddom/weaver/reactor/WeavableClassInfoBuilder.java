@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.objectweb.asm.Opcodes;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.realm.ClassInfo;
@@ -52,7 +51,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         return name;
     }
 
-    public WeavableClassInfo build() throws ClassNotFoundException, ModelWeaverException {
+    public WeavableClassInfo build() {
         ClassInfo[] interfaces = new ClassInfo[interfaceNames.length];
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = realm.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));

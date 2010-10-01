@@ -76,7 +76,7 @@ public class Reactor extends PropertySupport implements ClassRealm {
         this.classLoader = classLoader;
     }
 
-    public void addPlugin(ReactorPlugin plugin) throws ClassNotFoundException, ModelWeaverException {
+    public void addPlugin(ReactorPlugin plugin) {
         plugin.init(this);
         plugins.add(plugin);
     }
@@ -107,11 +107,11 @@ public class Reactor extends PropertySupport implements ClassRealm {
         mixins.add(builder.build());
     }
     
-    public ClassInfo getClassInfo(String className) throws ClassNotFoundException, ModelWeaverException {
+    public ClassInfo getClassInfo(String className) {
         return getClassInfo(new ClassRef(classLoader, className));
     }
     
-    public ClassInfo getClassInfo(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
+    public ClassInfo getClassInfo(ClassRef classRef) {
         String className = classRef.getClassName();
         ClassInfo classInfo = classInfos.get(className);
         if (classInfo != null) {
@@ -121,7 +121,12 @@ public class Reactor extends PropertySupport implements ClassRealm {
             if (builder != null) {
                 classInfo = builder.build();
             } else {
-                Class<?> clazz = classRef.load();
+                Class<?> clazz;
+                try {
+                    clazz = classRef.load();
+                } catch (ClassNotFoundException ex) {
+                    throw new ReactorException("Class not found: " + classRef.getClassName());
+                }
                 Class<?> superclass = clazz.getSuperclass();
                 Class<?>[] interfaces = clazz.getInterfaces();
                 ClassInfo[] interfaceInfos = new ClassInfo[interfaces.length];

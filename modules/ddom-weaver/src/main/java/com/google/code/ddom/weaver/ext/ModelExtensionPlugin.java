@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.weaver.ext;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 
@@ -26,7 +25,7 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     }
 
     @Override
-    public void resolve(Reactor reactor) throws ModelWeaverException {
+    public void resolve(Reactor reactor) {
         reactor.get(ModelExtensionGenerator.class).resolve();
     }
 }

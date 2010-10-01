@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
+import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
@@ -38,13 +38,13 @@ public class ImplementationMap {
         this.requiredImplementations = requiredImplementations;
     }
     
-    void addImplementation(WeavableClassInfo weavableClass) throws ModelWeaverException {
+    void addImplementation(WeavableClassInfo weavableClass) {
         boolean found = false;
         for (ClassInfo iface : requiredImplementations) {
             if (iface.isAssignableFrom(weavableClass)) {
                 ClassInfo impl = implementationMap.get(iface);
                 if (impl != null) {
-                    throw new ModelWeaverException("Duplicate implementation: an implementation of " + iface + " has already been found, namely " + impl);
+                    throw new ReactorException("Duplicate implementation: an implementation of " + iface + " has already been found, namely " + impl);
                 } else {
                     implementationMap.put(iface, weavableClass);
                     found = true;
@@ -53,15 +53,15 @@ public class ImplementationMap {
             }
         }
         if (!found) {
-            throw new ModelWeaverException("The class " + weavableClass + " was annotated with @Implementation, but this is not expected");
+            throw new ReactorException("The class " + weavableClass + " was annotated with @Implementation, but this is not expected");
         }
     }
 
-    void validate() throws ModelWeaverException {
+    void validate() {
         if (implementationMap.size() != requiredImplementations.size()) {
             Set<ClassInfo> missingImplementations = new HashSet<ClassInfo>(requiredImplementations);
             missingImplementations.removeAll(implementationMap.keySet());
-            throw new ModelWeaverException("The implementations for the following interfaces have not been found: " + missingImplementations);
+            throw new ReactorException("The implementations for the following interfaces have not been found: " + missingImplementations);
         }
         if (log.isLoggable(Level.FINE)) {
             log.fine("Implementation map: " + implementationMap);

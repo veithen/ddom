@@ -18,7 +18,6 @@ package com.google.code.ddom.weaver.reactor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
@@ -37,15 +36,8 @@ public class ReactorAwareClassWriter extends ClassWriter {
 
     @Override
     protected String getCommonSuperClass(String type1, String type2) {
-        ClassInfo c, d;
-        try {
-            c = reactor.getClassInfo(Util.internalNameToClassName(type1));
-            d = reactor.getClassInfo(Util.internalNameToClassName(type2));
-        } catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        } catch (ModelWeaverException ex) {
-            throw new RuntimeException(ex);
-        }
+        ClassInfo c = reactor.getClassInfo(Util.internalNameToClassName(type1));
+        ClassInfo d = reactor.getClassInfo(Util.internalNameToClassName(type2));
         if (c.isAssignableFrom(d)) {
             return type1;
         }

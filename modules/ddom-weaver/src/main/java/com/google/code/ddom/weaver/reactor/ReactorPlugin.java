@@ -15,16 +15,14 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
-
 public abstract class ReactorPlugin {
-    public void init(Reactor reactor) throws ClassNotFoundException, ModelWeaverException {
+    public void init(Reactor reactor) {
     }
     
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
         return null;
     }
     
-    public void resolve(Reactor reactor) throws ModelWeaverException {
+    public void resolve(Reactor reactor) {
     }
 }

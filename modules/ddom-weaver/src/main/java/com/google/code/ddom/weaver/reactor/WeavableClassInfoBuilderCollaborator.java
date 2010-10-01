@@ -17,8 +17,6 @@ package com.google.code.ddom.weaver.reactor;
 
 import org.objectweb.asm.ClassVisitor;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
-
 /**
  * Extracts additional information from a weavable class and adds it to the
  * {@link WeavableClassInfo}.
@@ -26,5 +24,5 @@ import com.google.code.ddom.weaver.ModelWeaverException;
  * @author Andreas Veithen
  */
 public interface WeavableClassInfoBuilderCollaborator extends ClassVisitor {
-    void process(WeavableClassInfo classInfo) throws ModelWeaverException;
+    void process(WeavableClassInfo classInfo);
 }

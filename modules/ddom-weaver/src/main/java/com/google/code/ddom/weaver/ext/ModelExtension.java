@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.implementation.ImplementationMap;
 import com.google.code.ddom.weaver.reactor.Reactor;
+import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
@@ -41,10 +41,10 @@ class ModelExtension {
         extensionInterfaces.add(classInfo);
     }
     
-    public void resolve(Reactor reactor) throws ModelWeaverException {
+    public void resolve(Reactor reactor) {
         implementations = reactor.get(ImplementationMap.class).getImplementations(rootInterface);
         if (implementations.isEmpty()) {
-            throw new ModelWeaverException("No implementations found for root interface " + rootInterface);
+            throw new ReactorException("No implementations found for root interface " + rootInterface);
         }
         if (log.isLoggable(Level.FINE)) {
             log.fine("Resolved model extension:\n  Root interface: " + rootInterface

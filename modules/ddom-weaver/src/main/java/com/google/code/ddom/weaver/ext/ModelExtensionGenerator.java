@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.reactor.Reactor;
+import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class ModelExtensionGenerator {
@@ -33,10 +33,10 @@ public class ModelExtensionGenerator {
         this.reactor = reactor;
     }
     
-    public void loadModelExtensionInterface(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
+    public void loadModelExtensionInterface(ClassRef classRef) {
         ClassInfo modelExtension = reactor.getClassInfo(classRef);
         if (modelExtension.getInterfaces().length != 1) {
-            throw new ModelWeaverException("A model extension interface must have exactly one superinterface");
+            throw new ReactorException("A model extension interface must have exactly one superinterface");
         }
         modelExtensionInterfaces.add(modelExtension);
     }
@@ -52,7 +52,7 @@ public class ModelExtensionGenerator {
         return false;
     }
     
-    void resolve() throws ModelWeaverException {
+    void resolve() {
         // We need to sort the model extensions so that defineClass doesn't complain (in case
         // a DynamicClassLoader is used).
 //        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
