@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.ddom.weaver.ModelWeaverException;
+import com.google.code.ddom.weaver.implementation.ImplementationMap;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
@@ -41,7 +42,7 @@ public class ModelExtension {
     }
     
     public void resolve(Reactor reactor) throws ModelWeaverException {
-        implementations = reactor.getImplementations(rootInterface);
+        implementations = reactor.get(ImplementationMap.class).getImplementations(rootInterface);
         if (implementations.isEmpty()) {
             throw new ModelWeaverException("No implementations found for root interface " + rootInterface);
         }

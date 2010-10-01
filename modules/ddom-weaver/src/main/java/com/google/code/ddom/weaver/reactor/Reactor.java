@@ -35,7 +35,6 @@ import com.google.code.ddom.weaver.ClassDefinitionProcessor;
 import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.ClassVisitorTee;
-import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.jsr45.SourceInfo;
 import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 import com.google.code.ddom.weaver.jsr45.SourceMapper;
@@ -152,24 +151,6 @@ public class Reactor extends PropertySupport implements ClassRealm {
             WeavableClassInfo weavableClass = (WeavableClassInfo)getClassInfo(className);
             weavableClasses.add(weavableClass);
         }
-    }
-    
-    /**
-     * Get all weavable classes that are annotated with
-     * {@link com.google.code.ddom.backend.Implementation} and implement (are assignable to) a given
-     * interface.
-     * 
-     * @param iface
-     * @return
-     */
-    public List<WeavableClassInfo> getImplementations(ClassInfo iface) {
-        List<WeavableClassInfo> implementations = new ArrayList<WeavableClassInfo>();
-        for (WeavableClassInfo candidate : weavableClasses) {
-            if (candidate.get(ImplementationInfo.class).isImplementation() && iface.isAssignableFrom(candidate)) {
-                implementations.add(candidate);
-            }
-        }
-        return implementations;
     }
     
     private void weave(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {

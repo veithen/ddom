@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.weaver.implementation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ImplementationMap {
     private static final Logger log = Logger.getLogger(ImplementationMap.class.getName());
     
     private final List<ClassInfo> requiredImplementations;
-    private final Map<ClassInfo,WeavableClassInfo> implementations = new HashMap<ClassInfo,WeavableClassInfo>();
+    private final Map<ClassInfo,WeavableClassInfo> implementationMap = new HashMap<ClassInfo,WeavableClassInfo>();
 
     ImplementationMap(List<ClassInfo> requiredImplementations) {
         this.requiredImplementations = requiredImplementations;
@@ -41,11 +42,11 @@ public class ImplementationMap {
         boolean found = false;
         for (ClassInfo iface : requiredImplementations) {
             if (iface.isAssignableFrom(weavableClass)) {
-                ClassInfo impl = implementations.get(iface);
+                ClassInfo impl = implementationMap.get(iface);
                 if (impl != null) {
                     throw new ModelWeaverException("Duplicate implementation: an implementation of " + iface + " has already been found, namely " + impl);
                 } else {
-                    implementations.put(iface, weavableClass);
+                    implementationMap.put(iface, weavableClass);
                     found = true;
                     break;
                 }
@@ -57,13 +58,31 @@ public class ImplementationMap {
     }
 
     void validate() throws ModelWeaverException {
-        if (implementations.size() != requiredImplementations.size()) {
+        if (implementationMap.size() != requiredImplementations.size()) {
             Set<ClassInfo> missingImplementations = new HashSet<ClassInfo>(requiredImplementations);
-            missingImplementations.removeAll(implementations.keySet());
+            missingImplementations.removeAll(implementationMap.keySet());
             throw new ModelWeaverException("The implementations for the following interfaces have not been found: " + missingImplementations);
         }
         if (log.isLoggable(Level.FINE)) {
-            log.fine("Implementation map: " + implementations);
+            log.fine("Implementation map: " + implementationMap);
         }
+    }
+
+    /**
+     * Get all weavable classes that are annotated with
+     * {@link com.google.code.ddom.backend.Implementation} and implement (are assignable to) a given
+     * interface.
+     * 
+     * @param iface
+     * @return
+     */
+    public List<WeavableClassInfo> getImplementations(ClassInfo iface) {
+        List<WeavableClassInfo> implementations = new ArrayList<WeavableClassInfo>();
+        for (WeavableClassInfo candidate : implementationMap.values()) {
+            if (iface.isAssignableFrom(candidate)) {
+                implementations.add(candidate);
+            }
+        }
+        return implementations;
     }
 }

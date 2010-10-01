@@ -40,7 +40,6 @@ class ImplementationAnnotationExtractor extends AbstractClassVisitor implements 
     }
 
     public void process(WeavableClassInfo classInfo) throws ModelWeaverException {
-        classInfo.set(new ImplementationInfo(isImplementation));
         if (isImplementation) {
             implementationMap.addImplementation(classInfo);
         }
