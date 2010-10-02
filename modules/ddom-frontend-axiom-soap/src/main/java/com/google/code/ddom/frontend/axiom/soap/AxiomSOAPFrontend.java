@@ -18,6 +18,7 @@ package com.google.code.ddom.frontend.axiom.soap;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
+import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.Module;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.Frontend;
@@ -27,9 +28,11 @@ import com.google.code.ddom.spi.Provider;
 @Provider(name="axiom-soap")
 public class AxiomSOAPFrontend extends AxiomFrontend {
     @Override
-    public ClassCollection getMixins(Map<String, Frontend> frontends) {
-        // TODO Auto-generated method stub
-        return super.getMixins(frontends);
+    public ClassCollection getMixins(Map<String,Frontend> frontends) {
+        ClassCollectionAggregate aggregate = new ClassCollectionAggregate();
+        aggregate.add(super.getMixins(frontends));
+        aggregate.add(Module.forClass(AxiomSOAPFrontend.class).getPackage("com.google.code.ddom.frontend.axiom.soap.mixin"));
+        return aggregate;
     }
 
     @Override

@@ -16,10 +16,11 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.Producer;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
-    void internalCreateBuilder(Producer producer, LLParentNode target);
+    void internalCreateBuilder(Producer producer, ModelExtension modelExtension, LLParentNode target);
     Builder internalGetBuilderFor(LLParentNode target);
     void internalMigrateBuilder(LLParentNode from, LLParentNode to);
 }

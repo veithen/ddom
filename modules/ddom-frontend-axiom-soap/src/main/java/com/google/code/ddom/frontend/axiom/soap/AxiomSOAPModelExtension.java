@@ -16,7 +16,10 @@
 package com.google.code.ddom.frontend.axiom.soap;
 
 import com.google.code.ddom.core.ext.ModelExtension;
+import com.google.code.ddom.core.ext.ModelExtensionMapper;
 
 public class AxiomSOAPModelExtension implements ModelExtension {
-
+    public ModelExtensionMapper newMapper() {
+        return new AxiomSOAPModelExtensionMapper();
+    }
 }

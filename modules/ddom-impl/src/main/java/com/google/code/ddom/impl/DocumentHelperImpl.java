@@ -21,10 +21,10 @@ import com.google.code.ddom.Options;
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.DocumentFactory;
 import com.google.code.ddom.frontend.APIObjectFactory;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
 import com.google.code.ddom.stream.spi.Producer;
@@ -55,11 +55,11 @@ public class DocumentHelperImpl implements DocumentHelper {
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public Object parse(ModelDefinition model, Object source, Options options, boolean preserve) {
+    public Object parse(ModelDefinition modelDefinition, Object source, Options options, boolean preserve) {
         // TODO: check for null here!
-        DocumentFactory documentFactory;
+        Model model;
         try {
-            documentFactory = modelLoaderRegistry.getModel(model).getDocumentFactory();
+            model = modelLoaderRegistry.getModel(modelDefinition);
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
         }
@@ -77,8 +77,8 @@ public class DocumentHelperImpl implements DocumentHelper {
             throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
-        CoreDocument document = documentFactory.createDocument();
-        document.coreSetContent(new SimpleFragmentSource(producer));
+        CoreDocument document = model.getDocumentFactory().createDocument();
+        document.coreSetContent(new SimpleFragmentSource(producer), model.getModelExtension());
         return document;
     }
 

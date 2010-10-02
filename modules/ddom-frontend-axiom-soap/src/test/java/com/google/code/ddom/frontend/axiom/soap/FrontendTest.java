@@ -15,13 +15,21 @@
  */
 package com.google.code.ddom.frontend.axiom.soap;
 
+import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.soap.SOAPEnvelope;
 import org.junit.Test;
 
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
 
 public class FrontendTest {
     @Test
     public void test() {
-        DocumentHelperFactory.INSTANCE.newInstance().newDocument("axiom-soap");
+        DocumentHelper helper = DocumentHelperFactory.INSTANCE.newInstance();
+        OMDocument document = (OMDocument)helper.parse("axiom-soap", FrontendTest.class.getResourceAsStream("message.xml"));
+        OMElement element = document.getOMDocumentElement();
+        SOAPEnvelope env = (SOAPEnvelope)element;
+        helper.disposeDocument(document);
     }
 }

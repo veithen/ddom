@@ -15,9 +15,12 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.collections.ArrayStack;
 import com.google.code.ddom.collections.Stack;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.ext.ModelExtension;
+import com.google.code.ddom.core.ext.ModelExtensionMapper;
 import com.google.code.ddom.stream.spi.CharacterData;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
@@ -25,7 +28,10 @@ import com.google.code.ddom.stream.util.CallbackConsumer;
 
 // TODO: also allow for deferred building of attributes
 public class Builder extends CallbackConsumer {
+    private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
+    
     private final Producer producer;
+    private final ModelExtensionMapper modelExtensionMapper;
     private final Document document;
     private final Stack<LLParentNode> nodeStack = new ArrayStack<LLParentNode>();
     private StreamException streamException;
@@ -34,8 +40,9 @@ public class Builder extends CallbackConsumer {
     private Attribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Producer producer, Document document, LLParentNode target) {
+    public Builder(Producer producer, ModelExtension modelExtension, Document document, LLParentNode target) {
         this.producer = producer;
+        modelExtensionMapper = modelExtension.newMapper();
         this.document = document;
         parent = target;
     }
@@ -85,7 +92,8 @@ public class Builder extends CallbackConsumer {
     }
     
     public final void processElement(String namespaceURI, String localName, String prefix) {
-        appendNode(new NSAwareElement(document, namespaceURI, localName, prefix, false));
+        Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName, prefix);
+        appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
     }
     
     public final void processAttribute(String name, String value, String type) {
@@ -194,6 +202,7 @@ public class Builder extends CallbackConsumer {
     }
     
     public final void nodeCompleted() {
+        modelExtensionMapper.endElement(); // TODO: not entirely correct
         parent.internalSetComplete(true);
         if (nodeStack.isEmpty()) {
             parent = null;

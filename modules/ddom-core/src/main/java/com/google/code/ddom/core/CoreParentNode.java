@@ -17,6 +17,7 @@ package com.google.code.ddom.core;
 
 import java.util.Iterator;
 
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public interface CoreParentNode extends CoreNode {
@@ -37,7 +38,7 @@ public interface CoreParentNode extends CoreNode {
      */
     Object coreGetContent();
     
-    void coreSetContent(FragmentSource source);
+    void coreSetContent(FragmentSource source, ModelExtension modelExtension);
     
     String coreGetValue() throws DeferredParsingException;
     

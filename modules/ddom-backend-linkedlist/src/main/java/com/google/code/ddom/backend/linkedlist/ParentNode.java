@@ -33,6 +33,7 @@ import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.NodeNotFoundException;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public abstract class ParentNode extends Node implements LLParentNode {
@@ -63,11 +64,11 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return content instanceof CoreChildNode;
     }
 
-    public final void coreSetContent(FragmentSource source) {
+    public final void coreSetContent(FragmentSource source, ModelExtension modelExtension) {
         // TODO: need to clear any existing content!
         complete = false;
         // TODO: getting the producer should be deferred!
-        internalGetDocument().internalCreateBuilder(source.getProducer(), this);
+        internalGetDocument().internalCreateBuilder(source.getProducer(), modelExtension, this);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }

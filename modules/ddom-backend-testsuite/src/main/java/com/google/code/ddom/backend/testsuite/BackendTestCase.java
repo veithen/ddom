@@ -25,6 +25,7 @@ import com.google.code.ddom.Options;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
@@ -54,7 +55,7 @@ public class BackendTestCase extends TestCase {
     protected final CoreDocument parse(String xml) {
         CoreDocument document = documentFactory.createDocument();
         try {
-            document.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)));
+            document.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)), ModelExtension.NULL);
         } catch (StreamException ex) {
             Assert.fail(ex.getMessage());
             return null;
@@ -65,7 +66,7 @@ public class BackendTestCase extends TestCase {
     protected final CoreDocumentFragment parse(CoreDocument document, String xml) {
         CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
         try {
-            fragment.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)));
+            fragment.coreSetContent(new SimpleFragmentSource(streamFactory.getProducer(new StringReader(xml), new Options(), true)), ModelExtension.NULL);
         } catch (StreamException ex) {
             Assert.fail(ex.getMessage());
             return null;
