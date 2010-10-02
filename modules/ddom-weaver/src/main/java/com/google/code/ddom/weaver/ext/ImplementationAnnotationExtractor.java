@@ -61,7 +61,7 @@ class ImplementationAnnotationExtractor extends AbstractClassVisitor implements 
 
     public void process(ClassRealm realm, WeavableClassInfo classInfo, Extensions classInfoExtensions) {
         if (isImplementation) {
-            classInfoExtensions.set(new ImplementationInfo(realm.getClassInfo(factoryInterfaceName), constructors));
+            classInfoExtensions.set(new ImplementationInfo(classInfo, realm.getClassInfo(factoryInterfaceName), constructors));
             realm.get(ModelExtensionGenerator.class).addImplementation(classInfo);
         } else {
             classInfoExtensions.set(ImplementationInfo.class, null);

@@ -25,14 +25,14 @@ import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
 public class ModelExtensionFactoryImplementation extends GeneratedClass {
-    private final ModelExtensionFactoryInfo info;
+    private final ImplementationInfo info;
 
-    ModelExtensionFactoryImplementation(ModelExtensionFactoryInfo info) {
+    ModelExtensionFactoryImplementation(ImplementationInfo info) {
         this.info = info;
     }
 
     public void accept(ClassVisitor classVisitor) {
-        String name = Util.classNameToInternalName(info.getImplementation().get(ImplementationInfo.class).getFactoryInterface().getName() + "__Impl");
+        String name = Util.classNameToInternalName(info.getFactoryInterface().getName() + "__Impl");
         classVisitor.visit(
                 Opcodes.V1_5,
                 Opcodes.ACC_PUBLIC,

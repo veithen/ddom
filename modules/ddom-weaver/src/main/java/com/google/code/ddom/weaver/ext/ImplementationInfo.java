@@ -17,22 +17,33 @@ package com.google.code.ddom.weaver.ext;
 
 import java.util.List;
 
+import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
-public class ImplementationInfo {
+class ImplementationInfo {
+    private final WeavableClassInfo implementation;
     private final ClassInfo factoryInterface;
     private final List<ConstructorInfo> constructors;
 
-    ImplementationInfo(ClassInfo factoryInterface, List<ConstructorInfo> constructors) {
+    ImplementationInfo(WeavableClassInfo implementation, ClassInfo factoryInterface, List<ConstructorInfo> constructors) {
+        this.implementation = implementation;
         this.factoryInterface = factoryInterface;
         this.constructors = constructors;
     }
 
-    public ClassInfo getFactoryInterface() {
+    WeavableClassInfo getImplementation() {
+        return implementation;
+    }
+
+    ClassInfo getFactoryInterface() {
         return factoryInterface;
     }
 
-    public List<ConstructorInfo> getConstructors() {
+    List<ConstructorInfo> getConstructors() {
         return constructors;
+    }
+
+    String getFactoryDelegateInterfaceName() {
+        return implementation.getName() + "__FactoryDelegate";
     }
 }

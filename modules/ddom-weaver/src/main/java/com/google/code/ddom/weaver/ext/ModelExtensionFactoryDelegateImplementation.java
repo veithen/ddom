@@ -25,16 +25,15 @@ import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
 class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
-    private final ModelExtensionFactoryInfo modelExtensionFactoryInfo;
+    private final ImplementationInfo implementationInfo;
     private final ModelExtensionClassInfo modelExtensionClassInfo;
     
-    ModelExtensionFactoryDelegateImplementation(ModelExtensionFactoryInfo modelExtensionFactoryInfo, ModelExtensionClassInfo modelExtensionClassInfo) {
-        this.modelExtensionFactoryInfo = modelExtensionFactoryInfo;
+    ModelExtensionFactoryDelegateImplementation(ImplementationInfo implementationInfo, ModelExtensionClassInfo modelExtensionClassInfo) {
+        this.implementationInfo = implementationInfo;
         this.modelExtensionClassInfo = modelExtensionClassInfo;
     }
 
     public void accept(ClassVisitor classVisitor) {
-        ImplementationInfo implementationInfo = modelExtensionClassInfo.getImplementation().get(ImplementationInfo.class);
         String factoryName = Util.classNameToInternalName(modelExtensionClassInfo.getFactoryDelegateImplementationClassName());
         classVisitor.visit(
                 Opcodes.V1_5,
@@ -42,7 +41,7 @@ class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
                 factoryName,
                 null,
                 "java/lang/Object",
-                new String[] { Util.classNameToInternalName(modelExtensionFactoryInfo.getDelegateInterfaceName()) });
+                new String[] { Util.classNameToInternalName(implementationInfo.getFactoryDelegateInterfaceName()) });
         String className = Util.classNameToInternalName(modelExtensionClassInfo.getClassName());
         {
             MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);

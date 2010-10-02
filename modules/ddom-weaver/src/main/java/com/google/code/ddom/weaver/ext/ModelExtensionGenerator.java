@@ -101,10 +101,6 @@ public class ModelExtensionGenerator {
         return implementations;
     }
 
-    public List<WeavableClassInfo> getImplementations() {
-        return new ArrayList<WeavableClassInfo>(implementationMap.values());
-    }
-    
     private boolean isModelExtension(ClassInfo classInfo) {
         // TODO: do we really need this, or is equals (identity) enough???
         String className = classInfo.getName();
@@ -141,19 +137,19 @@ public class ModelExtensionGenerator {
     }
     
     void generateExtensions(WeavableClassInjector injector) {
-        for (WeavableClassInfo implementation : getImplementations()) {
-            ModelExtensionFactoryInfo info = new ModelExtensionFactoryInfo(implementation);
-            injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(info));
-            injector.loadWeavableClass(new ModelExtensionFactoryImplementation(info));
+        for (WeavableClassInfo implementation : implementationMap.values()) {
+            ImplementationInfo implementationInfo = implementation.get(ImplementationInfo.class);
+            injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(implementationInfo));
+            injector.loadWeavableClass(new ModelExtensionFactoryImplementation(implementationInfo));
         }
         for (ModelExtension modelExtension : modelExtensions) {
             for (WeavableClassInfo implementation : modelExtension.getImplementations()) {
-                ModelExtensionFactoryInfo modelExtensionFactoryInfo = new ModelExtensionFactoryInfo(implementation);
-                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(modelExtensionFactoryInfo, new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), null)));
+                ImplementationInfo implementationInfo = implementation.get(ImplementationInfo.class);
+                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), null)));
                 for (ClassInfo iface : modelExtension.getExtensionInterfaces()) {
                     ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), iface);
                     injector.loadWeavableClass(new ModelExtensionClass(modelExtensionClassInfo));
-                    injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(modelExtensionFactoryInfo, modelExtensionClassInfo));
+                    injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, modelExtensionClassInfo));
                 }
             }
         }
