@@ -25,28 +25,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInjector;
 import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class ModelExtensionGenerator {
     private static final Logger log = Logger.getLogger(ModelExtensionGenerator.class.getName());
     
-    private final Reactor reactor;
+    private final ClassRealm realm;
     private final List<ClassInfo> requiredImplementations;
     private final Map<ClassInfo,WeavableClassInfo> implementationMap = new HashMap<ClassInfo,WeavableClassInfo>();
     private final List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>();
     private List<ModelExtension> modelExtensions;
 
-    ModelExtensionGenerator(Reactor reactor, List<ClassInfo> requiredImplementations) {
-        this.reactor = reactor;
+    ModelExtensionGenerator(ClassRealm realm, List<ClassInfo> requiredImplementations) {
+        this.realm = realm;
         this.requiredImplementations = requiredImplementations;
     }
     
     public void loadModelExtensionInterface(ClassRef classRef) {
-        ClassInfo modelExtension = reactor.getClassInfo(classRef);
+        ClassInfo modelExtension = realm.getClassInfo(classRef);
         if (modelExtension.getInterfaces().length != 1) {
             throw new ReactorException("A model extension interface must have exactly one superinterface");
         }
@@ -136,7 +136,7 @@ public class ModelExtensionGenerator {
         }
         modelExtensions = new ArrayList<ModelExtension>(modelExtensionMap.values());
         for (ModelExtension modelExtension : modelExtensions) {
-            modelExtension.resolve(reactor);
+            modelExtension.resolve(realm);
         }
     }
     

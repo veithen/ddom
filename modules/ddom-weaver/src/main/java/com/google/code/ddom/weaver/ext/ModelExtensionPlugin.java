@@ -20,11 +20,11 @@ import java.util.List;
 
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.reactor.Extensions;
-import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.reactor.WeavableClassInjector;
 import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class ModelExtensionPlugin extends ReactorPlugin {
     private final List<ClassRef> requiredImplementations = new ArrayList<ClassRef>();
@@ -34,28 +34,28 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     }
     
     @Override
-    public void init(Reactor reactor, Extensions extensions) {
+    public void init(ClassRealm realm, Extensions extensions) {
         List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>(this.requiredImplementations.size());
         for (ClassRef classRef : this.requiredImplementations) {
-            requiredImplementations.add(reactor.getClassInfo(classRef));
+            requiredImplementations.add(realm.getClassInfo(classRef));
         }
-        extensions.set(new ModelExtensionGenerator(reactor, requiredImplementations));
+        extensions.set(new ModelExtensionGenerator(realm, requiredImplementations));
     }
 
     @Override
-    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
+    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
         return new ImplementationAnnotationExtractor();
     }
 
     @Override
-    public void resolve(Reactor reactor) {
-        ModelExtensionGenerator generator = reactor.get(ModelExtensionGenerator.class);
+    public void resolve(ClassRealm realm) {
+        ModelExtensionGenerator generator = realm.get(ModelExtensionGenerator.class);
         generator.validate();
         generator.resolve();
     }
 
     @Override
-    public void generateWeavableClasses(Reactor reactor, WeavableClassInjector weavableClassInjector) {
-        reactor.get(ModelExtensionGenerator.class).generateExtensions(weavableClassInjector);
+    public void generateWeavableClasses(ClassRealm realm, WeavableClassInjector weavableClassInjector) {
+        realm.get(ModelExtensionGenerator.class).generateExtensions(weavableClassInjector);
     }
 }

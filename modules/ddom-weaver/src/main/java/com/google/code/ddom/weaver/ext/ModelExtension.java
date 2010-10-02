@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 class ModelExtension {
     private static final Logger log = Logger.getLogger(ModelExtension.class.getName());
@@ -40,8 +40,8 @@ class ModelExtension {
         extensionInterfaces.add(classInfo);
     }
     
-    public void resolve(Reactor reactor) {
-        implementations = reactor.get(ModelExtensionGenerator.class).getImplementations(rootInterface);
+    public void resolve(ClassRealm realm) {
+        implementations = realm.get(ModelExtensionGenerator.class).getImplementations(rootInterface);
         if (implementations.isEmpty()) {
             throw new ReactorException("No implementations found for root interface " + rootInterface);
         }

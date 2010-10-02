@@ -16,12 +16,13 @@
 package com.google.code.ddom.weaver.reactor;
 
 import com.google.code.ddom.weaver.mixin.MixinInfoBuilderCollaborator;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public abstract class ReactorPlugin {
-    public void init(Reactor reactor, Extensions extensions) {
+    public void init(ClassRealm realm, Extensions extensions) {
     }
     
-    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
+    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
         return null;
     }
     
@@ -29,9 +30,9 @@ public abstract class ReactorPlugin {
         return null;
     }
     
-    public void resolve(Reactor reactor) {
+    public void resolve(ClassRealm realm) {
     }
     
-    public void generateWeavableClasses(Reactor reactor, WeavableClassInjector weavableClassInjector) {
+    public void generateWeavableClasses(ClassRealm realm, WeavableClassInjector weavableClassInjector) {
     }
 }

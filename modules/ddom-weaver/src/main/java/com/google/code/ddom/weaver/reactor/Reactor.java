@@ -94,7 +94,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
     public void loadWeavableClass(ClassDefinitionSource classDefinitionSource) {
         List<WeavableClassInfoBuilderCollaborator> collaborators = new ArrayList<WeavableClassInfoBuilderCollaborator>(plugins.size());
         for (ReactorPlugin plugin : plugins) {
-            WeavableClassInfoBuilderCollaborator collaborator = plugin.newWeavableClassInfoBuilderCollaborator(this);
+            WeavableClassInfoBuilderCollaborator collaborator = plugin.newWeavableClassInfoBuilderCollaborator();
             if (collaborator != null) {
                 collaborators.add(collaborator);
             }
