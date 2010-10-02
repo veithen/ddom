@@ -40,7 +40,7 @@ class ModelExtensionFactoryDelegateInterface extends GeneratedClass {
                 "java/lang/Object",
                 new String[0]);
         for (ConstructorInfo constructor : info.getConstructors()) {
-            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT, "create", constructor.getDescriptor(), constructor.getSignature(), constructor.getExceptions());
+            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT, "create", constructor.getFactoryDelegateMethodDescriptor(), constructor.getSignature(), constructor.getExceptions());
             if (mv != null) {
                 mv.visitEnd();
             }

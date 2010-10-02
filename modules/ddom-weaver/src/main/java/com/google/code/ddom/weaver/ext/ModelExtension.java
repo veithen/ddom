@@ -17,41 +17,25 @@ package com.google.code.ddom.weaver.ext;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
-import com.google.code.ddom.weaver.realm.ClassRealm;
 
 class ModelExtension {
-    private static final Logger log = Logger.getLogger(ModelExtension.class.getName());
-    
     private final ClassInfo rootInterface;
     private final List<ClassInfo> extensionInterfaces = new ArrayList<ClassInfo>();
-    private List<WeavableClassInfo> implementations;
+    // TODO: we should actually store a list of ImplementationInfos here
+    private final List<WeavableClassInfo> implementations;
     
-    ModelExtension(ClassInfo rootInterface) {
+    ModelExtension(ClassInfo rootInterface, List<WeavableClassInfo> implementations) {
         this.rootInterface = rootInterface;
+        this.implementations = implementations;
     }
     
     void addExtensionInterface(ClassInfo classInfo) {
         extensionInterfaces.add(classInfo);
     }
     
-    void resolve(ClassRealm realm) {
-        implementations = realm.get(ModelExtensionGenerator.class).getImplementations(rootInterface);
-        if (implementations.isEmpty()) {
-            throw new ReactorException("No implementations found for root interface " + rootInterface);
-        }
-        if (log.isLoggable(Level.FINE)) {
-            log.fine("Resolved model extension:\n  Root interface: " + rootInterface
-                    + "\n  Extension interfaces: " + extensionInterfaces
-                    + "\n  Implementations: " + implementations);
-        }
-    }
-
     ClassInfo getRootInterface() {
         return rootInterface;
     }

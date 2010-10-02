@@ -38,7 +38,6 @@ public class ModelExtensionGenerator {
     private final List<ClassInfo> requiredImplementations;
     private final Map<ClassInfo,WeavableClassInfo> implementationMap = new HashMap<ClassInfo,WeavableClassInfo>();
     private final List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>();
-    private List<ModelExtension> modelExtensions;
 
     ModelExtensionGenerator(ClassRealm realm, List<ClassInfo> requiredImplementations) {
         this.realm = realm;
@@ -118,21 +117,31 @@ public class ModelExtensionGenerator {
 //        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
         Map<ClassInfo,ModelExtension> modelExtensionMap = new HashMap<ClassInfo,ModelExtension>();
         for (ClassInfo iface : modelExtensionInterfaces) {
-            ClassInfo root = iface;
+            ClassInfo rootInterface = iface;
             do {
                 // The number of super interface has already been validated by loadModelExtension
-                root = root.getInterfaces()[0];
-            } while (isModelExtension(root));
-            ModelExtension modelExtension = modelExtensionMap.get(root);
+                rootInterface = rootInterface.getInterfaces()[0];
+            } while (isModelExtension(rootInterface));
+            ModelExtension modelExtension = modelExtensionMap.get(rootInterface);
             if (modelExtension == null) {
-                modelExtension = new ModelExtension(root);
-                modelExtensionMap.put(root, modelExtension);
+                List<WeavableClassInfo> implementations = getImplementations(rootInterface);
+                if (implementations.isEmpty()) {
+                    throw new ReactorException("No implementations found for root interface " + rootInterface);
+                }
+                modelExtension = new ModelExtension(rootInterface, implementations);
+                modelExtensionMap.put(rootInterface, modelExtension);
+                for (WeavableClassInfo implementation : implementations) {
+                    implementation.get(ImplementationInfo.class).addModelExtension(modelExtension);
+                }
             }
             modelExtension.addExtensionInterface(iface);
         }
-        modelExtensions = new ArrayList<ModelExtension>(modelExtensionMap.values());
-        for (ModelExtension modelExtension : modelExtensions) {
-            modelExtension.resolve(realm);
+        if (log.isLoggable(Level.FINE)) {
+            for (ModelExtension modelExtension : modelExtensionMap.values()) {
+                log.fine("Resolved model extension:\n  Root interface: " + modelExtension.getRootInterface()
+                        + "\n  Extension interfaces: " + modelExtension.getExtensionInterfaces()
+                        + "\n  Implementations: " + modelExtension.getImplementations());
+            }
         }
     }
     
@@ -141,10 +150,7 @@ public class ModelExtensionGenerator {
             ImplementationInfo implementationInfo = implementation.get(ImplementationInfo.class);
             injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(implementationInfo));
             injector.loadWeavableClass(new ModelExtensionFactoryImplementation(implementationInfo));
-        }
-        for (ModelExtension modelExtension : modelExtensions) {
-            for (WeavableClassInfo implementation : modelExtension.getImplementations()) {
-                ImplementationInfo implementationInfo = implementation.get(ImplementationInfo.class);
+            for (ModelExtension modelExtension : implementationInfo.getModelExtensions()) {
                 injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), null)));
                 for (ClassInfo iface : modelExtension.getExtensionInterfaces()) {
                     ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), iface);

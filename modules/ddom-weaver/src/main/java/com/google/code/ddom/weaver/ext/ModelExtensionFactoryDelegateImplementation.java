@@ -60,7 +60,7 @@ class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
             }
         }
         for (ConstructorInfo constructor : implementationInfo.getConstructors()) {
-            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "create", constructor.getDescriptor(), constructor.getSignature(), constructor.getExceptions());
+            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "create", constructor.getFactoryDelegateMethodDescriptor(), constructor.getSignature(), constructor.getExceptions());
             if (mv != null) {
                 mv.visitCode();
                 Label l0 = new Label();
@@ -72,7 +72,7 @@ class ModelExtensionFactoryDelegateImplementation extends GeneratedClass {
                     mv.visitVarInsn(argumentTypes[i].getOpcode(Opcodes.ILOAD), i+1);
                 }
                 mv.visitMethodInsn(Opcodes.INVOKESPECIAL, className, "<init>", constructor.getDescriptor());
-                mv.visitInsn(Opcodes.RETURN);
+                mv.visitInsn(Opcodes.ARETURN);
                 Label l1 = new Label();
                 mv.visitLabel(l1);
                 mv.visitLocalVariable("this", "L" + factoryName + ";", null, l0, l1, 0);

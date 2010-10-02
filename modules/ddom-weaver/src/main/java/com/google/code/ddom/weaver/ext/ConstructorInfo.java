@@ -17,10 +17,13 @@ package com.google.code.ddom.weaver.ext;
 
 import org.objectweb.asm.Type;
 
+import com.google.code.ddom.weaver.asm.Util;
+
 class ConstructorInfo {
     private final String descriptor;
     private final String signature;
     private final String[] exceptions;
+    private ImplementationInfo implementationInfo;
     private Type[] argumentTypes;
     
     ConstructorInfo(String descriptor, String signature, String[] exceptions) {
@@ -29,8 +32,16 @@ class ConstructorInfo {
         this.exceptions = exceptions;
     }
 
+    void setImplementationInfo(ImplementationInfo implementationInfo) {
+        this.implementationInfo = implementationInfo;
+    }
+
     String getDescriptor() {
         return descriptor;
+    }
+    
+    String getFactoryDelegateMethodDescriptor() {
+        return Type.getMethodDescriptor(Type.getObjectType(Util.classNameToInternalName(implementationInfo.getImplementation().getName())), getArgumentTypes());
     }
     
     Type[] getArgumentTypes() {

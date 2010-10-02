@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.weaver.ext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
@@ -24,6 +25,7 @@ class ImplementationInfo {
     private final WeavableClassInfo implementation;
     private final ClassInfo factoryInterface;
     private final List<ConstructorInfo> constructors;
+    private final List<ModelExtension> modelExtensions = new ArrayList<ModelExtension>();
 
     ImplementationInfo(WeavableClassInfo implementation, ClassInfo factoryInterface, List<ConstructorInfo> constructors) {
         this.implementation = implementation;
@@ -44,6 +46,14 @@ class ImplementationInfo {
     }
 
     String getFactoryDelegateInterfaceName() {
-        return implementation.getName() + "__FactoryDelegate";
+        return implementation.getName() + "$$FactoryDelegate";
+    }
+
+    List<ModelExtension> getModelExtensions() {
+        return modelExtensions;
+    }
+    
+    void addModelExtension(ModelExtension modelExtension) {
+        modelExtensions.add(modelExtension);
     }
 }

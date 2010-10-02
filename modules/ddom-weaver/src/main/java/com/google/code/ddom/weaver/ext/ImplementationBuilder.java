@@ -61,7 +61,11 @@ class ImplementationBuilder extends AbstractClassVisitor implements WeavableClas
 
     public void process(ClassRealm realm, WeavableClassInfo classInfo, Extensions classInfoExtensions) {
         if (isImplementation) {
-            classInfoExtensions.set(new ImplementationInfo(classInfo, realm.getClassInfo(factoryInterfaceName), constructors));
+            ImplementationInfo implementationInfo = new ImplementationInfo(classInfo, realm.getClassInfo(factoryInterfaceName), constructors);
+            for (ConstructorInfo constructor : constructors) {
+                constructor.setImplementationInfo(implementationInfo);
+            }
+            classInfoExtensions.set(implementationInfo);
             realm.get(ModelExtensionGenerator.class).addImplementation(classInfo);
         } else {
             classInfoExtensions.set(ImplementationInfo.class, null);

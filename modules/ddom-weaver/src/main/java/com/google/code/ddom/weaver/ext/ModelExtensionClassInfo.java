@@ -42,7 +42,7 @@ class ModelExtensionClassInfo {
     }
 
     String getModelExtensionClassName(ClassInfo extensionInterface) {
-        return implementation.getName() + "__" + extensionInterface.getName().replace('.', '_');
+        return implementation.getName() + "$$" + extensionInterface.getName().replace('.', '$');
     }
     
     String getClassName() {
@@ -50,7 +50,7 @@ class ModelExtensionClassInfo {
     }
     
     String getFactoryDelegateImplementationClassName() {
-        return getClassName() + "__FactoryDelegateImpl";
+        return getClassName() + "$$FactoryDelegateImpl";
     }
     
     String getSuperClassName() {
