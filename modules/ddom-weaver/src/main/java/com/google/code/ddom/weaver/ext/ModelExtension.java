@@ -32,15 +32,15 @@ class ModelExtension {
     private final List<ClassInfo> extensionInterfaces = new ArrayList<ClassInfo>();
     private List<WeavableClassInfo> implementations;
     
-    public ModelExtension(ClassInfo rootInterface) {
+    ModelExtension(ClassInfo rootInterface) {
         this.rootInterface = rootInterface;
     }
     
-    public void addExtensionInterface(ClassInfo classInfo) {
+    void addExtensionInterface(ClassInfo classInfo) {
         extensionInterfaces.add(classInfo);
     }
     
-    public void resolve(ClassRealm realm) {
+    void resolve(ClassRealm realm) {
         implementations = realm.get(ModelExtensionGenerator.class).getImplementations(rootInterface);
         if (implementations.isEmpty()) {
             throw new ReactorException("No implementations found for root interface " + rootInterface);

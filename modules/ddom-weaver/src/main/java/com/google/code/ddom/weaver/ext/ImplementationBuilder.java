@@ -30,7 +30,7 @@ import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
-class ImplementationAnnotationExtractor extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
+class ImplementationBuilder extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
     private boolean isImplementation;
     String factoryInterfaceName;
     private List<ConstructorInfo> constructors;

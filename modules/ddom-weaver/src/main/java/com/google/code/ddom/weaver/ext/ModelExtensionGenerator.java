@@ -91,7 +91,7 @@ public class ModelExtensionGenerator {
      * @param iface
      * @return
      */
-    public List<WeavableClassInfo> getImplementations(ClassInfo iface) {
+    List<WeavableClassInfo> getImplementations(ClassInfo iface) {
         List<WeavableClassInfo> implementations = new ArrayList<WeavableClassInfo>();
         for (WeavableClassInfo candidate : implementationMap.values()) {
             if (iface.isAssignableFrom(candidate)) {

@@ -17,7 +17,7 @@ package com.google.code.ddom.weaver.ext;
 
 import org.objectweb.asm.Type;
 
-public class ConstructorInfo {
+class ConstructorInfo {
     private final String descriptor;
     private final String signature;
     private final String[] exceptions;
@@ -29,22 +29,22 @@ public class ConstructorInfo {
         this.exceptions = exceptions;
     }
 
-    public String getDescriptor() {
+    String getDescriptor() {
         return descriptor;
     }
     
-    public Type[] getArgumentTypes() {
+    Type[] getArgumentTypes() {
         if (argumentTypes == null) {
             argumentTypes = Type.getArgumentTypes(descriptor);
         }
         return argumentTypes;
     }
 
-    public String getSignature() {
+    String getSignature() {
         return signature;
     }
 
-    public String[] getExceptions() {
+    String[] getExceptions() {
         return exceptions;
     }
 }

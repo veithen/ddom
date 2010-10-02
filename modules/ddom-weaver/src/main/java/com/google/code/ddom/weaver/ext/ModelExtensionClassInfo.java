@@ -29,31 +29,31 @@ class ModelExtensionClassInfo {
         this.extensionInterface = extensionInterface;
     }
 
-    public WeavableClassInfo getImplementation() {
+    WeavableClassInfo getImplementation() {
         return implementation;
     }
 
-    public ClassInfo getRootInterface() {
+    ClassInfo getRootInterface() {
         return rootInterface;
     }
 
-    public ClassInfo getExtensionInterface() {
+    ClassInfo getExtensionInterface() {
         return extensionInterface;
     }
 
-    private String getModelExtensionClassName(ClassInfo extensionInterface) {
+    String getModelExtensionClassName(ClassInfo extensionInterface) {
         return implementation.getName() + "__" + extensionInterface.getName().replace('.', '_');
     }
     
-    public String getClassName() {
+    String getClassName() {
         return extensionInterface == null ? implementation.getName() : getModelExtensionClassName(extensionInterface);
     }
     
-    public String getFactoryDelegateImplementationClassName() {
+    String getFactoryDelegateImplementationClassName() {
         return getClassName() + "__FactoryDelegateImpl";
     }
     
-    public String getSuperClassName() {
+    String getSuperClassName() {
         ClassInfo superInterface = extensionInterface.getInterfaces()[0];
         return superInterface == rootInterface ? implementation.getName() : getModelExtensionClassName(superInterface);
     }

@@ -44,7 +44,7 @@ public class ModelExtensionPlugin extends ReactorPlugin {
 
     @Override
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
-        return new ImplementationAnnotationExtractor();
+        return new ImplementationBuilder();
     }
 
     @Override
