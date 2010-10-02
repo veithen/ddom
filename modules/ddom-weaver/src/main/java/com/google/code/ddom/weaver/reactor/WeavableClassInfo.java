@@ -21,15 +21,21 @@ import com.google.code.ddom.weaver.realm.ClassInfo;
  * Describes a weavable class. A weavable class is simply a class submitted to the weaver and that
  * may be woven. The weaver will decide whether the class actually needs to be woven or not.
  */
-public final class WeavableClassInfo extends ClassInfo {
+public final class WeavableClassInfo extends ClassInfo implements Extensible {
     private final ClassDefinitionSource classDefinitionSource;
+    private final Extensions extensions;
     
-    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, ClassDefinitionSource classDefinitionSource) {
+    public WeavableClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, ClassDefinitionSource classDefinitionSource, Extensions extensions) {
         super(name, isInterface, superclass, interfaces);
         this.classDefinitionSource = classDefinitionSource;
+        this.extensions = extensions;
     }
 
     public ClassDefinitionSource getClassDefinitionSource() {
         return classDefinitionSource;
+    }
+
+    public <T> T get(Class<T> key) {
+        return extensions.get(key);
     }
 }

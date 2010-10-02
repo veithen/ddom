@@ -16,7 +16,7 @@
 package com.google.code.ddom.weaver.reactor;
 
 public abstract class ReactorPlugin {
-    public void init(Reactor reactor) {
+    public void init(Reactor reactor, Extensions extensions) {
     }
     
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {

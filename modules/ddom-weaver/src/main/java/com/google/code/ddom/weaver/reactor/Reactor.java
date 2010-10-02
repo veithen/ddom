@@ -45,7 +45,7 @@ import com.google.code.ddom.weaver.mixin.MixinInfoBuilder;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
-public class Reactor extends PropertySupport implements ClassRealm, WeavableClassInjector {
+public class Reactor implements ClassRealm, WeavableClassInjector {
     private static final Logger log = Logger.getLogger(Reactor.class.getName());
     
     // TODO: introduce system property for this
@@ -66,6 +66,7 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
         }
     };
     
+    private final Extensions extensions = new Extensions();
     private final ClassLoader classLoader;
     private final List<ReactorPlugin> plugins = new ArrayList<ReactorPlugin>();
     private final Map<String,WeavableClassInfoBuilder> weavableClassInfoBuilders = new HashMap<String,WeavableClassInfoBuilder>();
@@ -77,8 +78,12 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
         this.classLoader = classLoader;
     }
 
+    public <T> T get(Class<T> key) {
+        return extensions.get(key);
+    }
+
     public void addPlugin(ReactorPlugin plugin) {
-        plugin.init(this);
+        plugin.init(this, extensions);
         plugins.add(plugin);
     }
     
@@ -103,9 +108,9 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
     
     public void loadMixin(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
         SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
-        MixinInfoBuilder builder = new MixinInfoBuilder(this, sourceInfoBuilder, SimpleErrorHandler.INSTANCE);
+        MixinInfoBuilder builder = new MixinInfoBuilder(sourceInfoBuilder, SimpleErrorHandler.INSTANCE);
         new ClassReader(classRef.getClassDefinition()).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
-        mixins.add(builder.build());
+        mixins.add(builder.build(this));
     }
     
     public ClassInfo getClassInfo(String className) {

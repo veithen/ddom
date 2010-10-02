@@ -54,10 +54,11 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = realm.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
         }
+        Extensions extensions = new Extensions();
         WeavableClassInfo classInfo = new WeavableClassInfo(name, isInterface, realm.getClassInfo(Util.internalNameToClassName(superName)),
-                interfaces, classDefinitionSource);
+                interfaces, classDefinitionSource, extensions);
         for (WeavableClassInfoBuilderCollaborator collaborator : collaborators) {
-            collaborator.process(realm, classInfo);
+            collaborator.process(realm, classInfo, extensions);
         }
         return classInfo;
     }

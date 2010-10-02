@@ -18,7 +18,7 @@ package com.google.code.ddom.weaver.reactor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PropertySupport implements Extensible {
+public class Extensions implements Extensible {
     private final Map<Class<?>,Object> properties = new HashMap<Class<?>,Object>();
 
     public void set(Class<?> key, Object object) {

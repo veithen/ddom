@@ -25,6 +25,7 @@ import org.objectweb.asm.Type;
 
 import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
+import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.realm.ClassRealm;
@@ -58,12 +59,12 @@ class ImplementationAnnotationExtractor extends AbstractClassVisitor implements 
         return null;
     }
 
-    public void process(ClassRealm realm, WeavableClassInfo classInfo) {
+    public void process(ClassRealm realm, WeavableClassInfo classInfo, Extensions classInfoExtensions) {
         if (isImplementation) {
-            classInfo.set(new ImplementationInfo(realm.getClassInfo(factoryInterfaceName), constructors));
+            classInfoExtensions.set(new ImplementationInfo(realm.getClassInfo(factoryInterfaceName), constructors));
             realm.get(ModelExtensionGenerator.class).addImplementation(classInfo);
         } else {
-            classInfo.set(ImplementationInfo.class, null);
+            classInfoExtensions.set(ImplementationInfo.class, null);
         }
     }
 }

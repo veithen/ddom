@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.code.ddom.commons.cl.ClassRef;
+import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
@@ -33,12 +34,12 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     }
     
     @Override
-    public void init(Reactor reactor) {
+    public void init(Reactor reactor, Extensions extensions) {
         List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>(this.requiredImplementations.size());
         for (ClassRef classRef : this.requiredImplementations) {
             requiredImplementations.add(reactor.getClassInfo(classRef));
         }
-        reactor.set(new ModelExtensionGenerator(reactor, requiredImplementations));
+        extensions.set(new ModelExtensionGenerator(reactor, requiredImplementations));
     }
 
     @Override

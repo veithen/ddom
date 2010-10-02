@@ -15,10 +15,7 @@
  */
 package com.google.code.ddom.weaver.realm;
 
-import com.google.code.ddom.weaver.reactor.PropertySupport;
-
-// TODO: not sure if ClassInfo or WeavableClassInfo should inherit from PropertySupport
-public class ClassInfo extends PropertySupport {
+public class ClassInfo {
     private final String name;
     private final boolean isInterface;
     private final ClassInfo superclass;

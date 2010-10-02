@@ -41,7 +41,6 @@ import com.google.code.ddom.weaver.realm.ClassRealm;
 public class MixinInfoBuilder extends AbstractClassVisitor {
     private static final Logger log = Logger.getLogger(MixinInfo.class.getName());
     
-    private final ClassRealm realm;
     private final SourceInfoBuilder sourceInfoBuilder;
     private final ErrorHandler errorHandler;
     private String name;
@@ -51,8 +50,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
     private final List<MethodNode> methods = new ArrayList<MethodNode>();
     private MethodNode init;
 
-    public MixinInfoBuilder(ClassRealm realm, SourceInfoBuilder sourceInfoBuilder, ErrorHandler errorHandler) {
-        this.realm = realm;
+    public MixinInfoBuilder(SourceInfoBuilder sourceInfoBuilder, ErrorHandler errorHandler) {
         this.sourceInfoBuilder = sourceInfoBuilder;
         this.errorHandler = errorHandler;
     }
@@ -118,7 +116,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
         }
     }
 
-    public MixinInfo build() throws ClassNotFoundException, ModelWeaverException {
+    public MixinInfo build(ClassRealm realm) throws ClassNotFoundException, ModelWeaverException {
         // TODO: do we still need this?
 //        if (!contributedInterfaces.remove(target.getInternalName())) {
 //            log.warning("Mixin class doesn't implement target interface");

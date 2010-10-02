@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.reactor;
+package com.google.code.ddom.weaver.mixin;
 
 import org.objectweb.asm.ClassVisitor;
 
+import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
 /**
- * Extracts additional information from a weavable class and adds it to the
- * {@link WeavableClassInfo}.
+ * Extracts additional information from a mixin and adds it to the
+ * {@link MixinInfo}.
  * 
  * @author Andreas Veithen
  */
-public interface WeavableClassInfoBuilderCollaborator extends ClassVisitor {
-    void process(ClassRealm realm, WeavableClassInfo classInfo, Extensions classInfoExtensions);
+public interface MixinInfoBuilderCollaborator extends ClassVisitor {
+    void process(ClassRealm realm, MixinInfo mixinInfo, Extensions mixinInfoExtensions);
 }
