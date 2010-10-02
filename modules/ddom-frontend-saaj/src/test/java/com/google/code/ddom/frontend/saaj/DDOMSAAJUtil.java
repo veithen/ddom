@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,29 @@
 package com.google.code.ddom.frontend.saaj;
 
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 
 import org.w3c.dom.Document;
 
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.core.CoreDocument;
 
 public class DDOMSAAJUtil extends SAAJUtil {
     public static final DDOMSAAJUtil INSTANCE = new DDOMSAAJUtil();
+    
+    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
     
     private DDOMSAAJUtil() {}
     
     @Override
     public SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix) {
-        Document document = (Document)DocumentHelperFactory.INSTANCE.newInstance().newDocument("saaj");
+        Document document = (Document)documentHelper.newDocument("saaj");
         return (SOAPElement)document.createElementNS(namespaceURI, prefix == null ? localName : prefix + ":" + localName);
+    }
+
+    @Override
+    public SOAPEnvelope createSOAPEnvelope() {
+        return (SOAPEnvelope)((CoreDocument)documentHelper.newDocument("saaj")).coreCreateElement(com.google.code.ddom.frontend.saaj.ext.SOAPEnvelope.class, "http://schemas.xmlsoap.org/soap/envelope/", "Envelope", "soap");
     }
 }

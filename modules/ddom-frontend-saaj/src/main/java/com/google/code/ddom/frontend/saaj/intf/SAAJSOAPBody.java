@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj;
+package com.google.code.ddom.frontend.saaj.intf;
 
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPBody;
 
-public abstract class SAAJUtil {
-    public abstract SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix);
-    public abstract SOAPEnvelope createSOAPEnvelope();
+public interface SAAJSOAPBody extends SOAPBody, SAAJSOAPElement {
+
 }

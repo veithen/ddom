@@ -227,6 +227,10 @@ public class Document extends ParentNode implements LLDocument {
         return new NSAwareElement(this, namespaceURI, localName, prefix, true);
     }
     
+    public final CoreNSAwareElement coreCreateElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) {
+        return nsAwareElementFactory.create(extensionInterface, this, namespaceURI, localName, prefix, true);
+    }
+    
     public final CoreNSUnawareAttribute coreCreateAttribute(String name, String value, String type) {
         return new NSUnawareAttribute(this, name, value, type);
     }

@@ -33,4 +33,9 @@ public class SAAJFrontend extends DOMFrontend {
         aggregate.add(Module.forClass(SAAJFrontend.class).getPackage("com.google.code.ddom.frontend.saaj.mixin"));
         return aggregate;
     }
+
+    @Override
+    public ClassCollection getModelExtensionInterfaces() {
+        return Module.forClass(SAAJFrontend.class).getPackage("com.google.code.ddom.frontend.saaj.ext");
+    }
 }

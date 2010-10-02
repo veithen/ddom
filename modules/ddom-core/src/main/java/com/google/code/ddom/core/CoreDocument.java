@@ -70,6 +70,8 @@ public interface CoreDocument extends CoreParentNode {
      */
     CoreNSAwareElement coreCreateElement(String namespaceURI, String localName, String prefix);
     
+    CoreNSAwareElement coreCreateElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix);
+    
     CoreNSUnawareAttribute coreCreateAttribute(String name, String value, String type);
     
     CoreNSAwareAttribute coreCreateAttribute(String namespaceURI, String localName, String prefix, String value, String type);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
+import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 
@@ -34,6 +36,18 @@ public class RISAAJUtil extends SAAJUtil {
     public SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix) {
         try {
             return factory.createElement(localName, prefix, namespaceURI);
+        } catch (SOAPException ex) {
+            Assert.fail(ex.getMessage());
+            return null;
+        }
+    }
+    
+    @Override
+    public SOAPEnvelope createSOAPEnvelope() {
+        try {
+            SOAPEnvelope envelope = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
+            envelope.removeContents();
+            return envelope;
         } catch (SOAPException ex) {
             Assert.fail(ex.getMessage());
             return null;
