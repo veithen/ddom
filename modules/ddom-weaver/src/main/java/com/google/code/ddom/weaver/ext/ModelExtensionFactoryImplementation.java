@@ -34,7 +34,8 @@ public class ModelExtensionFactoryImplementation extends GeneratedClass {
     }
 
     public void accept(ClassVisitor classVisitor) {
-        String name = Util.classNameToInternalName(implementationInfo.getFactoryInterface().getName() + "__Impl");
+        // Note: the name chosen here must match what is expected in ExtensionFactoryLocator
+        String name = Util.classNameToInternalName(implementationInfo.getFactoryInterface().getName() + "$$Impl");
         String factoryInterfaceName = Util.classNameToInternalName(implementationInfo.getFactoryInterface().getName());
         classVisitor.visit(
                 Opcodes.V1_5,

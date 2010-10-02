@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.core.ChildTypeNotAllowedException;
 import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreChildNode;
@@ -40,6 +41,8 @@ import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public class Document extends ParentNode implements LLDocument {
+    private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
+    
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final DocumentFactory documentFactory;
     private final Symbols symbols;
