@@ -25,7 +25,6 @@ import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class WeavableClassInfoBuilder extends AbstractClassVisitor {
-    private final ClassRealm realm;
     private final ClassDefinitionSource classDefinitionSource;
     private final List<WeavableClassInfoBuilderCollaborator> collaborators;
     private String name;
@@ -33,8 +32,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
     private String superName;
     private String[] interfaceNames;
     
-    public WeavableClassInfoBuilder(ClassRealm realm, ClassDefinitionSource classDefinitionSource, List<WeavableClassInfoBuilderCollaborator> collaborators) {
-        this.realm = realm;
+    public WeavableClassInfoBuilder(ClassDefinitionSource classDefinitionSource, List<WeavableClassInfoBuilderCollaborator> collaborators) {
         this.classDefinitionSource = classDefinitionSource;
         this.collaborators = collaborators;
     }
@@ -51,7 +49,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         return name;
     }
 
-    public WeavableClassInfo build() {
+    public WeavableClassInfo build(ClassRealm realm) {
         ClassInfo[] interfaces = new ClassInfo[interfaceNames.length];
         for (int i=0; i<interfaces.length; i++) {
             interfaces[i] = realm.getClassInfo(Util.internalNameToClassName(interfaceNames[i]));
@@ -59,7 +57,7 @@ public class WeavableClassInfoBuilder extends AbstractClassVisitor {
         WeavableClassInfo classInfo = new WeavableClassInfo(name, isInterface, realm.getClassInfo(Util.internalNameToClassName(superName)),
                 interfaces, classDefinitionSource);
         for (WeavableClassInfoBuilderCollaborator collaborator : collaborators) {
-            collaborator.process(classInfo);
+            collaborator.process(realm, classInfo);
         }
         return classInfo;
     }

@@ -22,6 +22,7 @@ import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.AbstractMethodVisitor;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 /**
  * Class visitor that extracts information about source code references. In particular, it
@@ -67,7 +68,7 @@ public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableC
         return sourceInfo;
     }
 
-    public void process(WeavableClassInfo classInfo) {
+    public void process(ClassRealm realm, WeavableClassInfo classInfo) {
         classInfo.set(sourceInfo);
     }
 }

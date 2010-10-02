@@ -15,6 +15,10 @@
  */
 package com.google.code.ddom.weaver.realm;
 
-public interface ClassRealm {
+import com.google.code.ddom.commons.cl.ClassRef;
+import com.google.code.ddom.weaver.reactor.Extensible;
+
+public interface ClassRealm extends Extensible {
     ClassInfo getClassInfo(String className);
+    ClassInfo getClassInfo(ClassRef classRef);
 }

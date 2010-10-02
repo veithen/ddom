@@ -43,7 +43,7 @@ public class ModelExtensionPlugin extends ReactorPlugin {
 
     @Override
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
-        return new ImplementationAnnotationExtractor(reactor, reactor.get(ModelExtensionGenerator.class));
+        return new ImplementationAnnotationExtractor();
     }
 
     @Override

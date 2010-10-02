@@ -25,22 +25,15 @@ import org.objectweb.asm.Type;
 
 import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
-import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
+import com.google.code.ddom.weaver.realm.ClassRealm;
 
 class ImplementationAnnotationExtractor extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
-    private final Reactor reactor;
-    private final ModelExtensionGenerator implementationMap;
     private boolean isImplementation;
     String factoryInterfaceName;
     private List<ConstructorInfo> constructors;
     
-    ImplementationAnnotationExtractor(Reactor reactor, ModelExtensionGenerator implementationMap) {
-        this.reactor = reactor;
-        this.implementationMap = implementationMap;
-    }
-
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (desc.equals("Lcom/google/code/ddom/backend/Implementation;")) {
@@ -65,10 +58,10 @@ class ImplementationAnnotationExtractor extends AbstractClassVisitor implements 
         return null;
     }
 
-    public void process(WeavableClassInfo classInfo) {
+    public void process(ClassRealm realm, WeavableClassInfo classInfo) {
         if (isImplementation) {
-            classInfo.set(new ImplementationInfo(reactor.getClassInfo(factoryInterfaceName), constructors));
-            implementationMap.addImplementation(classInfo);
+            classInfo.set(new ImplementationInfo(realm.getClassInfo(factoryInterfaceName), constructors));
+            realm.get(ModelExtensionGenerator.class).addImplementation(classInfo);
         } else {
             classInfo.set(ImplementationInfo.class, null);
         }

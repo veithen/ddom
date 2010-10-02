@@ -15,16 +15,6 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
-import org.objectweb.asm.ClassVisitor;
-
-import com.google.code.ddom.weaver.realm.ClassRealm;
-
-/**
- * Extracts additional information from a weavable class and adds it to the
- * {@link WeavableClassInfo}.
- * 
- * @author Andreas Veithen
- */
-public interface WeavableClassInfoBuilderCollaborator extends ClassVisitor {
-    void process(ClassRealm realm, WeavableClassInfo classInfo);
+public interface Extensible {
+    <T> T get(Class<T> key);
 }

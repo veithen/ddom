@@ -94,7 +94,7 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
                 collaborators.add(collaborator);
             }
         }
-        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(this, classDefinitionSource, collaborators);
+        WeavableClassInfoBuilder builder = new WeavableClassInfoBuilder(classDefinitionSource, collaborators);
         ClassVisitorTee tee = new ClassVisitorTee(builder);
         tee.addVisitors(collaborators);
         classDefinitionSource.accept(tee);
@@ -120,7 +120,7 @@ public class Reactor extends PropertySupport implements ClassRealm, WeavableClas
         } else {
             WeavableClassInfoBuilder builder = weavableClassInfoBuilders.get(className);
             if (builder != null) {
-                WeavableClassInfo weavableClassInfo = builder.build();
+                WeavableClassInfo weavableClassInfo = builder.build(this);
                 weavableClassInfoBuilders.remove(className);
                 weavableClasses.add(weavableClassInfo);
                 classInfo = weavableClassInfo;
