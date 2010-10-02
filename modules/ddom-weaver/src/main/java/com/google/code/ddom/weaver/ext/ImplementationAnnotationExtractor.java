@@ -31,12 +31,12 @@ import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 
 class ImplementationAnnotationExtractor extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
     private final Reactor reactor;
-    private final ImplementationMap implementationMap;
+    private final ModelExtensionGenerator implementationMap;
     private boolean isImplementation;
     String factoryInterfaceName;
     private List<ConstructorInfo> constructors;
     
-    ImplementationAnnotationExtractor(Reactor reactor, ImplementationMap implementationMap) {
+    ImplementationAnnotationExtractor(Reactor reactor, ModelExtensionGenerator implementationMap) {
         this.reactor = reactor;
         this.implementationMap = implementationMap;
     }

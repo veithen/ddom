@@ -41,7 +41,7 @@ class ModelExtension {
     }
     
     public void resolve(Reactor reactor) {
-        implementations = reactor.get(ImplementationMap.class).getImplementations(rootInterface);
+        implementations = reactor.get(ModelExtensionGenerator.class).getImplementations(rootInterface);
         if (implementations.isEmpty()) {
             throw new ReactorException("No implementations found for root interface " + rootInterface);
         }

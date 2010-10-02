@@ -34,23 +34,23 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     
     @Override
     public void init(Reactor reactor) {
-        reactor.set(new ModelExtensionGenerator(reactor));
         List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>(this.requiredImplementations.size());
         for (ClassRef classRef : this.requiredImplementations) {
             requiredImplementations.add(reactor.getClassInfo(classRef));
         }
-        reactor.set(new ImplementationMap(requiredImplementations));
+        reactor.set(new ModelExtensionGenerator(reactor, requiredImplementations));
     }
 
     @Override
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
-        return new ImplementationAnnotationExtractor(reactor, reactor.get(ImplementationMap.class));
+        return new ImplementationAnnotationExtractor(reactor, reactor.get(ModelExtensionGenerator.class));
     }
 
     @Override
     public void resolve(Reactor reactor) {
-        reactor.get(ImplementationMap.class).validate();
-        reactor.get(ModelExtensionGenerator.class).resolve();
+        ModelExtensionGenerator generator = reactor.get(ModelExtensionGenerator.class);
+        generator.validate();
+        generator.resolve();
     }
 
     @Override
