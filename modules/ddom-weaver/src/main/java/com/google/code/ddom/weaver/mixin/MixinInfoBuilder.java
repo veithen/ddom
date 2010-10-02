@@ -35,14 +35,15 @@ import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.ErrorHandler;
 import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
+import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class MixinInfoBuilder extends AbstractClassVisitor {
     private static final Logger log = Logger.getLogger(MixinInfo.class.getName());
     
-    private final SourceInfoBuilder sourceInfoBuilder;
     private final ErrorHandler errorHandler;
+    private final List<MixinInfoBuilderCollaborator> collaborators;
     private String name;
     private final List<Type> targetTypes = new ArrayList<Type>();
     private final Set<String> contributedInterfaces = new HashSet<String>();
@@ -50,9 +51,9 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
     private final List<MethodNode> methods = new ArrayList<MethodNode>();
     private MethodNode init;
 
-    public MixinInfoBuilder(SourceInfoBuilder sourceInfoBuilder, ErrorHandler errorHandler) {
-        this.sourceInfoBuilder = sourceInfoBuilder;
+    public MixinInfoBuilder(ErrorHandler errorHandler, List<MixinInfoBuilderCollaborator> collaborators) {
         this.errorHandler = errorHandler;
+        this.collaborators = collaborators;
     }
 
     @Override
@@ -125,6 +126,11 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
         for (Type type : targetTypes) {
             targets.add(realm.getClassInfo(type.getClassName()));
         }
-        return new MixinInfo(name, targets, contributedInterfaces, init, fields, methods, sourceInfoBuilder.getSourceInfo());
+        Extensions extensions = new Extensions();
+        MixinInfo mixinInfo = new MixinInfo(name, targets, contributedInterfaces, init, fields, methods, extensions);
+        for (MixinInfoBuilderCollaborator collaborator : collaborators) {
+            collaborator.process(realm, mixinInfo, extensions);
+        }
+        return mixinInfo;
     }
 }

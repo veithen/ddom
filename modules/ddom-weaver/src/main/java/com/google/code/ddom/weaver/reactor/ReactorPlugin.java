@@ -15,11 +15,17 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
+import com.google.code.ddom.weaver.mixin.MixinInfoBuilderCollaborator;
+
 public abstract class ReactorPlugin {
     public void init(Reactor reactor, Extensions extensions) {
     }
     
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
+        return null;
+    }
+    
+    public MixinInfoBuilderCollaborator newMixinInfoBuilderCollaborator() {
         return null;
     }
     

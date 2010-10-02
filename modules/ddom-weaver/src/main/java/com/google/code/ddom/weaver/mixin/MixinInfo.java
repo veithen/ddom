@@ -22,27 +22,32 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
-import com.google.code.ddom.weaver.jsr45.SourceInfo;
+import com.google.code.ddom.weaver.reactor.Extensible;
+import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
-public class MixinInfo {
+public class MixinInfo implements Extensible {
     private final String name;
     private final List<ClassInfo> targets;
     private final Set<String> contributedInterfaces;
     private final MethodNode init;
     private final List<FieldNode> fields;
     private final List<MethodNode> methods;
-    private final SourceInfo sourceInfo;
+    private final Extensions extensions;
     
     public MixinInfo(String name, List<ClassInfo> targets, Set<String> contributedInterfaces,
-            MethodNode init, List<FieldNode> fields, List<MethodNode> methods, SourceInfo sourceInfo) {
+            MethodNode init, List<FieldNode> fields, List<MethodNode> methods, Extensions extensions) {
         this.name = name;
         this.targets = targets;
         this.contributedInterfaces = contributedInterfaces;
         this.init = init;
         this.fields = fields;
         this.methods = methods;
-        this.sourceInfo = sourceInfo;
+        this.extensions = extensions;
+    }
+
+    public <T> T get(Class<T> key) {
+        return extensions.get(key);
     }
 
     public String getName() {
@@ -67,10 +72,6 @@ public class MixinInfo {
 
     public InsnList getInitInstructions() {
         return init.instructions;
-    }
-
-    public SourceInfo getSourceInfo() {
-        return sourceInfo;
     }
 
     @Override

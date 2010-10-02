@@ -41,6 +41,7 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.google.code.ddom.weaver.asm.ErrorHandler;
+import com.google.code.ddom.weaver.jsr45.SourceInfo;
 import com.google.code.ddom.weaver.jsr45.SourceMapper;
 
 /**
@@ -164,7 +165,7 @@ public class MergeAdapter extends ClassAdapter {
                 MethodVisitor mv = cv.visitMethod(mn.access, mn.name, mn.desc, mn.signature, exceptions);
                 if (mv != null) {
                     mn.instructions.resetLabels();
-                    mv = sourceMapper.getMethodAdapter(mixin.getSourceInfo(), mv);
+                    mv = sourceMapper.getMethodAdapter(mixin.get(SourceInfo.class), mv);
                     mv = new RemappingMethodAdapter(mn.access, mn.desc, mv, remapper);
                     mn.accept(mv);
                 }

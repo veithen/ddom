@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.weaver.jsr45;
 
+import com.google.code.ddom.weaver.mixin.MixinInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
@@ -22,6 +23,11 @@ import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 public class JSR45Plugin extends ReactorPlugin {
     @Override
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
+        return new SourceInfoBuilder();
+    }
+
+    @Override
+    public MixinInfoBuilderCollaborator newMixinInfoBuilderCollaborator() {
         return new SourceInfoBuilder();
     }
 }

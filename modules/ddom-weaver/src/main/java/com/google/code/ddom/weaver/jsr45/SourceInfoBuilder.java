@@ -20,6 +20,8 @@ import org.objectweb.asm.MethodVisitor;
 
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.AbstractMethodVisitor;
+import com.google.code.ddom.weaver.mixin.MixinInfo;
+import com.google.code.ddom.weaver.mixin.MixinInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
@@ -29,7 +31,7 @@ import com.google.code.ddom.weaver.realm.ClassRealm;
  * Class visitor that extracts information about source code references. In particular, it
  * calculates the maximum line number.
  */
-public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator {
+public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator, MixinInfoBuilderCollaborator {
     private String name;
     private String source;
     private String debug;
@@ -64,12 +66,11 @@ public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableC
         sourceInfo = new SourceInfo(name.substring(0, name.lastIndexOf('/')+1) + source, maxLine);
     }
 
-    // TODO: this should eventually disappear
-    public SourceInfo getSourceInfo() {
-        return sourceInfo;
-    }
-
     public void process(ClassRealm realm, WeavableClassInfo classInfo, Extensions classInfoExtensions) {
         classInfoExtensions.set(sourceInfo);
+    }
+
+    public void process(ClassRealm realm, MixinInfo mixinInfo, Extensions mixinInfoExtensions) {
+        mixinInfoExtensions.set(sourceInfo);
     }
 }

@@ -37,11 +37,11 @@ import com.google.code.ddom.weaver.ClassDefinitionProcessorException;
 import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.ClassVisitorTee;
 import com.google.code.ddom.weaver.jsr45.SourceInfo;
-import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 import com.google.code.ddom.weaver.jsr45.SourceMapper;
 import com.google.code.ddom.weaver.mixin.MergeAdapter;
 import com.google.code.ddom.weaver.mixin.MixinInfo;
 import com.google.code.ddom.weaver.mixin.MixinInfoBuilder;
+import com.google.code.ddom.weaver.mixin.MixinInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
@@ -107,9 +107,17 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
     }
     
     public void loadMixin(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
-        SourceInfoBuilder sourceInfoBuilder = new SourceInfoBuilder();
-        MixinInfoBuilder builder = new MixinInfoBuilder(sourceInfoBuilder, SimpleErrorHandler.INSTANCE);
-        new ClassReader(classRef.getClassDefinition()).accept(new ClassVisitorTee(sourceInfoBuilder, builder), 0);
+        List<MixinInfoBuilderCollaborator> collaborators = new ArrayList<MixinInfoBuilderCollaborator>(plugins.size());
+        for (ReactorPlugin plugin : plugins) {
+            MixinInfoBuilderCollaborator collaborator = plugin.newMixinInfoBuilderCollaborator();
+            if (collaborator != null) {
+                collaborators.add(collaborator);
+            }
+        }
+        MixinInfoBuilder builder = new MixinInfoBuilder(SimpleErrorHandler.INSTANCE, collaborators);
+        ClassVisitorTee tee = new ClassVisitorTee(builder);
+        tee.addVisitors(collaborators);
+        new ClassReader(classRef.getClassDefinition()).accept(tee, 0);
         mixins.add(builder.build(this));
     }
     
@@ -207,7 +215,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
             SourceMapper sourceMapper = new SourceMapper();
             sourceMapper.addSourceInfo(weavableClass.get(SourceInfo.class));
             for (MixinInfo mixin : mixins) {
-                sourceMapper.addSourceInfo(mixin.getSourceInfo());
+                sourceMapper.addSourceInfo(mixin.get(SourceInfo.class));
             }
             ClassVisitor out = cw;
             if (dump) {
