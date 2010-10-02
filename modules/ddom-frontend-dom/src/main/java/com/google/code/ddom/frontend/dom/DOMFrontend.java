@@ -21,6 +21,7 @@ import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.EmptyClassCollection;
 import com.google.code.ddom.commons.cl.Module;
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.dom.support.APIObjectFactoryImpl;
@@ -34,6 +35,10 @@ public class DOMFrontend implements Frontend {
 
     public ClassCollection getModelExtensionInterfaces() {
         return EmptyClassCollection.INSTANCE;
+    }
+
+    public ModelExtension getModelExtension() {
+        return null;
     }
 
     public APIObjectFactory getAPIObjectFactory(DocumentFactory documentFactory) {

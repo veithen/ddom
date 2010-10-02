@@ -25,7 +25,7 @@ class ImplementationInfo {
     private final WeavableClassInfo implementation;
     private final ClassInfo factoryInterface;
     private final List<ConstructorInfo> constructors;
-    private final List<ModelExtension> modelExtensions = new ArrayList<ModelExtension>();
+    private final List<ModelExtensionInfo> modelExtensionInfos = new ArrayList<ModelExtensionInfo>();
 
     ImplementationInfo(WeavableClassInfo implementation, ClassInfo factoryInterface, List<ConstructorInfo> constructors) {
         this.implementation = implementation;
@@ -49,11 +49,11 @@ class ImplementationInfo {
         return implementation.getName() + "$$FactoryDelegate";
     }
 
-    List<ModelExtension> getModelExtensions() {
-        return modelExtensions;
+    List<ModelExtensionInfo> getModelExtensions() {
+        return modelExtensionInfos;
     }
     
-    void addModelExtension(ModelExtension modelExtension) {
-        modelExtensions.add(modelExtension);
+    void addModelExtension(ModelExtensionInfo modelExtensionInfo) {
+        modelExtensionInfos.add(modelExtensionInfo);
     }
 }

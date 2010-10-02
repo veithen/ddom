@@ -19,6 +19,7 @@ import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.ext.ModelExtension;
 
 // TODO: this API is a bit simplistic; we need at least to support the following features:
 //        - a frontend configuration (so that aspects can be selected dynamically)
@@ -28,6 +29,8 @@ public interface Frontend {
     ClassCollection getMixins(Map<String,Frontend> frontends);
     
     ClassCollection getModelExtensionInterfaces();
+    
+    ModelExtension getModelExtension();
     
     APIObjectFactory getAPIObjectFactory(DocumentFactory documentFactory);
 }

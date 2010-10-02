@@ -115,32 +115,32 @@ public class ModelExtensionGenerator {
         // We need to sort the model extensions so that defineClass doesn't complain (in case
         // a DynamicClassLoader is used).
 //        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
-        Map<ClassInfo,ModelExtension> modelExtensionMap = new HashMap<ClassInfo,ModelExtension>();
+        Map<ClassInfo,ModelExtensionInfo> modelExtensionMap = new HashMap<ClassInfo,ModelExtensionInfo>();
         for (ClassInfo iface : modelExtensionInterfaces) {
             ClassInfo rootInterface = iface;
             do {
                 // The number of super interface has already been validated by loadModelExtension
                 rootInterface = rootInterface.getInterfaces()[0];
             } while (isModelExtension(rootInterface));
-            ModelExtension modelExtension = modelExtensionMap.get(rootInterface);
-            if (modelExtension == null) {
+            ModelExtensionInfo modelExtensionInfo = modelExtensionMap.get(rootInterface);
+            if (modelExtensionInfo == null) {
                 List<WeavableClassInfo> implementations = getImplementations(rootInterface);
                 if (implementations.isEmpty()) {
                     throw new ReactorException("No implementations found for root interface " + rootInterface);
                 }
-                modelExtension = new ModelExtension(rootInterface, implementations);
-                modelExtensionMap.put(rootInterface, modelExtension);
+                modelExtensionInfo = new ModelExtensionInfo(rootInterface, implementations);
+                modelExtensionMap.put(rootInterface, modelExtensionInfo);
                 for (WeavableClassInfo implementation : implementations) {
-                    implementation.get(ImplementationInfo.class).addModelExtension(modelExtension);
+                    implementation.get(ImplementationInfo.class).addModelExtension(modelExtensionInfo);
                 }
             }
-            modelExtension.addExtensionInterface(iface);
+            modelExtensionInfo.addExtensionInterface(iface);
         }
         if (log.isLoggable(Level.FINE)) {
-            for (ModelExtension modelExtension : modelExtensionMap.values()) {
-                log.fine("Resolved model extension:\n  Root interface: " + modelExtension.getRootInterface()
-                        + "\n  Extension interfaces: " + modelExtension.getExtensionInterfaces()
-                        + "\n  Implementations: " + modelExtension.getImplementations());
+            for (ModelExtensionInfo modelExtensionInfo : modelExtensionMap.values()) {
+                log.fine("Resolved model extension:\n  Root interface: " + modelExtensionInfo.getRootInterface()
+                        + "\n  Extension interfaces: " + modelExtensionInfo.getExtensionInterfaces()
+                        + "\n  Implementations: " + modelExtensionInfo.getImplementations());
             }
         }
     }
@@ -150,10 +150,10 @@ public class ModelExtensionGenerator {
             ImplementationInfo implementationInfo = implementation.get(ImplementationInfo.class);
             injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(implementationInfo));
             injector.loadWeavableClass(new ModelExtensionFactoryImplementation(implementationInfo));
-            for (ModelExtension modelExtension : implementationInfo.getModelExtensions()) {
-                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), null)));
-                for (ClassInfo iface : modelExtension.getExtensionInterfaces()) {
-                    ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtension.getRootInterface(), iface);
+            for (ModelExtensionInfo modelExtensionInfo : implementationInfo.getModelExtensions()) {
+                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, new ModelExtensionClassInfo(implementation, modelExtensionInfo.getRootInterface(), null)));
+                for (ClassInfo iface : modelExtensionInfo.getExtensionInterfaces()) {
+                    ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtensionInfo.getRootInterface(), iface);
                     injector.loadWeavableClass(new ModelExtensionClass(modelExtensionClassInfo));
                     injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, modelExtensionClassInfo));
                 }

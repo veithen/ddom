@@ -16,6 +16,7 @@
 package com.google.code.ddom.spi.model;
 
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.APIObjectFactory;
 
 /**
@@ -27,10 +28,12 @@ import com.google.code.ddom.frontend.APIObjectFactory;
 public class Model {
     private final DocumentFactory documentFactory;
     private final APIObjectFactory apiObjectFactory;
+    private final ModelExtension modelExtension;
     
-    public Model(DocumentFactory documentFactory, APIObjectFactory apiObjectFactory) {
+    public Model(DocumentFactory documentFactory, APIObjectFactory apiObjectFactory, ModelExtension modelExtension) {
         this.documentFactory = documentFactory;
         this.apiObjectFactory = apiObjectFactory;
+        this.modelExtension = modelExtension;
     }
 
     public DocumentFactory getDocumentFactory() {
@@ -39,5 +42,9 @@ public class Model {
 
     public APIObjectFactory getAPIObjectFactory() {
         return apiObjectFactory;
+    }
+
+    public ModelExtension getModelExtension() {
+        return modelExtension;
     }
 }

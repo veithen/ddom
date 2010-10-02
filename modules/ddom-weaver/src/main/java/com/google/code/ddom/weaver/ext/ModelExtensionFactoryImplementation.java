@@ -72,10 +72,10 @@ public class ModelExtensionFactoryImplementation extends GeneratedClass {
                 mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/util/HashMap", "<init>", "()V");
                 mv.visitFieldInsn(Opcodes.PUTFIELD, name, "delegates", "Ljava/util/Map;");
                 // Populate delegates map
-                for (ModelExtension modelExtension : implementationInfo.getModelExtensions()) {
-                    for (ClassInfo extensionInterfaces : modelExtension.getExtensionInterfaces()) {
+                for (ModelExtensionInfo modelExtensionInfo : implementationInfo.getModelExtensions()) {
+                    for (ClassInfo extensionInterfaces : modelExtensionInfo.getExtensionInterfaces()) {
                         // TODO: this is stupid; we should not recreate the info object here
-                        ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementationInfo.getImplementation(), modelExtension.getRootInterface(), extensionInterfaces);
+                        ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementationInfo.getImplementation(), modelExtensionInfo.getRootInterface(), extensionInterfaces);
                         String factoryDelegateImplName = Util.classNameToInternalName(modelExtensionClassInfo.getFactoryDelegateImplementationClassName());
                         mv.visitVarInsn(Opcodes.ALOAD, 0);
                         mv.visitFieldInsn(Opcodes.GETFIELD, name, "delegates", "Ljava/util/Map;");

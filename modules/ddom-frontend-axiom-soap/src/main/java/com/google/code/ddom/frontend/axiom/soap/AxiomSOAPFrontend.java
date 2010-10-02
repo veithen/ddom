@@ -19,6 +19,7 @@ import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.Module;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.axiom.AxiomFrontend;
 import com.google.code.ddom.spi.Provider;
@@ -34,5 +35,10 @@ public class AxiomSOAPFrontend extends AxiomFrontend {
     @Override
     public ClassCollection getModelExtensionInterfaces() {
         return Module.forClass(AxiomSOAPFrontend.class).getPackage("com.google.code.ddom.frontend.axiom.soap.ext");
+    }
+
+    @Override
+    public ModelExtension getModelExtension() {
+        return new AxiomSOAPModelExtension();
     }
 }

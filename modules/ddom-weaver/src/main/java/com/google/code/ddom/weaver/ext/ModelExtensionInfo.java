@@ -21,13 +21,13 @@ import java.util.List;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 
-class ModelExtension {
+class ModelExtensionInfo {
     private final ClassInfo rootInterface;
     private final List<ClassInfo> extensionInterfaces = new ArrayList<ClassInfo>();
     // TODO: we should actually store a list of ImplementationInfos here
     private final List<WeavableClassInfo> implementations;
     
-    ModelExtension(ClassInfo rootInterface, List<WeavableClassInfo> implementations) {
+    ModelExtensionInfo(ClassInfo rootInterface, List<WeavableClassInfo> implementations) {
         this.rootInterface = rootInterface;
         this.implementations = implementations;
     }

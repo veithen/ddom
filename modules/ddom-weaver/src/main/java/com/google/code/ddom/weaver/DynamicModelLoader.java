@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.model.ModelDefinition;
@@ -51,12 +52,17 @@ public class DynamicModelLoader implements ModelLoader {
         
         String[] frontendIds = definition.getFrontends();
         Map<String,Frontend> frontends = new LinkedHashMap<String,Frontend>();
+        ModelExtension modelExtension = null;
         for (String frontendId : frontendIds) {
             Frontend frontend = frontendMap.get(frontendId);
             if (frontend == null) {
                 return null;
             }
             frontends.put(frontendId, frontend);
+            if (modelExtension == null) {
+                // TODO: we need to have a way to combine model extensions!
+                modelExtension = frontend.getModelExtension();
+            }
         }
         DocumentFactory documentFactory;
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
@@ -82,6 +88,6 @@ public class DynamicModelLoader implements ModelLoader {
                 break;
             }
         }
-        return new Model(documentFactory, apiObjectFactory);
+        return new Model(documentFactory, apiObjectFactory, modelExtension);
     }
 }
