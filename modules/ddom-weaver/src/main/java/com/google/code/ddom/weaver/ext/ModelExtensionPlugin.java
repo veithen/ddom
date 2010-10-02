@@ -15,18 +15,41 @@
  */
 package com.google.code.ddom.weaver.ext;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
+import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.reactor.WeavableClassInjector;
+import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class ModelExtensionPlugin extends ReactorPlugin {
+    private final List<ClassRef> requiredImplementations = new ArrayList<ClassRef>();
+
+    public void addRequiredImplementation(ClassRef iface) throws ClassNotFoundException {
+        requiredImplementations.add(iface);
+    }
+    
     @Override
     public void init(Reactor reactor) {
         reactor.set(new ModelExtensionGenerator(reactor));
+        List<ClassInfo> requiredImplementations = new ArrayList<ClassInfo>(this.requiredImplementations.size());
+        for (ClassRef classRef : this.requiredImplementations) {
+            requiredImplementations.add(reactor.getClassInfo(classRef));
+        }
+        reactor.set(new ImplementationMap(requiredImplementations));
+    }
+
+    @Override
+    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator(Reactor reactor) {
+        return new ImplementationAnnotationExtractor(reactor, reactor.get(ImplementationMap.class));
     }
 
     @Override
     public void resolve(Reactor reactor) {
+        reactor.get(ImplementationMap.class).validate();
         reactor.get(ModelExtensionGenerator.class).resolve();
     }
 

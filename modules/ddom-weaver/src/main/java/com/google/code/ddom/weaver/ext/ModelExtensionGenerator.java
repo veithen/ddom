@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.weaver.implementation.ImplementationMap;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfo;

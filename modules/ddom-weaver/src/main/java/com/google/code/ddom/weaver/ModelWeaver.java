@@ -20,21 +20,10 @@ import java.util.Map;
 
 import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.core.CoreCDATASection;
-import com.google.code.ddom.core.CoreComment;
-import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
-import com.google.code.ddom.core.CoreEntityReference;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.CoreNSUnawareAttribute;
-import com.google.code.ddom.core.CoreNSUnawareElement;
-import com.google.code.ddom.core.CoreNamespaceDeclaration;
-import com.google.code.ddom.core.CoreProcessingInstruction;
-import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.weaver.ext.ModelExtensionGenerator;
 import com.google.code.ddom.weaver.ext.ModelExtensionPlugin;
-import com.google.code.ddom.weaver.implementation.ImplementationPlugin;
 import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
@@ -47,20 +36,19 @@ public class ModelWeaver {
         this.processor = processor;
         reactor = new Reactor(classLoader);
         reactor.addPlugin(new JSR45Plugin());
-        ImplementationPlugin implementationPlugin = new ImplementationPlugin();
+        ModelExtensionPlugin modelExtensionPlugin = new ModelExtensionPlugin();
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreComment.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreEntityReference.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNamespaceDeclaration.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareAttribute.class));
-        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareElement.class));
+        modelExtensionPlugin.addRequiredImplementation(new ClassRef(CoreNSAwareElement.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareAttribute.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
-        reactor.addPlugin(implementationPlugin);
-        reactor.addPlugin(new ModelExtensionPlugin());
+        reactor.addPlugin(modelExtensionPlugin);
         try {
             for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
                 reactor.loadWeavableClass(classRef);

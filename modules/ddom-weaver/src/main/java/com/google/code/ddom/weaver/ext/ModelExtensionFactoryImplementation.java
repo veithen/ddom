@@ -22,7 +22,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.google.code.ddom.weaver.asm.Util;
-import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
 public class ModelExtensionFactoryImplementation extends GeneratedClass {

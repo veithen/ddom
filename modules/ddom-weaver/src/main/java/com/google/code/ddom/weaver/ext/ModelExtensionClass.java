@@ -22,8 +22,6 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 import com.google.code.ddom.weaver.asm.Util;
-import com.google.code.ddom.weaver.implementation.ConstructorInfo;
-import com.google.code.ddom.weaver.implementation.ImplementationInfo;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
 
 class ModelExtensionClass extends GeneratedClass {
