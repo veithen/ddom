@@ -23,7 +23,6 @@ import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.weaver.dump.DumpPlugin;
-import com.google.code.ddom.weaver.ext.ModelExtensionGenerator;
 import com.google.code.ddom.weaver.ext.ModelExtensionPlugin;
 import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
 import com.google.code.ddom.weaver.reactor.Reactor;
@@ -32,13 +31,16 @@ import com.google.code.ddom.weaver.verifier.VerifierPlugin;
 
 public class ModelWeaver {
     private final ClassDefinitionProcessor processor;
+    private final Backend backend;
     private final Reactor reactor;
+    private final ModelExtensionPlugin modelExtensionPlugin;
     
-    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException, ClassNotFoundException {
+    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
         this.processor = processor;
+        this.backend = backend;
         reactor = new Reactor(classLoader);
         reactor.addPlugin(new JSR45Plugin());
-        ModelExtensionPlugin modelExtensionPlugin = new ModelExtensionPlugin();
+        modelExtensionPlugin = new ModelExtensionPlugin();
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreComment.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
@@ -50,6 +52,16 @@ public class ModelWeaver {
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
+//        reactor.addPlugin(DumpPlugin.INSTANCE);
+        reactor.addPlugin(VerifierPlugin.INSTANCE);
+    }
+
+    public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
+        for (Frontend frontend : frontends.values()) {
+            for (ClassRef classRef : frontend.getModelExtensionInterfaces().getClassRefs()) {
+                modelExtensionPlugin.addModelExtensionInterface(classRef);
+            }
+        }
         reactor.addPlugin(modelExtensionPlugin);
         try {
             for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
@@ -58,19 +70,10 @@ public class ModelWeaver {
         } catch (ClassNotFoundException ex) {
             throw new ModelWeaverException(ex);
         }
-//        reactor.addPlugin(DumpPlugin.INSTANCE);
-        reactor.addPlugin(VerifierPlugin.INSTANCE);
-    }
-
-    public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
         try {
-            ModelExtensionGenerator modelExtensionGenerator = reactor.get(ModelExtensionGenerator.class);
             for (Frontend frontend : frontends.values()) {
                 for (ClassRef classRef : frontend.getMixins(Collections.unmodifiableMap(frontends)).getClassRefs()) {
                     reactor.loadMixin(classRef);
-                }
-                for (ClassRef classRef : frontend.getModelExtensionInterfaces().getClassRefs()) {
-                    modelExtensionGenerator.loadModelExtensionInterface(classRef);
                 }
             }
             reactor.generateModel(processor);

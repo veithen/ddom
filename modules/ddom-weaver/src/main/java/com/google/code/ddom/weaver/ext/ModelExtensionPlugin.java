@@ -28,9 +28,14 @@ import com.google.code.ddom.weaver.realm.ClassRealm;
 
 public class ModelExtensionPlugin extends ReactorPlugin {
     private final List<ClassRef> requiredImplementations = new ArrayList<ClassRef>();
+    private final List<ClassRef> modelExtensionInterfaces = new ArrayList<ClassRef>();
 
-    public void addRequiredImplementation(ClassRef iface) throws ClassNotFoundException {
+    public void addRequiredImplementation(ClassRef iface) {
         requiredImplementations.add(iface);
+    }
+    
+    public void addModelExtensionInterface(ClassRef iface) {
+        modelExtensionInterfaces.add(iface);
     }
     
     @Override
@@ -39,7 +44,11 @@ public class ModelExtensionPlugin extends ReactorPlugin {
         for (ClassRef classRef : this.requiredImplementations) {
             requiredImplementations.add(realm.getClassInfo(classRef));
         }
-        extensions.set(new ModelExtensionGenerator(realm, requiredImplementations));
+        List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>(this.modelExtensionInterfaces.size());
+        for (ClassRef classRef : this.modelExtensionInterfaces) {
+            modelExtensionInterfaces.add(realm.getClassInfo(classRef));
+        }
+        extensions.set(new ModelExtensionGenerator(requiredImplementations, modelExtensionInterfaces));
     }
 
     @Override
