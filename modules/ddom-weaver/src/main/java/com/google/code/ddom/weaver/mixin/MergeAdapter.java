@@ -105,29 +105,31 @@ public class MergeAdapter extends ClassAdapter {
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
         if (visitor != null) {
             visitor = new RemappingMethodAdapter(access, desc, visitor, remapper);
-            visitor = new MethodAdapter(visitor) {
-                private boolean inlined;
-                
-                @Override
-                public void visitMethodInsn(int opcode, String owner, String name, String desc) {
-                    super.visitMethodInsn(opcode, owner, name, desc);
-                    if (!inlined && opcode == Opcodes.INVOKESPECIAL) {
-                        Label end = new Label();
-                        for (MixinInfo mixin : mixins) {
-                            for (Iterator<?> it = mixin.getInitInstructions().iterator(); it.hasNext(); ) {
-                                AbstractInsnNode insn = (AbstractInsnNode)it.next();
-                                if (insn instanceof InsnNode && insn.getOpcode() == Opcodes.RETURN) {
-                                    mv.visitJumpInsn(Opcodes.GOTO, end);
-                                } else {
-                                    insn.accept(mv);
+            if (name.equals("<init>")) {
+                visitor = new MethodAdapter(visitor) {
+                    private boolean inlined;
+                    
+                    @Override
+                    public void visitMethodInsn(int opcode, String owner, String name, String desc) {
+                        super.visitMethodInsn(opcode, owner, name, desc);
+                        if (!inlined && opcode == Opcodes.INVOKESPECIAL) {
+                            Label end = new Label();
+                            for (MixinInfo mixin : mixins) {
+                                for (Iterator<?> it = mixin.getInitInstructions().iterator(); it.hasNext(); ) {
+                                    AbstractInsnNode insn = (AbstractInsnNode)it.next();
+                                    if (insn instanceof InsnNode && insn.getOpcode() == Opcodes.RETURN) {
+                                        mv.visitJumpInsn(Opcodes.GOTO, end);
+                                    } else {
+                                        insn.accept(mv);
+                                    }
                                 }
                             }
+                            mv.visitLabel(end);
+                            inlined = true;
                         }
-                        mv.visitLabel(end);
-                        inlined = true;
                     }
-                }
-            };
+                };
+            }
         }
         return visitor;
     }
