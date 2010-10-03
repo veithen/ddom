@@ -22,8 +22,10 @@ import javax.xml.soap.SOAPHeader;
 
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAPEnvelopeExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
@@ -48,9 +50,22 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         }
     }
 
+    public SOAPBody getBody() throws SOAPException {
+        try {
+            return coreGetFirstChildByType(SAAJSOAPBody.class);
+        } catch (CoreModelException ex) {
+            throw new SOAPException(ex); // TODO
+        }
+    }
+
     public SOAPBody addBody() throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        if (getBody() != null) {
+            throw new SOAPException("Can't add a body when one is already present");
+        } else {
+            SOAPBody body = (SOAPBody)coreGetDocument().coreCreateElement(SOAPBodyExtension.class, getNamespaceURI(), "Body", getPrefix());
+            appendChild(body);
+            return body;
+        }
     }
 
     public Name createName(String localName, String prefix, String uri) throws SOAPException {
@@ -58,11 +73,6 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
     }
 
     public Name createName(String arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public SOAPBody getBody() throws SOAPException {
         // TODO Auto-generated method stub
         return null;
     }

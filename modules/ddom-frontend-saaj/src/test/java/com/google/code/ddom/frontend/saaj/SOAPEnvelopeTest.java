@@ -52,6 +52,13 @@ public class SOAPEnvelopeTest {
         envelope.addHeader();
     }
     
+    @Validated @Test(expected=SOAPException.class)
+    public void testAddBodyTwice() throws Exception {
+        SOAPEnvelope envelope = saajUtil.createSOAPEnvelope();
+        envelope.addBody();
+        envelope.addBody();
+    }
+    
     @Validated @Test @Ignore
     public void testHeaderElements() throws Exception {
         SOAPEnvelope envelope = saajUtil.createSOAPEnvelope();

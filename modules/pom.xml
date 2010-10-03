@@ -44,6 +44,7 @@
         <module>ddom-impl</module>
         <module>ddom-jaxp</module>
         <module>ddom-model-dom</module>
+        <module>ddom-saaj-impl</module>
         <module>ddom-spi</module>
         <module>ddom-spring-ws</module>
         <module>ddom-stream</module>
