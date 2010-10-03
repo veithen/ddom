@@ -199,8 +199,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
     }
     
     private void weave(ClassDefinitionProcessor processor, WeavableClassInfo weavableClass, List<MixinInfo> mixins) throws ClassDefinitionProcessorException {
-        // TODO: get rid of the options
-        ClassWriter cw = new ReactorAwareClassWriter(this, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        ClassWriter cw = new ReactorAwareClassWriter(this, 0);
         ClassDefinitionSource classDefinitionSource = weavableClass.getClassDefinitionSource();
         boolean woven = !mixins.isEmpty();
         boolean generated = classDefinitionSource instanceof GeneratedClass;
