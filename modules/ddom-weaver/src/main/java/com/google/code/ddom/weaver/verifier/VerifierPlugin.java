@@ -27,8 +27,7 @@ public class VerifierPlugin extends ReactorPlugin {
     
     @Override
     public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean woven) {
-        // TODO: verifier currently reports error for woven classes!
-        if (generated /*|| woven*/) {
+        if (generated || woven) {
             return new CheckClassAdapter(outputClassVisitor);
         } else {
             return outputClassVisitor;
