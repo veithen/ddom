@@ -100,17 +100,6 @@ public class ModelExtensionGenerator {
         return implementations;
     }
 
-    private boolean isModelExtension(ClassInfo classInfo) {
-        // TODO: do we really need this, or is equals (identity) enough???
-        String className = classInfo.getName();
-        for (ClassInfo ci : modelExtensionInterfaces) {
-            if (className.equals(ci.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
     void resolve() {
         // We need to sort the model extensions so that defineClass doesn't complain (in case
         // a DynamicClassLoader is used).
@@ -121,7 +110,7 @@ public class ModelExtensionGenerator {
             do {
                 // The number of super interface has already been validated by loadModelExtension
                 rootInterface = rootInterface.getInterfaces()[0];
-            } while (isModelExtension(rootInterface));
+            } while (modelExtensionInterfaces.contains(rootInterface));
             ModelExtensionInfo modelExtensionInfo = modelExtensionMap.get(rootInterface);
             if (modelExtensionInfo == null) {
                 List<WeavableClassInfo> implementations = getImplementations(rootInterface);
