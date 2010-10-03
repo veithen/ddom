@@ -27,6 +27,7 @@ import com.google.code.ddom.weaver.ext.ModelExtensionPlugin;
 import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
+import com.google.code.ddom.weaver.verifier.VerifierPlugin;
 
 public class ModelWeaver {
     private final ClassDefinitionProcessor processor;
@@ -56,6 +57,7 @@ public class ModelWeaver {
         } catch (ClassNotFoundException ex) {
             throw new ModelWeaverException(ex);
         }
+        reactor.addPlugin(VerifierPlugin.INSTANCE);
     }
 
     public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {

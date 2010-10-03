@@ -202,22 +202,28 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
     }
     
     private void weave(ClassDefinitionProcessor processor, WeavableClassInfo weavableClass, List<MixinInfo> mixins) throws ClassDefinitionProcessorException {
-        if (mixins.isEmpty()) {
+        ClassWriter cw = new ReactorAwareClassWriter(this, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        ClassDefinitionSource classDefinitionSource = weavableClass.getClassDefinitionSource();
+        boolean woven = !mixins.isEmpty();
+        boolean generated = classDefinitionSource instanceof GeneratedClass;
+        ClassVisitor out = cw;
+        for (ReactorPlugin plugin : plugins) {
+            out = plugin.prepareForOutput(out, generated, woven);
+        }
+        if (out == cw && !woven) {
             if (log.isLoggable(Level.FINE)) {
                 log.fine("Copying unmodified class " + weavableClass);
             }
-            processor.processClassDefinition(weavableClass.getName(), weavableClass.getClassDefinitionSource().getClassDefinition(this));
+            processor.processClassDefinition(weavableClass.getName(), classDefinitionSource.getClassDefinition(this));
         } else {
             if (log.isLoggable(Level.FINE)) {
                 log.fine("Weaving " + weavableClass + "; mixins: " + mixins);
             }
-            ClassWriter cw = new ReactorAwareClassWriter(this, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
             SourceMapper sourceMapper = new SourceMapper();
             sourceMapper.addSourceInfo(weavableClass.get(SourceInfo.class));
             for (MixinInfo mixin : mixins) {
                 sourceMapper.addSourceInfo(mixin.get(SourceInfo.class));
             }
-            ClassVisitor out = cw;
             if (dump) {
                 out = new TraceClassVisitor(out, new PrintWriter(System.out));
             }

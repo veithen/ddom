@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
+import org.objectweb.asm.ClassVisitor;
+
 import com.google.code.ddom.weaver.mixin.MixinInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.realm.ClassRealm;
 
@@ -34,5 +36,22 @@ public abstract class ReactorPlugin {
     }
     
     public void generateWeavableClasses(ClassRealm realm, WeavableClassInjector weavableClassInjector) {
+    }
+    
+    /**
+     * Prepare classes for output. Implementations may override this method to add a
+     * {@link org.objectweb.asm.ClassAdapter} in front of the {@link ClassVisitor} that outputs the
+     * code to the {@link com.google.code.ddom.weaver.ClassDefinitionProcessor}.
+     * 
+     * @param outputClassVisitor
+     *            the class visitor that outputs the classes
+     * @param generated
+     *            specifies whether the submitted class has been generated
+     * @param woven
+     *            specifies whether any mixins have been applied to the submitted class
+     * @return a class visitor that wraps the class visitor passed as parameter
+     */
+    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean woven) {
+        return outputClassVisitor;
     }
 }
