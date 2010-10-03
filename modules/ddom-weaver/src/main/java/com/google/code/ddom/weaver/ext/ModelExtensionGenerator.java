@@ -151,7 +151,6 @@ public class ModelExtensionGenerator {
             injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(implementationInfo));
             injector.loadWeavableClass(new ModelExtensionFactoryImplementation(implementationInfo));
             for (ModelExtensionInfo modelExtensionInfo : implementationInfo.getModelExtensions()) {
-                injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, new ModelExtensionClassInfo(implementation, modelExtensionInfo.getRootInterface(), null)));
                 for (ClassInfo iface : modelExtensionInfo.getExtensionInterfaces()) {
                     ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtensionInfo.getRootInterface(), iface);
                     injector.loadWeavableClass(new ModelExtensionClass(modelExtensionClassInfo));

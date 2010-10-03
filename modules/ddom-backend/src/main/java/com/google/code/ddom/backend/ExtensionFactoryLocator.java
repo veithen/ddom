@@ -15,7 +15,12 @@
  */
 package com.google.code.ddom.backend;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ExtensionFactoryLocator {
     private ExtensionFactoryLocator() {}
@@ -25,9 +30,7 @@ public final class ExtensionFactoryLocator {
         try {
             implClass = factoryInterface.getClassLoader().loadClass(factoryInterface.getName() + "$$Impl");
         } catch (ClassNotFoundException ex) {
-            // TODO: here we should fall back to a dynamic proxy
-            return null;
-//            throw new IllegalArgumentException();
+            return createNullExtensionFactory(factoryInterface);
         }
         Field instanceField;
         try {
@@ -39,6 +42,23 @@ public final class ExtensionFactoryLocator {
             return factoryInterface.cast(instanceField.get(null));
         } catch (IllegalAccessException ex) {
             throw new IllegalArgumentException(instanceField + " is not accessible");
+        }
+    }
+    
+    private static <T> T createNullExtensionFactory(Class<T> factoryInterface) {
+        try {
+            Map<Method,Constructor<?>> constructorMap = new HashMap<Method,Constructor<?>>();
+            for (Method method : factoryInterface.getMethods()) {
+                Class<?> implementationClass = method.getReturnType();
+                Class<?>[] factoryMethodParameterTypes = method.getParameterTypes();
+                Class<?>[] constructorParameterTypes = new Class<?>[factoryMethodParameterTypes.length-1];
+                System.arraycopy(factoryMethodParameterTypes, 1, constructorParameterTypes, 0, factoryMethodParameterTypes.length-1);
+                constructorMap.put(method, implementationClass.getConstructor(constructorParameterTypes));
+            }
+            return factoryInterface.cast(Proxy.newProxyInstance(ExtensionFactoryLocator.class.getClassLoader(),
+                    new Class<?>[] { factoryInterface }, new NullExtensionFactoryInvocationHandler(constructorMap)));
+        } catch (NoSuchMethodException ex) {
+            throw new NoSuchMethodError(ex.getMessage());
         }
     }
 }

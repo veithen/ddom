@@ -117,17 +117,28 @@ public class ModelExtensionFactoryImplementation extends GeneratedClass {
                 mv.visitEnd();
             }
         }
+        String implementationName = Util.classNameToInternalName(implementationInfo.getImplementation().getName());
         for (ConstructorInfo constructor : implementationInfo.getConstructors()) {
-            Type returnType = Type.getObjectType(Util.classNameToInternalName(implementationInfo.getImplementation().getName()));
             Type[] constructorArgumentTypes = constructor.getArgumentTypes();
             Type[] argumentTypes = new Type[constructorArgumentTypes.length+1];
             argumentTypes[0] = Type.getObjectType("java/lang/Class");
             System.arraycopy(constructorArgumentTypes, 0, argumentTypes, 1, constructorArgumentTypes.length);
-            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "create", Type.getMethodDescriptor(returnType, argumentTypes), null, null);
+            MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "create", Type.getMethodDescriptor(Type.getObjectType(implementationName), argumentTypes), null, null);
             if (mv != null) {
                 mv.visitCode();
                 Label l0 = new Label();
                 mv.visitLabel(l0);
+                mv.visitVarInsn(Opcodes.ALOAD, 1);
+                Label l1 = new Label();
+                mv.visitJumpInsn(Opcodes.IFNONNULL, l1);
+                mv.visitTypeInsn(Opcodes.NEW, implementationName);
+                mv.visitInsn(Opcodes.DUP);
+                for (int i=0; i<constructorArgumentTypes.length; i++) {
+                    mv.visitVarInsn(constructorArgumentTypes[i].getOpcode(Opcodes.ILOAD), i+2);
+                }
+                mv.visitMethodInsn(Opcodes.INVOKESPECIAL, implementationName, "<init>", constructor.getDescriptor());
+                mv.visitInsn(Opcodes.ARETURN);
+                mv.visitLabel(l1);
                 mv.visitVarInsn(Opcodes.ALOAD, 0);
                 mv.visitVarInsn(Opcodes.ALOAD, 1);
                 mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, name, "getDelegate", getDelegateDesc);
@@ -136,14 +147,14 @@ public class ModelExtensionFactoryImplementation extends GeneratedClass {
                 }
                 mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, factoryDelegateInterfaceName, "create", constructor.getFactoryDelegateMethodDescriptor());
                 mv.visitInsn(Opcodes.ARETURN);
-                Label l1 = new Label();
-                mv.visitLabel(l1);
-                mv.visitLocalVariable("this", "L" + name + ";", null, l0, l1, 0);
-                mv.visitLocalVariable("extensionInterface", "Ljava/lang/Class;", null, l0, l1, 1);
+                Label l3 = new Label();
+                mv.visitLabel(l3);
+                mv.visitLocalVariable("this", "L" + name + ";", null, l0, l3, 0);
+                mv.visitLocalVariable("extensionInterface", "Ljava/lang/Class;", null, l0, l3, 1);
                 for (int i=0; i<constructorArgumentTypes.length; i++) {
-                    mv.visitLocalVariable("arg" + i, constructorArgumentTypes[i].getDescriptor(), null, l0, l1, i+2);
+                    mv.visitLocalVariable("arg" + i, constructorArgumentTypes[i].getDescriptor(), null, l0, l3, i+2);
                 }
-                mv.visitMaxs(argumentTypes.length, argumentTypes.length+1);
+                mv.visitMaxs(argumentTypes.length+1, argumentTypes.length+1);
                 mv.visitEnd();
             }
         }

@@ -64,6 +64,9 @@ public class DynamicModelLoader implements ModelLoader {
                 modelExtension = frontend.getModelExtension();
             }
         }
+        if (modelExtension == null) {
+            modelExtension = ModelExtension.NULL;
+        }
         DocumentFactory documentFactory;
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         try {

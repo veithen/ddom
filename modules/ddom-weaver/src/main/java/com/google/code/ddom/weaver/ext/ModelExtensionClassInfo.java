@@ -46,7 +46,7 @@ class ModelExtensionClassInfo {
     }
     
     String getClassName() {
-        return extensionInterface == null ? implementation.getName() : getModelExtensionClassName(extensionInterface);
+        return getModelExtensionClassName(extensionInterface);
     }
     
     String getFactoryDelegateImplementationClassName() {
