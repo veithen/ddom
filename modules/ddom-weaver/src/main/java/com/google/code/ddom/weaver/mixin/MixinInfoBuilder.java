@@ -34,7 +34,6 @@ import com.google.code.ddom.weaver.ModelWeaverException;
 import com.google.code.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.google.code.ddom.weaver.asm.AbstractClassVisitor;
 import com.google.code.ddom.weaver.asm.ErrorHandler;
-import com.google.code.ddom.weaver.jsr45.SourceInfoBuilder;
 import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.realm.ClassInfo;
 import com.google.code.ddom.weaver.realm.ClassRealm;
