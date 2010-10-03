@@ -92,7 +92,7 @@ public class Builder extends CallbackConsumer {
     }
     
     public final void processElement(String namespaceURI, String localName, String prefix) {
-        Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName, prefix);
+        Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
         appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
     }
     

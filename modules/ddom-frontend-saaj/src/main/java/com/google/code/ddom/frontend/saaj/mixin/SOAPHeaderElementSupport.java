@@ -24,42 +24,42 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 @Mixin(SOAPHeaderElementExtension.class)
 public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement {
     public String getActor() {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public boolean getMustUnderstand() {
-        // TODO Auto-generated method stub
-        return false;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public boolean getRelay() {
-        // TODO Auto-generated method stub
-        return false;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public String getRole() {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public void setActor(String arg0) {
-        // TODO Auto-generated method stub
-        
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public void setMustUnderstand(boolean arg0) {
-        // TODO Auto-generated method stub
-        
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public void setRelay(boolean arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public void setRole(String arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

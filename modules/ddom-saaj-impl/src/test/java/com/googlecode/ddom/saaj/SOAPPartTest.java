@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.saaj;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
 import javax.xml.soap.MessageFactory;
@@ -22,7 +23,6 @@ import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPPart;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
@@ -37,10 +37,11 @@ public class SOAPPartTest {
     @ValidatedTestResource(reference=SOAPMessageFactory1_1Impl.class, actual=SOAP11MessageFactory.class)
     private MessageFactory factory;
     
-    @Validated @Test @Ignore
+    @Validated @Test
     public void testCreateEnvelopeWithCreateElementNS() throws Exception {
         SOAPPart soapPart = factory.createMessage().getSOAPPart();
         Element element = soapPart.createElementNS(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "SOAP-ENV:Envelope");
+        assertTrue(element instanceof SOAPEnvelope);
         soapPart.appendChild(element);
         SOAPEnvelope envelope = soapPart.getEnvelope();
         assertNotNull(envelope);

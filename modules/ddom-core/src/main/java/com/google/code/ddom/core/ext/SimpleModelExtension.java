@@ -15,16 +15,15 @@
  */
 package com.google.code.ddom.core.ext;
 
-public interface ModelExtensionMapper {
-    ModelExtensionMapper NULL = new ModelExtensionMapper() {
-        public Class<?> startElement(String namespaceURI, String localName) {
-            return null;
-        }
-        
-        public void endElement() {
-        }
-    };
-    
-    Class<?> startElement(String namespaceURI, String localName);
-    void endElement();
+public abstract class SimpleModelExtension implements ModelExtension, ModelExtensionMapper {
+    public final Class<?> startElement(String namespaceURI, String localName) {
+        return mapElement(namespaceURI, localName);
+    }
+
+    public final void endElement() {
+    }
+
+    public final ModelExtensionMapper newMapper() {
+        return this;
+    }
 }

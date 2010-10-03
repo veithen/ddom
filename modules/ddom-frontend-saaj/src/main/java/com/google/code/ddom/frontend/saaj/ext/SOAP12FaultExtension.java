@@ -13,18 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.core.ext;
+package com.google.code.ddom.frontend.saaj.ext;
 
-public interface ModelExtensionMapper {
-    ModelExtensionMapper NULL = new ModelExtensionMapper() {
-        public Class<?> startElement(String namespaceURI, String localName) {
-            return null;
-        }
-        
-        public void endElement() {
-        }
-    };
-    
-    Class<?> startElement(String namespaceURI, String localName);
-    void endElement();
+public interface SOAP12FaultExtension extends SOAPFaultExtension {
+
 }

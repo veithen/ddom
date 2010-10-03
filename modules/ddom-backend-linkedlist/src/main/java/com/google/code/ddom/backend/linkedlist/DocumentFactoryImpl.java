@@ -17,9 +17,14 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.ext.ModelExtension;
 
 public class DocumentFactoryImpl implements DocumentFactory {
     public CoreDocument createDocument() {
-        return new Document(this);
+        return createDocument(ModelExtension.NULL);
+    }
+
+    public CoreDocument createDocument(ModelExtension modelExtension) {
+        return new Document(this, modelExtension);
     }
 }

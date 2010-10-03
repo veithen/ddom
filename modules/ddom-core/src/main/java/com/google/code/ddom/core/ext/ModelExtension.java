@@ -17,10 +17,16 @@ package com.google.code.ddom.core.ext;
 
 public interface ModelExtension {
     ModelExtension NULL = new ModelExtension() {
+        public Class<?> mapElement(String namespaceURI, String localName) {
+            return null;
+        }
+
         public ModelExtensionMapper newMapper() {
             return ModelExtensionMapper.NULL;
         }
     };
+    
+    Class<?> mapElement(String namespaceURI, String localName);
     
     ModelExtensionMapper newMapper();
 }

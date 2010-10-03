@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.core;
 
+import com.google.code.ddom.core.ext.ModelExtension;
+
 /**
  * Node factory. The frontend code MUST use this interface to create new nodes. To do so, it MUST
  * obtain an instance using {@link CoreDocument#getDocumentFactory()}. On the other hand, the frontend
@@ -30,4 +32,5 @@ package com.google.code.ddom.core;
  */
 public interface DocumentFactory {
     CoreDocument createDocument();
+    CoreDocument createDocument(ModelExtension modelExtension);
 }

@@ -18,5 +18,6 @@ package com.google.code.ddom.frontend.saaj.intf;
 import javax.xml.soap.SOAPEnvelope;
 
 public interface SAAJSOAPEnvelope extends SOAPEnvelope, SAAJSOAPElement {
-
+    Class<?> getSOAPHeaderExtension();
+    Class<?> getSOAPBodyExtension();
 }

@@ -49,7 +49,6 @@ public abstract class SOAPPartImpl extends SOAPPart {
     private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(MessageFactoryImpl.class.getClassLoader());
     
     private final SAAJDocument document;
-    private SOAPEnvelope envelope;
     
     public SOAPPartImpl() {
         document = (SAAJDocument)documentHelper.newDocument("saaj");
@@ -59,6 +58,7 @@ public abstract class SOAPPartImpl extends SOAPPart {
     
     @Override
     public SOAPEnvelope getEnvelope() throws SOAPException {
+        SOAPEnvelope envelope = (SOAPEnvelope)document.getDocumentElement();
         if (envelope == null) {
             envelope = createEnvelope(document);
             document.appendChild(envelope);

@@ -27,7 +27,7 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
     private String soapNamespaceURI;
     private boolean isSoap12;
     
-    public Class<?> startElement(String namespaceURI, String localName, String prefix) {
+    public Class<?> startElement(String namespaceURI, String localName) {
         switch (depth++) {
             case 0:
                 if (namespaceURI.equals(SOAP11_NAMESPACE_URI)) {

@@ -19,6 +19,11 @@ import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
 
 public class AxiomSOAPModelExtension implements ModelExtension {
+    public Class<?> mapElement(String namespaceURI, String localName) {
+        // Axiom only creates SOAP specific elements if explicitly requested
+        return null;
+    }
+
     public ModelExtensionMapper newMapper() {
         return new AxiomSOAPModelExtensionMapper();
     }

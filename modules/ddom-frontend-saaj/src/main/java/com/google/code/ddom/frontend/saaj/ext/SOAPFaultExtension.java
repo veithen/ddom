@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.intf;
+package com.google.code.ddom.frontend.saaj.ext;
 
-public interface SAAJSOAP12HeaderElement extends SAAJSOAPHeaderElement {
+import com.google.code.ddom.core.CoreNSAwareElement;
+
+public interface SOAPFaultExtension extends CoreNSAwareElement {
 
 }

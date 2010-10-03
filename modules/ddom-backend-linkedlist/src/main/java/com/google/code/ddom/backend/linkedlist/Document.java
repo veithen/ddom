@@ -46,6 +46,7 @@ public class Document extends ParentNode implements LLDocument {
     
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
     private final DocumentFactory documentFactory;
+    private final ModelExtension modelExtension;
     private final Symbols symbols;
     private List<Builder> builders = new LinkedList<Builder>();
     private int children;
@@ -55,9 +56,10 @@ public class Document extends ParentNode implements LLDocument {
     private boolean standalone;
     private String documentURI;
 
-    public Document(DocumentFactory documentFactory) {
+    public Document(DocumentFactory documentFactory, ModelExtension modelExtension) {
         super(true);
         this.documentFactory = documentFactory;
+        this.modelExtension = modelExtension;
         symbols = new SymbolHashTable();
     }
 
@@ -224,7 +226,7 @@ public class Document extends ParentNode implements LLDocument {
     }
     
     public final CoreNSAwareElement coreCreateElement(String namespaceURI, String localName, String prefix) {
-        return new NSAwareElement(this, namespaceURI, localName, prefix, true);
+        return nsAwareElementFactory.create(modelExtension.mapElement(namespaceURI, localName), this, namespaceURI, localName, prefix, true);
     }
     
     public final CoreNSAwareElement coreCreateElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) {

@@ -42,9 +42,10 @@ public class DocumentHelperImpl implements DocumentHelper {
         this.streamFactory = streamFactory;
     }
     
-    public Object newDocument(ModelDefinition model) {
+    public Object newDocument(ModelDefinition modelDefinition) {
         try {
-            return modelLoaderRegistry.getModel(model).getDocumentFactory().createDocument();
+            Model model = modelLoaderRegistry.getModel(modelDefinition);
+            return model.getDocumentFactory().createDocument(model.getModelExtension());
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
         }

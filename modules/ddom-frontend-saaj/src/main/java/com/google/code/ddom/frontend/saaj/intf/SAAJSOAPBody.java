@@ -18,5 +18,5 @@ package com.google.code.ddom.frontend.saaj.intf;
 import javax.xml.soap.SOAPBody;
 
 public interface SAAJSOAPBody extends SOAPBody, SAAJSOAPElement {
-
+    Class<?> getSOAPFaultExtension();
 }

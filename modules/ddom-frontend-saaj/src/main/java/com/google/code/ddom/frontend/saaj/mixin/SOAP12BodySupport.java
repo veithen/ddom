@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.core.ext;
+package com.google.code.ddom.frontend.saaj.mixin;
 
-public interface ModelExtensionMapper {
-    ModelExtensionMapper NULL = new ModelExtensionMapper() {
-        public Class<?> startElement(String namespaceURI, String localName) {
-            return null;
-        }
-        
-        public void endElement() {
-        }
-    };
-    
-    Class<?> startElement(String namespaceURI, String localName);
-    void endElement();
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
+import com.google.code.ddom.frontend.saaj.ext.SOAP12FaultExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
+
+@Mixin(SOAP12BodyExtension.class)
+public abstract class SOAP12BodySupport implements SAAJSOAPBody {
+    public final Class<?> getSOAPFaultExtension() {
+        return SOAP12FaultExtension.class;
+    }
 }

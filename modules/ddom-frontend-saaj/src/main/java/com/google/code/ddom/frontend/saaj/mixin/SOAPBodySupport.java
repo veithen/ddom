@@ -25,6 +25,8 @@ import javax.xml.soap.SOAPFault;
 
 import org.w3c.dom.Document;
 
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
@@ -32,59 +34,68 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 @Mixin(SOAPBodyExtension.class)
 public abstract class SOAPBodySupport implements SAAJSOAPBody {
     public SOAPBodyElement addBodyElement(Name arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPBodyElement addBodyElement(QName arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPBodyElement addDocument(Document arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
-    public SOAPFault addFault() throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+    public SOAPFault getFault() {
+        try {
+            CoreElement firstElement = coreGetFirstChildByType(CoreElement.class);
+            return firstElement instanceof SOAPFault ? (SOAPFault)firstElement : null;
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex); // TODO
+        }
+    }
+
+    public boolean hasFault() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFault addFault() throws SOAPException {
+        if (getFault() != null) {
+            throw new SOAPException(""); // TODO
+        } else {
+            SOAPFault fault = (SOAPFault)coreGetDocument().coreCreateElement(getSOAPFaultExtension(), getNamespaceURI(), "Fault", getPrefix());
+            appendChild(fault);
+            return fault;
+        }
     }
 
     public SOAPFault addFault(Name arg0, String arg1, Locale arg2)
             throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPFault addFault(Name arg0, String arg1) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPFault addFault(QName arg0, String arg1, Locale arg2)
             throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPFault addFault(QName arg0, String arg1) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public Document extractContentAsDocument() throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public SOAPFault getFault() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public boolean hasFault() {
-        // TODO Auto-generated method stub
-        return false;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

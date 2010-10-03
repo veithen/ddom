@@ -20,21 +20,24 @@ import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 
+import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAPEnvelopeExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
-import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
 
 @Mixin(SOAPEnvelopeExtension.class)
 public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
+    // TODO: this should not be necessary; it is because the weaver doesn't support abstract model extension classes
+    public Class<?> getSOAPBodyExtension() { throw new IllegalStateException(); }
+    public Class<?> getSOAPHeaderExtension() { throw new IllegalStateException(); }
+
     public SOAPHeader getHeader() throws SOAPException {
         try {
-            return coreGetFirstChildByType(SAAJSOAPHeader.class);
+            CoreElement firstElement = coreGetFirstChildByType(CoreElement.class);
+            return firstElement instanceof SOAPHeader ? (SOAPHeader)firstElement : null;
         } catch (CoreModelException ex) {
             throw new SOAPException(ex); // TODO
         }
@@ -44,7 +47,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         if (getHeader() != null) {
             throw new SOAPException("Can't add a header when one is already present");
         } else {
-            SOAPHeader header = (SOAPHeader)coreGetDocument().coreCreateElement(SOAPHeaderExtension.class, getNamespaceURI(), "Header", getPrefix());
+            SOAPHeader header = (SOAPHeader)coreGetDocument().coreCreateElement(getSOAPHeaderExtension(), getNamespaceURI(), "Header", getPrefix());
             insertBefore(header, getFirstChild());
             return header;
         }
@@ -62,7 +65,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         if (getBody() != null) {
             throw new SOAPException("Can't add a body when one is already present");
         } else {
-            SOAPBody body = (SOAPBody)coreGetDocument().coreCreateElement(SOAPBodyExtension.class, getNamespaceURI(), "Body", getPrefix());
+            SOAPBody body = (SOAPBody)coreGetDocument().coreCreateElement(getSOAPBodyExtension(), getNamespaceURI(), "Body", getPrefix());
             appendChild(body);
             return body;
         }
@@ -73,7 +76,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
     }
 
     public Name createName(String arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

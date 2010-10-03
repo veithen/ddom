@@ -20,6 +20,7 @@ import java.util.Map;
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.Module;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.dom.DOMFrontend;
 import com.google.code.ddom.spi.Provider;
@@ -37,5 +38,9 @@ public class SAAJFrontend extends DOMFrontend {
     @Override
     public ClassCollection getModelExtensionInterfaces() {
         return Module.forClass(SAAJFrontend.class).getPackage("com.google.code.ddom.frontend.saaj.ext");
+    }
+
+    public ModelExtension getModelExtension() {
+        return new SAAJModelExtension();
     }
 }

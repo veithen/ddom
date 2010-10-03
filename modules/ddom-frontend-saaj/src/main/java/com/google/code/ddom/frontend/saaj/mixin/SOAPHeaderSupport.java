@@ -34,56 +34,56 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
     }
 
     public SOAPHeaderElement addHeaderElement(QName arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPHeaderElement addNotUnderstoodHeaderElement(QName arg0)
             throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPHeaderElement addUpgradeHeaderElement(Iterator arg0)
             throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPHeaderElement addUpgradeHeaderElement(String arg0)
             throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPHeaderElement addUpgradeHeaderElement(String[] arg0)
             throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public Iterator examineAllHeaderElements() {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public Iterator examineHeaderElements(String arg0) {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public Iterator examineMustUnderstandHeaderElements(String arg0) {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public Iterator extractAllHeaderElements() {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public Iterator extractHeaderElements(String actor) {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

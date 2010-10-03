@@ -13,8 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.intf;
+package com.google.code.ddom.frontend.saaj.mixin;
 
-public interface SAAJSOAP11HeaderElement extends SAAJSOAPHeaderElement {
+import javax.xml.soap.SOAPConstants;
 
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.ext.SOAP12FaultExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
+
+@Mixin(SOAP12FaultExtension.class)
+public abstract class SOAP12FaultSupport implements SAAJSOAPFault {
+    public final String getFaultSubElementsNamespaceURI() {
+        return SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE;
+    }
+
+    public final String getFaultCodeElementLocalName() {
+        return "Code";
+    }
 }
