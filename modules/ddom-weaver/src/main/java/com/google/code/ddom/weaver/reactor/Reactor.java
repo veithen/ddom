@@ -48,9 +48,6 @@ import com.google.code.ddom.weaver.realm.ClassRealm;
 public class Reactor implements ClassRealm, WeavableClassInjector {
     private static final Logger log = Logger.getLogger(Reactor.class.getName());
     
-    // TODO: introduce system property for this
-    private static final boolean dump = false;
-    
     private static final EdgeRelation<ClassInfo> inheritanceRelation = new EdgeRelation<ClassInfo>() {
         public boolean isEdge(ClassInfo from, ClassInfo to) {
             if (to.isInterface()) {
@@ -223,9 +220,6 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
             sourceMapper.addSourceInfo(weavableClass.get(SourceInfo.class));
             for (MixinInfo mixin : mixins) {
                 sourceMapper.addSourceInfo(mixin.get(SourceInfo.class));
-            }
-            if (dump) {
-                out = new TraceClassVisitor(out, new PrintWriter(System.out));
             }
             weavableClass.getClassDefinitionSource().accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper, SimpleErrorHandler.INSTANCE)));
             processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());

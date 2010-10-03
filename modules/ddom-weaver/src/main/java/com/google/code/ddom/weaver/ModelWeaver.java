@@ -22,6 +22,7 @@ import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.frontend.Frontend;
+import com.google.code.ddom.weaver.dump.DumpPlugin;
 import com.google.code.ddom.weaver.ext.ModelExtensionGenerator;
 import com.google.code.ddom.weaver.ext.ModelExtensionPlugin;
 import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
@@ -57,6 +58,7 @@ public class ModelWeaver {
         } catch (ClassNotFoundException ex) {
             throw new ModelWeaverException(ex);
         }
+//        reactor.addPlugin(DumpPlugin.INSTANCE);
         reactor.addPlugin(VerifierPlugin.INSTANCE);
     }
 
