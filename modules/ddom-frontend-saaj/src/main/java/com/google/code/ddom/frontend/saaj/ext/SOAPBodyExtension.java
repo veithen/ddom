@@ -17,6 +17,6 @@ package com.google.code.ddom.frontend.saaj.ext;
 
 import com.google.code.ddom.core.CoreNSAwareElement;
 
-public interface SOAPEnvelope extends CoreNSAwareElement {
+public interface SOAPBodyExtension extends CoreNSAwareElement {
 
 }

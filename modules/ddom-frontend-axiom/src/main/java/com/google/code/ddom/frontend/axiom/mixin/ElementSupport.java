@@ -29,6 +29,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.IdentityMapper;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
@@ -89,8 +90,11 @@ public abstract class ElementSupport implements AxiomElement {
     }
     
     public OMElement getFirstElement() {
-        // TODO
-        throw new UnsupportedOperationException();
+        try {
+            return coreGetFirstChildByType(AxiomElement.class);
+        } catch (DeferredParsingException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public OMElement cloneOMElement() {

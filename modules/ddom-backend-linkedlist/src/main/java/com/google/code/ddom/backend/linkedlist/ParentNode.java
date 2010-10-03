@@ -308,4 +308,16 @@ public abstract class ParentNode extends Node implements LLParentNode {
     public final Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
         return new ElementsByLocalNameIterator(this, axis, localName);
     }
+
+    public <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredParsingException {
+        CoreChildNode child = coreGetFirstChild();
+        while (true) {
+            if (child == null) {
+                return null;
+            } else if (type.isInstance(child)) {
+                return type.cast(child);
+            }
+            child = child.coreGetNextSibling();
+        }
+    }
 }

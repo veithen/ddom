@@ -23,14 +23,14 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeaderElement;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAPHeader;
+import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderElementExtension;
+import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 
-@Mixin(SOAPHeader.class)
+@Mixin(SOAPHeaderExtension.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
-    public SOAPHeaderElement addHeaderElement(Name arg0) throws SOAPException {
-        // TODO Auto-generated method stub
-        return null;
+    public SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
+        return (SOAPHeaderElement)coreGetDocument().coreCreateElement(SOAPHeaderElementExtension.class, name.getURI(), name.getLocalName(), name.getPrefix());
     }
 
     public SOAPHeaderElement addHeaderElement(QName arg0) throws SOAPException {
@@ -82,7 +82,7 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
         return null;
     }
 
-    public Iterator extractHeaderElements(String arg0) {
+    public Iterator extractHeaderElements(String actor) {
         // TODO Auto-generated method stub
         return null;
     }

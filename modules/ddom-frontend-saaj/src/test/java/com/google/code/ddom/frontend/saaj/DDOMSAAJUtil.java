@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
+import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 
@@ -23,6 +24,7 @@ import org.w3c.dom.Document;
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.frontend.saaj.ext.SOAPEnvelopeExtension;
 
 public class DDOMSAAJUtil extends SAAJUtil {
     public static final DDOMSAAJUtil INSTANCE = new DDOMSAAJUtil();
@@ -39,6 +41,6 @@ public class DDOMSAAJUtil extends SAAJUtil {
 
     @Override
     public SOAPEnvelope createSOAPEnvelope() {
-        return (SOAPEnvelope)((CoreDocument)documentHelper.newDocument("saaj")).coreCreateElement(com.google.code.ddom.frontend.saaj.ext.SOAPEnvelope.class, "http://schemas.xmlsoap.org/soap/envelope/", "Envelope", "soap");
+        return (SOAPEnvelope)((CoreDocument)documentHelper.newDocument("saaj")).coreCreateElement(SOAPEnvelopeExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Envelope", "SOAP-ENV");
     }
 }

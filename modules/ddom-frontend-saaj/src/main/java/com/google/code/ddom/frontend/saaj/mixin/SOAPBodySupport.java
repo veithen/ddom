@@ -26,10 +26,10 @@ import javax.xml.soap.SOAPFault;
 import org.w3c.dom.Document;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAPBody;
+import com.google.code.ddom.frontend.saaj.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 
-@Mixin(SOAPBody.class)
+@Mixin(SOAPBodyExtension.class)
 public abstract class SOAPBodySupport implements SAAJSOAPBody {
     public SOAPBodyElement addBodyElement(Name arg0) throws SOAPException {
         // TODO Auto-generated method stub

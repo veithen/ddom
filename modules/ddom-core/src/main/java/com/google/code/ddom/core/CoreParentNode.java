@@ -98,4 +98,6 @@ public interface CoreParentNode extends CoreNode {
     Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
     Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI);
     Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName);
+    
+    <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredParsingException;
 }
