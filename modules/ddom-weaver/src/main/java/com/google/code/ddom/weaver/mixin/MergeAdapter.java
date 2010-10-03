@@ -18,7 +18,6 @@ package com.google.code.ddom.weaver.mixin;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,16 +27,13 @@ import java.util.logging.Logger;
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.commons.RemappingMethodAdapter;
 import org.objectweb.asm.commons.SimpleRemapper;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.google.code.ddom.weaver.asm.ErrorHandler;
@@ -60,6 +56,7 @@ public class MergeAdapter extends ClassAdapter {
     final List<MixinInfo> mixins;
     private final SourceMapper sourceMapper;
     private final ErrorHandler errorHandler;
+    String finalName;
     private Remapper remapper;
     
     /**
@@ -83,6 +80,7 @@ public class MergeAdapter extends ClassAdapter {
     
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        finalName = name;
         Set<String> mergedInterfaces = new HashSet<String>();
         mergedInterfaces.addAll(Arrays.asList(interfaces));
         for (MixinInfo mixin : mixins) {
@@ -113,18 +111,13 @@ public class MergeAdapter extends ClassAdapter {
                     public void visitMethodInsn(int opcode, String owner, String name, String desc) {
                         super.visitMethodInsn(opcode, owner, name, desc);
                         if (!inlined && opcode == Opcodes.INVOKESPECIAL) {
-                            Label end = new Label();
                             for (MixinInfo mixin : mixins) {
-                                for (Iterator<?> it = mixin.getInitInstructions().iterator(); it.hasNext(); ) {
-                                    AbstractInsnNode insn = (AbstractInsnNode)it.next();
-                                    if (insn instanceof InsnNode && insn.getOpcode() == Opcodes.RETURN) {
-                                        mv.visitJumpInsn(Opcodes.GOTO, end);
-                                    } else {
-                                        insn.accept(mv);
-                                    }
+                                MethodNode initMethod = mixin.getInitMethod();
+                                if (initMethod != null) {
+                                    super.visitVarInsn(Opcodes.ALOAD, 0);
+                                    super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, finalName, initMethod.name, initMethod.desc);
                                 }
                             }
-                            mv.visitLabel(end);
                             inlined = true;
                         }
                     }
@@ -142,7 +135,19 @@ public class MergeAdapter extends ClassAdapter {
         seenFields.add(name);
         return super.visitField(access, name, desc, signature, value);
     }
-
+    
+    private void mergeMixinMethod(MixinInfo mixin, MethodNode mn) {
+        String[] exceptions = new String[mn.exceptions.size()];
+        mn.exceptions.toArray(exceptions);
+        MethodVisitor mv = cv.visitMethod(mn.access, mn.name, mn.desc, mn.signature, exceptions);
+        if (mv != null) {
+            mn.instructions.resetLabels();
+            mv = sourceMapper.getMethodAdapter(mixin.get(SourceInfo.class), mv);
+            mv = new RemappingMethodAdapter(mn.access, mn.desc, mv, remapper);
+            mn.accept(mv);
+        }
+    }
+    
     @Override
     public void visitEnd() {
         for (MixinInfo mixin : mixins) {
@@ -155,6 +160,13 @@ public class MergeAdapter extends ClassAdapter {
                 }
                 field.accept(this);
             }
+            MethodNode initMethod = mixin.getInitMethod();
+            if (initMethod != null) {
+                if (log.isLoggable(Level.FINER)) {
+                    log.finer("Merging constructor code from mixin " + mixin.getName());
+                }
+                mergeMixinMethod(mixin, mixin.getInitMethod());
+            }
             for (MethodNode mn : mixin.getMethods()) {
                 if (log.isLoggable(Level.FINER)) {
                     log.finer("Merging method " + mn.name + mn.desc + " from mixin " + mixin.getName());
@@ -162,15 +174,7 @@ public class MergeAdapter extends ClassAdapter {
                 if (!seenMethods.add(mn.name + mn.desc)) {
                     errorHandler.handleError("Method " + mn.name + mn.desc + " of mixin " + mixin.getName() + " collides with a method declared in the base class or another mixin");
                 }
-                String[] exceptions = new String[mn.exceptions.size()];
-                mn.exceptions.toArray(exceptions);
-                MethodVisitor mv = cv.visitMethod(mn.access, mn.name, mn.desc, mn.signature, exceptions);
-                if (mv != null) {
-                    mn.instructions.resetLabels();
-                    mv = sourceMapper.getMethodAdapter(mixin.get(SourceInfo.class), mv);
-                    mv = new RemappingMethodAdapter(mn.access, mn.desc, mv, remapper);
-                    mn.accept(mv);
-                }
+                mergeMixinMethod(mixin, mn);
             }
         }
         super.visitEnd();

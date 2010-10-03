@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.google.code.ddom.weaver.reactor.Extensible;
@@ -30,17 +29,17 @@ public class MixinInfo implements Extensible {
     private final String name;
     private final List<ClassInfo> targets;
     private final Set<String> contributedInterfaces;
-    private final MethodNode init;
+    private final MethodNode initMethod;
     private final List<FieldNode> fields;
     private final List<MethodNode> methods;
     private final Extensions extensions;
     
     public MixinInfo(String name, List<ClassInfo> targets, Set<String> contributedInterfaces,
-            MethodNode init, List<FieldNode> fields, List<MethodNode> methods, Extensions extensions) {
+            MethodNode initMethod, List<FieldNode> fields, List<MethodNode> methods, Extensions extensions) {
         this.name = name;
         this.targets = targets;
         this.contributedInterfaces = contributedInterfaces;
-        this.init = init;
+        this.initMethod = initMethod;
         this.fields = fields;
         this.methods = methods;
         this.extensions = extensions;
@@ -69,9 +68,9 @@ public class MixinInfo implements Extensible {
     public Set<String> getContributedInterfaces() {
         return contributedInterfaces;
     }
-
-    public InsnList getInitInstructions() {
-        return init.instructions;
+    
+    public MethodNode getInitMethod() {
+        return initMethod;
     }
 
     @Override

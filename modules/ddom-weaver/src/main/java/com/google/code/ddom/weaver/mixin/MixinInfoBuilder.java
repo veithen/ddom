@@ -18,6 +18,7 @@ package com.google.code.ddom.weaver.mixin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -43,12 +45,12 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
     
     private final ErrorHandler errorHandler;
     private final List<MixinInfoBuilderCollaborator> collaborators;
-    private String name;
+    private String mixinName;
     private final List<Type> targetTypes = new ArrayList<Type>();
     private final Set<String> contributedInterfaces = new HashSet<String>();
     private final List<FieldNode> fields = new ArrayList<FieldNode>();
     private final List<MethodNode> methods = new ArrayList<MethodNode>();
-    private MethodNode init;
+    private MethodNode initMethod;
 
     public MixinInfoBuilder(ErrorHandler errorHandler, List<MixinInfoBuilderCollaborator> collaborators) {
         this.errorHandler = errorHandler;
@@ -57,7 +59,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        this.name = name;
+        this.mixinName = name;
         // Add all interfaces; we will remove the target interface later
         contributedInterfaces.addAll(Arrays.asList(interfaces));
     }
@@ -93,15 +95,15 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         if (name.equals("<init>")) {
             if (desc.equals("()V")) {
-                init = new MethodNode(access, name, desc, signature, exceptions);
-                return new ConstructorToMethodConverter(init);
+                initMethod = new MethodNode(Opcodes.ACC_PRIVATE, "init$$" + mixinName.replace('/', '$'), desc, signature, exceptions);
+                return new ConstructorToMethodConverter(initMethod);
             } else {
                 log.warning("Encountered non default constructor");
                 return null;
             }
         } else {
             if ((access & Opcodes.ACC_ABSTRACT) != 0) {
-                errorHandler.handleError("Mixin " + this.name + " declares an abstract method " + name + desc + ". This is disallowed; use an interface instead.");
+                errorHandler.handleError("Mixin " + mixinName + " declares an abstract method " + name + desc + ". This is disallowed; use an interface instead.");
             }
             MethodNode method = new MethodNode(access, name, desc, signature, exceptions);
             methods.add(method);
@@ -112,7 +114,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
     @Override
     public void visitEnd() {
         if (targetTypes.isEmpty()) {
-            errorHandler.handleError(name + " is missing a @Mixin annotation or the value of the @Mixin annotation is an empty array");
+            errorHandler.handleError(mixinName + " is missing a @Mixin annotation or the value of the @Mixin annotation is an empty array");
         }
     }
 
@@ -126,7 +128,15 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
             targets.add(realm.getClassInfo(type.getClassName()));
         }
         Extensions extensions = new Extensions();
-        MixinInfo mixinInfo = new MixinInfo(name, targets, contributedInterfaces, init, fields, methods, extensions);
+        boolean emptyInitMethod = true;
+        for (Iterator<?> it = initMethod.instructions.iterator(); it.hasNext(); ) {
+            int opcode = ((AbstractInsnNode)it.next()).getOpcode();
+            if (opcode != -1 && opcode != Opcodes.RETURN) {
+                emptyInitMethod = false;
+                break;
+            }
+        }
+        MixinInfo mixinInfo = new MixinInfo(mixinName, targets, contributedInterfaces, emptyInitMethod ? null : initMethod, fields, methods, extensions);
         for (MixinInfoBuilderCollaborator collaborator : collaborators) {
             collaborator.process(realm, mixinInfo, extensions);
         }

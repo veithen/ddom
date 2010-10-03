@@ -94,9 +94,7 @@ public class ConstructorToMethodConverter implements MethodVisitor {
     }
 
     public void visitLabel(Label label) {
-        if (keep) {
-            mv.visitLabel(label);
-        }
+        mv.visitLabel(label);
     }
 
     public void visitLdcInsn(Object cst) {
