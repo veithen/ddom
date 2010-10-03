@@ -19,6 +19,7 @@ import org.objectweb.asm.ClassWriter;
 
 public abstract class GeneratedClass implements ClassDefinitionSource {
     public final byte[] getClassDefinition(Reactor reactor) {
+        // TODO: get rid of the options
         ClassWriter cw = new ReactorAwareClassWriter(reactor, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         accept(cw);
         return cw.toByteArray();
