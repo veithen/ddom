@@ -115,7 +115,7 @@ public class MergeAdapter extends ClassAdapter {
                                 MethodNode initMethod = mixin.getInitMethod();
                                 if (initMethod != null) {
                                     super.visitVarInsn(Opcodes.ALOAD, 0);
-                                    super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, finalName, initMethod.name, initMethod.desc);
+                                    super.visitMethodInsn(Opcodes.INVOKESPECIAL, finalName, initMethod.name, initMethod.desc);
                                 }
                             }
                             inlined = true;
