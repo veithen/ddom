@@ -27,6 +27,7 @@ import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAPEnvelopeExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
+import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SOAPEnvelopeExtension.class)
 public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
@@ -34,7 +35,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         try {
             return (SOAPHeader)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 0, SequenceOperation.GET);
         } catch (CoreModelException ex) {
-            throw new SOAPException(ex); // TODO
+            throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
     
@@ -44,7 +45,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         } catch (ElementAlreadyExistsException ex) {
             throw new SOAPException("Can't add a header when one is already present");
         } catch (CoreModelException ex) {
-            throw new SOAPException(ex); // TODO
+            throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
 
@@ -52,7 +53,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         try {
             return (SOAPBody)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 1, SequenceOperation.GET);
         } catch (CoreModelException ex) {
-            throw new SOAPException(ex); // TODO
+            throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
 
@@ -62,7 +63,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         } catch (ElementAlreadyExistsException ex) {
             throw new SOAPException("Can't add a body when one is already present");
         } catch (CoreModelException ex) {
-            throw new SOAPException(ex); // TODO
+            throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
 
