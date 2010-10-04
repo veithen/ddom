@@ -21,9 +21,9 @@ import com.google.code.ddom.weaver.realm.ClassInfo;
 class ModelExtensionClassInfo {
     private final WeavableClassInfo implementation;
     private final ClassInfo rootInterface;
-    private final ClassInfo extensionInterface;
+    private final ModelExtensionInterfaceInfo extensionInterface;
     
-    ModelExtensionClassInfo(WeavableClassInfo implementation, ClassInfo rootInterface, ClassInfo extensionInterface) {
+    ModelExtensionClassInfo(WeavableClassInfo implementation, ClassInfo rootInterface, ModelExtensionInterfaceInfo extensionInterface) {
         this.implementation = implementation;
         this.rootInterface = rootInterface;
         this.extensionInterface = extensionInterface;
@@ -37,7 +37,7 @@ class ModelExtensionClassInfo {
         return rootInterface;
     }
 
-    ClassInfo getExtensionInterface() {
+    ModelExtensionInterfaceInfo getExtensionInterface() {
         return extensionInterface;
     }
 
@@ -46,7 +46,7 @@ class ModelExtensionClassInfo {
     }
     
     String getClassName() {
-        return getModelExtensionClassName(extensionInterface);
+        return getModelExtensionClassName(extensionInterface.getClassInfo());
     }
     
     String getFactoryDelegateImplementationClassName() {
@@ -54,7 +54,7 @@ class ModelExtensionClassInfo {
     }
     
     String getSuperClassName() {
-        ClassInfo superInterface = extensionInterface.getInterfaces()[0];
+        ClassInfo superInterface = extensionInterface.getClassInfo().getInterfaces()[0];
         return superInterface == rootInterface ? implementation.getName() : getModelExtensionClassName(superInterface);
     }
 }

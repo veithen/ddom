@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.weaver.reactor.Extensions;
+import com.google.code.ddom.weaver.reactor.NonWeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.reactor.WeavableClassInjector;
@@ -44,9 +45,9 @@ public class ModelExtensionPlugin extends ReactorPlugin {
         for (ClassRef classRef : this.requiredImplementations) {
             requiredImplementations.add(realm.getClassInfo(classRef));
         }
-        List<ClassInfo> modelExtensionInterfaces = new ArrayList<ClassInfo>(this.modelExtensionInterfaces.size());
+        List<ModelExtensionInterfaceInfo> modelExtensionInterfaces = new ArrayList<ModelExtensionInterfaceInfo>(this.modelExtensionInterfaces.size());
         for (ClassRef classRef : this.modelExtensionInterfaces) {
-            modelExtensionInterfaces.add(realm.getClassInfo(classRef));
+            modelExtensionInterfaces.add(realm.getClassInfo(classRef).get(ModelExtensionInterfaceInfo.class));
         }
         extensions.set(new ModelExtensionGenerator(requiredImplementations, modelExtensionInterfaces));
     }
@@ -54,6 +55,22 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     @Override
     public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
         return new ImplementationBuilder();
+    }
+
+    @Override
+    public void processNonWeavableClassInfo(NonWeavableClassInfo classInfo, Class<?> clazz, Extensions extensions) {
+        boolean isExtensionInterface = false;
+        for (ClassRef classRef : modelExtensionInterfaces) {
+            if (classRef.getClassName().equals(classInfo.getName())) {
+                isExtensionInterface = true;
+                break;
+            }
+        }
+        if (isExtensionInterface) {
+            extensions.set(new ModelExtensionInterfaceInfo(classInfo, false));
+        } else {
+            extensions.set(ModelExtensionInterfaceInfo.class, null);
+        }
     }
 
     @Override

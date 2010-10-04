@@ -33,10 +33,10 @@ class ModelExtensionGenerator {
     private static final Logger log = Logger.getLogger(ModelExtensionGenerator.class.getName());
     
     private final List<ClassInfo> requiredImplementations;
-    private final List<ClassInfo> modelExtensionInterfaces;
+    private final List<ModelExtensionInterfaceInfo> modelExtensionInterfaces;
     private final Map<ClassInfo,WeavableClassInfo> implementationMap = new HashMap<ClassInfo,WeavableClassInfo>();
 
-    ModelExtensionGenerator(List<ClassInfo> requiredImplementations, List<ClassInfo> modelExtensionInterfaces) {
+    ModelExtensionGenerator(List<ClassInfo> requiredImplementations, List<ModelExtensionInterfaceInfo> modelExtensionInterfaces) {
         this.requiredImplementations = requiredImplementations;
         this.modelExtensionInterfaces = modelExtensionInterfaces;
     }
@@ -94,12 +94,13 @@ class ModelExtensionGenerator {
         // a DynamicClassLoader is used).
 //        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
         Map<ClassInfo,ModelExtensionInfo> modelExtensionMap = new HashMap<ClassInfo,ModelExtensionInfo>();
-        for (ClassInfo iface : modelExtensionInterfaces) {
-            ClassInfo rootInterface = iface;
+        for (ModelExtensionInterfaceInfo iface : modelExtensionInterfaces) {
+            // TODO: this needs cleanup
+            ClassInfo rootInterface = iface.getClassInfo();
             do {
                 // The number of super interface has already been validated by loadModelExtension
                 rootInterface = rootInterface.getInterfaces()[0];
-            } while (modelExtensionInterfaces.contains(rootInterface));
+            } while (modelExtensionInterfaces.contains(rootInterface.get(ModelExtensionInterfaceInfo.class)));
             ModelExtensionInfo modelExtensionInfo = modelExtensionMap.get(rootInterface);
             if (modelExtensionInfo == null) {
                 List<WeavableClassInfo> implementations = getImplementations(rootInterface);
@@ -129,7 +130,7 @@ class ModelExtensionGenerator {
             injector.loadWeavableClass(new ModelExtensionFactoryDelegateInterface(implementationInfo));
             injector.loadWeavableClass(new ModelExtensionFactoryImplementation(implementationInfo));
             for (ModelExtensionInfo modelExtensionInfo : implementationInfo.getModelExtensions()) {
-                for (ClassInfo iface : modelExtensionInfo.getExtensionInterfaces()) {
+                for (ModelExtensionInterfaceInfo iface : modelExtensionInfo.getExtensionInterfaces()) {
                     ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtensionInfo.getRootInterface(), iface);
                     injector.loadWeavableClass(new ModelExtensionClass(modelExtensionClassInfo));
                     injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, modelExtensionClassInfo));

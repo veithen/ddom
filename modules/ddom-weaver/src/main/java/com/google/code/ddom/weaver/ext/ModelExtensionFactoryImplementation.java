@@ -24,7 +24,6 @@ import org.objectweb.asm.Type;
 
 import com.google.code.ddom.weaver.asm.Util;
 import com.google.code.ddom.weaver.reactor.GeneratedClass;
-import com.google.code.ddom.weaver.realm.ClassInfo;
 
 public class ModelExtensionFactoryImplementation extends GeneratedClass {
     private final ImplementationInfo implementationInfo;
@@ -73,13 +72,13 @@ public class ModelExtensionFactoryImplementation extends GeneratedClass {
                 mv.visitFieldInsn(Opcodes.PUTFIELD, name, "delegates", "Ljava/util/Map;");
                 // Populate delegates map
                 for (ModelExtensionInfo modelExtensionInfo : implementationInfo.getModelExtensions()) {
-                    for (ClassInfo extensionInterface : modelExtensionInfo.getExtensionInterfaces()) {
+                    for (ModelExtensionInterfaceInfo extensionInterface : modelExtensionInfo.getExtensionInterfaces()) {
                         // TODO: this is stupid; we should not recreate the info object here
                         ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementationInfo.getImplementation(), modelExtensionInfo.getRootInterface(), extensionInterface);
                         String factoryDelegateImplName = Util.classNameToInternalName(modelExtensionClassInfo.getFactoryDelegateImplementationClassName());
                         mv.visitVarInsn(Opcodes.ALOAD, 0);
                         mv.visitFieldInsn(Opcodes.GETFIELD, name, "delegates", "Ljava/util/Map;");
-                        mv.visitLdcInsn(Type.getObjectType(Util.classNameToInternalName(modelExtensionClassInfo.getExtensionInterface().getName())));
+                        mv.visitLdcInsn(Type.getObjectType(Util.classNameToInternalName(modelExtensionClassInfo.getExtensionInterface().getClassInfo().getName())));
                         mv.visitTypeInsn(Opcodes.NEW, factoryDelegateImplName);
                         mv.visitInsn(Opcodes.DUP);
                         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, factoryDelegateImplName, "<init>", "()V");

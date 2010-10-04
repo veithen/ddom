@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.weaver.reactor;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,7 +26,6 @@ import java.util.logging.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.commons.dag.EdgeRelation;
@@ -80,8 +78,8 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
     }
 
     public void addPlugin(ReactorPlugin plugin) {
-        plugin.init(this, extensions);
         plugins.add(plugin);
+        plugin.init(this, extensions);
     }
     
     public void loadWeavableClass(ClassRef classRef) throws ClassNotFoundException {
@@ -147,9 +145,14 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
                 for (int i=0; i<interfaces.length; i++) {
                     interfaceInfos[i] = getClassInfo(new ClassRef(interfaces[i]));
                 }
-                classInfo = new NonWeavableClassInfo(className, clazz.isInterface(),
+                Extensions extensions = new Extensions();
+                NonWeavableClassInfo nonWeavableClassInfo = new NonWeavableClassInfo(className, clazz.isInterface(),
                         superclass == null ? null : getClassInfo(new ClassRef(clazz.getSuperclass())),
-                        interfaceInfos);
+                        interfaceInfos, extensions);
+                for (ReactorPlugin plugin : plugins) {
+                    plugin.processNonWeavableClassInfo(nonWeavableClassInfo, clazz, extensions);
+                }
+                classInfo = nonWeavableClassInfo;
             }
             classInfos.put(className, classInfo);
             return classInfo;

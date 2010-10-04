@@ -15,36 +15,45 @@
  */
 package com.google.code.ddom.weaver.realm;
 
-public class ClassInfo {
+import com.google.code.ddom.weaver.reactor.Extensible;
+import com.google.code.ddom.weaver.reactor.Extensions;
+
+public class ClassInfo implements Extensible {
     private final String name;
     private final boolean isInterface;
     private final ClassInfo superclass;
     private final ClassInfo[] interfaces;
+    private final Extensions extensions;
     
-    public ClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces) {
+    public ClassInfo(String name, boolean isInterface, ClassInfo superclass, ClassInfo[] interfaces, Extensions extensions) {
         this.name = name;
         this.isInterface = isInterface;
         this.superclass = superclass;
         this.interfaces = interfaces;
+        this.extensions = extensions;
     }
     
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public boolean isInterface() {
+    public final boolean isInterface() {
         return isInterface;
     }
 
-    public ClassInfo getSuperclass() {
+    public final ClassInfo getSuperclass() {
         return superclass;
     }
 
-    public ClassInfo[] getInterfaces() {
+    public final ClassInfo[] getInterfaces() {
         return interfaces;
     }
 
-    public boolean isAssignableFrom(ClassInfo classInfo) {
+    public final <T> T get(Class<T> key) {
+        return extensions.get(key);
+    }
+
+    public final boolean isAssignableFrom(ClassInfo classInfo) {
         if (classInfo == this) {
             return true;
         }
@@ -60,7 +69,7 @@ public class ClassInfo {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return name;
     }
 }

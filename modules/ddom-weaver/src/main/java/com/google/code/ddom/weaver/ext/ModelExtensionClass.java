@@ -41,7 +41,7 @@ class ModelExtensionClass extends GeneratedClass {
                 name,
                 null,
                 superName,
-                new String[] { Util.classNameToInternalName(info.getExtensionInterface().getName()) });
+                new String[] { Util.classNameToInternalName(info.getExtensionInterface().getClassInfo().getName()) });
         for (ConstructorInfo constructor : implementationInfo.getConstructors()) {
             MethodVisitor mv = classVisitor.visitMethod(Opcodes.ACC_PUBLIC, "<init>", constructor.getDescriptor(), constructor.getSignature(), constructor.getExceptions());
             if (mv != null) {

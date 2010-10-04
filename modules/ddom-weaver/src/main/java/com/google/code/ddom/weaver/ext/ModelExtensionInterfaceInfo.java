@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.reactor;
+package com.google.code.ddom.weaver.ext;
 
-import com.google.code.ddom.weaver.realm.ClassInfo;
+import com.google.code.ddom.weaver.reactor.NonWeavableClassInfo;
 
-public class NonWeavableClassInfo extends ClassInfo {
-    public NonWeavableClassInfo(String name, boolean isInterface, ClassInfo superclass,
-            ClassInfo[] interfaces, Extensions extensions) {
-        super(name, isInterface, superclass, interfaces, extensions);
+class ModelExtensionInterfaceInfo {
+    private final NonWeavableClassInfo classInfo;
+    private final boolean isAbstract;
+    
+    ModelExtensionInterfaceInfo(NonWeavableClassInfo classInfo, boolean isAbstract) {
+        this.classInfo = classInfo;
+        this.isAbstract = isAbstract;
+    }
+
+    NonWeavableClassInfo getClassInfo() {
+        return classInfo;
+    }
+
+    boolean isAbstract() {
+        return isAbstract;
     }
 }

@@ -23,7 +23,7 @@ import com.google.code.ddom.weaver.realm.ClassInfo;
 
 class ModelExtensionInfo {
     private final ClassInfo rootInterface;
-    private final List<ClassInfo> extensionInterfaces = new ArrayList<ClassInfo>();
+    private final List<ModelExtensionInterfaceInfo> extensionInterfaces = new ArrayList<ModelExtensionInterfaceInfo>();
     // TODO: we should actually store a list of ImplementationInfos here
     private final List<WeavableClassInfo> implementations;
     
@@ -32,8 +32,8 @@ class ModelExtensionInfo {
         this.implementations = implementations;
     }
     
-    void addExtensionInterface(ClassInfo classInfo) {
-        extensionInterfaces.add(classInfo);
+    void addExtensionInterface(ModelExtensionInterfaceInfo extensionInterface) {
+        extensionInterfaces.add(extensionInterface);
     }
     
     ClassInfo getRootInterface() {
@@ -44,7 +44,7 @@ class ModelExtensionInfo {
         return implementations;
     }
 
-    List<ClassInfo> getExtensionInterfaces() {
+    List<ModelExtensionInterfaceInfo> getExtensionInterfaces() {
         return extensionInterfaces;
     }
 }

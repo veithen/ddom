@@ -35,6 +35,9 @@ public abstract class ReactorPlugin {
     public void resolve(ClassRealm realm) {
     }
     
+    public void processNonWeavableClassInfo(NonWeavableClassInfo classInfo, Class<?> clazz, Extensions extensions) {
+    }
+    
     public void generateWeavableClasses(ClassRealm realm, WeavableClassInjector weavableClassInjector) {
     }
     
