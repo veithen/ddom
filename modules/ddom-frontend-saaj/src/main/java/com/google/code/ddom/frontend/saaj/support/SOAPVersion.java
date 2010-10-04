@@ -19,17 +19,21 @@ import javax.xml.soap.SOAPConstants;
 
 import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceBuilder;
+import com.google.code.ddom.frontend.saaj.ext.SOAP11BodyExtension;
+import com.google.code.ddom.frontend.saaj.ext.SOAP11HeaderExtension;
+import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
+import com.google.code.ddom.frontend.saaj.ext.SOAP12HeaderExtension;
 
 public class SOAPVersion {
     public static final SOAPVersion SOAP11 = new SOAPVersion(
             new SequenceBuilder()
-                .addItem(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Header")
-                .addItem(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body").build());
+                .addItem(SOAP11HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Header")
+                .addItem(SOAP11BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body").build());
     
     public static final SOAPVersion SOAP12 = new SOAPVersion(
             new SequenceBuilder()
-                .addItem(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Header")
-                .addItem(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Body").build());
+                .addItem(SOAP12HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Header")
+                .addItem(SOAP12BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Body").build());
     
     private final Sequence envelopeSequence;
     
