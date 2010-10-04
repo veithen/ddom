@@ -40,8 +40,8 @@ public class SOAPHeaderTest {
 
     @Validated @Test @Ignore
     public void testExtractHeaderElementsPartialConsumption() throws Exception {
-        SOAPEnvelope env = saajUtil.createSOAPEnvelope();
-        SOAPHeader header = saajUtil.createSOAPEnvelope().addHeader();
+        SOAPEnvelope env = saajUtil.createSOAP11Envelope();
+        SOAPHeader header = saajUtil.createSOAP11Envelope().addHeader();
         SOAPHeaderElement element1 = header.addHeaderElement(env.createName("test", "p", "urn:ns1"));
         element1.setActor("urn:my-actor");
         SOAPHeaderElement element2 = header.addHeaderElement(env.createName("test", "p", "urn:ns2"));

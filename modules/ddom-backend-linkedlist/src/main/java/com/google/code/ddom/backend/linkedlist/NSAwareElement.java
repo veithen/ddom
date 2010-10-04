@@ -92,7 +92,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         while (child != null) {
             if (child instanceof CoreNSAwareElement) {
                 CoreNSAwareElement element = (CoreNSAwareElement)child;
-                while (!matches(element, sequence.item(ptr))) {
+                while (!matches(element, sequence, ptr)) {
                     ptr++;
                     if (ptr == sequence.length()) {
                         throw new CoreModelException(); // TODO
@@ -136,10 +136,10 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         }
     }
     
-    private boolean matches(CoreNSAwareElement element, SequenceItem item) {
-        Class<?> extensionInterface = item.getExtensionInterface();
-        if (extensionInterface != null) {
-            return extensionInterface.isInstance(element);
+    private boolean matches(CoreNSAwareElement element, Sequence sequence, int index) {
+        SequenceItem item = sequence.item(index);
+        if (sequence.isMatchByInterface()) {
+            return item.getExtensionInterface().isInstance(element);
         } else {
             return ObjectUtils.equals(item.getLocalName(), element.coreGetLocalName())
                     && ObjectUtils.equals(item.getNamespaceURI(), element.coreGetNamespaceURI());

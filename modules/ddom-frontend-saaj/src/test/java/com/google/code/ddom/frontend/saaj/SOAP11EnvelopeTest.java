@@ -15,11 +15,10 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPConstants;
 
-public abstract class SAAJUtil {
-    public abstract SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix);
-    public abstract SOAPEnvelope createSOAP11Envelope();
-    public abstract SOAPEnvelope createSOAP12Envelope();
+public class SOAP11EnvelopeTest extends SOAPEnvelopeTest {
+    public SOAP11EnvelopeTest() {
+        super(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE);
+    }
 }

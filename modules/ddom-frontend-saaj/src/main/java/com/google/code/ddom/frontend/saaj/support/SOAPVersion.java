@@ -19,29 +19,49 @@ import javax.xml.soap.SOAPConstants;
 
 import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceBuilder;
+import com.google.code.ddom.frontend.saaj.ext.DetailExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAP11BodyExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAP11HeaderExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAP12HeaderExtension;
+import com.google.code.ddom.frontend.saaj.ext.SOAPFaultElementExtension;
 
-public class SOAPVersion {
+public final class SOAPVersion {
     public static final SOAPVersion SOAP11 = new SOAPVersion(
             new SequenceBuilder()
                 .addItem(SOAP11HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Header")
-                .addItem(SOAP11BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body").build());
+                .addItem(SOAP11BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body")
+                .enableMatchByInterface().build(),
+            new SequenceBuilder()
+                .addItem(SOAPFaultElementExtension.class, null, "faultcode")
+                .addItem(SOAPFaultElementExtension.class, null, "faultstring")
+                .addItem(SOAPFaultElementExtension.class, null, "faultactor")
+                .addItem(DetailExtension.class, null, "detail").build());
     
     public static final SOAPVersion SOAP12 = new SOAPVersion(
             new SequenceBuilder()
                 .addItem(SOAP12HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Header")
-                .addItem(SOAP12BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Body").build());
+                .addItem(SOAP12BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Body")
+                .enableMatchByInterface().build(),
+            new SequenceBuilder()
+                .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Code")
+                .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Reason")
+                .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
+                .addItem(DetailExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build());
     
     private final Sequence envelopeSequence;
+    private final Sequence faultSequence;
     
-    private SOAPVersion(Sequence envelopeSequence) {
+    private SOAPVersion(Sequence envelopeSequence, Sequence faultSequence) {
         this.envelopeSequence = envelopeSequence;
+        this.faultSequence = faultSequence;
     }
 
     public Sequence getEnvelopeSequence() {
         return envelopeSequence;
+    }
+
+    public Sequence getFaultSequence() {
+        return faultSequence;
     }
 }

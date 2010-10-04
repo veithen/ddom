@@ -20,6 +20,7 @@ import java.util.List;
 
 public class SequenceBuilder {
     private final List<SequenceItem> items = new ArrayList<SequenceItem>();
+    private boolean matchByInterface;
     
     public SequenceBuilder addItem(String namespaceURI, String localName) {
         items.add(new SequenceItem(namespaceURI, localName, null, false));
@@ -31,7 +32,13 @@ public class SequenceBuilder {
         return this;
     }
     
+    public SequenceBuilder enableMatchByInterface() {
+        matchByInterface = true;
+        return this;
+    }
+    
     public Sequence build() {
-        return new Sequence(items.toArray(new SequenceItem[items.size()]));
+        // TODO: if matchByInterface is true, we should validate that all items have an extensionInterface set
+        return new Sequence(items.toArray(new SequenceItem[items.size()]), matchByInterface);
     }
 }

@@ -17,9 +17,11 @@ package com.google.code.ddom.core;
 
 public class Sequence {
     private final SequenceItem[] items;
+    private final boolean matchByInterface;
     
-    Sequence(SequenceItem[] items) {
+    Sequence(SequenceItem[] items, boolean matchByInterface) {
         this.items = items;
+        this.matchByInterface = matchByInterface;
     }
 
     public int length() {
@@ -28,5 +30,9 @@ public class Sequence {
     
     public SequenceItem item(int i) {
         return items[i];
+    }
+
+    public boolean isMatchByInterface() {
+        return matchByInterface;
     }
 }

@@ -38,7 +38,12 @@ public class DDOMSAAJUtil extends SAAJUtil {
     }
 
     @Override
-    public SOAPEnvelope createSOAPEnvelope() {
-        return (SOAPEnvelope)((SAAJDocument)documentHelper.newDocument("saaj")).createSOAP11Envelope();
+    public SOAPEnvelope createSOAP11Envelope() {
+        return ((SAAJDocument)documentHelper.newDocument("saaj")).createSOAP11Envelope();
+    }
+    
+    @Override
+    public SOAPEnvelope createSOAP12Envelope() {
+        return ((SAAJDocument)documentHelper.newDocument("saaj")).createSOAP12Envelope();
     }
 }

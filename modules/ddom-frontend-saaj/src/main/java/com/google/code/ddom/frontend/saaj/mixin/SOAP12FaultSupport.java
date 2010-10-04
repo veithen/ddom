@@ -15,19 +15,14 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import javax.xml.soap.SOAPConstants;
-
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAP12FaultExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
+import com.google.code.ddom.frontend.saaj.support.SOAPVersion;
 
 @Mixin(SOAP12FaultExtension.class)
 public abstract class SOAP12FaultSupport implements SAAJSOAPFault {
-    public final String getFaultSubElementsNamespaceURI() {
-        return SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE;
-    }
-
-    public final String getFaultCodeElementLocalName() {
-        return "Code";
+    public SOAPVersion getSOAPVersion() {
+        return SOAPVersion.SOAP12;
     }
 }

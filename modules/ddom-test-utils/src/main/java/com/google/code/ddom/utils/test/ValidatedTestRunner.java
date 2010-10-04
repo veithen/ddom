@@ -121,14 +121,18 @@ public class ValidatedTestRunner extends JUnit4ClassRunner {
     @Override
     protected Object createTest() throws Exception {
         Object test = super.createTest();
-        for (Field field : test.getClass().getDeclaredFields()) {
-            ValidatedTestResource annotation = field.getAnnotation(ValidatedTestResource.class);
-            if (annotation != null) {
-                Class<?> clazz = isReferenceEnvironment ? annotation.reference() : annotation.actual();
-                field.setAccessible(true);
-                field.set(test, createInstance(clazz));
+        Class<?> testClazz = test.getClass();
+        do {
+            for (Field field : testClazz.getDeclaredFields()) {
+                ValidatedTestResource annotation = field.getAnnotation(ValidatedTestResource.class);
+                if (annotation != null) {
+                    Class<?> clazz = isReferenceEnvironment ? annotation.reference() : annotation.actual();
+                    field.setAccessible(true);
+                    field.set(test, createInstance(clazz));
+                }
             }
-        }
+            testClazz = testClazz.getSuperclass();
+        } while (!testClazz.equals(Object.class));
         return test;
     }
 }

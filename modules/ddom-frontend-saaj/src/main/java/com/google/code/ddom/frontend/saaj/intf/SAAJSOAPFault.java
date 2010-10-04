@@ -17,7 +17,6 @@ package com.google.code.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.SOAPFault;
 
-public interface SAAJSOAPFault extends SOAPFault, SAAJSOAPElement {
-    String getFaultSubElementsNamespaceURI();
-    String getFaultCodeElementLocalName();
+public interface SAAJSOAPFault extends SOAPFault, SAAJSOAPElement, HasSOAPVersion {
+    
 }

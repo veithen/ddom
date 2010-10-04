@@ -18,14 +18,11 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAP11FaultExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
+import com.google.code.ddom.frontend.saaj.support.SOAPVersion;
 
 @Mixin(SOAP11FaultExtension.class)
 public abstract class SOAP11FaultSupport implements SAAJSOAPFault {
-    public final String getFaultSubElementsNamespaceURI() {
-        return null;
-    }
-
-    public final String getFaultCodeElementLocalName() {
-        return "faultcode";
+    public SOAPVersion getSOAPVersion() {
+        return SOAPVersion.SOAP11;
     }
 }

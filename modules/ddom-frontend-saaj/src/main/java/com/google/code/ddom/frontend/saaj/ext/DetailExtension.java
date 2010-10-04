@@ -13,13 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj;
+package com.google.code.ddom.frontend.saaj.ext;
 
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
+public interface DetailExtension extends SOAPFaultElementExtension {
 
-public abstract class SAAJUtil {
-    public abstract SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix);
-    public abstract SOAPEnvelope createSOAP11Envelope();
-    public abstract SOAPEnvelope createSOAP12Envelope();
 }

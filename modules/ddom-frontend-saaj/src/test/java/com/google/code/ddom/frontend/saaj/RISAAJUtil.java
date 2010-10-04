@@ -16,6 +16,7 @@
 package com.google.code.ddom.frontend.saaj;
 
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -42,15 +43,24 @@ public class RISAAJUtil extends SAAJUtil {
         }
     }
     
-    @Override
-    public SOAPEnvelope createSOAPEnvelope() {
+    private SOAPEnvelope createSOAPEnvelope(String protocol) {
         try {
-            SOAPEnvelope envelope = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
+            SOAPEnvelope envelope = MessageFactory.newInstance(protocol).createMessage().getSOAPPart().getEnvelope();
             envelope.removeContents();
             return envelope;
         } catch (SOAPException ex) {
             Assert.fail(ex.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public SOAPEnvelope createSOAP11Envelope() {
+        return createSOAPEnvelope(SOAPConstants.SOAP_1_1_PROTOCOL);
+    }
+
+    @Override
+    public SOAPEnvelope createSOAP12Envelope() {
+        return createSOAPEnvelope(SOAPConstants.SOAP_1_2_PROTOCOL);
     }
 }

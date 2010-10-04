@@ -245,9 +245,8 @@ public abstract class SOAPPartImpl extends SOAPPart {
         throw new UnsupportedOperationException();
     }
 
-    public Node importNode(Node importedNode, boolean deep) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node importNode(Node importedNode, boolean deep) throws DOMException {
+        return document.importNode(importedNode, deep);
     }
 
     public void normalizeDocument() {

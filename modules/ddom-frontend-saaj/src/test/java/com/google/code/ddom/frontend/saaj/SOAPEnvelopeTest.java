@@ -27,41 +27,38 @@ import javax.xml.soap.SOAPHeaderElement;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
-import com.google.code.ddom.utils.test.ValidatedTestResource;
-import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(ValidatedTestRunner.class)
-public class SOAPEnvelopeTest {
-    @ValidatedTestResource(reference=RISAAJUtil.class, actual=DDOMSAAJUtil.class)
-    private SAAJUtil saajUtil;
-    
-    @Validated @Test
+public abstract class SOAPEnvelopeTest extends AbstractTestCase {
+    public SOAPEnvelopeTest(String soapVersion) {
+        super(soapVersion);
+    }
+
+    @Validated @Test @Ignore
     public void testName() {
-        SOAPEnvelope envelope = saajUtil.createSOAPEnvelope();
+        SOAPEnvelope envelope = createSOAPEnvelope();
         assertEquals("http://schemas.xmlsoap.org/soap/envelope/", envelope.getNamespaceURI());
         assertEquals("Envelope", envelope.getLocalName());
     }
     
     @Validated @Test(expected=SOAPException.class)
     public void testAddHeaderTwice() throws Exception {
-        SOAPEnvelope envelope = saajUtil.createSOAPEnvelope();
+        SOAPEnvelope envelope = createSOAPEnvelope();
         envelope.addHeader();
         envelope.addHeader();
     }
     
     @Validated @Test(expected=SOAPException.class)
     public void testAddBodyTwice() throws Exception {
-        SOAPEnvelope envelope = saajUtil.createSOAPEnvelope();
+        SOAPEnvelope envelope = createSOAPEnvelope();
         envelope.addBody();
         envelope.addBody();
     }
     
     @Validated @Test @Ignore
     public void testHeaderElements() throws Exception {
-        SOAPEnvelope envelope = saajUtil.createSOAPEnvelope();
+        SOAPEnvelope envelope = createSOAPEnvelope();
         SOAPHeader header = envelope.addHeader();
 
         SOAPHeaderElement headerEle = header.addHeaderElement(envelope.createName("foo1",
