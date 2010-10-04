@@ -27,21 +27,28 @@ import javax.xml.soap.SOAPHeaderElement;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
-import com.google.code.ddom.utils.test.ValidatedTestResource;
-import com.google.code.ddom.utils.test.ValidatedTestRunner;
 
-@RunWith(ValidatedTestRunner.class)
-public class SOAPHeaderTest {
-    @ValidatedTestResource(reference=RISAAJUtil.class, actual=DDOMSAAJUtil.class)
-    private SAAJUtil saajUtil;
+public abstract class SOAPHeaderTest extends AbstractTestCase {
+    public SOAPHeaderTest(String soapVersion) {
+        super(soapVersion);
+    }
 
-    @Validated @Test @Ignore
+    @Validated @Test
+    public void getChildElementsReification() {
+        SOAPHeader header = createEmptySOAPHeader();
+        header.appendChild(header.getOwnerDocument().createElementNS("urn:test", "p:test"));
+        Iterator<?> it = header.getChildElements();
+        assertTrue(it.hasNext());
+        Object child = it.next();
+        assertTrue(child instanceof SOAPHeaderElement);
+    }
+    
+    @Validated @Test @Ignore // TODO
     public void testExtractHeaderElementsPartialConsumption() throws Exception {
-        SOAPEnvelope env = saajUtil.createSOAP11Envelope();
-        SOAPHeader header = saajUtil.createSOAP11Envelope().addHeader();
+        SOAPEnvelope env = createSOAPEnvelope();
+        SOAPHeader header = env.addHeader();
         SOAPHeaderElement element1 = header.addHeaderElement(env.createName("test", "p", "urn:ns1"));
         element1.setActor("urn:my-actor");
         SOAPHeaderElement element2 = header.addHeaderElement(env.createName("test", "p", "urn:ns2"));

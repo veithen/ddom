@@ -22,6 +22,7 @@ import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterat
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
 import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.ChildIterator;
 import com.google.code.ddom.core.ChildTypeNotAllowedException;
 import com.google.code.ddom.core.CoreCharacterData;
 import com.google.code.ddom.core.CoreChildNode;
@@ -293,19 +294,19 @@ public abstract class ParentNode extends Node implements LLParentNode {
         merge(newChildren, null, false);
     }
 
-    public final <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
+    public final <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
         return new ChildrenByTypeIterator<T>(this, axis, type);
     }
 
-    public final Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName) {
+    public final ChildIterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName) {
         return new ElementsByNameIterator(this, axis, namespaceURI, localName);
     }
 
-    public final Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
+    public final ChildIterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
         return new ElementsByNamespaceIterator(this, axis, namespaceURI);
     }
 
-    public final Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
+    public final ChildIterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
         return new ElementsByLocalNameIterator(this, axis, localName);
     }
 

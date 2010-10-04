@@ -18,16 +18,20 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.Detail;
 import javax.xml.soap.DetailEntry;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPException;
 
+import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.ext.DetailEntryExtension;
 import com.google.code.ddom.frontend.saaj.ext.DetailExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJDetail;
+import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
 
 @Mixin(DetailExtension.class)
-public abstract class DetailSupport implements Detail {
+public abstract class DetailSupport implements SAAJDetail {
     public DetailEntry addDetailEntry(Name arg0) throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
@@ -38,8 +42,7 @@ public abstract class DetailSupport implements Detail {
         throw new UnsupportedOperationException();
     }
 
-    public Iterator getDetailEntries() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public Iterator<DetailEntry> getDetailEntries() {
+        return new ReifyingIterator<DetailEntry>(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class), DetailEntryExtension.class, DetailEntry.class);
     }
 }

@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.intf;
+package com.google.code.ddom.core;
 
-import javax.xml.soap.SOAPElement;
+import java.util.Iterator;
 
-import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
-
-public interface SAAJSOAPElement extends SOAPElement, DOMNSAwareElement, SAAJNode {
-    Class<?> getChildExtensionInterface();
-    Class<?> getChildType();
+public interface ChildIterator<T extends CoreChildNode> extends Iterator<T> {
+    void replace(CoreChildNode newNode) throws CoreModelException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.intf;
+package com.google.code.ddom.frontend.saaj.mixin;
 
-import javax.xml.soap.SOAPElement;
+import javax.xml.soap.DetailEntry;
 
-import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.ext.DetailEntryExtension;
 
-public interface SAAJSOAPElement extends SOAPElement, DOMNSAwareElement, SAAJNode {
-    Class<?> getChildExtensionInterface();
-    Class<?> getChildType();
+@Mixin(DetailEntryExtension.class)
+public abstract class DetailEntrySupport implements DetailEntry {
+
 }

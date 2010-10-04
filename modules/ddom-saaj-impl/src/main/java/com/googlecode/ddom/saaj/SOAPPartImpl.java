@@ -151,9 +151,8 @@ public abstract class SOAPPartImpl extends SOAPPart {
         return document.createComment(data);
     }
 
-    public DocumentFragment createDocumentFragment() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final DocumentFragment createDocumentFragment() {
+        return document.createDocumentFragment();
     }
 
     public Element createElement(String tagName) throws DOMException {
@@ -314,9 +313,8 @@ public abstract class SOAPPartImpl extends SOAPPart {
         throw new UnsupportedOperationException();
     }
 
-    public Node getFirstChild() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node getFirstChild() {
+        return document.getFirstChild();
     }
 
     public Node getLastChild() {

@@ -23,11 +23,14 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
 import com.google.code.ddom.core.AttributeMatcher;
+import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.ChildIterator;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.IdentityMapper;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
+import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class SOAPElementSupport implements SAAJSOAPElement {
@@ -159,9 +162,25 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public Iterator getChildElements() {
-        // TODO
-        throw new UnsupportedOperationException();
+    // May be overridden by other mixins!
+    public Class<?> getChildExtensionInterface() {
+        return null;
+    }
+
+    // May be overridden by other mixins!
+    public Class<?> getChildType() {
+        return SOAPElement.class;
+    }
+
+    public final Iterator getChildElements() {
+        Class<?> extensionInterface = getChildExtensionInterface();
+        ChildIterator<CoreNSAwareElement> iterator = coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class);
+        if (extensionInterface == null) {
+            // The iterator actually returns SOAPElements
+            return iterator;
+        } else {
+            return new ReifyingIterator(iterator, extensionInterface, getChildType());
+        }
     }
 
     public Iterator getChildElements(Name name) {

@@ -15,123 +15,132 @@
  */
 package com.googlecode.ddom.saaj;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.Iterator;
-import java.util.List;
 
+import javax.activation.DataHandler;
 import javax.xml.soap.AttachmentPart;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
 
-public class SOAPMessageImpl extends SOAPMessage {
-    private final SOAPPartImpl soapPart;
-    private final List<AttachmentPartImpl> attachments = new ArrayList<AttachmentPartImpl>();
-    
-    public SOAPMessageImpl(SOAPPartImpl soapPart) {
-        this.soapPart = soapPart;
-    }
+public class AttachmentPartImpl extends AttachmentPart {
 
     @Override
-    public SOAPHeader getSOAPHeader() throws SOAPException {
-        return getSOAPPart().getEnvelope().getHeader();
-    }
-
-    @Override
-    public SOAPBody getSOAPBody() throws SOAPException {
-        return getSOAPPart().getEnvelope().getBody();
-    }
-
-    @Override
-    public void addAttachmentPart(AttachmentPart arg0) {
+    public void addMimeHeader(String arg0, String arg1) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int countAttachments() {
-        return attachments.size();
-    }
-
-    @Override
-    public AttachmentPart createAttachmentPart() {
+    public void clearContent() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public AttachmentPart getAttachment(SOAPElement arg0) throws SOAPException {
+    public Iterator getAllMimeHeaders() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Iterator getAttachments() {
+    public InputStream getBase64Content() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Iterator getAttachments(MimeHeaders arg0) {
+    public Object getContent() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String getContentDescription() {
+    public DataHandler getDataHandler() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public MimeHeaders getMimeHeaders() {
+    public Iterator getMatchingMimeHeaders(String[] arg0) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public SOAPPart getSOAPPart() {
-        return soapPart;
-    }
-
-    @Override
-    public void removeAllAttachments() {
+    public String[] getMimeHeader(String arg0) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeAttachments(MimeHeaders arg0) {
+    public Iterator getNonMatchingMimeHeaders(String[] arg0) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void saveChanges() throws SOAPException {
+    public InputStream getRawContent() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean saveRequired() {
+    public byte[] getRawContentBytes() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setContentDescription(String arg0) {
+    public int getSize() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void writeTo(OutputStream arg0) throws SOAPException, IOException {
+    public void removeAllMimeHeaders() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeMimeHeader(String arg0) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setBase64Content(InputStream arg0, String arg1) throws SOAPException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setContent(Object arg0, String arg1) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setDataHandler(DataHandler arg0) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setMimeHeader(String arg0, String arg1) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setRawContent(InputStream arg0, String arg1) throws SOAPException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setRawContentBytes(byte[] arg0, int arg1, int arg2, String arg3)
+            throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }

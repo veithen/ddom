@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.core;
 
-import java.util.Iterator;
-
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
@@ -94,10 +92,10 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException;
 
-    <T extends CoreChildNode> Iterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
-    Iterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
-    Iterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI);
-    Iterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName);
+    <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
+    ChildIterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
+    ChildIterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI);
+    ChildIterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName);
     
     <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredParsingException;
 }

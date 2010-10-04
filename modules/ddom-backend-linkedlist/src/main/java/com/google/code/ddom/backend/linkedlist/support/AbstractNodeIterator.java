@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,22 @@
  */
 package com.google.code.ddom.backend.linkedlist.support;
 
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.ChildIterator;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.DeferredParsingException;
 
-public abstract class AbstractNodeIterator<T extends CoreChildNode> implements Iterator<T> {
+public abstract class AbstractNodeIterator<T extends CoreChildNode> implements ChildIterator<T> {
     private final CoreParentNode startNode;
     private final Class<T> type;
     private final Axis axis;
-    private CoreChildNode node;
+    private CoreChildNode currentNode;
+    private CoreChildNode nextNode;
     private boolean hasNext;
     private int depth;
     
@@ -42,7 +44,7 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
 
     public final boolean hasNext() {
         if (!hasNext) {
-            CoreChildNode node = this.node;
+            CoreChildNode node = currentNode;
             do {
                 try {
                     // Get to the next node
@@ -89,16 +91,17 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
                     throw new RuntimeException(ex);
                 }
             } while (node != null && (!type.isInstance(node) || !matches(type.cast(node))));
-            this.node = node;
+            nextNode = node;
             hasNext = true;
         }
-        return node != null;
+        return nextNode != null;
     }
 
     public final T next() {
         if (hasNext()) {
+            currentNode = nextNode;
             hasNext = false;
-            return type.cast(node);
+            return type.cast(currentNode);
         } else {
             throw new NoSuchElementException();
         }
@@ -106,5 +109,11 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements I
 
     public final void remove() {
         throw new UnsupportedOperationException();
+    }
+
+    public final void replace(CoreChildNode newNode) throws CoreModelException {
+        // Move to next node before replacing the current one
+        hasNext();
+        currentNode.coreReplaceWith(newNode);
     }
 }

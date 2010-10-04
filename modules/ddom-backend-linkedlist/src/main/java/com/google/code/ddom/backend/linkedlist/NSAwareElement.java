@@ -119,11 +119,12 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
             CoreDocument document = coreGetDocument();
             SequenceItem item = sequence.item(index);
             CoreNSAwareElement element;
-            // TODO: handle prefix
+            String namespaceURI = item.getNamespaceURI();
+            String prefix = namespaceURI == null ? null : coreLookupPrefix(namespaceURI, false);
             if (item.isUseExtensionInterface()) {
-                element = document.coreCreateElement(item.getExtensionInterface(), item.getNamespaceURI(), item.getLocalName(), null);
+                element = document.coreCreateElement(item.getExtensionInterface(), item.getNamespaceURI(), item.getLocalName(), prefix);
             } else {
-                element = document.coreCreateElement(item.getNamespaceURI(), item.getLocalName(), null);
+                element = document.coreCreateElement(item.getNamespaceURI(), item.getLocalName(), prefix);
             }
             if (previousElement != null) {
                 previousElement.coreInsertSiblingAfter(element);

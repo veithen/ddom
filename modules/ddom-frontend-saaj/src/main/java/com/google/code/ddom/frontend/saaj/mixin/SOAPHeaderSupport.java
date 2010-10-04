@@ -29,6 +29,14 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 
 @Mixin(SOAPHeaderExtension.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
+    public Class<?> getChildExtensionInterface() {
+        return SOAPHeaderElementExtension.class;
+    }
+
+    public Class<?> getChildType() {
+        return SOAPHeaderElement.class;
+    }
+
     public SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
         return (SOAPHeaderElement)coreGetDocument().coreCreateElement(SOAPHeaderElementExtension.class, name.getURI(), name.getLocalName(), name.getPrefix());
     }

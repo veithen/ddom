@@ -36,8 +36,16 @@ public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
     }
 
     @Override
-    protected SOAPFactory newSOAPFactory(String arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected SOAPFactory newSOAPFactory(String protocol) throws SOAPException {
+        // TODO: distinguish SOAP versions
+        if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol)) {
+            return new SOAPFactoryImpl();
+        } else if (SOAPConstants.SOAP_1_2_PROTOCOL.equals(protocol)) {
+            return new SOAPFactoryImpl();
+        } else if (SOAPConstants.DYNAMIC_SOAP_PROTOCOL.equals(protocol)) {
+            return new SOAPFactoryImpl();
+        } else {
+            throw new SOAPException("Unknown Protocol: " + protocol + " specified for creating SOAPFactory");
+        }
     }
 }
