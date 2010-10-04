@@ -19,9 +19,18 @@ import javax.xml.soap.SOAPEnvelope;
 
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 
-public class SOAP11Part extends SOAPPartImpl {
-    @Override
-    protected SOAPEnvelope createEnvelope(SAAJDocument document) {
-        return document.createSOAP11Envelope();
-    }
+public interface SOAPVersion {
+    SOAPVersion SOAP11 = new SOAPVersion() {
+        public SOAPEnvelope createEnvelope(SAAJDocument document) {
+            return document.createSOAP11Envelope();
+        }
+    };
+
+    SOAPVersion SOAP12 = new SOAPVersion() {
+        public SOAPEnvelope createEnvelope(SAAJDocument document) {
+            return document.createSOAP12Envelope();
+        }
+    };
+    
+    SOAPEnvelope createEnvelope(SAAJDocument document);
 }

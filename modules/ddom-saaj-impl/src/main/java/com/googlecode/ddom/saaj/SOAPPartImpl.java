@@ -41,26 +41,22 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 
-public abstract class SOAPPartImpl extends SOAPPart {
-    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(MessageFactoryImpl.class.getClassLoader());
-    
+public class SOAPPartImpl extends SOAPPart {
+    private final SOAPVersion soapVersion;
     private final SAAJDocument document;
     
-    public SOAPPartImpl() {
-        document = (SAAJDocument)documentHelper.newDocument("saaj");
+    public SOAPPartImpl(SOAPVersion soapVersion, SAAJDocument document) {
+        this.soapVersion = soapVersion;
+        this.document = document;
     }
-    
-    protected abstract SOAPEnvelope createEnvelope(SAAJDocument document);
     
     @Override
     public SOAPEnvelope getEnvelope() throws SOAPException {
         SOAPEnvelope envelope = (SOAPEnvelope)document.getDocumentElement();
         if (envelope == null) {
-            envelope = createEnvelope(document);
+            envelope = soapVersion.createEnvelope(document);
             document.appendChild(envelope);
             envelope.addHeader();
             envelope.addBody();

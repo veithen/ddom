@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.google.code.ddom.frontend.saaj.mixin;
 
-import javax.xml.soap.SOAPEnvelope;
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.ext.SOAPBodyElementExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBodyElement;
 
-import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
-
-public class SOAP12Part extends SOAPPartImpl {
-    @Override
-    protected SOAPEnvelope createEnvelope(SAAJDocument document) {
-        return document.createSOAP12Envelope();
-    }
+@Mixin(SOAPBodyElementExtension.class)
+public abstract class SOAPBodyElementSupport implements SAAJSOAPBodyElement {
+    // This mixin only adds the interface, but no methods
 }

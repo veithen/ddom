@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.google.code.ddom.frontend.saaj.intf;
 
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPBodyElement;
 
-public class DynamicMessageFactory extends MessageFactoryImpl {
-    @Override
-    public SOAPMessage createMessage() throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
+public interface SAAJSOAPBodyElement extends SOAPBodyElement, SAAJSOAPElement {
+
 }

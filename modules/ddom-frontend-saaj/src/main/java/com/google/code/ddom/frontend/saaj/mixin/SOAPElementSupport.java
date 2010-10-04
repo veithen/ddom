@@ -171,16 +171,19 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     public Class<?> getChildType() {
         return SOAPElement.class;
     }
-
-    public final Iterator getChildElements() {
+    
+    private Iterator getChildElements(ChildIterator<CoreNSAwareElement> childIterator) {
         Class<?> extensionInterface = getChildExtensionInterface();
-        ChildIterator<CoreNSAwareElement> iterator = coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class);
         if (extensionInterface == null) {
             // The iterator actually returns SOAPElements
-            return iterator;
+            return childIterator;
         } else {
-            return new ReifyingIterator(iterator, extensionInterface, getChildType());
+            return new ReifyingIterator(childIterator, extensionInterface, getChildType());
         }
+    }
+    
+    public final Iterator getChildElements() {
+        return getChildElements(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class));
     }
 
     public Iterator getChildElements(Name name) {
@@ -189,8 +192,11 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
 
     public Iterator getChildElements(QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
+        String namespaceURI = qname.getNamespaceURI();
+        if (namespaceURI.length() == 0) {
+            namespaceURI = null;
+        }
+        return getChildElements(coreGetElementsByName(Axis.CHILDREN, namespaceURI, qname.getLocalPart()));
     }
 
     public void setEncodingStyle(String encodingStyle) throws SOAPException {

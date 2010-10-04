@@ -17,6 +17,6 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import com.google.code.ddom.core.CoreNSUnawareNamedNode;
 
-public interface DOMNSUnawareNamedNode extends CoreNSUnawareNamedNode {
+public interface DOMNSUnawareNamedNode extends CoreNSUnawareNamedNode, DOMNode {
 
 }

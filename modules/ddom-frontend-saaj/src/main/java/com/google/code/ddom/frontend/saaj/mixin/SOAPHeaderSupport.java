@@ -29,11 +29,11 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 
 @Mixin(SOAPHeaderExtension.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
-    public Class<?> getChildExtensionInterface() {
+    public final Class<?> getChildExtensionInterface() {
         return SOAPHeaderElementExtension.class;
     }
 
-    public Class<?> getChildType() {
+    public final Class<?> getChildType() {
         return SOAPHeaderElement.class;
     }
 

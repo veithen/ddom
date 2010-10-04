@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.intf;
+package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.core.CoreNSAwareNamedNode;
+import com.google.code.ddom.core.CoreText;
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.intf.SAAJText;
 
-public interface DOMNSAwareNamedNode extends CoreNSAwareNamedNode, DOMNode {
-    String internalGetName();
+// TODO: does this also apply to CDATA (in which case we could apply the mixin to CoreTextNode)???
+@Mixin(CoreText.class)
+public abstract class TextSupport implements SAAJText {
+    public boolean isComment() {
+        return false;
+    }
 }

@@ -23,11 +23,26 @@ import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-public abstract class MessageFactoryImpl extends MessageFactory {
+import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
+
+public class MessageFactoryImpl extends MessageFactory {
+    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(MessageFactoryImpl.class.getClassLoader());
+    
+    private final SOAPVersion soapVersion;
+    
+    public MessageFactoryImpl(SOAPVersion soapVersion) {
+        this.soapVersion = soapVersion;
+    }
+
     @Override
-    public SOAPMessage createMessage(MimeHeaders arg0, InputStream arg1)
-            throws IOException, SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public SOAPMessage createMessage() throws SOAPException {
+        return new SOAPMessageImpl(new SOAPPartImpl(soapVersion, (SAAJDocument)documentHelper.newDocument("saaj")));
+    }
+    
+    @Override
+    public SOAPMessage createMessage(MimeHeaders headers, InputStream in) throws IOException, SOAPException {
+        return new SOAPMessageImpl(new SOAPPartImpl(soapVersion, (SAAJDocument)documentHelper.parse("saaj", in)));
     }
 }

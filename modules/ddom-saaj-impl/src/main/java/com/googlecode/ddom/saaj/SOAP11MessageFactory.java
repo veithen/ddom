@@ -15,12 +15,8 @@
  */
 package com.googlecode.ddom.saaj;
 
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
 public class SOAP11MessageFactory extends MessageFactoryImpl {
-    @Override
-    public SOAPMessage createMessage() throws SOAPException {
-        return new SOAPMessageImpl(new SOAP11Part());
+    public SOAP11MessageFactory() {
+        super(SOAPVersion.SOAP11);
     }
 }

@@ -28,12 +28,21 @@ import org.w3c.dom.Document;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.ext.SOAPBodyElementExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SOAPBodyExtension.class)
 public abstract class SOAPBodySupport implements SAAJSOAPBody {
+    public final Class<?> getChildExtensionInterface() {
+        return SOAPBodyElementExtension.class;
+    }
+
+    public final Class<?> getChildType() {
+        return SOAPBodyElement.class;
+    }
+
     public SOAPBodyElement addBodyElement(Name arg0) throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();

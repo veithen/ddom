@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.google.code.ddom.frontend.saaj.mixin;
 
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import com.google.code.ddom.core.CoreComment;
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.saaj.intf.SAAJText;
 
-public class SOAP12MessageFactory extends MessageFactoryImpl {
-    @Override
-    public SOAPMessage createMessage() throws SOAPException {
-        return new SOAPMessageImpl(new SOAP12Part());
+@Mixin(CoreComment.class)
+public abstract class CommentSupport implements SAAJText {
+    public boolean isComment() {
+        return true;
     }
 }
