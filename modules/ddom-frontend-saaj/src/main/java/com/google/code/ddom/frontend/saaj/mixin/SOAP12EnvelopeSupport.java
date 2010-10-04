@@ -16,18 +16,13 @@
 package com.google.code.ddom.frontend.saaj.mixin;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAP12EnvelopeExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12HeaderExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
+import com.google.code.ddom.frontend.saaj.support.SOAPVersion;
 
 @Mixin(SOAP12EnvelopeExtension.class)
 public abstract class SOAP12EnvelopeSupport implements SAAJSOAPEnvelope {
-    public final Class<?> getSOAPHeaderExtension() {
-        return SOAP12HeaderExtension.class;
-    }
-    
-    public final Class<?> getSOAPBodyExtension() {
-        return SOAP12BodyExtension.class;
+    public SOAPVersion getSOAPVersion() {
+        return SOAPVersion.SOAP12;
     }
 }

@@ -13,16 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.mixin;
+package com.google.code.ddom.frontend.saaj.intf;
 
-import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11EnvelopeExtension;
-import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.frontend.saaj.support.SOAPVersion;
 
-@Mixin(SOAP11EnvelopeExtension.class)
-public abstract class SOAP11EnvelopeSupport implements SAAJSOAPEnvelope {
-    public SOAPVersion getSOAPVersion() {
-        return SOAPVersion.SOAP11;
-    }
+public interface HasSOAPVersion {
+    SOAPVersion getSOAPVersion();
 }

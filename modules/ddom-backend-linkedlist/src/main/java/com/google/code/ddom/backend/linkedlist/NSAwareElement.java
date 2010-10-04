@@ -17,8 +17,15 @@ package com.google.code.ddom.backend.linkedlist;
 
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.google.code.ddom.backend.Implementation;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.Sequence;
+import com.google.code.ddom.core.SequenceItem;
 
 @Implementation(factory=NSAwareElementFactory.class)
 public class NSAwareElement extends Element implements CoreNSAwareElement {
@@ -73,5 +80,63 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     @Override
     protected final String getImplicitPrefix(String namespaceURI) {
         return namespaceURI.equals(this.namespaceURI) ? prefix : null;
+    }
+
+    public final CoreNSAwareElement coreGetChildFromSequence(Sequence sequence, int index, boolean create) throws CoreModelException {
+        int ptr = 0;
+        CoreChildNode child = coreGetFirstChild();
+        CoreNSAwareElement previousElement = null;
+        CoreNSAwareElement nextElement = null;
+        while (child != null) {
+            if (child instanceof CoreNSAwareElement) {
+                CoreNSAwareElement element = (CoreNSAwareElement)child;
+                while (!matches(element, sequence.item(ptr))) {
+                    ptr++;
+                    if (ptr == sequence.length()) {
+                        throw new CoreModelException(); // TODO
+                    }
+                }
+                if (ptr == index) {
+                    return element;
+                } else if (ptr > index) {
+                    nextElement = element;
+                    break;
+                } else {
+                    previousElement = element;
+                }
+            }
+            child = child.coreGetNextSibling();
+        }
+        if (create) {
+            CoreDocument document = coreGetDocument();
+            SequenceItem item = sequence.item(index);
+            CoreNSAwareElement element;
+            // TODO: handle prefix
+            if (item.isUseExtensionInterface()) {
+                element = document.coreCreateElement(item.getExtensionInterface(), item.getNamespaceURI(), item.getLocalName(), null);
+            } else {
+                element = document.coreCreateElement(item.getNamespaceURI(), item.getLocalName(), null);
+            }
+            if (previousElement != null) {
+                previousElement.coreInsertSiblingAfter(element);
+            } else if (nextElement != null) {
+                nextElement.coreInsertSiblingBefore(element);
+            } else {
+                coreAppendChild(element);
+            }
+            return element;
+        } else {
+            return null;
+        }
+    }
+    
+    private boolean matches(CoreNSAwareElement element, SequenceItem item) {
+        Class<?> extensionInterface = item.getExtensionInterface();
+        if (extensionInterface != null) {
+            return extensionInterface.isInstance(element);
+        } else {
+            return ObjectUtils.equals(item.getLocalName(), element.coreGetLocalName())
+                    && ObjectUtils.equals(item.getNamespaceURI(), element.coreGetNamespaceURI());
+        }
     }
 }

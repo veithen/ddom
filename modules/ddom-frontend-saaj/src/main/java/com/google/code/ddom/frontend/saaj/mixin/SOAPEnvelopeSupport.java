@@ -20,11 +20,9 @@ import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 
-import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAPEnvelopeExtension;
-import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
 
@@ -32,38 +30,43 @@ import com.google.code.ddom.frontend.saaj.support.NameImpl;
 public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
     public SOAPHeader getHeader() throws SOAPException {
         try {
-            CoreElement firstElement = coreGetFirstChildByType(CoreElement.class);
-            return firstElement instanceof SOAPHeader ? (SOAPHeader)firstElement : null;
+            return (SOAPHeader)coreGetChildFromSequence(getSOAPVersion().getEnvelopeSequence(), 0, false);
         } catch (CoreModelException ex) {
             throw new SOAPException(ex); // TODO
         }
     }
     
     public SOAPHeader addHeader() throws SOAPException {
+        // TODO: this is inefficient because we iterate over the children twice
         if (getHeader() != null) {
             throw new SOAPException("Can't add a header when one is already present");
         } else {
-            SOAPHeader header = (SOAPHeader)coreGetDocument().coreCreateElement(getSOAPHeaderExtension(), getNamespaceURI(), "Header", getPrefix());
-            insertBefore(header, getFirstChild());
-            return header;
+            try {
+                return (SOAPHeader)coreGetChildFromSequence(getSOAPVersion().getEnvelopeSequence(), 0, true);
+            } catch (CoreModelException ex) {
+                throw new SOAPException(ex); // TODO
+            }
         }
     }
 
     public SOAPBody getBody() throws SOAPException {
         try {
-            return coreGetFirstChildByType(SAAJSOAPBody.class);
+            return (SOAPBody)coreGetChildFromSequence(getSOAPVersion().getEnvelopeSequence(), 1, false);
         } catch (CoreModelException ex) {
             throw new SOAPException(ex); // TODO
         }
     }
 
     public SOAPBody addBody() throws SOAPException {
+        // TODO: this is inefficient because we iterate over the children twice
         if (getBody() != null) {
             throw new SOAPException("Can't add a body when one is already present");
         } else {
-            SOAPBody body = (SOAPBody)coreGetDocument().coreCreateElement(getSOAPBodyExtension(), getNamespaceURI(), "Body", getPrefix());
-            appendChild(body);
-            return body;
+            try {
+                return (SOAPBody)coreGetChildFromSequence(getSOAPVersion().getEnvelopeSequence(), 1, true);
+            } catch (CoreModelException ex) {
+                throw new SOAPException(ex); // TODO
+            }
         }
     }
 

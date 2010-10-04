@@ -16,5 +16,5 @@
 package com.google.code.ddom.core;
 
 public interface CoreNSAwareElement extends CoreElement, CoreNSAwareNamedNode {
-
+    CoreNSAwareElement coreGetChildFromSequence(Sequence sequence, int index, boolean create) throws CoreModelException;
 }
