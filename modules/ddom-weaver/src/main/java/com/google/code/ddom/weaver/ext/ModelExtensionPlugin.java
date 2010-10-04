@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.code.ddom.commons.cl.ClassRef;
+import com.google.code.ddom.core.ext.Abstract;
 import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.reactor.NonWeavableClassInfo;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
@@ -67,7 +68,7 @@ public class ModelExtensionPlugin extends ReactorPlugin {
             }
         }
         if (isExtensionInterface) {
-            extensions.set(new ModelExtensionInterfaceInfo(classInfo, false));
+            extensions.set(new ModelExtensionInterfaceInfo(classInfo, clazz.getAnnotation(Abstract.class) != null));
         } else {
             extensions.set(ModelExtensionInterfaceInfo.class, null);
         }

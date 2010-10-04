@@ -73,17 +73,19 @@ public class ModelExtensionFactoryImplementation extends GeneratedClass {
                 // Populate delegates map
                 for (ModelExtensionInfo modelExtensionInfo : implementationInfo.getModelExtensions()) {
                     for (ModelExtensionInterfaceInfo extensionInterface : modelExtensionInfo.getExtensionInterfaces()) {
-                        // TODO: this is stupid; we should not recreate the info object here
-                        ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementationInfo.getImplementation(), modelExtensionInfo.getRootInterface(), extensionInterface);
-                        String factoryDelegateImplName = Util.classNameToInternalName(modelExtensionClassInfo.getFactoryDelegateImplementationClassName());
-                        mv.visitVarInsn(Opcodes.ALOAD, 0);
-                        mv.visitFieldInsn(Opcodes.GETFIELD, name, "delegates", "Ljava/util/Map;");
-                        mv.visitLdcInsn(Type.getObjectType(Util.classNameToInternalName(modelExtensionClassInfo.getExtensionInterface().getClassInfo().getName())));
-                        mv.visitTypeInsn(Opcodes.NEW, factoryDelegateImplName);
-                        mv.visitInsn(Opcodes.DUP);
-                        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, factoryDelegateImplName, "<init>", "()V");
-                        mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
-                        mv.visitInsn(Opcodes.POP);
+                        if (!extensionInterface.isAbstract()) {
+                            // TODO: this is stupid; we should not recreate the info object here
+                            ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementationInfo.getImplementation(), modelExtensionInfo.getRootInterface(), extensionInterface);
+                            String factoryDelegateImplName = Util.classNameToInternalName(modelExtensionClassInfo.getFactoryDelegateImplementationClassName());
+                            mv.visitVarInsn(Opcodes.ALOAD, 0);
+                            mv.visitFieldInsn(Opcodes.GETFIELD, name, "delegates", "Ljava/util/Map;");
+                            mv.visitLdcInsn(Type.getObjectType(Util.classNameToInternalName(modelExtensionClassInfo.getExtensionInterface().getClassInfo().getName())));
+                            mv.visitTypeInsn(Opcodes.NEW, factoryDelegateImplName);
+                            mv.visitInsn(Opcodes.DUP);
+                            mv.visitMethodInsn(Opcodes.INVOKESPECIAL, factoryDelegateImplName, "<init>", "()V");
+                            mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+                            mv.visitInsn(Opcodes.POP);
+                        }
                     }
                 }
                 mv.visitInsn(Opcodes.RETURN);

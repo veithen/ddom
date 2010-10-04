@@ -30,10 +30,6 @@ import com.google.code.ddom.frontend.saaj.support.NameImpl;
 
 @Mixin(SOAPEnvelopeExtension.class)
 public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
-    // TODO: this should not be necessary; it is because the weaver doesn't support abstract model extension classes
-    public Class<?> getSOAPBodyExtension() { throw new IllegalStateException(); }
-    public Class<?> getSOAPHeaderExtension() { throw new IllegalStateException(); }
-
     public SOAPHeader getHeader() throws SOAPException {
         try {
             CoreElement firstElement = coreGetFirstChildByType(CoreElement.class);

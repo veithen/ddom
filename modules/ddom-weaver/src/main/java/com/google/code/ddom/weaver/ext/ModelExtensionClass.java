@@ -37,7 +37,7 @@ class ModelExtensionClass extends GeneratedClass {
         String superName = Util.classNameToInternalName(info.getSuperClassName());
         classVisitor.visit(
                 Opcodes.V1_5,
-                Opcodes.ACC_PUBLIC,
+                info.isAbstract() ? Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT : Opcodes.ACC_PUBLIC,
                 name,
                 null,
                 superName,

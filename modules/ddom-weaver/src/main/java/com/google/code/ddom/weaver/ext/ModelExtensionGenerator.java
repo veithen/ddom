@@ -133,7 +133,9 @@ class ModelExtensionGenerator {
                 for (ModelExtensionInterfaceInfo iface : modelExtensionInfo.getExtensionInterfaces()) {
                     ModelExtensionClassInfo modelExtensionClassInfo = new ModelExtensionClassInfo(implementation, modelExtensionInfo.getRootInterface(), iface);
                     injector.loadWeavableClass(new ModelExtensionClass(modelExtensionClassInfo));
-                    injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, modelExtensionClassInfo));
+                    if (!modelExtensionClassInfo.isAbstract()) {
+                        injector.loadWeavableClass(new ModelExtensionFactoryDelegateImplementation(implementationInfo, modelExtensionClassInfo));
+                    }
                 }
             }
         }

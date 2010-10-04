@@ -57,4 +57,8 @@ class ModelExtensionClassInfo {
         ClassInfo superInterface = extensionInterface.getClassInfo().getInterfaces()[0];
         return superInterface == rootInterface ? implementation.getName() : getModelExtensionClassName(superInterface);
     }
+    
+    boolean isAbstract() {
+        return extensionInterface.isAbstract();
+    }
 }
