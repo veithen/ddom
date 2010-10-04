@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,20 @@
  */
 package com.google.code.ddom.core;
 
-public interface CoreNSAwareElement extends CoreElement, CoreNSAwareNamedNode {
-    CoreNSAwareElement coreQuerySequence(Sequence sequence, int index, SequenceOperation operation) throws CoreModelException;
+public enum SequenceOperation {
+    /**
+     * Get an element from the sequence. If no element is found, return <code>null</code>.
+     */
+    GET,
+
+    /**
+     * Create the element from the sequence. If the element already exists, an
+     * {@link ElementAlreadyExistsException} is thrown.
+     */
+    CREATE,
+
+    /**
+     * Get or create an element from the sequence. If the element is not found, create a new one.
+     */
+    GET_OR_CREATE
 }

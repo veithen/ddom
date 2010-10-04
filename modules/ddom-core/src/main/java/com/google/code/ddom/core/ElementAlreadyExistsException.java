@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,11 @@
  */
 package com.google.code.ddom.core;
 
-public interface CoreNSAwareElement extends CoreElement, CoreNSAwareNamedNode {
-    CoreNSAwareElement coreQuerySequence(Sequence sequence, int index, SequenceOperation operation) throws CoreModelException;
+public class ElementAlreadyExistsException extends SequenceException {
+    private static final long serialVersionUID = 6477182238903394670L;
+
+    public ElementAlreadyExistsException(Sequence sequence, int index) {
+        // TODO: compose a more meaningful message
+        super("The element already exists (index=" + index + ")");
+    }
 }

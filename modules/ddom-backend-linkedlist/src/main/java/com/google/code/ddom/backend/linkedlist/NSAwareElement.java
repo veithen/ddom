@@ -24,8 +24,10 @@ import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.ElementAlreadyExistsException;
 import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceItem;
+import com.google.code.ddom.core.SequenceOperation;
 
 @Implementation(factory=NSAwareElementFactory.class)
 public class NSAwareElement extends Element implements CoreNSAwareElement {
@@ -82,7 +84,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         return namespaceURI.equals(this.namespaceURI) ? prefix : null;
     }
 
-    public final CoreNSAwareElement coreGetChildFromSequence(Sequence sequence, int index, boolean create) throws CoreModelException {
+    public final CoreNSAwareElement coreQuerySequence(Sequence sequence, int index, SequenceOperation operation) throws CoreModelException {
         int ptr = 0;
         CoreChildNode child = coreGetFirstChild();
         CoreNSAwareElement previousElement = null;
@@ -97,7 +99,11 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
                     }
                 }
                 if (ptr == index) {
-                    return element;
+                    if (operation == SequenceOperation.CREATE) {
+                        throw new ElementAlreadyExistsException(sequence, index);
+                    } else {
+                        return element;
+                    }
                 } else if (ptr > index) {
                     nextElement = element;
                     break;
@@ -107,7 +113,9 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
             }
             child = child.coreGetNextSibling();
         }
-        if (create) {
+        if (operation == SequenceOperation.GET) {
+            return null;
+        } else {
             CoreDocument document = coreGetDocument();
             SequenceItem item = sequence.item(index);
             CoreNSAwareElement element;
@@ -125,8 +133,6 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
                 coreAppendChild(element);
             }
             return element;
-        } else {
-            return null;
         }
     }
     
