@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.saaj;
 
+import java.io.InputStream;
 import java.util.Iterator;
 
 import javax.xml.soap.SOAPElement;
@@ -42,37 +43,40 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 
 public class SOAPPartImpl extends SOAPPart {
+    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(SOAPPartImpl.class.getClassLoader());
+    
     private final SOAPVersion soapVersion;
-    private final SAAJDocument document;
+    private SAAJDocument document;
     private Source source;
     
-    public SOAPPartImpl(SOAPVersion soapVersion, SAAJDocument document) {
+    public SOAPPartImpl(SOAPVersion soapVersion) {
         this.soapVersion = soapVersion;
-        this.document = document;
+    }
+    
+    public SOAPPartImpl(SOAPVersion soapVersion, InputStream in) {
+        this.soapVersion = soapVersion;
+        document = (SAAJDocument)documentHelper.parse("saaj", in);
+    }
+    
+    private void initDocument() {
+        if (document == null) {
+            if (source != null) {
+                document = (SAAJDocument)documentHelper.parse("saaj", source);
+                source = null;
+            } else {
+                document = (SAAJDocument)documentHelper.newDocument("saaj");
+            }
+        }
     }
     
     @Override
     public SOAPEnvelope getEnvelope() throws SOAPException {
-        if (source != null) {
-            // Quick and dirty hack for CXF
-            if (source instanceof DOMSource && ((DOMSource)source).getNode() == null) {
-                try {
-                    document.coreClear();
-                } catch (DeferredParsingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                source = null;
-                // Continue with creating a default SOAPEnvelope
-            } else {
-                // TODO
-                throw new UnsupportedOperationException();
-            }
-        }
+        initDocument();
         SOAPEnvelope envelope = (SOAPEnvelope)document.getDocumentElement();
         if (envelope == null) {
             envelope = soapVersion.createEnvelope(document);
@@ -133,7 +137,13 @@ public class SOAPPartImpl extends SOAPPart {
 
     @Override
     public final void setContent(Source source) throws SOAPException {
-        this.source = source;
+        document = null;
+        // TODO: This is used by CXF; actually it is surprising that this works with the reference implementation
+        if (source instanceof DOMSource && ((DOMSource)source).getNode() == null) {
+            this.source = null;
+        } else {
+            this.source = source;
+        }
     }
 
     @Override
@@ -143,38 +153,47 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Node adoptNode(Node source) throws DOMException {
+        initDocument();
         return document.adoptNode(source);
     }
 
     public final Attr createAttribute(String name) throws DOMException {
+        initDocument();
         return document.createAttribute(name);
     }
 
     public final Attr createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
+        initDocument();
         return document.createAttributeNS(namespaceURI, qualifiedName);
     }
 
     public final CDATASection createCDATASection(String data) throws DOMException {
+        initDocument();
         return document.createCDATASection(data);
     }
 
     public final Comment createComment(String data) {
+        initDocument();
         return document.createComment(data);
     }
 
     public final DocumentFragment createDocumentFragment() {
+        initDocument();
         return document.createDocumentFragment();
     }
 
     public final Element createElement(String tagName) throws DOMException {
+        initDocument();
         return document.createElement(tagName);
     }
 
     public final Element createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
+        initDocument();
         return document.createElementNS(namespaceURI, qualifiedName);
     }
 
     public final EntityReference createEntityReference(String name) throws DOMException {
+        initDocument();
         return document.createEntityReference(name);
     }
 
@@ -185,6 +204,7 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Text createTextNode(String data) {
+        initDocument();
         return document.createTextNode(data);
     }
 
@@ -194,13 +214,7 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Element getDocumentElement() {
-        // TODO: needs cleanup
-        // Allow processing of new source
-        try {
-            getEnvelope();
-        } catch (SOAPException ex) {
-            throw new RuntimeException(ex);
-        }
+        initDocument();
         return document.getDocumentElement();
     }
 
@@ -260,6 +274,7 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Node importNode(Node importedNode, boolean deep) throws DOMException {
+        initDocument();
         return document.importNode(importedNode, deep);
     }
 
@@ -295,6 +310,7 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Node appendChild(Node newChild) throws DOMException {
+        initDocument();
         return document.appendChild(newChild);
     }
 
@@ -329,6 +345,7 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Node getFirstChild() {
+        initDocument();
         return document.getFirstChild();
     }
 
@@ -358,6 +375,7 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final short getNodeType() {
+        initDocument();
         return document.getNodeType();
     }
 
@@ -372,6 +390,7 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Node getParentNode() {
+        initDocument();
         return document.getParentNode();
     }
 

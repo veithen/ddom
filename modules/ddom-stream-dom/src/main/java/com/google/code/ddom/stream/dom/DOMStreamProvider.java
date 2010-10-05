@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 package com.google.code.ddom.stream.dom;
 
+import javax.xml.transform.dom.DOMSource;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
@@ -27,8 +30,13 @@ import com.google.code.ddom.stream.spi.StreamProvider;
 @Provider(name="dom")
 public class DOMStreamProvider implements StreamProvider {
     public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
-        // TODO build Producer for Node and DOMSource objects
-        return null;
+        if (source instanceof Node) {
+            return new DOMInput((Node)source);
+        } else if (source instanceof DOMSource) {
+            return new DOMInput(((DOMSource)source).getNode());
+        } else {
+            return null;
+        }
     }
 
     public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
