@@ -354,14 +354,14 @@ public class SOAPPartImpl extends SOAPPart {
         throw new UnsupportedOperationException();
     }
 
-    public String getLocalName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getLocalName() {
+        initDocument();
+        return document.getLocalName();
     }
 
-    public String getNamespaceURI() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getNamespaceURI() {
+        initDocument();
+        return document.getNamespaceURI();
     }
 
     public Node getNextSibling() {
@@ -419,9 +419,9 @@ public class SOAPPartImpl extends SOAPPart {
         throw new UnsupportedOperationException();
     }
 
-    public boolean hasChildNodes() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean hasChildNodes() {
+        initDocument();
+        return document.hasChildNodes();
     }
 
     public Node insertBefore(Node newChild, Node refChild) throws DOMException {

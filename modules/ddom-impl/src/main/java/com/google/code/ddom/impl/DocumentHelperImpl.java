@@ -78,7 +78,8 @@ public class DocumentHelperImpl implements DocumentHelper {
             throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
-        CoreDocument document = model.getDocumentFactory().createDocument();
+        // TODO: setting the model extension twice? looks strange...
+        CoreDocument document = model.getDocumentFactory().createDocument(model.getModelExtension());
         document.coreSetContent(new SimpleFragmentSource(input), model.getModelExtension());
         return document;
     }

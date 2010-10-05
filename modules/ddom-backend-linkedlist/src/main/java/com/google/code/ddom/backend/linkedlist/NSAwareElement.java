@@ -95,7 +95,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
                 while (!matches(element, sequence, ptr)) {
                     ptr++;
                     if (ptr == sequence.length()) {
-                        throw new CoreModelException(); // TODO
+                        throw new CoreModelException("Unexpected element {" + element.coreGetNamespaceURI() + "}" + element.coreGetLocalName()); // TODO
                     }
                 }
                 if (ptr == index) {
