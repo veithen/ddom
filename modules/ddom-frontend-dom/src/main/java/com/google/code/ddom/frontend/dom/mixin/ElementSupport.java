@@ -27,6 +27,8 @@ import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.CoreAttribute;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreNSAwareAttribute;
+import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.CoreTypedAttribute;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
@@ -119,16 +121,21 @@ public abstract class ElementSupport implements DOMElement {
             return newAttr;
         } else {
             String namespaceURI;
-            String name = newAttr.getLocalName();
+            String name;
             AttributeMatcher matcher;
-            // TODO: ATTR_NSDECL case missing here
-            if (name == null) {
+            if (newAttr instanceof CoreNSAwareAttribute) {
+                namespaceURI = newAttr.getNamespaceURI();
+                name = newAttr.getLocalName();
+                matcher = DOM2AttributeMatcher.INSTANCE;
+            } else if (newAttr instanceof CoreNamespaceDeclaration) {
+                namespaceURI = null;
+                name = ((CoreNamespaceDeclaration)newAttr).coreGetDeclaredPrefix();
+                matcher = AttributeMatcher.NAMESPACE_DECLARATION;
+            } else {
+                // Must be a DOM1 (namespace unaware) attribute
                 namespaceURI = null;
                 name = newAttr.getName();
                 matcher = DOM1AttributeMatcher.INSTANCE;
-            } else {
-                namespaceURI = newAttr.getNamespaceURI();
-                matcher = DOM2AttributeMatcher.INSTANCE;
             }
             try {
                 return (DOMAttribute)coreSetAttribute(matcher, namespaceURI, name, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY);

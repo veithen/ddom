@@ -172,6 +172,19 @@ public class ElementTest {
         Assert.assertNull(attr.getLocalName());
     }
     
+    @Validated @Test
+    public void testSetAttributeNodeNSReplacingNamespaceDeclaration() {
+        Document doc = domUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        Attr attr1 = doc.createAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p");
+        attr1.setValue("urn:ns1");
+        Attr attr2 = doc.createAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p");
+        attr2.setValue("urn:ns2");
+        element.setAttributeNodeNS(attr1);
+        element.setAttributeNodeNS(attr2);
+        Assert.assertEquals(1, element.getAttributes().getLength());
+    }
+    
     @Validated @Test(expected=NullPointerException.class)
     public void testInsertBeforeWithNullNewChild() {
         Document doc = domUtil.newDocument();
