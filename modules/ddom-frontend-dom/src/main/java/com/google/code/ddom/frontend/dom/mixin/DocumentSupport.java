@@ -159,7 +159,6 @@ public abstract class DocumentSupport implements DOMDocument {
     }
     
     public final Node importNode(Node node, boolean deep) throws DOMException {
-        // TODO: do we really need to use getNodeFactory().createXXX, or can we just use createXXX?
         Node importedNode;
         boolean importChildren;
         switch (node.getNodeType()) {
