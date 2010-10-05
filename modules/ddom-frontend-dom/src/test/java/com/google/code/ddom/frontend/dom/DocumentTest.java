@@ -140,4 +140,14 @@ public class DocumentTest {
         Assert.assertEquals("urn:ns", element.lookupNamespaceURI("p"));
         Assert.assertEquals("p", element.lookupPrefix("urn:ns"));
     }
+    
+    @Validated @Test
+    public void testImportElementWithAttributes() {
+        Document doc1 = domUtil.newDocument();
+        Element element1 = doc1.createElementNS(null, "test");
+        element1.setAttributeNS(null, "attr", "test");
+        Document doc2 = domUtil.newDocument();
+        Element element2 = (Element)doc2.importNode(element1, false);
+        Assert.assertEquals("test", element2.getAttributeNS(null, "attr"));
+    }
 }

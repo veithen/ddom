@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.stream.dom;
 
+import javax.xml.XMLConstants;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -103,8 +105,12 @@ public class DOMInput implements Input {
                                 // TODO: type information
                                 output.processAttribute(attrLocalName, attr.getValue(), null);
                             } else {
-                                // TODO: distinguish namespace declarations
-                                output.processAttribute(attr.getNamespaceURI(), attrLocalName, attr.getPrefix(), attr.getValue(), null);
+                                String namespaceURI = attr.getNamespaceURI();
+                                if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+                                    output.processNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName, attr.getValue());
+                                } else {
+                                    output.processAttribute(namespaceURI, attrLocalName, attr.getPrefix(), attr.getValue(), null);
+                                }
                             }
                         }
                         output.attributesCompleted();
@@ -112,6 +118,9 @@ public class DOMInput implements Input {
                     case Node.TEXT_NODE:
                         output.processText(currentNode.getNodeValue());
                         break loop;
+                    default:
+                        // TODO
+                        throw new UnsupportedOperationException();
                 }
             }
         }

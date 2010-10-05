@@ -165,7 +165,13 @@ public abstract class DocumentSupport implements DOMDocument {
             case Node.ELEMENT_NODE:
                 Element element = (Element)node;
                 // TODO: detect DOM 1 elements (as with attributes)
-                importedNode = (Node)coreCreateElement(element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
+                Element importedElement = (Element)coreCreateElement(element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
+                NamedNodeMap attributes = element.getAttributes();
+                for (int length = attributes.getLength(), i=0; i<length; i++) {
+                    // TODO optimize: we should have a method in the core model that simply appends an attribute (even if this is somewhat unsafe)
+                    importedElement.setAttributeNode((Attr)importNode(attributes.item(i), true));
+                }
+                importedNode = importedElement;
                 importChildren = deep;
                 break;
             case Node.ATTRIBUTE_NODE:
