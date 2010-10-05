@@ -112,12 +112,19 @@ public class DocumentTest {
      * Validate the behavior of {@link Document#createElementNS(String, String)} when invoked with
      * an empty namespace URI (instead of <code>null</code>).
      */
-    // TODO: same test for attributes (create attribute, set attribute, etc.), renameNode, etc.
+    // TODO: same test for attributes (create attribute [DONE], set attribute, etc.), renameNode, etc.
     @Validated @Test
     public void testCreateElementNSWithEmptyNamespaceURI() {
         Document doc = domUtil.newDocument();
         Element element = doc.createElementNS("", "test");
         Assert.assertNull(element.getNamespaceURI());
+    }
+    
+    @Validated @Test
+    public void testCreateAttributeNSWithEmptyNamespaceURI() {
+        Document doc = domUtil.newDocument();
+        Attr attr = doc.createAttributeNS("", "test");
+        Assert.assertNull(attr.getNamespaceURI());
     }
     
     /**

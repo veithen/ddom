@@ -194,6 +194,13 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     public final Element getDocumentElement() {
+        // TODO: needs cleanup
+        // Allow processing of new source
+        try {
+            getEnvelope();
+        } catch (SOAPException ex) {
+            throw new RuntimeException(ex);
+        }
         return document.getDocumentElement();
     }
 

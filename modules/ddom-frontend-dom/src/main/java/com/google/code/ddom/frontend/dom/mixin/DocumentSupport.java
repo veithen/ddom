@@ -342,6 +342,7 @@ public abstract class DocumentSupport implements DOMDocument {
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
             return (Attr)coreCreateNamespaceDeclaration(NSUtil.getDeclaredPrefix(localName, prefix), null);
         } else {
+            namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
             return (Attr)coreCreateAttribute(namespaceURI, localName, prefix, null, null);
         }
