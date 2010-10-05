@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,8 @@
  */
 package com.google.code.ddom.stream.spi;
 
-// TODO: explain that the preferred way of delivering data to the consumer is
-//       using processEvent with a scope of PARSER_INVOCATION or ETERNAL 
 public interface Consumer {
     void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
-    
-    void processDTD(DTDEvent event);
     
     void processDocumentType(String rootName, String publicId, String systemId);
     
@@ -70,20 +66,18 @@ public interface Consumer {
      * @param namespaceURI
      *            the namespace URI; this value must not be <code>null</code>
      */
-    void processNSDecl(String prefix, String namespaceURI);
+    void processNamespaceDeclaration(String prefix, String namespaceURI);
     
     void attributesCompleted();
     
-    void processProcessingInstruction(String target, CharacterData data);
-    void processText(CharacterData data);
-    void processComment(CharacterData data);
-    void processCDATASection(CharacterData data);
+    void processProcessingInstruction(String target, String data);
+    void processText(String data);
+    void processComment(String data);
+    void processCDATASection(String data);
     void processEntityReference(String name);
     
     /**
      * Inform the consumer that the current element or the document is complete.
      */
     void nodeCompleted();
-    
-    void processEvent(Event event);
 }

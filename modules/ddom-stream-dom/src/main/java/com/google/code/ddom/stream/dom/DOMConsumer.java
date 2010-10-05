@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.stream.spi.CharacterData;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.util.CallbackConsumer;
+import com.google.code.ddom.stream.spi.Consumer;
 
 /**
  * 
@@ -37,7 +35,7 @@ import com.google.code.ddom.stream.util.CallbackConsumer;
  */
 // TODO: this is a strange name: it is indeed an event consumer, but a DOM producer... Maybe we should use StreamSink and StreamSource?
 // TODO: what about ID attributes???
-public class DOMConsumer extends CallbackConsumer {
+public class DOMConsumer implements Consumer {
     private final Document document;
     private Node node;
     
@@ -78,7 +76,7 @@ public class DOMConsumer extends CallbackConsumer {
         ((Element)node).setAttributeNS(namespaceURI, getQualifiedName(localName, prefix), value);
     }
 
-    public void processNSDecl(String prefix, String namespaceURI) {
+    public void processNamespaceDeclaration(String prefix, String namespaceURI) {
         if (prefix == null) {
             // TODO: check this
             ((Element)node).setAttributeNS("", XMLConstants.XMLNS_ATTRIBUTE, namespaceURI);
@@ -95,39 +93,23 @@ public class DOMConsumer extends CallbackConsumer {
         node = node.getParentNode();
     }
 
-    public void processCDATASection(CharacterData data) {
-        try {
-            node.appendChild(document.createCDATASection(data.getString()));
-        } catch (StreamException ex) {
-            throw new RuntimeException(ex); // TODO
-        }
+    public void processCDATASection(String data) {
+        node.appendChild(document.createCDATASection(data));
     }
 
-    public void processText(CharacterData data) {
-        try {
-            node.appendChild(document.createTextNode(data.getString()));
-        } catch (StreamException ex) {
-            throw new RuntimeException(ex); // TODO
-        }
+    public void processText(String data) {
+        node.appendChild(document.createTextNode(data));
     }
 
-    public void processComment(CharacterData data) {
-        try {
-            node.appendChild(document.createComment(data.getString()));
-        } catch (StreamException ex) {
-            throw new RuntimeException(ex); // TODO
-        }
+    public void processComment(String data) {
+        node.appendChild(document.createComment(data));
     }
 
     public void processEntityReference(String name) {
         node.appendChild(document.createEntityReference(name));
     }
 
-    public void processProcessingInstruction(String target, CharacterData data) {
-        try {
-            node.appendChild(document.createProcessingInstruction(target, data.getString()));
-        } catch (StreamException ex) {
-            throw new RuntimeException(ex); // TODO
-        }
+    public void processProcessingInstruction(String target, String data) {
+        node.appendChild(document.createProcessingInstruction(target, data));
     }
 }

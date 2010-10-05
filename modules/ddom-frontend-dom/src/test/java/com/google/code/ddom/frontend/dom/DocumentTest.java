@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ public class DocumentTest {
     
     @Test
     public void testNamespaceUnawareParsing() throws Exception {
-        Reader reader = new StringReader("<p:root xmlns:p='urn:ns'>");
+        Reader reader = new StringReader("<p:root xmlns:p='urn:ns'/>");
         Options options = new Options();
         options.set(NamespaceAwareness.DISABLE);
         Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", reader, options);

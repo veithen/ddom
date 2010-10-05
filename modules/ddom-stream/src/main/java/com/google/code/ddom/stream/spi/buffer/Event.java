@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.google.code.ddom.stream.spi.buffer;
 
-public interface Event extends Data {
+public class Event {
     public enum Type {
         NS_UNAWARE_ELEMENT,
         
@@ -44,7 +44,33 @@ public interface Event extends Data {
         COMMENT
     }
     
-    Type getEventType();
+    private Type eventType;
+    private String name;
+    private String namespaceURI;
+    private String prefix;
+    private String data;
+    private String dataType;
+    
+    void init(Type eventType, String name, String namespaceURI, String prefix, String data, String dataType) {
+        this.eventType = eventType;
+        this.name = name;
+        this.namespaceURI = namespaceURI;
+        this.prefix = prefix;
+        this.data = data;
+        this.dataType = dataType;
+    }
+
+    void reset() {
+        eventType = null;
+        name = null;
+        namespaceURI = null;
+        data = null;
+        dataType = null;
+    }
+    
+    public Type getEventType() {
+        return eventType;
+    }
     
     /**
      * Get the name of the information item represented by this event.
@@ -64,7 +90,9 @@ public interface Event extends Data {
      * <p>
      * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
      */
-    String getName();
+    public String getName() {
+        return name;
+    }
 
     /**
      * Get the namespace URI of the information item represented by this event.
@@ -83,7 +111,9 @@ public interface Event extends Data {
      * <p>
      * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
      */
-    String getNamespaceURI();
+    public String getNamespaceURI() {
+        return namespaceURI;
+    }
     
     /**
      * Get the namespace prefix of the information item represented by this event.
@@ -103,24 +133,20 @@ public interface Event extends Data {
      * <p>
      * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
      */
-    String getPrefix();
+    public String getPrefix() {
+        return prefix;
+    }
 
     /**
      * 
-     * Valid for {@link Type#CHARACTERS}, {@link Type#SPACE}, {@link Type#CDATA}, {@link Type#COMMENT}
-     * and {@link Type#PROCESSING_INSTRUCTION}.
+     * Valid for {@link Type#CHARACTERS}, {@link Type#SPACE}, {@link Type#CDATA}, {@link Type#COMMENT},
+     * {@link Type#PROCESSING_INSTRUCTION}, {@link Type#NS_UNAWARE_ATTRIBUTE} and {@link Type#NS_AWARE_ATTRIBUTE}.
      * 
      * @return
      */
-    CharacterData getData();
-
-    /**
-     * 
-     * Valid for {@link Type#NS_UNAWARE_ATTRIBUTE} and {@link Type#NS_AWARE_ATTRIBUTE}.
-     * 
-     * @return
-     */
-    String getValue();
+    public String getData() {
+        return data;
+    }
 
     /**
      * 
@@ -128,5 +154,7 @@ public interface Event extends Data {
      * 
      * @return
      */
-    String getDataType();
+    public String getDataType() {
+        return dataType;
+    }
 }

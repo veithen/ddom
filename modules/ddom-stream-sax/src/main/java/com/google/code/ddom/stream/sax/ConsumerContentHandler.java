@@ -24,14 +24,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 
 import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.util.CharArrayCharacterData;
-import com.google.code.ddom.stream.util.StringCharacterData;
 
 public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
     private final Consumer consumer;
     private boolean inCDATA;
-    private StringCharacterData stringData;
-    private CharArrayCharacterData charArrayData;
 
     public ConsumerContentHandler(Consumer consumer) {
         this.consumer = consumer;
@@ -75,7 +71,7 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
             } else {
                 String attUri = atts.getURI(i);
                 if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                    consumer.processNSDecl(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
+                    consumer.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
                 } else {
                     consumer.processAttribute(
                             SAXStreamUtils.normalizeNamespaceURI(attUri),
@@ -102,51 +98,23 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
-        CharArrayCharacterData data = charArrayData;
-        if (data == null) {
-            data = new CharArrayCharacterData();
-            charArrayData = data;
-        }
-        data.setData(ch, start, length);
         if (inCDATA) {
-            consumer.processCDATASection(data);
+            consumer.processCDATASection(new String(ch, start, length));
         } else {
-            consumer.processText(data);
+            consumer.processText(new String(ch, start, length));
         }
-        data.clear();
     }
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-        CharArrayCharacterData data = charArrayData;
-        if (data == null) {
-            data = new CharArrayCharacterData();
-            charArrayData = data;
-        }
-        data.setData(ch, start, length);
-        consumer.processText(data);
-        data.clear();
+        consumer.processText(new String(ch, start, length));
     }
 
     public void comment(char[] ch, int start, int length) throws SAXException {
-        CharArrayCharacterData data = charArrayData;
-        if (data == null) {
-            data = new CharArrayCharacterData();
-            charArrayData = data;
-        }
-        data.setData(ch, start, length);
-        consumer.processComment(data);
-        data.clear();
+        consumer.processComment(new String(ch, start, length));
     }
 
     public void processingInstruction(String piTarget, String piData) throws SAXException {
-        StringCharacterData data = stringData;
-        if (data == null) {
-            data = new StringCharacterData();
-            stringData = data;
-        }
-        data.setData(piData);
-        consumer.processProcessingInstruction(piTarget, data);
-        data.clear();
+        consumer.processProcessingInstruction(piTarget, piData);
     }
 
     public void startEntity(String name) throws SAXException {

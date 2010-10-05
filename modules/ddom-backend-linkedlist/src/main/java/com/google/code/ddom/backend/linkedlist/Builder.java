@@ -21,13 +21,12 @@ import com.google.code.ddom.collections.Stack;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
-import com.google.code.ddom.stream.spi.CharacterData;
+import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
 import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.util.CallbackConsumer;
 
 // TODO: also allow for deferred building of attributes
-public class Builder extends CallbackConsumer {
+public class Builder implements Consumer {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
     private final Producer producer;
@@ -104,7 +103,7 @@ public class Builder extends CallbackConsumer {
         appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type));
     }
 
-    public final void processNSDecl(String prefix, String namespaceURI) {
+    public final void processNamespaceDeclaration(String prefix, String namespaceURI) {
         appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
     }
 
@@ -112,44 +111,20 @@ public class Builder extends CallbackConsumer {
         nodeAppended = true;
     }
 
-    public final void processProcessingInstruction(String target, CharacterData data) {
-        try {
-            appendNode(new ProcessingInstruction(document, target, data.getString()));
-        } catch (StreamException ex) {
-            streamException = ex;
-            // TODO
-            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
-        }
+    public final void processProcessingInstruction(String target, String data) {
+        appendNode(new ProcessingInstruction(document, target, data));
     }
     
-    public final void processText(CharacterData data) {
-        try {
-            appendNode(new Text(document, data.getString()));
-        } catch (StreamException ex) {
-            streamException = ex;
-            // TODO
-            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
-        }
+    public final void processText(String data) {
+        appendNode(new Text(document, data));
     }
     
-    public final void processComment(CharacterData data) {
-        try {
-            appendNode(new Comment(document, data.getString()));
-        } catch (StreamException ex) {
-            streamException = ex;
-            // TODO
-            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
-        }
+    public final void processComment(String data) {
+        appendNode(new Comment(document, data));
     }
     
-    public final void processCDATASection(CharacterData data) {
-        try {
-            appendNode(new CDATASection(document, data.getString()));
-        } catch (StreamException ex) {
-            streamException = ex;
-            // TODO
-            throw new RuntimeException(streamException.getMessage(), streamException.getCause());
-        }
+    public final void processCDATASection(String data) {
+        appendNode(new CDATASection(document, data));
     }
     
     public final void processEntityReference(String name) {

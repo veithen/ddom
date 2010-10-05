@@ -15,8 +15,11 @@
  */
 package com.google.code.ddom.stream.stax;
 
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
+import org.codehaus.stax2.DTDInfo;
 
 import com.google.code.ddom.stream.spi.Consumer;
 import com.google.code.ddom.stream.spi.Producer;
@@ -25,69 +28,94 @@ import com.google.code.ddom.stream.spi.Symbols;
 
 public class StAXParser implements Producer {
     private final XMLStreamReader reader;
+    private final DTDInfo dtdInfo;
+    private final boolean parserIsNamespaceAware;
     private final Symbols symbols;
-    private final XMLStreamReaderEvent event; // TODO: maybe this should be an inner class
+    private boolean callNext;
 
     public StAXParser(XMLStreamReader reader, Symbols symbols) {
         this.reader = reader;
+        dtdInfo = (DTDInfo)reader;
+        parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
         this.symbols = symbols;
-        event = new XMLStreamReaderEvent(reader);
     }
 
     public Symbols getSymbols() {
         return symbols;
     }
 
-    public boolean proceed(Consumer consumer) throws StreamException {
-        XMLStreamReaderEvent.Mode mode = event.getMode();
-        int index = event.getIndex();
-        switch (mode) {
-            case ATTRIBUTES_COMPLETE:
-                mode = XMLStreamReaderEvent.Mode.NODE;
-                break;
-            case NODE:
-                if (!reader.isStartElement()) {
-                    break;
-                } else {
-                    mode = XMLStreamReaderEvent.Mode.ATTRIBUTE;
-                    index = -1;
-                    // Fall through
-                }
-            case ATTRIBUTE:
-                if (++index < reader.getAttributeCount()) {
-                    break;
-                } else {
-                    mode = XMLStreamReaderEvent.Mode.NS_DECL;
-                    index = -1;
-                    // Fall through
-                }
-            case NS_DECL:
-                if (++index < reader.getNamespaceCount()) {
-                    break;
-                } else {
-                    mode = XMLStreamReaderEvent.Mode.ATTRIBUTES_COMPLETE;
-                }
+    private String emptyToNull(String value) {
+        return value == null || value.length() == 0 ? null : value;
+    }
+    
+    private void processNSUnawareElement(Consumer consumer) {
+        consumer.processElement(reader.getLocalName());
+        for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
+            consumer.processAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
         }
-        event.updateState(mode, index);
-        boolean complete;
-        if (mode == XMLStreamReaderEvent.Mode.NODE) {
-            if (reader.getEventType() == XMLStreamReader.START_DOCUMENT) {
-                consumer.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
-            }
+        consumer.attributesCompleted();
+    }
+    
+    private void processNSAwareElement(Consumer consumer) {
+        consumer.processElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
+        for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
+            consumer.processAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
+        }
+        for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
+            consumer.processNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)), emptyToNull(reader.getNamespaceURI(i)));
+        }
+        consumer.attributesCompleted();
+    }
+    
+    public boolean proceed(Consumer consumer) throws StreamException {
+        if (callNext) {
             try {
-                complete = reader.next() == XMLStreamReader.END_DOCUMENT;
+                reader.next();
             } catch (XMLStreamException ex) {
                 throw new StreamException(ex);
             }
         } else {
-            complete = false;
+            callNext = true;
         }
-        if (reader.getEventType() == XMLStreamReader.DTD) {
-            consumer.processDTD(event);
-        } else {
-            consumer.processEvent(event);
+        switch (reader.getEventType()) {
+            case XMLStreamReader.START_DOCUMENT:
+                consumer.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
+                return true;
+            case XMLStreamReader.END_DOCUMENT:
+                consumer.nodeCompleted();
+                return false;
+            case XMLStreamReader.DTD:
+                consumer.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
+                return true;
+            case XMLStreamReader.START_ELEMENT:
+                if (parserIsNamespaceAware) {
+                    processNSAwareElement(consumer);
+                } else {
+                    processNSUnawareElement(consumer);
+                }
+                return true;
+            case XMLStreamReader.END_ELEMENT:
+                consumer.nodeCompleted();
+                return true;
+            case XMLStreamReader.PROCESSING_INSTRUCTION:
+                consumer.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
+                return true;
+            case XMLStreamReader.CHARACTERS:
+            case XMLStreamReader.SPACE: // TODO: these should be distinct events
+                consumer.processText(reader.getText());
+                return true;
+            case XMLStreamReader.CDATA:
+                consumer.processCDATASection(reader.getText());
+                return true;
+            case XMLStreamReader.COMMENT:
+                consumer.processComment(reader.getText());
+                return true;
+            case XMLStreamReader.ENTITY_REFERENCE:
+                consumer.processEntityReference(reader.getLocalName());
+                return true;
+            default:
+                throw new StreamException("Unexpected StAX event: " + reader.getEventType());
         }
-        return !complete;
     }
 
     public void dispose() {
