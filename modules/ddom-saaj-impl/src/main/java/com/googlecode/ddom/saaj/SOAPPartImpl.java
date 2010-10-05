@@ -22,6 +22,7 @@ import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPPart;
 import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
@@ -41,11 +42,13 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
 
+import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 
 public class SOAPPartImpl extends SOAPPart {
     private final SOAPVersion soapVersion;
     private final SAAJDocument document;
+    private Source source;
     
     public SOAPPartImpl(SOAPVersion soapVersion, SAAJDocument document) {
         this.soapVersion = soapVersion;
@@ -54,6 +57,22 @@ public class SOAPPartImpl extends SOAPPart {
     
     @Override
     public SOAPEnvelope getEnvelope() throws SOAPException {
+        if (source != null) {
+            // Quick and dirty hack for CXF
+            if (source instanceof DOMSource && ((DOMSource)source).getNode() == null) {
+                try {
+                    document.coreClear();
+                } catch (DeferredParsingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                source = null;
+                // Continue with creating a default SOAPEnvelope
+            } else {
+                // TODO
+                throw new UnsupportedOperationException();
+            }
+        }
         SOAPEnvelope envelope = (SOAPEnvelope)document.getDocumentElement();
         if (envelope == null) {
             envelope = soapVersion.createEnvelope(document);
@@ -113,9 +132,8 @@ public class SOAPPartImpl extends SOAPPart {
     }
 
     @Override
-    public void setContent(Source arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setContent(Source source) throws SOAPException {
+        this.source = source;
     }
 
     @Override
