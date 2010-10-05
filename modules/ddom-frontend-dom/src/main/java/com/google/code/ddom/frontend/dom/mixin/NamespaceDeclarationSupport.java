@@ -32,8 +32,7 @@ public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclara
     }
 
     public final Node shallowClone() {
-        // TODO Auto-generated method stub
-        return null;
+        return (Node)coreGetDocument().coreCreateNamespaceDeclaration(coreGetDeclaredPrefix(), null);
     }
 
     public final String getNamespaceURI() {

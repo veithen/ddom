@@ -142,23 +142,20 @@ public class SOAPPartImpl extends SOAPPart {
         throw new UnsupportedOperationException();
     }
 
-    public Node adoptNode(Node source) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node adoptNode(Node source) throws DOMException {
+        return document.adoptNode(source);
     }
 
-    public Attr createAttribute(String name) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Attr createAttribute(String name) throws DOMException {
+        return document.createAttribute(name);
     }
 
     public final Attr createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
         return document.createAttributeNS(namespaceURI, qualifiedName);
     }
 
-    public CDATASection createCDATASection(String data) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final CDATASection createCDATASection(String data) throws DOMException {
+        return document.createCDATASection(data);
     }
 
     public final Comment createComment(String data) {
@@ -169,19 +166,16 @@ public class SOAPPartImpl extends SOAPPart {
         return document.createDocumentFragment();
     }
 
-    public Element createElement(String tagName) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Element createElement(String tagName) throws DOMException {
+        return document.createElement(tagName);
     }
 
     public final Element createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
         return document.createElementNS(namespaceURI, qualifiedName);
     }
 
-    public EntityReference createEntityReference(String name)
-            throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final EntityReference createEntityReference(String name) throws DOMException {
+        return document.createEntityReference(name);
     }
 
     public ProcessingInstruction createProcessingInstruction(String target,
@@ -356,9 +350,8 @@ public class SOAPPartImpl extends SOAPPart {
         throw new UnsupportedOperationException();
     }
 
-    public short getNodeType() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final short getNodeType() {
+        return document.getNodeType();
     }
 
     public String getNodeValue() throws DOMException {
@@ -371,9 +364,8 @@ public class SOAPPartImpl extends SOAPPart {
         throw new UnsupportedOperationException();
     }
 
-    public Node getParentNode() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node getParentNode() {
+        return document.getParentNode();
     }
 
     public String getPrefix() {

@@ -254,4 +254,13 @@ public class ElementTest {
         Element element = doc.createElementNS(null, "test");
         element.removeAttributeNS("urn:some:namespace", "unknown");
     }
+    
+    @Validated @Test
+    public void testCloneNodeWithNamespaceDeclaration() {
+        Document doc = domUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p", "urn:test");
+        Element clone = (Element)element.cloneNode(true);
+        Assert.assertEquals("urn:test", clone.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "p"));
+    }
 }

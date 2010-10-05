@@ -58,7 +58,7 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPFault getFault() {
+    public final SOAPFault getFault() {
         try {
             CoreElement firstElement = coreGetFirstChildByType(CoreElement.class);
             return firstElement instanceof SOAPFault ? (SOAPFault)firstElement : null;
@@ -67,9 +67,8 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
         }
     }
 
-    public boolean hasFault() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean hasFault() {
+        return getFault() != null;
     }
 
     public final SOAPFault addFault() throws SOAPException {
