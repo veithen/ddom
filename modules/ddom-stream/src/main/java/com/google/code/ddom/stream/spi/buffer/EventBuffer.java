@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
-import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Output;
 import com.google.code.ddom.stream.spi.buffer.Event.Type;
 
 /**
@@ -26,7 +26,7 @@ import com.google.code.ddom.stream.spi.buffer.Event.Type;
  * 
  * @author Andreas Veithen
  */
-public class EventBuffer implements Consumer {
+public class EventBuffer implements Output {
     private final Event[] buffer = new Event[16];
     private int currentIndex;
     private int nextIndex;

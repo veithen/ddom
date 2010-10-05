@@ -39,16 +39,16 @@ import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.google.code.ddom.stream.options.ValidationPolicy;
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
 import com.google.code.ddom.stream.stax.CommentFilterStreamReader;
-import com.google.code.ddom.stream.stax.StAXParser;
+import com.google.code.ddom.stream.stax.StAXInput;
 
 @Provider(name="woodstox")
 public class WoodstoxStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         // TODO: who actually closes the streams???
         InputStream byteStream;
         Reader characterStream;
@@ -143,15 +143,15 @@ public class WoodstoxStreamProvider implements StreamProvider {
         if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
             reader = new CommentFilterStreamReader(reader);
         }
-        return new StAXParser(reader, config.getSymbols());
+        return new StAXInput(reader, config.getSymbols());
     }
     
-    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
+    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
+    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
         // TODO
         return null;
     }

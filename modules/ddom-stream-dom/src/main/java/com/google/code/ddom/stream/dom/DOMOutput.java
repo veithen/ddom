@@ -21,7 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Output;
 
 /**
  * 
@@ -33,13 +33,12 @@ import com.google.code.ddom.stream.spi.Consumer;
  * 
  * @author Andreas Veithen
  */
-// TODO: this is a strange name: it is indeed an event consumer, but a DOM producer... Maybe we should use StreamSink and StreamSource?
 // TODO: what about ID attributes???
-public class DOMConsumer implements Consumer {
+public class DOMOutput implements Output {
     private final Document document;
     private Node node;
     
-    public DOMConsumer(Document document) {
+    public DOMOutput(Document document) {
         this.document = document;
         node = document;
     }

@@ -21,19 +21,19 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.Symbols;
 
-public class StAXParser implements Producer {
+public class StAXInput implements Input {
     private final XMLStreamReader reader;
     private final DTDInfo dtdInfo;
     private final boolean parserIsNamespaceAware;
     private final Symbols symbols;
     private boolean callNext;
 
-    public StAXParser(XMLStreamReader reader, Symbols symbols) {
+    public StAXInput(XMLStreamReader reader, Symbols symbols) {
         this.reader = reader;
         dtdInfo = (DTDInfo)reader;
         parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
@@ -48,26 +48,26 @@ public class StAXParser implements Producer {
         return value == null || value.length() == 0 ? null : value;
     }
     
-    private void processNSUnawareElement(Consumer consumer) {
-        consumer.processElement(reader.getLocalName());
+    private void processNSUnawareElement(Output output) {
+        output.processElement(reader.getLocalName());
         for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-            consumer.processAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
+            output.processAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
         }
-        consumer.attributesCompleted();
+        output.attributesCompleted();
     }
     
-    private void processNSAwareElement(Consumer consumer) {
-        consumer.processElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
+    private void processNSAwareElement(Output output) {
+        output.processElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
         for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-            consumer.processAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
+            output.processAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
         }
         for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
-            consumer.processNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)), emptyToNull(reader.getNamespaceURI(i)));
+            output.processNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)), emptyToNull(reader.getNamespaceURI(i)));
         }
-        consumer.attributesCompleted();
+        output.attributesCompleted();
     }
     
-    public boolean proceed(Consumer consumer) throws StreamException {
+    public boolean proceed(Output output) throws StreamException {
         if (callNext) {
             try {
                 reader.next();
@@ -79,39 +79,39 @@ public class StAXParser implements Producer {
         }
         switch (reader.getEventType()) {
             case XMLStreamReader.START_DOCUMENT:
-                consumer.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
+                output.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
                 return true;
             case XMLStreamReader.END_DOCUMENT:
-                consumer.nodeCompleted();
+                output.nodeCompleted();
                 return false;
             case XMLStreamReader.DTD:
-                consumer.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
+                output.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
                 return true;
             case XMLStreamReader.START_ELEMENT:
                 if (parserIsNamespaceAware) {
-                    processNSAwareElement(consumer);
+                    processNSAwareElement(output);
                 } else {
-                    processNSUnawareElement(consumer);
+                    processNSUnawareElement(output);
                 }
                 return true;
             case XMLStreamReader.END_ELEMENT:
-                consumer.nodeCompleted();
+                output.nodeCompleted();
                 return true;
             case XMLStreamReader.PROCESSING_INSTRUCTION:
-                consumer.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
+                output.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
                 return true;
             case XMLStreamReader.CHARACTERS:
             case XMLStreamReader.SPACE: // TODO: these should be distinct events
-                consumer.processText(reader.getText());
+                output.processText(reader.getText());
                 return true;
             case XMLStreamReader.CDATA:
-                consumer.processCDATASection(reader.getText());
+                output.processCDATASection(reader.getText());
                 return true;
             case XMLStreamReader.COMMENT:
-                consumer.processComment(reader.getText());
+                output.processComment(reader.getText());
                 return true;
             case XMLStreamReader.ENTITY_REFERENCE:
-                consumer.processEntityReference(reader.getLocalName());
+                output.processEntityReference(reader.getLocalName());
                 return true;
             default:
                 throw new StreamException("Unexpected StAX event: " + reader.getEventType());

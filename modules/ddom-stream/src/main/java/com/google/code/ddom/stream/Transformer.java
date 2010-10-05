@@ -16,27 +16,27 @@
 package com.google.code.ddom.stream;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
 
 public class Transformer {
     public class Source {
-        private final Producer producer;
+        private final Input input;
 
-        Source(Producer producer) {
-            this.producer = producer;
+        Source(Input input) {
+            this.input = input;
         }
         
-        private void to(Consumer consumer) throws StreamException {
-            while (producer.proceed(consumer)) {
+        private void to(Output output) throws StreamException {
+            while (input.proceed(output)) {
                 // Just loop
             }
         }
         
         public void to(Object destination, Options options) throws StreamException {
-            to(streamFactory.getConsumer(destination, options));
+            to(streamFactory.getOutput(destination, options));
         }
         
         public void to(Object destination) throws StreamException {
@@ -59,11 +59,11 @@ public class Transformer {
     }
     
     public Source from(String providerName, Object source, Options options, boolean preserve) throws StreamException {
-        return new Source(streamFactory.getProducer(providerName, source, options, preserve));
+        return new Source(streamFactory.getInput(providerName, source, options, preserve));
     }
     
     public Source from(Object source, Options options, boolean preserve) throws StreamException {
-        return new Source(streamFactory.getProducer(source, options, preserve));
+        return new Source(streamFactory.getInput(source, options, preserve));
     }
     
     public Source from(Object source) throws StreamException {

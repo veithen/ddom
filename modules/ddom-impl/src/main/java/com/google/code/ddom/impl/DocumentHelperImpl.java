@@ -27,7 +27,7 @@ import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
@@ -65,21 +65,21 @@ public class DocumentHelperImpl implements DocumentHelper {
             throw new DocumentHelperException(ex);
         }
         OptionsTracker tracker = options.createTracker();
-        Producer producer;
+        Input input;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
-            producer = streamFactory.getProducer(source, tracker, preserve);
+            input = streamFactory.getInput(source, tracker, preserve);
         } catch (StreamException ex) {
             // TODO
             throw new RuntimeException(ex.getMessage(), ex.getCause());
         }
-        if (producer == null) {
+        if (input == null) {
             // TODO
             throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
         CoreDocument document = model.getDocumentFactory().createDocument();
-        document.coreSetContent(new SimpleFragmentSource(producer), model.getModelExtension());
+        document.coreSetContent(new SimpleFragmentSource(input), model.getModelExtension());
         return document;
     }
 

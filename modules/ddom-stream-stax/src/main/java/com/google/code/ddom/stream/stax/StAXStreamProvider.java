@@ -20,32 +20,32 @@ import javax.xml.stream.XMLStreamReader;
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.options.CommentPolicy;
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="stax")
 public class StAXStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         if (source instanceof XMLStreamReader) {
             XMLStreamReader reader = (XMLStreamReader)source;
             if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
                 reader = new CommentFilterStreamReader(reader);
             }
             // TODO: implement canonicalization!
-            return new StAXParser(reader, null);
+            return new StAXInput(reader, null);
         } else {
             return null;
         }
     }
     
-    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
+    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO construct Consumer wrapping an XMLStreamWriter
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
+    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
         // TODO support wrapping the consumer in an XMLStreamWriter
         return null;
     }

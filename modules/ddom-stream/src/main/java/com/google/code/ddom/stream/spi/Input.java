@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.stream.spi;
 
-public interface Producer {
+public interface Input {
     /**
      * Get the symbol table used by this producer. More precisely, get the symbol table that the
      * producer uses to canonicalize the return values of {@link Event#getName()},
@@ -28,14 +28,14 @@ public interface Producer {
     /**
      * 
      * 
-     * Must result in one or more calls to the {@link Consumer}.
+     * Must result in one or more calls to the {@link Output}.
      * 
-     * @param consumer
+     * @param output
      * @return <code>true</code> if there are more events to consume; <code>false</code> if the end
      *         of the document has been reached
      * @throws StreamException
      */
-    boolean proceed(Consumer consumer) throws StreamException;
+    boolean proceed(Output output) throws StreamException;
     
     void dispose();
 }

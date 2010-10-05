@@ -21,29 +21,29 @@ import javax.xml.transform.sax.SAXSource;
 
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="sax")
 public class SAXStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         if (source instanceof SAXSource) {
-            return new SAXSourceProducer((SAXSource)source);
+            return new SAXInput((SAXSource)source);
         } else {
             return null;
         }
     }
 
-    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
+    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO build a Consumer that wraps a ContentHandler
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
+    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
         if (serializerType.equals(ContentHandler.class)) {
-            return serializerType.cast(new ConsumerContentHandler(consumer));
+            return serializerType.cast(new OutputContentHandler(output));
         } else {
             return null;
         }

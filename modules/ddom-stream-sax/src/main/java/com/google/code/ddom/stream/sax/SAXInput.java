@@ -22,15 +22,15 @@ import javax.xml.transform.sax.SAXSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.Symbols;
 
-public class SAXSourceProducer implements Producer {
+public class SAXInput implements Input {
     private final SAXSource source;
 
-    public SAXSourceProducer(SAXSource source) {
+    public SAXInput(SAXSource source) {
         this.source = source;
     }
 
@@ -39,9 +39,9 @@ public class SAXSourceProducer implements Producer {
         return null;
     }
 
-    public boolean proceed(Consumer consumer) throws StreamException {
+    public boolean proceed(Output output) throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
-        ConsumerContentHandler handler = new ConsumerContentHandler(consumer);
+        OutputContentHandler handler = new OutputContentHandler(output);
         xmlReader.setContentHandler(handler);
         try {
             xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", handler);

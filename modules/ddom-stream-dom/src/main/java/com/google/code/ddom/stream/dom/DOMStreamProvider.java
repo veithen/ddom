@@ -19,28 +19,28 @@ import org.w3c.dom.Document;
 
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
 
 @Provider(name="dom")
 public class DOMStreamProvider implements StreamProvider {
-    public Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         // TODO build Producer for Node and DOMSource objects
         return null;
     }
 
-    public Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException {
+    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO: support DOMResult objects (and DocumentFragment and Element objects)
         if (destination instanceof Document) {
-            return new DOMConsumer((Document)destination);
+            return new DOMOutput((Document)destination);
         } else {
             return null;
         }
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options) {
+    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
         // DOM doesn't define any serializers
         return null;
     }

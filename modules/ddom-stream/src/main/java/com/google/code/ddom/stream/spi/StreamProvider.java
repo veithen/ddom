@@ -30,9 +30,9 @@ public interface StreamProvider {
      * @return
      * @throws StreamException
      */
-    Producer getProducer(Object source, OptionsTracker options, boolean preserve) throws StreamException;
+    Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException;
     
-    Consumer getConsumer(Object destination, OptionsTracker options) throws StreamException;
+    Output getOutput(Object destination, OptionsTracker options) throws StreamException;
     
-    <T> T getSerializer(Class<T> serializerType, Consumer consumer, OptionsTracker options);
+    <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options);
 }

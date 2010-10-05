@@ -21,15 +21,15 @@ import com.google.code.ddom.collections.Stack;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
-import com.google.code.ddom.stream.spi.Consumer;
-import com.google.code.ddom.stream.spi.Producer;
+import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 
 // TODO: also allow for deferred building of attributes
-public class Builder implements Consumer {
+public class Builder implements Output {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
-    private final Producer producer;
+    private final Input input;
     private final ModelExtensionMapper modelExtensionMapper;
     private final Document document;
     private final Stack<LLParentNode> nodeStack = new ArrayStack<LLParentNode>();
@@ -39,8 +39,8 @@ public class Builder implements Consumer {
     private Attribute lastAttribute;
     private boolean nodeAppended;
 
-    public Builder(Producer producer, ModelExtension modelExtension, Document document, LLParentNode target) {
-        this.producer = producer;
+    public Builder(Input input, ModelExtension modelExtension, Document document, LLParentNode target) {
+        this.input = input;
         modelExtensionMapper = modelExtension.newMapper();
         this.document = document;
         parent = target;
@@ -64,7 +64,7 @@ public class Builder implements Consumer {
             try {
                 nodeAppended = false; 
                 do {
-                    producer.proceed(this);
+                    input.proceed(this);
                 } while (parent != null && !nodeAppended);
             } catch (StreamException ex) {
                 streamException = ex;
@@ -190,6 +190,6 @@ public class Builder implements Consumer {
     }
 
     public final void dispose() {
-        producer.dispose();
+        input.dispose();
     }
 }

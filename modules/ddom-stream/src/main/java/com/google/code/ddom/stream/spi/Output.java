@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.stream.spi;
 
-public interface Consumer {
+public interface Output {
     void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
     
     void processDocumentType(String rootName, String publicId, String systemId);

@@ -88,7 +88,7 @@ public class Event {
      * <p>
      * For all other event types, the behavior of this method is undefined.
      * <p>
-     * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
+     * The return value is canonicalized using the symbol table returned by {@link Input#getSymbols()}.
      */
     public String getName() {
         return name;
@@ -109,7 +109,7 @@ public class Event {
      * <p>
      * For all other event types, the behavior of this method is undefined.
      * <p>
-     * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
+     * The return value is canonicalized using the symbol table returned by {@link Input#getSymbols()}.
      */
     public String getNamespaceURI() {
         return namespaceURI;
@@ -131,7 +131,7 @@ public class Event {
      * <p>
      * For all other event types, the behavior of this method is undefined.
      * <p>
-     * The return value is canonicalized using the symbol table returned by {@link Producer#getSymbols()}.
+     * The return value is canonicalized using the symbol table returned by {@link Input#getSymbols()}.
      */
     public String getPrefix() {
         return prefix;

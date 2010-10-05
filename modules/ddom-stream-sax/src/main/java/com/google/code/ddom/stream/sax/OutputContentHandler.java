@@ -23,14 +23,14 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 
-import com.google.code.ddom.stream.spi.Consumer;
+import com.google.code.ddom.stream.spi.Output;
 
-public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
-    private final Consumer consumer;
+public class OutputContentHandler implements ContentHandler, LexicalHandler {
+    private final Output output;
     private boolean inCDATA;
 
-    public ConsumerContentHandler(Consumer consumer) {
-        this.consumer = consumer;
+    public OutputContentHandler(Output output) {
+        this.output = output;
     }
 
     public void setDocumentLocator(Locator locator) {
@@ -40,11 +40,11 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
     }
 
     public void endDocument() throws SAXException {
-        consumer.nodeCompleted();
+        output.nodeCompleted();
     }
 
     public void startDTD(String name, String publicId, String systemId) throws SAXException {
-        consumer.processDocumentType(name, publicId, systemId);
+        output.processDocumentType(name, publicId, systemId);
     }
 
     public void endDTD() throws SAXException {
@@ -58,22 +58,22 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
         if (localName.length() == 0) {
-            consumer.processElement(qName);
+            output.processElement(qName);
         } else {
-            consumer.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName));
+            output.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName));
         }
 
         int length = atts.getLength();
         for (int i=0; i<length; i++) {
             String attLocalName = atts.getLocalName(i);
             if (attLocalName.length() == 0) {
-                consumer.processAttribute(qName, atts.getValue(i), atts.getType(i));
+                output.processAttribute(qName, atts.getValue(i), atts.getType(i));
             } else {
                 String attUri = atts.getURI(i);
                 if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                    consumer.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
+                    output.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
                 } else {
-                    consumer.processAttribute(
+                    output.processAttribute(
                             SAXStreamUtils.normalizeNamespaceURI(attUri),
                             atts.getLocalName(i),
                             SAXStreamUtils.getPrefixFromQName(qName),
@@ -82,11 +82,11 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
                 }
             }
         }
-        consumer.attributesCompleted();
+        output.attributesCompleted();
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        consumer.nodeCompleted();
+        output.nodeCompleted();
     }
 
     public void startCDATA() throws SAXException {
@@ -99,22 +99,22 @@ public class ConsumerContentHandler implements ContentHandler, LexicalHandler {
 
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (inCDATA) {
-            consumer.processCDATASection(new String(ch, start, length));
+            output.processCDATASection(new String(ch, start, length));
         } else {
-            consumer.processText(new String(ch, start, length));
+            output.processText(new String(ch, start, length));
         }
     }
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-        consumer.processText(new String(ch, start, length));
+        output.processText(new String(ch, start, length));
     }
 
     public void comment(char[] ch, int start, int length) throws SAXException {
-        consumer.processComment(new String(ch, start, length));
+        output.processComment(new String(ch, start, length));
     }
 
     public void processingInstruction(String piTarget, String piData) throws SAXException {
-        consumer.processProcessingInstruction(piTarget, piData);
+        output.processProcessingInstruction(piTarget, piData);
     }
 
     public void startEntity(String name) throws SAXException {

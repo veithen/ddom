@@ -16,6 +16,6 @@
 package com.google.code.ddom.stream.spi;
 
 public interface FragmentSource {
-    Producer getProducer();
+    Input getProducer();
     boolean isDestructive();
 }

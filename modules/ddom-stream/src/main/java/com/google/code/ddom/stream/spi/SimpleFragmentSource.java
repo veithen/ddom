@@ -16,14 +16,14 @@
 package com.google.code.ddom.stream.spi;
 
 public class SimpleFragmentSource implements FragmentSource {
-    private final Producer producer;
+    private final Input input;
 
-    public SimpleFragmentSource(Producer producer) {
-        this.producer = producer;
+    public SimpleFragmentSource(Input input) {
+        this.input = input;
     }
 
-    public Producer getProducer() {
-        return producer;
+    public Input getProducer() {
+        return input;
     }
 
     public boolean isDestructive() {
