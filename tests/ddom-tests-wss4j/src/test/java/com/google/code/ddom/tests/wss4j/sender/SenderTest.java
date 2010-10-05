@@ -15,6 +15,10 @@
  */
 package com.google.code.ddom.tests.wss4j.sender;
 
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.apache.ws.security.message.WSSecHeader;
 import org.apache.ws.security.message.WSSecUsernameToken;
 import org.junit.Test;
@@ -32,6 +36,6 @@ public class SenderTest {
         WSSecHeader secHeader = new WSSecHeader();
         secHeader.insertSecurityHeader(doc);
         Document signedDoc = builder.build(doc, secHeader);
-        System.out.println(signedDoc);
+        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(signedDoc), new StreamResult(System.out));
     }
 }

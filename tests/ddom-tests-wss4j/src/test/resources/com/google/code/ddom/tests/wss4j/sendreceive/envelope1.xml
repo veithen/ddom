@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="urn:ns1" xmlns:ns2="urn:ns2">
+    <soap:Header>
+        <ns1:header>
+            <someStuffToSign/>
+        </ns1:header> 
+    </soap:Header>
+    <soap:Body>
+        <ns2:operation>
+            <otherStuffToSign/>
+        </ns2:operation>
+    </soap:Body>
+</soap:Envelope>

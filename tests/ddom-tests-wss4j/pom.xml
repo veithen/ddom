@@ -78,4 +78,28 @@
             <version>1.2.14</version>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>keytool-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>genkey</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keystore>${project.build.directory}/keystore</keystore>
+                    <alias>key1</alias>
+                    <dname>cn=dummy</dname>
+                    <keypass>password</keypass>
+                    <storepass>password</storepass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
