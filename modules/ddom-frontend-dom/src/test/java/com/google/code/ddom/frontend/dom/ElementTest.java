@@ -84,6 +84,14 @@ public class ElementTest {
     }
     
     @Validated @Test
+    public void testSetPrefixEmpty() {
+        Document doc = domUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.setPrefix("");
+        Assert.assertNull(element.getPrefix());
+    }
+    
+    @Validated @Test
     public void testGetNamespaceURIFromCreateElement() {
         Document doc = domUtil.newDocument();
         Element element = doc.createElement("test");

@@ -36,18 +36,23 @@ public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
     }
     
     public final void setPrefix(String prefix) throws DOMException {
-        String namespaceURI = getNamespaceURI();
-        if (namespaceURI == null) {
-            throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+        if (prefix == null || prefix.length() == 0) {
+            coreSetPrefix(null);
         } else {
-            NSUtil.validatePrefix(prefix);
-            if (XMLConstants.XML_NS_PREFIX.equals(prefix) && !XMLConstants.XML_NS_URI.equals(namespaceURI)) {
+            String namespaceURI = getNamespaceURI();
+            if (namespaceURI == null) {
+                // The null namespace can't be bound to a prefix
                 throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+            } else {
+                NSUtil.validatePrefix(prefix);
+                if (XMLConstants.XML_NS_PREFIX.equals(prefix) && !XMLConstants.XML_NS_URI.equals(namespaceURI)) {
+                    throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+                }
+                if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix) && !XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+                    throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+                }
+                coreSetPrefix(prefix);
             }
-            if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix) && !XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-                throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
-            }
-            coreSetPrefix(prefix);
         }
     }
     
