@@ -34,6 +34,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
+import com.google.code.ddom.frontend.saaj.support.SAAJUtil;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class SOAPElementSupport implements SAAJSOAPElement {
@@ -62,9 +63,14 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPElement addChildElement(SOAPElement element) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement addChildElement(SOAPElement element) throws SOAPException {
+        try {
+            SAAJSOAPElement reifiedElement = SAAJUtil.reify((CoreNSAwareElement)element, getChildExtensionInterface());
+            coreAppendChild(reifiedElement);
+            return reifiedElement;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
     public void removeContents() {

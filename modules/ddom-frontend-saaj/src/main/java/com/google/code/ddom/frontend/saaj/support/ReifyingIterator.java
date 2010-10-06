@@ -18,10 +18,9 @@ package com.google.code.ddom.frontend.saaj.support;
 import java.util.Iterator;
 
 import com.google.code.ddom.core.ChildIterator;
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 
 /**
  * Iterator wrapper that silently replaces generic {@link org.w3c.dom.Element} instances by new
@@ -50,20 +49,8 @@ public class ReifyingIterator<T> implements Iterator<T> {
             return type.cast(element);
         } else {
             try {
-                CoreNSAwareElement newElement = element.coreGetDocument().coreCreateElement(
-                        extensionInterface, element.coreGetNamespaceURI(),
-                        element.coreGetLocalName(), element.coreGetPrefix());
+                SAAJSOAPElement newElement = SAAJUtil.reify(element, extensionInterface);
                 parent.replace(newElement);
-                // TODO: maybe there is a more efficient way to do this
-                CoreChildNode child;
-                while ((child = element.coreGetFirstChild()) != null) {
-                    newElement.coreAppendChild(child);
-                }
-                // TODO: copy over the attributes of the original element
-//                CoreAttribute attr;
-//                while ((attr = element.coreGetFirstAttribute()) != null) {
-//                    newElement.core
-//                }
                 return type.cast(newElement);
             } catch (CoreModelException ex) {
                 throw new RuntimeException(ex); // TODO

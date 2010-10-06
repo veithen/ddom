@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPHeaderElement;
@@ -36,12 +37,19 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
     }
 
     @Validated @Test
-    public void getChildElementsReification() {
+    public final void getChildElementsReification() {
         SOAPHeader header = createEmptySOAPHeader();
         header.appendChild(header.getOwnerDocument().createElementNS("urn:test", "p:test"));
         Iterator<?> it = header.getChildElements();
         assertTrue(it.hasNext());
         Object child = it.next();
+        assertTrue(child instanceof SOAPHeaderElement);
+    }
+    
+    @Validated @Test
+    public final void addChildElementReification() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPElement child = header.addChildElement((SOAPElement)header.getOwnerDocument().createElementNS("urn:test", "p:test"));
         assertTrue(child instanceof SOAPHeaderElement);
     }
     

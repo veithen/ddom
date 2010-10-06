@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPFault;
@@ -46,6 +47,10 @@ public abstract class AbstractTestCase {
     
     protected SOAPHeader createEmptySOAPHeader() {
         return (SOAPHeader)createSOAPEnvelope().getOwnerDocument().createElementNS(soapVersion, "SOAP-ENV:Header");
+    }
+    
+    protected SOAPBody createEmptySOAPBody() {
+        return (SOAPBody)createSOAPEnvelope().getOwnerDocument().createElementNS(soapVersion, "SOAP-ENV:Body");
     }
     
     protected SOAPFault createEmptySOAPFault() {
