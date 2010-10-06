@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
+import javax.xml.soap.SOAPException;
+
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAP11FaultExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
@@ -22,7 +24,15 @@ import com.google.code.ddom.frontend.saaj.support.SOAPVersion;
 
 @Mixin(SOAP11FaultExtension.class)
 public abstract class SOAP11FaultSupport implements SAAJSOAPFault {
-    public SOAPVersion getSOAPVersion() {
+    public final SOAPVersion getSOAPVersion() {
         return SOAPVersion.SOAP11;
+    }
+
+    public final String getFaultRole() {
+        throw new UnsupportedOperationException("Not supported in SOAP 1.1");
+    }
+
+    public final void setFaultRole(String uri) throws SOAPException {
+        throw new UnsupportedOperationException("Not supported in SOAP 1.1");
     }
 }

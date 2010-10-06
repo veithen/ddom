@@ -25,12 +25,15 @@ import javax.xml.soap.SOAPException;
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.ChildIterator;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.IdentityMapper;
 import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
+import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class SOAPElementSupport implements SAAJSOAPElement {
@@ -69,14 +72,20 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPElement addTextNode(String text) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement addTextNode(String text) throws SOAPException {
+        try {
+            // TODO: this actually replaces the content instead of adding a text node
+            coreSetValue(text);
+            return this;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
-    public SOAPElement addAttribute(Name name, String value) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement addAttribute(Name name, String value) throws SOAPException {
+        // TODO: this requires some unit tests
+        coreSetAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName(), name.getPrefix(), value);
+        return this;
     }
 
     public SOAPElement addAttribute(QName qname, String value) throws SOAPException {

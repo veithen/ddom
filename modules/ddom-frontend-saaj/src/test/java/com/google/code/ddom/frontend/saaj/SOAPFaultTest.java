@@ -26,7 +26,6 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -40,18 +39,14 @@ public abstract class SOAPFaultTest extends AbstractTestCase {
     protected abstract void checkFaultCodeElement(SOAPFaultElement element);
     protected abstract void checkFaultStringElement(SOAPFaultElement element);
     
-    @Validated @Test @Ignore // TODO
-    public void testSetFaultCode() throws Exception {
+    @Validated @Test(expected=SOAPException.class)
+    public final void testSetFaultCodeAsStringWithUnboundPrefix() throws Exception {
         SOAPFault fault = createEmptySOAPFault();
-        System.out.println(fault.getPrefix());
-        fault.setFaultCode("SOAP-ENV:Server");
-        Node child = fault.getFirstChild();
-        assertTrue(child instanceof SOAPFaultElement);
-        checkFaultCodeElement((SOAPFaultElement)child);
+        fault.setFaultCode("unbound:test");
     }
     
     @Validated @Test
-    public void testSetFaultString() throws Exception {
+    public final void testSetFaultString() throws Exception {
         SOAPFault fault = createEmptySOAPFault();
         fault.setFaultString("test");
         Node child = fault.getFirstChild();
@@ -60,14 +55,14 @@ public abstract class SOAPFaultTest extends AbstractTestCase {
     }
     
     @Validated @Test(expected=SOAPException.class)
-    public void testAddDetailTwice() throws Exception {
+    public final void testAddDetailTwice() throws Exception {
         SOAPFault fault = createEmptySOAPFault();
         fault.addDetail();
         fault.addDetail();
     }
     
     @Validated @Test
-    public void testCreateDetailEntryUsingCreateElementNS() throws Exception {
+    public final void testCreateDetailEntryUsingCreateElementNS() throws Exception {
         SOAPFault fault = createEmptySOAPFault();
         Detail detail = fault.addDetail();
         detail.appendChild(fault.getOwnerDocument().createElementNS("urn:ns", "p:test"));

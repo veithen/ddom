@@ -61,7 +61,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         throw new UnsupportedOperationException();
     }
 
-    public void setFaultCode(QName faultCode) throws SOAPException {
+    public final void setFaultCode(QName faultCode) throws SOAPException {
         try {
             CoreNSAwareElement faultCodeElement = getFaultCodeElement(SequenceOperation.GET_OR_CREATE);
             // TODO: incorrect; generate namespace declaration
@@ -71,16 +71,27 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         }
     }
 
-    public void setFaultCode(String arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setFaultCode(String faultCode) throws SOAPException {
+        try {
+            int idx = faultCode.indexOf(':');
+            // TODO: handle -1 case
+            String prefix = faultCode.substring(0, idx);
+            String namespaceURI = coreLookupNamespaceURI(prefix, false);
+            if (namespaceURI == null) {
+                throw new SOAPException("No NamespaceURI, SOAP requires faultcode content to be a QName");
+            }
+            CoreNSAwareElement faultCodeElement = getFaultCodeElement(SequenceOperation.GET_OR_CREATE);
+            faultCodeElement.coreSetValue(faultCode);
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
     private CoreNSAwareElement getFaultStringElement(SequenceOperation operation) throws CoreModelException {
         return coreQuerySequence(getSOAPVersion().getFaultSequence(), 1, operation);
     }
     
-    public String getFaultString() {
+    public final String getFaultString() {
         try {
             CoreNSAwareElement faultStringElement = getFaultStringElement(SequenceOperation.GET);
             return faultStringElement == null ? null : faultStringElement.coreGetValue();
@@ -99,7 +110,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         throw new UnsupportedOperationException();
     }
 
-    public void setFaultString(String faultString) throws SOAPException {
+    public final void setFaultString(String faultString) throws SOAPException {
         try {
             getFaultStringElement(SequenceOperation.GET_OR_CREATE).coreSetValue(faultString);
         } catch (CoreModelException ex) {
@@ -107,6 +118,23 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         }
     }
     
+    private CoreNSAwareElement getFaultActorElement(SequenceOperation operation) throws CoreModelException {
+        return coreQuerySequence(getSOAPVersion().getFaultSequence(), 2, operation);
+    }
+    
+    public String getFaultActor() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final void setFaultActor(String faultActor) throws SOAPException {
+        try {
+            getFaultActorElement(SequenceOperation.GET_OR_CREATE).coreSetValue(faultActor);
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
+    }
+
     public Detail getDetail() {
         try {
             return (Detail)coreQuerySequence(getSOAPVersion().getFaultSequence(), 3, SequenceOperation.GET);
@@ -134,11 +162,6 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         throw new UnsupportedOperationException();
     }
 
-    public String getFaultActor() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public String getFaultNode() {
         // TODO
         throw new UnsupportedOperationException();
@@ -159,11 +182,6 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         throw new UnsupportedOperationException();
     }
 
-    public String getFaultRole() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public Iterator getFaultSubcodes() {
         // TODO
         throw new UnsupportedOperationException();
@@ -179,17 +197,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         throw new UnsupportedOperationException();
     }
 
-    public void setFaultActor(String arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public void setFaultNode(String arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setFaultRole(String arg0) throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }

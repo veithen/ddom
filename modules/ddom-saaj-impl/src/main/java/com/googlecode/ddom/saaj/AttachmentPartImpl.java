@@ -20,24 +20,55 @@ import java.util.Iterator;
 
 import javax.activation.DataHandler;
 import javax.xml.soap.AttachmentPart;
+import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 
 public class AttachmentPartImpl extends AttachmentPart {
-
+    private final MimeHeaders headers = new MimeHeaders();
+    private DataHandler dataHandler;
+    
     @Override
-    public void addMimeHeader(String arg0, String arg1) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setDataHandler(DataHandler dataHandler) {
+        this.dataHandler = dataHandler;
+    }
+
+    public final void removeAllMimeHeaders() {
+        headers.removeAllHeaders();
+    }
+
+    public final void removeMimeHeader(String header) {
+        headers.removeHeader(header);
+    }
+
+    public final String[] getMimeHeader(String name) {
+        return headers.getHeader(name);
+    }
+
+    public final void setMimeHeader(String name, String value) {
+        headers.setHeader(name, value);
+    }
+
+    public final void addMimeHeader(String name, String value) {
+        headers.addHeader(name, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final Iterator getAllMimeHeaders() {
+        return headers.getAllHeaders();
+    }
+
+    @SuppressWarnings("unchecked")
+    public final Iterator getMatchingMimeHeaders(String[] names) {
+        return headers.getMatchingHeaders(names);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final Iterator getNonMatchingMimeHeaders(String[] names) {
+        return headers.getNonMatchingHeaders(names);
     }
 
     @Override
     public void clearContent() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Iterator getAllMimeHeaders() {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -61,24 +92,6 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     @Override
-    public Iterator getMatchingMimeHeaders(String[] arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String[] getMimeHeader(String arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Iterator getNonMatchingMimeHeaders(String[] arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public InputStream getRawContent() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
@@ -97,18 +110,6 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     @Override
-    public void removeAllMimeHeaders() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void removeMimeHeader(String arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void setBase64Content(InputStream arg0, String arg1) throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
@@ -116,18 +117,6 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     @Override
     public void setContent(Object arg0, String arg1) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setDataHandler(DataHandler arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setMimeHeader(String arg0, String arg1) {
         // TODO
         throw new UnsupportedOperationException();
     }

@@ -23,8 +23,18 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPFault;
 
-public class SOAPFactoryImpl extends SOAPFactory {
+import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
+import com.google.code.ddom.frontend.saaj.support.NameImpl;
 
+public class SOAPFactoryImpl extends SOAPFactory {
+    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(SOAPFactoryImpl.class.getClassLoader());
+    
+    private SAAJDocument createDocument() {
+        return (SAAJDocument)documentHelper.newDocument("saaj");
+    }
+    
     @Override
     public Detail createDetail() throws SOAPException {
         // TODO
@@ -32,9 +42,9 @@ public class SOAPFactoryImpl extends SOAPFactory {
     }
 
     @Override
-    public SOAPElement createElement(Name arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement createElement(Name name) throws SOAPException {
+        // TODO: need to check if conventions for empty/null prefix/uri are respected
+        return (SOAPElement)createDocument().coreCreateElement(name.getURI(), name.getLocalName(), name.getPrefix());
     }
 
     @Override
@@ -44,10 +54,9 @@ public class SOAPFactoryImpl extends SOAPFactory {
     }
 
     @Override
-    public SOAPElement createElement(String arg0, String arg1, String arg2)
-            throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement createElement(String localName, String prefix, String uri) throws SOAPException {
+        // TODO: add a unit test that checks the type of returned object if the name corresponds to a SOAP envelope, body, etc.
+        return (SOAPElement)createDocument().coreCreateElement(uri, localName, prefix);
     }
 
     @Override
@@ -69,9 +78,7 @@ public class SOAPFactoryImpl extends SOAPFactory {
     }
 
     @Override
-    public Name createName(String arg0, String arg1, String arg2)
-            throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Name createName(String localName, String prefix, String uri) throws SOAPException {
+        return new NameImpl(localName, prefix, uri);
     }
 }

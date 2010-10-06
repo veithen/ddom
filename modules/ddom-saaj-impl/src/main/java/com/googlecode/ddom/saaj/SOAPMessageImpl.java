@@ -49,20 +49,18 @@ public class SOAPMessageImpl extends SOAPMessage {
     }
 
     @Override
-    public void addAttachmentPart(AttachmentPart arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void addAttachmentPart(AttachmentPart attachmentPart) {
+        attachments.add((AttachmentPartImpl)attachmentPart);
     }
 
     @Override
-    public int countAttachments() {
+    public final int countAttachments() {
         return attachments.size();
     }
 
     @Override
-    public AttachmentPart createAttachmentPart() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final AttachmentPart createAttachmentPart() {
+        return new AttachmentPartImpl();
     }
 
     @Override

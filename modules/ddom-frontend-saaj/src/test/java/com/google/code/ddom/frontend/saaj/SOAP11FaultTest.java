@@ -15,10 +15,18 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
+import static org.junit.Assert.assertTrue;
+
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 
 import org.junit.Assert;
+import org.junit.Test;
+import org.w3c.dom.Node;
+
+import com.google.code.ddom.utils.test.Validated;
 
 public class SOAP11FaultTest extends SOAPFaultTest {
     public SOAP11FaultTest() {
@@ -37,5 +45,28 @@ public class SOAP11FaultTest extends SOAPFaultTest {
         // TODO
 //        Assert.assertNull(element.getNamespaceURI());
         Assert.assertEquals("faultstring", element.getLocalName());
+    }
+
+    // Custom fault codes are only allowed in SOAP 1.1
+    @Validated @Test
+    public void testSetFaultCodeAsStringCustom() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        fault.addNamespaceDeclaration("p", "urn:ns1");
+        fault.setFaultCode("p:MyFaultCode");
+        Node child = fault.getFirstChild();
+        assertTrue(child instanceof SOAPFaultElement);
+        checkFaultCodeElement((SOAPFaultElement)child);
+    }
+    
+    @Validated @Test(expected=UnsupportedOperationException.class)
+    public void testGetFaultRole() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        fault.getFaultRole();
+    }
+    
+    @Validated @Test(expected=UnsupportedOperationException.class)
+    public void testSetFaultRole() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        fault.setFaultRole("urn:myrole");
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,5 +99,13 @@ public class SOAPElementTest {
         Assert.assertTrue(StringUtils.isEmpty(name.getPrefix()));
         Assert.assertEquals("test", name.getLocalName());
         Assert.assertEquals("test", name.getQualifiedName());
+    }
+    
+    @Validated @Test
+    public void testAddTextNode() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        SOAPElement returnValue = element.addTextNode("text");
+        Assert.assertSame(element, returnValue);
+        Assert.assertEquals("text", element.getTextContent());
     }
 }
