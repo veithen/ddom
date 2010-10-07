@@ -120,7 +120,7 @@ public class DOMInput implements Input {
                         break loop;
                     default:
                         // TODO
-                        throw new UnsupportedOperationException();
+                        throw new UnsupportedOperationException("Unsupported node type " + nodeType);
                 }
             }
         }

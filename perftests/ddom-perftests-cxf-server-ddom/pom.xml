@@ -33,20 +33,19 @@
             <artifactId>ddom-perftests-cxf-service-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${cxf.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.sun.xml.messaging.saaj</groupId>
                     <artifactId>saaj-impl</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-saaj-impl</artifactId>
+            <artifactId>ddom-cxf</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

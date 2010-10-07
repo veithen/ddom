@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.googlecode.ddom.cxf;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MimeHeaders;
@@ -27,29 +25,45 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPPart;
 
+import org.apache.cxf.binding.soap.SoapMessage;
+
 import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPMessageImpl;
+import com.google.code.ddom.spi.model.Model;
 
 public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
-    private final SOAPPartImpl soapPart;
-    private final List<AttachmentPartImpl> attachments = new ArrayList<AttachmentPartImpl>();
+    private final Model saajModel;
+    private final SoapMessage message;
+    private SOAPPart soapPart;
     
-    public SOAPMessageImpl(SOAPPartImpl soapPart) {
-        this.soapPart = soapPart;
+    public SOAPMessageImpl(Model saajModel, SoapMessage message) {
+        this.saajModel = saajModel;
+        this.message = message;
+    }
+
+    @Override
+    public SOAPPart getSOAPPart() {
+        if (soapPart == null) {
+            soapPart = new SOAPPartImpl(saajModel, message);
+        }
+        return soapPart;
     }
 
     @Override
     public final void addAttachmentPart(AttachmentPart attachmentPart) {
-        attachments.add((AttachmentPartImpl)attachmentPart);
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public final int countAttachments() {
-        return attachments.size();
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public final AttachmentPart createAttachmentPart() {
-        return new AttachmentPartImpl();
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -80,11 +94,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     public MimeHeaders getMimeHeaders() {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public SOAPPart getSOAPPart() {
-        return soapPart;
     }
 
     @Override

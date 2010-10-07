@@ -35,6 +35,7 @@
         <module>ddom-backend-testsuite</module>
         <module>ddom-commons</module>
         <module>ddom-core</module>
+        <module>ddom-cxf</module>
         <module>ddom-dom-utils</module>
         <module>ddom-frontend</module>
         <module>ddom-frontend-axiom</module>

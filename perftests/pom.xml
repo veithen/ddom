@@ -40,7 +40,6 @@
 
     <properties>
         <jaxws.ri.version>2.1.7</jaxws.ri.version>
-        <cxf.version>2.3.0-SNAPSHOT</cxf.version>
     </properties>
     <dependencyManagement>
         <dependencies>

@@ -20,26 +20,49 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google.code.ddom</groupId>
-        <artifactId>perftests</artifactId>
+        <artifactId>modules</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-perftests-cxf-client</artifactId>
-    <name>DDOM :: Performance tests :: CXF :: Client</name>
+    <artifactId>ddom-cxf</artifactId>
+    <name>DDOM :: Modules :: CXF support</name>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-perftests-cxf-common</artifactId>
+            <artifactId>ddom-frontend-saaj</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-backend-linkedlist</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-weaver</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-stream-dom</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-stream-stax</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-ws-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-ws-policy</artifactId>
+            <artifactId>cxf-rt-bindings-soap</artifactId>
         </dependency>
     </dependencies>
 </project>
