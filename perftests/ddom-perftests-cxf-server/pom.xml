@@ -24,8 +24,8 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>ddom-perftests-cxf-server-ddom</artifactId>
-    <name>DDOM :: Performance tests :: CXF :: Server (DDOM)</name>
+    <artifactId>ddom-perftests-cxf-server</artifactId>
+    <name>DDOM :: Performance tests :: CXF :: Server</name>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
@@ -33,16 +33,6 @@
             <artifactId>ddom-perftests-cxf-service-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.xml.messaging.saaj</groupId>
-                    <artifactId>saaj-impl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ddom-cxf</artifactId>

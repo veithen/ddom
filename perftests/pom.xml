@@ -33,8 +33,7 @@
         <module>ddom-perftests-seismic-axis2</module -->
         <module>ddom-perftests-cxf-client</module>
         <module>ddom-perftests-cxf-common</module>
-        <module>ddom-perftests-cxf-server-ddom</module>
-        <module>ddom-perftests-cxf-server-saajri</module>
+        <module>ddom-perftests-cxf-server</module>
         <module>ddom-perftests-cxf-service-impl</module>
     </modules>
 

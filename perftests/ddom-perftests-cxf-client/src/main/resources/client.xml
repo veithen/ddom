@@ -62,4 +62,77 @@
     </jaxws:properties>
   </jaxws:client>
 
+  <jaxws:client
+        id="plain-ddom"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-plain.wsdl">
+    
+    <jaxws:inInterceptors>
+      <bean class="com.googlecode.ddom.cxf.SAAJInInterceptor"/>
+    </jaxws:inInterceptors>
+    
+  </jaxws:client>
+  
+  <jaxws:client
+        id="sign-ddom"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-sign.wsdl">
+    
+    <jaxws:inInterceptors>
+      <bean class="com.googlecode.ddom.cxf.SAAJInInterceptor"/>
+    </jaxws:inInterceptors>
+    
+    <jaxws:properties>
+      <entry key="ws-security.signature.properties"
+          value="client-crypto.properties"/>
+      <entry key="ws-security.signature.username" value="clientkey"/>
+      <entry key="ws-security.callback-handler"
+          value="com.sosnoski.ws.seismic.cxf.ClientCallback"/>
+    </jaxws:properties>
+  </jaxws:client>
+
+  <jaxws:client
+        id="signencr-ddom"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-signencr.wsdl">
+    
+    <jaxws:inInterceptors>
+      <bean class="com.googlecode.ddom.cxf.SAAJInInterceptor"/>
+    </jaxws:inInterceptors>
+    
+    <jaxws:properties>
+      <entry key="ws-security.signature.properties"
+          value="client-crypto.properties"/>
+      <entry key="ws-security.signature.username" value="clientkey"/>
+      <entry key="ws-security.encryption.properties"
+          value="client-crypto.properties"/>
+      <entry key="ws-security.encryption.username" value="serverkey"/>
+      <entry key="ws-security.callback-handler"
+          value="com.sosnoski.ws.seismic.cxf.ClientCallback"/>
+    </jaxws:properties>
+  </jaxws:client>
+
+  <jaxws:client
+        id="username-ddom"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-username.wsdl">
+    
+    <jaxws:inInterceptors>
+      <bean class="com.googlecode.ddom.cxf.SAAJInInterceptor"/>
+    </jaxws:inInterceptors>
+    
+    <jaxws:properties>
+      <entry key="ws-security.username" value="libuser"/>
+      <entry key="ws-security.password" value="books"/>
+    </jaxws:properties>
+  </jaxws:client>
+
 </beans>

@@ -41,5 +41,10 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-ws-policy</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-cxf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
