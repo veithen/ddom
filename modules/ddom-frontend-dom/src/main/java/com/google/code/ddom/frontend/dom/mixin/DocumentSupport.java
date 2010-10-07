@@ -45,9 +45,13 @@ import com.google.code.ddom.core.CoreNSAwareNamedNode;
 import com.google.code.ddom.core.CoreTypedAttribute;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
+import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.frontend.dom.intf.DOMDocumentFragment;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMConfigurationImpl;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
@@ -159,65 +163,72 @@ public abstract class DocumentSupport implements DOMDocument {
     }
     
     public final Node importNode(Node node, boolean deep) throws DOMException {
-        Node importedNode;
-        boolean importChildren;
-        switch (node.getNodeType()) {
-            case Node.ELEMENT_NODE:
-                Element element = (Element)node;
-                // TODO: detect DOM 1 elements (as with attributes)
-                Element importedElement = (Element)coreCreateElement(element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
-                NamedNodeMap attributes = element.getAttributes();
-                for (int length = attributes.getLength(), i=0; i<length; i++) {
-                    // TODO optimize: we should have a method in the core model that simply appends an attribute (even if this is somewhat unsafe)
-                    importedElement.setAttributeNode((Attr)importNode(attributes.item(i), true));
-                }
-                importedNode = importedElement;
-                importChildren = deep;
-                break;
-            case Node.ATTRIBUTE_NODE:
-                Attr attr = (Attr)node;
-                String localName = attr.getLocalName();
-                if (localName == null) {
-                    importedNode = (Node)coreCreateAttribute(attr.getName(), null, null);
-                } else {
-                    importedNode = (Node)coreCreateAttribute(attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
-                }
-                importChildren = true;
-                break;
-            case Node.COMMENT_NODE:
-                importedNode = (Node)coreCreateComment(node.getNodeValue());
-                importChildren = false;
-                break;
-            case Node.TEXT_NODE:
-                importedNode = (Node)coreCreateText(node.getNodeValue());
-                importChildren = false;
-                break;
-            case Node.CDATA_SECTION_NODE:
-                importedNode = (Node)coreCreateCDATASection(node.getNodeValue());
-                importChildren = false;
-                break;
-            case Node.PROCESSING_INSTRUCTION_NODE:
-                ProcessingInstruction pi = (ProcessingInstruction)node;
-                importedNode = (Node)coreCreateProcessingInstruction(pi.getTarget(), pi.getData());
-                importChildren = false;
-                break;
-            case Node.DOCUMENT_FRAGMENT_NODE:
-                importedNode = (Node)coreCreateDocumentFragment();
-                importChildren = deep;
-                break;
-            case Node.ENTITY_REFERENCE_NODE:
-                importedNode = (Node)coreCreateEntityReference(node.getNodeName());
-                importChildren = false;
-                break;
-            default:
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
-        }
-        if (importChildren) {
-            for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
-                importedNode.appendChild(importNode(child, true));
+        try {
+            switch (node.getNodeType()) {
+                case Node.ELEMENT_NODE:
+                    Element element = (Element)node;
+                    // TODO: detect DOM 1 elements (as with attributes)
+                    DOMElement importedElement = (DOMElement)coreCreateElement(element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
+                    NamedNodeMap attributes = element.getAttributes();
+                    for (int length = attributes.getLength(), i=0; i<length; i++) {
+                        // TODO optimize: we should have a method in the core model that simply appends an attribute (even if this is somewhat unsafe)
+                        importedElement.setAttributeNode((Attr)importNode(attributes.item(i), true));
+                    }
+                    if (deep) {
+                        importChildren(element, importedElement);
+                    }
+                    return importedElement;
+                case Node.ATTRIBUTE_NODE:
+                    Attr attr = (Attr)node;
+                    String localName = attr.getLocalName();
+                    DOMAttribute importedAttr;
+                    // TODO: namespace declarations
+                    if (localName == null) {
+                        importedAttr = (DOMAttribute)coreCreateAttribute(attr.getName(), null, null);
+                    } else {
+                        importedAttr = (DOMAttribute)coreCreateAttribute(attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
+                    }
+                    // Children of attributes are always imported, regardless of the value of the "deep" parameter
+                    importChildren(attr, importedAttr);
+                    return importedAttr;
+                case Node.COMMENT_NODE:
+                    return (Node)coreCreateComment(node.getNodeValue());
+                case Node.TEXT_NODE:
+                    return (Node)coreCreateText(node.getNodeValue());
+                case Node.CDATA_SECTION_NODE:
+                    return (Node)coreCreateCDATASection(node.getNodeValue());
+                case Node.PROCESSING_INSTRUCTION_NODE:
+                    ProcessingInstruction pi = (ProcessingInstruction)node;
+                    return (Node)coreCreateProcessingInstruction(pi.getTarget(), pi.getData());
+                case Node.DOCUMENT_FRAGMENT_NODE:
+                    DOMDocumentFragment importedNode = (DOMDocumentFragment)coreCreateDocumentFragment();
+                    if (deep) {
+                        importChildren(node, importedNode);
+                    }
+                    return importedNode;
+                case Node.ENTITY_REFERENCE_NODE:
+                    return (Node)coreCreateEntityReference(node.getNodeName());
+                default:
+                    throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
             }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return importedNode;
+    }
+    
+    private void importChildren(Node node, DOMParentNode target) throws CoreModelException {
+        DOMCoreChildNode previousImportedChild = null;
+        for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
+            DOMCoreChildNode importedChild = (DOMCoreChildNode)importNode(child, true);
+            if (previousImportedChild == null) {
+                target.coreAppendChild(importedChild);
+            } else {
+                // Inserting a new child after the last child is more efficient than
+                // appending it to the parent (at least in the default linkedlist back-end).
+                previousImportedChild.coreInsertSiblingAfter(importedChild);
+            }
+            previousImportedChild = importedChild;
+        }
     }
 
     public final Element getElementById(String elementId) {
