@@ -17,12 +17,11 @@ package com.googlecode.ddom.cxf;
 
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 
 import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.staxutils.W3CDOMStreamReader;
+import org.apache.cxf.phase.Phase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -35,7 +34,6 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.stream.dom.DOMInput;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
-import com.google.code.ddom.stream.stax.StAXInput;
 
 public class SOAPPartImpl extends AbstractSOAPPartImpl {
     private final Model saajModel;
@@ -66,19 +64,23 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             
             // TODO: handle the fault case
             
-            // TODO: using ModelExtension.NULL here means that we will create a simple element instead of a SOAPBodyElement
-            body.coreSetContent(new SimpleFragmentSource(new StAXInput(message.getContent(XMLStreamReader.class), null)), ModelExtension.NULL);
+            // This allows us to pass through the raw StAX events from the original reader
+            // unless the SOAP body is actually accessed through SAAJ.
+            // TODO: need a better name for this thing
+            StreamSwitch streamSwitch = new StreamSwitch(message.getContent(XMLStreamReader.class), body);
             
-            XMLStreamReader newReader = new W3CDOMStreamReader(body);
-            // Move the reader to the right position
-            newReader.nextTag();
-            newReader.nextTag();
-            message.setContent(XMLStreamReader.class, newReader);
+            // TODO: using ModelExtension.NULL here means that we will create a simple element instead of a SOAPBodyElement
+            body.coreSetContent(new SimpleFragmentSource(streamSwitch), ModelExtension.NULL);
+            
+            message.setContent(XMLStreamReader.class, streamSwitch);
+
+            // This is a bit ugly. WSS4JInInterceptor#doResults resets the XMLStreamReader content to
+            // a W3CDOMStreamReader constructed from the body. This is not what we want, so we add
+            // an interceptor to the end of the chain to reset the XMLStreamReader.
+            message.getInterceptorChain().add(new ReaderResetInterceptor(Phase.PRE_PROTOCOL, streamSwitch));
             
             return saajDocument;
         } catch (SOAPException ex) {
-            throw new RuntimeException(ex);
-        } catch (XMLStreamException ex) {
             throw new RuntimeException(ex);
         } catch (DeferredParsingException ex) {
             throw new RuntimeException(ex);
