@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xmlns:soap="http://cxf.apache.org/bindings/soap"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+      http://cxf.apache.org/jaxws
+      http://cxf.apache.org/schemas/jaxws.xsd">
+
+  <jaxws:endpoint
+      implementor="com.sosnoski.ws.seismic.cxf.CxfSeismicImpl"
+      wsdlLocation="META-INF/wsdl/seismic-plain.wsdl"
+      address="/plain"/>
+  
+  <jaxws:endpoint
+      implementor="com.sosnoski.ws.seismic.cxf.CxfSeismicImpl"
+      wsdlLocation="META-INF/wsdl/seismic-sign.wsdl"
+      address="/sign">
+
+    <jaxws:properties>
+      <entry key="ws-security.signature.properties" value="server-crypto.properties"/>
+      <entry key="ws-security.signature.username" value="serverkey"/>
+      <entry key="ws-security.callback-handler"
+          value="com.sosnoski.ws.seismic.cxf.ServerCallback"/>
+    </jaxws:properties>
+
+  </jaxws:endpoint>
+
+  <jaxws:endpoint
+      implementor="com.sosnoski.ws.seismic.cxf.CxfSeismicImpl"
+      wsdlLocation="META-INF/wsdl/seismic-signencr.wsdl"
+      address="/signencr">
+
+    <jaxws:properties>
+      <entry key="ws-security.signature.properties" value="server-crypto.properties"/>
+      <entry key="ws-security.signature.username" value="serverkey"/>
+      <entry key="ws-security.encryption.username" value="useReqSigCert"/>
+      <entry key="ws-security.callback-handler"
+          value="com.sosnoski.ws.seismic.cxf.ServerCallback"/>
+    </jaxws:properties>
+
+  </jaxws:endpoint>
+
+  <jaxws:endpoint
+      implementor="com.sosnoski.ws.seismic.cxf.CxfSeismicImpl"
+      wsdlLocation="META-INF/wsdl/seismic-username.wsdl"
+      address="/username">
+
+    <jaxws:properties>
+      <entry key="ws-security.callback-handler"
+          value="com.sosnoski.ws.seismic.cxf.ServerCallback"/>
+    </jaxws:properties>
+
+  </jaxws:endpoint>
+</beans>

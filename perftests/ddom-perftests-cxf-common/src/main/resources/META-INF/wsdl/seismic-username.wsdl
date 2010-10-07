@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws.sosnoski.com/seismic/wsdl"
+   xmlns:wns="http://ws.sosnoski.com/seismic/wsdl"
+   xmlns:tns="http://ws.sosnoski.com/seismic/types"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  
+  <!-- Policy for Username Token with plaintext password, sent from client to
+    server only -->
+  <wsp:Policy wsu:Id="UsernameToken" xmlns:wsu=
+      "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+      xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+      xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SupportingTokens>
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken=
+                "http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToRecipient"/>
+          </wsp:Policy>
+        </sp:SupportingTokens>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+   
+ <wsdl:types>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     targetNamespace="http://ws.sosnoski.com/seismic/types"
+     elementFormDefault="qualified">
+     
+   <element name="matchQuakes">
+    <complexType>
+     <sequence>
+      <element name="min-date" minOccurs="0" type="xsd:dateTime"/>
+      <element name="max-date" minOccurs="0" type="xsd:dateTime"/>
+      <element name="min-long" minOccurs="0" type="xsd:float"/>
+      <element name="max-long" minOccurs="0" type="xsd:float"/>
+      <element name="min-lat" minOccurs="0" type="xsd:float"/>
+      <element name="max-lat" minOccurs="0" type="xsd:float"/>
+      <element name="min-mag" minOccurs="0" type="xsd:float"/>
+      <element name="max-mag" minOccurs="0" type="xsd:float"/>
+      <element name="min-depth" minOccurs="0" type="xsd:float"/>
+      <element name="max-depth" minOccurs="0" type="xsd:float"/>
+     </sequence>
+    </complexType>
+   </element>
+   
+   <complexType name="Region">
+    <simpleContent>
+     <extension base="xsd:string">
+      <attribute name="ident" use="required" type="xsd:ID"/>
+      <attribute name="index" use="required" type="xsd:int"/>
+     </extension>
+    </simpleContent>
+   </complexType>
+   
+   <complexType name="Quake">
+    <attribute name="time" use="required" type="xsd:dateTime"/>
+    <attribute name="millis" use="required" type="xsd:int"/>
+    <attribute name="latitude" use="required" type="xsd:float"/>
+    <attribute name="longitude" use="required" type="xsd:float"/>
+    <attribute name="depth" use="required" type="xsd:float"/>
+    <attribute name="magnitude" use="required" type="xsd:float"/>
+    <attribute name="method" use="required" type="xsd:string"/>
+    <attribute name="region" use="required" type="xsd:IDREF"/>
+   </complexType>
+   
+   <complexType name="QuakeSet">
+    <sequence>
+     <element name="area-name" type="xsd:string"/>
+     <element name="regions">
+      <complexType>
+       <sequence>
+        <element name="region" minOccurs="0" maxOccurs="unbounded" type="tns:Region"/>
+       </sequence>
+       <attribute name="count" use="required" type="xsd:int"/>
+      </complexType>
+     </element>
+     <element name="quakes">
+      <complexType>
+       <sequence>
+        <element name="quake" minOccurs="0" maxOccurs="unbounded" type="tns:Quake"/>
+       </sequence>
+       <attribute name="count" use="required" type="xsd:int"/>
+      </complexType>
+     </element>
+    </sequence>
+   </complexType>
+   
+   <element name="results">
+    <complexType>
+     <sequence>
+      <element name="result-set" minOccurs="0" maxOccurs="unbounded" type="tns:QuakeSet"/>
+     </sequence>
+     <attribute name="count" use="required" type="xsd:int"/>
+    </complexType>
+   </element>
+   
+  </schema>
+ </wsdl:types>
+ 
+ <wsdl:message name="quakeQuery">
+  <wsdl:part name="parameters" element="tns:matchQuakes"/>
+ </wsdl:message>
+
+ <wsdl:message name="quakeResponse">
+  <wsdl:part name="result" element="tns:results"/>
+ </wsdl:message>
+ 
+ <wsdl:portType name="SeismicInterface">
+  <wsdl:operation name="matchQuakes">
+   <wsdl:input message="wns:quakeQuery"/>
+   <wsdl:output message="wns:quakeResponse"/>
+  </wsdl:operation>
+ </wsdl:portType>
+ 
+ <wsdl:binding name="SeismicBinding" type="wns:SeismicInterface">
+  <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    URI="#UsernameToken"/> 
+  <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+  <wsdl:operation name="matchQuakes">
+   <soap:operation soapAction="urn:matchQuakes"/>
+   <wsdl:input>
+    <soap:body use="literal"/>
+   </wsdl:input>
+   <wsdl:output>
+    <soap:body use="literal"/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:service name="SeismicCXF">
+  <wsdl:port name="seismic" binding="wns:SeismicBinding">
+   <soap:address location="http://localhost:8080/cxf-seismic"/>
+  </wsdl:port>
+ </wsdl:service>
+
+</wsdl:definitions>

@@ -1,0 +1,65 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:jaxws="http://cxf.apache.org/jaxws"
+   xmlns:seismic="http://ws.sosnoski.com/seismic/wsdl"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+   http://cxf.apache.org/jaxws 
+   http://cxf.apache.org/schemas/jaxws.xsd">
+
+  <jaxws:client
+        id="plain"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-plain.wsdl"/>
+  
+  <jaxws:client
+        id="sign"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-sign.wsdl">
+    
+    <jaxws:properties>
+      <entry key="ws-security.signature.properties"
+          value="client-crypto.properties"/>
+      <entry key="ws-security.signature.username" value="clientkey"/>
+      <entry key="ws-security.callback-handler"
+          value="com.sosnoski.ws.seismic.cxf.ClientCallback"/>
+    </jaxws:properties>
+  </jaxws:client>
+
+  <jaxws:client
+        id="signencr"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-signencr.wsdl">
+    
+    <jaxws:properties>
+      <entry key="ws-security.signature.properties"
+          value="client-crypto.properties"/>
+      <entry key="ws-security.signature.username" value="clientkey"/>
+      <entry key="ws-security.encryption.properties"
+          value="client-crypto.properties"/>
+      <entry key="ws-security.encryption.username" value="serverkey"/>
+      <entry key="ws-security.callback-handler"
+          value="com.sosnoski.ws.seismic.cxf.ClientCallback"/>
+    </jaxws:properties>
+  </jaxws:client>
+
+  <jaxws:client
+        id="username"
+        serviceClass="com.sosnoski.ws.seismic.cxf.SeismicInterface"
+        serviceName="seismic:SeismicCXF"
+        endpointName="seismic:seismic"
+        wsdlLocation="META-INF/wsdl/seismic-username.wsdl">
+    
+    <jaxws:properties>
+      <entry key="ws-security.username" value="libuser"/>
+      <entry key="ws-security.password" value="books"/>
+    </jaxws:properties>
+  </jaxws:client>
+
+</beans>

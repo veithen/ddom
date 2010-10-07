@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Andreas Veithen
+  ~ Copyright 2009-2010 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -29,12 +29,18 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>ddom-perftests-seismic</module>
-        <module>ddom-perftests-seismic-axis2</module>
+        <!-- module>ddom-perftests-seismic</module>
+        <module>ddom-perftests-seismic-axis2</module -->
+        <module>ddom-perftests-cxf-client</module>
+        <module>ddom-perftests-cxf-common</module>
+        <module>ddom-perftests-cxf-server-ddom</module>
+        <module>ddom-perftests-cxf-server-saajri</module>
+        <module>ddom-perftests-cxf-service-impl</module>
     </modules>
 
     <properties>
         <jaxws.ri.version>2.1.7</jaxws.ri.version>
+        <cxf.version>2.3.0-SNAPSHOT</cxf.version>
     </properties>
     <dependencyManagement>
         <dependencies>
