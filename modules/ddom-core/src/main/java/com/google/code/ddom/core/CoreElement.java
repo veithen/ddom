@@ -98,6 +98,21 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
     CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException;
     
     /**
+     * Append an attribute to this element. The attribute is simply added at the end of the list of
+     * attributes for this element. This method should be used with care because no provisions are
+     * made to ensure uniqueness of attribute names.
+     * 
+     * @param attr
+     *            the attribute to append
+     * @param policy
+     *            the policy to apply if the attribute already has an owner element or belongs to a
+     *            different document
+     * @throws NodeMigrationException
+     *             if appending the attribute was rejected by the policy
+     */
+    void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException;
+    
+    /**
      * Look up the namespace URI associated to the given prefix.
      * 
      * @param prefix

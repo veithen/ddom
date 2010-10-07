@@ -43,6 +43,7 @@ import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareNamedNode;
 import com.google.code.ddom.core.CoreTypedAttribute;
+import com.google.code.ddom.core.NodeMigrationPolicy;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
@@ -58,6 +59,7 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
+import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.frontend.dom.support.UserData;
 import com.google.code.ddom.stream.spi.Symbols;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
@@ -171,8 +173,7 @@ public abstract class DocumentSupport implements DOMDocument {
                     DOMElement importedElement = (DOMElement)coreCreateElement(element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
                     NamedNodeMap attributes = element.getAttributes();
                     for (int length = attributes.getLength(), i=0; i<length; i++) {
-                        // TODO optimize: we should have a method in the core model that simply appends an attribute (even if this is somewhat unsafe)
-                        importedElement.setAttributeNode((Attr)importNode(attributes.item(i), true));
+                        importedElement.coreAppendAttribute((DOMAttribute)importNode(attributes.item(i), true), Policies.ATTRIBUTE_MIGRATION_POLICY);
                     }
                     if (deep) {
                         importChildren(element, importedElement);

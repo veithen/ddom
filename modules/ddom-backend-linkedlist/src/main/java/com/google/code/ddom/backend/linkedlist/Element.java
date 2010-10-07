@@ -91,7 +91,7 @@ public abstract class Element extends Container implements LLChildNode, CoreElem
             CoreDocument document = internalGetDocument();
             Attribute newAttr = (Attribute)matcher.createAttribute(document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
-                appendAttribute(newAttr);
+                internalAppendAttribute(newAttr);
             } else {
                 previousAttr.insertAttributeAfter(newAttr);
             }
@@ -166,7 +166,11 @@ public abstract class Element extends Container implements LLChildNode, CoreElem
         }
     }
 
-    final void appendAttribute(Attribute attr) {
+    public final void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException {
+        internalAppendAttribute(accept(attr, policy));
+    }
+
+    final void internalAppendAttribute(Attribute attr) {
         // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
         attr.setOwnerElement(this);
         if (firstAttribute == null) {

@@ -169,7 +169,7 @@ public class Builder implements Output {
     private void appendAttribute(Attribute attr) {
         Element element = (Element)parent;
         if (lastAttribute == null) {
-            element.appendAttribute(attr);
+            element.internalAppendAttribute(attr);
         } else {
             lastAttribute.insertAttributeAfter(attr);
         }
