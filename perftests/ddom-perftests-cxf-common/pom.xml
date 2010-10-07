@@ -32,6 +32,15 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
         </dependency>
+        <dependency>
+            <!-- This is added to make sure that the SAAJ RI gets no chance to
+                 do special optimizations that use the fact that it is tightly coupled
+                 to the DOM implementation. -->
+            <!-- TODO: evaluate the real impact of this -->
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.9.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
