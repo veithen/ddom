@@ -40,7 +40,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
     public String getFaultCode() {
         try {
             CoreNSAwareElement faultCodeElement = getFaultCodeElement(SequenceOperation.GET);
-            return faultCodeElement == null ? null : faultCodeElement.coreGetValue();
+            return faultCodeElement == null ? null : faultCodeElement.coreGetTextContent();
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }
@@ -94,7 +94,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
     public final String getFaultString() {
         try {
             CoreNSAwareElement faultStringElement = getFaultStringElement(SequenceOperation.GET);
-            return faultStringElement == null ? null : faultStringElement.coreGetValue();
+            return faultStringElement == null ? null : faultStringElement.coreGetTextContent();
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }

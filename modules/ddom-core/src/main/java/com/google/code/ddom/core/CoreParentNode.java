@@ -38,6 +38,9 @@ public interface CoreParentNode extends CoreNode {
     
     void coreSetContent(FragmentSource source, ModelExtension modelExtension);
     
+    // Temporarily marked as deprecated. In most cases coreGetTextContent should be used.
+    // However, this method may later be changed to return objects (e.g. QNames).
+    @Deprecated
     String coreGetValue() throws DeferredParsingException;
     
     /**

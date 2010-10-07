@@ -33,6 +33,6 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
     }
     
     public final String coreGetDeclaredNamespaceURI() throws DeferredParsingException {
-        return coreGetValue();
+        return coreGetTextContent();
     }
 }

@@ -225,7 +225,7 @@ public abstract class DocumentSupport implements DOMDocument {
             for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
                 DOMElement element = it.next();
                 for (CoreAttribute attr = element.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
-                    if (((Attr)attr).isId() && elementId.equals(attr.coreGetValue())) {
+                    if (((Attr)attr).isId() && elementId.equals(attr.coreGetTextContent())) {
                         return element;
                     }
                 }

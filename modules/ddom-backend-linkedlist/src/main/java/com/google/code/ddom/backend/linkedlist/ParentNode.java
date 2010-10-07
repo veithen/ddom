@@ -115,8 +115,12 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final String coreGetTextContent() throws DeferredParsingException {
-        CharSequence content = internalCollectTextContent(null);
-        return content == null ? "" : content.toString();
+        if (content instanceof String) {
+            return (String)content;
+        } else {
+            CharSequence content = internalCollectTextContent(null);
+            return content == null ? "" : content.toString();
+        }
     }
     
     @Override

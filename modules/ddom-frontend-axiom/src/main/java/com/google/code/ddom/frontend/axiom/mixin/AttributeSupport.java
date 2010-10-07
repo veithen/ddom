@@ -29,7 +29,7 @@ import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 public abstract class AttributeSupport implements AxiomAttribute {
     public String getAttributeValue() {
         try {
-            return coreGetValue();
+            return coreGetTextContent();
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

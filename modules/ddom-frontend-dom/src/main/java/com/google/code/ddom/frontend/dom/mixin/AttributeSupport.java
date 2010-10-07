@@ -43,7 +43,7 @@ public abstract class AttributeSupport implements DOMAttribute {
     
     public final String getValue() {
         try {
-            return coreGetValue();
+            return coreGetTextContent();
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
