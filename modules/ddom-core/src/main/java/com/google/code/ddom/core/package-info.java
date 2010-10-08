@@ -41,6 +41,8 @@
  * in which case the frontend must translate prefixes and namespace URIs. By doing so, it naturally
  * enforces the conventions of the core model. Requiring the backend to validate namespace prefixes and
  * URIs would then add an unnecessary overhead.
- * </ul>
+ * <p>
+ * The {@link com.google.code.ddom.core.util.QNameUtil} class provides utility methods implementing
+ * these conventions to extract namespace URIs and prefixes from {@link javax.xml.namespace.QName} instances.
  */
 package com.google.code.ddom.core;

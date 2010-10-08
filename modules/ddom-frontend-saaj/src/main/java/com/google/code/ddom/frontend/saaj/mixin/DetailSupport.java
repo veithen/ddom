@@ -23,26 +23,41 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPException;
 
 import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.DetailEntryExtension;
 import com.google.code.ddom.frontend.saaj.ext.DetailExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetail;
+import com.google.code.ddom.frontend.saaj.intf.SAAJDetailEntry;
+import com.google.code.ddom.frontend.saaj.support.NameUtil;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
+import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(DetailExtension.class)
 public abstract class DetailSupport implements SAAJDetail {
-    public DetailEntry addDetailEntry(Name arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final DetailEntry addDetailEntry(Name name) throws SOAPException {
+        try {
+            SAAJDetailEntry entry = (SAAJDetailEntry)coreGetDocument().coreCreateElement(DetailEntryExtension.class, NameUtil.getNamespaceURI(name), name.getLocalName(), NameUtil.getPrefix(name));
+            coreAppendChild(entry);
+            return entry;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
-    public DetailEntry addDetailEntry(QName arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final DetailEntry addDetailEntry(QName qname) throws SOAPException {
+        try {
+            SAAJDetailEntry entry = (SAAJDetailEntry)coreGetDocument().coreCreateElement(DetailEntryExtension.class, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+            coreAppendChild(entry);
+            return entry;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
-    public Iterator<DetailEntry> getDetailEntries() {
+    public final Iterator<DetailEntry> getDetailEntries() {
         return new ReifyingIterator<DetailEntry>(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class), DetailEntryExtension.class, DetailEntry.class);
     }
 }

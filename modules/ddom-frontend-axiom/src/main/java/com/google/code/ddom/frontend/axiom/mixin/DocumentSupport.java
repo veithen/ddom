@@ -34,6 +34,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
@@ -136,8 +137,8 @@ public abstract class DocumentSupport implements AxiomDocument {
     }
 
     public OMElement createOMElement(QName qname) {
-        String namespaceURI = NSUtil.getNamespaceURI(qname);
-        String prefix = NSUtil.getPrefix(qname);
+        String namespaceURI = QNameUtil.getNamespaceURI(qname);
+        String prefix = QNameUtil.getPrefix(qname);
         if (prefix == null && namespaceURI != null) {
             prefix = generatePrefix();
         }

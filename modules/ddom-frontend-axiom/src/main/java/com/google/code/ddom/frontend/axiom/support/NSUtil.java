@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.frontend.axiom.support;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMNamespace;
 
 public class NSUtil {
@@ -30,15 +28,5 @@ public class NSUtil {
     public static String getPrefix(OMNamespace ns) {
         // TODO: maybe still need to handle empty strings returned by OMNamespace
         return ns == null ? null : ns.getPrefix();
-    }
-    
-    public static String getNamespaceURI(QName qname) {
-        String namespaceURI = qname.getNamespaceURI();
-        return namespaceURI.length() == 0 ? null : namespaceURI;
-    }
-    
-    public static String getPrefix(QName qname) {
-        String prefix = qname.getPrefix();
-        return prefix.length() == 0 ? null : prefix;
     }
 }

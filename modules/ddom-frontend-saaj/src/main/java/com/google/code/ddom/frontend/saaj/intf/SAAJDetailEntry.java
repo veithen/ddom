@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.mixin;
+package com.google.code.ddom.frontend.saaj.intf;
 
-import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.DetailEntryExtension;
-import com.google.code.ddom.frontend.saaj.intf.SAAJDetailEntry;
+import javax.xml.soap.DetailEntry;
 
-@Mixin(DetailEntryExtension.class)
-public abstract class DetailEntrySupport implements SAAJDetailEntry {
+public interface SAAJDetailEntry extends DetailEntry, SAAJSOAPElement {
 
 }

@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.mixin;
+package com.google.code.ddom.frontend.saaj.support;
 
-import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.DetailEntryExtension;
-import com.google.code.ddom.frontend.saaj.intf.SAAJDetailEntry;
+import javax.xml.soap.Name;
 
-@Mixin(DetailEntryExtension.class)
-public abstract class DetailEntrySupport implements SAAJDetailEntry {
-
+// TODO: check what the SAAJ spec says about null/empty prefies/URIs
+public final class NameUtil {
+    private NameUtil() {}
+    
+    public static String getNamespaceURI(Name name) {
+        String uri = name.getURI();
+        return uri == null || uri.length() == 0 ? null : uri;
+    }
+    
+    public static String getPrefix(Name name) {
+        String prefix = name.getPrefix();
+        return prefix == null || prefix.length() == 0 ? null : prefix;
+    }
 }

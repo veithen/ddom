@@ -16,16 +16,19 @@
 package com.google.code.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.Detail;
 import javax.xml.soap.DetailEntry;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -59,6 +62,27 @@ public abstract class SOAPFaultTest extends AbstractTestCase {
         SOAPFault fault = createEmptySOAPFault();
         fault.addDetail();
         fault.addDetail();
+    }
+    
+    @Validated @Test
+    public final void testAddDetailEntryUsingQName() throws Exception {
+        Detail detail = createEmptySOAPFault().addDetail();
+        DetailEntry detailEntry = detail.addDetailEntry(new QName("urn:ns", "mydetail", "p"));
+        assertEquals("urn:ns", detailEntry.getNamespaceURI());
+        assertEquals("mydetail", detailEntry.getLocalName());
+        assertEquals("p", detailEntry.getPrefix());
+        assertSame(detailEntry, detail.getFirstChild());
+    }
+    
+    @Validated @Test
+    public final void testAddDetailEntryUsingQNameWithoutNamespace() throws Exception {
+        Detail detail = createEmptySOAPFault().addDetail();
+        DetailEntry detailEntry = detail.addDetailEntry(new QName("mydetail"));
+        // TODO: Sun's implementation returns an empty string here (which I believe is incorrect)
+//        assertNull(detailEntry.getNamespaceURI());
+        assertEquals("mydetail", detailEntry.getLocalName());
+        assertNull(detailEntry.getPrefix());
+        assertSame(detailEntry, detail.getFirstChild());
     }
     
     @Validated @Test
