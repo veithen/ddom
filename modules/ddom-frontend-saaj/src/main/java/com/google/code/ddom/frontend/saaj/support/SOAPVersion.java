@@ -28,6 +28,7 @@ import com.google.code.ddom.frontend.saaj.ext.SOAPFaultElementExtension;
 
 public final class SOAPVersion {
     public static final SOAPVersion SOAP11 = new SOAPVersion(
+            SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE,
             new SequenceBuilder()
                 .addItem(SOAP11HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Header")
                 .addItem(SOAP11BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body")
@@ -39,6 +40,7 @@ public final class SOAPVersion {
                 .addItem(DetailExtension.class, null, "detail").build());
     
     public static final SOAPVersion SOAP12 = new SOAPVersion(
+            SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE,
             new SequenceBuilder()
                 .addItem(SOAP12HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Header")
                 .addItem(SOAP12BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Body")
@@ -49,14 +51,20 @@ public final class SOAPVersion {
                 .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
                 .addItem(DetailExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build());
     
+    private final String envelopeNamespaceURI;
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
     
-    private SOAPVersion(Sequence envelopeSequence, Sequence faultSequence) {
+    private SOAPVersion(String envelopeNamespaceURI, Sequence envelopeSequence, Sequence faultSequence) {
+        this.envelopeNamespaceURI = envelopeNamespaceURI;
         this.envelopeSequence = envelopeSequence;
         this.faultSequence = faultSequence;
     }
-
+    
+    public String getEnvelopeNamespaceURI() {
+        return envelopeNamespaceURI;
+    }
+    
     public Sequence getEnvelopeSequence() {
         return envelopeSequence;
     }

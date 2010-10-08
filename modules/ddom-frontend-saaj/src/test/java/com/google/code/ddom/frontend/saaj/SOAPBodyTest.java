@@ -27,6 +27,11 @@ import org.junit.Test;
 
 import com.google.code.ddom.utils.test.Validated;
 
+/**
+ * Contains SOAP version independent test cases for {@link SOAPBody} and {@link SOAPBodyElement}.
+ * 
+ * @author Andreas Veithen
+ */
 public abstract class SOAPBodyTest extends AbstractTestCase {
     public SOAPBodyTest(String soapVersion) {
         super(soapVersion);

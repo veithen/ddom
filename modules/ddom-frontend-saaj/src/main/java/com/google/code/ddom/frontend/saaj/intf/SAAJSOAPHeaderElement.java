@@ -17,6 +17,6 @@ package com.google.code.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.SOAPHeaderElement;
 
-public interface SAAJSOAPHeaderElement extends SOAPHeaderElement, SAAJSOAPElement {
+public interface SAAJSOAPHeaderElement extends SOAPHeaderElement, SAAJSOAPElement, HasSOAPVersion {
 
 }

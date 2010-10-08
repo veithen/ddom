@@ -18,11 +18,13 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.core.CoreNode;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNode;
+import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
-@Mixin(CoreNode.class)
+@Mixin(CoreChildNode.class)
 public abstract class NodeSupport implements SAAJNode {
     public String getValue() {
         // TODO
@@ -44,9 +46,13 @@ public abstract class NodeSupport implements SAAJNode {
         throw new UnsupportedOperationException();
     }
 
-    public void detachNode() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void detachNode() {
+        // TODO: need specific unit test here; current coverage is only provided by unit tests that don't validate the behavior of detachNode
+        try {
+            coreDetach();
+        } catch (CoreModelException ex) {
+            SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public void recycleNode() {

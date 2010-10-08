@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.frontend.saaj.ext;
 
-//TODO: is this necessary?
 public interface SOAP12HeaderElementExtension extends SOAPHeaderElementExtension {
 
 }

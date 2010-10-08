@@ -19,6 +19,6 @@ import javax.xml.soap.Text;
 
 import com.google.code.ddom.frontend.dom.intf.DOMText;
 
-public interface SAAJText extends Text, DOMText {
+public interface SAAJText extends Text, DOMText, SAAJNode {
 
 }

@@ -36,28 +36,28 @@ public abstract class SOAPEnvelopeTest extends AbstractTestCase {
     }
 
     @Validated @Test @Ignore
-    public void testName() {
+    public final void testName() {
         SOAPEnvelope envelope = createSOAPEnvelope();
         assertEquals("http://schemas.xmlsoap.org/soap/envelope/", envelope.getNamespaceURI());
         assertEquals("Envelope", envelope.getLocalName());
     }
     
     @Validated @Test(expected=SOAPException.class)
-    public void testAddHeaderTwice() throws Exception {
+    public final void testAddHeaderTwice() throws Exception {
         SOAPEnvelope envelope = createSOAPEnvelope();
         envelope.addHeader();
         envelope.addHeader();
     }
     
     @Validated @Test(expected=SOAPException.class)
-    public void testAddBodyTwice() throws Exception {
+    public final void testAddBodyTwice() throws Exception {
         SOAPEnvelope envelope = createSOAPEnvelope();
         envelope.addBody();
         envelope.addBody();
     }
     
     @Validated @Test @Ignore
-    public void testHeaderElements() throws Exception {
+    public final void testHeaderElements() throws Exception {
         SOAPEnvelope envelope = createSOAPEnvelope();
         SOAPHeader header = envelope.addHeader();
 

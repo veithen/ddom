@@ -17,7 +17,8 @@ package com.google.code.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
@@ -28,12 +29,17 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.utils.test.Validated;
 
+/**
+ * Contains SOAP version independent test cases for {@link SOAPFault}, {@link SOAPFaultElement},
+ * {@link Detail} and {@link DetailEntry}.
+ * 
+ * @author Andreas Veithen
+ */
 public abstract class SOAPFaultTest extends AbstractTestCase {
     public SOAPFaultTest(String soapVersion) {
         super(soapVersion);

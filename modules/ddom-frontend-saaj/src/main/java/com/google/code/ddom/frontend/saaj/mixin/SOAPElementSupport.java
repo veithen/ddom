@@ -49,6 +49,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
 
     public SOAPElement addChildElement(String localName) throws SOAPException {
+        // From the Javadoc: "The new SOAPElement inherits any in-scope default namespace."
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -58,9 +59,20 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPElement addChildElement(String localName, String prefix, String uri) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement addChildElement(String localName, String prefix, String uri) throws SOAPException {
+        try {
+            if (uri != null && uri.length() == 0) {
+                uri = null;
+            }
+            if (prefix != null && prefix.length() == 0) {
+                prefix = null;
+            }
+            SAAJSOAPElement child = (SAAJSOAPElement)coreGetDocument().coreCreateElement(getChildExtensionInterface(), uri, localName, prefix);
+            coreAppendChild(child);
+            return child;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
     public final SOAPElement addChildElement(SOAPElement element) throws SOAPException {

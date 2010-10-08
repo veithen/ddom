@@ -17,12 +17,13 @@ package com.google.code.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Iterator;
 
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPHeaderElement;
 
@@ -31,13 +32,18 @@ import org.junit.Test;
 
 import com.google.code.ddom.utils.test.Validated;
 
+/**
+ * Contains SOAP version independent test cases for {@link SOAPHeader} and {@link SOAPHeaderElement}.
+ * 
+ * @author Andreas Veithen
+ */
 public abstract class SOAPHeaderTest extends AbstractTestCase {
     public SOAPHeaderTest(String soapVersion) {
         super(soapVersion);
     }
 
     @Validated @Test
-    public final void getChildElementsReification() {
+    public final void testGetChildElementsReification() {
         SOAPHeader header = createEmptySOAPHeader();
         header.appendChild(header.getOwnerDocument().createElementNS("urn:test", "p:test"));
         Iterator<?> it = header.getChildElements();
@@ -46,15 +52,48 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         assertTrue(child instanceof SOAPHeaderElement);
     }
     
+    // TODO: same tests for other addChildElement variants!
     @Validated @Test
-    public final void addChildElementReification() throws Exception {
+    public final void testAddChildElementReification() throws Exception {
         SOAPHeader header = createEmptySOAPHeader();
         SOAPElement child = header.addChildElement((SOAPElement)header.getOwnerDocument().createElementNS("urn:test", "p:test"));
         assertTrue(child instanceof SOAPHeaderElement);
     }
     
+    @Validated @Test(expected=SOAPException.class) @Ignore // TODO: later
+    public final void testAddChildElementWithoutNamespace() throws Exception {
+        createEmptySOAPHeader().addChildElement("test");
+    }
+    
+    // TODO: the RI adds various namespace declarations in this test; check if this is mandated by the specs
+    @Validated @Test
+    public final void testGetSetActor() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
+        element.setActor("urn:my:actor");
+        assertEquals("urn:my:actor", element.getAttributeNS(header.getNamespaceURI(), "actor"));
+        assertEquals("urn:my:actor", element.getActor());
+    }
+    
+    /**
+     * Tests that {@link SOAPHeaderElement#setActor(String)} works correctly even on an element that
+     * has been detached from its parent. Note that this means that a {@link SOAPHeaderElement}
+     * implicitly retains information about the SOAP version it belongs to.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public final void testSetActorOnDetachedHeaderElement() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
+        element.detachNode();
+        assertNull(element.getParentNode());
+        element.setActor("urn:my:actor");
+        assertEquals("urn:my:actor", element.getAttributeNS(header.getNamespaceURI(), "actor"));
+    }
+    
     @Validated @Test @Ignore // TODO
-    public void testExtractHeaderElementsPartialConsumption() throws Exception {
+    public final void testExtractHeaderElementsPartialConsumption() throws Exception {
         SOAPEnvelope env = createSOAPEnvelope();
         SOAPHeader header = env.addHeader();
         SOAPHeaderElement element1 = header.addHeaderElement(env.createName("test", "p", "urn:ns1"));

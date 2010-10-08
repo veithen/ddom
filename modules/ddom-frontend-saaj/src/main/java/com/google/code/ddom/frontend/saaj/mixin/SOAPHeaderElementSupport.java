@@ -23,9 +23,22 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 
 @Mixin(SOAPHeaderElementExtension.class)
 public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement {
-    public String getActor() {
-        // TODO
-        throw new UnsupportedOperationException();
+    private String getSOAPAttribute(String localName) {
+        // TODO: null or empty string if attribute not present??
+        return getAttributeNS(getSOAPVersion().getEnvelopeNamespaceURI(), localName);
+    }
+    
+    private void setSOAPAttribute(String localName, String value) {
+        // TODO: ugly, use core model methods directly
+        setAttributeNS(getSOAPVersion().getEnvelopeNamespaceURI(), "SOAP-ENV:" + localName, value);
+    }
+    
+    public final String getActor() {
+        return getSOAPAttribute("actor");
+    }
+
+    public final void setActor(String actor) {
+        setSOAPAttribute("actor", actor);
     }
 
     public boolean getMustUnderstand() {
@@ -39,11 +52,6 @@ public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement 
     }
 
     public String getRole() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setActor(String arg0) {
         // TODO
         throw new UnsupportedOperationException();
     }

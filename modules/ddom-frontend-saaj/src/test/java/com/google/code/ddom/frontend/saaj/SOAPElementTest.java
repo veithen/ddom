@@ -15,6 +15,11 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Iterator;
 
 import javax.xml.XMLConstants;
@@ -23,7 +28,6 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
@@ -48,7 +52,7 @@ public class SOAPElementTest {
     public void testAddNamespaceDeclaration() throws SOAPException {
         SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
         element.addNamespaceDeclaration("ns", "urn:ns");
-        Assert.assertEquals("urn:ns", element.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "ns"));
+        assertEquals("urn:ns", element.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "ns"));
     }
 
     /**
@@ -62,9 +66,9 @@ public class SOAPElementTest {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addNamespaceDeclaration("p", "urn:ns1");
         element.addNamespaceDeclaration("p", "urn:ns2");
-        Assert.assertEquals("urn:ns2", element.lookupNamespaceURI("p"));
-        Assert.assertNull(element.lookupPrefix("urn:ns1"));
-        Assert.assertEquals("p", element.lookupPrefix("urn:ns2"));
+        assertEquals("urn:ns2", element.lookupNamespaceURI("p"));
+        assertNull(element.lookupPrefix("urn:ns1"));
+        assertEquals("p", element.lookupPrefix("urn:ns2"));
     }
     
     /**
@@ -75,13 +79,13 @@ public class SOAPElementTest {
     public void testGetAllAttributesWithNamespace() {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.setAttributeNS("urn:ns", "p:test", "value");
-        Iterator it = element.getAllAttributes();
-        Assert.assertTrue(it.hasNext());
+        Iterator<?> it = element.getAllAttributes();
+        assertTrue(it.hasNext());
         Name name = (Name)it.next();
-        Assert.assertEquals("urn:ns", name.getURI());
-        Assert.assertEquals("p", name.getPrefix());
-        Assert.assertEquals("test", name.getLocalName());
-        Assert.assertEquals("p:test", name.getQualifiedName());
+        assertEquals("urn:ns", name.getURI());
+        assertEquals("p", name.getPrefix());
+        assertEquals("test", name.getLocalName());
+        assertEquals("p:test", name.getQualifiedName());
     }
     
     /**
@@ -92,20 +96,29 @@ public class SOAPElementTest {
     public void testGetAllAttributesWithoutNamespace() {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.setAttributeNS(null, "test", "value");
-        Iterator it = element.getAllAttributes();
-        Assert.assertTrue(it.hasNext());
+        Iterator<?> it = element.getAllAttributes();
+        assertTrue(it.hasNext());
         Name name = (Name)it.next();
-        Assert.assertTrue(StringUtils.isEmpty(name.getURI()));
-        Assert.assertTrue(StringUtils.isEmpty(name.getPrefix()));
-        Assert.assertEquals("test", name.getLocalName());
-        Assert.assertEquals("test", name.getQualifiedName());
+        assertTrue(StringUtils.isEmpty(name.getURI()));
+        assertTrue(StringUtils.isEmpty(name.getPrefix()));
+        assertEquals("test", name.getLocalName());
+        assertEquals("test", name.getQualifiedName());
     }
     
     @Validated @Test
     public void testAddTextNode() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         SOAPElement returnValue = element.addTextNode("text");
-        Assert.assertSame(element, returnValue);
-        Assert.assertEquals("text", element.getTextContent());
+        assertSame(element, returnValue);
+        assertEquals("text", element.getTextContent());
+    }
+    
+    @Validated @Test
+    public void testAddChildElement() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        SOAPElement child = element.addChildElement("test", "p", "urn:ns");
+        assertEquals("urn:ns", child.getNamespaceURI());
+        assertEquals("p", child.getPrefix());
+        assertEquals("test", child.getLocalName());
     }
 }
