@@ -52,8 +52,10 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
     public boolean matches(CoreAttribute attr, String namespaceURI, String name) {
         if (attr instanceof CoreNSAwareAttribute) {
             CoreNSAwareAttribute nsAwareAttr = (CoreNSAwareAttribute)attr;
-            return ObjectUtils.equals(namespaceURI, nsAwareAttr.coreGetNamespaceURI())
-                    && name.equals(nsAwareAttr.coreGetLocalName());
+            // Optimization: first compare the local names because they are in general
+            // shorter and have higher "uniqueness"
+            return name.equals(nsAwareAttr.coreGetLocalName())
+                    && ObjectUtils.equals(namespaceURI, nsAwareAttr.coreGetNamespaceURI());
         } else if (namespaceURI == null && attr instanceof CoreNSUnawareAttribute) {
             return name.equals(((CoreNSUnawareAttribute)attr).coreGetName());
         } else {
