@@ -253,7 +253,7 @@
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-maven-plugin</artifactId>
-                <version>2.0.8</version>
+                <version>2.0.9</version>
                 <inherited>false</inherited>
                 <executions>
                     <execution>
@@ -294,6 +294,14 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <entities>
+                        <entity>
+                            <name>version</name>
+                            <value>${project.version}</value>
+                        </entity>
+                    </entities>
+                </configuration>
             </plugin>
         </plugins>
     </build>

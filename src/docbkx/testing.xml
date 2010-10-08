@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter SYSTEM "manual.dtd">
+<chapter>
+    <title>Testing DDOM</title>
+    <section>
+        <title>Testing interoperability of DDOM with other projects</title>
+        <para>
+            DDOM contains unit tests to check interoperability with other projects.
+            However, this may not always be enough and it is useful to further check
+            interoperability by executing the test suites of these third party projects
+            against DDOM. This section describes how this can be achieved for a
+            selected set of projects.
+        </para>
+        <section>
+            <title>CXF</title>
+            <para>
+                To test interoperability with CXF, run the CXF build with DDOM
+                configured as the SAAJ implementation. Since in the particular case of CXF
+                this is configurable using Maven properties, there is no need to change the
+                CXF POMs for that:
+            </para>
+            <screen>$ <userinput>mvn clean install -Dsaaj.impl.groupId=com.google.code.ddom \
+-Dsaaj.impl.artifactId=ddom-saaj-impl -Dsaaj.impl.version=&version;</userinput></screen>
+        </section>
+        <section>
+            <title>WSS4J</title>
+            <para>
+                Running the WSS4J test suite against DDOM as DOM implementation requires the
+                following changes to the <filename>pom.xml</filename> file of WSS4J:
+            </para>
+            <orderedlist>
+                <listitem>
+                    <para>
+                        Replace the dependency on <literal>xerces:xercesImpl</literal> by
+                        <literal>com.googlecode.ddom:ddom-jaxp</literal>.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        In the configuration for <literal>maven-surefire-plugin</literal>, disable
+                        the <literal>argLine</literal> that sets the <literal>java.endorsed.dirs</literal>
+                        system property.
+                    </para>
+                </listitem>
+            </orderedlist>
+            <note>
+                <para>
+                    There will be failures in the tests related to SAML because OpenSAML expects
+                    the DOM implementation hooked into JAXP to support schema validation (which is not
+                    yet the case for DDOM).
+                </para>
+            </note>
+        </section>
+    </section>
+    <section>
+        <title>Performance testing</title>
+        <para>
+            The <filename>perftests</filename> folder contains a set of prepackaged service implementations
+            and clients that can be used to do performance testing for WS-Security processing. The service
+            implementations are packaged as WAR files that can be executed in an embedded Jetty container
+            from the command line:
+        </para>
+        <screen>$ <userinput>mvn jetty:run</userinput></screen>
+        <section>
+            <title>Recommended tools</title>
+            <section>
+                <title>OKTECH profiler</title>
+                <para>
+                    <ulink url="http://code.google.com/p/oktech-profiler">OKTECH Profiler</ulink> is an easy to set up
+                    and use profiler that implements sampling profiling. This requires a JMX connection between
+                    the profiler and the process to examine. Here are the relevant commands and settings to use the profiler:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Use the following VM arguments to configure the process to profile:
+                        </para>
+                        <screen>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=3333 \
+-Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false</screen>
+                        <para>
+                            To profile a service running in an embedded Jetty container (as described above),
+                            add these options to the <literal>MAVEN_OPTS</literal> environment variable.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Running the profiler:
+                        </para>
+                        <screen>$ <userinput>java -jar hu.oktech.profiler-runtime.jar \
+remote.jmx.url=service:jmx:rmi:///jndi/rmi://localhost:3333/jmxrmi \
+thread.sampling.millis=10</userinput></screen>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Generating the report:
+                        </para>
+                        <screen>$ <userinput>java -jar hu.oktech.profiler-report.jar \
+input=tmp/profiler/<replaceable>timestamp</replaceable>.dump</userinput></screen>
+                    </listitem>
+                </itemizedlist>
+            </section>
+        </section>
+    </section>
+</chapter>
