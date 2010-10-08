@@ -46,29 +46,24 @@
         <dependency>
             <groupId>asm</groupId>
             <artifactId>asm</artifactId>
-            <version>3.2</version>
         </dependency>
         <dependency>
             <groupId>asm</groupId>
             <artifactId>asm-tree</artifactId>
-            <version>3.2</version>
         </dependency>
         <dependency>
             <groupId>asm</groupId>
             <artifactId>asm-commons</artifactId>
-            <version>3.2</version>
         </dependency>
         <dependency>
             <!-- Only used for debugging -->
             <groupId>asm</groupId>
             <artifactId>asm-util</artifactId>
-            <version>3.2</version>
         </dependency>
         <dependency>
             <!-- Only used for debugging (verify) -->
             <groupId>asm</groupId>
             <artifactId>asm-analysis</artifactId>
-            <version>3.2</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
