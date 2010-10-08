@@ -76,11 +76,12 @@
         <dependency>
         	<groupId>com.sun.xml.messaging.saaj</groupId>
         	<artifactId>saaj-impl</artifactId>
-        	<version>1.3.2</version>
+        	<version>1.3.4</version>
         	<scope>test</scope>
         </dependency>
         <!-- This is required on IBM JDKs (and potentially others) because saaj-impl depends
              on Sun's internal copy of Xerces. -->
+        <!-- TODO: need to retest this after upgrading saaj-imp from 1.3.2 to 1.3.4 -->
         <dependency>
             <groupId>com.sun.xml.parsers</groupId>
             <artifactId>jaxp-ri</artifactId>
@@ -88,4 +89,20 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <repositories>
+        <!-- This is necessary to get the latest version of the SAAJ reference implementation.
+             We only add this here so that we don't pollute other modules with broken things
+             from the java.net repository. -->
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/2</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
