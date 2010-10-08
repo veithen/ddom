@@ -39,7 +39,8 @@ import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
  * <dd>Not used.
  * </dl>
  * If the namespace URI is <code>null</code>, then this class will also match namespace unaware
- * attributes.
+ * attributes. Note that the class doesn't match namespace declarations (for which
+ * {@link AttributeMatcher#NAMESPACE_DECLARATION} can be used).
  * 
  * @author Andreas Veithen
  */
