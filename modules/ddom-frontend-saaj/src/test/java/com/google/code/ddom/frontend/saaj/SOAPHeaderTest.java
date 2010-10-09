@@ -38,8 +38,11 @@ import com.google.code.ddom.utils.test.Validated;
  * @author Andreas Veithen
  */
 public abstract class SOAPHeaderTest extends AbstractTestCase {
-    public SOAPHeaderTest(String soapVersion) {
+    private final String actorAttributeLocalName;
+    
+    public SOAPHeaderTest(String soapVersion, String actorAttributeLocalName) {
         super(soapVersion);
+        this.actorAttributeLocalName = actorAttributeLocalName;
     }
 
     @Validated @Test
@@ -71,7 +74,7 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         SOAPHeader header = createEmptySOAPHeader();
         SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
         element.setActor("urn:my:actor");
-        assertEquals("urn:my:actor", element.getAttributeNS(header.getNamespaceURI(), "actor"));
+        assertEquals("urn:my:actor", element.getAttributeNS(header.getNamespaceURI(), actorAttributeLocalName));
         assertEquals("urn:my:actor", element.getActor());
     }
     
@@ -89,7 +92,25 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         element.detachNode();
         assertNull(element.getParentNode());
         element.setActor("urn:my:actor");
-        assertEquals("urn:my:actor", element.getAttributeNS(header.getNamespaceURI(), "actor"));
+        assertEquals("urn:my:actor", element.getAttributeNS(header.getNamespaceURI(), actorAttributeLocalName));
+    }
+    
+    @Validated @Test
+    public final void testGetActorUnset() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
+        assertNull(element.getActor());
+    }
+    
+    @Validated @Test @Ignore // TODO: SAAJ RI gives strange results here
+    public final void testSetActorNull() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
+        element.setActor("urn:actor");
+        element.setActor(null);
+        System.out.println(element.getActor());
+        assertNull(element.getActor());
+        assertFalse(element.hasAttributeNS(header.getNamespaceURI(), actorAttributeLocalName));
     }
     
     @Validated @Test @Ignore // TODO

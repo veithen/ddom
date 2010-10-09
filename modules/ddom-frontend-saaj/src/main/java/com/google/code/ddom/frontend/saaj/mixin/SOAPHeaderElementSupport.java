@@ -17,15 +17,23 @@ package com.google.code.ddom.frontend.saaj.mixin;
 
 import javax.xml.soap.SOAPException;
 
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderElementExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
+import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SOAPHeaderElementExtension.class)
 public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement {
     private String getSOAPAttribute(String localName) {
-        // TODO: null or empty string if attribute not present??
-        return getAttributeNS(getSOAPVersion().getEnvelopeNamespaceURI(), localName);
+        try {
+            CoreNSAwareAttribute attr = (CoreNSAwareAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, getSOAPVersion().getEnvelopeNamespaceURI(), localName);
+            return attr == null ? null : attr.coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
     
     private void setSOAPAttribute(String localName, String value) {
@@ -34,11 +42,11 @@ public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement 
     }
     
     public final String getActor() {
-        return getSOAPAttribute("actor");
+        return getSOAPAttribute(getSOAPVersion().getActorAttributeLocalName());
     }
 
     public final void setActor(String actor) {
-        setSOAPAttribute("actor", actor);
+        setSOAPAttribute(getSOAPVersion().getActorAttributeLocalName(), actor);
     }
 
     public boolean getMustUnderstand() {

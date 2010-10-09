@@ -37,7 +37,8 @@ public final class SOAPVersion {
                 .addItem(SOAPFaultElementExtension.class, null, "faultcode")
                 .addItem(SOAPFaultElementExtension.class, null, "faultstring")
                 .addItem(SOAPFaultElementExtension.class, null, "faultactor")
-                .addItem(DetailExtension.class, null, "detail").build());
+                .addItem(DetailExtension.class, null, "detail").build(),
+            "actor");
     
     public static final SOAPVersion SOAP12 = new SOAPVersion(
             SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE,
@@ -49,16 +50,20 @@ public final class SOAPVersion {
                 .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Code")
                 .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Reason")
                 .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
-                .addItem(DetailExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build());
+                .addItem(DetailExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build(),
+            "role");
     
     private final String envelopeNamespaceURI;
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
+    private final String actorAttributeLocalName;
     
-    private SOAPVersion(String envelopeNamespaceURI, Sequence envelopeSequence, Sequence faultSequence) {
+    private SOAPVersion(String envelopeNamespaceURI, Sequence envelopeSequence, Sequence faultSequence,
+            String actorAttributeLocalName) {
         this.envelopeNamespaceURI = envelopeNamespaceURI;
         this.envelopeSequence = envelopeSequence;
         this.faultSequence = faultSequence;
+        this.actorAttributeLocalName = actorAttributeLocalName;
     }
     
     public String getEnvelopeNamespaceURI() {
@@ -71,5 +76,9 @@ public final class SOAPVersion {
 
     public Sequence getFaultSequence() {
         return faultSequence;
+    }
+
+    public String getActorAttributeLocalName() {
+        return actorAttributeLocalName;
     }
 }

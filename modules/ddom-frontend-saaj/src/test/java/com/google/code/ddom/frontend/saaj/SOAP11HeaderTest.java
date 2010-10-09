@@ -19,6 +19,6 @@ import javax.xml.soap.SOAPConstants;
 
 public class SOAP11HeaderTest extends SOAPHeaderTest {
     public SOAP11HeaderTest() {
-        super(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE);
+        super(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "actor");
     }
 }
