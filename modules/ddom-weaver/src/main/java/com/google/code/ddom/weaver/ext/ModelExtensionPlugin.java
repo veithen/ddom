@@ -22,6 +22,7 @@ import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.core.ext.Abstract;
 import com.google.code.ddom.weaver.reactor.Extensions;
 import com.google.code.ddom.weaver.reactor.NonWeavableClassInfo;
+import com.google.code.ddom.weaver.reactor.ReactorException;
 import com.google.code.ddom.weaver.reactor.ReactorPlugin;
 import com.google.code.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 import com.google.code.ddom.weaver.reactor.WeavableClassInjector;
@@ -68,6 +69,9 @@ public class ModelExtensionPlugin extends ReactorPlugin {
             }
         }
         if (isExtensionInterface) {
+            if (classInfo.getInterfaces().length != 1) {
+                throw new ReactorException("A model extension interface must have exactly one superinterface: " + classInfo.getName());
+            }
             extensions.set(new ModelExtensionInterfaceInfo(classInfo, clazz.getAnnotation(Abstract.class) != null));
         } else {
             extensions.set(ModelExtensionInterfaceInfo.class, null);
