@@ -16,8 +16,8 @@
 package com.google.code.ddom.frontend.axiom.soap;
 
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11Envelope;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12Envelope;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11EnvelopeExtension;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12EnvelopeExtension;
 
 public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
     private static final String SOAP11_NAMESPACE_URI = "http://schemas.xmlsoap.org/soap/envelope/";
@@ -42,7 +42,7 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                 if (!localName.equals("Envelope")) {
                     throw new RuntimeException(); // TODO
                 }
-                return isSoap12 ? SOAP12Envelope.class : SOAP11Envelope.class;
+                return isSoap12 ? SOAP12EnvelopeExtension.class : SOAP11EnvelopeExtension.class;
             default:
                 return null;
         }

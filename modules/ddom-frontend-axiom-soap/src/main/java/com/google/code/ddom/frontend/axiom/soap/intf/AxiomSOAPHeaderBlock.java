@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.soap.ext;
+package com.google.code.ddom.frontend.axiom.soap.intf;
 
-import com.google.code.ddom.core.CoreNSAwareElement;
+import org.apache.axiom.soap.SOAPHeaderBlock;
 
-public interface SOAPEnvelope extends CoreNSAwareElement {
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+
+public interface AxiomSOAPHeaderBlock extends AxiomElement, SOAPHeaderBlock {
 
 }

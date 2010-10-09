@@ -15,6 +15,6 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.ext;
 
-public interface SOAP12Envelope extends SOAPEnvelope {
+public interface SOAP11HeaderExtension extends SOAPHeaderExtension {
 
 }

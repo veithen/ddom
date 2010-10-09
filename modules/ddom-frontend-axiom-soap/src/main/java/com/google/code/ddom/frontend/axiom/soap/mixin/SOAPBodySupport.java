@@ -15,40 +15,37 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.mixin;
 
-import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.soap.SOAPBody;
-import org.apache.axiom.soap.SOAPHeader;
-import org.apache.axiom.soap.SOAPVersion;
+import org.apache.axiom.soap.SOAPFault;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPEnvelopeExtension;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAPBodyExtension;
 
-@Mixin(SOAPEnvelopeExtension.class)
-public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
-    public SOAPHeader getHeader() throws OMException {
-        OMElement firstElement = getFirstElement();
-        return firstElement instanceof SOAPHeader ? (SOAPHeader)firstElement : null;
-    }
-
-    public SOAPBody getBody() throws OMException {
+@Mixin(SOAPBodyExtension.class)
+public abstract class SOAPBodySupport implements SOAPBody {
+    public SOAPFault addFault(Exception e) throws OMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public String getSOAPBodyFirstElementLocalName() {
+    public void addFault(SOAPFault soapFault) throws OMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public OMNamespace getSOAPBodyFirstElementNS() {
+    public SOAPFault getFault() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public SOAPVersion getVersion() {
+    public String getFirstElementLocalName() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public OMNamespace getFirstElementNS() {
         // TODO
         throw new UnsupportedOperationException();
     }
