@@ -8,7 +8,7 @@
             ...
         </para>
     </section>
-    <section>
+    <section id="covariant-literals">
         <title>Covariant literals</title>
         <para>
             If you look at the 19 primitive types defined by the second part of the XML Schema specification

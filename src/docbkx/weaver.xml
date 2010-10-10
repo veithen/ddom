@@ -148,7 +148,7 @@
             </listitem>
         </orderedlist>
     </section>
-    <section>
+    <section id="model-extensions">
         <title>Model extensions</title>
         <para>
             A back-end only defines a single class for each type of information item. E.g. a comment
