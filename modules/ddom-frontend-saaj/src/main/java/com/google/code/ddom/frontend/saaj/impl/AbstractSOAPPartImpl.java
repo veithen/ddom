@@ -408,103 +408,99 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.hasChildNodes();
     }
 
-    public Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
+        initDocument();
+        return insertBefore(newChild, refChild);
     }
 
-    public boolean isDefaultNamespace(String namespaceURI) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean isDefaultNamespace(String namespaceURI) {
+        initDocument();
+        return isDefaultNamespace(namespaceURI);
     }
 
-    public boolean isEqualNode(Node arg) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean isEqualNode(Node arg) {
+        initDocument();
+        return isEqualNode(arg);
     }
 
-    public boolean isSameNode(Node other) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean isSameNode(Node other) {
+        initDocument();
+        return document.isSameNode(other);
     }
 
-    public boolean isSupported(String feature, String version) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean isSupported(String feature, String version) {
+        initDocument();
+        return document.isSupported(feature, version);
     }
 
-    public String lookupNamespaceURI(String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String lookupNamespaceURI(String prefix) {
+        initDocument();
+        return document.lookupNamespaceURI(prefix);
     }
 
-    public String lookupPrefix(String namespaceURI) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String lookupPrefix(String namespaceURI) {
+        initDocument();
+        return document.lookupPrefix(namespaceURI);
     }
 
-    public void normalize() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void normalize() {
+        initDocument();
+        document.normalize();
     }
 
-    public Node removeChild(Node oldChild) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node removeChild(Node oldChild) throws DOMException {
+        initDocument();
+        return removeChild(oldChild);
     }
 
-    public Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {
+        initDocument();
+        return document.replaceChild(newChild, oldChild);
     }
 
-    public void setNodeValue(String nodeValue) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setNodeValue(String nodeValue) throws DOMException {
+        initDocument();
+        document.setNodeValue(nodeValue);
     }
 
-    public void setPrefix(String prefix) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setPrefix(String prefix) throws DOMException {
+        initDocument();
+        document.setPrefix(prefix);
     }
 
-    public void setTextContent(String textContent) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setTextContent(String textContent) throws DOMException {
+        initDocument();
+        document.setTextContent(textContent);
     }
 
-    public Object setUserData(String key, Object data, UserDataHandler handler) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Object setUserData(String key, Object data, UserDataHandler handler) {
+        initDocument();
+        return document.setUserData(key, data, handler);
     }
 
-    public void detachNode() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void detachNode() {
+        // A document is always detached
     }
 
-    public SOAPElement getParentElement() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void recycleNode() {
+        // TODO: in DDOM recycleNode should probably dispose the document; needs to be analyzed more carefully
     }
 
-    public String getValue() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement getParentElement() {
+        return null;
     }
 
-    public void recycleNode() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setParentElement(SOAPElement parent) throws SOAPException {
+        throw new SOAPException("The parent element of a soap part is not defined");
     }
 
-    public void setParentElement(SOAPElement arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getValue() {
+        // In DOM, the document node can't have text nodes as children. Therefore, the
+        // return value is always null
+        return null;
     }
 
-    public void setValue(String arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setValue(String value) {
+        throw new IllegalStateException();
     }
 }

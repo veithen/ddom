@@ -15,12 +15,15 @@
  */
 package com.googlecode.ddom.saaj;
 
-import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPPart;
 
 import org.junit.Test;
@@ -45,5 +48,42 @@ public class SOAPPartTest {
         soapPart.appendChild(element);
         SOAPEnvelope envelope = soapPart.getEnvelope();
         assertNotNull(envelope);
+    }
+    
+    @Validated @Test
+    public void testGetParentElement() throws Exception {
+        SOAPPart soapPart = factory.createMessage().getSOAPPart();
+        assertNull(soapPart.getParentElement());
+    }
+    
+    @Validated @Test(expected=SOAPException.class)
+    public void testSetParentElement() throws Exception {
+        SOAPPart soapPart = factory.createMessage().getSOAPPart();
+        SOAPElement element = (SOAPElement)soapPart.createElementNS("urn:ns", "p:root");
+        soapPart.setParentElement(element);
+    }
+    
+    @Validated @Test(expected=SOAPException.class)
+    public void testSetParentElementNull() throws Exception {
+        SOAPPart soapPart = factory.createMessage().getSOAPPart();
+        soapPart.setParentElement(null);
+    }
+    
+    @Validated @Test
+    public void testGetValue() throws Exception {
+        SOAPPart soapPart = factory.createMessage().getSOAPPart();
+        assertNull(soapPart.getValue());
+    }
+    
+    @Validated @Test(expected=IllegalStateException.class)
+    public void testSetValue() throws Exception {
+        SOAPPart soapPart = factory.createMessage().getSOAPPart();
+        soapPart.setValue("test");
+    }
+    
+    @Validated @Test(expected=IllegalStateException.class)
+    public void testSetValueNull() throws Exception {
+        SOAPPart soapPart = factory.createMessage().getSOAPPart();
+        soapPart.setValue(null);
     }
 }
