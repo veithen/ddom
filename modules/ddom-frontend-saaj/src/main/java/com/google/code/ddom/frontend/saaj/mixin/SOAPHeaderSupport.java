@@ -23,9 +23,9 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeaderElement;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderElementExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 
 @Mixin(SOAPHeaderExtension.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
@@ -33,8 +33,10 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
         return SOAPHeaderElement.class;
     }
 
-    public SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
-        return (SOAPHeaderElement)coreGetDocument().coreCreateElement(SOAPHeaderElementExtension.class, name.getURI(), name.getLocalName(), name.getPrefix());
+    public final SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
+        SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreGetDocument().coreCreateElement(getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
+        appendChild(element);
+        return element;
     }
 
     public SOAPHeaderElement addHeaderElement(QName arg0) throws SOAPException {

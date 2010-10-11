@@ -15,9 +15,11 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
@@ -68,6 +70,17 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         createEmptySOAPHeader().addChildElement("test");
     }
     
+    @Validated @Test
+    public final void testAddHeaderElementUsingName() throws Exception {
+        SOAPEnvelope env = createSOAPEnvelope();
+        SOAPHeader header = env.addHeader();
+        SOAPHeaderElement element = header.addHeaderElement(env.createName("test", "ns", "http://example.org"));
+        assertSame(header.getFirstChild(), element);
+        assertEquals("test", element.getLocalName());
+        assertEquals("ns", element.getPrefix());
+        assertEquals("http://example.org", element.getNamespaceURI());
+    }
+    
     // TODO: the RI adds various namespace declarations in this test; check if this is mandated by the specs
     @Validated @Test
     public final void testGetSetActor() throws Exception {
@@ -111,6 +124,45 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         System.out.println(element.getActor());
         assertNull(element.getActor());
         assertFalse(element.hasAttributeNS(header.getNamespaceURI(), actorAttributeLocalName));
+    }
+    
+    @Validated @Test
+    public final void testGetMustUnderstandUnset() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
+        assertFalse(element.getMustUnderstand());
+    }
+    
+    protected final void testGetMustUnderstandFromExistingAttribute(String value, boolean expected) throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
+        element.setAttributeNS(header.getNamespaceURI(), "soap:mustUnderstand", value);
+        assertEquals(expected, element.getMustUnderstand());
+    }
+    
+    @Validated @Test
+    public final void testGetMustUnderstandFromExistingAttribute0() throws Exception {
+        testGetMustUnderstandFromExistingAttribute("0", false);
+    }
+    
+    @Validated @Test
+    public final void testGetMustUnderstandFromExistingAttribute1() throws Exception {
+        testGetMustUnderstandFromExistingAttribute("1", true);
+    }
+    
+    @Validated @Test
+    public final void testGetMustUnderstandFromExistingAttributeFalse() throws Exception {
+        testGetMustUnderstandFromExistingAttribute("false", false);
+    }
+    
+    @Validated @Test
+    public final void testGetMustUnderstandFromExistingAttributeTrue() throws Exception {
+        testGetMustUnderstandFromExistingAttribute("true", true);
+    }
+    
+    @Validated @Test
+    public void testGetMustUnderstandFromExistingAttributeInvalid() throws Exception {
+        testGetMustUnderstandFromExistingAttribute("invalid", false);
     }
     
     @Validated @Test @Ignore // TODO

@@ -49,9 +49,13 @@ public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement 
         setSOAPAttribute(getSOAPVersion().getActorAttributeLocalName(), actor);
     }
 
-    public boolean getMustUnderstand() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean getMustUnderstand() {
+        String value = getSOAPAttribute("mustUnderstand");
+        return value != null && (value.equals("1") || value.equalsIgnoreCase("true")); 
+    }
+
+    public final void setMustUnderstand(boolean mustUnderstand) {
+        setSOAPAttribute("mustUnderstand", mustUnderstand ? "1" : "0");
     }
 
     public boolean getRelay() {
@@ -60,11 +64,6 @@ public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement 
     }
 
     public String getRole() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setMustUnderstand(boolean arg0) {
         // TODO
         throw new UnsupportedOperationException();
     }
