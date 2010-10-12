@@ -205,7 +205,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
             // The iterator actually returns SOAPElements
             return childIterator;
         } else {
-            return new ReifyingIterator(childIterator, extensionInterface, getChildType());
+            return new ReifyingIterator<SOAPElement>(childIterator, extensionInterface, getChildType().asSubclass(SOAPElement.class));
         }
     }
     

@@ -18,7 +18,6 @@ package com.google.code.ddom.frontend.saaj;
 import static org.junit.Assert.assertTrue;
 
 import javax.xml.soap.SOAPConstants;
-import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 

@@ -15,15 +15,18 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Iterator;
 
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPFault;
 
 import org.junit.Test;
+import org.w3c.dom.Element;
 
 import com.google.code.ddom.utils.test.Validated;
 
@@ -37,8 +40,34 @@ public abstract class SOAPBodyTest extends AbstractTestCase {
         super(soapVersion);
     }
 
+    @Validated @Test(expected=SOAPException.class)
+    public final void testAddFaultTwice() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        body.addFault();
+        body.addFault();
+    }
+    
     @Validated @Test
-    public final void getChildElementsReification() {
+    public final void testGetFaultWithCreateElementNS() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        Element faultElement = body.getOwnerDocument().createElementNS(soapVersion, "soap:Fault");
+        body.appendChild(faultElement);
+        SOAPFault fault = body.getFault();
+        // createElementNS actually creates a node of type SOAPFault in this case.
+        // Therefore getFault returns the original node.
+        assertSame(faultElement, fault);
+    }
+    
+    @Validated @Test
+    public final void testHasFault() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        assertFalse(body.hasFault());
+        body.addFault();
+        assertTrue(body.hasFault());
+    }
+    
+    @Validated @Test
+    public final void testGetChildElementsReification() {
         SOAPBody body = createEmptySOAPBody();
         body.appendChild(body.getOwnerDocument().createElementNS("urn:test", "p:test"));
         Iterator<?> it = body.getChildElements();
@@ -48,7 +77,7 @@ public abstract class SOAPBodyTest extends AbstractTestCase {
     }
     
     @Validated @Test
-    public final void addChildElementReification() throws Exception {
+    public final void testAddChildElementReification() throws Exception {
         SOAPBody body = createEmptySOAPBody();
         SOAPElement child = body.addChildElement((SOAPElement)body.getOwnerDocument().createElementNS("urn:test", "p:test"));
         assertTrue(child instanceof SOAPBodyElement);

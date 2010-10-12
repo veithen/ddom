@@ -31,7 +31,7 @@ public abstract class AbstractTestCase {
     @ValidatedTestResource(reference=RISAAJUtil.class, actual=DDOMSAAJUtil.class)
     private SAAJUtil saajUtil;
     
-    private final String soapVersion;
+    protected final String soapVersion;
 
     public AbstractTestCase(String soapVersion) {
         this.soapVersion = soapVersion;

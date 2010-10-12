@@ -26,7 +26,7 @@ import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAP12HeaderExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAPFaultElementExtension;
 
-public final class SOAPVersion {
+public abstract class SOAPVersion {
     public static final SOAPVersion SOAP11 = new SOAPVersion(
             SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE,
             new SequenceBuilder()
@@ -38,7 +38,18 @@ public final class SOAPVersion {
                 .addItem(SOAPFaultElementExtension.class, null, "faultstring")
                 .addItem(SOAPFaultElementExtension.class, null, "faultactor")
                 .addItem(DetailExtension.class, null, "detail").build(),
-            "actor");
+            "actor") {
+        
+        @Override
+        public String formatMustUnderstand(boolean mustUnderstand) {
+            return mustUnderstand ? "1" : "0";
+        }
+
+        @Override
+        public boolean parseMustUnderstand(String mustUnderstand) {
+            return mustUnderstand.equals("1") || mustUnderstand.equalsIgnoreCase("true");
+        }
+    };
     
     public static final SOAPVersion SOAP12 = new SOAPVersion(
             SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE,
@@ -51,14 +62,25 @@ public final class SOAPVersion {
                 .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Reason")
                 .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
                 .addItem(DetailExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build(),
-            "role");
+            "role") {
+        
+        @Override
+        public String formatMustUnderstand(boolean mustUnderstand) {
+            return mustUnderstand ? "true" : "false";
+        }
+
+        @Override
+        public boolean parseMustUnderstand(String mustUnderstand) {
+            return mustUnderstand.equals("1") || mustUnderstand.equals("true");
+        }
+    };
     
     private final String envelopeNamespaceURI;
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
     private final String actorAttributeLocalName;
     
-    private SOAPVersion(String envelopeNamespaceURI, Sequence envelopeSequence, Sequence faultSequence,
+    public SOAPVersion(String envelopeNamespaceURI, Sequence envelopeSequence, Sequence faultSequence,
             String actorAttributeLocalName) {
         this.envelopeNamespaceURI = envelopeNamespaceURI;
         this.envelopeSequence = envelopeSequence;
@@ -81,4 +103,7 @@ public final class SOAPVersion {
     public String getActorAttributeLocalName() {
         return actorAttributeLocalName;
     }
+    
+    public abstract String formatMustUnderstand(boolean mustUnderstand);
+    public abstract boolean parseMustUnderstand(String mustUnderstand);
 }

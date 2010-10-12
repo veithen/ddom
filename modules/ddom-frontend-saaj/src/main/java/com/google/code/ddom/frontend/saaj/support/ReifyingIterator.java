@@ -31,9 +31,9 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 public class ReifyingIterator<T> implements Iterator<T> {
     private final ChildIterator<CoreNSAwareElement> parent;
     private final Class<?> extensionInterface;
-    private final Class<T> type;
+    private final Class<? extends T> type;
 
-    public ReifyingIterator(ChildIterator<CoreNSAwareElement> parent, Class<?> extensionInterface, Class<T> type) {
+    public ReifyingIterator(ChildIterator<CoreNSAwareElement> parent, Class<?> extensionInterface, Class<? extends T> type) {
         this.parent = parent;
         this.extensionInterface = extensionInterface;
         this.type = type;

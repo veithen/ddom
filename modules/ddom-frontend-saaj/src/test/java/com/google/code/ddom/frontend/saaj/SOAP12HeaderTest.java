@@ -23,7 +23,6 @@ import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPHeaderElement;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.code.ddom.utils.test.Validated;
@@ -33,7 +32,7 @@ public class SOAP12HeaderTest extends SOAPHeaderTest {
         super(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "role");
     }
 
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public final void testGetSetMustUnderstandTrue() throws Exception {
         SOAPHeader header = createEmptySOAPHeader();
         SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
@@ -42,7 +41,7 @@ public class SOAP12HeaderTest extends SOAPHeaderTest {
         assertTrue(element.getMustUnderstand());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public final void testGetSetMustUnderstandFalse() throws Exception {
         SOAPHeader header = createEmptySOAPHeader();
         SOAPHeaderElement element = (SOAPHeaderElement)header.addChildElement("test", "p", "urn:ns");
@@ -51,7 +50,7 @@ public class SOAP12HeaderTest extends SOAPHeaderTest {
         assertFalse(element.getMustUnderstand());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public final void testGetMustUnderstandFromExistingAttributeTrueUpperCase() throws Exception {
         testGetMustUnderstandFromExistingAttribute("TRUE", false);
     }

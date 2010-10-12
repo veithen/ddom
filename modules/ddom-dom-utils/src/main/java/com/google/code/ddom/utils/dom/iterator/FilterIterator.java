@@ -19,8 +19,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Abstract iterator that returns matching item from another iterator.
+ * Abstract iterator that returns matching items from another iterator.
  */
+// TODO: this overlaps with FilteredIterator in ddom-collections
 public abstract class FilterIterator<T> implements Iterator<T> {
     private final Iterator<T> parent;
     private T nextItem;

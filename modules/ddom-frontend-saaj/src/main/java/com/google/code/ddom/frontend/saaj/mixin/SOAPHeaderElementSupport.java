@@ -51,11 +51,11 @@ public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement 
 
     public final boolean getMustUnderstand() {
         String value = getSOAPAttribute("mustUnderstand");
-        return value != null && (value.equals("1") || value.equalsIgnoreCase("true")); 
+        return value != null && getSOAPVersion().parseMustUnderstand(value);
     }
 
     public final void setMustUnderstand(boolean mustUnderstand) {
-        setSOAPAttribute("mustUnderstand", mustUnderstand ? "1" : "0");
+        setSOAPAttribute("mustUnderstand", getSOAPVersion().formatMustUnderstand(mustUnderstand));
     }
 
     public boolean getRelay() {

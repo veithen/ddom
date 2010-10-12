@@ -25,6 +25,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 import javax.xml.soap.Detail;
 import javax.xml.soap.DetailEntry;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
@@ -88,6 +89,17 @@ public abstract class SOAPFaultTest extends AbstractTestCase {
 //        assertNull(detailEntry.getNamespaceURI());
         assertEquals("mydetail", detailEntry.getLocalName());
         assertNull(detailEntry.getPrefix());
+        assertSame(detailEntry, detail.getFirstChild());
+    }
+    
+    @Validated @Test
+    public final void testAddDetailEntryUsingName() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Detail detail = envelope.addBody().addFault().addDetail();
+        DetailEntry detailEntry = detail.addDetailEntry(envelope.createName("mydetail", "p", "urn:ns"));
+        assertEquals("urn:ns", detailEntry.getNamespaceURI());
+        assertEquals("mydetail", detailEntry.getLocalName());
+        assertEquals("p", detailEntry.getPrefix());
         assertSame(detailEntry, detail.getFirstChild());
     }
     
