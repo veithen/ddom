@@ -16,10 +16,13 @@
 package com.google.code.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import javax.xml.soap.Name;
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
@@ -27,6 +30,7 @@ import javax.xml.soap.SOAPHeaderElement;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
 import com.google.code.ddom.utils.test.Validated;
 
@@ -42,6 +46,15 @@ public abstract class SOAPEnvelopeTest extends AbstractTestCase {
         assertEquals("Envelope", envelope.getLocalName());
     }
     
+    @Validated @Test
+    public final void testGetHeaderWithCreateElementNS() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Element headerElement = envelope.getOwnerDocument().createElementNS(soapVersion, "soap:Header");
+        envelope.appendChild(headerElement);
+        SOAPHeader header = envelope.getHeader();
+        assertSame(headerElement, header);
+    }
+    
     @Validated @Test(expected=SOAPException.class)
     public final void testAddHeaderTwice() throws Exception {
         SOAPEnvelope envelope = createSOAPEnvelope();
@@ -49,11 +62,70 @@ public abstract class SOAPEnvelopeTest extends AbstractTestCase {
         envelope.addHeader();
     }
     
+    @Validated @Test
+    public final void testGetBodyWithCreateElementNS() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Element bodyElement = envelope.getOwnerDocument().createElementNS(soapVersion, "soap:Body");
+        envelope.appendChild(bodyElement);
+        SOAPBody body = envelope.getBody();
+        assertSame(bodyElement, body);
+    }
+    
     @Validated @Test(expected=SOAPException.class)
     public final void testAddBodyTwice() throws Exception {
         SOAPEnvelope envelope = createSOAPEnvelope();
         envelope.addBody();
         envelope.addBody();
+    }
+    
+    @Validated @Test
+    public final void testCreateName() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Name name = envelope.createName("test", "p", "urn:ns1");
+        assertEquals("test", name.getLocalName());
+        assertEquals("p", name.getPrefix());
+        assertEquals("urn:ns1", name.getURI());
+        assertEquals("p:test", name.getQualifiedName());
+    }
+    
+    @Validated @Test
+    public final void testCreateNameWithEmptyPrefix() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Name name = envelope.createName("test", "", "urn:ns1");
+        assertEquals("test", name.getLocalName());
+        assertEquals("", name.getPrefix());
+        assertEquals("urn:ns1", name.getURI());
+        assertEquals("test", name.getQualifiedName());
+    }
+    
+    @Validated @Test
+    public final void testCreateNameWithNullPrefix() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Name name = envelope.createName("test", null, "urn:ns1");
+        assertEquals("test", name.getLocalName());
+        assertEquals("", name.getPrefix());
+        assertEquals("urn:ns1", name.getURI());
+        assertEquals("test", name.getQualifiedName());
+    }
+    
+    @Validated @Test
+    public final void testCreateNameWithoutNamespace() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Name name = envelope.createName("test", null, null);
+        assertEquals("test", name.getLocalName());
+        assertEquals("", name.getPrefix());
+        assertEquals("", name.getURI());
+        assertEquals("test", name.getQualifiedName());
+    }
+    
+    @Validated @Test
+    public final void testCreateName2() throws Exception {
+        SOAPEnvelope envelope = createSOAPEnvelope();
+        Name name = envelope.createName("test");
+        assertEquals("test", name.getLocalName());
+        assertEquals("", name.getPrefix());
+        assertEquals("", name.getURI());
+        assertEquals("test", name.getQualifiedName());
     }
     
     @Validated @Test @Ignore

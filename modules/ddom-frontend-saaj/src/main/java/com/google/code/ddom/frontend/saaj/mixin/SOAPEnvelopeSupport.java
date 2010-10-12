@@ -31,7 +31,7 @@ import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SOAPEnvelopeExtension.class)
 public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
-    public SOAPHeader getHeader() throws SOAPException {
+    public final SOAPHeader getHeader() throws SOAPException {
         try {
             return (SOAPHeader)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 0, SequenceOperation.GET);
         } catch (CoreModelException ex) {
@@ -39,7 +39,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         }
     }
     
-    public SOAPHeader addHeader() throws SOAPException {
+    public final SOAPHeader addHeader() throws SOAPException {
         try {
             return (SOAPHeader)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 0, SequenceOperation.CREATE);
         } catch (ElementAlreadyExistsException ex) {
@@ -49,7 +49,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         }
     }
 
-    public SOAPBody getBody() throws SOAPException {
+    public final SOAPBody getBody() throws SOAPException {
         try {
             return (SOAPBody)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 1, SequenceOperation.GET);
         } catch (CoreModelException ex) {
@@ -57,7 +57,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         }
     }
 
-    public SOAPBody addBody() throws SOAPException {
+    public final SOAPBody addBody() throws SOAPException {
         try {
             return (SOAPBody)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 1, SequenceOperation.CREATE);
         } catch (ElementAlreadyExistsException ex) {
@@ -67,12 +67,11 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
         }
     }
 
-    public Name createName(String localName, String prefix, String uri) throws SOAPException {
+    public final Name createName(String localName, String prefix, String uri) throws SOAPException {
         return new NameImpl(localName, prefix, uri);
     }
 
-    public Name createName(String arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Name createName(String localName) throws SOAPException {
+        return new NameImpl(localName, null, null);
     }
 }

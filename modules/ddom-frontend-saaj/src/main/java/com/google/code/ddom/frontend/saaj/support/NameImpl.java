@@ -23,9 +23,12 @@ public class NameImpl implements Name {
     private final String uri;
     
     public NameImpl(String localName, String prefix, String uri) {
+        if (localName == null || localName.length() == 0) {
+            throw new IllegalArgumentException("localName can't be null or empty");
+        }
         this.localName = localName;
-        this.prefix = prefix;
-        this.uri = uri;
+        this.prefix = prefix == null ? "" : prefix;
+        this.uri = uri == null ? "" : uri;
     }
 
     public String getLocalName() {
@@ -41,7 +44,6 @@ public class NameImpl implements Name {
     }
     
     public String getQualifiedName() {
-        // TODO Auto-generated method stub
-        return null;
+        return prefix.length() == 0 ? localName : prefix + ":" + localName;
     }
 }

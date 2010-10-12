@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -75,6 +76,16 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         SOAPEnvelope env = createSOAPEnvelope();
         SOAPHeader header = env.addHeader();
         SOAPHeaderElement element = header.addHeaderElement(env.createName("test", "ns", "http://example.org"));
+        assertSame(header.getFirstChild(), element);
+        assertEquals("test", element.getLocalName());
+        assertEquals("ns", element.getPrefix());
+        assertEquals("http://example.org", element.getNamespaceURI());
+    }
+    
+    @Validated @Test
+    public final void testAddHeaderElementUsingQName() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPHeaderElement element = header.addHeaderElement(new QName("http://example.org", "test", "ns"));
         assertSame(header.getFirstChild(), element);
         assertEquals("test", element.getLocalName());
         assertEquals("ns", element.getPrefix());

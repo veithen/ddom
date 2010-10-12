@@ -27,10 +27,12 @@ import org.w3c.dom.Document;
 
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAPBodyElementExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBodyElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SOAPBodyExtension.class)
@@ -43,14 +45,17 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
         return SOAPBodyElement.class;
     }
 
-    public SOAPBodyElement addBodyElement(Name arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPBodyElement addBodyElement(Name name) throws SOAPException {
+        // TODO: need unit test with empty prefix/namespace
+        SAAJSOAPBodyElement element = (SAAJSOAPBodyElement)coreGetDocument().coreCreateElement(getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
+        appendChild(element);
+        return element;
     }
 
-    public SOAPBodyElement addBodyElement(QName arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPBodyElement addBodyElement(QName qname) throws SOAPException {
+        SAAJSOAPBodyElement element = (SAAJSOAPBodyElement)coreGetDocument().coreCreateElement(getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+        appendChild(element);
+        return element;
     }
 
     public SOAPBodyElement addDocument(Document arg0) throws SOAPException {

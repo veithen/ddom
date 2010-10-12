@@ -15,13 +15,18 @@
  */
 package com.google.code.ddom.frontend.saaj;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 
@@ -64,6 +69,27 @@ public abstract class SOAPBodyTest extends AbstractTestCase {
         assertFalse(body.hasFault());
         body.addFault();
         assertTrue(body.hasFault());
+    }
+    
+    @Validated @Test
+    public final void testAddBodyElementUsingName() throws Exception {
+        SOAPEnvelope env = createSOAPEnvelope();
+        SOAPBody body = env.addBody();
+        SOAPBodyElement element = body.addBodyElement(env.createName("test", "ns", "http://example.org"));
+        assertSame(body.getFirstChild(), element);
+        assertEquals("test", element.getLocalName());
+        assertEquals("ns", element.getPrefix());
+        assertEquals("http://example.org", element.getNamespaceURI());
+    }
+    
+    @Validated @Test
+    public final void testAddBodyElementUsingQName() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        SOAPBodyElement element = body.addBodyElement(new QName("http://example.org", "test", "ns"));
+        assertSame(body.getFirstChild(), element);
+        assertEquals("test", element.getLocalName());
+        assertEquals("ns", element.getPrefix());
+        assertEquals("http://example.org", element.getNamespaceURI());
     }
     
     @Validated @Test
