@@ -15,13 +15,17 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.core.CoreTextNode;
+import com.google.code.ddom.core.CoreCharacterData;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.intf.SAAJText;
+import com.google.code.ddom.frontend.saaj.intf.SAAJNode;
 
-@Mixin(CoreTextNode.class)
-public abstract class TextSupport implements SAAJText {
-    public boolean isComment() {
-        return false;
+@Mixin(CoreCharacterData.class)
+public abstract class CharacterDataSupport implements SAAJNode, CoreCharacterData {
+    public final String getValue() {
+        return coreGetData();
+    }
+
+    public final void setValue(String value) {
+        coreSetData(value);
     }
 }

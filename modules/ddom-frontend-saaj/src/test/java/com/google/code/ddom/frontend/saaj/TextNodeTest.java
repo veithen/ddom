@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.saaj.mixin;
+package com.google.code.ddom.frontend.saaj;
 
-import com.google.code.ddom.core.CoreTextNode;
-import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.intf.SAAJText;
+import static org.junit.Assert.assertFalse;
 
-@Mixin(CoreTextNode.class)
-public abstract class TextSupport implements SAAJText {
-    public boolean isComment() {
-        return false;
+import org.junit.Test;
+
+import com.google.code.ddom.utils.test.Validated;
+
+public abstract class TextNodeTest extends CharacterDataTest {
+    @Validated @Test
+    public final void testIsComment() {
+        assertFalse(createNode("test").isComment());
     }
 }

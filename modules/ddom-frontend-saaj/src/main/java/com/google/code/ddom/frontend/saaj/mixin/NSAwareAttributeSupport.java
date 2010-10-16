@@ -29,13 +29,13 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
  */
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class NSAwareAttributeSupport implements SAAJNSAwareAttribute {
-    public String getQualifiedName() {
+    public final String getQualifiedName() {
         String prefix = coreGetPrefix();
         String localName = coreGetLocalName();
         return prefix == null ? localName : prefix + ":" + localName;
     }
     
-    public String getURI() {
+    public final String getURI() {
         return coreGetNamespaceURI();
     }
 }

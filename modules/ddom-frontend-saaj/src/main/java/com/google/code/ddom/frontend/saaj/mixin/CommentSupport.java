@@ -21,7 +21,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJText;
 
 @Mixin(CoreComment.class)
 public abstract class CommentSupport implements SAAJText {
-    public boolean isComment() {
+    public final boolean isComment() {
         return true;
     }
 }

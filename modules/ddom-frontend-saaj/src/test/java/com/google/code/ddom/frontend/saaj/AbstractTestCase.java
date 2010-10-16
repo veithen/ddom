@@ -20,6 +20,7 @@ import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.Text;
 
 import org.junit.runner.RunWith;
 
@@ -37,7 +38,7 @@ public abstract class AbstractTestCase {
         this.soapVersion = soapVersion;
     }
     
-    protected SOAPEnvelope createSOAPEnvelope() {
+    protected final SOAPEnvelope createSOAPEnvelope() {
         if (soapVersion.equals(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE)) {
             return saajUtil.createSOAP11Envelope();
         } else {
@@ -45,15 +46,27 @@ public abstract class AbstractTestCase {
         }
     }
     
-    protected SOAPHeader createEmptySOAPHeader() {
+    protected final SOAPHeader createEmptySOAPHeader() {
         return (SOAPHeader)createSOAPEnvelope().getOwnerDocument().createElementNS(soapVersion, "SOAP-ENV:Header");
     }
     
-    protected SOAPBody createEmptySOAPBody() {
+    protected final SOAPBody createEmptySOAPBody() {
         return (SOAPBody)createSOAPEnvelope().getOwnerDocument().createElementNS(soapVersion, "SOAP-ENV:Body");
     }
     
-    protected SOAPFault createEmptySOAPFault() {
+    protected final SOAPFault createEmptySOAPFault() {
         return (SOAPFault)createSOAPEnvelope().getOwnerDocument().createElementNS(soapVersion, "SOAP-ENV:Fault");
+    }
+    
+    protected final Text createText(String content) {
+        return (Text)createSOAPEnvelope().getOwnerDocument().createTextNode(content);
+    }
+    
+    protected final Text createComment(String content) {
+        return (Text)createSOAPEnvelope().getOwnerDocument().createComment(content);
+    }
+    
+    protected final Text createCDATASection(String content) {
+        return (Text)createSOAPEnvelope().getOwnerDocument().createCDATASection(content);
     }
 }
