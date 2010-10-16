@@ -287,7 +287,7 @@
                             <includes>manual.xml</includes>
                             <foCustomization>src/docbkx/xsl/fo.xsl</foCustomization>
                             <postProcess>
-                                <copy file="target/docbkx/pdf/manaul.pdf"
+                                <copy file="target/docbkx/pdf/manual.pdf"
                                       tofile="target/site/manual.pdf"/>
                             </postProcess>
                             <xincludeSupported>true</xincludeSupported>

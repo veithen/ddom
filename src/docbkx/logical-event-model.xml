@@ -20,7 +20,7 @@
         
         
         <table>
-            <tgroup cols="2">
+            <tgroup cols="3">
                 <thead>
                     <row>
                         <entry>Event type</entry>
