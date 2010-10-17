@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class InfosetTest extends TestCase {
     private final XMLConformanceTest test;
     
     public InfosetTest(XMLConformanceTest test) {
-        super(test.getId() + "__" + test.getUrl().toExternalForm());
+        super(test.getName());
         this.test = test;
     }
 

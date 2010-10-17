@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,14 @@ import org.xml.sax.InputSource;
 import com.google.code.ddom.collections.Identifiable;
 
 public class XMLConformanceTest implements Identifiable<String> {
+    private static final String rootUrl;
+    
+    static {
+        String url = XMLConformanceTest.class.getResource("/xmlconf/testcases.dtd").toExternalForm();
+        url = url.substring(0, url.lastIndexOf('/')+1);
+        rootUrl = url;
+    }
+    
     public enum Type {
         VALID,
         INVALID,
@@ -45,6 +53,7 @@ public class XMLConformanceTest implements Identifiable<String> {
     private final URL url;
     private final URL output;
     private final String description;
+    private String name;
     
     XMLConformanceTest(String id, Type type, Set<XMLVersion> xmlVersions, boolean usingNamespaces, URL url, URL output, String description) {
         this.id = id;
@@ -60,6 +69,17 @@ public class XMLConformanceTest implements Identifiable<String> {
         return id;
     }
     
+    public String getName() {
+        if (name == null) {
+            String urlString = url.toExternalForm();
+            if (urlString.startsWith(rootUrl)) {
+                urlString = urlString.substring(rootUrl.length());
+            }
+            name = id + " [" + urlString + "]";
+        }
+        return name;
+    }
+
     public Type getType() {
         return type;
     }
