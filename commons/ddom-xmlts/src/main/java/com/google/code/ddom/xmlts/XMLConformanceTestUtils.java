@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.xmlts;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -44,5 +45,42 @@ public class XMLConformanceTestUtils {
             removeXmlBaseAttributes(child);
             child = child.getNextSibling();
         }
+    }
+
+    /**
+     * Remove empty CDATA sections from the given node and all of its descendants. Some parsers
+     * silently discard empty CDATA sections, and this method may be used to compare the output from
+     * parsers that behave differently with respect to empty CDATA sections.
+     * 
+     * @param node
+     *            the node to process
+     */
+    public static void removeEmptyCDATASections(Node node) {
+        Node child = node.getFirstChild();
+        while (child != null) {
+            Node next = child.getNextSibling();
+            switch (child.getNodeType()) {
+                case Node.CDATA_SECTION_NODE:
+                    if (child.getNodeValue().length() == 0) {
+                        child.getParentNode().removeChild(child);
+                    }
+                    break;
+                case Node.ELEMENT_NODE:
+                    removeEmptyCDATASections(child);
+            }
+            child = next;
+        }
+    }
+    
+    /**
+     * Coalesce adjacent text nodes in the given document. CDATA sections are preserved. This method
+     * is useful to compare output from two non coalescing parsers.
+     * 
+     * @param document
+     *            the document to process
+     */
+    public static void coalesceTextNodes(Document document) {
+        document.getDomConfig().setParameter("cdata-sections", true);
+        document.normalize();
     }
 }

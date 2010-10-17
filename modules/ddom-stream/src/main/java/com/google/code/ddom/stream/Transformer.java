@@ -40,7 +40,7 @@ public class Transformer {
         }
         
         public void to(Object destination) throws StreamException {
-            to(destination, null);
+            to(destination, new Options());
         }
     }
     
@@ -67,6 +67,6 @@ public class Transformer {
     }
     
     public Source from(Object source) throws StreamException {
-        return from(source, null, true);
+        return from(source, new Options(), true);
     }
 }

@@ -44,7 +44,10 @@ public class DOMOutput implements Output {
     }
 
     public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
-        // TODO Auto-generated method stub
+        // TODO: process the remaining information
+        if (xmlVersion != null) {
+            document.setXmlVersion(xmlVersion);
+        }
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId) {
@@ -76,12 +79,11 @@ public class DOMOutput implements Output {
     }
 
     public void processNamespaceDeclaration(String prefix, String namespaceURI) {
-        if (prefix == null) {
-            // TODO: check this
-            ((Element)node).setAttributeNS("", XMLConstants.XMLNS_ATTRIBUTE, namespaceURI);
-        } else {
-            ((Element)node).setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix, namespaceURI);
-        }
+        ((Element)node).setAttributeNS(
+                XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+                prefix == null ? XMLConstants.XMLNS_ATTRIBUTE
+                               : XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix,
+                namespaceURI);
     }
 
     public void attributesCompleted() {
