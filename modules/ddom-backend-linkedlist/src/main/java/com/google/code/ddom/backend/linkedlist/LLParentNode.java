@@ -42,4 +42,6 @@ public interface LLParentNode extends LLNode, CoreParentNode {
      * @throws DeferredParsingException 
      */
     void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
+    
+    void internalSetValue(String value);
 }

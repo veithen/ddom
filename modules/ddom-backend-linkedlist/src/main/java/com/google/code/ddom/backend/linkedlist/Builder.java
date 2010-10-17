@@ -37,6 +37,7 @@ public class Builder implements Output {
     private LLParentNode parent; // The current node being built
     private LLChildNode lastSibling; // The last child of the current node
     private Attribute lastAttribute;
+    private String pendingText; // Text that has not yet been added to the tree
     private boolean nodeAppended;
 
     public Builder(Input input, ModelExtension modelExtension, Document document, LLParentNode target) {
@@ -116,7 +117,11 @@ public class Builder implements Output {
     }
     
     public final void processText(String data) {
-        appendNode(new Text(document, data));
+        if (lastSibling == null && pendingText == null) {
+            pendingText = data;
+        } else {
+            appendNode(new Text(document, data));
+        }
     }
     
     public final void processComment(String data) {
@@ -131,7 +136,7 @@ public class Builder implements Output {
         appendNode(new EntityReference(document, name));
     }
     
-    private void appendNode(LLChildNode node) {
+    private void refreshLastSibling() {
         if (lastSibling == null && parent.internalGetFirstChildIfMaterialized() != null
                 || lastSibling != null && (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSiblingIfMaterialized() != null)) {
             // We get here if the children of the node being built have been modified
@@ -147,6 +152,9 @@ public class Builder implements Output {
                 child = child.internalGetNextSiblingIfMaterialized();
             }
         }
+    }
+    
+    private void appendSibling(LLChildNode node) {
         if (lastSibling == null) {
             parent.internalSetFirstChild(node);
         } else {
@@ -154,13 +162,26 @@ public class Builder implements Output {
         }
         parent.internalNotifyChildrenModified(1);
         node.internalSetParent(parent);
+        lastSibling = node;
+    }
+    
+    private void flushPendingText() {
+        if (pendingText != null) {
+            appendSibling(new Text(document, pendingText));
+            pendingText = null;
+        }
+    }
+    
+    private void appendNode(LLChildNode node) {
+        refreshLastSibling();
+        flushPendingText();
+        appendSibling(node);
         if (node instanceof Element) {
             // TODO: this assumes that elements are always created as incomplete
             nodeStack.push(parent);
             parent = (Element)node;
             lastSibling = null;
         } else {
-            lastSibling = node;
             nodeAppended = true;
         }
         lastAttribute = null;
@@ -177,6 +198,16 @@ public class Builder implements Output {
     }
     
     public final void nodeCompleted() {
+        if (pendingText != null) {
+            refreshLastSibling();
+            if (lastSibling == null) {
+                parent.internalSetValue(pendingText);
+                parent.internalNotifyChildrenModified(1);
+                pendingText = null;
+            } else {
+                flushPendingText();
+            }
+        }
         modelExtensionMapper.endElement(); // TODO: not entirely correct
         parent.internalSetComplete(true);
         if (nodeStack.isEmpty()) {

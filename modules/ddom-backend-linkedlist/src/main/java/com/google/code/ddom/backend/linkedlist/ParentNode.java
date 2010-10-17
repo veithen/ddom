@@ -99,6 +99,10 @@ public abstract class ParentNode extends Node implements LLParentNode {
         content = value;
         internalNotifyChildrenModified(1);
     }
+    
+    public final void internalSetValue(String value) {
+        content = value;
+    }
 
     public final void coreClear() throws DeferredParsingException {
         if (content instanceof LLChildNode) {
@@ -166,9 +170,11 @@ public abstract class ParentNode extends Node implements LLParentNode {
                 while (content == null && !complete) {
                     builder.next();
                 }
-                return (CoreChildNode)content;
+                // After calling the builder, the content may be a String object,
+                // so just continue.
             }
-        } else if (content instanceof String) {
+        }
+        if (content instanceof String) {
             // TODO: no cast here
             LLChildNode firstChild = new Text((Document)internalGetDocument(), (String)content);
             firstChild.internalSetParent(this);
