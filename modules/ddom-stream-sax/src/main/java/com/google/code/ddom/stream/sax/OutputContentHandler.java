@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.ext.Locator2;
 
 import com.google.code.ddom.stream.spi.Output;
 
@@ -34,6 +35,11 @@ public class OutputContentHandler implements ContentHandler, LexicalHandler {
     }
 
     public void setDocumentLocator(Locator locator) {
+        if (locator instanceof Locator2) {
+            Locator2 locator2 = (Locator2)locator;
+            // TODO: extract remaining info and build minimal info if locator doesn't implement Locator2
+            output.setDocumentInfo(locator2.getXMLVersion(), null, null, true);
+        }
     }
 
     public void startDocument() throws SAXException {
@@ -65,18 +71,19 @@ public class OutputContentHandler implements ContentHandler, LexicalHandler {
 
         int length = atts.getLength();
         for (int i=0; i<length; i++) {
+            String attQName = atts.getQName(i);
             String attLocalName = atts.getLocalName(i);
             if (attLocalName.length() == 0) {
-                output.processAttribute(qName, atts.getValue(i), atts.getType(i));
+                output.processAttribute(attQName, atts.getValue(i), atts.getType(i));
             } else {
                 String attUri = atts.getURI(i);
                 if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                    output.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(qName), atts.getValue(i));
+                    output.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(attQName), atts.getValue(i));
                 } else {
                     output.processAttribute(
                             SAXStreamUtils.normalizeNamespaceURI(attUri),
                             atts.getLocalName(i),
-                            SAXStreamUtils.getPrefixFromQName(qName),
+                            SAXStreamUtils.getPrefixFromQName(attQName),
                             atts.getValue(i),
                             atts.getType(i));
                 }
