@@ -72,6 +72,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <excludes>
+                        <!-- TODO -->
                         <exclude>**/SAXStreamProviderTest.java</exclude>
                     </excludes>
                 </configuration>
