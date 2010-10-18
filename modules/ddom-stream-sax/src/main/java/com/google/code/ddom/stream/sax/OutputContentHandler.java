@@ -28,7 +28,6 @@ import com.google.code.ddom.stream.spi.Output;
 
 public class OutputContentHandler implements ContentHandler, LexicalHandler {
     private final Output output;
-    private boolean inCDATA;
 
     public OutputContentHandler(Output output) {
         this.output = output;
@@ -97,19 +96,15 @@ public class OutputContentHandler implements ContentHandler, LexicalHandler {
     }
 
     public void startCDATA() throws SAXException {
-        inCDATA = true;
+        output.processCDATASection();
     }
 
     public void endCDATA() throws SAXException {
-        inCDATA = false;
+        output.nodeCompleted();
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
-        if (inCDATA) {
-            output.processCDATASection(new String(ch, start, length));
-        } else {
-            output.processText(new String(ch, start, length));
-        }
+        output.processText(new String(ch, start, length));
     }
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {

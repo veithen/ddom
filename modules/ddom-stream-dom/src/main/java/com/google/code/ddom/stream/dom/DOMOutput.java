@@ -37,6 +37,8 @@ import com.google.code.ddom.stream.spi.Output;
 public class DOMOutput implements Output {
     private final Document document;
     private Node node;
+    private boolean isCDATASection;
+    private Object cdataSectionContent;
     
     public DOMOutput(Document document) {
         this.document = document;
@@ -91,15 +93,41 @@ public class DOMOutput implements Output {
     }
 
     public void nodeCompleted() {
-        node = node.getParentNode();
+        if (isCDATASection) {
+            String data;
+            if (cdataSectionContent == null) {
+                data = "";
+            } else if (cdataSectionContent instanceof String) {
+                data = (String)cdataSectionContent;
+            } else {
+                data = ((StringBuilder)cdataSectionContent).toString();
+            }
+            node.appendChild(document.createCDATASection(data));
+            isCDATASection = false;
+            cdataSectionContent = null;
+        } else {
+            node = node.getParentNode();
+        }
     }
 
-    public void processCDATASection(String data) {
-        node.appendChild(document.createCDATASection(data));
+    public void processCDATASection() {
+        isCDATASection = true;
     }
 
     public void processText(String data) {
-        node.appendChild(document.createTextNode(data));
+        if (isCDATASection) {
+            if (cdataSectionContent == null) {
+                cdataSectionContent = data;
+            } else if (cdataSectionContent instanceof String) {
+                StringBuilder buffer = new StringBuilder((String)cdataSectionContent);
+                buffer.append(data);
+                cdataSectionContent = buffer;
+            } else {
+                ((StringBuilder)cdataSectionContent).append(data);
+            }
+        } else {
+            node.appendChild(document.createTextNode(data));
+        }
     }
 
     public void processComment(String data) {

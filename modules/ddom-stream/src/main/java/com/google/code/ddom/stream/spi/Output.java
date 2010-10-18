@@ -73,7 +73,7 @@ public interface Output {
     void processProcessingInstruction(String target, String data);
     void processText(String data);
     void processComment(String data);
-    void processCDATASection(String data);
+    void processCDATASection();
     void processEntityReference(String name);
     
     /**

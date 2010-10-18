@@ -105,7 +105,9 @@ public class StAXInput implements Input {
                 output.processText(reader.getText());
                 return true;
             case XMLStreamReader.CDATA:
-                output.processCDATASection(reader.getText());
+                output.processCDATASection();
+                output.processText(reader.getText());
+                output.nodeCompleted();
                 return true;
             case XMLStreamReader.COMMENT:
                 output.processComment(reader.getText());

@@ -121,8 +121,8 @@ public class EventBuffer implements Output {
         newEvent().init(Type.CHARACTERS, null, null, null, data, null);
     }
 
-    public void processCDATASection(String data) {
-        newEvent().init(Type.CDATA, null, null, null, data, null);
+    public void processCDATASection() {
+        newEvent().init(Type.CDATA, null, null, null, null, null);
     }
 
     public void processEntityReference(String name) {

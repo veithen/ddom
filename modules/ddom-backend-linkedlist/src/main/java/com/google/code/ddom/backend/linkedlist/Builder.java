@@ -128,8 +128,8 @@ public class Builder implements Output {
         appendNode(new Comment(document, data));
     }
     
-    public final void processCDATASection(String data) {
-        appendNode(new CDATASection(document, data));
+    public final void processCDATASection() {
+        appendNode(new CDATASection(document));
     }
     
     public final void processEntityReference(String name) {
@@ -176,10 +176,10 @@ public class Builder implements Output {
         refreshLastSibling();
         flushPendingText();
         appendSibling(node);
-        if (node instanceof Element) {
+        if (node instanceof Container) {
             // TODO: this assumes that elements are always created as incomplete
             nodeStack.push(parent);
-            parent = (Element)node;
+            parent = (Container)node;
             lastSibling = null;
         } else {
             nodeAppended = true;

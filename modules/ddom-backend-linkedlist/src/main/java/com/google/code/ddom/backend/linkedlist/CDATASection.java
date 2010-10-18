@@ -24,6 +24,7 @@ import com.google.code.ddom.core.DeferredParsingException;
 
 // @Implementation
 public class CDATASection extends Container implements CoreCDATASection {
+    // TODO: this should be removed
     public CDATASection(Document document, String data) {
         super(document, true);
         try {
@@ -31,6 +32,10 @@ public class CDATASection extends Container implements CoreCDATASection {
         } catch (DeferredParsingException e) {
             throw new RuntimeException(e); // TODO
         }
+    }
+    
+    public CDATASection(Document document) {
+        super(document, false);
     }
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)
