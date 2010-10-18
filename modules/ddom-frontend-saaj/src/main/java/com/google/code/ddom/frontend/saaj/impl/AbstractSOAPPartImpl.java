@@ -181,10 +181,9 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.createEntityReference(name);
     }
 
-    public ProcessingInstruction createProcessingInstruction(String target,
-            String data) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final ProcessingInstruction createProcessingInstruction(String target, String data) throws DOMException {
+        initDocument();
+        return document.createProcessingInstruction(target, data);
     }
 
     public final Text createTextNode(String data) {
@@ -192,9 +191,9 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.createTextNode(data);
     }
 
-    public DocumentType getDoctype() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final DocumentType getDoctype() {
+        initDocument();
+        return document.getDoctype();
     }
 
     public final Element getDocumentElement() {
@@ -202,59 +201,59 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.getDocumentElement();
     }
 
-    public String getDocumentURI() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getDocumentURI() {
+        initDocument();
+        return document.getDocumentURI();
     }
 
-    public DOMConfiguration getDomConfig() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final DOMConfiguration getDomConfig() {
+        initDocument();
+        return document.getDomConfig();
     }
 
-    public Element getElementById(String elementId) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Element getElementById(String elementId) {
+        initDocument();
+        return document.getElementById(elementId);
     }
 
-    public NodeList getElementsByTagName(String tagname) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final NodeList getElementsByTagName(String tagname) {
+        initDocument();
+        return document.getElementsByTagName(tagname);
     }
 
-    public NodeList getElementsByTagNameNS(String namespaceURI, String localName) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final NodeList getElementsByTagNameNS(String namespaceURI, String localName) {
+        initDocument();
+        return document.getElementsByTagNameNS(namespaceURI, localName);
     }
 
-    public DOMImplementation getImplementation() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final DOMImplementation getImplementation() {
+        initDocument();
+        return document.getImplementation();
     }
 
-    public String getInputEncoding() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getInputEncoding() {
+        initDocument();
+        return document.getInputEncoding();
     }
 
-    public boolean getStrictErrorChecking() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean getStrictErrorChecking() {
+        initDocument();
+        return document.getStrictErrorChecking();
     }
 
-    public String getXmlEncoding() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getXmlEncoding() {
+        initDocument();
+        return document.getXmlEncoding();
     }
 
-    public boolean getXmlStandalone() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean getXmlStandalone() {
+        initDocument();
+        return document.getXmlStandalone();
     }
 
-    public String getXmlVersion() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getXmlVersion() {
+        initDocument();
+        return document.getXmlVersion();
     }
 
     public final Node importNode(Node importedNode, boolean deep) throws DOMException {
@@ -262,35 +261,34 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.importNode(importedNode, deep);
     }
 
-    public void normalizeDocument() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void normalizeDocument() {
+        initDocument();
+        document.normalizeDocument();
     }
 
-    public Node renameNode(Node n, String namespaceURI, String qualifiedName)
-            throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node renameNode(Node n, String namespaceURI, String qualifiedName) throws DOMException {
+        initDocument();
+        return document.renameNode(n, namespaceURI, qualifiedName);
     }
 
-    public void setDocumentURI(String documentURI) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setDocumentURI(String documentURI) {
+        initDocument();
+        document.setDocumentURI(documentURI);
     }
 
-    public void setStrictErrorChecking(boolean strictErrorChecking) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setStrictErrorChecking(boolean strictErrorChecking) {
+        initDocument();
+        document.setStrictErrorChecking(strictErrorChecking);
     }
 
-    public void setXmlStandalone(boolean xmlStandalone) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setXmlStandalone(boolean xmlStandalone) throws DOMException {
+        initDocument();
+        document.setXmlStandalone(xmlStandalone);
     }
 
-    public void setXmlVersion(String xmlVersion) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setXmlVersion(String xmlVersion) throws DOMException {
+        initDocument();
+        document.setXmlVersion(xmlVersion);
     }
 
     public final Node appendChild(Node newChild) throws DOMException {
@@ -298,34 +296,34 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.appendChild(newChild);
     }
 
-    public Node cloneNode(boolean deep) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node cloneNode(boolean deep) {
+        initDocument();
+        return document.cloneNode(deep);
     }
 
-    public short compareDocumentPosition(Node other) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final short compareDocumentPosition(Node other) throws DOMException {
+        initDocument();
+        return document.compareDocumentPosition(other);
     }
 
-    public NamedNodeMap getAttributes() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final NamedNodeMap getAttributes() {
+        initDocument();
+        return document.getAttributes();
     }
 
-    public String getBaseURI() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getBaseURI() {
+        initDocument();
+        return document.getBaseURI();
     }
 
-    public NodeList getChildNodes() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final NodeList getChildNodes() {
+        initDocument();
+        return document.getChildNodes();
     }
 
-    public Object getFeature(String feature, String version) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Object getFeature(String feature, String version) {
+        initDocument();
+        return document.getFeature(feature, version);
     }
 
     public final Node getFirstChild() {
@@ -333,9 +331,9 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.getFirstChild();
     }
 
-    public Node getLastChild() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node getLastChild() {
+        initDocument();
+        return document.getLastChild();
     }
 
     public final String getLocalName() {
@@ -348,14 +346,14 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.getNamespaceURI();
     }
 
-    public Node getNextSibling() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node getNextSibling() {
+        initDocument();
+        return document.getNextSibling();
     }
 
-    public String getNodeName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getNodeName() {
+        initDocument();
+        return document.getNodeName();
     }
 
     public final short getNodeType() {
@@ -363,14 +361,14 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.getNodeType();
     }
 
-    public String getNodeValue() throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getNodeValue() throws DOMException {
+        initDocument();
+        return document.getNodeValue();
     }
 
-    public Document getOwnerDocument() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Document getOwnerDocument() {
+        initDocument();
+        return document.getOwnerDocument();
     }
 
     public final Node getParentNode() {
@@ -378,29 +376,29 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         return document.getParentNode();
     }
 
-    public String getPrefix() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getPrefix() {
+        initDocument();
+        return document.getPrefix();
     }
 
-    public Node getPreviousSibling() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Node getPreviousSibling() {
+        initDocument();
+        return document.getPreviousSibling();
     }
 
-    public String getTextContent() throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getTextContent() throws DOMException {
+        initDocument();
+        return document.getTextContent();
     }
 
-    public Object getUserData(String key) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Object getUserData(String key) {
+        initDocument();
+        return document.getUserData(key);
     }
 
-    public boolean hasAttributes() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean hasAttributes() {
+        initDocument();
+        return document.hasAttributes();
     }
 
     public final boolean hasChildNodes() {
