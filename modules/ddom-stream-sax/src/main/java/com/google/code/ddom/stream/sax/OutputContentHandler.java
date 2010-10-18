@@ -28,20 +28,31 @@ import com.google.code.ddom.stream.spi.Output;
 
 public class OutputContentHandler implements ContentHandler, LexicalHandler {
     private final Output output;
+    private Locator locator;
+    private boolean documentInfoProcessed;
 
     public OutputContentHandler(Output output) {
         this.output = output;
     }
 
-    public void setDocumentLocator(Locator locator) {
-        if (locator instanceof Locator2) {
-            Locator2 locator2 = (Locator2)locator;
-            // TODO: extract remaining info and build minimal info if locator doesn't implement Locator2
-            output.setDocumentInfo(locator2.getXMLVersion(), null, null, true);
+    private void processDocumentInfo() {
+        if (!documentInfoProcessed) {
+            if (locator instanceof Locator2) {
+                Locator2 locator2 = (Locator2)locator;
+                // TODO: extract remaining info and build minimal info if locator doesn't implement Locator2
+                output.setDocumentInfo(locator2.getXMLVersion(), null, null, true);
+            }
+            documentInfoProcessed = true;
         }
+    }
+    
+    public void setDocumentLocator(Locator locator) {
+        this.locator = locator;
     }
 
     public void startDocument() throws SAXException {
+        // The document info provided by the Locator2 interface is not ready at this stage and needs
+        // to be processed later. Do nothing here.
     }
 
     public void endDocument() throws SAXException {
@@ -49,6 +60,7 @@ public class OutputContentHandler implements ContentHandler, LexicalHandler {
     }
 
     public void startDTD(String name, String publicId, String systemId) throws SAXException {
+        processDocumentInfo();
         output.processDocumentType(name, publicId, systemId);
     }
 
@@ -62,6 +74,7 @@ public class OutputContentHandler implements ContentHandler, LexicalHandler {
     }
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+        processDocumentInfo();
         if (localName.length() == 0) {
             output.processElement(qName);
         } else {

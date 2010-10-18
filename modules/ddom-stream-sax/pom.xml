@@ -66,17 +66,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <!-- TODO -->
-                        <exclude>**/SAXStreamProviderTest.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
