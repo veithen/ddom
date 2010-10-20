@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,16 @@ package com.google.code.ddom.core;
 import com.google.code.ddom.core.ext.ModelExtension;
 
 /**
- * Node factory. The frontend code MUST use this interface to create new nodes. To do so, it MUST
- * obtain an instance using {@link CoreDocument#coreGetNodeFactory()}. On the other hand, the frontend
- * MUST NOT assume that all nodes are created using this factory. The backend internally MAY create
- * nodes without using this factory, in particular during deferred parsing. Thus, frontend aspects
- * SHOULD NOT apply advices to this interface or its implementing classes.
+ * Node factory. The front-end code MUST use this interface to create new nodes. To do so, it MUST
+ * obtain an instance using {@link CoreDocument#coreGetNodeFactory()}. On the other hand, the
+ * front-end MUST NOT assume that all nodes are created using this factory. The back-end internally
+ * MAY create nodes without using this factory, in particular during deferred parsing.
  * <p>
- * Parameters passed to methods defined by this interface are not required to be canonicalized. It
- * is the responsibility of the implementation to canonicalize names, namespace URIs and prefixes as
- * necessary.
+ * The lifecycle of a {@link NodeFactory} implementation is managed as follows. The implementation
+ * class MUST declare a public static final field named <code>INSTANCE</code> initialized with an
+ * instance of the implementation. The class name of that implementation MUST be returned by
+ * {@link com.google.code.ddom.backend.Backend#getNodeFactoryClassName()}. This information is used
+ * by the model loaders to locate the singleton instance.
  * 
  * @author Andreas Veithen
  */

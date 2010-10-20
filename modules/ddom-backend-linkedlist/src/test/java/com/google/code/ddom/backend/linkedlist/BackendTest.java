@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,6 @@ import junit.framework.TestSuite;
 
 public class BackendTest extends TestCase {
     public static TestSuite suite() {
-        return BackendTestSuiteBuilder.suite(new NodeFactoryImpl(), BackendTestCase.BUILDER_TYPE_2);
+        return BackendTestSuiteBuilder.suite(NodeFactoryImpl.INSTANCE, BackendTestCase.BUILDER_TYPE_2);
     }
 }

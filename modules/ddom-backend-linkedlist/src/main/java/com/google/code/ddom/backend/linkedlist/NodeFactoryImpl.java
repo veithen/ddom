@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,10 @@ import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 
 public class NodeFactoryImpl implements NodeFactory {
+    public static final NodeFactory INSTANCE = new NodeFactoryImpl();
+    
+    private NodeFactoryImpl() {}
+    
     public CoreDocument createDocument() {
         return createDocument(ModelExtension.NULL);
     }

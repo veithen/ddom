@@ -79,7 +79,8 @@ public class DynamicModelLoader implements ModelLoader {
 //                }
 //            }
             weaver.weave(frontends);
-            nodeFactory = (NodeFactory)classLoader.loadClass(backend.getNodeFactoryClassName()).newInstance();
+            Class<? extends NodeFactory> nodeFactoryClass = classLoader.loadClass(backend.getNodeFactoryClassName()).asSubclass(NodeFactory.class);
+            nodeFactory = (NodeFactory)nodeFactoryClass.getField("INSTANCE").get(null);
         } catch (Exception ex) {
             throw new ModelLoaderException("Failed to weave model", ex);
         }
