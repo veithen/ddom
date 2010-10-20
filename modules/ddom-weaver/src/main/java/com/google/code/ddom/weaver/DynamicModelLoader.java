@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.google.code.ddom.backend.Backend;
-import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
@@ -67,7 +67,7 @@ public class DynamicModelLoader implements ModelLoader {
         if (modelExtension == null) {
             modelExtension = ModelExtension.NULL;
         }
-        DocumentFactory documentFactory;
+        NodeFactory nodeFactory;
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         try {
             ModelWeaver weaver = new ModelWeaver(parentClassLoader, classLoader, backend);
@@ -79,18 +79,18 @@ public class DynamicModelLoader implements ModelLoader {
 //                }
 //            }
             weaver.weave(frontends);
-            documentFactory = (DocumentFactory)classLoader.loadClass(backend.getDocumentFactoryClassName()).newInstance();
+            nodeFactory = (NodeFactory)classLoader.loadClass(backend.getNodeFactoryClassName()).newInstance();
         } catch (Exception ex) {
             throw new ModelLoaderException("Failed to weave model", ex);
         }
         APIObjectFactory apiObjectFactory = null;
         for (Frontend frontend : frontends.values()) {
-            apiObjectFactory = frontend.getAPIObjectFactory(documentFactory);
+            apiObjectFactory = frontend.getAPIObjectFactory(nodeFactory);
             // TODO: we should obviously not just take the first one...
             if (apiObjectFactory != null) {
                 break;
             }
         }
-        return new Model(documentFactory, apiObjectFactory, modelExtension);
+        return new Model(nodeFactory, apiObjectFactory, modelExtension);
     }
 }

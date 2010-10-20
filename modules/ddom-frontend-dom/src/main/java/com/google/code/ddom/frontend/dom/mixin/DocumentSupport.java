@@ -72,7 +72,7 @@ public abstract class DocumentSupport implements DOMDocument {
     
     public final DOMImplementation getImplementation() {
         if (domImplementation == null) {
-            domImplementation = new DOMImplementationImpl(getDocumentFactory());
+            domImplementation = new DOMImplementationImpl(coreGetNodeFactory());
         }
         return domImplementation;
     }

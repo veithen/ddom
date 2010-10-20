@@ -24,9 +24,9 @@
  * that have no namespace or are in the default namespace. These two conventions apply to the following methods
  * (non exhaustive list):
  * <ul>
- * <li>{@link com.google.code.ddom.core.DocumentFactory#createElement(CoreDocument, String, String, String)}
- * <li>{@link com.google.code.ddom.core.DocumentFactory#createAttribute(CoreDocument, String, String, String, String, String)}
- * <li>{@link com.google.code.ddom.core.DocumentFactory#createNamespaceDeclaration(CoreDocument, String, String)}
+ * <li>{@link com.google.code.ddom.core.NodeFactory#createElement(CoreDocument, String, String, String)}
+ * <li>{@link com.google.code.ddom.core.NodeFactory#createAttribute(CoreDocument, String, String, String, String, String)}
+ * <li>{@link com.google.code.ddom.core.NodeFactory#createNamespaceDeclaration(CoreDocument, String, String)}
  * <li>{@link com.google.code.ddom.core.CoreNSAwareNamedNode#coreGetNamespaceURI()}
  * <li>{@link com.google.code.ddom.core.CoreNSAwareNamedNode#coreGetPrefix()}
  * <li>{@link com.google.code.ddom.core.CoreNSAwareNamedNode#coreSetNamespaceURI(String)}

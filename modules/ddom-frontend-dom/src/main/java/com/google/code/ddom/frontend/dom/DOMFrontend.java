@@ -20,7 +20,7 @@ import java.util.Map;
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.EmptyClassCollection;
 import com.google.code.ddom.commons.cl.Module;
-import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
@@ -41,7 +41,7 @@ public class DOMFrontend implements Frontend {
         return null;
     }
 
-    public APIObjectFactory getAPIObjectFactory(DocumentFactory documentFactory) {
-        return new APIObjectFactoryImpl(documentFactory);
+    public APIObjectFactory getAPIObjectFactory(NodeFactory nodeFactory) {
+        return new APIObjectFactoryImpl(nodeFactory);
     }
 }

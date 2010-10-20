@@ -18,7 +18,7 @@ package com.google.code.ddom.backend;
 import com.google.code.ddom.commons.cl.ClassCollection;
 
 public interface Backend {
-    String getDocumentFactoryClassName();
+    String getNodeFactoryClassName();
     
     /**
      * Get the collection of classes that must be woven.

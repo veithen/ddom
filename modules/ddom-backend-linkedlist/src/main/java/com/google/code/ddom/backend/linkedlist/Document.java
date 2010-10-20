@@ -35,7 +35,7 @@ import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
@@ -45,7 +45,7 @@ public class Document extends ParentNode implements LLDocument {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
     // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
-    private final DocumentFactory documentFactory;
+    private final NodeFactory nodeFactory;
     private final ModelExtension modelExtension;
     private final Symbols symbols;
     private List<Builder> builders = new LinkedList<Builder>();
@@ -56,9 +56,9 @@ public class Document extends ParentNode implements LLDocument {
     private boolean standalone;
     private String documentURI;
 
-    public Document(DocumentFactory documentFactory, ModelExtension modelExtension) {
+    public Document(NodeFactory nodeFactory, ModelExtension modelExtension) {
         super(true);
-        this.documentFactory = documentFactory;
+        this.nodeFactory = nodeFactory;
         this.modelExtension = modelExtension;
         symbols = new SymbolHashTable();
     }
@@ -94,8 +94,8 @@ public class Document extends ParentNode implements LLDocument {
         throw new IllegalArgumentException("No builder found for target");
     }
     
-    public final DocumentFactory getDocumentFactory() {
-        return documentFactory;
+    public final NodeFactory coreGetNodeFactory() {
+        return nodeFactory;
     }
 
     public final Symbols getSymbols() {

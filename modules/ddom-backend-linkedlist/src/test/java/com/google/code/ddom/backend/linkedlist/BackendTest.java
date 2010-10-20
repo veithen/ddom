@@ -23,6 +23,6 @@ import junit.framework.TestSuite;
 
 public class BackendTest extends TestCase {
     public static TestSuite suite() {
-        return BackendTestSuiteBuilder.suite(new DocumentFactoryImpl(), BackendTestCase.BUILDER_TYPE_2);
+        return BackendTestSuiteBuilder.suite(new NodeFactoryImpl(), BackendTestCase.BUILDER_TYPE_2);
     }
 }

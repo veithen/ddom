@@ -19,7 +19,7 @@ import com.google.code.ddom.core.ext.ModelExtension;
 
 /**
  * Node factory. The frontend code MUST use this interface to create new nodes. To do so, it MUST
- * obtain an instance using {@link CoreDocument#getDocumentFactory()}. On the other hand, the frontend
+ * obtain an instance using {@link CoreDocument#coreGetNodeFactory()}. On the other hand, the frontend
  * MUST NOT assume that all nodes are created using this factory. The backend internally MAY create
  * nodes without using this factory, in particular during deferred parsing. Thus, frontend aspects
  * SHOULD NOT apply advices to this interface or its implementing classes.
@@ -30,7 +30,7 @@ import com.google.code.ddom.core.ext.ModelExtension;
  * 
  * @author Andreas Veithen
  */
-public interface DocumentFactory {
+public interface NodeFactory {
     CoreDocument createDocument();
     CoreDocument createDocument(ModelExtension modelExtension);
 }

@@ -50,7 +50,7 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             // This will give the SOAP message with an empty body
             Document domDocument = (Document)message.getContent(Node.class);
             
-            SAAJDocument saajDocument = (SAAJDocument)saajModel.getDocumentFactory().createDocument(saajModel.getModelExtension());
+            SAAJDocument saajDocument = (SAAJDocument)saajModel.getNodeFactory().createDocument(saajModel.getModelExtension());
             saajDocument.coreSetContent(new SimpleFragmentSource(new DOMInput(domDocument)), saajModel.getModelExtension());
             
             // We build the document at this point because we need to access the (empty) body anyway

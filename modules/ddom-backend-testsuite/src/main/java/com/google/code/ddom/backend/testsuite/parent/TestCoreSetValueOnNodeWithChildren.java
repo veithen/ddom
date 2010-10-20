@@ -30,7 +30,7 @@ public class TestCoreSetValueOnNodeWithChildren extends ParentNodeTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = documentFactory.createDocument();
+        CoreDocument document = nodeFactory.createDocument();
         CoreParentNode parent = parentNodeFactory.createNode(document);
         CoreText child1 = document.coreCreateText("text1");
         CoreText child2 = document.coreCreateText("text2");

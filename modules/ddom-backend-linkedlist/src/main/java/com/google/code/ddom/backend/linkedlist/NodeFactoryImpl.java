@@ -16,10 +16,10 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 
-public class DocumentFactoryImpl implements DocumentFactory {
+public class NodeFactoryImpl implements NodeFactory {
     public CoreDocument createDocument() {
         return createDocument(ModelExtension.NULL);
     }

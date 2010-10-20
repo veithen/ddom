@@ -15,19 +15,19 @@
  */
 package com.google.code.ddom.backend.testsuite;
 
-import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.NodeFactory;
 
 public final class BackendTestSuiteConfig {
-    private final DocumentFactory documentFactory;
+    private final NodeFactory nodeFactory;
     private final int builderType;
     
-    public BackendTestSuiteConfig(DocumentFactory documentFactory, int builderType) {
-        this.documentFactory = documentFactory;
+    public BackendTestSuiteConfig(NodeFactory nodeFactory, int builderType) {
+        this.nodeFactory = nodeFactory;
         this.builderType = builderType;
     }
 
-    public DocumentFactory getNodeFactory() {
-        return documentFactory;
+    public NodeFactory getNodeFactory() {
+        return nodeFactory;
     }
 
     public int getBuilderType() {

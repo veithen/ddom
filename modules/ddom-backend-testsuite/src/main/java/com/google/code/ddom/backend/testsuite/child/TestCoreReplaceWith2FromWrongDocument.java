@@ -29,8 +29,8 @@ public class TestCoreReplaceWith2FromWrongDocument extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document1 = documentFactory.createDocument();
-        CoreDocument document2 = documentFactory.createDocument();
+        CoreDocument document1 = nodeFactory.createDocument();
+        CoreDocument document2 = nodeFactory.createDocument();
         CoreChildNode node1 = document1.coreCreateComment("test");
         document1.coreAppendChild(node1);
         CoreDocumentFragment fragment = document2.coreCreateDocumentFragment();

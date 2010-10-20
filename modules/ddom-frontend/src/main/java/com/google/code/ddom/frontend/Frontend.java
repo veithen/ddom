@@ -18,7 +18,7 @@ package com.google.code.ddom.frontend;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
-import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 
 // TODO: this API is a bit simplistic; we need at least to support the following features:
@@ -32,5 +32,5 @@ public interface Frontend {
     
     ModelExtension getModelExtension();
     
-    APIObjectFactory getAPIObjectFactory(DocumentFactory documentFactory);
+    APIObjectFactory getAPIObjectFactory(NodeFactory nodeFactory);
 }

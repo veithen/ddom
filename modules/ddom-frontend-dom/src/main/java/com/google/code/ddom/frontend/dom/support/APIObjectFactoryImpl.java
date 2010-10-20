@@ -17,14 +17,14 @@ package com.google.code.ddom.frontend.dom.support;
 
 import org.w3c.dom.DOMImplementation;
 
-import com.google.code.ddom.core.DocumentFactory;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.APIObjectFactory;
 
 public class APIObjectFactoryImpl implements APIObjectFactory {
     private final DOMImplementation domImplementation;
     
-    public APIObjectFactoryImpl(DocumentFactory documentFactory) {
-        domImplementation = new DOMImplementationImpl(documentFactory);
+    public APIObjectFactoryImpl(NodeFactory nodeFactory) {
+        domImplementation = new DOMImplementationImpl(nodeFactory);
     }
 
     public Object getAPIObject(Class<?> clazz) {

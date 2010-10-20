@@ -28,7 +28,7 @@ public class TestCoreReplaceWith1OnSelf extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = documentFactory.createDocument();
+        CoreDocument document = nodeFactory.createDocument();
         CoreChildNode child1 = document.coreCreateDocumentTypeDeclaration("test", null, "test.dtd");
         CoreChildNode child2 = document.coreCreateComment("comment");
         CoreChildNode child3 = document.coreCreateElement(null, "root", null);
