@@ -29,6 +29,6 @@ public class NodeFactoryImpl implements NodeFactory {
     }
 
     public CoreDocument createDocument(ModelExtension modelExtension) {
-        return new Document(this, modelExtension);
+        return new Document(modelExtension);
     }
 }

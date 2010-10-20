@@ -18,9 +18,14 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.WrongDocumentException;
 
 public abstract class Node implements LLNode {
+    public final NodeFactory coreGetNodeFactory() {
+        return NodeFactoryImpl.INSTANCE;
+    }
+
     public final CoreDocument coreGetDocument() {
         return internalGetDocument();
     }

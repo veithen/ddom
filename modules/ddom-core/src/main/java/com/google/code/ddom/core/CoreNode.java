@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,14 @@
 package com.google.code.ddom.core;
 
 public interface CoreNode {
+    /**
+     * Get the node factory for the model to which this node belongs.
+     * 
+     * @return the node factory; the return value MUST be the singleton instance described in the
+     *         documentation of the {@link NodeFactory} interface
+     */
+    NodeFactory coreGetNodeFactory();
+    
     /**
      * Get the document to which this node belongs.
      * 

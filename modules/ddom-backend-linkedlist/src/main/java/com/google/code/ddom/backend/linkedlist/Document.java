@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
@@ -44,8 +43,6 @@ import com.google.code.ddom.stream.spi.Symbols;
 public class Document extends ParentNode implements LLDocument {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
-    // TODO: since we are now using a weaver, it should no longer be necessary to have a reference to the node factory
-    private final NodeFactory nodeFactory;
     private final ModelExtension modelExtension;
     private final Symbols symbols;
     private List<Builder> builders = new LinkedList<Builder>();
@@ -56,9 +53,8 @@ public class Document extends ParentNode implements LLDocument {
     private boolean standalone;
     private String documentURI;
 
-    public Document(NodeFactory nodeFactory, ModelExtension modelExtension) {
+    public Document(ModelExtension modelExtension) {
         super(true);
-        this.nodeFactory = nodeFactory;
         this.modelExtension = modelExtension;
         symbols = new SymbolHashTable();
     }
@@ -94,10 +90,6 @@ public class Document extends ParentNode implements LLDocument {
         throw new IllegalArgumentException("No builder found for target");
     }
     
-    public final NodeFactory coreGetNodeFactory() {
-        return nodeFactory;
-    }
-
     public final Symbols getSymbols() {
         return symbols;
     }

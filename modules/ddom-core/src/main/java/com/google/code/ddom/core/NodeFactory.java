@@ -28,6 +28,9 @@ import com.google.code.ddom.core.ext.ModelExtension;
  * instance of the implementation. The class name of that implementation MUST be returned by
  * {@link com.google.code.ddom.backend.Backend#getNodeFactoryClassName()}. This information is used
  * by the model loaders to locate the singleton instance.
+ * <p>
+ * In addition, the {@link CoreNode#coreGetNodeFactory()} method MUST be implemented such that it
+ * returns the same singleton instance.
  * 
  * @author Andreas Veithen
  */

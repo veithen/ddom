@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.google.code.ddom.core;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public interface CoreDocument extends CoreParentNode {
-    NodeFactory coreGetNodeFactory();
-    
     /**
      * Get the symbol table used by this document. The symbol table may be used to avoid creation of
      * new {@link String} objects when doing substring operations.
