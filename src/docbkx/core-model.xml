@@ -15,7 +15,133 @@
             XML document, the Core Model is an API that allows user code to manipulate,
             edit and create XML documents. To allow these manipulations, it is necessary
             to introduce a node type that has no corresponding information item.
-            ...
+            This node type is called <firstterm>document fragment</firstterm> and
+            represents an arbitrary sequence of nodes. Together, these nodes do not
+            necessarily constitute a well formed document. E.g. the sequence may contain
+            an arbitrary number of element nodes. 
+        </para>
+    </section>
+    <section>
+        <title>Owner documents and node factories</title>
+        <para>
+            APIs implementing XML object models can be classified into three categories:
+        </para>
+        <orderedlist>
+            <listitem>
+                <para>
+                    Some APIs require that a node must always be linked to a document instance, even
+                    if it is not an ancestor of that document. In these APIs it is not possible
+                    to create a node that is completely detached from any other model object, the
+                    only exception being the document instance itself. An example is DOM where every node
+                    must be linked a single <classname>Document</classname> instance (except for
+                    <classname>DocumentType</classname> nodes created from a <classname>DOMImplementation</classname>).
+                    DOM enforces this by defining the factory methods for node instances on the
+                    <classname>Document</classname> interface, so that a node can only be created
+                    from an existing <classname>Document</classname> instance.
+                </para>
+                <para>
+                    For consistency, in this type of API, all nodes linked by parent-child (or element-attribute)
+                    relationships must belong to the same owner document. Therefore, moving a node from one document to another
+                    is a different operation than moving a node within the same document. E.g. in
+                    DOM, nodes must be "imported" or "adopted" before they can be used in a
+                    different document instance.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Some APIs use a factory pattern to create nodes and in addition require that each node keeps
+                    a reference to the factory that created it. Depending on whether the factory is stateless
+                    and thread safe, it may or may not be implemented as a singleton.
+                </para>
+                <para>
+                    Axiom is an example of this kind of API. The reason is that it uses different factories
+                    for different SOAP versions, as well as a separate factory for plain XML documents. The factories
+                    for the two SOAP versions implement the same interface which extends the interface implemented
+                    by the factory for plain XML documents.
+                </para>
+                <para>
+                    The default (LLOM) implementation uses singleton factories, while for the DOOM implementation
+                    the factories need to be considered as stateful (because each instance keeps a reference to
+                    the document so that it can provide compatibility with DOM, which uses a different API style,
+                    as explained above).
+                </para>
+                <para>
+                    Another particularity of Axiom is that nodes in the same tree (i.e. linked by parent-child or
+                    element-attribute relationships) are not necessarily linked to the same factory. Axiom only
+                    enforces compatibility between the factories used in the same tree. For example it is possible
+                    to add a node created by a plain XML factory to a node created using a SOAP factory, provided
+                    that the two factories are from the same implementation (LLOM or DOOM).
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    In other APIs a node is neither required to have a reference to a document nor to a factory.
+                    JDOM is an example of this type of API. It uses concrete classes that can be instantiated using
+                    public constructors, i.e. there is no factory. Part of the SAAJ API also uses this API style,
+                    but with a factory (<classname>SOAPFactory</classname>). However, since SAAJ is an extension of
+                    DOM, a node created by this factory still has a property that links it to an owner document.
+                    Sun's reference implementation resolves this contradiction by creating a document instance for
+                    each node created by the factory. This document instance is discarded when the node is added to
+                    the target document.
+                </para>
+            </listitem>
+        </orderedlist>
+        <para>
+            In the last two cases, a node only becomes linked to a particular document instance when it is added to a parent
+            that is part of a tree which has a document as its root node. It should be noted that a large number of operations
+            may be carried out on the node or its descendants before this actually happens.
+            In the extreme case, the entire content of the document is constructed before
+            the document element is added to a particular document instance. Some APIs (such as Axiom) also
+            support serializing elements so that it is even not required to create a document instance.
+        </para>
+        <para>
+            To support front-ends using any of the API styles identified above, the Core Model is designed around the
+            following assumptions:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    A node may be linked to an owner document, but this is not required.
+                    In contexts where an owner document is needed, one will be created automatically.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    If a node has a parent, then the owner document of the node must be the same as
+                    the owner document of the parent. Similarly, if an attribute is owned by an element, then
+                    the owner document of the attribute must be the same as the owner document of the element.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A document instance has itself as an owner document.
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            A corollary of these rules is that explicit knowledge of the owner document is only required for
+            nodes that have no parent. To determine the owner document of a node that has a parent, it is
+            sufficient to iterate over the ancestors until reaching a document node (which is then the owner
+            document) or a node that has no parent (for which the owner document is then known explicitly).
+        </para>
+        <para>
+            The Core Model also has a concept of <firstterm>node factory</firstterm>. This factory is a
+            singleton. More precisely, because of the weaving process (which generates different node factory
+            implementations), there is one and only one node factory for each model (i.e. combination of
+            back-end end front-ends).
+        </para>
+        <tip>
+            <para>
+                As a side note, this implies that in order to check whether a given node belongs to
+                the right model and can be added to the tree without conversion, a back-end implementation
+                may invariably use the <literal>instanceof</literal> operator or compare the identity of
+                the node factories.
+            </para>
+        </tip>
+        <para>
+            Because of the singleton nature, the concept of node factory used by the Core Model doesn't
+            match the factory concept in Axiom. On the other hand, in terms of lifecycle, it is equivalent
+            to Axiom's <classname>OMMetaFactory</classname> concept.
         </para>
     </section>
     <section id="compact.parents">
