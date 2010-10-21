@@ -28,8 +28,8 @@ public class DumpPlugin extends ReactorPlugin {
     private DumpPlugin() {}
     
     @Override
-    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean woven) {
-        if (generated || woven) {
+    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
+        if (generated || enhanced) {
             return new TraceClassVisitor(outputClassVisitor, new PrintWriter(System.out));
         } else {
             return outputClassVisitor;

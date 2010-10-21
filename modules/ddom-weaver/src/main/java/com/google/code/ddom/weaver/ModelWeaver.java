@@ -21,9 +21,12 @@ import java.util.Map;
 import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.weaver.dump.DumpPlugin;
 import com.google.code.ddom.weaver.ext.ModelExtensionPlugin;
+import com.google.code.ddom.weaver.inject.InjectionPlugin;
+import com.google.code.ddom.weaver.inject.PrototypeInjector;
 import com.google.code.ddom.weaver.jsr45.JSR45Plugin;
 import com.google.code.ddom.weaver.reactor.Reactor;
 import com.google.code.ddom.weaver.reactor.ReactorException;
@@ -34,6 +37,7 @@ public class ModelWeaver {
     private final Backend backend;
     private final Reactor reactor;
     private final ModelExtensionPlugin modelExtensionPlugin;
+    private final InjectionPlugin injectionPlugin;
     
     public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
         this.processor = processor;
@@ -54,6 +58,7 @@ public class ModelWeaver {
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
 //        reactor.addPlugin(DumpPlugin.INSTANCE);
         reactor.addPlugin(VerifierPlugin.INSTANCE);
+        injectionPlugin = new InjectionPlugin();
     }
 
     public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
@@ -63,6 +68,15 @@ public class ModelWeaver {
             }
         }
         reactor.addPlugin(modelExtensionPlugin);
+        // TODO: clean this up
+        ModelExtension modelExtension = frontends.values().iterator().next().getModelExtension();
+        if (modelExtension == null) {
+            injectionPlugin.addBinding(ModelExtension.class.getName(), null);
+        } else {
+            String modelExtensionClass = modelExtension.getClass().getName();
+            injectionPlugin.addBinding(ModelExtension.class.getName(), new PrototypeInjector(modelExtensionClass));
+        }
+        reactor.addPlugin(injectionPlugin);
         try {
             for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
                 reactor.loadWeavableClass(classRef);

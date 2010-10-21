@@ -204,7 +204,19 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
     private void weave(ClassDefinitionProcessor processor, WeavableClassInfo weavableClass, List<MixinInfo> mixins) throws ClassDefinitionProcessorException {
         ClassWriter cw = new ReactorAwareClassWriter(this, 0);
         ClassDefinitionSource classDefinitionSource = weavableClass.getClassDefinitionSource();
-        boolean woven = !mixins.isEmpty();
+        List<ClassTransformation> preTransforms = new ArrayList<ClassTransformation>();
+        List<ClassTransformation> postTransforms = new ArrayList<ClassTransformation>();
+        for (ReactorPlugin plugin : plugins) {
+            ClassTransformation t = plugin.getPreTransformation(weavableClass);
+            if (t != null) {
+                preTransforms.add(t);
+            }
+            t = plugin.getPostTransformation(weavableClass);
+            if (t != null) {
+                postTransforms.add(t);
+            }
+        }
+        boolean woven = !mixins.isEmpty() || !preTransforms.isEmpty() || !postTransforms.isEmpty();
         boolean generated = classDefinitionSource instanceof GeneratedClass;
         ClassVisitor out = cw;
         for (ReactorPlugin plugin : plugins) {
@@ -224,7 +236,15 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
             for (MixinInfo mixin : mixins) {
                 sourceMapper.addSourceInfo(mixin.get(SourceInfo.class));
             }
-            weavableClass.getClassDefinitionSource().accept(sourceMapper.getClassAdapter(new MergeAdapter(out, mixins, sourceMapper, SimpleErrorHandler.INSTANCE)));
+            for (ClassTransformation t : postTransforms) {
+                out = t.adapt(out);
+            }
+            out = new MergeAdapter(out, mixins, sourceMapper, SimpleErrorHandler.INSTANCE);
+            out = sourceMapper.getClassAdapter(out);
+            for (ClassTransformation t : preTransforms) {
+                out = t.adapt(out);
+            }
+            weavableClass.getClassDefinitionSource().accept(out);
             processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
         }
     }

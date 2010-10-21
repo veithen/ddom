@@ -42,6 +42,30 @@ public abstract class ReactorPlugin {
     }
     
     /**
+     * Get the transformation that is to be applied before weaving the given class.
+     * 
+     * @param classInfo
+     *            the class that will be woven
+     * @return the transformation that is to be applied, or <code>null</code> if the plugin doesn't
+     *         wish to transform the class
+     */
+    public ClassTransformation getPreTransformation(WeavableClassInfo classInfo) {
+        return null;
+    }
+    
+    /**
+     * Get the transformation that is to be applied after weaving the given class.
+     * 
+     * @param classInfo
+     *            the class that will be woven
+     * @return the transformation that is to be applied, or <code>null</code> if the plugin doesn't
+     *         wish to transform the class
+     */
+    public ClassTransformation getPostTransformation(WeavableClassInfo classInfo) {
+        return null;
+    }
+    
+    /**
      * Prepare classes for output. Implementations may override this method to add a
      * {@link org.objectweb.asm.ClassAdapter} in front of the {@link ClassVisitor} that outputs the
      * code to the {@link com.google.code.ddom.weaver.ClassDefinitionProcessor}.
@@ -50,11 +74,12 @@ public abstract class ReactorPlugin {
      *            the class visitor that outputs the classes
      * @param generated
      *            specifies whether the submitted class has been generated
-     * @param woven
-     *            specifies whether any mixins have been applied to the submitted class
+     * @param enhanced
+     *            specifies whether any mixins or transformations have been applied to the submitted
+     *            class
      * @return a class visitor that wraps the class visitor passed as parameter
      */
-    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean woven) {
+    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
         return outputClassVisitor;
     }
 }

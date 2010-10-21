@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.weaver.mixin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,9 +28,7 @@ import java.util.logging.Logger;
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.commons.RemappingMethodAdapter;
 import org.objectweb.asm.commons.SimpleRemapper;
@@ -104,24 +103,16 @@ public class MergeAdapter extends ClassAdapter {
         if (visitor != null) {
             visitor = new RemappingMethodAdapter(access, desc, visitor, remapper);
             if (name.equals("<init>")) {
-                visitor = new MethodAdapter(visitor) {
-                    private boolean inlined;
-                    
-                    @Override
-                    public void visitMethodInsn(int opcode, String owner, String name, String desc) {
-                        super.visitMethodInsn(opcode, owner, name, desc);
-                        if (!inlined && opcode == Opcodes.INVOKESPECIAL) {
-                            for (MixinInfo mixin : mixins) {
-                                MethodNode initMethod = mixin.getInitMethod();
-                                if (initMethod != null) {
-                                    super.visitVarInsn(Opcodes.ALOAD, 0);
-                                    super.visitMethodInsn(Opcodes.INVOKESPECIAL, finalName, initMethod.name, initMethod.desc);
-                                }
-                            }
-                            inlined = true;
-                        }
+                List<String> initMethodNames = new ArrayList<String>();
+                for (MixinInfo mixin : mixins) {
+                    MethodNode initMethod = mixin.getInitMethod();
+                    if (initMethod != null) {
+                        initMethodNames.add(initMethod.name);
                     }
-                };
+                }
+                if (!initMethodNames.isEmpty()) {
+                    visitor = new ConstructorEnhancer(visitor, finalName, initMethodNames);
+                }
             }
         }
         return visitor;

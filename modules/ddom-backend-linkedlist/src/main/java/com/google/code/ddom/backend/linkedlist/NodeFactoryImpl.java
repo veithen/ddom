@@ -15,12 +15,16 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.Inject;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 
 public class NodeFactoryImpl implements NodeFactory {
     public static final NodeFactory INSTANCE = new NodeFactoryImpl();
+    
+    @Inject
+    private ModelExtension modelExtension;
     
     private NodeFactoryImpl() {}
     

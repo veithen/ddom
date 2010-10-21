@@ -13,24 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.weaver.verifier;
+package com.google.code.ddom.weaver.reactor;
 
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.util.CheckClassAdapter;
 
-import com.google.code.ddom.weaver.reactor.ReactorPlugin;
-
-public class VerifierPlugin extends ReactorPlugin {
-    public static final VerifierPlugin INSTANCE = new VerifierPlugin();
-    
-    private VerifierPlugin() {}
-    
-    @Override
-    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
-        if (generated || enhanced) {
-            return new CheckClassAdapter(outputClassVisitor);
-        } else {
-            return outputClassVisitor;
-        }
-    }
+public interface ClassTransformation {
+    ClassVisitor adapt(ClassVisitor cv);
 }
