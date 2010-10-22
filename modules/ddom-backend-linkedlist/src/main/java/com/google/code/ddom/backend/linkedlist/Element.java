@@ -39,7 +39,7 @@ import com.google.code.ddom.core.NodeMigrationException;
 import com.google.code.ddom.core.NodeMigrationPolicy;
 import com.google.code.ddom.core.WrongDocumentException;
 
-public abstract class Element extends Container implements LLChildNode, CoreElement {
+public abstract class Element extends Container implements CoreElement {
     private Attribute firstAttribute;
 
     public Element(Document document, boolean complete) {
