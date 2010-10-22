@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class TestCoreInsertSiblingAfterWithIncompleteParent extends BackendTestC
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = parse("<root><a>test</a><b>test</b></root>");
-        CoreText text = document.coreCreateText("text1");
+        CoreText text = nodeFactory.createText(document, "text1");
         CoreNSAwareElement a = (CoreNSAwareElement)document.coreGetDocumentElement().coreGetFirstChild();
         a.coreInsertSiblingAfter(text);
         if (builderType >= BUILDER_TYPE_2) {

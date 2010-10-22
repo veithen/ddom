@@ -24,7 +24,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareAttribute;
 @Mixin(CoreNSUnawareAttribute.class)
 public abstract class NSUnawareAttributeSupport implements DOMNSUnawareAttribute {
     public final Node shallowClone() {
-        return (Node)coreGetDocument().coreCreateAttribute(coreGetName(), null, coreGetType());
+        return (Node)coreGetNodeFactory().createAttribute(coreGetDocument(), coreGetName(), null, coreGetType());
     }
     
     public final String getName() {

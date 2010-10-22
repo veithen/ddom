@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ public class TestCoreInsertSiblingAfterOnChild extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = document.coreCreateElement(null, "test", null);
-        CoreText text = document.coreCreateText("test");
+        CoreElement element = nodeFactory.createElement(document, null, "test", null);
+        CoreText text = nodeFactory.createText(document, "test");
         element.coreAppendChild(text);
         try {
             text.coreInsertSiblingAfter(element);

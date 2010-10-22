@@ -27,10 +27,10 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements SAAJDocument {
     public final SOAPEnvelope createSOAP11Envelope() {
-        return (SOAPEnvelope)coreCreateElement(SOAP11EnvelopeExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Envelope", "SOAP-ENV");
+        return (SOAPEnvelope)coreGetNodeFactory().createElement(this, SOAP11EnvelopeExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Envelope", "SOAP-ENV");
     }
 
     public final SOAPEnvelope createSOAP12Envelope() {
-        return (SOAPEnvelope)coreCreateElement(SOAP12EnvelopeExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Envelope", "SOAP-ENV");
+        return (SOAPEnvelope)coreGetNodeFactory().createElement(this, SOAP12EnvelopeExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Envelope", "SOAP-ENV");
     }
 }

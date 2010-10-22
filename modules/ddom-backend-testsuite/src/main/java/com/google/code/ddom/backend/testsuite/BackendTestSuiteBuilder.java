@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,8 +70,8 @@ public class BackendTestSuiteBuilder {
                 return CoreNSAwareElement.class;
             }
             
-            public CoreNSAwareNamedNode create(CoreDocument document, String namespaceURI, String localName, String prefix) {
-                return document.coreCreateElement(namespaceURI, localName, prefix);
+            public CoreNSAwareNamedNode create(NodeFactory nodeFactory, CoreDocument document, String namespaceURI, String localName, String prefix) {
+                return nodeFactory.createElement(document, namespaceURI, localName, prefix);
             }
         });
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
@@ -79,8 +79,8 @@ public class BackendTestSuiteBuilder {
                 return CoreNSAwareAttribute.class;
             }
             
-            public CoreNSAwareNamedNode create(CoreDocument document, String namespaceURI, String localName, String prefix) {
-                return document.coreCreateAttribute(namespaceURI, localName, prefix, "test", "CDATA");
+            public CoreNSAwareNamedNode create(NodeFactory nodeFactory, CoreDocument document, String namespaceURI, String localName, String prefix) {
+                return nodeFactory.createAttribute(document, namespaceURI, localName, prefix, "test", "CDATA");
             }
         });
         addParentNodeTests(suite, config, new ParentNodeFactory() {
@@ -88,8 +88,8 @@ public class BackendTestSuiteBuilder {
                 return CoreTypedAttribute.class;
             }
             
-            public CoreParentNode createNode(CoreDocument document) {
-                return document.coreCreateAttribute(null, "attr", null, null, null);
+            public CoreParentNode createNode(NodeFactory nodeFactory, CoreDocument document) {
+                return nodeFactory.createAttribute(document, null, "attr", null, null, null);
             }
         });
         addParentNodeTests(suite, config, new ParentNodeFactory() {
@@ -97,8 +97,8 @@ public class BackendTestSuiteBuilder {
                 return CoreElement.class;
             }
             
-            public CoreParentNode createNode(CoreDocument document) {
-                return document.coreCreateElement(null, "element", null);
+            public CoreParentNode createNode(NodeFactory nodeFactory, CoreDocument document) {
+                return nodeFactory.createElement(document, null, "element", null);
             }
         });
         return suite;

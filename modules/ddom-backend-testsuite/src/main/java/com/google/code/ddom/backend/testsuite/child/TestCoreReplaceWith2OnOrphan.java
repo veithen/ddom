@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ public class TestCoreReplaceWith2OnOrphan extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreChildNode node1 = document.coreCreateComment("test");
-        CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
-        fragment.coreAppendChild(document.coreCreateComment("test"));
+        CoreChildNode node1 = nodeFactory.createComment(document, "test");
+        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
+        fragment.coreAppendChild(nodeFactory.createComment(document, "test"));
         try {
             node1.coreReplaceWith(fragment);
             fail("Expected NoParentException");

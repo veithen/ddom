@@ -36,13 +36,13 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
 
     public final SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
         // TODO: need unit test with empty prefix/namespace
-        SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreGetDocument().coreCreateElement(getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
+        SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreGetNodeFactory().createElement(coreGetDocument(), getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
         appendChild(element);
         return element;
     }
 
     public final SOAPHeaderElement addHeaderElement(QName qname) throws SOAPException {
-        SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreGetDocument().coreCreateElement(getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+        SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreGetNodeFactory().createElement(coreGetDocument(), getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
         appendChild(element);
         return element;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ public interface AttributeMatcher {
             }
         }
 
-        public CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value) {
-            return document.coreCreateNamespaceDeclaration(name, value);
+        public CoreAttribute createAttribute(NodeFactory nodeFactory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+            return nodeFactory.createNamespaceDeclaration(document, name, value);
         }
 
         public void update(CoreAttribute attr, String prefix, String value) {
@@ -87,6 +87,8 @@ public interface AttributeMatcher {
      * <code>prefix</code> and <code>value</code> parameters are those passed to
      * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, String, String)}.
      * 
+     * @param nodeFactory
+     *            the node factory the should be used to create the attribute
      * @param document
      *            the document in which the attribute is created
      * @param namespaceURI
@@ -99,7 +101,7 @@ public interface AttributeMatcher {
      *            see above
      * @return
      */
-    CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value);
+    CoreAttribute createAttribute(NodeFactory nodeFactory, CoreDocument document, String namespaceURI, String name, String prefix, String value);
     
     /**
      * Update an existing attribute. The values of the <code>prefix</code> and <code>value</code>

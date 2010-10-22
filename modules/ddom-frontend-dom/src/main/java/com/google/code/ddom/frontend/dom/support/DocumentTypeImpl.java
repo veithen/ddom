@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ public class DocumentTypeImpl implements DOMDocumentType {
         if (declaration != null) {
             throw new IllegalStateException();
         }
-        declaration = (DOMDocumentTypeDeclaration)document.coreCreateDocumentTypeDeclaration(name, publicId, systemId);
+        declaration = (DOMDocumentTypeDeclaration)document.coreGetNodeFactory().createDocumentTypeDeclaration(document, name, publicId, systemId);
         name = null;
         publicId = null;
         systemId = null;

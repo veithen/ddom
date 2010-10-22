@@ -23,7 +23,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
 @Mixin(CoreNSAwareElement.class)
 public abstract class NSAwareElementSupport implements DOMNSAwareElement {
     public final CoreElement shallowCloneWithoutAttributes() {
-        return coreGetDocument().coreCreateElement(coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
+        return coreGetNodeFactory().createElement(coreGetDocument(), coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
     }
     
     public final String getTagName() {

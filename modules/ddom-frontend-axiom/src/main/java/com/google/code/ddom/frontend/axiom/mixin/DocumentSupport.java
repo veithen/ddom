@@ -106,7 +106,7 @@ public abstract class DocumentSupport implements AxiomDocument {
     }
 
     public OMElement createOMElement(String localName, OMNamespace ns) {
-        return (OMElement)coreCreateElement(NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns));
+        return (OMElement)coreGetNodeFactory().createElement(this, NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns));
     }
 
     public OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent) {
@@ -142,7 +142,7 @@ public abstract class DocumentSupport implements AxiomDocument {
         if (prefix == null && namespaceURI != null) {
             prefix = generatePrefix();
         }
-        AxiomElement element = (AxiomElement)coreCreateElement(namespaceURI, qname.getLocalPart(), prefix);
+        AxiomElement element = (AxiomElement)coreGetNodeFactory().createElement(this, namespaceURI, qname.getLocalPart(), prefix);
         if (prefix != null) {
             element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
         }
@@ -187,7 +187,7 @@ public abstract class DocumentSupport implements AxiomDocument {
     }
 
     public OMText createOMText(String s) {
-        return (OMText)coreCreateText(s);
+        return (OMText)coreGetNodeFactory().createText(this, s);
     }
 
     public OMText createOMText(String s, int type) {
@@ -220,7 +220,7 @@ public abstract class DocumentSupport implements AxiomDocument {
     }
 
     public OMAttribute createOMAttribute(String localName, OMNamespace ns, String value) {
-        return (OMAttribute)coreCreateAttribute(NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns), value, "CDATA");
+        return (OMAttribute)coreGetNodeFactory().createAttribute(this, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns), value, "CDATA");
     }
 
     public OMDocType createOMDocType(OMContainer parent, String content) {

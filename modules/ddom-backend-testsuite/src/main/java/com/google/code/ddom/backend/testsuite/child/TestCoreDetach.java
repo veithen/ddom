@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@ public class TestCoreDetach extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = document.coreCreateElement("test");
-        CoreText text1 = document.coreCreateText("text1");
+        CoreElement element = nodeFactory.createElement(document, "test");
+        CoreText text1 = nodeFactory.createText(document, "text1");
         element.coreAppendChild(text1);
-        CoreText text2 = document.coreCreateText("text1");
+        CoreText text2 = nodeFactory.createText(document, "text1");
         element.coreAppendChild(text2);
-        CoreText text3 = document.coreCreateText("text1");
+        CoreText text3 = nodeFactory.createText(document, "text1");
         element.coreAppendChild(text3);
         
         text2.coreDetach();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +32,10 @@ public class TestCoreInsertSiblingsBeforeFromWrongDocument extends BackendTestCa
     protected void runTest() throws Throwable {
         CoreDocument document1 = nodeFactory.createDocument();
         CoreDocument document2 = nodeFactory.createDocument();
-        CoreElement parent = document1.coreCreateElement("test");
-        CoreText text1 = document1.coreCreateText("text1");
-        CoreDocumentFragment fragment = document2.coreCreateDocumentFragment();
-        fragment.coreAppendChild(document2.coreCreateText("text2"));
+        CoreElement parent = nodeFactory.createElement(document1, "test");
+        CoreText text1 = nodeFactory.createText(document1, "text1");
+        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document2);
+        fragment.coreAppendChild(nodeFactory.createText(document2, "text2"));
         parent.coreAppendChild(text1);
         try {
             text1.coreInsertSiblingsBefore(fragment);

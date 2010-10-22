@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.core.CoreNSUnawareAttribute;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 
 /**
@@ -63,8 +64,8 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
         }
     }
 
-    public CoreAttribute createAttribute(CoreDocument document, String namespaceURI, String name, String prefix, String value) {
-        return document.coreCreateAttribute(namespaceURI, name, prefix, value, null);
+    public CoreAttribute createAttribute(NodeFactory nodeFactory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
+        return nodeFactory.createAttribute(document, namespaceURI, name, prefix, value, null);
     }
 
     public void update(CoreAttribute attr, String prefix, String value) {

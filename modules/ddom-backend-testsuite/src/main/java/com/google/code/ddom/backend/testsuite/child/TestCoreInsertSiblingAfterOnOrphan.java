@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ public class TestCoreInsertSiblingAfterOnOrphan extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreText text1 = document.coreCreateText("text1");
-        CoreText text2 = document.coreCreateText("text2");
+        CoreText text1 = nodeFactory.createText(document, "text1");
+        CoreText text2 = nodeFactory.createText(document, "text2");
         try {
             text1.coreInsertSiblingAfter(text2);
             fail("Expected NoParentException");

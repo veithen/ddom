@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,14 @@ package com.google.code.ddom.backend.testsuite;
 
 import java.io.StringReader;
 
-import org.junit.Assert;
-
 import junit.framework.TestCase;
+
+import org.junit.Assert;
 
 import com.google.code.ddom.Options;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.NodeFactory;
-import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
@@ -55,7 +54,7 @@ public class BackendTestCase extends TestCase {
     protected final CoreDocument parse(String xml) {
         CoreDocument document = nodeFactory.createDocument();
         try {
-            document.coreSetContent(new SimpleFragmentSource(streamFactory.getInput(new StringReader(xml), new Options(), true)), ModelExtension.NULL);
+            document.coreSetContent(new SimpleFragmentSource(streamFactory.getInput(new StringReader(xml), new Options(), true)));
         } catch (StreamException ex) {
             Assert.fail(ex.getMessage());
             return null;
@@ -64,9 +63,9 @@ public class BackendTestCase extends TestCase {
     }
     
     protected final CoreDocumentFragment parse(CoreDocument document, String xml) {
-        CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
+        CoreDocumentFragment fragment = document.coreGetNodeFactory().createDocumentFragment(document);
         try {
-            fragment.coreSetContent(new SimpleFragmentSource(streamFactory.getInput(new StringReader(xml), new Options(), true)), ModelExtension.NULL);
+            fragment.coreSetContent(new SimpleFragmentSource(streamFactory.getInput(new StringReader(xml), new Options(), true)));
         } catch (StreamException ex) {
             Assert.fail(ex.getMessage());
             return null;

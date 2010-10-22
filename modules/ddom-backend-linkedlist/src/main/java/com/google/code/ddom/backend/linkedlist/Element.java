@@ -89,7 +89,7 @@ public abstract class Element extends Container implements LLChildNode, CoreElem
         }
         if (attr == null) {
             CoreDocument document = internalGetDocument();
-            Attribute newAttr = (Attribute)matcher.createAttribute(document, namespaceURI, name, prefix, value);
+            Attribute newAttr = (Attribute)matcher.createAttribute(coreGetNodeFactory(), document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
                 internalAppendAttribute(newAttr);
             } else {
@@ -282,7 +282,7 @@ public abstract class Element extends Container implements LLChildNode, CoreElem
                         buffer.append(textNode.coreGetData());
                     }
                     CoreTextNode first = textNodes.get(0);
-                    CoreText newTextNode = document.coreCreateText(buffer.toString());
+                    CoreText newTextNode = coreGetNodeFactory().createText(document, buffer.toString());
                     try {
                         first.coreInsertSiblingBefore(newTextNode);
                     } catch (CoreModelException ex) {

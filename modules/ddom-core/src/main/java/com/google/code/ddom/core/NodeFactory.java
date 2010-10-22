@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.core;
 
-import com.google.code.ddom.core.ext.ModelExtension;
-
 /**
  * Node factory. The front-end code MUST use this interface to create new nodes. To do so, it MUST
  * obtain an instance using {@link CoreDocument#coreGetNodeFactory()}. On the other hand, the
@@ -36,5 +34,45 @@ import com.google.code.ddom.core.ext.ModelExtension;
  */
 public interface NodeFactory {
     CoreDocument createDocument();
-    CoreDocument createDocument(ModelExtension modelExtension);
+
+    /**
+     * 
+     * @param document
+     * @return
+     */
+    CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId);
+    
+    CoreNSUnawareElement createElement(CoreDocument document, String tagName);
+    
+    /**
+     * Create a namespace aware element.
+     * 
+     * @param namespaceURI the namespace URI of the element, or <code>null</code> if the element has no
+     *                     namespace
+     * @param localName the local part of the element's name
+     * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
+     * @param complete
+     * @return the element
+     */
+    CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix);
+    
+    CoreNSAwareElement createElement(CoreDocument document, Class<?> extensionInterface, String namespaceURI, String localName, String prefix);
+    
+    CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type);
+    
+    CoreNSAwareAttribute createAttribute(CoreDocument document, String namespaceURI, String localName, String prefix, String value, String type);
+    
+    CoreNamespaceDeclaration createNamespaceDeclaration(CoreDocument document, String prefix, String namespaceURI);
+    
+    CoreProcessingInstruction createProcessingInstruction(CoreDocument document, String target, String data);
+    
+    CoreDocumentFragment createDocumentFragment(CoreDocument document);
+
+    CoreText createText(CoreDocument document, String data);
+
+    CoreComment createComment(CoreDocument document, String data);
+
+    CoreCDATASection createCDATASection(CoreDocument document, String data);
+
+    CoreEntityReference createEntityReference(CoreDocument document, String name);
 }

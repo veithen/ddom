@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 @Mixin(CoreText.class)
 public abstract class TextSupport implements DOMText {
     public final DOMTextNode createNewTextNode(String data) {
-        return (DOMTextNode)coreGetDocument().coreCreateText(data);
+        return (DOMTextNode)coreGetNodeFactory().createText(coreGetDocument(), data);
     }
 
     public final short getNodeType() {

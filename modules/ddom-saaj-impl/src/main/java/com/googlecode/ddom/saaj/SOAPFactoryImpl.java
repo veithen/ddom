@@ -25,6 +25,7 @@ import javax.xml.soap.SOAPFault;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
 
@@ -43,8 +44,10 @@ public class SOAPFactoryImpl extends SOAPFactory {
 
     @Override
     public final SOAPElement createElement(Name name) throws SOAPException {
+        // TODO: creating a document should no longer be necessary
+        CoreDocument document = createDocument();
         // TODO: need to check if conventions for empty/null prefix/uri are respected
-        return (SOAPElement)createDocument().coreCreateElement(name.getURI(), name.getLocalName(), name.getPrefix());
+        return (SOAPElement)document.coreGetNodeFactory().createElement(document, name.getURI(), name.getLocalName(), name.getPrefix());
     }
 
     @Override
@@ -55,8 +58,10 @@ public class SOAPFactoryImpl extends SOAPFactory {
 
     @Override
     public final SOAPElement createElement(String localName, String prefix, String uri) throws SOAPException {
+        // TODO: creating a document should no longer be necessary
+        CoreDocument document = createDocument();
         // TODO: add a unit test that checks the type of returned object if the name corresponds to a SOAP envelope, body, etc.
-        return (SOAPElement)createDocument().coreCreateElement(uri, localName, prefix);
+        return (SOAPElement)document.coreGetNodeFactory().createElement(document, uri, localName, prefix);
     }
 
     @Override

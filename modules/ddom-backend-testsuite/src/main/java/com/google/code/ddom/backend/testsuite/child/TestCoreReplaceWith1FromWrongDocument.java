@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ public class TestCoreReplaceWith1FromWrongDocument extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document1 = nodeFactory.createDocument();
         CoreDocument document2 = nodeFactory.createDocument();
-        CoreChildNode node1 = document1.coreCreateComment("test");
+        CoreChildNode node1 = nodeFactory.createComment(document1, "test");
         document1.coreAppendChild(node1);
-        CoreChildNode node2 = document2.coreCreateComment("test");
+        CoreChildNode node2 = nodeFactory.createComment(document2, "test");
         try {
             node1.coreReplaceWith(node2);
             fail("Expected WrongDocumentException");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,10 @@ public class TestCoreAppendChildrenFromWrongDocument extends ParentNodeTestCase 
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document1 = nodeFactory.createDocument();
-        CoreParentNode parent = parentNodeFactory.createNode(document1);
+        CoreParentNode parent = parentNodeFactory.createNode(nodeFactory, document1);
         CoreDocument document2 = nodeFactory.createDocument();
-        CoreDocumentFragment fragment = document2.coreCreateDocumentFragment();
-        fragment.coreAppendChild(document2.coreCreateText("text"));
+        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document2);
+        fragment.coreAppendChild(nodeFactory.createText(document2, "text"));
         try {
             parent.coreAppendChildren(fragment);
             fail("Expected WrongDocumentException");

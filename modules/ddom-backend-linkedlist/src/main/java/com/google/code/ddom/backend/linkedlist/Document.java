@@ -18,22 +18,10 @@ package com.google.code.ddom.backend.linkedlist;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.core.ChildTypeNotAllowedException;
-import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreComment;
-import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreEntityReference;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.CoreNSUnawareAttribute;
-import com.google.code.ddom.core.CoreNSUnawareElement;
-import com.google.code.ddom.core.CoreNamespaceDeclaration;
-import com.google.code.ddom.core.CoreProcessingInstruction;
-import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.Input;
@@ -41,8 +29,6 @@ import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 
 public class Document extends ParentNode implements LLDocument {
-    private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
-    
     private final ModelExtension modelExtension;
     private final Symbols symbols;
     private List<Builder> builders = new LinkedList<Builder>();
@@ -59,7 +45,7 @@ public class Document extends ParentNode implements LLDocument {
         symbols = new SymbolHashTable();
     }
 
-    public final void internalCreateBuilder(Input input, ModelExtension modelExtension, LLParentNode target) {
+    public final void internalCreateBuilder(Input input, LLParentNode target) {
         builders.add(new Builder(input, modelExtension, this, target));
     }
     
@@ -207,57 +193,5 @@ public class Document extends ParentNode implements LLDocument {
             child = child.coreGetNextSibling();
         }
         return (CoreDocumentTypeDeclaration)child;
-    }
-
-    public final CoreDocumentTypeDeclaration coreCreateDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
-        return new DocumentTypeDeclaration(this, rootName, publicId, systemId);
-    }
-
-    public final CoreNSUnawareElement coreCreateElement(String tagName) {
-        return new NSUnawareElement(this, tagName, true);
-    }
-    
-    public final CoreNSAwareElement coreCreateElement(String namespaceURI, String localName, String prefix) {
-        return nsAwareElementFactory.create(modelExtension.mapElement(namespaceURI, localName), this, namespaceURI, localName, prefix, true);
-    }
-    
-    public final CoreNSAwareElement coreCreateElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) {
-        return nsAwareElementFactory.create(extensionInterface, this, namespaceURI, localName, prefix, true);
-    }
-    
-    public final CoreNSUnawareAttribute coreCreateAttribute(String name, String value, String type) {
-        return new NSUnawareAttribute(this, name, value, type);
-    }
-    
-    public final CoreNSAwareAttribute coreCreateAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
-        return new NSAwareAttribute(this, namespaceURI, localName, prefix, value, type);
-    }
-    
-    public final CoreNamespaceDeclaration coreCreateNamespaceDeclaration(String prefix, String namespaceURI) {
-        return new NamespaceDeclaration(this, prefix, namespaceURI);
-    }
-    
-    public final CoreProcessingInstruction coreCreateProcessingInstruction(String target, String data) {
-        return new ProcessingInstruction(this, target, data);
-    }
-    
-    public final CoreDocumentFragment coreCreateDocumentFragment() {
-        return new DocumentFragment(this);
-    }
-
-    public final CoreText coreCreateText(String data) {
-        return new Text(this, data);
-    }
-
-    public final CoreComment coreCreateComment(String data) {
-        return new Comment(this, data);
-    }
-
-    public final CoreCDATASection coreCreateCDATASection(String data) {
-        return new CDATASection(this, data);
-    }
-
-    public final CoreEntityReference coreCreateEntityReference(String name) {
-        return new EntityReference(this, name);
     }
 }

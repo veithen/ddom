@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import java.util.Iterator;
-
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
@@ -34,7 +32,6 @@ import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.NodeNotFoundException;
-import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public abstract class ParentNode extends Node implements LLParentNode {
@@ -65,11 +62,11 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return content instanceof CoreChildNode;
     }
 
-    public final void coreSetContent(FragmentSource source, ModelExtension modelExtension) {
+    public final void coreSetContent(FragmentSource source) {
         // TODO: need to clear any existing content!
         complete = false;
         // TODO: getting the producer should be deferred!
-        internalGetDocument().internalCreateBuilder(source.getProducer(), modelExtension, this);
+        internalGetDocument().internalCreateBuilder(source.getProducer(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }

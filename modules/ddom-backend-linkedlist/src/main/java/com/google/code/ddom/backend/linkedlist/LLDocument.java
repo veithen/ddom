@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.Input;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
-    void internalCreateBuilder(Input input, ModelExtension modelExtension, LLParentNode target);
+    void internalCreateBuilder(Input input, LLParentNode target);
     Builder internalGetBuilderFor(LLParentNode target);
     void internalMigrateBuilder(LLParentNode from, LLParentNode to);
 }

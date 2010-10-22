@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ public class TestCoreSetValue extends ParentNodeTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreParentNode parent = parentNodeFactory.createNode(document);
+        CoreParentNode parent = parentNodeFactory.createNode(nodeFactory, document);
         parent.coreSetValue("test");
         Assert.assertFalse(parent.coreIsExpanded());
         CoreChildNode child = parent.coreGetFirstChild();

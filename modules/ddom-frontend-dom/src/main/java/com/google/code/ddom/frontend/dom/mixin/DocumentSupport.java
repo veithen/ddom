@@ -43,6 +43,7 @@ import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareNamedNode;
 import com.google.code.ddom.core.CoreTypedAttribute;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.NodeMigrationPolicy;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
@@ -165,12 +166,13 @@ public abstract class DocumentSupport implements DOMDocument {
     }
     
     public final Node importNode(Node node, boolean deep) throws DOMException {
+        NodeFactory nodeFactory = coreGetNodeFactory();
         try {
             switch (node.getNodeType()) {
                 case Node.ELEMENT_NODE:
                     Element element = (Element)node;
                     // TODO: detect DOM 1 elements (as with attributes)
-                    DOMElement importedElement = (DOMElement)coreCreateElement(element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
+                    DOMElement importedElement = (DOMElement)nodeFactory.createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
                     NamedNodeMap attributes = element.getAttributes();
                     for (int length = attributes.getLength(), i=0; i<length; i++) {
                         importedElement.coreAppendAttribute((DOMAttribute)importNode(attributes.item(i), true), Policies.ATTRIBUTE_MIGRATION_POLICY);
@@ -185,30 +187,30 @@ public abstract class DocumentSupport implements DOMDocument {
                     DOMAttribute importedAttr;
                     // TODO: namespace declarations
                     if (localName == null) {
-                        importedAttr = (DOMAttribute)coreCreateAttribute(attr.getName(), null, null);
+                        importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, attr.getName(), null, null);
                     } else {
-                        importedAttr = (DOMAttribute)coreCreateAttribute(attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
+                        importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
                     }
                     // Children of attributes are always imported, regardless of the value of the "deep" parameter
                     importChildren(attr, importedAttr);
                     return importedAttr;
                 case Node.COMMENT_NODE:
-                    return (Node)coreCreateComment(node.getNodeValue());
+                    return (Node)nodeFactory.createComment(this, node.getNodeValue());
                 case Node.TEXT_NODE:
-                    return (Node)coreCreateText(node.getNodeValue());
+                    return (Node)nodeFactory.createText(this, node.getNodeValue());
                 case Node.CDATA_SECTION_NODE:
-                    return (Node)coreCreateCDATASection(node.getNodeValue());
+                    return (Node)nodeFactory.createCDATASection(this, node.getNodeValue());
                 case Node.PROCESSING_INSTRUCTION_NODE:
                     ProcessingInstruction pi = (ProcessingInstruction)node;
-                    return (Node)coreCreateProcessingInstruction(pi.getTarget(), pi.getData());
+                    return (Node)nodeFactory.createProcessingInstruction(this, pi.getTarget(), pi.getData());
                 case Node.DOCUMENT_FRAGMENT_NODE:
-                    DOMDocumentFragment importedNode = (DOMDocumentFragment)coreCreateDocumentFragment();
+                    DOMDocumentFragment importedNode = (DOMDocumentFragment)nodeFactory.createDocumentFragment(this);
                     if (deep) {
                         importChildren(node, importedNode);
                     }
                     return importedNode;
                 case Node.ENTITY_REFERENCE_NODE:
-                    return (Node)coreCreateEntityReference(node.getNodeName());
+                    return (Node)nodeFactory.createEntityReference(this, node.getNodeName());
                 default:
                     throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
             }
@@ -317,7 +319,7 @@ public abstract class DocumentSupport implements DOMDocument {
 
     public final Element createElement(String tagName) throws DOMException {
         NSUtil.validateName(tagName);
-        return (Element)coreCreateElement(tagName);
+        return (Element)coreGetNodeFactory().createElement(this, tagName);
     }
     
     public final Element createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
@@ -335,12 +337,12 @@ public abstract class DocumentSupport implements DOMDocument {
         }
         namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
         NSUtil.validateNamespace(namespaceURI, prefix);
-        return (Element)coreCreateElement(namespaceURI, localName, prefix);
+        return (Element)coreGetNodeFactory().createElement(this, namespaceURI, localName, prefix);
     }
     
     public final Attr createAttribute(String name) throws DOMException {
         NSUtil.validateName(name);
-        return (Attr)coreCreateAttribute(name, null, null);
+        return (Attr)coreGetNodeFactory().createAttribute(this, name, null, null);
     }
 
     public final Attr createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
@@ -357,37 +359,37 @@ public abstract class DocumentSupport implements DOMDocument {
             localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return (Attr)coreCreateNamespaceDeclaration(NSUtil.getDeclaredPrefix(localName, prefix), null);
+            return (Attr)coreGetNodeFactory().createNamespaceDeclaration(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
         } else {
             namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-            return (Attr)coreCreateAttribute(namespaceURI, localName, prefix, null, null);
+            return (Attr)coreGetNodeFactory().createAttribute(this, namespaceURI, localName, prefix, null, null);
         }
     }
 
     public final ProcessingInstruction createProcessingInstruction(String target, String data) throws DOMException {
         NSUtil.validateName(target);
-        return (ProcessingInstruction)coreCreateProcessingInstruction(target, data);
+        return (ProcessingInstruction)coreGetNodeFactory().createProcessingInstruction(this, target, data);
     }
     
     public final DocumentFragment createDocumentFragment() {
-        return (DocumentFragment)coreCreateDocumentFragment();
+        return (DocumentFragment)coreGetNodeFactory().createDocumentFragment(this);
     }
 
     public final Text createTextNode(String data) {
-        return (Text)coreCreateText(data);
+        return (Text)coreGetNodeFactory().createText(this, data);
     }
 
     public final Comment createComment(String data) {
-        return (Comment)coreCreateComment(data);
+        return (Comment)coreGetNodeFactory().createComment(this, data);
     }
 
     public final CDATASection createCDATASection(String data) throws DOMException {
-        return (CDATASection)coreCreateCDATASection(data);
+        return (CDATASection)coreGetNodeFactory().createCDATASection(this, data);
     }
 
     public final EntityReference createEntityReference(String name) throws DOMException {
-        return (EntityReference)coreCreateEntityReference(name);
+        return (EntityReference)coreGetNodeFactory().createEntityReference(this, name);
     }
 
     public final int getStructureVersion() {

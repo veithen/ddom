@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,18 +35,18 @@ public class TestCoreCoalesce extends BackendTestCase {
     @Override
     protected void runTest() throws Exception {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = document.coreCreateElement("test");
-        CoreText text1 = document.coreCreateText("A");
+        CoreElement element = nodeFactory.createElement(document, "test");
+        CoreText text1 = nodeFactory.createText(document, "A");
         element.coreAppendChild(text1);
-        CoreText text2 = document.coreCreateText("B");
+        CoreText text2 = nodeFactory.createText(document, "B");
         element.coreAppendChild(text2);
-        CoreCDATASection cdata = document.coreCreateCDATASection("C");
+        CoreCDATASection cdata = nodeFactory.createCDATASection(document, "C");
         element.coreAppendChild(cdata);
-        CoreText text3 = document.coreCreateText("D");
+        CoreText text3 = nodeFactory.createText(document, "D");
         element.coreAppendChild(text3);
-        CoreComment comment = document.coreCreateComment("test");
+        CoreComment comment = nodeFactory.createComment(document, "test");
         element.coreAppendChild(comment);
-        CoreText text4 = document.coreCreateText("E");
+        CoreText text4 = nodeFactory.createText(document, "E");
         element.coreAppendChild(text4);
         element.coreCoalesce(true);
         

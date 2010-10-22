@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@ public class TestCoreInsertSiblingsBeforeWithPreviousSibling extends BackendTest
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = document.coreCreateElement(null, "test", null);
-        CoreComment comment = document.coreCreateComment("test");
+        CoreElement element = nodeFactory.createElement(document, null, "test", null);
+        CoreComment comment = nodeFactory.createComment(document, "test");
         element.coreAppendChild(comment);
-        CoreDocumentFragment fragment = document.coreCreateDocumentFragment();
-        CoreChildNode fragmentChild1 = document.coreCreateElement(null, "test", null);
-        CoreChildNode fragmentChild2 = document.coreCreateProcessingInstruction("pi", "test");
+        CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
+        CoreChildNode fragmentChild1 = nodeFactory.createElement(document, null, "test", null);
+        CoreChildNode fragmentChild2 = nodeFactory.createProcessingInstruction(document, "pi", "test");
         fragment.coreAppendChild(fragmentChild1);
         fragment.coreAppendChild(fragmentChild2);
         comment.coreInsertSiblingsBefore(fragment);

@@ -45,7 +45,7 @@ public class DocumentHelperImpl implements DocumentHelper {
     public Object newDocument(ModelDefinition modelDefinition) {
         try {
             Model model = modelLoaderRegistry.getModel(modelDefinition);
-            return model.getNodeFactory().createDocument(model.getModelExtension());
+            return model.getNodeFactory().createDocument();
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
         }
@@ -78,9 +78,8 @@ public class DocumentHelperImpl implements DocumentHelper {
             throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
         }
         tracker.finish();
-        // TODO: setting the model extension twice? looks strange...
-        CoreDocument document = model.getNodeFactory().createDocument(model.getModelExtension());
-        document.coreSetContent(new SimpleFragmentSource(input), model.getModelExtension());
+        CoreDocument document = model.getNodeFactory().createDocument();
+        document.coreSetContent(new SimpleFragmentSource(input));
         return document;
     }
 

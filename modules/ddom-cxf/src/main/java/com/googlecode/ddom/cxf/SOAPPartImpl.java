@@ -26,7 +26,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
@@ -50,8 +49,8 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             // This will give the SOAP message with an empty body
             Document domDocument = (Document)message.getContent(Node.class);
             
-            SAAJDocument saajDocument = (SAAJDocument)saajModel.getNodeFactory().createDocument(saajModel.getModelExtension());
-            saajDocument.coreSetContent(new SimpleFragmentSource(new DOMInput(domDocument)), saajModel.getModelExtension());
+            SAAJDocument saajDocument = (SAAJDocument)saajModel.getNodeFactory().createDocument();
+            saajDocument.coreSetContent(new SimpleFragmentSource(new DOMInput(domDocument)));
             
             // We build the document at this point because we need to access the (empty) body anyway
             // and there is not much content after the body. Building the document allows DDOM to
@@ -69,8 +68,7 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             // TODO: need a better name for this thing
             StreamSwitch streamSwitch = new StreamSwitch(message.getContent(XMLStreamReader.class), body);
             
-            // TODO: using ModelExtension.NULL here means that we will create a simple element instead of a SOAPBodyElement
-            body.coreSetContent(new SimpleFragmentSource(streamSwitch), ModelExtension.NULL);
+            body.coreSetContent(new SimpleFragmentSource(streamSwitch));
             
             message.setContent(XMLStreamReader.class, streamSwitch);
 

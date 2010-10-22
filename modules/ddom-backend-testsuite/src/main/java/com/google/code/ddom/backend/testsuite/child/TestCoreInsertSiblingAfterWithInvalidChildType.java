@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ public class TestCoreInsertSiblingAfterWithInvalidChildType extends BackendTestC
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement parent = document.coreCreateElement("test");
-        CoreText text = document.coreCreateText("text1");
-        CoreDocumentTypeDeclaration dtd = document.coreCreateDocumentTypeDeclaration("root", null, null);
+        CoreElement parent = nodeFactory.createElement(document, "test");
+        CoreText text = nodeFactory.createText(document, "text1");
+        CoreDocumentTypeDeclaration dtd = nodeFactory.createDocumentTypeDeclaration(document, "root", null, null);
         parent.coreAppendChild(text);
         try {
             text.coreInsertSiblingAfter(dtd);

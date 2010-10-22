@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.CoreTextNode;
@@ -109,8 +108,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
     public final Text replaceWholeText(String content) throws DOMException {
         DOMTextNode newText;
         if (content.length() > 0) {
-            CoreDocument document = coreGetDocument();
-            newText = (DOMTextNode)document.coreCreateText(content);
+            newText = (DOMTextNode)coreGetNodeFactory().createText(coreGetDocument(), content);
         } else {
             newText = null;
         }

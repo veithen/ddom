@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,12 @@ public class TestCoreInsertSiblingBeforeWithPreviousSibling extends BackendTestC
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement parent = document.coreCreateElement("test");
-        CoreText text1 = document.coreCreateText("text1");
-        CoreText text2 = document.coreCreateText("text2");
+        CoreElement parent = nodeFactory.createElement(document, "test");
+        CoreText text1 = nodeFactory.createText(document, "text1");
+        CoreText text2 = nodeFactory.createText(document, "text2");
         parent.coreAppendChild(text1);
         parent.coreAppendChild(text2);
-        CoreText newSibling = document.coreCreateText("sibling");
+        CoreText newSibling = nodeFactory.createText(document, "sibling");
         text2.coreInsertSiblingBefore(newSibling);
         assertEquals(3, parent.coreGetChildCount());
         assertSame(parent, newSibling.coreGetParent());

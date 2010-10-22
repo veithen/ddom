@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@ package com.google.code.ddom.backend.testsuite.parent;
 
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.NodeFactory;
 
 public interface ParentNodeFactory {
     Class<? extends CoreParentNode> getNodeClass();
-    CoreParentNode createNode(CoreDocument document);
+    CoreParentNode createNode(NodeFactory nodeFactory, CoreDocument document);
 }

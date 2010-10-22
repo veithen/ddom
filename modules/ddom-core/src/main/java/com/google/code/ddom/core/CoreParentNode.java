@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.google.code.ddom.core;
 
-import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public interface CoreParentNode extends CoreNode {
@@ -36,7 +35,7 @@ public interface CoreParentNode extends CoreNode {
      */
     Object coreGetContent();
     
-    void coreSetContent(FragmentSource source, ModelExtension modelExtension);
+    void coreSetContent(FragmentSource source);
     
     // Temporarily marked as deprecated. In most cases coreGetTextContent should be used.
     // However, this method may later be changed to return objects (e.g. QNames).
