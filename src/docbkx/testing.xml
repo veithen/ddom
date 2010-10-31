@@ -19,8 +19,12 @@
                 this is configurable using Maven properties, there is no need to change the
                 CXF POMs for that:
             </para>
-            <screen>$ <userinput>mvn clean install -Dsaaj.impl.groupId=com.google.code.ddom \
--Dsaaj.impl.artifactId=ddom-saaj-impl -Dsaaj.impl.version=&version;</userinput></screen>
+            <screen>$ <userinput>mvn clean install -Dcxf.saaj.impl.groupId=com.google.code.ddom \
+-Dcxf.saaj.impl.artifactId=ddom-saaj-impl -Dcxf.saaj.impl.version=&version;</userinput></screen>
+            <para>
+                This works with the current trunk (2.4.0-SNAPSHOT). For previous versions,
+                remove the <literal>cxf.</literal> prefix from the Maven properties.
+            </para>
         </section>
         <section>
             <title>WSS4J</title>
