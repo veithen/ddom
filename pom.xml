@@ -58,6 +58,7 @@
         <module>commons</module>
         <module>modules</module>
         <module>tests</module>
+        <module>perftests</module>
     </modules>
 
     <properties>
