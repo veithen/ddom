@@ -15,10 +15,12 @@
  */
 package com.googlecode.ddom.mime;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Random;
 
 import javax.activation.DataHandler;
-import javax.mail.BodyPart;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
@@ -26,8 +28,7 @@ import javax.mail.util.ByteArrayDataSource;
 import org.junit.Test;
 
 public class JavaMailTest {
-    @Test
-    public void test() throws Exception {
+    private void test(boolean preamble) throws Exception {
         MimeMultipart multipart = new MimeMultipart();
         
         MimeBodyPart bodyPart1 = new MimeBodyPart();
@@ -45,8 +46,24 @@ public class JavaMailTest {
         bodyPart2.setHeader("Content-Type", "application/octet-stream");
         multipart.addBodyPart(bodyPart2);
         
-        multipart.setPreamble("This is a MIME multipart.");
-        System.out.println("Content-Type: " + multipart.getContentType());
-        multipart.writeTo(System.out);
+        if (preamble) {
+            multipart.setPreamble("This is a MIME multipart.");
+        }
+        
+        String boundary = new ContentType(multipart.getContentType()).getParameter("boundary");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        multipart.writeTo(baos);
+        MultipartInputStream mpis = new MultipartInputStream(new ByteArrayInputStream(baos.toByteArray()), boundary);
+        mpis.nextPart();
+    }
+
+    @Test
+    public void testWithoutPreamble() throws Exception {
+        test(false);
+    }
+
+    @Test
+    public void testWithPreamble() throws Exception {
+        test(true);
     }
 }

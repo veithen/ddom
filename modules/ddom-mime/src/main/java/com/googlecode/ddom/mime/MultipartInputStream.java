@@ -89,7 +89,11 @@ public class MultipartInputStream extends InputStream {
      */
     private final byte[] delimiter;
     
-    private final int[] skip = new int[256];
+    /**
+     * Contains the shift values used by the Quick Search algorithm to locate the <tt>delimiter</tt>
+     * token.
+     */
+    private final int[] shift = new int[256];
     
     /**
      * The read buffer. Note that this buffer is used as a ring buffer, i.e. the next byte is not at
@@ -107,6 +111,21 @@ public class MultipartInputStream extends InputStream {
      */
     private int bufferLen;
     
+    /**
+     * The number of bytes available in the buffer that are known not to be part of a
+     * <tt>delimiter</tt> token. This attribute is only meaningful if {@link #state} is
+     * {@link #STATE_PREAMBLE} or {@link #STATE_CONTENT}.
+     */
+    private int nonDelimiterBytes;
+    
+    /**
+     * Indicates whether a <tt>delimiter</tt> token has been found in the buffer. If this attribute
+     * is <code>true</code>, then {@link #nonDelimiterBytes} indicates the position of the
+     * delimiter. This attribute is only meaningful if {@link #state} is {@link #STATE_PREAMBLE} or
+     * {@link #STATE_CONTENT}.
+     */
+    private boolean delimiterFound;
+    
     public MultipartInputStream(InputStream in, String boundary) {
         this.in = in;
         int boundaryLen = boundary.length();
@@ -119,11 +138,10 @@ public class MultipartInputStream extends InputStream {
         for (int i=0; i<boundaryLen; i++) {
             delimiter[4+i] = (byte)boundary.charAt(i);
         }
-        Arrays.fill(skip, delimiterLen);
-        for (int i=0; i<delimiterLen-1; i++) {
-            skip[delimiter[i]] = delimiterLen-i-1;
+        Arrays.fill(shift, delimiterLen+1);
+        for (int i=0; i<delimiterLen; i++) {
+            shift[delimiter[i]] = delimiterLen-i;
         }
-        
     }
     
     /**
@@ -142,7 +160,51 @@ public class MultipartInputStream extends InputStream {
             if (read == -1) {
                 throw new IOException("Unexpected end of stream");
             }
-            len += read;
+            bufferLen += read;
+        }
+    }
+    
+    private void searchDelimiter() {
+        final byte[] delimiter = this.delimiter;
+        final byte[] buffer = this.buffer;
+        final int bufferPosition = this.bufferPosition;
+        final int bufferLen = this.bufferLen;
+        final int delimiterLength = delimiter.length;
+        final int bufferSize = buffer.length;
+        int nonDelimiterBytes = this.nonDelimiterBytes;
+        while (bufferLen > nonDelimiterBytes + delimiterLength) {
+            boolean found = true;
+            int pos = bufferPosition + nonDelimiterBytes;
+            for (int i=0; i<delimiterLength; i++) {
+                if (pos >= bufferSize) {
+                    pos -= bufferSize;
+                }
+                if (buffer[pos] != delimiter[i]) {
+                    found = false;
+                    break;
+                }
+                pos++;
+            }
+            if (found) {
+                delimiterFound = true;
+                break;
+            } else {
+                nonDelimiterBytes += shift[buffer[(bufferPosition + nonDelimiterBytes + delimiterLength) % bufferSize]];
+            }
+        }
+        this.nonDelimiterBytes = nonDelimiterBytes;
+    }
+    
+    /**
+     * Discard a given number of bytes from the buffer.
+     * 
+     * @param bytes the number of bytes to discard
+     */
+    private void discard(int bytes) {
+        bufferPosition = (bufferPosition + bytes) % buffer.length;
+        bufferLen -= bytes;
+        if (state == STATE_PREAMBLE || state == STATE_CONTENT) {
+            nonDelimiterBytes -= bytes;
         }
     }
     
@@ -158,12 +220,14 @@ public class MultipartInputStream extends InputStream {
             }
             if (state != STATE_PREAMBLE) {
                 if (buffer[delimiterLen-2] == '\r' && buffer[delimiterLen-1] == '\n') {
-                    bufferPosition = delimiterLen;
-                    bufferLen -= delimiterLen;
+                    discard(delimiterLen);
                     state = STATE_HEADERS;
                 } else {
                     state = STATE_PREAMBLE;
                 }
+            }
+            if (state == STATE_PREAMBLE) {
+                searchDelimiter();
             }
         }
     }
