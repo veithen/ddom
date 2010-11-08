@@ -93,7 +93,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
             DOMDocumentType doctype = (DOMDocumentType)node;
             DOMDocumentTypeDeclaration declaration = doctype.getDeclaration();
             if (declaration == null) {
-                declaration = doctype.attach((DOMDocument)coreGetDocument());
+                declaration = doctype.attach((DOMDocument)coreGetOwnerDocument(true));
             }
             return declaration;
         } else {
@@ -204,11 +204,11 @@ public abstract class ParentNodeSupport implements DOMParentNode {
     }
     
     public final NodeList getElementsByTagName(String tagname) {
-        return new ElementsByTagName((DOMDocument)coreGetDocument(), this, tagname);
+        return new ElementsByTagName((DOMDocument)coreGetOwnerDocument(true), this, tagname);
     }
 
     public final NodeList getElementsByTagNameNS(String namespaceURI, String localName) {
-        return new ElementsByTagNameNS((DOMDocument)coreGetDocument(), this, namespaceURI, localName);
+        return new ElementsByTagNameNS((DOMDocument)coreGetOwnerDocument(true), this, namespaceURI, localName);
     }
     
     public void normalizeChildren(NormalizationConfig config) throws AbortNormalizationException {

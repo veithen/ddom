@@ -97,7 +97,7 @@ public abstract class ElementSupport implements DOMElement {
             localName = qualifiedName;
         } else {
             // Use symbol table to avoid creation of new String objects
-            Symbols symbols = coreGetDocument().getSymbols();
+            Symbols symbols = coreGetOwnerDocument(true).getSymbols();
             prefix = symbols.getSymbol(qualifiedName, 0, i);
             localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }

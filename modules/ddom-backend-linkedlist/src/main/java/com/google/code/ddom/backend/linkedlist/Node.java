@@ -22,12 +22,26 @@ import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.WrongDocumentException;
 
 public abstract class Node implements LLNode {
+    private int flags;
+    
     public final NodeFactory coreGetNodeFactory() {
         return NodeFactoryImpl.INSTANCE;
     }
 
-    public final CoreDocument coreGetDocument() {
+    public final CoreDocument coreGetOwnerDocument(boolean create) {
         return internalGetDocument();
+    }
+
+    public final boolean internalGetFlag(int flag) {
+        return (flags & flag) != 0;
+    }
+
+    public final void internalSetFlag(int flag, boolean value) {
+        if (value) {
+            flags |= flag;
+        } else {
+            flags &= ~flag;
+        }
     }
 
     public final void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException {

@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.mixin;
+package com.google.code.ddom.backend.linkedlist;
 
-import org.w3c.dom.Node;
-
-import com.google.code.ddom.core.CoreNSUnawareAttribute;
-import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareAttribute;
-
-@Mixin(CoreNSUnawareAttribute.class)
-public abstract class NSUnawareAttributeSupport implements DOMNSUnawareAttribute {
-    public final Node shallowClone() {
-        return (Node)coreGetNodeFactory().createAttribute(coreGetOwnerDocument(true), coreGetName(), null, coreGetType());
-    }
+public class Flags {
+    private Flags() {}
     
-    public final String getName() {
-        return coreGetName();
-    }
+    /**
+     * Used by {@link LLParentNode} instances to indicate completeness.
+     */
+    public static final int COMPLETE = 1;
+    
+    /**
+     * Used by {@link LLChildNode} instances to indicate whether the node has a parent or not.
+     * This is necessary to interpret the meaning of the <code>owner</code> attribute if it
+     * refers to a document node (which may be the parent or simply the owner document).
+     */
+    public static final int HAS_PARENT = 2;
 }

@@ -25,9 +25,14 @@ public interface CoreNode {
     NodeFactory coreGetNodeFactory();
     
     /**
-     * Get the document to which this node belongs.
+     * Get the owner document to which this node belongs. The concept and semantics of owner
+     * documents are defined in the manual.
      * 
-     * @return the document; this will never be <code>null</code>
+     * @param create
+     *            indicates whether the owner document should be created if it has not been created
+     *            yet
+     * @return the owner document or <code>null</code> if the owner document has not been created
+     *         yet and <code>create</code> is <code>false</code>
      */
-    CoreDocument coreGetDocument();
+    CoreDocument coreGetOwnerDocument(boolean create);
 }

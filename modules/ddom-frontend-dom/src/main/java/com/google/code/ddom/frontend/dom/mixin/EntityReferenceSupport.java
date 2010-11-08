@@ -27,7 +27,7 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 @Mixin(CoreEntityReference.class)
 public abstract class EntityReferenceSupport implements DOMEntityReference {
     public final Node cloneNode(boolean deep) {
-        return (Node)coreGetNodeFactory().createEntityReference(coreGetDocument(), coreGetName());
+        return (Node)coreGetNodeFactory().createEntityReference(coreGetOwnerDocument(true), coreGetName());
     }
 
     public final String getTextContent() {

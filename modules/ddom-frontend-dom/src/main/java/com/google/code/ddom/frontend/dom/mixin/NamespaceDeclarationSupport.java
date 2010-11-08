@@ -32,7 +32,7 @@ public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclara
     }
 
     public final Node shallowClone() {
-        return (Node)coreGetNodeFactory().createNamespaceDeclaration(coreGetDocument(), coreGetDeclaredPrefix(), null);
+        return (Node)coreGetNodeFactory().createNamespaceDeclaration(coreGetOwnerDocument(true), coreGetDeclaredPrefix(), null);
     }
 
     public final String getNamespaceURI() {

@@ -269,7 +269,7 @@ public abstract class DocumentSupport implements DOMDocument {
         if (node instanceof CoreNSAwareNamedNode) {
             CoreNSAwareNamedNode namedNode = (CoreNSAwareNamedNode)node;
             
-            if (namedNode.coreGetDocument() != this) {
+            if (namedNode.coreGetOwnerDocument(true) != this) {
                 throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
             }
             

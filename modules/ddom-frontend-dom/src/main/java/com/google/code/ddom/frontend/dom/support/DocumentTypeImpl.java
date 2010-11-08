@@ -77,7 +77,7 @@ public class DocumentTypeImpl implements DOMDocumentType {
     }
 
     public final DOMImplementation getDOMImplementation() {
-        return declaration == null ? domImplementation : ((DOMDocument)declaration.coreGetDocument()).getImplementation();
+        return declaration == null ? domImplementation : ((DOMDocument)declaration.coreGetOwnerDocument(true)).getImplementation();
     }
 
     public final String getName() {
@@ -116,7 +116,7 @@ public class DocumentTypeImpl implements DOMDocumentType {
 
     public final Document getOwnerDocument() {
         DOMDocumentTypeDeclaration declaration = getDeclaration();
-        return declaration == null ? null : (Document)declaration.coreGetDocument();
+        return declaration == null ? null : (Document)declaration.coreGetOwnerDocument(true);
     }
 
     public final Node getParentNode() {

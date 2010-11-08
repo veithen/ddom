@@ -22,7 +22,7 @@
         </para>
     </section>
     <section>
-        <title>Owner documents and node factories</title>
+        <title>Owner documents</title>
         <para>
             APIs implementing XML object models can be classified into three categories:
         </para>
@@ -92,13 +92,13 @@
             may be carried out on the node or its descendants before this actually happens.
             In the extreme case, the entire content of the document is constructed before
             the document element is added to a particular document instance. Some APIs (such as Axiom) also
-            support serializing elements so that it is even not required to create a document instance.
+            support serializing elements (in addition to documents), so that it is even not required to create a document instance.
         </para>
         <para>
             To support front-ends using any of the API styles identified above, the Core Model is designed around the
             following assumptions:
         </para>
-        <itemizedlist>
+        <orderedlist>
             <listitem>
                 <para>
                     A node may be linked to an owner document, but this is not required.
@@ -117,13 +117,29 @@
                     A document instance has itself as an owner document.
                 </para>
             </listitem>
-        </itemizedlist>
+        </orderedlist>
         <para>
-            A corollary of these rules is that explicit knowledge of the owner document is only required for
+            A corollary of the second assumption is that explicit knowledge of the owner document is only required for
             nodes that have no parent. To determine the owner document of a node that has a parent, it is
             sufficient to iterate over the ancestors until reaching a document node (which is then the owner
             document) or a node that has no parent (for which the owner document is then known explicitly).
+            This implies that the implementation of a Core Model node is not required to have separate
+            attributes to store the parent and the owner document. It only needs a single attribute to store
+            the reference to either the parent or the owner document, as well as a flag to distinguish
+            between a parent document and an owner document.
         </para>
+        <para>
+            Except for very obvious cases (such as requesting the owner document explicitly), the Core Model
+            doesn't specify at what time an owner document is auto-created. This is left to the discretion
+            of the implementation, and this choice is indeed implementation specific since it may depend
+            on what kind of information the implementation stores in the owner document. Therefore the
+            Core Model API describes the expected behavior with respect to owner documents as if these owner
+            documents were created eagerly. This ensures the consistency and implementation independence
+            of the API.
+        </para>
+    </section>
+    <section>
+        <title>Node factories</title>
         <para>
             The Core Model also has a concept of <firstterm>node factory</firstterm>. This factory is a
             singleton. More precisely, because of the weaving process (which generates different node factory

@@ -30,11 +30,11 @@ import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 @Mixin(CoreNode.class)
 public abstract class NodeSupport implements AxiomNode {
     public OMFactory getOMFactory() {
-        return (OMFactory)coreGetDocument();
+        return (OMFactory)coreGetOwnerDocument(true);
     }
 
     public void close(boolean build) {
-        CoreDocument document = coreGetDocument();
+        CoreDocument document = coreGetOwnerDocument(true);
         if (build) {
             try {
                 // TODO: not sure if the document or only the node should be built

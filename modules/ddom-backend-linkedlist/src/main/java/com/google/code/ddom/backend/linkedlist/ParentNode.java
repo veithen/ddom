@@ -42,16 +42,13 @@ public abstract class ParentNode extends Node implements LLParentNode {
      */
     private Object content;
     
-    // TODO: this should be merged with other flags
-    private boolean complete;
-    
     public ParentNode(Object content) {
         this.content = content;
-        complete = true;
+        internalSetComplete(true);
     }
 
     public ParentNode(boolean complete) {
-        this.complete = complete;
+        internalSetComplete(complete);
     }
 
     public final Object coreGetContent() {
@@ -64,7 +61,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final void coreSetContent(FragmentSource source) {
         // TODO: need to clear any existing content!
-        complete = false;
+        internalSetComplete(false);
         // TODO: getting the producer should be deferred!
         internalGetDocument().internalCreateBuilder(source.getProducer(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
@@ -142,29 +139,29 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final boolean coreIsComplete() {
-        return complete;
+        return internalGetFlag(Flags.COMPLETE);
     }
 
     public final void internalSetComplete(boolean complete) {
-        this.complete = complete;
+        internalSetFlag(Flags.COMPLETE, complete);
     }
     
     public final void coreBuild() throws DeferredParsingException {
-        if (!complete) {
+        if (!coreIsComplete()) {
             Builder builder = internalGetDocument().internalGetBuilderFor(this);
             do {
                 builder.next();
-            } while (!complete);
+            } while (!coreIsComplete());
         }
     }
     
     public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
         if (content == null) {
-            if (complete) {
+            if (coreIsComplete()) {
                 return null;
             } else {
                 Builder builder = internalGetDocument().internalGetBuilderFor(this);
-                while (content == null && !complete) {
+                while (content == null && !coreIsComplete()) {
                     builder.next();
                 }
                 // After calling the builder, the content may be a String object,

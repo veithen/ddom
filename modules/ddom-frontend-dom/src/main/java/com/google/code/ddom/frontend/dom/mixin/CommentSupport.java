@@ -24,7 +24,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMComment;
 @Mixin(CoreComment.class)
 public abstract class CommentSupport implements DOMComment {
     public final Node cloneNode(boolean deep) {
-        return (Node)coreGetNodeFactory().createComment(coreGetDocument(), getData());
+        return (Node)coreGetNodeFactory().createComment(coreGetOwnerDocument(true), getData());
     }
 
     public final short getNodeType() {

@@ -108,7 +108,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
     public final Text replaceWholeText(String content) throws DOMException {
         DOMTextNode newText;
         if (content.length() > 0) {
-            newText = (DOMTextNode)coreGetNodeFactory().createText(coreGetDocument(), content);
+            newText = (DOMTextNode)coreGetNodeFactory().createText(coreGetOwnerDocument(true), content);
         } else {
             newText = null;
         }

@@ -25,7 +25,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 @Mixin(CoreText.class)
 public abstract class TextSupport implements DOMText {
     public final DOMTextNode createNewTextNode(String data) {
-        return (DOMTextNode)coreGetNodeFactory().createText(coreGetDocument(), data);
+        return (DOMTextNode)coreGetNodeFactory().createText(coreGetOwnerDocument(true), data);
     }
 
     public final short getNodeType() {

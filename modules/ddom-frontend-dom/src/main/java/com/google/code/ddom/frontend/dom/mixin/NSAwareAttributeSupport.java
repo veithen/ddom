@@ -24,7 +24,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMNSAwareAttribute;
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class NSAwareAttributeSupport implements DOMNSAwareAttribute {
     public final Node shallowClone() {
-        return (Node)coreGetNodeFactory().createAttribute(coreGetDocument(), coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
+        return (Node)coreGetNodeFactory().createAttribute(coreGetOwnerDocument(true), coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
     
     public final String getName() {

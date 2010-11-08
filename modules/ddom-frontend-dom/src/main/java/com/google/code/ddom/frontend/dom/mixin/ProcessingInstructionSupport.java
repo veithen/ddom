@@ -38,7 +38,7 @@ public abstract class ProcessingInstructionSupport implements DOMProcessingInstr
     }
 
     public final Node cloneNode(boolean deep) {
-        return (Node)coreGetNodeFactory().createProcessingInstruction(coreGetDocument(), getTarget(), getData());
+        return (Node)coreGetNodeFactory().createProcessingInstruction(coreGetOwnerDocument(true), getTarget(), getData());
     }
 
     public final String getTextContent() {

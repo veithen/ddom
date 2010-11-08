@@ -25,7 +25,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 @Mixin(CoreCDATASection.class)
 public abstract class CDATASectionSupport implements DOMCDATASection {
     public final DOMTextNode createNewTextNode(String data) {
-        return (DOMTextNode)coreGetNodeFactory().createCDATASection(coreGetDocument(), data);
+        return (DOMTextNode)coreGetNodeFactory().createCDATASection(coreGetOwnerDocument(true), data);
     }
 
     public final short getNodeType() {

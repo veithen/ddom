@@ -28,7 +28,7 @@ public final class SAAJUtil {
             return (SAAJSOAPElement)element;
         } else {
             CoreNSAwareElement newElement = element.coreGetNodeFactory().createElement(
-                    element.coreGetDocument(), extensionInterface, element.coreGetNamespaceURI(),
+                    element.coreGetOwnerDocument(true), extensionInterface, element.coreGetNamespaceURI(),
                     element.coreGetLocalName(), element.coreGetPrefix());
             // TODO: maybe there is a more efficient way to do this
             CoreChildNode child;

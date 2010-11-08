@@ -23,7 +23,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareElement;
 @Mixin(CoreNSUnawareElement.class)
 public abstract class NSUnawareElementSupport implements DOMNSUnawareElement {
     public final CoreElement shallowCloneWithoutAttributes() {
-        return coreGetNodeFactory().createElement(coreGetDocument(), coreGetName());
+        return coreGetNodeFactory().createElement(coreGetOwnerDocument(true), coreGetName());
     }
     
     public final String getTagName() {

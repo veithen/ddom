@@ -47,13 +47,13 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
 
     public final SOAPBodyElement addBodyElement(Name name) throws SOAPException {
         // TODO: need unit test with empty prefix/namespace
-        SAAJSOAPBodyElement element = (SAAJSOAPBodyElement)coreGetNodeFactory().createElement(coreGetDocument(), getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
+        SAAJSOAPBodyElement element = (SAAJSOAPBodyElement)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
         appendChild(element);
         return element;
     }
 
     public final SOAPBodyElement addBodyElement(QName qname) throws SOAPException {
-        SAAJSOAPBodyElement element = (SAAJSOAPBodyElement)coreGetNodeFactory().createElement(coreGetDocument(), getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+        SAAJSOAPBodyElement element = (SAAJSOAPBodyElement)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
         appendChild(element);
         return element;
     }
@@ -80,7 +80,7 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
         if (getFault() != null) {
             throw new SOAPException(""); // TODO
         } else {
-            SOAPFault fault = (SOAPFault)coreGetNodeFactory().createElement(coreGetDocument(), getSOAPFaultExtension(), getNamespaceURI(), "Fault", getPrefix());
+            SOAPFault fault = (SOAPFault)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), getSOAPFaultExtension(), getNamespaceURI(), "Fault", getPrefix());
             appendChild(fault);
             return fault;
         }

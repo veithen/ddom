@@ -28,7 +28,7 @@ import com.google.code.ddom.frontend.dom.support.NodeUtil;
 @Mixin(CoreChildNode.class)
 public abstract class CoreChildNodeSupport implements DOMCoreChildNode {
     public final Document getOwnerDocument() {
-        return (Document)coreGetDocument();
+        return (Document)coreGetOwnerDocument(true);
     }
     
     public final Node getParentNode() {

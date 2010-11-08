@@ -19,6 +19,10 @@ import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.core.WrongDocumentException;
 
 public interface LLNode extends CoreNode {
+    // TODO: need to check if we really need interface methods for this
+    boolean internalGetFlag(int flag);
+    void internalSetFlag(int flag, boolean value);
+    
     LLDocument internalGetDocument();
     
     void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException;

@@ -73,7 +73,7 @@ public abstract class AttributeSupport implements DOMAttribute {
     }
 
     public final Document getOwnerDocument() {
-        return (Document)coreGetDocument();
+        return (Document)coreGetOwnerDocument(true);
     }
     
     public final Node getParentNode() {

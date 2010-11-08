@@ -28,10 +28,10 @@ import com.google.code.ddom.frontend.dom.support.UserData;
 @Mixin(CoreNode.class)
 public abstract class CoreNodeSupport implements DOMCoreNode {
     public final Map<String,UserData> getUserDataMap(boolean create) {
-        return ((DOMDocument)coreGetDocument()).getUserDataMap(this, create);
+        return ((DOMDocument)coreGetOwnerDocument(true)).getUserDataMap(this, create);
     }
     
     public final DOMImplementation getDOMImplementation() {
-        return ((DOMDocument)coreGetDocument()).getImplementation();
+        return ((DOMDocument)coreGetOwnerDocument(true)).getImplementation();
     }
 }

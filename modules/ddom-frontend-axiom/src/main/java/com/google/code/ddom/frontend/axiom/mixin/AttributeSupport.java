@@ -61,6 +61,6 @@ public abstract class AttributeSupport implements AxiomAttribute {
     }
     
     public OMFactory getOMFactory() {
-        return (OMFactory)coreGetDocument();
+        return (OMFactory)coreGetOwnerDocument(true);
     }
 }

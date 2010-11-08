@@ -116,7 +116,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         if (operation == SequenceOperation.GET) {
             return null;
         } else {
-            CoreDocument document = coreGetDocument();
+            CoreDocument document = coreGetOwnerDocument(true);
             SequenceItem item = sequence.item(index);
             CoreNSAwareElement element;
             String namespaceURI = item.getNamespaceURI();
