@@ -22,13 +22,20 @@ import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterat
 import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.ChildIterator;
 import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreCharacterData;
 import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreComment;
 import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
+import com.google.code.ddom.core.CoreEntityReference;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.CoreNSUnawareElement;
 import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.CoreProcessingInstruction;
+import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.NodeNotFoundException;
@@ -297,7 +304,106 @@ public abstract class ParentNode extends Node implements LLParentNode {
         internalValidateOwnerDocument(newChildren);
         merge(newChildren, null, false);
     }
+    
+    public final CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
+        // TODO
+        CoreDocumentTypeDeclaration dtd = coreGetNodeFactory().createDocumentTypeDeclaration(coreGetOwnerDocument(true), rootName, publicId, systemId);
+        try {
+            coreAppendChild(dtd);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return dtd;
+    }
+    
+    public final CoreNSUnawareElement coreAppendElement(String tagName) {
+        // TODO
+        CoreNSUnawareElement element = coreGetNodeFactory().createElement(coreGetOwnerDocument(true), tagName);
+        try {
+            coreAppendChild(element);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return element;
+    }
+    
+    public final CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) {
+        // TODO
+        CoreNSAwareElement element = coreGetNodeFactory().createElement(coreGetOwnerDocument(true), namespaceURI, localName, prefix);
+        try {
+            coreAppendChild(element);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return element;
+    }
+    
+    public final CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) {
+        // TODO
+        CoreNSAwareElement element = coreGetNodeFactory().createElement(coreGetOwnerDocument(true), extensionInterface, namespaceURI, localName, prefix);
+        try {
+            coreAppendChild(element);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return element;
+    }
+    
+    public final CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) {
+        // TODO
+        CoreProcessingInstruction pi = coreGetNodeFactory().createProcessingInstruction(coreGetOwnerDocument(true), target, data);
+        try {
+            coreAppendChild(pi);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return pi;
+    }
+    
+    public final CoreText coreAppendText(String data) {
+        // TODO
+        CoreText text = coreGetNodeFactory().createText(coreGetOwnerDocument(true), data);
+        try {
+            coreAppendChild(text);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return text;
+    }
 
+    public final CoreComment coreAppendComment(String data) {
+        // TODO
+        CoreComment comment = coreGetNodeFactory().createComment(coreGetOwnerDocument(true), data);
+        try {
+            coreAppendChild(comment);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return comment;
+    }
+
+    public final CoreCDATASection coreAppendCDATASection(String data) {
+        // TODO
+        CoreCDATASection cdata = coreGetNodeFactory().createCDATASection(coreGetOwnerDocument(true), data);
+        try {
+            coreAppendChild(cdata);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return cdata;
+    }
+
+    public final CoreEntityReference coreAppendEntityReference(String name) {
+        // TODO
+        CoreEntityReference entityRef = coreGetNodeFactory().createEntityReference(coreGetOwnerDocument(true), name);
+        try {
+            coreAppendChild(entityRef);
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex);
+        }
+        return entityRef;
+    }
+    
     public final <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
         return new ChildrenByTypeIterator<T>(this, axis, type);
     }

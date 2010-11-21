@@ -93,7 +93,25 @@ public interface CoreParentNode extends CoreNode {
      *             if <code>newChildren</code> belongs to a different document
      */
     void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException;
+    
+    CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId);
+    
+    CoreNSUnawareElement coreAppendElement(String tagName);
+    
+    CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix);
+    
+    CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix);
+    
+    CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data);
+    
+    CoreText coreAppendText(String data);
 
+    CoreComment coreAppendComment(String data);
+
+    CoreCDATASection coreAppendCDATASection(String data);
+
+    CoreEntityReference coreAppendEntityReference(String name);
+    
     <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
     ChildIterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
     ChildIterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI);

@@ -30,6 +30,7 @@
     
     <modules>
         <module>ddom-api</module>
+        <module>ddom-axiom-impl</module>
         <module>ddom-axis2</module>
         <module>ddom-backend</module>
         <module>ddom-backend-linkedlist</module>
