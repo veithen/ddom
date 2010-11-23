@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package com.google.code.ddom.core;
  * 
  * @author Andreas Veithen
  */
-public class CyclicRelationshipException extends CoreModelException {
+public class CyclicRelationshipException extends HierarchyException {
     private static final long serialVersionUID = 6161496839157477471L;
 
     public CyclicRelationshipException() {

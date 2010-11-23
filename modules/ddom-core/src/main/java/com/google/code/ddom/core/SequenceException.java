@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.core;
 
-public class SequenceException extends CoreModelException {
+public abstract class SequenceException extends CoreModelException {
     private static final long serialVersionUID = 5925429320938169775L;
 
     public SequenceException(String message) {

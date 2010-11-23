@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package com.google.code.ddom.core;
  * 
  * @author Andreas Veithen
  */
+// TODO: this should be an abstract class to make sure that we always use a specific exception class
 public class CoreModelException extends Exception {
     private static final long serialVersionUID = 1204321445792058777L;
 

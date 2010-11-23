@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.WrongDocumentException;
 
 public interface LLParentNode extends LLNode, CoreParentNode {
     void internalNotifyChildrenModified(int delta);
@@ -27,7 +28,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     LLChildNode internalGetFirstChildIfMaterialized();
     void internalSetFirstChild(CoreChildNode child);
     void internalSetComplete(boolean complete);
-    void internalPrepareNewChild(CoreChildNode newChild) throws CoreModelException;
+    void internalPrepareNewChild(CoreChildNode newChild) throws WrongDocumentException, CyclicRelationshipException;
     
     /**
      * Check if the given node is allowed as a child.

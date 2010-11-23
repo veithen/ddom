@@ -54,9 +54,9 @@ public interface CoreChildNode extends CoreNode {
      *             if the new sibling is of a type that is not allowed in this position in the
      *             document
      */
-    void coreInsertSiblingAfter(CoreChildNode sibling) throws CoreModelException;
+    void coreInsertSiblingAfter(CoreChildNode sibling) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
-    void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws CoreModelException;
+    void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     /**
      * 
@@ -71,9 +71,9 @@ public interface CoreChildNode extends CoreNode {
      *             if the new sibling is of a type that is not allowed in this position in the
      *             document
      */
-    void coreInsertSiblingBefore(CoreChildNode sibling) throws CoreModelException;
+    void coreInsertSiblingBefore(CoreChildNode sibling) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
-    void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws CoreModelException;
+    void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     /**
      * Detach this node from its parent. If the node has no parent, then this method does nothing.

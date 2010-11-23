@@ -39,6 +39,7 @@ import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.NodeNotFoundException;
+import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public abstract class ParentNode extends Node implements LLParentNode {
@@ -197,7 +198,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return previousChild;
     }
     
-    public void internalPrepareNewChild(CoreChildNode newChild) throws CoreModelException {
+    public void internalPrepareNewChild(CoreChildNode newChild) throws WrongDocumentException, CyclicRelationshipException {
         internalValidateOwnerDocument(newChild);
         
         // Check that the new node is not an ancestor of this node

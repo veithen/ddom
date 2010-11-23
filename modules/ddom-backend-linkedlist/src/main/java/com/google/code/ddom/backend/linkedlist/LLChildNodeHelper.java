@@ -19,7 +19,9 @@ import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.HierarchyException;
 import com.google.code.ddom.core.NoParentException;
+import com.google.code.ddom.core.NodeMigrationException;
 import com.google.code.ddom.core.SelfRelationshipException;
 
 public final class LLChildNodeHelper {
@@ -81,7 +83,7 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingAfter(LLChildNode that, CoreChildNode coreSibling) throws CoreModelException {
+    public static void coreInsertSiblingAfter(LLChildNode that, CoreChildNode coreSibling) throws HierarchyException, NodeMigrationException, DeferredParsingException {
         LLChildNode sibling = (LLChildNode)coreSibling;
         if (sibling == that) {
             throw new SelfRelationshipException();
@@ -102,7 +104,7 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingsAfter(LLChildNode that, CoreDocumentFragment coreFragment) throws CoreModelException {
+    public static void coreInsertSiblingsAfter(LLChildNode that, CoreDocumentFragment coreFragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {
@@ -132,7 +134,7 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingBefore(LLChildNode that, CoreChildNode coreSibling) throws CoreModelException {
+    public static void coreInsertSiblingBefore(LLChildNode that, CoreChildNode coreSibling) throws HierarchyException, NodeMigrationException, DeferredParsingException {
         LLChildNode sibling = (LLChildNode)coreSibling;
         if (sibling == that) {
             throw new SelfRelationshipException();
@@ -161,7 +163,7 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingsBefore(LLChildNode that, CoreDocumentFragment coreFragment) throws CoreModelException {
+    public static void coreInsertSiblingsBefore(LLChildNode that, CoreDocumentFragment coreFragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {

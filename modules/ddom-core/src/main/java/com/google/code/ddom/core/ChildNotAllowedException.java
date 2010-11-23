@@ -23,7 +23,7 @@ package com.google.code.ddom.core;
  * 
  * @author Andreas Veithen
  */
-public class ChildNotAllowedException extends CoreModelException {
+public class ChildNotAllowedException extends HierarchyException {
     private static final long serialVersionUID = -676602453248623826L;
 
     public ChildNotAllowedException() {

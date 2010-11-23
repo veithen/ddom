@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package com.google.code.ddom.core;
  * 
  * @author Andreas Veithen
  */
-public class SelfRelationshipException extends CoreModelException {
+public class SelfRelationshipException extends HierarchyException {
     private static final long serialVersionUID = -1792206962696162381L;
 
     public SelfRelationshipException() {

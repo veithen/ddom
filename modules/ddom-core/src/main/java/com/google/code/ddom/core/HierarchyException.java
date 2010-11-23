@@ -16,18 +16,20 @@
 package com.google.code.ddom.core;
 
 /**
- * Indicates that an operation could not be completed because a node is expected to have a parent,
- * but didn't have one.
+ * Indicates that an attempt was made to perform an operation that would cause a violation of some
+ * constraint on the tree structure of a valid XML document. See the subclasses for the possible
+ * types of violations.
  * 
  * @author Andreas Veithen
  */
-public class NoParentException extends HierarchyException {
-    private static final long serialVersionUID = 7197332472239819416L;
+public abstract class HierarchyException extends CoreModelException {
+    private static final long serialVersionUID = 501086920417955642L;
 
-    public NoParentException() {
+    public HierarchyException() {
+        super();
     }
 
-    public NoParentException(String message) {
+    public HierarchyException(String message) {
         super(message);
     }
 }
