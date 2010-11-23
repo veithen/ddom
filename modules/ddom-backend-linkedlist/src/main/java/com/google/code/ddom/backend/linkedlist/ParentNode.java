@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
@@ -45,6 +46,8 @@ import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public abstract class ParentNode extends Node implements LLParentNode {
+    private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
+    
     /**
      * The content of this node. This is a {@link CoreChildNode} if the node is expanded, a
      * {@link FragmentSource} if the content is sourced or a {@link String} if the value has been
@@ -314,26 +317,28 @@ public abstract class ParentNode extends Node implements LLParentNode {
         merge(newChildren, null, false);
     }
     
-    public final CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
-        // TODO
-        CoreDocumentTypeDeclaration dtd = coreGetNodeFactory().createDocumentTypeDeclaration(coreGetOwnerDocument(true), rootName, publicId, systemId);
-        try {
-            coreAppendChild(dtd);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
+    private void appendNewlyCreatedChild(LLChildNode child) throws ChildNotAllowedException, DeferredParsingException {
+        internalValidateChildType(child, null);
+        LLChildNode lastChild = (LLChildNode)coreGetLastChild(); // TODO: avoid cast here
+        if (lastChild == null) {
+            internalSetFirstChild(child);
+        } else {
+            lastChild.internalSetNextSibling(child);
         }
-        return dtd;
+        child.internalSetParent(this);
+        internalNotifyChildrenModified(1);
+    }
+
+    public final CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredParsingException {
+        DocumentTypeDeclaration child = new DocumentTypeDeclaration(null, rootName, publicId, systemId);
+        appendNewlyCreatedChild(child);
+        return child;
     }
     
-    public final CoreNSUnawareElement coreAppendElement(String tagName) {
-        // TODO
-        CoreNSUnawareElement element = coreGetNodeFactory().createElement(coreGetOwnerDocument(true), tagName);
-        try {
-            coreAppendChild(element);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return element;
+    public final CoreNSUnawareElement coreAppendElement(String tagName) throws ChildNotAllowedException, DeferredParsingException {
+        NSUnawareElement child = new NSUnawareElement(null, tagName, true);
+        appendNewlyCreatedChild(child);
+        return child;
     }
     
     public final CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) {
@@ -347,70 +352,40 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return element;
     }
     
-    public final CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) {
-        // TODO
-        CoreNSAwareElement element = coreGetNodeFactory().createElement(coreGetOwnerDocument(true), extensionInterface, namespaceURI, localName, prefix);
-        try {
-            coreAppendChild(element);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return element;
+    public final CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException {
+        NSAwareElement child = nsAwareElementFactory.create(extensionInterface, null, namespaceURI, localName, prefix, true);
+        appendNewlyCreatedChild(child);
+        return child;
     }
     
-    public final CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) {
-        // TODO
-        CoreProcessingInstruction pi = coreGetNodeFactory().createProcessingInstruction(coreGetOwnerDocument(true), target, data);
-        try {
-            coreAppendChild(pi);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return pi;
+    public final CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredParsingException {
+        ProcessingInstruction child = new ProcessingInstruction(null, target, data);
+        appendNewlyCreatedChild(child);
+        return child;
     }
     
-    public final CoreText coreAppendText(String data) {
-        // TODO
-        CoreText text = coreGetNodeFactory().createText(coreGetOwnerDocument(true), data);
-        try {
-            coreAppendChild(text);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return text;
+    public final CoreText coreAppendText(String data) throws ChildNotAllowedException, DeferredParsingException {
+        Text child = new Text(null, data);
+        appendNewlyCreatedChild(child);
+        return child;
     }
 
-    public final CoreComment coreAppendComment(String data) {
-        // TODO
-        CoreComment comment = coreGetNodeFactory().createComment(coreGetOwnerDocument(true), data);
-        try {
-            coreAppendChild(comment);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return comment;
+    public final CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredParsingException {
+        Comment child = new Comment(null, data);
+        appendNewlyCreatedChild(child);
+        return child;
     }
 
-    public final CoreCDATASection coreAppendCDATASection(String data) {
-        // TODO
-        CoreCDATASection cdata = coreGetNodeFactory().createCDATASection(coreGetOwnerDocument(true), data);
-        try {
-            coreAppendChild(cdata);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return cdata;
+    public final CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredParsingException {
+        CDATASection child = new CDATASection(null, data);
+        appendNewlyCreatedChild(child);
+        return child;
     }
 
-    public final CoreEntityReference coreAppendEntityReference(String name) {
-        // TODO
-        CoreEntityReference entityRef = coreGetNodeFactory().createEntityReference(coreGetOwnerDocument(true), name);
-        try {
-            coreAppendChild(entityRef);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return entityRef;
+    public final CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredParsingException {
+        EntityReference child = new EntityReference(null, name);
+        appendNewlyCreatedChild(child);
+        return child;
     }
     
     public final <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {

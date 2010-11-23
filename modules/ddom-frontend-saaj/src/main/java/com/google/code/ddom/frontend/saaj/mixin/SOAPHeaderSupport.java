@@ -22,11 +22,13 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeaderElement;
 
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
+import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SOAPHeaderExtension.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
@@ -36,15 +38,19 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
 
     public final SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
         // TODO: need unit test with empty prefix/namespace
-        SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
-        appendChild(element);
-        return element;
+        try {
+            return (SAAJSOAPHeaderElement)coreAppendElement(getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
     public final SOAPHeaderElement addHeaderElement(QName qname) throws SOAPException {
-        SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
-        appendChild(element);
-        return element;
+        try {
+            return (SAAJSOAPHeaderElement)coreAppendElement(getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
     public SOAPHeaderElement addNotUnderstoodHeaderElement(QName arg0)

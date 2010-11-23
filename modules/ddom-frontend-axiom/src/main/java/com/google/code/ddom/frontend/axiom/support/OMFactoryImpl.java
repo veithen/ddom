@@ -34,6 +34,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
 import com.google.code.ddom.core.AttributeMatcher;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
@@ -56,7 +57,11 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMComment createOMComment(OMContainer parent, String content) {
-        return (AxiomComment)((AxiomContainer)parent).coreAppendComment(content);
+        try {
+            return (AxiomComment)((AxiomContainer)parent).coreAppendComment(content);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final OMDocType createOMDocType(OMContainer parent, String content) {
@@ -118,7 +123,11 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMProcessingInstruction createOMProcessingInstruction(OMContainer parent, String piTarget, String piData) {
-        return (AxiomProcessingInstruction)((AxiomContainer)parent).coreAppendProcessingInstruction(piTarget, piData);
+        try {
+            return (AxiomProcessingInstruction)((AxiomContainer)parent).coreAppendProcessingInstruction(piTarget, piData);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final OMText createOMText(String s) {
@@ -126,7 +135,11 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMText createOMText(OMContainer parent, String text) {
-        return (AxiomText)((AxiomContainer)parent).coreAppendText(text);
+        try {
+            return (AxiomText)((AxiomContainer)parent).coreAppendText(text);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final OMText createOMText(OMContainer parent, OMText source) {

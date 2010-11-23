@@ -67,9 +67,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
             if (prefix != null && prefix.length() == 0) {
                 prefix = null;
             }
-            SAAJSOAPElement child = (SAAJSOAPElement)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), getChildExtensionInterface(), uri, localName, prefix);
-            coreAppendChild(child);
-            return child;
+            return (SAAJSOAPElement)coreAppendElement(getChildExtensionInterface(), uri, localName, prefix);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }

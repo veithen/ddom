@@ -39,9 +39,7 @@ import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 public abstract class DetailSupport implements SAAJDetail {
     public final DetailEntry addDetailEntry(Name name) throws SOAPException {
         try {
-            SAAJDetailEntry entry = (SAAJDetailEntry)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), DetailEntryExtension.class, NameUtil.getNamespaceURI(name), name.getLocalName(), NameUtil.getPrefix(name));
-            coreAppendChild(entry);
-            return entry;
+            return (SAAJDetailEntry)coreAppendElement(DetailEntryExtension.class, NameUtil.getNamespaceURI(name), name.getLocalName(), NameUtil.getPrefix(name));
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -49,9 +47,7 @@ public abstract class DetailSupport implements SAAJDetail {
 
     public final DetailEntry addDetailEntry(QName qname) throws SOAPException {
         try {
-            SAAJDetailEntry entry = (SAAJDetailEntry)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), DetailEntryExtension.class, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
-            coreAppendChild(entry);
-            return entry;
+            return (SAAJDetailEntry)coreAppendElement(DetailEntryExtension.class, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }

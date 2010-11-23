@@ -94,23 +94,23 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException;
     
-    CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId);
+    CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredParsingException;
     
-    CoreNSUnawareElement coreAppendElement(String tagName);
+    CoreNSUnawareElement coreAppendElement(String tagName) throws ChildNotAllowedException, DeferredParsingException;
     
-    CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix);
+    CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException;
     
-    CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix);
+    CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException;
     
-    CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data);
+    CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredParsingException;
     
-    CoreText coreAppendText(String data);
+    CoreText coreAppendText(String data) throws ChildNotAllowedException, DeferredParsingException;
 
-    CoreComment coreAppendComment(String data);
+    CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredParsingException;
 
-    CoreCDATASection coreAppendCDATASection(String data);
+    CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredParsingException;
 
-    CoreEntityReference coreAppendEntityReference(String name);
+    CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredParsingException;
     
     <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
     ChildIterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
