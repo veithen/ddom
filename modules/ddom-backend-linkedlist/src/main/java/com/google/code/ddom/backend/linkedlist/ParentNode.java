@@ -212,11 +212,6 @@ public abstract class ParentNode extends Node implements LLParentNode {
                 break;
             }
         } while (current != null);
-        
-        // TODO: should never or not always be necessary
-        if (newChild instanceof CoreParentNode) {
-            ((CoreParentNode)newChild).coreBuild();
-        }
     }
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
