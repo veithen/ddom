@@ -17,7 +17,10 @@ package com.google.code.ddom.core;
 
 public interface CoreNode {
     /**
-     * Get the node factory for the model to which this node belongs.
+     * Get the node factory for the model to which this node belongs. Since there is a single
+     * {@link NodeFactory} instance for each model (i.e. back-end and front-end combination), the
+     * return value of this method may be used to determine whether two nodes belong to the same
+     * model.
      * 
      * @return the node factory; the return value MUST be the singleton instance described in the
      *         documentation of the {@link NodeFactory} interface

@@ -24,31 +24,31 @@ import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.DeferredParsingException;
 
 public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode {
-    private final Document document;
-    private LLParentNode parent;
+    private LLParentNode owner;
     private LLChildNode nextSibling;
     
     public LeafNode(Document document) {
-        this.document = document;
+        owner = document;
     }
 
-    public final LLParentNode internalGetParent() {
-        return parent;
+    public final LLParentNode internalGetOwner() {
+        return owner;
     }
-    
-    public final void internalSetParent(LLParentNode parent) {
-        this.parent = parent;
+
+    public final void internalSetOwner(LLParentNode owner) {
+        this.owner = owner;
     }
-    
+
     public final CoreParentNode coreGetParent() {
-        return parent;
+        return internalGetParent();
     }
 
     public final boolean coreHasParent() {
-        return parent != null;
+        return internalGetFlag(Flags.HAS_PARENT);
     }
 
     public final CoreElement coreGetParentElement() {
+        LLParentNode parent = internalGetParent();
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
@@ -68,10 +68,18 @@ public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode
         return internalGetPreviousSibling();
     }
     
-    public final LLDocument internalGetDocument() {
-        return document;
+    public final LLDocument internalGetOwnerDocument() {
+        return LLChildNodeHelper.internalGetOwnerDocument(this);
     }
 
+    public final LLParentNode internalGetParent() {
+        return LLChildNodeHelper.internalGetParent(this);
+    }
+    
+    public final void internalSetParent(LLParentNode parent) {
+        LLChildNodeHelper.internalSetParent(this, parent);
+    }
+    
     public final LLChildNode internalGetNextSibling() throws DeferredParsingException {
         return LLChildNodeHelper.internalGetNextSibling(this);
     }

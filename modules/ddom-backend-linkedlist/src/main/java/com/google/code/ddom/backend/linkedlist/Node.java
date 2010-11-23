@@ -29,7 +29,7 @@ public abstract class Node implements LLNode {
     }
 
     public final CoreDocument coreGetOwnerDocument(boolean create) {
-        return internalGetDocument();
+        return internalGetOwnerDocument();
     }
 
     public final boolean internalGetFlag(int flag) {
@@ -45,8 +45,8 @@ public abstract class Node implements LLNode {
     }
 
     public final void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException {
-        CoreDocument document1 = ((Node)node).internalGetDocument(); // TODO: get rid of cast
-        CoreDocument document2 = internalGetDocument();
+        CoreDocument document1 = ((Node)node).internalGetOwnerDocument(); // TODO: get rid of cast
+        CoreDocument document2 = internalGetOwnerDocument();
         if (document1 != null && document2 != null && document1 != document2) {
             throw new WrongDocumentException();
         }

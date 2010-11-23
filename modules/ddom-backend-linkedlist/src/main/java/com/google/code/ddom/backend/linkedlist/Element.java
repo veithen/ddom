@@ -88,7 +88,7 @@ public abstract class Element extends Container implements CoreElement {
             attr = (Attribute)attr.coreGetNextAttribute();
         }
         if (attr == null) {
-            CoreDocument document = internalGetDocument();
+            CoreDocument document = internalGetOwnerDocument();
             Attribute newAttr = (Attribute)matcher.createAttribute(coreGetNodeFactory(), document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
                 internalAppendAttribute(newAttr);
@@ -102,7 +102,7 @@ public abstract class Element extends Container implements CoreElement {
 
     private Attribute accept(CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
         boolean hasParent = coreAttr.coreHasOwnerElement();
-        boolean isForeignDocument = coreAttr.coreGetOwnerDocument(true) != internalGetDocument();
+        boolean isForeignDocument = coreAttr.coreGetOwnerDocument(true) != internalGetOwnerDocument();
         boolean isForeignModel = !(coreAttr instanceof Attribute);
         if (hasParent || isForeignDocument || isForeignModel) {
             switch (policy.getAction(hasParent, isForeignDocument, isForeignModel)) {
@@ -243,7 +243,7 @@ public abstract class Element extends Container implements CoreElement {
     }
 
     public final void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException {
-        CoreDocument document = internalGetDocument();
+        CoreDocument document = internalGetOwnerDocument();
         // TODO: using a collection here is very bad!!
         List<CoreTextNode> textNodes = new ArrayList<CoreTextNode>();
         CoreChildNode child = coreGetFirstChild();

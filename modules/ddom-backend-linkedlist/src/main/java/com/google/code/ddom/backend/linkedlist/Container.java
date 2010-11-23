@@ -23,18 +23,21 @@ import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.DeferredParsingException;
 
 public abstract class Container extends ParentNode implements LLChildNode {
-    private final Document document;
-    private LLParentNode parent;
+    private LLParentNode owner;
     private LLChildNode nextSibling;
     private int children;
 
     public Container(Document document, boolean complete) {
         super(complete);
-        this.document = document;
+        owner = document;
     }
 
-    public final LLDocument internalGetDocument() {
-        return document;
+    public final LLParentNode internalGetOwner() {
+        return owner;
+    }
+
+    public final void internalSetOwner(LLParentNode owner) {
+        this.owner = owner;
     }
 
     public final void internalNotifyChildrenModified(int delta) {
@@ -50,23 +53,16 @@ public abstract class Container extends ParentNode implements LLChildNode {
         return children;
     }
 
-    public final LLParentNode internalGetParent() {
-        return parent;
-    }
-    
-    public final void internalSetParent(LLParentNode parent) {
-        this.parent = parent;
-    }
-    
     public final CoreParentNode coreGetParent() {
-        return parent;
+        return internalGetParent();
     }
 
     public final boolean coreHasParent() {
-        return parent != null;
+        return internalGetFlag(Flags.HAS_PARENT);
     }
 
     public final CoreElement coreGetParentElement() {
+        LLParentNode parent = internalGetParent();
         return parent instanceof CoreElement ? (CoreElement)parent : null;
     }
 
@@ -84,6 +80,18 @@ public abstract class Container extends ParentNode implements LLChildNode {
     
     public final CoreChildNode coreGetPreviousSibling() {
         return internalGetPreviousSibling();
+    }
+    
+    public final LLDocument internalGetOwnerDocument() {
+        return LLChildNodeHelper.internalGetOwnerDocument(this);
+    }
+
+    public final LLParentNode internalGetParent() {
+        return LLChildNodeHelper.internalGetParent(this);
+    }
+    
+    public final void internalSetParent(LLParentNode parent) {
+        LLChildNodeHelper.internalSetParent(this, parent);
     }
     
     public final LLChildNode internalGetNextSibling() throws DeferredParsingException {

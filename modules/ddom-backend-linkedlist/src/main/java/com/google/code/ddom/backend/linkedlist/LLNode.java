@@ -23,7 +23,7 @@ public interface LLNode extends CoreNode {
     boolean internalGetFlag(int flag);
     void internalSetFlag(int flag, boolean value);
     
-    LLDocument internalGetDocument();
+    LLDocument internalGetOwnerDocument();
     
     void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException;
 }

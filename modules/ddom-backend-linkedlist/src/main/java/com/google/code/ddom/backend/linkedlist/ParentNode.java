@@ -70,7 +70,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         // TODO: need to clear any existing content!
         internalSetComplete(false);
         // TODO: getting the producer should be deferred!
-        internalGetDocument().internalCreateBuilder(source.getProducer(), this);
+        internalGetOwnerDocument().internalCreateBuilder(source.getProducer(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }
@@ -155,7 +155,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
     
     public final void coreBuild() throws DeferredParsingException {
         if (!coreIsComplete()) {
-            Builder builder = internalGetDocument().internalGetBuilderFor(this);
+            Builder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
             do {
                 builder.next();
             } while (!coreIsComplete());
@@ -167,7 +167,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
             if (coreIsComplete()) {
                 return null;
             } else {
-                Builder builder = internalGetDocument().internalGetBuilderFor(this);
+                Builder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
                 while (content == null && !coreIsComplete()) {
                     builder.next();
                 }
@@ -177,7 +177,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
         if (content instanceof String) {
             // TODO: no cast here
-            LLChildNode firstChild = new Text((Document)internalGetDocument(), (String)content);
+            LLChildNode firstChild = new Text((Document)internalGetOwnerDocument(), (String)content);
             firstChild.internalSetParent(this);
             content = firstChild;
             return firstChild;

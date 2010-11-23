@@ -25,13 +25,39 @@ import com.google.code.ddom.core.SelfRelationshipException;
 public final class LLChildNodeHelper {
     private LLChildNodeHelper() {}
     
+    public static LLDocument internalGetOwnerDocument(LLChildNode that) {
+        LLNode root = that;
+        while (root.internalGetFlag(Flags.HAS_PARENT)) {
+            root = ((LLChildNode)root).internalGetOwner();
+        }
+        if (root instanceof LLChildNode) {
+            return (LLDocument)((LLChildNode)root).internalGetOwner();
+        } else {
+            return ((LLNode)root).internalGetOwnerDocument();
+        }
+    }
+    
+    public static LLParentNode internalGetParent(LLChildNode that) {
+        return that.internalGetFlag(Flags.HAS_PARENT) ? that.internalGetOwner() : null;
+    }
+    
+    public static void internalSetParent(LLChildNode that, LLParentNode parent) {
+        if (parent == null) {
+            that.internalSetOwner(internalGetOwnerDocument(that));
+            that.internalSetFlag(Flags.HAS_PARENT, false);
+        } else {
+            that.internalSetOwner(parent);
+            that.internalSetFlag(Flags.HAS_PARENT, true);
+        }
+    }
+    
     public static LLChildNode internalGetNextSibling(LLChildNode that) throws DeferredParsingException {
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             return null;
         } else {
             if (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete()) {
-                Builder builder = that.internalGetDocument().internalGetBuilderFor(parent);
+                Builder builder = that.internalGetOwnerDocument().internalGetBuilderFor(parent);
                 do {
                     builder.next();
                 } while (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete());
@@ -88,7 +114,7 @@ public final class LLChildNodeHelper {
                 // This is a special case: we don't need to build the fragment, but only to move
                 // the already materialized children and then to migrate the builder. This is
                 // possible because we have a builder of type 2.
-                that.internalGetDocument().internalMigrateBuilder(fragment, parent);
+                that.internalGetOwnerDocument().internalMigrateBuilder(fragment, parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 that.internalSetNextSibling(node);
                 int nodeCount = 0;
@@ -217,7 +243,7 @@ public final class LLChildNodeHelper {
             int nodeCount = 0;
             if (parent.coreIsComplete() && that.internalGetNextSiblingIfMaterialized() == null && !fragment.coreIsComplete()) {
                 // This is the same case as considered in coreInsertSiblingsAfter
-                that.internalGetDocument().internalMigrateBuilder(fragment, parent);
+                that.internalGetOwnerDocument().internalMigrateBuilder(fragment, parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 if (previousSibling == null) {
                     parent.internalSetFirstChild(node);

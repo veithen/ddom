@@ -44,7 +44,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     final void setOwnerElement(CoreElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
-            owner = ((Element)owner).internalGetDocument();
+            owner = ((Element)owner).internalGetOwnerDocument();
         } else {
             owner = newOwner;
         }
@@ -105,11 +105,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return owner instanceof CoreElement;
     }
 
-    public final LLDocument internalGetDocument() {
+    public final LLDocument internalGetOwnerDocument() {
         if (owner instanceof Document) {
             return (Document)owner;
         } else {
-            return ((Element)owner).internalGetDocument();
+            return ((Element)owner).internalGetOwnerDocument();
         }
     }
 

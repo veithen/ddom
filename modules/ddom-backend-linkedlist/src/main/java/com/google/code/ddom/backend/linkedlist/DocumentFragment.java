@@ -43,7 +43,7 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         return children;
     }
 
-    public final LLDocument internalGetDocument() {
+    public final LLDocument internalGetOwnerDocument() {
         return document;
     }
 }

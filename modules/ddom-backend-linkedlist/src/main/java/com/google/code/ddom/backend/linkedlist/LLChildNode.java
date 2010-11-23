@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,16 @@ import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.DeferredParsingException;
 
 public interface LLChildNode extends LLNode, CoreChildNode {
+    /**
+     * Return the owner of the node. This is either the parent or the owner document, depending on
+     * the {@link Flags#HAS_PARENT} flag.
+     * 
+     * @return the parent or owner document of the node
+     */
+    LLParentNode internalGetOwner();
+    
+    void internalSetOwner(LLParentNode owner);
+    
     LLParentNode internalGetParent();
     void internalSetParent(LLParentNode parent);
     

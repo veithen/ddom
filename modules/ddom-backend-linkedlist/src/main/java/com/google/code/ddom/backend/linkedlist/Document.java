@@ -80,7 +80,7 @@ public class Document extends ParentNode implements LLDocument {
         return symbols;
     }
 
-    public final LLDocument internalGetDocument() {
+    public final LLDocument internalGetOwnerDocument() {
         return this;
     }
 

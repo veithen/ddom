@@ -45,5 +45,6 @@ public class TestCoreDetach extends BackendTestCase {
         CoreAssert.assertOrphan(text2);
         CoreAssert.assertSiblings(text1, text3);
         Assert.assertEquals(2, element.coreGetChildCount());
+        Assert.assertSame(document, text2.coreGetOwnerDocument(false));
     }
 }
