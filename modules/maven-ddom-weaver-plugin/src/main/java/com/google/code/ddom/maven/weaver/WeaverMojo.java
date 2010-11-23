@@ -30,8 +30,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.spi.ProviderFinder;
-import com.google.code.ddom.weaver.ModelWeaver;
-import com.google.code.ddom.weaver.ModelWeaverException;
+import com.googlecode.ddom.weaver.ModelWeaver;
+import com.googlecode.ddom.weaver.ModelWeaverException;
 
 /**
  * @goal weave
