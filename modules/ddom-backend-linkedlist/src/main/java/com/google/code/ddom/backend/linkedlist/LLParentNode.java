@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreParentNode;
@@ -37,11 +37,14 @@ public interface LLParentNode extends LLNode, CoreParentNode {
      * @param replacedChild
      *            the child that will be replaced by the new node, or <code>null</code> if the new
      *            child will be inserted and doesn't replace any existing node
-     * @throws ChildTypeNotAllowedException
+     * @throws ChildNotAllowedException
      *             if the child is not allowed
-     * @throws DeferredParsingException 
+     * @throws DeferredParsingException
+     *             if a parsing error occurs. This exception may be thrown because the
+     *             implementation may need to check if a child of a given type already exist. If the
+     *             node is incomplete, then this may result in a parsing error.
      */
-    void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException;
+    void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildNotAllowedException, DeferredParsingException;
     
     void internalSetValue(String value);
 }

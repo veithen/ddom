@@ -18,7 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.core.CoreElement;
@@ -105,15 +105,15 @@ public class Document extends ParentNode implements LLDocument {
         children = 0;
     }
 
-    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException, DeferredParsingException {
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
         if (newChild instanceof CoreDocumentTypeDeclaration) {
             if (!(replacedChild instanceof CoreDocumentTypeDeclaration || coreGetDocumentTypeDeclaration() == null)) {
-                throw new ChildTypeNotAllowedException("The document already has a document type node");
+                throw new ChildNotAllowedException("The document already has a document type node");
             }
         } else if (newChild instanceof CoreElement) {
             if (!(replacedChild instanceof CoreElement || coreGetDocumentElement() == null)) {
-                throw new ChildTypeNotAllowedException("The document already has a document element");
+                throw new ChildNotAllowedException("The document already has a document element");
             }
         }
     }

@@ -16,7 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
-import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreText;
@@ -39,9 +39,9 @@ public class CDATASection extends Container implements CoreCDATASection {
     }
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)
-            throws ChildTypeNotAllowedException, DeferredParsingException {
+            throws ChildNotAllowedException, DeferredParsingException {
         if (!(newChild instanceof CoreText)) {
-            throw new ChildTypeNotAllowedException();
+            throw new ChildNotAllowedException();
         }
     }
 

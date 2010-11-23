@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,20 @@
 package com.google.code.ddom.core;
 
 /**
- * Indicates that an attempt was made to insert a child node where it is not allowed.
+ * Indicates that an attempt was made to insert a child node where it is not allowed. This exception
+ * may be thrown because the node type is not allowed (e.g. a processing instruction as a child of
+ * an attribute) or because the parent node only allows a single child of a given type (e.g. an
+ * element as a child of a document) and a child of that type already exists.
  * 
  * @author Andreas Veithen
  */
-public class ChildTypeNotAllowedException extends CoreModelException {
+public class ChildNotAllowedException extends CoreModelException {
     private static final long serialVersionUID = -676602453248623826L;
 
-    public ChildTypeNotAllowedException() {
+    public ChildNotAllowedException() {
     }
 
-    public ChildTypeNotAllowedException(String message) {
+    public ChildNotAllowedException(String message) {
         super(message);
     }
 }

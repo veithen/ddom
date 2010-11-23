@@ -17,7 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.core.CoreElement;
@@ -38,7 +38,7 @@ public class TestCoreInsertSiblingBeforeWithInvalidChildType extends BackendTest
         try {
             text.coreInsertSiblingBefore(dtd);
             fail("Expected ChildTypeNotAllowedException");
-        } catch (ChildTypeNotAllowedException ex) {
+        } catch (ChildNotAllowedException ex) {
             // Expected
         }
     }

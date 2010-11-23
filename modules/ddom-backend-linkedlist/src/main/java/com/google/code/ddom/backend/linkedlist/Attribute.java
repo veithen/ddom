@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreAttribute;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreElement;
@@ -79,9 +79,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         // Ignore this; we don't store the number of children
     }
 
-    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildNotAllowedException {
         if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
-            throw new ChildTypeNotAllowedException();
+            throw new ChildNotAllowedException();
         }
     }
 

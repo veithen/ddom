@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.google.code.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreAttribute;
 import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreChildNode;
@@ -50,10 +50,10 @@ public abstract class Element extends Container implements CoreElement {
         this.firstAttribute = firstAttribute;
     }
 
-    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildTypeNotAllowedException {
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildNotAllowedException {
         // TODO: need a test case here!
         if (newChild instanceof CoreDocumentTypeDeclaration) {
-            throw new ChildTypeNotAllowedException();
+            throw new ChildNotAllowedException();
         }
     }
 

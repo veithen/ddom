@@ -50,7 +50,7 @@ public interface CoreChildNode extends CoreNode {
      *             if this node and the new sibling are the same
      * @throws CyclicRelationshipException
      *             if the sibling to be inserted is an ancestor of this node
-     * @throws ChildTypeNotAllowedException
+     * @throws ChildNotAllowedException
      *             if the new sibling is of a type that is not allowed in this position in the
      *             document
      */
@@ -67,7 +67,7 @@ public interface CoreChildNode extends CoreNode {
      *             if this node and the new sibling are the same
      * @throws CyclicRelationshipException
      *             if the sibling to be inserted is an ancestor of this node
-     * @throws ChildTypeNotAllowedException
+     * @throws ChildNotAllowedException
      *             if the new sibling is of a type that is not allowed in this position in the
      *             document
      */

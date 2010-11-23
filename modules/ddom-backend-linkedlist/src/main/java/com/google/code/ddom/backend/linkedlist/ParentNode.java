@@ -21,7 +21,7 @@ import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
 import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.ChildIterator;
-import com.google.code.ddom.core.ChildTypeNotAllowedException;
+import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreCharacterData;
 import com.google.code.ddom.core.CoreChildNode;
@@ -274,7 +274,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
                 ((LLChildNode)firstNodeToInsert).internalSetParent(this);
                 delta = 1;
             } else {
-                throw new ChildTypeNotAllowedException();
+                throw new ChildNotAllowedException();
             }
             if (removeRefChild) {
                 delta--;
