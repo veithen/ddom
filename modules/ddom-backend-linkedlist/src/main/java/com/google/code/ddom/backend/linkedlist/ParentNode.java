@@ -38,6 +38,8 @@ import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.core.HierarchyException;
+import com.google.code.ddom.core.NodeMigrationException;
 import com.google.code.ddom.core.NodeNotFoundException;
 import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.stream.spi.FragmentSource;
@@ -292,8 +294,19 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
     }
 
-    public final void coreAppendChild(CoreChildNode newChild) throws CoreModelException {
-        merge(newChild, null, false);
+    public final void coreAppendChild(CoreChildNode coreChild) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+        LLChildNode child = (LLChildNode)coreChild;
+        internalValidateChildType(child, null);
+        internalPrepareNewChild(child);
+        child.coreDetach();
+        LLChildNode lastChild = (LLChildNode)coreGetLastChild(); // TODO: avoid cast here
+        if (lastChild == null) {
+            internalSetFirstChild(child);
+        } else {
+            lastChild.internalSetNextSibling(child);
+        }
+        child.internalSetParent(this);
+        internalNotifyChildrenModified(1);
     }
 
     public final void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException {

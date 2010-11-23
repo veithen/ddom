@@ -83,7 +83,7 @@ public interface CoreParentNode extends CoreNode {
      * @throws WrongDocumentException
      *             if <code>newChild</code> belongs to a different document
      */
-    void coreAppendChild(CoreChildNode newChild) throws CoreModelException;
+    void coreAppendChild(CoreChildNode newChild) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     /**
      * 
