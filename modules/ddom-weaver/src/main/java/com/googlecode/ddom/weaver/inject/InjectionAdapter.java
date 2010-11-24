@@ -15,11 +15,11 @@
  */
 package com.googlecode.ddom.weaver.inject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -44,11 +44,7 @@ class InjectionAdapter extends ClassAdapter {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
         if (mv != null && name.equals("<init>")) {
-            List<String> injectorMethodNames = new ArrayList<String>();
-            for (InjectableFieldInfo fieldInfo : injectionInfo.getInjectableFields()) {
-                injectorMethodNames.add(fieldInfo.getInjectorMethodName());
-            }
-            mv = new ConstructorEnhancer(mv, className, injectorMethodNames);
+            mv = new ConstructorEnhancer(mv, className, Arrays.asList("inject$$instance"));
         }
         return mv;
     }
@@ -56,10 +52,27 @@ class InjectionAdapter extends ClassAdapter {
     @Override
     public void visitEnd() {
         for (InjectableFieldInfo fieldInfo : injectionInfo.getInjectableFields()) {
-            MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PRIVATE, fieldInfo.getInjectorMethodName(), "()V", null, new String[0]);
+            MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC, fieldInfo.getFactoryMethodName(), fieldInfo.getFactoryMethodDesc(), null, new String[0]);
             if (mv != null) {
-                fieldInfo.getInjector().generateInjectorMethod(className, fieldInfo.getFieldName(), fieldInfo.getFieldDesc(), mv);
+                fieldInfo.getInjector().generateFactoryMethodCode(mv);
             }
+        }
+        MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PRIVATE, "inject$$instance", "()V", null, new String[0]);
+        if (mv != null) {
+            mv.visitCode();
+            Label l0 = new Label();
+            mv.visitLabel(l0);
+            for (InjectableFieldInfo fieldInfo : injectionInfo.getInjectableFields()) {
+                mv.visitVarInsn(Opcodes.ALOAD, 0);
+                mv.visitMethodInsn(Opcodes.INVOKESTATIC, className, fieldInfo.getFactoryMethodName(), fieldInfo.getFactoryMethodDesc());
+                mv.visitFieldInsn(Opcodes.PUTFIELD, className, fieldInfo.getFieldName(), fieldInfo.getFieldDesc());
+            }
+            mv.visitInsn(Opcodes.RETURN);
+            Label l1 = new Label();
+            mv.visitLabel(l1);
+            mv.visitLocalVariable("this", "L" + className + ";", null, l0, l1, 0);
+            mv.visitMaxs(2, 1);
+            mv.visitEnd();
         }
         super.visitEnd();
     }

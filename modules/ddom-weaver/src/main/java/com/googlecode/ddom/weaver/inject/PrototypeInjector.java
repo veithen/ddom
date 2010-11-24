@@ -15,7 +15,6 @@
  */
 package com.googlecode.ddom.weaver.inject;
 
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -33,20 +32,13 @@ public class PrototypeInjector implements Injector {
         this.className = Util.classNameToInternalName(className);
     }
 
-    public void generateInjectorMethod(String owner, String fieldName, String fieldDesc, MethodVisitor mv) {
+    public void generateFactoryMethodCode(MethodVisitor mv) {
         mv.visitCode();
-        Label l0 = new Label();
-        mv.visitLabel(l0);
-        mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitTypeInsn(Opcodes.NEW, className);
         mv.visitInsn(Opcodes.DUP);
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, className, "<init>", "()V");
-        mv.visitFieldInsn(Opcodes.PUTFIELD, owner, fieldName, fieldDesc);
-        mv.visitInsn(Opcodes.RETURN);
-        Label l1 = new Label();
-        mv.visitLabel(l1);
-        mv.visitLocalVariable("this", "L" + owner + ";", null, l0, l1, 0);
-        mv.visitMaxs(3, 1);
+        mv.visitInsn(Opcodes.ARETURN);
+        mv.visitMaxs(2, 0);
         mv.visitEnd();
     }
 }

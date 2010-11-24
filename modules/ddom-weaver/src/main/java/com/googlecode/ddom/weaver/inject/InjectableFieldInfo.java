@@ -34,8 +34,12 @@ class InjectableFieldInfo {
         return fieldName;
     }
     
-    String getInjectorMethodName() {
-        return "inject$$" + fieldName;
+    String getFactoryMethodName() {
+        return fieldName + "$$factory";
+    }
+    
+    String getFactoryMethodDesc() {
+        return "()" + fieldDesc;
     }
     
     Injector getInjector() {
