@@ -159,6 +159,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
         }
     }
     
+    // TODO: rename this
     public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException, ModelWeaverException {
         resolveWeavableClasses();
         for (ReactorPlugin plugin : plugins) {
