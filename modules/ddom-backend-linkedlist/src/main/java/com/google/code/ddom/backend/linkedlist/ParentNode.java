@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.ExtensionFactoryLocator;
+import com.google.code.ddom.backend.Inject;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
@@ -43,10 +44,14 @@ import com.google.code.ddom.core.HierarchyException;
 import com.google.code.ddom.core.NodeMigrationException;
 import com.google.code.ddom.core.NodeNotFoundException;
 import com.google.code.ddom.core.WrongDocumentException;
+import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.FragmentSource;
 
 public abstract class ParentNode extends Node implements LLParentNode {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
+    
+    @Inject
+    private static ModelExtension modelExtension;
     
     /**
      * The content of this node. This is a {@link CoreChildNode} if the node is expanded, a
@@ -341,15 +346,10 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return child;
     }
     
-    public final CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) {
-        // TODO
-        CoreNSAwareElement element = coreGetNodeFactory().createElement(coreGetOwnerDocument(true), namespaceURI, localName, prefix);
-        try {
-            coreAppendChild(element);
-        } catch (CoreModelException ex) {
-            throw new RuntimeException(ex);
-        }
-        return element;
+    public final CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException {
+        NSAwareElement child = nsAwareElementFactory.create(modelExtension == null ? null : modelExtension.mapElement(namespaceURI, localName), null, namespaceURI, localName, prefix, true);
+        appendNewlyCreatedChild(child);
+        return child;
     }
     
     public final CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException {
