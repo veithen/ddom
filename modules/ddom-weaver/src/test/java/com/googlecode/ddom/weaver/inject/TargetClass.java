@@ -19,9 +19,16 @@ import com.google.code.ddom.backend.Inject;
 
 public class TargetClass implements TargetInterface {
     @Inject
-    private InjectedInterface injected;
+    private InjectedInterface injectedInstanceField;
+    
+    @Inject
+    private static InjectedInterface injectedClassField;
 
-    public InjectedInterface getInjected() {
-        return injected;
+    public InjectedInterface getInjectedInstanceField() {
+        return injectedInstanceField;
+    }
+    
+    public InjectedInterface getInjectedClassField() {
+        return injectedClassField;
     }
 }

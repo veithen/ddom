@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 import com.googlecode.ddom.weaver.asm.AbstractClassVisitor;
@@ -40,7 +41,7 @@ class InjectionInfoBuilder extends AbstractClassVisitor implements WeavableClass
     }
 
     @Override
-    public FieldVisitor visitField(int access, final String fieldName, final String fieldDesc, String signature, Object value) {
+    public FieldVisitor visitField(final int access, final String fieldName, final String fieldDesc, String signature, Object value) {
         return new AbstractFieldVisitor() {
             public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
                 if (desc.equals("Lcom/google/code/ddom/backend/Inject;")) {
@@ -54,7 +55,7 @@ class InjectionInfoBuilder extends AbstractClassVisitor implements WeavableClass
                         if (fieldInfos == null) {
                             fieldInfos = new ArrayList<InjectableFieldInfo>();
                         }
-                        fieldInfos.add(new InjectableFieldInfo(fieldName, fieldDesc, injector));
+                        fieldInfos.add(new InjectableFieldInfo((access & Opcodes.ACC_STATIC) != 0, fieldName, fieldDesc, injector));
                     }
                 }
                 return null;

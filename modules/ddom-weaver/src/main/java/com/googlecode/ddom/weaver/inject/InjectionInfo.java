@@ -18,13 +18,34 @@ package com.googlecode.ddom.weaver.inject;
 import java.util.List;
 
 class InjectionInfo {
-    private final List<InjectableFieldInfo> fieldBindings;
+    private final List<InjectableFieldInfo> injectableFields;
+    private final boolean hasInjectableInstanceFields;
+    private final boolean hasInjectableClassFields;
 
-    InjectionInfo(List<InjectableFieldInfo> fieldBindings) {
-        this.fieldBindings = fieldBindings;
+    InjectionInfo(List<InjectableFieldInfo> injectableFields) {
+        this.injectableFields = injectableFields;
+        boolean hasInjectableInstanceFields = false;
+        boolean hasInjectableClassFields = false;
+        for (InjectableFieldInfo injectableField : injectableFields) {
+            if (injectableField.isStatic()) {
+                hasInjectableClassFields = true;
+            } else {
+                hasInjectableInstanceFields = true;
+            }
+        }
+        this.hasInjectableInstanceFields = hasInjectableInstanceFields;
+        this.hasInjectableClassFields = hasInjectableClassFields;
+    }
+
+    boolean hasInjectableInstanceFields() {
+        return hasInjectableInstanceFields;
+    }
+
+    boolean hasInjectableClassFields() {
+        return hasInjectableClassFields;
     }
 
     List<InjectableFieldInfo> getInjectableFields() {
-        return fieldBindings;
+        return injectableFields;
     }
 }

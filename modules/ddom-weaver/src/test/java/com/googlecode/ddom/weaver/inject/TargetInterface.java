@@ -16,5 +16,6 @@
 package com.googlecode.ddom.weaver.inject;
 
 public interface TargetInterface {
-    InjectedInterface getInjected();
+    InjectedInterface getInjectedInstanceField();
+    InjectedInterface getInjectedClassField();
 }

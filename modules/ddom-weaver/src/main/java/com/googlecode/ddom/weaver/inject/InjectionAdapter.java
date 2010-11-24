@@ -23,11 +23,13 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import com.googlecode.ddom.weaver.mixin.ConstructorEnhancer;
+import com.googlecode.ddom.weaver.asm.ConstructorEnhancer;
+import com.googlecode.ddom.weaver.asm.MethodEnhancer;
 
 class InjectionAdapter extends ClassAdapter {
     private final InjectionInfo injectionInfo;
     private String className;
+    private boolean hasClassInitializer;
     
     public InjectionAdapter(ClassVisitor cv, InjectionInfo injectionInfo) {
         super(cv);
@@ -43,8 +45,16 @@ class InjectionAdapter extends ClassAdapter {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        if (mv != null && name.equals("<init>")) {
-            mv = new ConstructorEnhancer(mv, className, Arrays.asList("inject$$instance"));
+        boolean isClinit = name.equals("<clinit>");
+        if (mv != null) {
+            if (name.equals("<init>") && injectionInfo.hasInjectableInstanceFields()) {
+                mv = new ConstructorEnhancer(mv, className, Arrays.asList("inject$$instance"));
+            } else if (isClinit && injectionInfo.hasInjectableClassFields()) {
+                mv = new MethodEnhancer(mv, className, Arrays.asList("inject$$class"), true);
+            }
+        }
+        if (isClinit) {
+            hasClassInitializer = true;
         }
         return mv;
     }
@@ -57,22 +67,41 @@ class InjectionAdapter extends ClassAdapter {
                 fieldInfo.getInjector().generateFactoryMethodCode(mv);
             }
         }
-        MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PRIVATE, "inject$$instance", "()V", null, new String[0]);
-        if (mv != null) {
-            mv.visitCode();
-            Label l0 = new Label();
-            mv.visitLabel(l0);
-            for (InjectableFieldInfo fieldInfo : injectionInfo.getInjectableFields()) {
-                mv.visitVarInsn(Opcodes.ALOAD, 0);
-                mv.visitMethodInsn(Opcodes.INVOKESTATIC, className, fieldInfo.getFactoryMethodName(), fieldInfo.getFactoryMethodDesc());
-                mv.visitFieldInsn(Opcodes.PUTFIELD, className, fieldInfo.getFieldName(), fieldInfo.getFieldDesc());
+        if (injectionInfo.hasInjectableInstanceFields()) {
+            MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PRIVATE, "inject$$instance", "()V", null, new String[0]);
+            if (mv != null) {
+                mv.visitCode();
+                Label l0 = new Label();
+                mv.visitLabel(l0);
+                for (InjectableFieldInfo fieldInfo : injectionInfo.getInjectableFields()) {
+                    if (!fieldInfo.isStatic()) {
+                        mv.visitVarInsn(Opcodes.ALOAD, 0);
+                        mv.visitMethodInsn(Opcodes.INVOKESTATIC, className, fieldInfo.getFactoryMethodName(), fieldInfo.getFactoryMethodDesc());
+                        mv.visitFieldInsn(Opcodes.PUTFIELD, className, fieldInfo.getFieldName(), fieldInfo.getFieldDesc());
+                    }
+                }
+                mv.visitInsn(Opcodes.RETURN);
+                Label l1 = new Label();
+                mv.visitLabel(l1);
+                mv.visitLocalVariable("this", "L" + className + ";", null, l0, l1, 0);
+                mv.visitMaxs(2, 1);
+                mv.visitEnd();
             }
-            mv.visitInsn(Opcodes.RETURN);
-            Label l1 = new Label();
-            mv.visitLabel(l1);
-            mv.visitLocalVariable("this", "L" + className + ";", null, l0, l1, 0);
-            mv.visitMaxs(2, 1);
-            mv.visitEnd();
+        }
+        if (injectionInfo.hasInjectableClassFields()) {
+            MethodVisitor mv = cv.visitMethod(Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC, hasClassInitializer ? "inject$$class" : "<clinit>", "()V", null, new String[0]);
+            if (mv != null) {
+                mv.visitCode();
+                for (InjectableFieldInfo fieldInfo : injectionInfo.getInjectableFields()) {
+                    if (fieldInfo.isStatic()) {
+                        mv.visitMethodInsn(Opcodes.INVOKESTATIC, className, fieldInfo.getFactoryMethodName(), fieldInfo.getFactoryMethodDesc());
+                        mv.visitFieldInsn(Opcodes.PUTSTATIC, className, fieldInfo.getFieldName(), fieldInfo.getFieldDesc());
+                    }
+                }
+                mv.visitInsn(Opcodes.RETURN);
+                mv.visitMaxs(1, 0);
+                mv.visitEnd();
+            }
         }
         super.visitEnd();
     }

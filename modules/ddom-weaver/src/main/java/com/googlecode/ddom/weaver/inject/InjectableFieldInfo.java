@@ -16,14 +16,20 @@
 package com.googlecode.ddom.weaver.inject;
 
 class InjectableFieldInfo {
+    private final boolean isStatic;
     private final String fieldName;
     private final String fieldDesc;
     private final Injector injector;
     
-    InjectableFieldInfo(String fieldName, String fieldDesc, Injector injector) {
+    InjectableFieldInfo(boolean isStatic, String fieldName, String fieldDesc, Injector injector) {
+        this.isStatic = isStatic;
         this.fieldName = fieldName;
         this.fieldDesc = fieldDesc;
         this.injector = injector;
+    }
+
+    boolean isStatic() {
+        return isStatic;
     }
 
     String getFieldDesc() {

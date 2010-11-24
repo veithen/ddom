@@ -13,41 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.weaver.mixin;
+package com.googlecode.ddom.weaver.asm;
 
 import java.util.List;
 
 import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
- * Method adapter that inserts additional method calls into a constructor. All methods must be
- * private, have no arguments and return void. The method calls are inserted right after the call to
- * the constructor of the superclass.
+ * Method adapter that inserts additional method calls at the beginning of a method. All methods
+ * must be private, have no arguments and return void.
  * 
  * @author Andreas Veithen
  */
-public class ConstructorEnhancer extends MethodAdapter {
+public class MethodEnhancer extends MethodAdapter {
     private final String className;
     private final List<String> methodNames;
+    private final boolean isStatic;
     private boolean inlined;
     
-    public ConstructorEnhancer(MethodVisitor mv, String className, List<String> methodNames) {
+    public MethodEnhancer(MethodVisitor mv, String className, List<String> methodNames, boolean isStatic) {
         super(mv);
         this.className = className;
         this.methodNames = methodNames;
+        this.isStatic = isStatic;
     }
-    
-    @Override
-    public void visitMethodInsn(int opcode, String owner, String name, String desc) {
-        super.visitMethodInsn(opcode, owner, name, desc);
-        if (!inlined && opcode == Opcodes.INVOKESPECIAL) {
-            for (String methodName : methodNames) {
-                super.visitVarInsn(Opcodes.ALOAD, 0);
-                super.visitMethodInsn(Opcodes.INVOKESPECIAL, className, methodName, "()V");
-            }
+
+    private void injectIfNotInlined() {
+        if (!inlined) {
+            // TODO
             inlined = true;
         }
+    }
+
+    // TODO: we need to intercept other methods
+    @Override
+    public void visitInsn(int opcode) {
+        injectIfNotInlined();
+        super.visitInsn(opcode);
     }
 }

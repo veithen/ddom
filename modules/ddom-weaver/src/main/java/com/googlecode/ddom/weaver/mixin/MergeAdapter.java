@@ -35,6 +35,7 @@ import org.objectweb.asm.commons.SimpleRemapper;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.googlecode.ddom.weaver.asm.ConstructorEnhancer;
 import com.googlecode.ddom.weaver.asm.ErrorHandler;
 import com.googlecode.ddom.weaver.jsr45.SourceInfo;
 import com.googlecode.ddom.weaver.jsr45.SourceMapper;

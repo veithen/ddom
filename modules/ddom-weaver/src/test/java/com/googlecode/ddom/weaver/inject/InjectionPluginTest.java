@@ -36,9 +36,18 @@ public class InjectionPluginTest {
         reactor.addPlugin(new JSR45Plugin());
         reactor.loadWeavableClass(new ClassRef(TargetClass.class));
         reactor.generateModel(classLoader);
-        TargetInterface target = (TargetInterface)classLoader.loadClass(TargetClass.class.getName()).newInstance();
-        InjectedInterface injected = target.getInjected();
-        Assert.assertNotNull(injected);
-        Assert.assertEquals(InjectedClass.class, injected.getClass());
+        Class<? extends TargetInterface> targetClass = classLoader.loadClass(TargetClass.class.getName()).asSubclass(TargetInterface.class);
+        TargetInterface target1 = targetClass.newInstance();
+        TargetInterface target2 = targetClass.newInstance();
+        InjectedInterface injectedInstanceField1 = target1.getInjectedInstanceField();
+        InjectedInterface injectedInstanceField2 = target2.getInjectedInstanceField();
+        InjectedInterface injectedClassField1 = target1.getInjectedClassField();
+        InjectedInterface injectedClassField2 = target2.getInjectedClassField();
+        Assert.assertNotNull(injectedInstanceField1);
+        Assert.assertEquals(InjectedClass.class, injectedInstanceField1.getClass());
+        Assert.assertNotNull(injectedClassField1);
+        Assert.assertEquals(InjectedClass.class, injectedClassField1.getClass());
+        Assert.assertNotSame(injectedInstanceField1, injectedInstanceField2);
+        Assert.assertSame(injectedClassField1, injectedClassField2);
     }
 }
