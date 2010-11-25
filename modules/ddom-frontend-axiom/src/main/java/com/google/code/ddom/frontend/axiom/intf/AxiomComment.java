@@ -19,6 +19,6 @@ import org.apache.axiom.om.OMComment;
 
 import com.google.code.ddom.core.CoreComment;
 
-public interface AxiomComment extends CoreComment, OMComment {
+public interface AxiomComment extends CoreComment, OMComment, AxiomLeafNode {
 
 }

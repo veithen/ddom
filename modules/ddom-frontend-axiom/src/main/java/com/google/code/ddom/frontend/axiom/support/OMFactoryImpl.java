@@ -53,12 +53,16 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMAttribute createOMAttribute(String localName, OMNamespace ns, String value) {
-        return (AxiomAttribute)nodeFactory.createAttribute(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns), value, "CDATA");
+        AxiomAttribute attr = (AxiomAttribute)nodeFactory.createAttribute(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns), value, "CDATA");
+        attr.setOMFactory(this);
+        return attr;
     }
 
     public final OMComment createOMComment(OMContainer parent, String content) {
         try {
-            return (AxiomComment)((AxiomContainer)parent).coreAppendComment(content);
+            AxiomComment comment = (AxiomComment)((AxiomContainer)parent).coreAppendComment(content);
+            comment.setOMFactory(this);
+            return comment;
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -70,7 +74,10 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMDocument createOMDocument() {
-        return (AxiomDocument)nodeFactory.createDocument();
+        AxiomDocument document = (AxiomDocument)nodeFactory.createDocument();
+        // TODO
+//        document.setOMFactory(this);
+        return document;
     }
 
     public final OMElement createOMElement(QName qname) {
@@ -83,6 +90,7 @@ public class OMFactoryImpl implements OMFactory {
         if (prefix != null) {
             element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
         }
+        element.setOMFactory(this);
         return element;
     }
 
@@ -92,7 +100,9 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns) {
-        return (OMElement)nodeFactory.createElement(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns));
+        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns));
+        element.setOMFactory(this);
+        return element;
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent) {
@@ -124,19 +134,25 @@ public class OMFactoryImpl implements OMFactory {
 
     public final OMProcessingInstruction createOMProcessingInstruction(OMContainer parent, String piTarget, String piData) {
         try {
-            return (AxiomProcessingInstruction)((AxiomContainer)parent).coreAppendProcessingInstruction(piTarget, piData);
+            AxiomProcessingInstruction pi = (AxiomProcessingInstruction)((AxiomContainer)parent).coreAppendProcessingInstruction(piTarget, piData);
+            pi.setOMFactory(this);
+            return pi;
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
     }
 
-    public final OMText createOMText(String s) {
-        return (AxiomText)nodeFactory.createText(null, s);
+    public final OMText createOMText(String data) {
+        AxiomText text = (AxiomText)nodeFactory.createText(null, data);
+        text.setOMFactory(this);
+        return text;
     }
 
-    public final OMText createOMText(OMContainer parent, String text) {
+    public final OMText createOMText(OMContainer parent, String data) {
         try {
-            return (AxiomText)((AxiomContainer)parent).coreAppendText(text);
+            AxiomText text = (AxiomText)((AxiomContainer)parent).coreAppendText(data);
+            text.setOMFactory(this);
+            return text;
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

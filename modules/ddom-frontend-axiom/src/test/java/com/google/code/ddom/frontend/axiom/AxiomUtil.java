@@ -16,8 +16,10 @@
 package com.google.code.ddom.frontend.axiom;
 
 import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMFactory;
 
 public interface AxiomUtil {
+    OMFactory getOMFactory();
     OMDocument createDocument();
     OMDocument parse(String xml);
 }

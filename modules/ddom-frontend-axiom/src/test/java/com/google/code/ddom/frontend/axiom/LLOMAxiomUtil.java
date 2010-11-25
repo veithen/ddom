@@ -33,6 +33,10 @@ public class LLOMAxiomUtil implements AxiomUtil {
 
     private LLOMAxiomUtil() {}
     
+    public OMFactory getOMFactory() {
+        return factory;
+    }
+    
     public OMDocument createDocument() {
         return factory.createOMDocument();
     }

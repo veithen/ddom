@@ -106,7 +106,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
 
     public final LLDocument internalGetOwnerDocument() {
-        if (owner instanceof Document) {
+        if (owner == null) {
+            return null;
+        } else if (owner instanceof Document) {
             return (Document)owner;
         } else {
             return ((Element)owner).internalGetOwnerDocument();

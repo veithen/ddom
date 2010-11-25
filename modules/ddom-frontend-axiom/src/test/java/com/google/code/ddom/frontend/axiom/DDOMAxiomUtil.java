@@ -18,22 +18,31 @@ package com.google.code.ddom.frontend.axiom;
 import java.io.StringReader;
 
 import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.OMFactory;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.Options;
+import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
 
 public class DDOMAxiomUtil implements AxiomUtil {
     public static final DDOMAxiomUtil INSTANCE = new DDOMAxiomUtil();
     
-    private final DocumentHelper factory = DocumentHelperFactory.INSTANCE.newInstance();
+    private final ModelDefinition modelDefinition = ModelDefinitionBuilder.buildModelDefinition("axiom");
+    private final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
 
     private DDOMAxiomUtil() {}
     
+    public OMFactory getOMFactory() {
+        return documentHelper.getAPIObject(modelDefinition, OMFactory.class);
+    }
+    
     public OMDocument createDocument() {
-        return (OMDocument)factory.newDocument("axiom");
+        return (OMDocument)documentHelper.newDocument(modelDefinition);
     }
 
     public OMDocument parse(String xml) {
-        return (OMDocument)factory.parse("axiom", new StringReader(xml));
+        return (OMDocument)documentHelper.parse(modelDefinition, new StringReader(xml), new Options());
     }
 }

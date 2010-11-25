@@ -34,7 +34,7 @@ public class AttributeTest {
     
     @Validated @Test
     public void testGetQNameWithoutNamespace() {
-        OMAttribute attr = axiomUtil.createDocument().getOMFactory().createOMAttribute("name", null, "value");
+        OMAttribute attr = axiomUtil.getOMFactory().createOMAttribute("name", null, "value");
         QName qname = attr.getQName();
         Assert.assertEquals("name", qname.getLocalPart());
         Assert.assertEquals("", qname.getNamespaceURI());

@@ -18,21 +18,15 @@ package com.google.code.ddom.frontend.axiom.mixin;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.apache.axiom.om.OMFactory;
-
+import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
-@Mixin(CoreNode.class)
+@Mixin(CoreChildNode.class)
 public abstract class NodeSupport implements AxiomNode {
-    public OMFactory getOMFactory() {
-        return (OMFactory)coreGetOwnerDocument(true);
-    }
-
     public void close(boolean build) {
         CoreDocument document = coreGetOwnerDocument(true);
         if (build) {

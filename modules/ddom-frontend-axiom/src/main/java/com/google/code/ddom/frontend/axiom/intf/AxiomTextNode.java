@@ -19,6 +19,6 @@ import org.apache.axiom.om.OMText;
 
 import com.google.code.ddom.core.CoreTextNode;
 
-public interface AxiomTextNode extends CoreTextNode, OMText {
+public interface AxiomTextNode extends CoreTextNode, OMText, AxiomLeafNode {
 
 }
