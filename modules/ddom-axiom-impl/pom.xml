@@ -30,6 +30,11 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-impl</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
@@ -38,6 +43,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>ddom-frontend-axiom-soap</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

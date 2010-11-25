@@ -19,26 +19,31 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.soap.SOAPFactory;
 
+import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 
 public class OMMetaFactoryImpl implements OMMetaFactory {
-    private final OMMetaFactory delegate;
+    private final OMFactory omFactory;
     
     public OMMetaFactoryImpl() {
-        delegate = DocumentHelperFactory.INSTANCE.getDefaultInstance().getAPIObject(
-                ModelDefinitionBuilder.buildModelDefinition("axiom-soap"), OMMetaFactory.class);
+        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(OMMetaFactoryImpl.class.getClassLoader());
+        ModelDefinition modelDefinition = ModelDefinitionBuilder.buildModelDefinition("axiom-soap");
+        omFactory = documentHelper.getAPIObject(modelDefinition, OMFactory.class);
     }
     
     public OMFactory getOMFactory() {
-        return delegate.getOMFactory();
+        return omFactory;
     }
 
     public SOAPFactory getSOAP11Factory() {
-        return delegate.getSOAP11Factory();
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public SOAPFactory getSOAP12Factory() {
-        return delegate.getSOAP12Factory();
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }
