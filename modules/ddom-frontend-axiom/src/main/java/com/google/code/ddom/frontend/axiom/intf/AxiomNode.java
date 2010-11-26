@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
  */
 package com.google.code.ddom.frontend.axiom.intf;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.apache.axiom.om.OMSerializable;
 
-import com.google.code.ddom.core.CoreNode;
-
-public interface AxiomNode extends CoreNode, OMSerializable, AxiomInformationItem {
-
+public interface AxiomNode extends OMSerializable, AxiomInformationItem {
+    void internalSerialize(XMLStreamWriter writer, boolean cache) throws XMLStreamException;
 }

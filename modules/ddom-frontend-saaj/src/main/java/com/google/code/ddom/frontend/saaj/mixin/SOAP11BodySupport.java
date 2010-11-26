@@ -18,11 +18,12 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.ext.SOAP11BodyExtension;
 import com.google.code.ddom.frontend.saaj.ext.SOAP11FaultExtension;
+import com.google.code.ddom.frontend.saaj.ext.SOAPFaultExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 
 @Mixin(SOAP11BodyExtension.class)
 public abstract class SOAP11BodySupport implements SAAJSOAPBody {
-    public final Class<?> getSOAPFaultExtension() {
+    public final Class<? extends SOAPFaultExtension> getSOAPFaultExtension() {
         return SOAP11FaultExtension.class;
     }
 }

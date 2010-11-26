@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,6 @@ import org.apache.axiom.om.OMContainer;
 
 import com.google.code.ddom.core.CoreParentNode;
 
-public interface AxiomContainer extends CoreParentNode, OMContainer {
+public interface AxiomContainer extends CoreParentNode, OMContainer, AxiomNode {
 
 }

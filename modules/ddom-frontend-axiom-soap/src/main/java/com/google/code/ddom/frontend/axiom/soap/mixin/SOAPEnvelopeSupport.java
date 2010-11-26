@@ -22,20 +22,27 @@ import org.apache.axiom.soap.SOAPBody;
 import org.apache.axiom.soap.SOAPHeader;
 import org.apache.axiom.soap.SOAPVersion;
 
+import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.SequenceOperation;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAPEnvelopeExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(SOAPEnvelopeExtension.class)
 public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
     public SOAPHeader getHeader() throws OMException {
+        // TODO
         OMElement firstElement = getFirstElement();
         return firstElement instanceof SOAPHeader ? (SOAPHeader)firstElement : null;
     }
 
-    public SOAPBody getBody() throws OMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPBody getBody() throws OMException {
+        try {
+            return (SOAPBody)coreQuerySequence(getSOAPVersionEx().getEnvelopeSequence(), 1, SequenceOperation.GET);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public String getSOAPBodyFirstElementLocalName() {
@@ -48,9 +55,8 @@ public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPVersion getVersion() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPVersion getVersion() {
+        return getSOAPVersionEx().getSOAPVersion();
     }
 
     public boolean hasFault() {

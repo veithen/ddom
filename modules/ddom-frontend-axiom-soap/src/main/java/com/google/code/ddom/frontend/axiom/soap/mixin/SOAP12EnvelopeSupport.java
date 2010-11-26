@@ -15,16 +15,14 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.mixin;
 
-import org.apache.axiom.soap.SOAPVersion;
-
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12EnvelopeExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
+import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
 @Mixin(SOAP12EnvelopeExtension.class)
 public abstract class SOAP12EnvelopeSupport implements AxiomSOAPEnvelope {
-    public SOAPVersion getVersion() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPVersionEx getSOAPVersionEx() {
+        return SOAPVersionEx.SOAP12;
     }
 }

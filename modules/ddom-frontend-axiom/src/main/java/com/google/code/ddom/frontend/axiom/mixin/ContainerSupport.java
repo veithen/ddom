@@ -25,15 +25,17 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
+import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 
 import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
-@Mixin(CoreParentNode.class)
+@Mixin({CoreDocument.class, CoreNSAwareElement.class})
 public abstract class ContainerSupport implements AxiomContainer {
     public OMNode getFirstOMChild() {
         try {
@@ -103,11 +105,15 @@ public abstract class ContainerSupport implements AxiomContainer {
         throw new UnsupportedOperationException();
     }
 
-    public void serialize(OutputStream output, OMOutputFormat format) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void serialize(OutputStream output, OMOutputFormat format) throws XMLStreamException {
+        MTOMXMLStreamWriter writer = new MTOMXMLStreamWriter(output, format);
+        try {
+            internalSerialize(writer, true);
+        } finally {
+            writer.close();
+        }
     }
-
+    
     public void serialize(Writer writer, OMOutputFormat format) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
@@ -125,7 +131,7 @@ public abstract class ContainerSupport implements AxiomContainer {
 
     public void serializeAndConsume(OutputStream output, OMOutputFormat format) throws XMLStreamException {
         // TODO
-        throw new UnsupportedOperationException();
+        serialize(output, format);
     }
 
     public void serializeAndConsume(Writer writer, OMOutputFormat format) throws XMLStreamException {

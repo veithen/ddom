@@ -46,7 +46,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
 
 public class OMFactoryImpl implements OMFactory {
-    private final NodeFactory nodeFactory;
+    protected final NodeFactory nodeFactory;
     
     public OMFactoryImpl(NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
@@ -100,7 +100,7 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns) {
-        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getNamespaceURI(ns));
+        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
         element.setOMFactory(this);
         return element;
     }
@@ -221,7 +221,7 @@ public class OMFactoryImpl implements OMFactory {
         throw new UnsupportedOperationException();
     }
 
-    public OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent, OMXMLParserWrapper builder) {
+    public final OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent, OMXMLParserWrapper builder) {
         throw new UnsupportedOperationException();
     }
 }

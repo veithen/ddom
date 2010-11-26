@@ -20,9 +20,13 @@ import java.util.Map;
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.Module;
+import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
+import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.axiom.AxiomFrontend;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPNodeFactory;
+import com.google.code.ddom.frontend.axiom.soap.support.APIObjectFactoryImpl;
 import com.google.code.ddom.spi.Provider;
 
 @Provider(name="axiom-soap")
@@ -43,5 +47,10 @@ public class AxiomSOAPFrontend extends AxiomFrontend {
     @Override
     public ModelExtension getModelExtension() {
         return new AxiomSOAPModelExtension();
+    }
+
+    @Override
+    public APIObjectFactory getAPIObjectFactory(NodeFactory nodeFactory) {
+        return new APIObjectFactoryImpl((AxiomSOAPNodeFactory)nodeFactory);
     }
 }

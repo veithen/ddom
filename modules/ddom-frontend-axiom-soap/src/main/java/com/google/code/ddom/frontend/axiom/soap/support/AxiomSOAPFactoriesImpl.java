@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.soap.mixin;
+package com.google.code.ddom.frontend.axiom.soap.support;
 
 import org.apache.axiom.soap.SOAPFactory;
 
-import com.google.code.ddom.core.NodeFactory;
-import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.axiom.soap.AxiomSOAPFactories;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPNodeFactory;
-import com.google.code.ddom.frontend.axiom.soap.support.SOAPFactoryImpl;
-import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
-@Mixin(NodeFactory.class)
-public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {
-    private final SOAPFactory soap11Factory = new SOAPFactoryImpl(this, SOAPVersionEx.SOAP11);
-    private final SOAPFactory soap12Factory = new SOAPFactoryImpl(this, SOAPVersionEx.SOAP12);
+// TODO: there must be a smarter way to expose the two SOAPFactory instances
+public class AxiomSOAPFactoriesImpl implements AxiomSOAPFactories {
+    private final AxiomSOAPNodeFactory nodeFactory;
     
-    public final SOAPFactory getSOAP11Factory() {
-        return soap11Factory;
+    public AxiomSOAPFactoriesImpl(AxiomSOAPNodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
     }
 
-    public final SOAPFactory getSOAP12Factory() {
-        return soap12Factory;
+    public SOAPFactory getSOAP11Factory() {
+        return nodeFactory.getSOAP11Factory();
+    }
+
+    public SOAPFactory getSOAP12Factory() {
+        return nodeFactory.getSOAP12Factory();
     }
 }

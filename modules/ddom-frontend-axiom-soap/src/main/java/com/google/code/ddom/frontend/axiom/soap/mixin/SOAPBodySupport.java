@@ -17,14 +17,14 @@ package com.google.code.ddom.frontend.axiom.soap.mixin;
 
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.soap.SOAPBody;
 import org.apache.axiom.soap.SOAPFault;
 
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAPBodyExtension;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 
 @Mixin(SOAPBodyExtension.class)
-public abstract class SOAPBodySupport implements SOAPBody {
+public abstract class SOAPBodySupport implements AxiomSOAPBody {
     public SOAPFault addFault(Exception e) throws OMException {
         // TODO
         throw new UnsupportedOperationException();

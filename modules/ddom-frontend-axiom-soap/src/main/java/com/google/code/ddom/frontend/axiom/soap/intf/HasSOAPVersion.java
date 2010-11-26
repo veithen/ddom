@@ -15,10 +15,8 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.intf;
 
-import org.apache.axiom.soap.SOAPEnvelope;
+import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
-import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
-
-public interface AxiomSOAPEnvelope extends AxiomElement, SOAPEnvelope, HasSOAPVersion {
-
+public interface HasSOAPVersion {
+    SOAPVersionEx getSOAPVersionEx();
 }

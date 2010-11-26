@@ -20,13 +20,17 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
+import org.apache.axiom.om.impl.OMNodeEx;
+import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
+import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.DeferredParsingException;
@@ -35,6 +39,7 @@ import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
@@ -204,5 +209,26 @@ public abstract class ElementSupport implements AxiomElement {
     public String toStringWithConsume() throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final void internalSerialize(XMLStreamWriter writer, boolean cache) throws XMLStreamException {
+        if (cache) {
+            // TODO: we should use our own (optimized) code here
+            OMSerializerUtil.serializeStartpart(this, writer);
+            try {
+                // TODO: check first if the element is expanded; otherwise just serialize the content directly
+                CoreChildNode child = coreGetFirstChild();
+                while (child != null) {
+                    ((AxiomNode)child).internalSerialize(writer, cache);
+                    child = child.coreGetNextSibling();
+                }
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
+            OMSerializerUtil.serializeEndpart(writer);
+        } else {
+            // TODO
+            throw new UnsupportedOperationException();
+        }
     }
 }
