@@ -29,7 +29,8 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>ddom-tests-dom-axiom</module>
+        <!-- TODO -->
+        <!-- module>ddom-tests-dom-axiom</module -->
         <module>ddom-tests-jaxen</module>
         <module>ddom-tests-wss4j</module>
         <module>ddom-tests-xslt</module>
