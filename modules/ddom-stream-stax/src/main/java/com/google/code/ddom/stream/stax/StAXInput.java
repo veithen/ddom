@@ -21,12 +21,12 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.Symbols;
+import com.google.code.ddom.stream.spi.XmlHandler;
+import com.google.code.ddom.stream.spi.XmlInput;
 
-public class StAXInput implements Input {
+public class StAXInput extends XmlInput {
     private final XMLStreamReader reader;
     private final DTDInfo dtdInfo;
     private final boolean parserIsNamespaceAware;
@@ -48,26 +48,7 @@ public class StAXInput implements Input {
         return value == null || value.length() == 0 ? null : value;
     }
     
-    private void processNSUnawareElement(Output output) {
-        output.processElement(reader.getLocalName());
-        for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-            output.processAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
-        }
-        output.attributesCompleted();
-    }
-    
-    private void processNSAwareElement(Output output) {
-        output.processElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
-        for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-            output.processAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
-        }
-        for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
-            output.processNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)), emptyToNull(reader.getNamespaceURI(i)));
-        }
-        output.attributesCompleted();
-    }
-    
-    public boolean proceed(Output output) throws StreamException {
+    public boolean proceed() throws StreamException {
         if (callNext) {
             try {
                 reader.next();
@@ -77,43 +58,55 @@ public class StAXInput implements Input {
         } else {
             callNext = true;
         }
+        XmlHandler handler = getHandler();
         switch (reader.getEventType()) {
             case XMLStreamReader.START_DOCUMENT:
-                output.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
+                handler.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
                 return true;
             case XMLStreamReader.END_DOCUMENT:
-                output.nodeCompleted();
+                handler.nodeCompleted();
                 return false;
             case XMLStreamReader.DTD:
-                output.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
+                handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
                 return true;
             case XMLStreamReader.START_ELEMENT:
                 if (parserIsNamespaceAware) {
-                    processNSAwareElement(output);
+                    handler.processElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
+                    for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
+                        handler.processAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
+                    }
+                    for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
+                        handler.processNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)), emptyToNull(reader.getNamespaceURI(i)));
+                    }
+                    handler.attributesCompleted();
                 } else {
-                    processNSUnawareElement(output);
+                    handler.processElement(reader.getLocalName());
+                    for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
+                        handler.processAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
+                    }
+                    handler.attributesCompleted();
                 }
                 return true;
             case XMLStreamReader.END_ELEMENT:
-                output.nodeCompleted();
+                handler.nodeCompleted();
                 return true;
             case XMLStreamReader.PROCESSING_INSTRUCTION:
-                output.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
+                handler.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
                 return true;
             case XMLStreamReader.CHARACTERS:
             case XMLStreamReader.SPACE: // TODO: these should be distinct events
-                output.processText(reader.getText());
+                handler.processText(reader.getText());
                 return true;
             case XMLStreamReader.CDATA:
-                output.processCDATASection();
-                output.processText(reader.getText());
-                output.nodeCompleted();
+                handler.processCDATASection();
+                handler.processText(reader.getText());
+                handler.nodeCompleted();
                 return true;
             case XMLStreamReader.COMMENT:
-                output.processComment(reader.getText());
+                handler.processComment(reader.getText());
                 return true;
             case XMLStreamReader.ENTITY_REFERENCE:
-                output.processEntityReference(reader.getLocalName());
+                handler.processEntityReference(reader.getLocalName());
                 return true;
             default:
                 throw new StreamException("Unexpected StAX event: " + reader.getEventType());

@@ -21,7 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 /**
  * 
@@ -34,7 +34,7 @@ import com.google.code.ddom.stream.spi.Output;
  * @author Andreas Veithen
  */
 // TODO: what about ID attributes???
-public class DOMOutput implements Output {
+public class DOMOutput extends XmlOutput {
     private final Document document;
     private Node node;
     private boolean isCDATASection;
@@ -45,14 +45,14 @@ public class DOMOutput implements Output {
         node = document;
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         // TODO: process the remaining information
         if (xmlVersion != null) {
             document.setXmlVersion(xmlVersion);
         }
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId) {
+    protected void processDocumentType(String rootName, String publicId, String systemId) {
         node.appendChild(document.getImplementation().createDocumentType(rootName, publicId, systemId));
     }
 
@@ -60,27 +60,27 @@ public class DOMOutput implements Output {
         return prefix == null ? localName : prefix + ":" + localName;
     }
     
-    public void processElement(String tagName) {
+    protected void processElement(String tagName) {
         Element element = document.createElement(tagName);
         node.appendChild(element);
         node = element;
     }
 
-    public void processElement(String namespaceURI, String localName, String prefix) {
+    protected void processElement(String namespaceURI, String localName, String prefix) {
         Element element = document.createElementNS(namespaceURI, getQualifiedName(localName, prefix));
         node.appendChild(element);
         node = element;
     }
 
-    public void processAttribute(String name, String value, String type) {
+    protected void processAttribute(String name, String value, String type) {
         ((Element)node).setAttribute(name, value);
     }
 
-    public void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+    protected void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
         ((Element)node).setAttributeNS(namespaceURI, getQualifiedName(localName, prefix), value);
     }
 
-    public void processNamespaceDeclaration(String prefix, String namespaceURI) {
+    protected void processNamespaceDeclaration(String prefix, String namespaceURI) {
         ((Element)node).setAttributeNS(
                 XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
                 prefix == null ? XMLConstants.XMLNS_ATTRIBUTE
@@ -88,11 +88,11 @@ public class DOMOutput implements Output {
                 namespaceURI);
     }
 
-    public void attributesCompleted() {
+    protected void attributesCompleted() {
         // Nothing special to do here
     }
 
-    public void nodeCompleted() {
+    protected void nodeCompleted() {
         if (isCDATASection) {
             String data;
             if (cdataSectionContent == null) {
@@ -110,11 +110,11 @@ public class DOMOutput implements Output {
         }
     }
 
-    public void processCDATASection() {
+    protected void processCDATASection() {
         isCDATASection = true;
     }
 
-    public void processText(String data) {
+    protected void processText(String data) {
         if (isCDATASection) {
             if (cdataSectionContent == null) {
                 cdataSectionContent = data;
@@ -130,15 +130,15 @@ public class DOMOutput implements Output {
         }
     }
 
-    public void processComment(String data) {
+    protected void processComment(String data) {
         node.appendChild(document.createComment(data));
     }
 
-    public void processEntityReference(String name) {
+    protected void processEntityReference(String name) {
         node.appendChild(document.createEntityReference(name));
     }
 
-    public void processProcessingInstruction(String target, String data) {
+    protected void processProcessingInstruction(String target, String data) {
         node.appendChild(document.createProcessingInstruction(target, data));
     }
 }

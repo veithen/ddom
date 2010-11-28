@@ -16,10 +16,10 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.stream.spi.Input;
+import com.google.code.ddom.stream.spi.XmlInput;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
-    void internalCreateBuilder(Input input, LLParentNode target);
+    void internalCreateBuilder(XmlInput input, LLParentNode target);
     Builder internalGetBuilderFor(LLParentNode target);
     void internalMigrateBuilder(LLParentNode from, LLParentNode to);
 }

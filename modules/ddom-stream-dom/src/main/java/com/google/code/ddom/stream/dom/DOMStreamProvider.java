@@ -22,14 +22,14 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 @Provider(name="dom")
 public class DOMStreamProvider implements StreamProvider {
-    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public XmlInput getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         if (source instanceof Node) {
             return new DOMInput((Node)source);
         } else if (source instanceof DOMSource) {
@@ -39,7 +39,7 @@ public class DOMStreamProvider implements StreamProvider {
         }
     }
 
-    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
+    public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO: support DOMResult objects (and DocumentFragment and Element objects)
         if (destination instanceof Document) {
             return new DOMOutput((Document)destination);
@@ -48,7 +48,7 @@ public class DOMStreamProvider implements StreamProvider {
         }
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
+    public <T> T getSerializer(Class<T> serializerType, XmlOutput output, OptionsTracker options) {
         // DOM doesn't define any serializers
         return null;
     }

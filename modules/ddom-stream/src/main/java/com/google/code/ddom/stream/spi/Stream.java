@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,10 @@
  */
 package com.google.code.ddom.stream.spi;
 
-public class SimpleFragmentSource implements FragmentSource {
-    private final XmlInput input;
-
-    public SimpleFragmentSource(XmlInput input) {
-        this.input = input;
-    }
-
-    public XmlInput getProducer() {
-        return input;
-    }
-
-    public boolean isDestructive() {
-        return true;
+public class Stream {
+    private Stream() {}
+    
+    public static void connect(XmlInput input, XmlOutput output) {
+        input.handler.setDelegate(new XmlOutputHandler(output));
     }
 }

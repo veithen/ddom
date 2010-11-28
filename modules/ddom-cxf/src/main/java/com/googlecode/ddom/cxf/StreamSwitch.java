@@ -24,7 +24,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.cxf.staxutils.W3CDOMStreamReader;
 
-import com.google.code.ddom.stream.spi.Output;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.stax.StAXInput;
 
@@ -43,13 +42,13 @@ public class StreamSwitch extends StAXInput implements XMLStreamReader {
     }
 
     @Override
-    public boolean proceed(Output output) throws StreamException {
+    public boolean proceed() throws StreamException {
         if (readerAccessed && isOriginalReader) {
             throw new IllegalStateException("The original XMLStreamReader has already been accessed; " +
             		"it is no longer available to build the SOAP body");
         }
         inputAccessed = true;
-        return super.proceed(output);
+        return super.proceed();
     }
     
     private void accessReader() {

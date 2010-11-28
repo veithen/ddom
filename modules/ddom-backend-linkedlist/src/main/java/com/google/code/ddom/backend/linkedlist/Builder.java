@@ -21,15 +21,15 @@ import com.google.code.ddom.collections.Stack;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 // TODO: also allow for deferred building of attributes
-public class Builder implements Output {
+public class Builder extends XmlOutput {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
-    private final Input input;
+    private final XmlInput input; // TODO: not sure if we still need this
     private final ModelExtensionMapper modelExtensionMapper;
     private final Document document;
     private final Stack<LLParentNode> nodeStack = new ArrayStack<LLParentNode>();
@@ -40,7 +40,7 @@ public class Builder implements Output {
     private String pendingText; // Text that has not yet been added to the tree
     private boolean nodeAppended;
 
-    public Builder(Input input, ModelExtension modelExtension, Document document, LLParentNode target) {
+    public Builder(XmlInput input, ModelExtension modelExtension, Document document, LLParentNode target) {
         this.input = input;
         modelExtensionMapper = modelExtension.newMapper();
         this.document = document;
@@ -65,7 +65,7 @@ public class Builder implements Output {
             try {
                 nodeAppended = false; 
                 do {
-                    input.proceed(this);
+                    input.proceed();
                 } while (parent != null && !nodeAppended);
             } catch (StreamException ex) {
                 streamException = ex;
@@ -76,47 +76,47 @@ public class Builder implements Output {
         }
     }
 
-    public final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    protected final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         document.coreSetXmlVersion(xmlVersion);
         document.coreSetXmlEncoding(xmlEncoding);
         document.coreSetInputEncoding(inputEncoding);
         document.coreSetStandalone(standalone);
     }
 
-    public final void processDocumentType(String rootName, String publicId, String systemId) {
+    protected final void processDocumentType(String rootName, String publicId, String systemId) {
         appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId));
     }
     
-    public final void processElement(String tagName) {
+    protected final void processElement(String tagName) {
         appendNode(new NSUnawareElement(document, tagName, false));
     }
     
-    public final void processElement(String namespaceURI, String localName, String prefix) {
+    protected final void processElement(String namespaceURI, String localName, String prefix) {
         Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
         appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
     }
     
-    public final void processAttribute(String name, String value, String type) {
+    protected final void processAttribute(String name, String value, String type) {
         appendAttribute(new NSUnawareAttribute(document, name, value, type));
     }
 
-    public final void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+    protected final void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
         appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type));
     }
 
-    public final void processNamespaceDeclaration(String prefix, String namespaceURI) {
+    protected final void processNamespaceDeclaration(String prefix, String namespaceURI) {
         appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
     }
 
-    public final void attributesCompleted() {
+    protected final void attributesCompleted() {
         nodeAppended = true;
     }
 
-    public final void processProcessingInstruction(String target, String data) {
+    protected final void processProcessingInstruction(String target, String data) {
         appendNode(new ProcessingInstruction(document, target, data));
     }
     
-    public final void processText(String data) {
+    protected final void processText(String data) {
         if (lastSibling == null && pendingText == null) {
             pendingText = data;
         } else {
@@ -124,15 +124,15 @@ public class Builder implements Output {
         }
     }
     
-    public final void processComment(String data) {
+    protected final void processComment(String data) {
         appendNode(new Comment(document, data));
     }
     
-    public final void processCDATASection() {
+    protected final void processCDATASection() {
         appendNode(new CDATASection(document));
     }
     
-    public final void processEntityReference(String name) {
+    protected final void processEntityReference(String name) {
         appendNode(new EntityReference(document, name));
     }
     
@@ -197,7 +197,7 @@ public class Builder implements Output {
         lastAttribute = attr;
     }
     
-    public final void nodeCompleted() {
+    protected final void nodeCompleted() {
         if (pendingText != null) {
             refreshLastSibling();
             if (lastSibling == null) {

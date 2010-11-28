@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
-import com.google.code.ddom.stream.spi.Output;
+import com.google.code.ddom.stream.spi.XmlOutput;
 import com.google.code.ddom.stream.spi.buffer.Event.Type;
 
 /**
@@ -26,7 +26,7 @@ import com.google.code.ddom.stream.spi.buffer.Event.Type;
  * 
  * @author Andreas Veithen
  */
-public class EventBuffer implements Output {
+public class EventBuffer extends XmlOutput {
     private final Event[] buffer = new Event[16];
     private int currentIndex;
     private int nextIndex;
@@ -85,60 +85,60 @@ public class EventBuffer implements Output {
         }
     }
 
-    public void processElement(String tagName) {
+    protected void processElement(String tagName) {
         newEvent().init(Type.NS_UNAWARE_ELEMENT, tagName, null, null, null, null);
     }
 
-    public void processElement(String namespaceURI, String localName, String prefix) {
+    protected void processElement(String namespaceURI, String localName, String prefix) {
         newEvent().init(Type.NS_AWARE_ELEMENT, localName, namespaceURI, prefix, null, null);
     }
 
-    public void processAttribute(String name, String value, String type) {
+    protected void processAttribute(String name, String value, String type) {
         newEvent().init(Type.NS_UNAWARE_ATTRIBUTE, name, null, null, value, type);
     }
 
-    public void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+    protected void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
         newEvent().init(Type.NS_AWARE_ATTRIBUTE, localName, namespaceURI, prefix, value, type);
     }
 
-    public void processNamespaceDeclaration(String prefix, String namespaceURI) {
+    protected void processNamespaceDeclaration(String prefix, String namespaceURI) {
         newEvent().init(Type.NAMESPACE_DECLARATION, null, namespaceURI, prefix, null, null);
     }
 
-    public void attributesCompleted() {
+    protected void attributesCompleted() {
         newEvent().init(Type.ATTRIBUTES_COMPLETE, null, null, null, null, null);
     }
 
-    public void nodeCompleted() {
+    protected void nodeCompleted() {
         newEvent().init(Type.NODE_COMPLETE, null, null, null, null, null);
     }
 
-    public void processProcessingInstruction(String target, String data) {
+    protected void processProcessingInstruction(String target, String data) {
         newEvent().init(Type.PROCESSING_INSTRUCTION, target, null, null, data, null);
     }
 
-    public void processText(String data) {
+    protected void processText(String data) {
         newEvent().init(Type.CHARACTERS, null, null, null, data, null);
     }
 
-    public void processCDATASection() {
+    protected void processCDATASection() {
         newEvent().init(Type.CDATA, null, null, null, null, null);
     }
 
-    public void processEntityReference(String name) {
+    protected void processEntityReference(String name) {
         newEvent().init(Type.ENTITY_REFERENCE, name, null, null, null, null);
     }
 
-    public void processComment(String data) {
+    protected void processComment(String data) {
         newEvent().init(Type.COMMENT, null, null, null, data, null);
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId) {
+    protected void processDocumentType(String rootName, String publicId, String systemId) {
         // TODO Auto-generated method stub
         
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
+    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
             boolean standalone) {
         // TODO Auto-generated method stub
         

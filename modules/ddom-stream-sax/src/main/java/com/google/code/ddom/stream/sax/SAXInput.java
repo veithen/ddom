@@ -22,12 +22,11 @@ import javax.xml.transform.sax.SAXSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.Symbols;
+import com.google.code.ddom.stream.spi.XmlInput;
 
-public class SAXInput implements Input {
+public class SAXInput extends XmlInput {
     private final SAXSource source;
 
     public SAXInput(SAXSource source) {
@@ -39,9 +38,9 @@ public class SAXInput implements Input {
         return null;
     }
 
-    public boolean proceed(Output output) throws StreamException {
+    public boolean proceed() throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
-        OutputContentHandler handler = new OutputContentHandler(output);
+        ContentHandlerAdapter handler = new ContentHandlerAdapter(getHandler());
         xmlReader.setContentHandler(handler);
         try {
             xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", handler);

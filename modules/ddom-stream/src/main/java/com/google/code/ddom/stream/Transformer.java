@@ -16,21 +16,23 @@
 package com.google.code.ddom.stream;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
+import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 public class Transformer {
     public class Source {
-        private final Input input;
+        private final XmlInput input;
 
-        Source(Input input) {
+        Source(XmlInput input) {
             this.input = input;
         }
         
-        private void to(Output output) throws StreamException {
-            while (input.proceed(output)) {
+        private void to(XmlOutput output) throws StreamException {
+            Stream.connect(input, output);
+            while (input.proceed()) {
                 // Just loop
             }
         }

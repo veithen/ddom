@@ -23,12 +23,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.stream.spi.Input;
-import com.google.code.ddom.stream.spi.Output;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.Symbols;
+import com.google.code.ddom.stream.spi.XmlHandler;
+import com.google.code.ddom.stream.spi.XmlInput;
 
-public class DOMInput implements Input {
+public class DOMInput extends XmlInput {
     private final Node rootNode;
     private Node currentNode;
     private boolean visited;
@@ -45,7 +45,8 @@ public class DOMInput implements Input {
         return null;
     }
 
-    public boolean proceed(Output output) throws StreamException {
+    public boolean proceed() throws StreamException {
+        XmlHandler handler = getHandler();
         Node currentNode = this.currentNode;
         boolean visited = this.visited;
         loop: while (true) {
@@ -84,7 +85,7 @@ public class DOMInput implements Input {
                 switch (nodeType) {
                     case Node.ELEMENT_NODE:
                     case Node.DOCUMENT_NODE:
-                        output.nodeCompleted();
+                        handler.nodeCompleted();
                         break loop;
                 }
             } else {
@@ -93,9 +94,9 @@ public class DOMInput implements Input {
                         Element element = (Element)currentNode;
                         String localName = element.getLocalName();
                         if (localName == null) {
-                            output.processElement(element.getTagName());
+                            handler.processElement(element.getTagName());
                         } else {
-                            output.processElement(element.getNamespaceURI(), localName, element.getPrefix());
+                            handler.processElement(element.getNamespaceURI(), localName, element.getPrefix());
                         }
                         NamedNodeMap attributes = element.getAttributes();
                         for (int length=attributes.getLength(), i=0; i<length; i++) {
@@ -103,20 +104,20 @@ public class DOMInput implements Input {
                             String attrLocalName = attr.getLocalName();
                             if (attrLocalName == null) {
                                 // TODO: type information
-                                output.processAttribute(attrLocalName, attr.getValue(), null);
+                                handler.processAttribute(attrLocalName, attr.getValue(), null);
                             } else {
                                 String namespaceURI = attr.getNamespaceURI();
                                 if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-                                    output.processNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName, attr.getValue());
+                                    handler.processNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName, attr.getValue());
                                 } else {
-                                    output.processAttribute(namespaceURI, attrLocalName, attr.getPrefix(), attr.getValue(), null);
+                                    handler.processAttribute(namespaceURI, attrLocalName, attr.getPrefix(), attr.getValue(), null);
                                 }
                             }
                         }
-                        output.attributesCompleted();
+                        handler.attributesCompleted();
                         break loop;
                     case Node.TEXT_NODE:
-                        output.processText(currentNode.getNodeValue());
+                        handler.processText(currentNode.getNodeValue());
                         break loop;
                     default:
                         // TODO

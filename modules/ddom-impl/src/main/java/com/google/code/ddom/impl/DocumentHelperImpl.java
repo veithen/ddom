@@ -27,10 +27,10 @@ import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelLoaderRegistry;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
+import com.google.code.ddom.stream.spi.XmlInput;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
 public class DocumentHelperImpl implements DocumentHelper {
@@ -65,7 +65,7 @@ public class DocumentHelperImpl implements DocumentHelper {
             throw new DocumentHelperException(ex);
         }
         OptionsTracker tracker = options.createTracker();
-        Input input;
+        XmlInput input;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
             input = streamFactory.getInput(source, tracker, preserve);

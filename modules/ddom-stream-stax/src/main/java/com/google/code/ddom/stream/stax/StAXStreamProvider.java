@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ import javax.xml.stream.XMLStreamReader;
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.options.CommentPolicy;
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 @Provider(name="stax")
 public class StAXStreamProvider implements StreamProvider {
-    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public XmlInput getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         if (source instanceof XMLStreamReader) {
             XMLStreamReader reader = (XMLStreamReader)source;
             if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
@@ -40,12 +40,12 @@ public class StAXStreamProvider implements StreamProvider {
         }
     }
     
-    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
+    public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO construct Consumer wrapping an XMLStreamWriter
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
+    public <T> T getSerializer(Class<T> serializerType, XmlOutput output, OptionsTracker options) {
         // TODO support wrapping the consumer in an XMLStreamWriter
         return null;
     }

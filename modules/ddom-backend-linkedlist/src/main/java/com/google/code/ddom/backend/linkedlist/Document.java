@@ -24,9 +24,10 @@ import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
-import com.google.code.ddom.stream.spi.Input;
+import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
+import com.google.code.ddom.stream.spi.XmlInput;
 
 public class Document extends ParentNode implements LLDocument {
     private final ModelExtension modelExtension;
@@ -45,8 +46,10 @@ public class Document extends ParentNode implements LLDocument {
         symbols = new SymbolHashTable();
     }
 
-    public final void internalCreateBuilder(Input input, LLParentNode target) {
-        builders.add(new Builder(input, modelExtension, this, target));
+    public final void internalCreateBuilder(XmlInput input, LLParentNode target) {
+        Builder builder = new Builder(input, modelExtension, this, target);
+        Stream.connect(input, builder);
+        builders.add(builder);
     }
     
     public final Builder internalGetBuilderFor(LLParentNode target) {

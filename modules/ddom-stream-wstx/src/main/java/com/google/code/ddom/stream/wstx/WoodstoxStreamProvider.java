@@ -39,16 +39,16 @@ import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.google.code.ddom.stream.options.ValidationPolicy;
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 import com.google.code.ddom.stream.stax.CommentFilterStreamReader;
 import com.google.code.ddom.stream.stax.StAXInput;
 
 @Provider(name="woodstox")
 public class WoodstoxStreamProvider implements StreamProvider {
-    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public XmlInput getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         // TODO: who actually closes the streams???
         InputStream byteStream;
         Reader characterStream;
@@ -146,12 +146,12 @@ public class WoodstoxStreamProvider implements StreamProvider {
         return new StAXInput(reader, config.getSymbols());
     }
     
-    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
+    public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
+    public <T> T getSerializer(Class<T> serializerType, XmlOutput output, OptionsTracker options) {
         // TODO
         return null;
     }

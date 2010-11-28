@@ -15,20 +15,18 @@
  */
 package com.google.code.ddom.stream.sax;
 
-import java.net.ContentHandler;
-
 import javax.xml.transform.sax.SAXSource;
 
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 @Provider(name="sax")
 public class SAXStreamProvider implements StreamProvider {
-    public Input getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public XmlInput getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
         if (source instanceof SAXSource) {
             return new SAXInput((SAXSource)source);
         } else {
@@ -36,16 +34,18 @@ public class SAXStreamProvider implements StreamProvider {
         }
     }
 
-    public Output getOutput(Object destination, OptionsTracker options) throws StreamException {
+    public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {
         // TODO build a Consumer that wraps a ContentHandler
         return null;
     }
 
-    public <T> T getSerializer(Class<T> serializerType, Output output, OptionsTracker options) {
-        if (serializerType.equals(ContentHandler.class)) {
-            return serializerType.cast(new OutputContentHandler(output));
-        } else {
-            return null;
-        }
+    public <T> T getSerializer(Class<T> serializerType, XmlOutput output, OptionsTracker options) {
+        // TODO
+//        if (serializerType.equals(ContentHandler.class)) {
+//            return serializerType.cast(new ContentHandlerAdapter(output));
+//        } else {
+//            return null;
+//        }
+        return null;
     }
 }
