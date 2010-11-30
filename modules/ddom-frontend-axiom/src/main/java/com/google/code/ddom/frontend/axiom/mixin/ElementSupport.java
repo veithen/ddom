@@ -27,9 +27,9 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
-import org.apache.axiom.om.impl.OMNodeEx;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
+import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
@@ -54,9 +54,8 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
     
-    public Iterator getChildElements() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator getChildElements() {
+        return coreGetChildrenByType(Axis.CHILDREN, AxiomElement.class);
     }
     
     private static final IdentityMapper<AxiomAttribute> attributeIdentityMapper = new IdentityMapper<AxiomAttribute>();

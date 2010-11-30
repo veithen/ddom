@@ -27,17 +27,20 @@ import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 
+import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
 public abstract class ContainerSupport implements AxiomContainer {
-    public OMNode getFirstOMChild() {
+    public final OMNode getFirstOMChild() {
         try {
             return (OMNode)coreGetFirstChild();
         } catch (CoreModelException ex) {
@@ -45,19 +48,16 @@ public abstract class ContainerSupport implements AxiomContainer {
         }
     }
     
-    public Iterator getChildren() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator getChildren() {
+        return coreGetChildrenByType(Axis.CHILDREN, AxiomChildNode.class);
     }
     
-    public Iterator getChildrenWithName(QName elementQName) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator getChildrenWithName(QName qname) {
+        return coreGetElementsByName(Axis.CHILDREN, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
     }
     
-    public Iterator getChildrenWithLocalName(String localName) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator getChildrenWithLocalName(String localName) {
+        return coreGetElementsByLocalName(Axis.CHILDREN, localName);
     }
     
     public Iterator getChildrenWithNamespaceURI(String uri) {

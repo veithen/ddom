@@ -65,6 +65,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreReplaceWith2OnOrphan(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.document.TestCoreGetDocumentElement(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeAndRemove(config));
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareElement.class;

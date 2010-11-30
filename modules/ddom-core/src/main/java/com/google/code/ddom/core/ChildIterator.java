@@ -17,6 +17,14 @@ package com.google.code.ddom.core;
 
 import java.util.Iterator;
 
+/**
+ * Extended iterator interface used by various methods in {@link CoreParentNode}. It defines an
+ * additional method that allows to replace the child node returned by the last call to
+ * {@link #next()}. Implementations of this interface MUST properly implement the {@link #remove()}
+ * method, i.e. they are not allowed to throw {@link UnsupportedOperationException}.
+ * 
+ * @author Andreas Veithen
+ */
 public interface ChildIterator<T extends CoreChildNode> extends Iterator<T> {
     void replace(CoreChildNode newNode) throws CoreModelException;
 }

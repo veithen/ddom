@@ -108,7 +108,18 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
     }
 
     public final void remove() {
-        throw new UnsupportedOperationException();
+        if (currentNode == null) {
+            throw new IllegalStateException();
+        }
+        // Move to next node before replacing the current one
+        hasNext();
+        try {
+            currentNode.coreDetach();
+        } catch (DeferredParsingException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
+        currentNode = null;
     }
 
     public final void replace(CoreChildNode newNode) throws CoreModelException {
