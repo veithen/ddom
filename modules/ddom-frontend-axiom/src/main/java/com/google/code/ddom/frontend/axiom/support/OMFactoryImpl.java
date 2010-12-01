@@ -27,6 +27,7 @@ import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMProcessingInstruction;
 import org.apache.axiom.om.OMSourcedElement;
 import org.apache.axiom.om.OMText;
@@ -44,6 +45,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
+import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
 
 public class OMFactoryImpl implements OMFactory {
     protected final NodeFactory nodeFactory;
@@ -95,19 +97,35 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(QName qname, OMContainer parent) {
-        // TODO
-        throw new UnsupportedOperationException();
+        try {
+            // TODO
+            String namespaceURI = QNameUtil.getNamespaceURI(qname);
+            String prefix = QNameUtil.getPrefix(qname);
+            AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(namespaceURI, qname.getLocalPart(), prefix);
+            element.ensureNamespaceIsDeclared(prefix, namespaceURI);
+            element.setOMFactory(this);
+            return element;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns) {
+        // TODO: namespace declaration?
         AxiomElement element = (AxiomElement)nodeFactory.createElement(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
         element.setOMFactory(this);
         return element;
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent) {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: namespace declaration?
+        try {
+            AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
+            element.setOMFactory(this);
+            return element;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final OMSourcedElement createOMElement(OMDataSource source, QName qname) {
@@ -186,9 +204,25 @@ public class OMFactoryImpl implements OMFactory {
         throw new UnsupportedOperationException();
     }
 
-    public final OMText createOMText(OMContainer parent, String text, int type) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMText createOMText(OMContainer parent, String data, int type) {
+        AxiomTextNode node;
+        try {
+            switch (type) {
+                case OMNode.TEXT_NODE:
+                    node = (AxiomTextNode)((AxiomContainer)parent).coreAppendText(data);
+                    break;
+                case OMNode.CDATA_SECTION_NODE:
+                    node = (AxiomTextNode)((AxiomContainer)parent).coreAppendCDATASection(data);
+                    break;
+                default:
+                    // TODO: support the other types
+                    throw new UnsupportedOperationException();
+            }
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+        node.setOMFactory(this);
+        return node;
     }
 
     public final OMText createOMText(OMContainer parent, char[] charArary, int type) {

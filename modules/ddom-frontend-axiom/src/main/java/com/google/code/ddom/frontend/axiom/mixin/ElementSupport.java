@@ -28,7 +28,9 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
+import org.apache.commons.lang.ObjectUtils;
 
+import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
@@ -42,13 +44,22 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
+import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.google.code.ddom.frontend.axiom.support.Policies;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class ElementSupport implements AxiomElement {
     private int lineNumber;
     
+    public final void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException {
+        String existingNamespaceURI = coreLookupNamespaceURI(prefix, true);
+        if (!ObjectUtils.equals(existingNamespaceURI, namespaceURI)) {
+            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+        }
+    }
+
     public void setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
         // TODO
         throw new UnsupportedOperationException();
@@ -74,10 +85,12 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
     
-    public OMAttribute addAttribute(OMAttribute attr) {
+    public final OMAttribute addAttribute(OMAttribute attr) {
         AxiomAttribute axiomAttr = (AxiomAttribute)attr;
         try {
-            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr.coreGetNamespaceURI(), axiomAttr.coreGetLocalName(), axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY);
+            String namespaceURI = axiomAttr.coreGetNamespaceURI();
+            ensureNamespaceIsDeclared(axiomAttr.coreGetPrefix(), namespaceURI);
+            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, namespaceURI, axiomAttr.coreGetLocalName(), axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -118,7 +131,16 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
 
-    public void setText(String text) {
+    public final String getText() {
+        try {
+            // TODO: there may be a mismatch between the way coreGetTextContent collects the text and what is expected for Axiom's getText
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+    
+    public final void setText(String text) {
         try {
             coreSetValue(text);
         } catch (CoreModelException ex) {
@@ -131,11 +153,6 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
 
-    public String getText() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
     public QName getTextAsQName() {
         // TODO
         throw new UnsupportedOperationException();
@@ -149,14 +166,24 @@ public abstract class ElementSupport implements AxiomElement {
         return lineNumber;
     }
     
-    public OMNamespace declareNamespace(String uri, String prefix) {
+    public OMNamespace declareNamespace(OMNamespace ns) {
+        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getPrefix(ns), null, NSUtil.getNamespaceURI(ns));
         // TODO
-        throw new UnsupportedOperationException();
+        return null;
+    }
+
+    public final OMNamespace declareNamespace(String uri, String prefix) {
+        // TODO: need to handle empty strings correctly
+        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
+        // TODO
+        return null;
     }
     
-    public OMNamespace declareDefaultNamespace(String uri) {
+    public final OMNamespace declareDefaultNamespace(String uri) {
+        // TODO: what if uri is null or empty string?
+        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, null, null, uri);
         // TODO
-        throw new UnsupportedOperationException();
+        return null;
     }
     
     public OMNamespace getDefaultNamespace() {
@@ -164,14 +191,18 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
     
-    public OMNamespace declareNamespace(OMNamespace namespace) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
-    public OMNamespace findNamespace(String uri, String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public OMNamespace findNamespace(String queryUri, String queryPrefix) {
+        try {
+            if (queryUri == null) {
+                String uri = coreLookupNamespaceURI(queryPrefix, true);
+                return uri == null ? null : new OMNamespaceImpl(uri, queryPrefix);
+            } else {
+                String prefix = coreLookupPrefix(queryUri, true);
+                return prefix == null ? null : new OMNamespaceImpl(queryUri, prefix);
+            }
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public OMNamespace findNamespaceURI(String prefix) {

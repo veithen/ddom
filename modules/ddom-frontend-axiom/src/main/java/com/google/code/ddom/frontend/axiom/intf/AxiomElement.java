@@ -17,8 +17,9 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMElement;
 
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
 
 public interface AxiomElement extends CoreNSAwareElement, OMElement, AxiomContainer, AxiomChildNode, AxiomNamedNode {
-
+    void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException;
 }

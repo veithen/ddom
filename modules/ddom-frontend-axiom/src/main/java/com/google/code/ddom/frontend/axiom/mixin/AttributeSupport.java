@@ -16,18 +16,18 @@
 package com.google.code.ddom.frontend.axiom.mixin;
 
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class AttributeSupport implements AxiomAttribute {
-    public String getAttributeValue() {
+    public final String getAttributeValue() {
         try {
             return coreGetTextContent();
         } catch (CoreModelException ex) {
@@ -35,7 +35,7 @@ public abstract class AttributeSupport implements AxiomAttribute {
         }
     }
 
-    public void setAttributeValue(String value) {
+    public final void setAttributeValue(String value) {
         try {
             coreSetValue(value);
         } catch (CoreModelException ex) {
@@ -43,11 +43,11 @@ public abstract class AttributeSupport implements AxiomAttribute {
         }
     }
 
-    public String getAttributeType() {
+    public final String getAttributeType() {
         return coreGetType();
     }
 
-    public void setAttributeType(String value) {
+    public final void setAttributeType(String value) {
         coreSetType(value);
     }
 
@@ -55,8 +55,7 @@ public abstract class AttributeSupport implements AxiomAttribute {
         setNamespace(omNamespace);
     }
 
-    public OMElement getOwner() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMElement getOwner() {
+        return (AxiomElement)coreGetOwnerElement();
     }
 }
