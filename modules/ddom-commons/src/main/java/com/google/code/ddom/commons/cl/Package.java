@@ -46,7 +46,7 @@ public final class Package extends AbstractClassRefCollection {
         for (URL urlInPackage : urlsInPackage) {
             String s = urlInPackage.getFile();
             s = s.substring(s.lastIndexOf('/')+1);
-            if (s.endsWith(".class")) {
+            if (s.endsWith(".class") && !s.equals("package-info.class")) {
                 classesInPackage.add(new ClassRef(classLoader, name + "." + s.substring(0, s.length()-6)));
             }
         }
