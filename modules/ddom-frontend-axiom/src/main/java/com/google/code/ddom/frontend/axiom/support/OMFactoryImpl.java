@@ -120,9 +120,17 @@ public class OMFactoryImpl implements OMFactory {
         throw new UnsupportedOperationException();
     }
 
-    public final OMElement createOMElement(String localName, String namespaceURI, String namespacePrefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMElement createOMElement(String localName, String namespaceURI, String prefix) {
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("Namespace URI must not be null");
+        }
+        if (namespaceURI.length() == 0) {
+            namespaceURI = null;
+        }
+        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
+        // TODO: do we need to generate a namespace declaration?
+        element.setOMFactory(this);
+        return element;
     }
 
     public final OMNamespace createOMNamespace(String uri, String prefix) {
