@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.ExtensionFactoryLocator;
+import com.google.code.ddom.backend.linkedlist.intf.LLBuilder;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.collections.ArrayStack;
@@ -24,11 +25,12 @@ import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
 import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 import com.google.code.ddom.stream.spi.XmlInput;
 import com.google.code.ddom.stream.spi.XmlOutput;
 
 // TODO: also allow for deferred building of attributes
-public class Builder extends XmlOutput {
+public class Builder extends XmlOutput implements LLBuilder {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
     private final XmlInput input; // TODO: not sure if we still need this
@@ -41,6 +43,17 @@ public class Builder extends XmlOutput {
     private Attribute lastAttribute;
     private String pendingText; // Text that has not yet been added to the tree
     private boolean nodeAppended;
+    
+    /**
+     * The {@link XmlHandler} object to send events to if pass-through is enabled. See
+     * {@link LLBuilder#setPassThroughHandler(XmlHandler)} for more details.
+     */
+    private XmlHandler passThroughHandler;
+    
+    /**
+     * Tracks the nesting depth when pass-through is enabled.
+     */
+    private int passThroughDepth;
 
     public Builder(XmlInput input, ModelExtension modelExtension, Document document, LLParentNode target) {
         this.input = input;
@@ -78,7 +91,13 @@ public class Builder extends XmlOutput {
         }
     }
 
+    public final void setPassThroughHandler(XmlHandler handler) {
+        passThroughHandler = handler;
+        passThroughDepth = 0;
+    }
+
     protected final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+        // TODO: how to handle pass-through here??
         document.coreSetXmlVersion(xmlVersion);
         document.coreSetXmlEncoding(xmlEncoding);
         document.coreSetInputEncoding(inputEncoding);
@@ -86,56 +105,107 @@ public class Builder extends XmlOutput {
     }
 
     protected final void processDocumentType(String rootName, String publicId, String systemId) {
-        appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId));
+        if (passThroughHandler == null) {
+            appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId));
+        } else {
+            passThroughHandler.processDocumentType(rootName, publicId, systemId);
+        }
     }
     
     protected final void processElement(String tagName) {
-        appendNode(new NSUnawareElement(document, tagName, false));
+        if (passThroughHandler == null) {
+            appendNode(new NSUnawareElement(document, tagName, false));
+        } else {
+            passThroughDepth++;
+            passThroughHandler.processElement(tagName);
+        }
     }
     
     protected final void processElement(String namespaceURI, String localName, String prefix) {
-        Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
-        appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
+        if (passThroughHandler == null) {
+            Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
+            appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
+        } else {
+            passThroughDepth++;
+            passThroughHandler.processElement(namespaceURI, localName, prefix);
+        }
     }
     
     protected final void processAttribute(String name, String value, String type) {
-        appendAttribute(new NSUnawareAttribute(document, name, value, type));
+        if (passThroughHandler == null) {
+            appendAttribute(new NSUnawareAttribute(document, name, value, type));
+        } else {
+            passThroughHandler.processAttribute(name, value, type);
+        }
     }
 
     protected final void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
-        appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type));
+        if (passThroughHandler == null) {
+            appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type));
+        } else {
+            passThroughHandler.processAttribute(namespaceURI, localName, prefix, value, type);
+        }
     }
 
     protected final void processNamespaceDeclaration(String prefix, String namespaceURI) {
-        appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
+        if (passThroughHandler == null) {
+            appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
+        } else {
+            passThroughHandler.processNamespaceDeclaration(prefix, namespaceURI);
+        }
     }
 
     protected final void attributesCompleted() {
-        nodeAppended = true;
+        if (passThroughHandler == null) {
+            nodeAppended = true;
+        } else {
+            passThroughHandler.attributesCompleted();
+        }
     }
 
     protected final void processProcessingInstruction(String target, String data) {
-        appendNode(new ProcessingInstruction(document, target, data));
+        if (passThroughHandler == null) {
+            appendNode(new ProcessingInstruction(document, target, data));
+        } else {
+            passThroughHandler.processProcessingInstruction(target, data);
+        }
     }
     
     protected final void processText(String data) {
-        if (lastSibling == null && pendingText == null) {
-            pendingText = data;
+        if (passThroughHandler == null) {
+            if (lastSibling == null && pendingText == null) {
+                pendingText = data;
+            } else {
+                appendNode(new Text(document, data));
+            }
         } else {
-            appendNode(new Text(document, data));
+            passThroughHandler.processText(data);
         }
     }
     
     protected final void processComment(String data) {
-        appendNode(new Comment(document, data));
+        if (passThroughHandler == null) {
+            appendNode(new Comment(document, data));
+        } else {
+            passThroughHandler.processComment(data);
+        }
     }
     
     protected final void processCDATASection() {
-        appendNode(new CDATASection(document));
+        if (passThroughHandler == null) {
+            appendNode(new CDATASection(document));
+        } else {
+            passThroughDepth++;
+            passThroughHandler.processCDATASection();
+        }
     }
     
     protected final void processEntityReference(String name) {
-        appendNode(new EntityReference(document, name));
+        if (passThroughHandler == null) {
+            appendNode(new EntityReference(document, name));
+        } else {
+            passThroughHandler.processEntityReference(name);
+        }
     }
     
     private void refreshLastSibling() {
@@ -200,25 +270,41 @@ public class Builder extends XmlOutput {
     }
     
     protected final void nodeCompleted() {
-        if (pendingText != null) {
-            refreshLastSibling();
-            if (lastSibling == null) {
-                parent.internalSetValue(pendingText);
-                parent.internalNotifyChildrenModified(1);
-                pendingText = null;
+        boolean pop;
+        if (passThroughHandler == null) {
+            if (pendingText != null) {
+                refreshLastSibling();
+                if (lastSibling == null) {
+                    parent.internalSetValue(pendingText);
+                    parent.internalNotifyChildrenModified(1);
+                    pendingText = null;
+                } else {
+                    flushPendingText();
+                }
+            }
+            modelExtensionMapper.endElement(); // TODO: not entirely correct
+            parent.internalSetComplete(true);
+            pop = true;
+        } else {
+            // TODO: do we need to check pendingText???
+            passThroughHandler.nodeCompleted();
+            if (passThroughDepth == 0) {
+                pop = true;
+                passThroughHandler = null;
             } else {
-                flushPendingText();
+                passThroughDepth--;
+                pop = false;
             }
         }
-        modelExtensionMapper.endElement(); // TODO: not entirely correct
-        parent.internalSetComplete(true);
-        if (nodeStack.isEmpty()) {
-            parent = null;
-        } else {
-            lastSibling = (LLChildNode)parent;
-            // This is important for being a builder of type 2: instead of getting the
-            // parent from the current node, we get it from the node stack.
-            parent = nodeStack.pop();
+        if (pop) {
+            if (nodeStack.isEmpty()) {
+                parent = null;
+            } else {
+                lastSibling = (LLChildNode)parent;
+                // This is important for being a builder of type 2: instead of getting the
+                // parent from the current node, we get it from the node stack.
+                parent = nodeStack.pop();
+            }
         }
     }
 

@@ -88,7 +88,7 @@ public class TreeSerializer extends XmlInput {
                             node = parent;
                             state = STATE_VISITED;
                         } else {
-                            getDocument().internalGetBuilderFor(parent);
+                            getDocument().internalGetBuilderFor(parent).setPassThroughHandler(handler);
                         }
                     } else {
                         node = child;
