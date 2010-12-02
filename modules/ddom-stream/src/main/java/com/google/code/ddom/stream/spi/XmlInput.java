@@ -31,6 +31,20 @@ public abstract class XmlInput {
         return handler;
     }
     
+    /**
+     * Instructs the implementation to produce more XML events. An invocation of this method must
+     * result in one or more method calls to the {@link XmlHandler} instance returned by
+     * {@link #getHandler()}.
+     * <p>
+     * If the implementation produced more than one event, then it should make sure that the last
+     * event corresponds to the same information item as the first one. This is not a strict
+     * requirement, but the pass-through logic in the current builder implementation assumes that
+     * this method behaves like this.
+     * 
+     * @return <code>true</code> if there are more events to consume; <code>false</code> if the end
+     *         of the document has been reached
+     * @throws StreamException
+     */
     public abstract boolean proceed() throws StreamException;
     
     public abstract void dispose();
