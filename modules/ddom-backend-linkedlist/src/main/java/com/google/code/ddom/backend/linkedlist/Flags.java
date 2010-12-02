@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
+import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
+
 public class Flags {
     private Flags() {}
     

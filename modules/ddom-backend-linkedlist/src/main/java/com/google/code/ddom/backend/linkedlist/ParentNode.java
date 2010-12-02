@@ -17,6 +17,8 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.backend.Inject;
+import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
+import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;

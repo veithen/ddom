@@ -18,6 +18,8 @@ package com.google.code.ddom.backend.linkedlist;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
+import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocumentTypeDeclaration;

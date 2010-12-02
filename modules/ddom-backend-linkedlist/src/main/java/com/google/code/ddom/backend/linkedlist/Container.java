@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
+import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
+import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreElement;

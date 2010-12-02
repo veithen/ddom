@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend.linkedlist;
+package com.google.code.ddom.backend.linkedlist.intf;
 
 import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreChildNode;

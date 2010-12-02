@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreAttribute;
 import com.google.code.ddom.core.CoreChildNode;

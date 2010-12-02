@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.core.DeferredParsingException;

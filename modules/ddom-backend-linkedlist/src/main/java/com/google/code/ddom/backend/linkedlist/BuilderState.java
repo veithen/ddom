@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 public class BuilderState {
