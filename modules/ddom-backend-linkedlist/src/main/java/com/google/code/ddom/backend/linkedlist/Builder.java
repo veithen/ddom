@@ -19,7 +19,6 @@ import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.collections.ArrayStack;
-import com.google.code.ddom.collections.ObjectStack;
 import com.google.code.ddom.collections.Stack;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
@@ -35,20 +34,9 @@ public class Builder extends XmlOutput {
     private final XmlInput input; // TODO: not sure if we still need this
     private final ModelExtensionMapper modelExtensionMapper;
     private final Document document;
-    private final ObjectStack<BuilderState> stateStack = new ObjectStack<BuilderState>() {
-        @Override
-        protected BuilderState createObject() {
-            return new BuilderState();
-        }
-
-        @Override
-        protected void recycleObject(BuilderState state) {
-            state.setNode(null);
-            state.setHandler(null);
-        }
-    };
+    private final Stack<LLParentNode> nodeStack = new ArrayStack<LLParentNode>();
     private StreamException streamException;
-    private BuilderState state; // The current node being built
+    private LLParentNode parent; // The current node being built
     private LLChildNode lastSibling; // The last child of the current node
     private Attribute lastAttribute;
     private String pendingText; // Text that has not yet been added to the tree
@@ -58,28 +46,20 @@ public class Builder extends XmlOutput {
         this.input = input;
         modelExtensionMapper = modelExtension.newMapper();
         this.document = document;
-        state = stateStack.allocate();
-        state.setNode(target);
+        parent = target;
     }
 
     public final boolean isBuilderFor(LLParentNode target) {
-        for (int i = 0, s = stateStack.size(); i<s; i++) {
-            if (stateStack.get(i).getNode() == target) {
-                return true;
-            }
-        }
-        return false;
+        return target == parent || nodeStack.contains(target);
     }
 
     public final boolean migrateBuilder(LLParentNode from, LLParentNode to) {
-        for (int i = 0, s = stateStack.size(); i<s; i++) {
-            BuilderState state = stateStack.get(i);
-            if (state.getNode() == from) {
-                state.setNode(to);
-                return true;
-            }
+        if (parent == from) {
+            parent = to;
+            return true;
+        } else {
+            return nodeStack.replace(from, to);
         }
-        return false;
     }
     
     public final void next() throws DeferredParsingException {
@@ -88,7 +68,7 @@ public class Builder extends XmlOutput {
                 nodeAppended = false; 
                 do {
                     input.proceed();
-                } while (state != null && !nodeAppended);
+                } while (parent != null && !nodeAppended);
             } catch (StreamException ex) {
                 streamException = ex;
             }
@@ -159,7 +139,6 @@ public class Builder extends XmlOutput {
     }
     
     private void refreshLastSibling() {
-        LLParentNode parent = state.getNode();
         if (lastSibling == null && parent.internalGetFirstChildIfMaterialized() != null
                 || lastSibling != null && (lastSibling.coreGetParent() != parent || lastSibling.internalGetNextSiblingIfMaterialized() != null)) {
             // We get here if the children of the node being built have been modified
@@ -178,7 +157,6 @@ public class Builder extends XmlOutput {
     }
     
     private void appendSibling(LLChildNode node) {
-        LLParentNode parent = state.getNode();
         if (lastSibling == null) {
             parent.internalSetFirstChild(node);
         } else {
@@ -202,8 +180,8 @@ public class Builder extends XmlOutput {
         appendSibling(node);
         if (node instanceof Container) {
             // TODO: this assumes that elements are always created as incomplete
-            state = stateStack.allocate();
-            state.setNode((Container)node);
+            nodeStack.push(parent);
+            parent = (Container)node;
             lastSibling = null;
         } else {
             nodeAppended = true;
@@ -212,7 +190,7 @@ public class Builder extends XmlOutput {
     }
     
     private void appendAttribute(Attribute attr) {
-        Element element = (Element)state.getNode();
+        Element element = (Element)parent;
         if (lastAttribute == null) {
             element.internalAppendAttribute(attr);
         } else {
@@ -222,7 +200,6 @@ public class Builder extends XmlOutput {
     }
     
     protected final void nodeCompleted() {
-        LLParentNode parent = state.getNode();
         if (pendingText != null) {
             refreshLastSibling();
             if (lastSibling == null) {
@@ -235,14 +212,13 @@ public class Builder extends XmlOutput {
         }
         modelExtensionMapper.endElement(); // TODO: not entirely correct
         parent.internalSetComplete(true);
-        stateStack.pop();
-        if (stateStack.isEmpty()) {
-            state = null;
+        if (nodeStack.isEmpty()) {
+            parent = null;
         } else {
             lastSibling = (LLChildNode)parent;
             // This is important for being a builder of type 2: instead of getting the
             // parent from the current node, we get it from the node stack.
-            state = stateStack.peek();
+            parent = nodeStack.pop();
         }
     }
 
