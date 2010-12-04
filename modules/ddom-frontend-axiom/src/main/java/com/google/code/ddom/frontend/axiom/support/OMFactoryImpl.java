@@ -26,6 +26,7 @@ import org.apache.axiom.om.OMDocType;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMProcessingInstruction;
@@ -36,22 +37,26 @@ import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomComment;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
 import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
 
 public class OMFactoryImpl implements OMFactory {
-    protected final NodeFactory nodeFactory;
+    protected final AxiomNodeFactory nodeFactory;
     
-    public OMFactoryImpl(NodeFactory nodeFactory) {
+    public OMFactoryImpl(AxiomNodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
+    }
+
+    public final OMMetaFactory getMetaFactory() {
+        return nodeFactory;
     }
 
     public final OMAttribute createOMAttribute(String localName, OMNamespace ns, String value) {

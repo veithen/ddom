@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.soap;
+package com.google.code.ddom.frontend.axiom.testsuite;
 
-import org.apache.axiom.soap.SOAPFactory;
+import org.apache.axiom.om.OMAttributeTestBase;
 
-public interface AxiomSOAPFactories {
-    SOAPFactory getSOAP11Factory();
-    SOAPFactory getSOAP12Factory();
+import com.google.code.ddom.frontend.axiom.DDOMAxiomUtil;
+
+public class OMAttributeTest extends OMAttributeTestBase {
+    public OMAttributeTest() {
+        super(DDOMAxiomUtil.INSTANCE.getMetaFactory());
+    }
 }

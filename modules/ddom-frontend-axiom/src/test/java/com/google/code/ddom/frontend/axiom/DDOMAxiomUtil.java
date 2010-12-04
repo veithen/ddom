@@ -19,6 +19,7 @@ import java.io.StringReader;
 
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.OMMetaFactory;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
@@ -34,8 +35,12 @@ public class DDOMAxiomUtil implements AxiomUtil {
 
     private DDOMAxiomUtil() {}
     
+    public OMMetaFactory getMetaFactory() {
+        return documentHelper.getAPIObject(modelDefinition, OMMetaFactory.class);
+    }
+    
     public OMFactory getOMFactory() {
-        return documentHelper.getAPIObject(modelDefinition, OMFactory.class);
+        return getMetaFactory().getOMFactory();
     }
     
     public OMDocument createDocument() {

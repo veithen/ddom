@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.intf;
+package com.google.code.ddom.frontend.axiom.testsuite;
 
-import org.apache.axiom.om.OMMetaFactory;
+import org.apache.axiom.om.OMElementTestBase;
 
-import com.google.code.ddom.core.NodeFactory;
+import com.google.code.ddom.frontend.axiom.DDOMAxiomUtil;
 
-public interface AxiomNodeFactory extends NodeFactory, OMMetaFactory {
-
+public class OMElementTest extends OMElementTestBase {
+    public OMElementTest() {
+        super(DDOMAxiomUtil.INSTANCE.getMetaFactory());
+    }
 }

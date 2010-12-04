@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.axiom;
+package com.google.code.ddom.frontend.axiom.testsuite;
 
 import org.apache.axiom.om.OMFactoryTestBase;
 
+import com.google.code.ddom.frontend.axiom.DDOMAxiomUtil;
+
 public class OMFactoryTest extends OMFactoryTestBase {
     public OMFactoryTest() {
-        super(new OMMetaFactoryImpl());
+        super(DDOMAxiomUtil.INSTANCE.getMetaFactory());
     }
 }

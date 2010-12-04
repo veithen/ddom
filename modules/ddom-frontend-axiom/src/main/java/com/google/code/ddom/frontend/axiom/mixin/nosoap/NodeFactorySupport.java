@@ -13,12 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.axiom;
+package com.google.code.ddom.frontend.axiom.mixin.nosoap;
 
-import org.apache.axiom.om.OMAttributeTestBase;
+import org.apache.axiom.soap.SOAPFactory;
 
-public class OMAttributeTest extends OMAttributeTestBase {
-    public OMAttributeTest() {
-        super(new OMMetaFactoryImpl());
+import com.google.code.ddom.core.NodeFactory;
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
+
+@Mixin(NodeFactory.class)
+public abstract class NodeFactorySupport implements AxiomNodeFactory {
+    public final SOAPFactory getSOAP11Factory() {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFactory getSOAP12Factory() {
+        throw new UnsupportedOperationException();
     }
 }

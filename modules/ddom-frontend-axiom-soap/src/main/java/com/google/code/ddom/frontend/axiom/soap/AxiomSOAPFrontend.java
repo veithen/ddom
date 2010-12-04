@@ -20,13 +20,9 @@ import java.util.Map;
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.Module;
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
-import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.axiom.AxiomFrontend;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPNodeFactory;
-import com.google.code.ddom.frontend.axiom.soap.support.APIObjectFactoryImpl;
 import com.google.code.ddom.spi.Provider;
 
 @Provider(name="axiom-soap")
@@ -34,7 +30,11 @@ public class AxiomSOAPFrontend extends AxiomFrontend {
     @Override
     public ClassCollection getMixins(Map<String,Frontend> frontends) {
         ClassCollectionAggregate aggregate = new ClassCollectionAggregate();
-        aggregate.add(super.getMixins(frontends));
+        Module module = Module.forClass(AxiomFrontend.class);
+        aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin"));
+        if (!frontends.containsKey("dom")) {
+            aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin.dom"));
+        }
         aggregate.add(Module.forClass(AxiomSOAPFrontend.class).getPackage("com.google.code.ddom.frontend.axiom.soap.mixin"));
         return aggregate;
     }
@@ -47,10 +47,5 @@ public class AxiomSOAPFrontend extends AxiomFrontend {
     @Override
     public ModelExtension getModelExtension() {
         return new AxiomSOAPModelExtension();
-    }
-
-    @Override
-    public APIObjectFactory getAPIObjectFactory(NodeFactory nodeFactory) {
-        return new APIObjectFactoryImpl((AxiomSOAPNodeFactory)nodeFactory);
     }
 }

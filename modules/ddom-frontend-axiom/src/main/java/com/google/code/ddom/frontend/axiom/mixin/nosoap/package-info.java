@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.axiom;
-
-import org.apache.axiom.om.OMElementTestBase;
-
-public class OMElementTest extends OMElementTestBase {
-    public OMElementTest() {
-        super(new OMMetaFactoryImpl());
-    }
-}
+/**
+ * Contains mixins to let SOAP related methods throw {@link UnsupportedOperationException}.
+ * 
+ * @author Andreas Veithen
+ */
+package com.google.code.ddom.frontend.axiom.mixin.nosoap;

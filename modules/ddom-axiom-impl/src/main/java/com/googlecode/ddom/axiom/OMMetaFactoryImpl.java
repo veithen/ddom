@@ -27,52 +27,40 @@ import org.apache.axiom.soap.SOAPFactory;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
-import com.google.code.ddom.Options;
-import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
-import com.google.code.ddom.frontend.axiom.soap.AxiomSOAPFactories;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 
 public final class OMMetaFactoryImpl implements OMMetaFactory {
-    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(OMMetaFactoryImpl.class.getClassLoader());
     private static final ModelDefinition modelDefinition = ModelDefinitionBuilder.buildModelDefinition("axiom-soap");
     
-    private final OMFactory omFactory;
-    private final SOAPFactory soap11Factory;
-    private final SOAPFactory soap12Factory;
+    private final OMMetaFactory metaFactory;
     
     public OMMetaFactoryImpl() {
-        omFactory = documentHelper.getAPIObject(modelDefinition, OMFactory.class);
-        AxiomSOAPFactories soapFactories = documentHelper.getAPIObject(modelDefinition, AxiomSOAPFactories.class);
-        soap11Factory = soapFactories.getSOAP11Factory();
-        soap12Factory = soapFactories.getSOAP12Factory();
+        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(OMMetaFactoryImpl.class.getClassLoader());
+        metaFactory = documentHelper.getAPIObject(modelDefinition, OMMetaFactory.class);
     }
-    
+
     public OMFactory getOMFactory() {
-        return omFactory;
+        return metaFactory.getOMFactory();
     }
 
     public SOAPFactory getSOAP11Factory() {
-        return soap11Factory;
+        return metaFactory.getSOAP11Factory();
     }
 
     public SOAPFactory getSOAP12Factory() {
-        return soap12Factory;
-    }
-    
-    private OMXMLParserWrapper createBuilder(Object source) {
-        return new OMXMLParserWrapperImpl((AxiomDocument)documentHelper.parse(modelDefinition, source, new Options()));
-    }
-    
-    public OMXMLParserWrapper createOMBuilder(InputStream in) {
-        return createBuilder(in);
+        return metaFactory.getSOAP12Factory();
     }
 
-    public OMXMLParserWrapper createOMBuilder(Reader in) {
-        return createBuilder(in);
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, InputStream in) {
+        return metaFactory.createOMBuilder(omFactory, in);
     }
 
-    public OMXMLParserWrapper createStAXOMBuilder(XMLStreamReader parser) {
-        return createBuilder(parser);
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Reader in) {
+        return metaFactory.createOMBuilder(omFactory, in);
+    }
+
+    public OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
+        return metaFactory.createStAXOMBuilder(omFactory, parser);
     }
 }

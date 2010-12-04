@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.support;
 
-import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.OMMetaFactory;
 
 import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
@@ -28,8 +28,8 @@ public class APIObjectFactoryImpl implements APIObjectFactory {
     }
 
     public Object getAPIObject(Class<?> clazz) {
-        if (clazz.equals(OMFactory.class)) {
-            return nodeFactory.getOMFactory();
+        if (clazz.equals(OMMetaFactory.class)) {
+            return nodeFactory;
         } else {
             return null;
         }

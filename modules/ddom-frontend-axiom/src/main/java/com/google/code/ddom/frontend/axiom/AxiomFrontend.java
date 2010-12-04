@@ -35,6 +35,7 @@ public class AxiomFrontend implements Frontend {
         ClassCollectionAggregate aggregate = new ClassCollectionAggregate();
         Module module = Module.forClass(AxiomFrontend.class);
         aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin"));
+        aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin.nosoap"));
         if (!frontends.containsKey("dom")) {
             aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin.dom"));
         }

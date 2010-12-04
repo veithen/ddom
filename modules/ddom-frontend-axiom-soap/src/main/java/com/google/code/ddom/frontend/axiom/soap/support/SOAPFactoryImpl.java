@@ -38,7 +38,7 @@ import org.apache.axiom.soap.SOAPProcessingException;
 import org.apache.axiom.soap.SOAPVersion;
 
 import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.NodeFactory;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
@@ -48,7 +48,7 @@ import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
 public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     private final SOAPVersionEx soapVersionEx;
 
-    public SOAPFactoryImpl(NodeFactory nodeFactory, SOAPVersionEx soapVersionEx) {
+    public SOAPFactoryImpl(AxiomNodeFactory nodeFactory, SOAPVersionEx soapVersionEx) {
         super(nodeFactory);
         this.soapVersionEx = soapVersionEx;
     }
