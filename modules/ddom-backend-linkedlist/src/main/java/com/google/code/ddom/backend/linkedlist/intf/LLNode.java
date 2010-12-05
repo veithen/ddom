@@ -17,6 +17,8 @@ package com.google.code.ddom.backend.linkedlist.intf;
 
 import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.core.WrongDocumentException;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 public interface LLNode extends CoreNode {
     // TODO: need to check if we really need interface methods for this
@@ -26,4 +28,6 @@ public interface LLNode extends CoreNode {
     LLDocument internalGetOwnerDocument();
     
     void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException;
+    
+    void internalGenerateEvents(XmlHandler handler) throws StreamException;
 }

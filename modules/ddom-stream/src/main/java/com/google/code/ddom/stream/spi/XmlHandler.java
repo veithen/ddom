@@ -34,8 +34,9 @@ public interface XmlHandler {
      *                     namespace
      * @param localName the local part of the element's name
      * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
+     * @throws StreamException 
      */
-    void processElement(String namespaceURI, String localName, String prefix);
+    void processElement(String namespaceURI, String localName, String prefix) throws StreamException;
     
     /**
      * Process an attribute in non namespace aware mode.
@@ -78,6 +79,7 @@ public interface XmlHandler {
     
     /**
      * Inform the consumer that the current element or the document is complete.
+     * @throws StreamException 
      */
-    void nodeCompleted();
+    void nodeCompleted() throws StreamException;
 }

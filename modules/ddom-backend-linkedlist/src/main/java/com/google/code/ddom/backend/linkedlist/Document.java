@@ -29,6 +29,7 @@ import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
+import com.google.code.ddom.stream.spi.XmlHandler;
 import com.google.code.ddom.stream.spi.XmlInput;
 
 public class Document extends ParentNode implements LLDocument {
@@ -198,5 +199,9 @@ public class Document extends ParentNode implements LLDocument {
             child = child.coreGetNextSibling();
         }
         return (CoreDocumentTypeDeclaration)child;
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        // TODO
     }
 }

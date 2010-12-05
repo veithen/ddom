@@ -17,10 +17,15 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreText;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class Text extends TextNode implements CoreText {
     public Text(Document document, String data) {
         super(document, data);
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        handler.processText(coreGetData());
     }
 }

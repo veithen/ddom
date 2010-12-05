@@ -19,6 +19,8 @@ import javax.xml.namespace.QName;
 
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSAwareAttribute;
+import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttribute {
@@ -59,5 +61,14 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
 
     public final QName coreGetQName() {
         return NSAwareNamedNodeHelper.coreGetQName(this);
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        try {
+            handler.processAttribute(namespaceURI, localName, prefix, coreGetTextContent(), coreGetType());
+        } catch (DeferredParsingException ex) {
+            // TODO: this should never happen if the event model is consistent with the core model
+            throw new RuntimeException(ex);
+        }
     }
 }

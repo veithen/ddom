@@ -17,7 +17,9 @@ package com.google.code.ddom.stream.wstx;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
 import java.net.URL;
 
 import javax.xml.stream.XMLStreamException;
@@ -31,6 +33,7 @@ import com.ctc.wstx.io.InputBootstrapper;
 import com.ctc.wstx.io.ReaderBootstrapper;
 import com.ctc.wstx.io.StreamBootstrapper;
 import com.ctc.wstx.stax.WstxInputFactory;
+import com.ctc.wstx.stax.WstxOutputFactory;
 import com.ctc.wstx.util.URLUtil;
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
@@ -45,6 +48,7 @@ import com.google.code.ddom.stream.spi.XmlInput;
 import com.google.code.ddom.stream.spi.XmlOutput;
 import com.google.code.ddom.stream.stax.CommentFilterStreamReader;
 import com.google.code.ddom.stream.stax.StAXInput;
+import com.google.code.ddom.stream.stax.StAXOutput;
 
 @Provider(name="woodstox")
 public class WoodstoxStreamProvider implements StreamProvider {
@@ -147,8 +151,19 @@ public class WoodstoxStreamProvider implements StreamProvider {
     }
     
     public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {
-        // TODO
-        return null;
+        try {
+            if (destination instanceof OutputStream) {
+                WstxOutputFactory factory = new WstxOutputFactory();
+                return new StAXOutput(factory.createXMLStreamWriter((OutputStream)destination));
+            } else if (destination instanceof Writer) {
+                WstxOutputFactory factory = new WstxOutputFactory();
+                return new StAXOutput(factory.createXMLStreamWriter((Writer)destination));
+            } else {
+                return null;
+            }
+        } catch (XMLStreamException ex) {
+            throw new StreamException(ex);
+        }
     }
 
     public <T> T getSerializer(Class<T> serializerType, XmlOutput output, OptionsTracker options) {

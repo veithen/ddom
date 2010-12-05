@@ -45,6 +45,10 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
         streamFactory = StreamFactory.getInstance(getClass().getClassLoader());
     }
     
+    public final StreamFactory getStreamFactory() {
+        return streamFactory;
+    }
+
     public final OMFactory getOMFactory() {
         return omFactory;
     }

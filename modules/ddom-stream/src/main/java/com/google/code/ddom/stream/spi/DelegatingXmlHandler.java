@@ -41,7 +41,7 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().processElement(tagName);
     }
 
-    public void processElement(String namespaceURI, String localName, String prefix) {
+    public void processElement(String namespaceURI, String localName, String prefix) throws StreamException {
         getDelegate().processElement(namespaceURI, localName, prefix);
     }
 
@@ -81,7 +81,7 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().processEntityReference(name);
     }
 
-    public void nodeCompleted() {
+    public void nodeCompleted() throws StreamException {
         getDelegate().nodeCompleted();
     }
 }

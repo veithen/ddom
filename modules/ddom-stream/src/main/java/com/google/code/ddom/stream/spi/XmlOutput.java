@@ -34,8 +34,9 @@ public abstract class XmlOutput {
      *                     namespace
      * @param localName the local part of the element's name
      * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
+     * @throws StreamException 
      */
-    protected abstract void processElement(String namespaceURI, String localName, String prefix);
+    protected abstract void processElement(String namespaceURI, String localName, String prefix) throws StreamException;
     
     /**
      * Process an attribute in non namespace aware mode.
@@ -78,6 +79,7 @@ public abstract class XmlOutput {
     
     /**
      * Inform the consumer that the current element or the document is complete.
+     * @throws StreamException 
      */
-    protected abstract void nodeCompleted();
+    protected abstract void nodeCompleted() throws StreamException;
 }

@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.mixin;
 
+import java.io.StringWriter;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -30,6 +31,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 import org.apache.commons.lang.ObjectUtils;
 
+import com.google.code.ddom.Options;
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.CoreChildNode;
@@ -42,12 +44,17 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.google.code.ddom.frontend.axiom.support.Policies;
+import com.google.code.ddom.stream.spi.Stream;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class ElementSupport implements AxiomElement {
@@ -236,9 +243,17 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
     
-    public String toStringWithConsume() throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String toStringWithConsume() throws XMLStreamException {
+        StringWriter sw = new StringWriter();
+        try {
+            XmlInput input = coreGetInput(false);
+            XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(sw, new Options());
+            Stream.connect(input, output);
+            while (input.proceed()) {}
+            return sw.toString();
+        } catch (StreamException ex) {
+            throw new XMLStreamException(ex);
+        }
     }
 
     public final void internalSerialize(XMLStreamWriter writer, boolean cache) throws XMLStreamException {

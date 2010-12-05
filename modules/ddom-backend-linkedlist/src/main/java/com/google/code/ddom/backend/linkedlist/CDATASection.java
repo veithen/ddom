@@ -21,6 +21,7 @@ import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class CDATASection extends Container implements CoreCDATASection {
@@ -59,5 +60,9 @@ public class CDATASection extends Container implements CoreCDATASection {
         } catch (DeferredParsingException e) {
             throw new RuntimeException(e); // TODO
         }
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        handler.processCDATASection();
     }
 }

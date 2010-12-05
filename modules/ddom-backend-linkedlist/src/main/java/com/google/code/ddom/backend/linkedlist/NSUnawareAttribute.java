@@ -17,6 +17,8 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSUnawareAttribute;
+import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareAttribute {
@@ -29,5 +31,14 @@ public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareA
 
     public final String coreGetName() {
         return name;
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        try {
+            handler.processAttribute(name, coreGetTextContent(), coreGetType());
+        } catch (DeferredParsingException ex) {
+            // TODO: this should never happen if the event model is consistent with the core model
+            throw new RuntimeException(ex);
+        }
     }
 }

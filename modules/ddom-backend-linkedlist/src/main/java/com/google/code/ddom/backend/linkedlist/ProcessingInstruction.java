@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class ProcessingInstruction extends LeafNode implements CoreProcessingInstruction {
@@ -49,5 +50,9 @@ public class ProcessingInstruction extends LeafNode implements CoreProcessingIns
     @Override
     final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
         return appendTo;
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        handler.processProcessingInstruction(target, data);
     }
 }

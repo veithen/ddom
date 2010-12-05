@@ -121,7 +121,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
     
-    protected final void processElement(String namespaceURI, String localName, String prefix) {
+    protected final void processElement(String namespaceURI, String localName, String prefix) throws StreamException {
         if (passThroughHandler == null) {
             Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
             appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
@@ -269,7 +269,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         lastAttribute = attr;
     }
     
-    protected final void nodeCompleted() {
+    protected final void nodeCompleted() throws StreamException {
         boolean pop;
         if (passThroughHandler == null) {
             if (pendingText != null) {

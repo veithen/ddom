@@ -146,7 +146,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
     @Override
     final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
         CharSequence content = appendTo;
-        for (CoreChildNode node = coreGetFirstChild(); node != null; node = node.coreGetNextSibling()) {
+        for (LLChildNode node = internalGetFirstChild(); node != null; node = node.internalGetNextSibling()) {
+            // TODO: define this method in LLNode
             content = ((Node)node).internalCollectTextContent(content);
         }
         return content;
@@ -178,6 +179,10 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
     
     public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
+        return internalGetFirstChild();
+    }
+    
+    public final LLChildNode internalGetFirstChild() throws DeferredParsingException {
         if (content == null) {
             if (coreIsComplete()) {
                 return null;
@@ -197,7 +202,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
             content = firstChild;
             return firstChild;
         } else {
-            return (CoreChildNode)content;
+            return (LLChildNode)content;
         }
     }
     

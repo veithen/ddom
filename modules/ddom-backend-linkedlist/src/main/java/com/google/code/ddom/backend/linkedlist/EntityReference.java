@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreEntityReference;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class EntityReference extends LeafNode implements CoreEntityReference {
@@ -36,5 +37,9 @@ public class EntityReference extends LeafNode implements CoreEntityReference {
     final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        // TODO
     }
 }

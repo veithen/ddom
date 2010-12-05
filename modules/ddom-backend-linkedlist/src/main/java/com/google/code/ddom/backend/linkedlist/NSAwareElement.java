@@ -28,6 +28,8 @@ import com.google.code.ddom.core.ElementAlreadyExistsException;
 import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceItem;
 import com.google.code.ddom.core.SequenceOperation;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 @Implementation(factory=NSAwareElementFactory.class)
 public class NSAwareElement extends Element implements CoreNSAwareElement {
@@ -145,5 +147,9 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
             return ObjectUtils.equals(item.getLocalName(), element.coreGetLocalName())
                     && ObjectUtils.equals(item.getNamespaceURI(), element.coreGetNamespaceURI());
         }
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.processElement(namespaceURI, localName, prefix);
     }
 }

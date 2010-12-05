@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSUnawareElement;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class NSUnawareElement extends Element implements CoreNSUnawareElement {
@@ -39,5 +40,9 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
     @Override
     protected final String getImplicitPrefix(String namespaceURI) {
         return null;
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        handler.processElement(tagName);
     }
 }

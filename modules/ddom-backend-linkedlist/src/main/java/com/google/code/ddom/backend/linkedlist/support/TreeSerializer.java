@@ -63,39 +63,72 @@ public class TreeSerializer extends XmlInput {
     public boolean proceed() throws StreamException {
         XmlHandler handler = getHandler();
         try {
-            LLNode previousNode = node;
-            if (node == null) {
-                node = root;
-            } else if (node instanceof LLParentNode && state == STATE_VISITED) {
-                
-            } else {
-                // If we get here, then the previous node can't be a document or document fragment and
-                // therefore must be a child node
-                LLChildNode previousSibling = (LLChildNode)previousNode;
+            final LLNode previousNode = node;
+            final LLNode nextNode;
+            if (previousNode == null) {
+                nextNode = root;
+            } else if (previousNode instanceof LLParentNode && state != STATE_VISITED) {
+                final LLParentNode parent = (LLParentNode)previousNode;
                 if (preserve) {
-                    LLChildNode child = previousSibling.internalGetNextSibling();
+                    LLChildNode child = parent.internalGetFirstChild();
                     if (child == null) {
-                        node = previousSibling.internalGetParent();
+                        nextNode = parent;
                         state = STATE_VISITED;
                     } else {
-                        node = child;
+                        nextNode = child;
                     }
                 } else {
-                    LLChildNode child = previousSibling.internalGetNextSiblingIfMaterialized();
+                    LLChildNode child = parent.internalGetFirstChildIfMaterialized();
                     if (child == null) {
-                        LLParentNode parent = previousSibling.internalGetParent();
+                        nextNode = parent;
                         if (parent.coreIsComplete()) {
-                            node = parent;
                             state = STATE_VISITED;
                         } else {
                             getDocument().internalGetBuilderFor(parent).setPassThroughHandler(handler);
+                            state = STATE_PASS_THROUGH;
                         }
                     } else {
-                        node = child;
+                        nextNode = child;
+                    }
+                }
+            } else {
+                // If we get here, then the previous node can't be a document or document fragment and
+                // therefore must be a child node
+                final LLChildNode previousChildNode = (LLChildNode)previousNode;
+                if (preserve) {
+                    LLChildNode sibling = previousChildNode.internalGetNextSibling();
+                    if (sibling == null) {
+                        nextNode = previousChildNode.internalGetParent();
+                        state = STATE_VISITED;
+                    } else {
+                        nextNode = sibling;
+                    }
+                } else {
+                    LLChildNode sibling = previousChildNode.internalGetNextSiblingIfMaterialized();
+                    if (sibling == null) {
+                        LLParentNode parent = previousChildNode.internalGetParent();
+                        nextNode = parent;
+                        if (parent.coreIsComplete()) {
+                            state = STATE_VISITED;
+                        } else {
+                            getDocument().internalGetBuilderFor(parent).setPassThroughHandler(handler);
+                            state = STATE_PASS_THROUGH;
+                        }
+                    } else {
+                        nextNode = sibling;
                     }
                 }
             }
-            
+            switch (state) {
+                case STATE_VISITED:
+                    handler.nodeCompleted();
+                    break;
+                case STATE_NONE:
+                    nextNode.internalGenerateEvents(handler);
+                    break;
+                    
+            }
+            node = nextNode;
             // TODO
             return true;
         } catch (CoreModelException ex) {

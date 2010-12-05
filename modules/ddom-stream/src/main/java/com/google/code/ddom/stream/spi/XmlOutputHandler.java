@@ -34,7 +34,7 @@ final class XmlOutputHandler implements XmlHandler{
         output.processElement(tagName);
     }
 
-    public void processElement(String namespaceURI, String localName, String prefix) {
+    public void processElement(String namespaceURI, String localName, String prefix) throws StreamException {
         output.processElement(namespaceURI, localName, prefix);
     }
 
@@ -74,7 +74,7 @@ final class XmlOutputHandler implements XmlHandler{
         output.processEntityReference(name);
     }
 
-    public void nodeCompleted() {
+    public void nodeCompleted() throws StreamException {
         output.nodeCompleted();
     }
 }

@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocumentFragment;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 public class DocumentFragment extends ParentNode implements CoreDocumentFragment {
     private final Document document;
@@ -46,5 +47,9 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
 
     public final LLDocument internalGetOwnerDocument() {
         return document;
+    }
+
+    public void internalGenerateEvents(XmlHandler handler) {
+        // TODO
     }
 }

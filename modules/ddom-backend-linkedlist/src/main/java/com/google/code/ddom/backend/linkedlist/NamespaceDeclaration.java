@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class NamespaceDeclaration extends Attribute implements CoreNamespaceDeclaration {
@@ -34,5 +35,14 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
     
     public final String coreGetDeclaredNamespaceURI() throws DeferredParsingException {
         return coreGetTextContent();
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) {
+        try {
+            handler.processNamespaceDeclaration(coreGetDeclaredPrefix(), coreGetDeclaredNamespaceURI());
+        } catch (DeferredParsingException ex) {
+            // TODO: this should never happen if the event model is consistent with the core model
+            throw new RuntimeException(ex);
+        }
     }
 }
