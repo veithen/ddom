@@ -37,7 +37,6 @@ import org.w3c.domts.level1.core.hc_nodevalue07;
 import org.w3c.domts.level1.core.hc_nodevalue08;
 import org.w3c.domts.level1.core.namednodemapremovenameditem;
 import org.w3c.domts.level1.core.namednodemapremovenameditemgetvalue;
-import org.w3c.domts.level1.core.nodeappendchildchildexists;
 import org.w3c.domts.level1.core.nodevalue03;
 import org.w3c.domts.level1.core.nodevalue07;
 import org.w3c.domts.level1.core.nodevalue08;
@@ -88,7 +87,6 @@ public class DOM1CoreTest extends TestSuite {
         // TODO
         suite.addExclude(hc_nodeappendchildchildexists.class);
         suite.addExclude(hc_nodereplacechildnewchildexists.class);
-        suite.addExclude(nodeappendchildchildexists.class);
         
         // TODO Will implement normalization later
         suite.addExclude(hc_elementnormalize2.class);
