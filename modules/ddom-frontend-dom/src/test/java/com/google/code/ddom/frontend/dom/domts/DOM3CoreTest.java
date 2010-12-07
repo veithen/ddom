@@ -30,7 +30,6 @@ import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
 import org.w3c.domts.level3.core.elementsetidattributens05;
 import org.w3c.domts.level3.core.namespacedeclarations02;
-import org.w3c.domts.level3.core.nodeinsertbefore12;
 import org.w3c.domts.level3.core.nodeinsertbefore14;
 import org.w3c.domts.level3.core.nodeinsertbefore15;
 import org.w3c.domts.level3.core.nodeinsertbefore25;
@@ -40,10 +39,6 @@ import org.w3c.domts.level3.core.nodeisequalnode18;
 import org.w3c.domts.level3.core.nodelookupnamespaceuri04;
 import org.w3c.domts.level3.core.nodelookupprefix04;
 import org.w3c.domts.level3.core.noderemovechild07;
-import org.w3c.domts.level3.core.nodereplacechild12;
-import org.w3c.domts.level3.core.nodereplacechild17;
-import org.w3c.domts.level3.core.nodereplacechild18;
-import org.w3c.domts.level3.core.nodereplacechild30;
 
 import com.google.code.ddom.domts.FilteredDOMTestSuite;
 
@@ -129,18 +124,9 @@ public class DOM3CoreTest extends TestSuite {
         // TODO: wrong exception thrown
         suite.addExclude(documentrenamenode19.class);
         
-        // TODO: contains some very tricky cases!
-        suite.addExclude(nodeinsertbefore12.class);
-        suite.addExclude(nodereplacechild17.class);
-        suite.addExclude(nodereplacechild18.class);
-
         // TODO: only the wrong exception type is thrown here
         suite.addExclude(nodeinsertbefore14.class);
         suite.addExclude(nodeinsertbefore15.class);
-        
-        // TODO: hangs
-        suite.addExclude(nodereplacechild12.class);
-        suite.addExclude(nodereplacechild30.class);
         
         return new JUnitTestSuiteAdapter(suite);
     }

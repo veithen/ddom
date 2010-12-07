@@ -56,6 +56,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsAfterWithIncomplete(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeFromWrongDocument(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeOnOrphan(config));
+        suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeWithEmptyFragment(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeWithoutPreviousSibling(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreInsertSiblingsBeforeWithPreviousSibling(config));
         suite.addTest(new com.google.code.ddom.backend.testsuite.child.TestCoreReplaceWith1FromWrongDocument(config));

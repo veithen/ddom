@@ -173,28 +173,29 @@ public final class LLChildNodeHelper {
         if (parent == null) {
             throw new NoParentException();
         } else {
-            // TODO: handle empty fragment?
             that.internalValidateOwnerDocument(fragment);
             fragment.coreBuild();
             LLChildNode node = fragment.internalGetFirstChild();
-            LLChildNode previousSibling = that.internalGetPreviousSibling();
-            if (previousSibling == null) {
-                parent.internalSetFirstChild(node);
-            } else {
-                previousSibling.internalSetNextSibling(node);
+            if (node != null) {
+                LLChildNode previousSibling = that.internalGetPreviousSibling();
+                if (previousSibling == null) {
+                    parent.internalSetFirstChild(node);
+                } else {
+                    previousSibling.internalSetNextSibling(node);
+                }
+                int nodeCount = 0;
+                LLChildNode previousNode;
+                do {
+                    node.internalSetParent(parent);
+                    previousNode = node;
+                    node = node.internalGetNextSibling();
+                    nodeCount++;
+                } while (node != null);
+                previousNode.internalSetNextSibling(that);
+                fragment.internalSetFirstChild(null);
+                fragment.internalNotifyChildrenCleared();
+                parent.internalNotifyChildrenModified(nodeCount);
             }
-            int nodeCount = 0;
-            LLChildNode previousNode;
-            do {
-                node.internalSetParent(parent);
-                previousNode = node;
-                node = node.internalGetNextSibling();
-                nodeCount++;
-            } while (node != null);
-            previousNode.internalSetNextSibling(that);
-            fragment.internalSetFirstChild(null);
-            fragment.internalNotifyChildrenCleared();
-            parent.internalNotifyChildrenModified(nodeCount);
         }
     }
     
