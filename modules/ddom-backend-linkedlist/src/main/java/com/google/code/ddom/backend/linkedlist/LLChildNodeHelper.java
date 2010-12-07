@@ -176,7 +176,7 @@ public final class LLChildNodeHelper {
             // TODO: handle empty fragment?
             that.internalValidateOwnerDocument(fragment);
             fragment.coreBuild();
-            LLChildNode node = (LLChildNode)fragment.coreGetFirstChild(); // TODO: internal... method here
+            LLChildNode node = fragment.internalGetFirstChild();
             LLChildNode previousSibling = that.internalGetPreviousSibling();
             if (previousSibling == null) {
                 parent.internalSetFirstChild(node);
