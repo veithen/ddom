@@ -24,6 +24,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.ext.Locator2;
 
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
@@ -56,7 +57,11 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     }
 
     public void endDocument() throws SAXException {
-        handler.nodeCompleted();
+        try {
+            handler.nodeCompleted();
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void startDTD(String name, String publicId, String systemId) throws SAXException {
@@ -74,38 +79,46 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     }
 
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        processDocumentInfo();
-        if (localName.length() == 0) {
-            handler.processElement(qName);
-        } else {
-            handler.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName));
-        }
-
-        int length = atts.getLength();
-        for (int i=0; i<length; i++) {
-            String attQName = atts.getQName(i);
-            String attLocalName = atts.getLocalName(i);
-            if (attLocalName.length() == 0) {
-                handler.processAttribute(attQName, atts.getValue(i), atts.getType(i));
+        try {
+            processDocumentInfo();
+            if (localName.length() == 0) {
+                handler.processElement(qName);
             } else {
-                String attUri = atts.getURI(i);
-                if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                    handler.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(attQName), atts.getValue(i));
+                handler.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName));
+            }
+    
+            int length = atts.getLength();
+            for (int i=0; i<length; i++) {
+                String attQName = atts.getQName(i);
+                String attLocalName = atts.getLocalName(i);
+                if (attLocalName.length() == 0) {
+                    handler.processAttribute(attQName, atts.getValue(i), atts.getType(i));
                 } else {
-                    handler.processAttribute(
-                            SAXStreamUtils.normalizeNamespaceURI(attUri),
-                            atts.getLocalName(i),
-                            SAXStreamUtils.getPrefixFromQName(attQName),
-                            atts.getValue(i),
-                            atts.getType(i));
+                    String attUri = atts.getURI(i);
+                    if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+                        handler.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(attQName), atts.getValue(i));
+                    } else {
+                        handler.processAttribute(
+                                SAXStreamUtils.normalizeNamespaceURI(attUri),
+                                atts.getLocalName(i),
+                                SAXStreamUtils.getPrefixFromQName(attQName),
+                                atts.getValue(i),
+                                atts.getType(i));
+                    }
                 }
             }
+            handler.attributesCompleted();
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
         }
-        handler.attributesCompleted();
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        handler.nodeCompleted();
+        try {
+            handler.nodeCompleted();
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void startCDATA() throws SAXException {
@@ -113,7 +126,11 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     }
 
     public void endCDATA() throws SAXException {
-        handler.nodeCompleted();
+        try {
+            handler.nodeCompleted();
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
