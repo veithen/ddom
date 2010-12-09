@@ -20,6 +20,7 @@ import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.DeferredParsingException;
@@ -49,12 +50,18 @@ public final class LLChildNodeHelper {
     
     public static void internalSetParent(LLChildNode that, LLParentNode parent) {
         if (parent == null) {
+            // TODO: this case should be covered by internalUnsetParent
             that.internalSetOwner(internalGetOwnerDocument(that));
             that.internalSetFlag(Flags.HAS_PARENT, false);
         } else {
             that.internalSetOwner(parent);
             that.internalSetFlag(Flags.HAS_PARENT, true);
         }
+    }
+    
+    public static void internalUnsetParent(LLChildNode that, LLDocument newOwnerDocument) {
+        that.internalSetOwner(newOwnerDocument);
+        that.internalSetFlag(Flags.HAS_PARENT, false);
     }
     
     public static LLChildNode internalGetNextSibling(LLChildNode that) throws DeferredParsingException {
@@ -200,6 +207,14 @@ public final class LLChildNodeHelper {
     }
     
     public static void coreDetach(LLChildNode that) throws DeferredParsingException {
+        detach(that, false, null);
+    }
+    
+    public static void coreDetach(LLChildNode that, CoreDocument document) throws DeferredParsingException {
+        detach(that, true, (LLDocument)document);
+    }
+    
+    private static void detach(LLChildNode that, boolean newOwnerDocument, LLDocument ownerDocument) throws DeferredParsingException {
         LLParentNode parent = that.internalGetParent();
         if (parent != null) {
             LLChildNode previousSibling = that.internalGetPreviousSibling();
@@ -213,7 +228,12 @@ public final class LLChildNodeHelper {
             }
             that.internalSetNextSibling(null);
             parent.internalNotifyChildrenModified(-1);
-            that.internalSetParent(null);
+        }
+        if (newOwnerDocument) {
+            // TODO: there is probably something more to do here if the node is not complete
+            that.internalUnsetParent(ownerDocument);
+        } else {
+            that.internalUnsetParent(internalGetOwnerDocument(that));
         }
     }
     

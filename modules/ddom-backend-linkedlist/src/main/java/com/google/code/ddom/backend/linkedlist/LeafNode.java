@@ -19,6 +19,7 @@ import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreLeafNode;
@@ -85,6 +86,10 @@ public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode
         LLChildNodeHelper.internalSetParent(this, parent);
     }
     
+    public final void internalUnsetParent(LLDocument newOwnerDocument) {
+        LLChildNodeHelper.internalUnsetParent(this, newOwnerDocument);
+    }
+    
     public final LLChildNode internalGetNextSibling() throws DeferredParsingException {
         return LLChildNodeHelper.internalGetNextSibling(this);
     }
@@ -110,6 +115,10 @@ public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode
     }
 
     public final void coreDetach() throws DeferredParsingException {
+        LLChildNodeHelper.coreDetach(this);
+    }
+
+    public final void coreDetach(CoreDocument document) throws DeferredParsingException {
         LLChildNodeHelper.coreDetach(this);
     }
 

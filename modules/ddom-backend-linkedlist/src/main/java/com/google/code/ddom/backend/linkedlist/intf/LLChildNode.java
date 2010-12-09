@@ -32,6 +32,7 @@ public interface LLChildNode extends LLNode, CoreChildNode {
     
     LLParentNode internalGetParent();
     void internalSetParent(LLParentNode parent);
+    void internalUnsetParent(LLDocument newOwnerDocument);
     
     LLChildNode internalGetNextSiblingIfMaterialized();
     void internalSetNextSibling(LLChildNode nextSibling);

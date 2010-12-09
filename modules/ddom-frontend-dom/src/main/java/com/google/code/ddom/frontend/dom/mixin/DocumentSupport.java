@@ -44,7 +44,6 @@ import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareNamedNode;
 import com.google.code.ddom.core.CoreTypedAttribute;
 import com.google.code.ddom.core.NodeFactory;
-import com.google.code.ddom.core.NodeMigrationPolicy;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
@@ -251,8 +250,23 @@ public abstract class DocumentSupport implements DOMDocument {
     }
 
     public final Node adoptNode(Node source) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
+        switch (source.getNodeType()) {
+            case Node.DOCUMENT_NODE:
+                throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+            case Node.DOCUMENT_FRAGMENT_NODE:
+                ((DOMDocumentFragment)source).coreSetOwnerDocument(this);
+                return source;
+            case Node.ATTRIBUTE_NODE:
+                ((DOMAttribute)source).coreRemove(this);
+                return source;
+            default:
+                try {
+                    ((DOMCoreChildNode)source).coreDetach(this);
+                    return source;
+                } catch (CoreModelException ex) {
+                    throw DOMExceptionUtil.translate(ex);
+                }
+        }
     }
 
     public final DOMConfiguration getDomConfig() {

@@ -76,10 +76,23 @@ public interface CoreChildNode extends CoreNode {
     void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     /**
-     * Detach this node from its parent. If the node has no parent, then this method does nothing.
-     * @throws DeferredParsingException 
+     * Detach this node from its parent. The node will keep its current owner document. If the node
+     * has no parent, then this method does nothing.
+     * 
+     * @throws DeferredParsingException
      */
     void coreDetach() throws DeferredParsingException;
+    
+    /**
+     * Detach this node from its parent and assign it to a new owner document. The owner document
+     * will always be changed, even if the node has no parent.
+     * 
+     * @param document
+     *            the new owner document, or <code>null</code> if the node will have it's own owner
+     *            document (which may be created lazily at a later moment)
+     * @throws DeferredParsingException
+     */
+    void coreDetach(CoreDocument document) throws DeferredParsingException;
     
     /**
      * Replace this node by another node. If the replacing node has a parent, it will be detached

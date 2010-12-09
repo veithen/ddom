@@ -17,11 +17,12 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 public class DocumentFragment extends ParentNode implements CoreDocumentFragment {
-    private final Document document;
+    private Document document;
     private int children;
     
     public DocumentFragment(Document document) {
@@ -51,5 +52,10 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
 
     public void internalGenerateEvents(XmlHandler handler) {
         // TODO
+    }
+
+    public final void coreSetOwnerDocument(CoreDocument document) {
+        // TODO: there is probably something more to do here if the node is not complete
+        this.document = (Document)document;
     }
 }

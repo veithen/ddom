@@ -19,6 +19,7 @@ import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.core.ChildNotAllowedException;
 import com.google.code.ddom.core.CoreAttribute;
 import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreEntityReference;
 import com.google.code.ddom.core.CoreText;
@@ -126,10 +127,18 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
 
     public final boolean coreRemove() {
+        return remove(false, null);
+    }
+
+    public final boolean coreRemove(CoreDocument document) {
+        return remove(true, (Document)document);
+    }
+
+    private boolean remove(boolean newOwnerDocument, Document ownerDocument) {
         if (owner instanceof Element) {
             Element ownerElement = (Element)owner;
             Attribute previousAttr = (Attribute)coreGetPreviousAttribute();
-            setOwnerElement(null);
+            owner = newOwnerDocument ? ownerDocument : internalGetOwnerDocument();
             if (previousAttr == null) {
                 ownerElement.setFirstAttribute((Attribute)nextAttribute);
             } else {
@@ -137,6 +146,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
             }
             return true;
         } else {
+            if (newOwnerDocument) {
+                owner = ownerDocument;
+            }
             return false;
         }
     }

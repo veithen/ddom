@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,4 +16,12 @@
 package com.google.code.ddom.core;
 
 public interface CoreDocumentFragment extends CoreParentNode {
+    /**
+     * Set a new owner document for this document fragment.
+     * 
+     * @param document
+     *            the new owner document, or <code>null</code> if the document fragment will have
+     *            it's own owner document (which may be created lazily later)
+     */
+    void coreSetOwnerDocument(CoreDocument document);
 }

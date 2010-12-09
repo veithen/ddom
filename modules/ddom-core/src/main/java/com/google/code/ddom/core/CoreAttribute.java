@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,13 +31,23 @@ public interface CoreAttribute extends CoreParentNode {
     boolean coreHasOwnerElement();
     
     /**
-     * Remove this attribute from its owner element.
+     * Remove this attribute from its owner element. The attribute will keep its current owner
+     * document.
      * 
      * @return <code>true</code> if the attribute had an owner element and has been removed from
      *         that element; <code>false</code> if the attribute didn't have an owner element and no
      *         changes have been made
      */
     boolean coreRemove();
+    
+    /**
+     * Remove this attribute from its owner element and assign it to a new owner document. The owner
+     * document will always be changed, even if the attribute has no owner element.
+     * 
+     * @return <code>true</code> if the attribute had an owner element and has been removed from
+     *         that element; <code>false</code> if the attribute didn't have an owner element
+     */
+    boolean coreRemove(CoreDocument document);
     
     /**
      * Get the attribute immediately following the current attribute.
