@@ -122,15 +122,20 @@ public class TreeSerializer extends XmlInput {
             switch (state) {
                 case STATE_VISITED:
                     handler.nodeCompleted();
-                    break;
+                    if (nextNode == root) {
+                        node = null;
+                        return false;
+                    } else {
+                        node = nextNode;
+                        return true;
+                    }
                 case STATE_NONE:
                     nextNode.internalGenerateEvents(handler);
-                    break;
-                    
+                    node = nextNode;
+                    return true;
+                default:
+                    throw new IllegalStateException();
             }
-            node = nextNode;
-            // TODO
-            return true;
         } catch (CoreModelException ex) {
             throw new StreamException(ex);
         }
