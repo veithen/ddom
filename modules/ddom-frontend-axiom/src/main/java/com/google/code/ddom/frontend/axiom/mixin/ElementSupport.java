@@ -25,6 +25,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
@@ -39,6 +40,7 @@ import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.IdentityMapper;
+import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
@@ -82,14 +84,13 @@ public abstract class ElementSupport implements AxiomElement {
         return coreGetAttributesByType(AxiomAttribute.class, attributeIdentityMapper);
     }
     
-    public OMAttribute getAttribute(QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMAttribute getAttribute(QName qname) {
+        return (AxiomAttribute)coreGetAttribute(AxiomAttributeMatcher.INSTANCE, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
     }
     
-    public String getAttributeValue(QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getAttributeValue(QName qname) {
+        // TODO: behavior if attribute not found?
+        return getAttribute(qname).getAttributeValue();
     }
     
     public final OMAttribute addAttribute(OMAttribute attr) {
@@ -155,9 +156,14 @@ public abstract class ElementSupport implements AxiomElement {
         }
     }
 
-    public void setText(QName text) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void setText(QName qname) {
+        try {
+            ensureNamespaceIsDeclared(QNameUtil.getPrefix(qname), QNameUtil.getNamespaceURI(qname));
+            // TODO
+            coreSetValue(qname.getPrefix() + ":" + qname.getLocalPart());
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public QName getTextAsQName() {
@@ -243,16 +249,28 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
     
-    public final String toStringWithConsume() throws XMLStreamException {
+    private String toString(boolean preserve) throws StreamException {
         StringWriter sw = new StringWriter();
+        XmlInput input = coreGetInput(preserve);
+        XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(sw, new Options());
+        Stream.connect(input, output);
+        while (input.proceed()) {}
+        return sw.toString();
+    }
+    
+    public final String toStringWithConsume() throws XMLStreamException {
         try {
-            XmlInput input = coreGetInput(false);
-            XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(sw, new Options());
-            Stream.connect(input, output);
-            while (input.proceed()) {}
-            return sw.toString();
+            return toString(false);
         } catch (StreamException ex) {
             throw new XMLStreamException(ex);
+        }
+    }
+
+    public final String toString() {
+        try {
+            return toString(false);
+        } catch (StreamException ex) {
+            throw new OMException(ex);
         }
     }
 
