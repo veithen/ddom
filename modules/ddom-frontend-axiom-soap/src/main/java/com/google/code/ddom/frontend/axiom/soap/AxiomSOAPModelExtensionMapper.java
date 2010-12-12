@@ -19,6 +19,7 @@ import com.google.code.ddom.core.ext.ModelExtensionMapper;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11EnvelopeExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12EnvelopeExtension;
 
+// TODO: this should only be used if a plain OMFactory is used; however, it is always used
 public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
     private static final String SOAP11_NAMESPACE_URI = "http://schemas.xmlsoap.org/soap/envelope/";
     private static final String SOAP12_NAMESPACE_URI = "http://www.w3.org/2003/05/soap-envelope";
@@ -30,7 +31,10 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
     public Class<?> startElement(String namespaceURI, String localName) {
         switch (depth++) {
             case 0:
-                if (namespaceURI.equals(SOAP11_NAMESPACE_URI)) {
+                if (namespaceURI == null) {
+                    // TODO
+                    return null;
+                } else if (namespaceURI.equals(SOAP11_NAMESPACE_URI)) {
                     soapNamespaceURI = namespaceURI;
                     isSoap12 = false;
                 } else if (namespaceURI.equals(SOAP12_NAMESPACE_URI)) {

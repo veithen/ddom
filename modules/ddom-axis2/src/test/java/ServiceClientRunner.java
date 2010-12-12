@@ -37,9 +37,8 @@ public class ServiceClientRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        ConfigurationContext configContext = ConfigurationContextFactory.createConfigurationContextFromFileSystem(null, null);
-        // TODO: we are cheating here because the ConfigurationContextFactory already uses Axiom
         OMAbstractFactory.setMetaFactory(new OMMetaFactoryImpl());
+        ConfigurationContext configContext = ConfigurationContextFactory.createConfigurationContextFromFileSystem(null, null);
         ServiceClient client = new ServiceClient(configContext, null);
         Options options = new Options();
         options.setTo(new EndpointReference("http://127.0.0.1:8080/axis2/services/MyService"));

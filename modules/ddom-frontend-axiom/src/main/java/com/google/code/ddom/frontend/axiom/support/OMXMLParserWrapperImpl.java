@@ -84,6 +84,11 @@ public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
 
     public void setCache(boolean b) throws OMException {
         // TODO
-        throw new UnsupportedOperationException();
+//        throw new UnsupportedOperationException();
+    }
+
+    public void close() {
+        // TODO
+//        throw new UnsupportedOperationException();
     }
 }
