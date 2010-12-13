@@ -89,8 +89,8 @@ public abstract class ElementSupport implements AxiomElement {
     }
     
     public final String getAttributeValue(QName qname) {
-        // TODO: behavior if attribute not found?
-        return getAttribute(qname).getAttributeValue();
+        OMAttribute attr = getAttribute(qname);
+        return attr == null ? null : attr.getAttributeValue();
     }
     
     public final OMAttribute addAttribute(OMAttribute attr) {

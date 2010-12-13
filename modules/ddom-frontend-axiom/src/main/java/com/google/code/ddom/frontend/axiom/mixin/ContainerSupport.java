@@ -36,6 +36,7 @@ import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
@@ -65,9 +66,10 @@ public abstract class ContainerSupport implements AxiomContainer {
         throw new UnsupportedOperationException();
     }
     
-    public OMElement getFirstChildWithName(QName elementQName) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMElement getFirstChildWithName(QName qname) {
+        // TODO: we should avoid usage of an iterator here; this would also improve error reporting (because the iterator can only throw unchecked exceptions)
+        Iterator<CoreNSAwareElement> it = coreGetElementsByName(Axis.CHILDREN, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
+        return it.hasNext() ? (AxiomElement)it.next() : null;
     }
     
     public void addChild(OMNode omNode) {
