@@ -15,16 +15,12 @@
  */
 package com.google.code.ddom.frontend.axiom.mixin;
 
-import java.io.IOException;
-
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.util.stax.XMLStreamWriterUtils;
 
 import com.google.code.ddom.core.CoreTextNode;
 import com.google.code.ddom.frontend.Mixin;
