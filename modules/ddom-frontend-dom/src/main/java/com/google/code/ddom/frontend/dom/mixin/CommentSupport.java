@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.mixin;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.core.CoreComment;
@@ -27,6 +28,14 @@ public abstract class CommentSupport implements DOMComment {
         return (Node)coreGetNodeFactory().createComment(coreGetOwnerDocument(true), getData());
     }
 
+    public final String getData() {
+        return coreGetData();
+    }
+    
+    public final void setData(String data) throws DOMException {
+        coreSetData(data);
+    }
+    
     public final short getNodeType() {
         return Node.COMMENT_NODE;
     }

@@ -17,22 +17,15 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.DOMException;
 
+import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreCharacterData;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMCharacterData;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
-@Mixin(CoreCharacterData.class)
+@Mixin({CoreCharacterData.class, CoreCDATASection.class})
 public abstract class CharacterDataSupport implements DOMCharacterData {
-    public final String getData() {
-        return coreGetData();
-    }
-    
-    public final void setData(String data) throws DOMException {
-        coreSetData(data);
-    }
-    
     public final int getLength() {
         return getData().length();
     }
@@ -74,11 +67,11 @@ public abstract class CharacterDataSupport implements DOMCharacterData {
     }
 
     public final String getTextContent() {
-        return coreGetData();
+        return getData();
     }
 
     public final void setTextContent(String textContent) {
-        coreSetData(textContent);
+        setData(textContent);
     }
     
     public final String getNodeValue() throws DOMException {

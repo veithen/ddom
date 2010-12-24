@@ -39,6 +39,7 @@ import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
+import com.google.code.ddom.frontend.axiom.intf.AxiomCDATASection;
 import com.google.code.ddom.frontend.axiom.intf.AxiomComment;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
@@ -217,7 +218,9 @@ public class OMFactoryImpl implements OMFactory {
                     node = (AxiomTextNode)((AxiomContainer)parent).coreAppendText(data);
                     break;
                 case OMNode.CDATA_SECTION_NODE:
-                    node = (AxiomTextNode)((AxiomContainer)parent).coreAppendCDATASection(data);
+                    AxiomCDATASection cdataSection = (AxiomCDATASection)((AxiomContainer)parent).coreAppendCDATASection();
+                    cdataSection.coreSetValue(data);
+                    node = cdataSection;
                     break;
                 default:
                     // TODO: support the other types

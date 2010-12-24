@@ -193,7 +193,7 @@ public class Builder extends XmlOutput implements LLBuilder {
     
     protected final void processCDATASection() {
         if (passThroughHandler == null) {
-            appendNode(new CDATASection(document));
+            appendNode(new CDATASection(document, false));
         } else {
             passThroughDepth++;
             passThroughHandler.processCDATASection();

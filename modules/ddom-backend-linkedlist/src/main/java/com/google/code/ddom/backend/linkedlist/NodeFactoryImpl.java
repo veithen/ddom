@@ -91,8 +91,8 @@ public class NodeFactoryImpl implements NodeFactory {
         return new Comment((Document)document, data);
     }
 
-    public final CoreCDATASection createCDATASection(CoreDocument document, String data) {
-        return new CDATASection((Document)document, data);
+    public final CoreCDATASection createCDATASection(CoreDocument document) {
+        return new CDATASection((Document)document, true);
     }
 
     public final CoreEntityReference createEntityReference(CoreDocument document, String name) {

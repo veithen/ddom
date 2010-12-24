@@ -25,40 +25,14 @@ import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class CDATASection extends Container implements CoreCDATASection {
-    // TODO: this should be removed
-    public CDATASection(Document document, String data) {
-        super(document, true);
-        try {
-            coreSetValue(data);
-        } catch (DeferredParsingException e) {
-            throw new RuntimeException(e); // TODO
-        }
-    }
-    
-    public CDATASection(Document document) {
-        super(document, false);
+    public CDATASection(Document document, boolean complete) {
+        super(document, complete);
     }
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)
             throws ChildNotAllowedException, DeferredParsingException {
         if (!(newChild instanceof CoreText)) {
             throw new ChildNotAllowedException();
-        }
-    }
-
-    public String coreGetData() {
-        try {
-            return coreGetTextContent();
-        } catch (DeferredParsingException e) {
-            throw new RuntimeException(e); // TODO
-        }
-    }
-
-    public void coreSetData(String data) {
-        try {
-            coreSetValue(data);
-        } catch (DeferredParsingException e) {
-            throw new RuntimeException(e); // TODO
         }
     }
 

@@ -20,6 +20,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreLeafNode;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
@@ -28,7 +29,7 @@ import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.EmptyNodeList;
 
-@Mixin(CoreLeafNode.class)
+@Mixin({CoreLeafNode.class, CoreCDATASection.class})
 public abstract class LeafNodeSupport implements DOMLeafNode {
     public final boolean hasAttributes() {
         return false;

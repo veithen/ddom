@@ -385,8 +385,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return child;
     }
 
-    public final CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredParsingException {
-        CDATASection child = new CDATASection(null, data);
+    public final CoreCDATASection coreAppendCDATASection() throws ChildNotAllowedException, DeferredParsingException {
+        CDATASection child = new CDATASection(null, true);
         appendNewlyCreatedChild(child);
         return child;
     }

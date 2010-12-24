@@ -19,6 +19,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import com.google.code.ddom.core.CoreCDATASection;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreParentNode;
@@ -27,7 +28,7 @@ import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
-@Mixin(CoreTextNode.class)
+@Mixin({CoreTextNode.class, CoreCDATASection.class})
 public abstract class TextNodeSupport implements DOMTextNode {
     public final Text splitText(int offset) throws DOMException {
         String text = getData();

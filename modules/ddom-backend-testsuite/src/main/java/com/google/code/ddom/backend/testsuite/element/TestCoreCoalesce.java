@@ -40,7 +40,8 @@ public class TestCoreCoalesce extends BackendTestCase {
         element.coreAppendChild(text1);
         CoreText text2 = nodeFactory.createText(document, "B");
         element.coreAppendChild(text2);
-        CoreCDATASection cdata = nodeFactory.createCDATASection(document, "C");
+        CoreCDATASection cdata = nodeFactory.createCDATASection(document);
+        cdata.coreSetValue("C");
         element.coreAppendChild(cdata);
         CoreText text3 = nodeFactory.createText(document, "D");
         element.coreAppendChild(text3);

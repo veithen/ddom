@@ -72,7 +72,7 @@ public interface NodeFactory {
 
     CoreComment createComment(CoreDocument document, String data);
 
-    CoreCDATASection createCDATASection(CoreDocument document, String data);
+    CoreCDATASection createCDATASection(CoreDocument document);
 
     CoreEntityReference createEntityReference(CoreDocument document, String name);
 }

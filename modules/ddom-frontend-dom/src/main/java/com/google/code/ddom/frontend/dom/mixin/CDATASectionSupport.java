@@ -15,17 +15,42 @@
  */
 package com.google.code.ddom.frontend.dom.mixin;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.core.CoreCDATASection;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 
 @Mixin(CoreCDATASection.class)
 public abstract class CDATASectionSupport implements DOMCDATASection {
     public final DOMTextNode createNewTextNode(String data) {
-        return (DOMTextNode)coreGetNodeFactory().createCDATASection(coreGetOwnerDocument(true), data);
+        DOMCDATASection newNode = (DOMCDATASection)coreGetNodeFactory().createCDATASection(coreGetOwnerDocument(true));
+        try {
+            newNode.coreSetValue(data);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return newNode;
+    }
+
+    public final String getData() throws DOMException {
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void setData(String data) throws DOMException {
+        try {
+            coreSetValue(data);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final short getNodeType() {

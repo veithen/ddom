@@ -47,6 +47,7 @@ import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
@@ -198,7 +199,9 @@ public abstract class DocumentSupport implements DOMDocument {
                 case Node.TEXT_NODE:
                     return (Node)nodeFactory.createText(this, node.getNodeValue());
                 case Node.CDATA_SECTION_NODE:
-                    return (Node)nodeFactory.createCDATASection(this, node.getNodeValue());
+                    DOMCDATASection cdataSection = (DOMCDATASection)coreGetNodeFactory().createCDATASection(this);
+                    cdataSection.coreSetValue(node.getNodeValue());
+                    return cdataSection;
                 case Node.PROCESSING_INSTRUCTION_NODE:
                     ProcessingInstruction pi = (ProcessingInstruction)node;
                     return (Node)nodeFactory.createProcessingInstruction(this, pi.getTarget(), pi.getData());
@@ -399,7 +402,13 @@ public abstract class DocumentSupport implements DOMDocument {
     }
 
     public final CDATASection createCDATASection(String data) throws DOMException {
-        return (CDATASection)coreGetNodeFactory().createCDATASection(this, data);
+        DOMCDATASection cdataSection = (DOMCDATASection)coreGetNodeFactory().createCDATASection(this);
+        try {
+            cdataSection.coreSetValue(data);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
+        return cdataSection;
     }
 
     public final EntityReference createEntityReference(String name) throws DOMException {

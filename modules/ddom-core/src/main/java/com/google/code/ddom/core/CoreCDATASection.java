@@ -15,6 +15,6 @@
  */
 package com.google.code.ddom.core;
 
-public interface CoreCDATASection extends CoreChildNode, CoreParentNode, CoreTextNode {
+public interface CoreCDATASection extends CoreChildNode, CoreParentNode {
 
 }
