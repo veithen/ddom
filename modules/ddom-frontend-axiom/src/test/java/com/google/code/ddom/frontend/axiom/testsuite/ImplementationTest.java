@@ -19,6 +19,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.axiom.ts.AxiomTestSuiteBuilder;
+import org.apache.axiom.ts.om.element.TestSerialization;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
 import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
@@ -32,6 +33,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestSetTextQName.class);
         builder.exclude(TestInsertSiblingAfterLastChild.class);
         builder.exclude(TestBase64Streaming.class);
+        builder.exclude(TestSerialization.class);
         return builder.build();
     }
 }
