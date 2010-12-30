@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreText;
@@ -32,7 +33,7 @@ public class TestCoreInsertSiblingsAfterOnOrphan extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreText text1 = nodeFactory.createText(document, "text1");
         CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
-        fragment.coreAppendChild(nodeFactory.createText(document, "text2"));
+        fragment.coreAppendChild(nodeFactory.createText(document, "text2"), Policies.REJECT);
         try {
             text1.coreInsertSiblingsAfter(fragment);
             fail("Expected NoParentException");

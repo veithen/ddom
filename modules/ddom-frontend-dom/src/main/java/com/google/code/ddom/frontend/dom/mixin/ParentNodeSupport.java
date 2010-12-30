@@ -38,6 +38,7 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagName;
 import com.google.code.ddom.frontend.dom.support.ElementsByTagNameNS;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
+import com.google.code.ddom.frontend.dom.support.Policies;
 
 @Mixin({CoreElement.class, CoreAttribute.class, CoreDocument.class, CoreDocumentFragment.class})
 public abstract class ParentNodeSupport implements DOMParentNode {
@@ -108,7 +109,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
         try {
             CoreNode coreNewChild = toCore(newChild);
             if (coreNewChild instanceof CoreChildNode) {
-                coreAppendChild((CoreChildNode)coreNewChild);
+                coreAppendChild((CoreChildNode)coreNewChild, Policies.NODE_MIGRATION_POLICY);
             } else if (coreNewChild instanceof CoreDocumentFragment) {
                 coreAppendChildren((CoreDocumentFragment)coreNewChild);
             } else {

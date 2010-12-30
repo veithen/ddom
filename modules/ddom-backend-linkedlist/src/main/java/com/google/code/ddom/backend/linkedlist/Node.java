@@ -33,6 +33,10 @@ public abstract class Node implements LLNode {
         return internalGetOwnerDocument();
     }
 
+    public final boolean coreIsSameOwnerDocument(CoreNode other) {
+        return other.coreGetOwnerDocument(true) == internalGetOwnerDocument(); // TODO: this is wrong
+    }
+
     public final boolean internalGetFlag(int flag) {
         return (flags & flag) != 0;
     }

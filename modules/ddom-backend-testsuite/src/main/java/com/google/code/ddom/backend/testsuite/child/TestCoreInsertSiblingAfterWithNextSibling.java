@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreText;
@@ -33,8 +34,8 @@ public class TestCoreInsertSiblingAfterWithNextSibling extends BackendTestCase {
         CoreElement parent = nodeFactory.createElement(document, "test");
         CoreText text1 = nodeFactory.createText(document, "text1");
         CoreText text2 = nodeFactory.createText(document, "text2");
-        parent.coreAppendChild(text1);
-        parent.coreAppendChild(text2);
+        parent.coreAppendChild(text1, Policies.REJECT);
+        parent.coreAppendChild(text2, Policies.REJECT);
         CoreText newSibling = nodeFactory.createText(document, "sibling");
         text1.coreInsertSiblingAfter(newSibling);
         assertEquals(3, parent.coreGetChildCount());

@@ -40,4 +40,6 @@ public interface LLChildNode extends LLNode, CoreChildNode {
     // Type safe variants of several core model methods
     LLChildNode internalGetNextSibling() throws DeferredParsingException;
     LLChildNode internalGetPreviousSibling();
+    
+    void internalDetach();
 }

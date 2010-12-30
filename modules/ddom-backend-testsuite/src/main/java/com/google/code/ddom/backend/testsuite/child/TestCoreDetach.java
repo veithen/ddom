@@ -20,6 +20,7 @@ import org.junit.Assert;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreText;
@@ -34,11 +35,11 @@ public class TestCoreDetach extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, "test");
         CoreText text1 = nodeFactory.createText(document, "text1");
-        element.coreAppendChild(text1);
+        element.coreAppendChild(text1, Policies.REJECT);
         CoreText text2 = nodeFactory.createText(document, "text1");
-        element.coreAppendChild(text2);
+        element.coreAppendChild(text2, Policies.REJECT);
         CoreText text3 = nodeFactory.createText(document, "text1");
-        element.coreAppendChild(text3);
+        element.coreAppendChild(text3, Policies.REJECT);
         
         text2.coreDetach();
         

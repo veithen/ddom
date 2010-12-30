@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreText;
@@ -32,7 +33,7 @@ public class TestCoreInsertSiblingBeforeOnSelf extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement parent = nodeFactory.createElement(document, "test");
         CoreText text = nodeFactory.createText(document, "text");
-        parent.coreAppendChild(text);
+        parent.coreAppendChild(text, Policies.REJECT);
         try {
             text.coreInsertSiblingBefore(text);
             fail("Expected SelfRelationshipException");

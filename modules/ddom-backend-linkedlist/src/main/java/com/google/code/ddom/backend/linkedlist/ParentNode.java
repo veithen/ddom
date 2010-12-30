@@ -44,7 +44,9 @@ import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.HierarchyException;
+import com.google.code.ddom.core.NodeInUseException;
 import com.google.code.ddom.core.NodeMigrationException;
+import com.google.code.ddom.core.NodeMigrationPolicy;
 import com.google.code.ddom.core.NodeNotFoundException;
 import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.core.ext.ModelExtension;
@@ -217,6 +219,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return previousChild;
     }
     
+    @Deprecated // TODO: should be replaced by the variant taking a NodeMigrationPolicy argument
     public void internalPrepareNewChild(CoreChildNode newChild) throws WrongDocumentException, CyclicRelationshipException {
         internalValidateOwnerDocument(newChild);
         
@@ -232,6 +235,57 @@ public abstract class ParentNode extends Node implements LLParentNode {
                 break;
             }
         } while (current != null);
+    }
+    
+    public LLChildNode internalPrepareNewChild(CoreChildNode newChild, NodeMigrationPolicy policy) throws NodeMigrationException, CyclicRelationshipException {
+        boolean hasParent = newChild.coreHasParent();
+        boolean isForeignDocument = !coreIsSameOwnerDocument(newChild);
+        boolean isForeignModel = newChild.coreGetNodeFactory() != coreGetNodeFactory();
+        if (hasParent || isForeignDocument || isForeignModel) {
+            switch (policy.getAction(hasParent, isForeignDocument, isForeignModel)) {
+                case REJECT:
+                    if (isForeignDocument) {
+                        // Note that since isForeignModel implies isForeignDocument, we also get here
+                        // if isForeignModel is true.
+                        throw new WrongDocumentException();
+                    } else {
+                        // We get here if isForeignDocument and isForeignModel are false. Since at least
+                        // one of the three booleans must be true, this implies that hasParent is true.
+                        throw new NodeInUseException();
+                    }
+                case MOVE:
+                    if (isForeignModel) {
+                        throw new UnsupportedOperationException();
+                    } else {
+                        break;
+                    }
+                case CLONE:
+                    // TODO
+                    throw new UnsupportedOperationException();
+                default:
+                    // Should never get here unless new values are added to the enum
+                    throw new IllegalStateException();
+            }
+        }
+        if (!isForeignModel) {
+            // Check that the new node is not an ancestor of this node
+            CoreParentNode current = this;
+            do {
+                if (current == newChild) {
+                    throw new CyclicRelationshipException();
+                }
+                if (current instanceof CoreChildNode) {
+                    current = ((CoreChildNode)current).coreGetParent();
+                } else {
+                    break;
+                }
+            } while (current != null);
+        }
+        LLChildNode result = (LLChildNode)newChild;
+        if (hasParent) {
+            result.internalDetach();
+        }
+        return result;
     }
     
     // insertBefore: newChild != null, refChild != null, removeRefChild == false
@@ -311,11 +365,9 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
     }
 
-    public final void coreAppendChild(CoreChildNode coreChild) throws HierarchyException, NodeMigrationException, DeferredParsingException {
-        LLChildNode child = (LLChildNode)coreChild;
-        internalValidateChildType(child, null);
-        internalPrepareNewChild(child);
-        child.coreDetach();
+    public final void coreAppendChild(CoreChildNode coreChild, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+        internalValidateChildType(coreChild, null);
+        LLChildNode child = internalPrepareNewChild(coreChild, policy);
         LLChildNode lastChild = (LLChildNode)coreGetLastChild(); // TODO: avoid cast here
         if (lastChild == null) {
             internalSetFirstChild(child);

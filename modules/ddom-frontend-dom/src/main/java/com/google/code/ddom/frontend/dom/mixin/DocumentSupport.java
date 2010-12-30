@@ -226,7 +226,7 @@ public abstract class DocumentSupport implements DOMDocument {
         for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()) {
             DOMCoreChildNode importedChild = (DOMCoreChildNode)importNode(child, true);
             if (previousImportedChild == null) {
-                target.coreAppendChild(importedChild);
+                target.coreAppendChild(importedChild, Policies.NODE_MIGRATION_POLICY);
             } else {
                 // Inserting a new child after the last child is more efficient than
                 // appending it to the parent (at least in the default linkedlist back-end).

@@ -30,6 +30,7 @@ import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.IdentityMapper;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
+import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
@@ -76,7 +77,8 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     public final SOAPElement addChildElement(SOAPElement element) throws SOAPException {
         try {
             SAAJSOAPElement reifiedElement = SAAJUtil.reify((CoreNSAwareElement)element, getChildExtensionInterface());
-            coreAppendChild(reifiedElement);
+            // TODO: probably we need to use another policy here
+            coreAppendChild(reifiedElement, Policies.NODE_MIGRATION_POLICY);
             return reifiedElement;
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);

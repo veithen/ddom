@@ -38,6 +38,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.frontend.axiom.support.Policies;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
 public abstract class ContainerSupport implements AxiomContainer {
@@ -74,7 +75,7 @@ public abstract class ContainerSupport implements AxiomContainer {
     
     public void addChild(OMNode omNode) {
         try {
-            coreAppendChild((CoreChildNode)omNode);
+            coreAppendChild((CoreChildNode)omNode, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

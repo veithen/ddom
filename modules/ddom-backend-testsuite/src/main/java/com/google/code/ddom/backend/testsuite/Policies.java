@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.dom.support;
+package com.google.code.ddom.backend.testsuite;
 
 import com.google.code.ddom.core.NodeMigrationPolicy;
 
 public final class Policies {
     private Policies() {}
     
-    public static final NodeMigrationPolicy ATTRIBUTE_MIGRATION_POLICY = new NodeMigrationPolicy() {
+    public static final NodeMigrationPolicy REJECT = new NodeMigrationPolicy() {
         public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
             return Action.REJECT;
-        }
-    };
-    
-    public static final NodeMigrationPolicy NODE_MIGRATION_POLICY = new NodeMigrationPolicy() {
-        public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
-            return isForeignDocument ? Action.REJECT : Action.MOVE;
         }
     };
 }

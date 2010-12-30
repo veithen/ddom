@@ -124,12 +124,15 @@ public interface CoreParentNode extends CoreNode {
      * @param newChild
      *            the new child; this may either be a {@link CoreChildNode} or a
      *            {@link CoreDocumentFragment}
+     * @param policy
+     *            the policy to apply if the new child already has a parent or belongs to a
+     *            different document
      * @throws CoreModelException
      *             TODO: specify the exceptions
      * @throws WrongDocumentException
      *             if <code>newChild</code> belongs to a different document
      */
-    void coreAppendChild(CoreChildNode newChild) throws HierarchyException, NodeMigrationException, DeferredParsingException;
+    void coreAppendChild(CoreChildNode newChild, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     /**
      * 

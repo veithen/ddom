@@ -119,7 +119,11 @@ public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode
     }
 
     public final void coreDetach(CoreDocument document) throws DeferredParsingException {
-        LLChildNodeHelper.coreDetach(this);
+        LLChildNodeHelper.coreDetach(this, document);
+    }
+
+    public final void internalDetach() {
+        LLChildNodeHelper.internalDetach(this);
     }
 
     public final void coreReplaceWith(CoreChildNode newNode) throws CoreModelException {

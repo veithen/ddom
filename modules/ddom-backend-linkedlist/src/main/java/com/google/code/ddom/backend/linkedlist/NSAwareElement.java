@@ -133,7 +133,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
             } else if (nextElement != null) {
                 nextElement.coreInsertSiblingBefore(element);
             } else {
-                coreAppendChild(element);
+                coreAppendChild(element, null); // TODO: don't use null here
             }
             return element;
         }

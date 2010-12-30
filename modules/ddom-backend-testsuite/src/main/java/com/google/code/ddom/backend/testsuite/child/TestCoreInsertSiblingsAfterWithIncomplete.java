@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreComment;
 import com.google.code.ddom.core.CoreDocument;
@@ -34,7 +35,7 @@ public class TestCoreInsertSiblingsAfterWithIncomplete extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, null, "test", null);
         CoreComment comment = nodeFactory.createComment(document, "test");
-        element.coreAppendChild(comment);
+        element.coreAppendChild(comment, Policies.REJECT);
         CoreDocumentFragment fragment = parse(document, "<?pi?><a>test</a>");
         comment.coreInsertSiblingsAfter(fragment);
         if (builderType >= BUILDER_TYPE_2) {

@@ -16,6 +16,7 @@
 package com.google.code.ddom.backend.testsuite.parent;
 
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreParentNode;
@@ -33,7 +34,7 @@ public class TestCoreAppendChildFromWrongDocument extends ParentNodeTestCase {
         CoreDocument document2 = nodeFactory.createDocument();
         CoreChildNode child = nodeFactory.createText(document2, "text");
         try {
-            parent.coreAppendChild(child);
+            parent.coreAppendChild(child, Policies.REJECT);
             fail("Expected WrongDocumentException");
         } catch (WrongDocumentException ex) {
             // Expected

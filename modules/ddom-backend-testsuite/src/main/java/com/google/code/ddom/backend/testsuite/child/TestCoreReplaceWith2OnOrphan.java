@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
@@ -32,7 +33,7 @@ public class TestCoreReplaceWith2OnOrphan extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreChildNode node1 = nodeFactory.createComment(document, "test");
         CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
-        fragment.coreAppendChild(nodeFactory.createComment(document, "test"));
+        fragment.coreAppendChild(nodeFactory.createComment(document, "test"), Policies.REJECT);
         try {
             node1.coreReplaceWith(fragment);
             fail("Expected NoParentException");

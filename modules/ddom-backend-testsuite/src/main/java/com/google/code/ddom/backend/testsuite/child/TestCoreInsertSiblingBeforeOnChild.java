@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreText;
@@ -32,7 +33,7 @@ public class TestCoreInsertSiblingBeforeOnChild extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, null, "test", null);
         CoreText text = nodeFactory.createText(document, "test");
-        element.coreAppendChild(text);
+        element.coreAppendChild(text, Policies.REJECT);
         try {
             text.coreInsertSiblingBefore(element);
             fail("Expected CyclicRelationshipException");

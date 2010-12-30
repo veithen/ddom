@@ -19,6 +19,7 @@ import org.junit.Assert;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreElement;
 
@@ -32,7 +33,7 @@ public class TestCoreGetDocumentElement extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         Assert.assertNull(document.coreGetDocumentElement());
         CoreElement element1 = nodeFactory.createElement(document, null, "root1", null);
-        document.coreAppendChild(element1);
+        document.coreAppendChild(element1, Policies.REJECT);
         Assert.assertSame(element1, document.coreGetDocumentElement());
         CoreElement element2 = nodeFactory.createElement(document, null, "root2", null);
         element1.coreReplaceWith(element2);

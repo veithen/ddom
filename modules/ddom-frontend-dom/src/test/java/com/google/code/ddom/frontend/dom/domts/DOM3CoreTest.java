@@ -96,7 +96,7 @@ public class DOM3CoreTest extends TestSuite {
         
         // TODO: later
         suite.addExclude(".*normalizedocument.*");
-        suite.addExclude("documentadoptnode(10|11|12)");
+        suite.addExclude("documentadoptnode(10|11|12|24)");
         suite.addExclude(".*documenturi.*");
         suite.addExclude(".*baseuri.*");
         suite.addExclude(".*inputencoding.*");

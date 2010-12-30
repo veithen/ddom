@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
@@ -32,9 +33,9 @@ public class TestCoreReplaceWith2FromWrongDocument extends BackendTestCase {
         CoreDocument document1 = nodeFactory.createDocument();
         CoreDocument document2 = nodeFactory.createDocument();
         CoreChildNode node1 = nodeFactory.createComment(document1, "test");
-        document1.coreAppendChild(node1);
+        document1.coreAppendChild(node1, Policies.REJECT);
         CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document2);
-        fragment.coreAppendChild(nodeFactory.createComment(document2, "test"));
+        fragment.coreAppendChild(nodeFactory.createComment(document2, "test"), Policies.REJECT);
         try {
             node1.coreReplaceWith(fragment);
             fail("Expected WrongDocumentException");

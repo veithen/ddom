@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreText;
@@ -34,7 +35,7 @@ public class TestCoreInsertSiblingAfterFromWrongDocument extends BackendTestCase
         CoreElement parent = nodeFactory.createElement(document1, "test");
         CoreText text1 = nodeFactory.createText(document1, "text1");
         CoreText text2 = nodeFactory.createText(document2, "text2");
-        parent.coreAppendChild(text1);
+        parent.coreAppendChild(text1, Policies.REJECT);
         try {
             text1.coreInsertSiblingAfter(text2);
             fail("Expected WrongDocumentException");

@@ -18,6 +18,7 @@ package com.google.code.ddom.frontend.saaj.support;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 
 public final class SAAJUtil {
@@ -33,7 +34,7 @@ public final class SAAJUtil {
             // TODO: maybe there is a more efficient way to do this
             CoreChildNode child;
             while ((child = element.coreGetFirstChild()) != null) {
-                newElement.coreAppendChild(child);
+                newElement.coreAppendChild(child, Policies.NODE_MIGRATION_POLICY);
             }
             // TODO: copy over the attributes of the original element
 //            CoreAttribute attr;

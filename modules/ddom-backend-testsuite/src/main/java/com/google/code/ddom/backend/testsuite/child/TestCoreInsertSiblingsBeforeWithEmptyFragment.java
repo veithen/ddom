@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreComment;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
@@ -32,7 +33,7 @@ public class TestCoreInsertSiblingsBeforeWithEmptyFragment extends BackendTestCa
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, null, "test", null);
         CoreComment comment = nodeFactory.createComment(document, "test");
-        element.coreAppendChild(comment);
+        element.coreAppendChild(comment, Policies.REJECT);
         CoreDocumentFragment emptyFragment = nodeFactory.createDocumentFragment(document);
         comment.coreInsertSiblingsBefore(emptyFragment);
         assertSame(comment, element.coreGetFirstChild());

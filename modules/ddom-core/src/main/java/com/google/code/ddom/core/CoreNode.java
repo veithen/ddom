@@ -38,4 +38,14 @@ public interface CoreNode {
      *         yet and <code>create</code> is <code>false</code>
      */
     CoreDocument coreGetOwnerDocument(boolean create);
+    
+    /**
+     * Determines if this node has the same owner document as another node.
+     * 
+     * @param other
+     *            the other node
+     * @return <code>true</code> if the two nodes have the same owner document; <code>false</code>
+     *         otherwise
+     */
+    boolean coreIsSameOwnerDocument(CoreNode other);
 }

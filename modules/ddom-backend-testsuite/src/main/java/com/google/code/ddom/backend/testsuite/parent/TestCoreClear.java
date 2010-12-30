@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.testsuite.parent;
 import org.junit.Assert;
 
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.CoreText;
@@ -33,8 +34,8 @@ public class TestCoreClear extends ParentNodeTestCase {
         CoreParentNode parent = parentNodeFactory.createNode(nodeFactory, document);
         CoreText child1 = nodeFactory.createText(document, "text1");
         CoreText child2 = nodeFactory.createText(document, "text2");
-        parent.coreAppendChild(child1);
-        parent.coreAppendChild(child2);
+        parent.coreAppendChild(child1, Policies.REJECT);
+        parent.coreAppendChild(child2, Policies.REJECT);
         Assert.assertEquals(2, parent.coreGetChildCount());
         parent.coreClear();
         Assert.assertEquals(0, parent.coreGetChildCount());

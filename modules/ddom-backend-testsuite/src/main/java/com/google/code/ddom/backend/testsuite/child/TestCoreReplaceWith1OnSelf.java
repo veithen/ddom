@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
+import com.google.code.ddom.backend.testsuite.Policies;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 
@@ -32,9 +33,9 @@ public class TestCoreReplaceWith1OnSelf extends BackendTestCase {
         CoreChildNode child1 = nodeFactory.createDocumentTypeDeclaration(document, "test", null, "test.dtd");
         CoreChildNode child2 = nodeFactory.createComment(document, "comment");
         CoreChildNode child3 = nodeFactory.createElement(document, null, "root", null);
-        document.coreAppendChild(child1);
-        document.coreAppendChild(child2);
-        document.coreAppendChild(child3);
+        document.coreAppendChild(child1, Policies.REJECT);
+        document.coreAppendChild(child2, Policies.REJECT);
+        document.coreAppendChild(child3, Policies.REJECT);
         child2.coreReplaceWith(child2);
         CoreAssert.assertSiblings(child1, child2);
         CoreAssert.assertSiblings(child2, child3);

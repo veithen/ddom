@@ -102,8 +102,8 @@ public abstract class Element extends Container implements CoreElement {
 
     private Attribute accept(CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
         boolean hasParent = coreAttr.coreHasOwnerElement();
-        boolean isForeignDocument = coreAttr.coreGetOwnerDocument(true) != internalGetOwnerDocument();
-        boolean isForeignModel = !(coreAttr instanceof Attribute);
+        boolean isForeignDocument = !coreIsSameOwnerDocument(coreAttr);
+        boolean isForeignModel = coreAttr.coreGetNodeFactory() != coreGetNodeFactory();
         if (hasParent || isForeignDocument || isForeignModel) {
             switch (policy.getAction(hasParent, isForeignDocument, isForeignModel)) {
                 case REJECT:

@@ -207,14 +207,17 @@ public final class LLChildNodeHelper {
     }
     
     public static void coreDetach(LLChildNode that) throws DeferredParsingException {
-        detach(that, false, null);
+        that.internalDetach();
+        that.internalUnsetParent(internalGetOwnerDocument(that));
     }
     
     public static void coreDetach(LLChildNode that, CoreDocument document) throws DeferredParsingException {
-        detach(that, true, (LLDocument)document);
+        that.internalDetach();
+        // TODO: there is probably something more to do here if the node is not complete
+        that.internalUnsetParent((LLDocument)document);
     }
     
-    private static void detach(LLChildNode that, boolean newOwnerDocument, LLDocument ownerDocument) throws DeferredParsingException {
+    public static void internalDetach(LLChildNode that) {
         LLParentNode parent = that.internalGetParent();
         if (parent != null) {
             LLChildNode previousSibling = that.internalGetPreviousSibling();
@@ -228,12 +231,6 @@ public final class LLChildNodeHelper {
             }
             that.internalSetNextSibling(null);
             parent.internalNotifyChildrenModified(-1);
-        }
-        if (newOwnerDocument) {
-            // TODO: there is probably something more to do here if the node is not complete
-            that.internalUnsetParent(ownerDocument);
-        } else {
-            that.internalUnsetParent(internalGetOwnerDocument(that));
         }
     }
     
