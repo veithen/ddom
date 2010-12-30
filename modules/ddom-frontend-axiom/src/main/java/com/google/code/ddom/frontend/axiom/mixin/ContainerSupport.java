@@ -27,6 +27,7 @@ import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 
+import com.google.code.ddom.Options;
 import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
@@ -37,8 +38,13 @@ import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
+import com.google.code.ddom.stream.spi.Stream;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlOutput;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
 public abstract class ContainerSupport implements AxiomContainer {
@@ -98,14 +104,47 @@ public abstract class ContainerSupport implements AxiomContainer {
         throw new UnsupportedOperationException();
     }
     
-    public void serialize(OutputStream output) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void internalSerialize(Object out, boolean preserve) throws StreamException {
+        XmlInput input = coreGetInput(preserve);
+        XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(out, new Options());
+        Stream.connect(input, output);
+        while (input.proceed()) {}
+    }
+    
+    public final void serialize(OutputStream output) throws XMLStreamException {
+        // TODO: close output?
+        try {
+            internalSerialize(output, true);
+        } catch (StreamException ex) {
+            throw new XMLStreamException(ex);
+        }
     }
 
     public void serialize(Writer writer) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: close output?
+        try {
+            internalSerialize(writer, true);
+        } catch (StreamException ex) {
+            throw new XMLStreamException(ex);
+        }
+    }
+
+    public void serializeAndConsume(OutputStream output) throws XMLStreamException {
+        // TODO: close output?
+        try {
+            internalSerialize(output, false);
+        } catch (StreamException ex) {
+            throw new XMLStreamException(ex);
+        }
+    }
+
+    public void serializeAndConsume(Writer writer) throws XMLStreamException {
+        // TODO: close output?
+        try {
+            internalSerialize(writer, false);
+        } catch (StreamException ex) {
+            throw new XMLStreamException(ex);
+        }
     }
 
     public final void serialize(OutputStream output, OMOutputFormat format) throws XMLStreamException {
@@ -118,16 +157,6 @@ public abstract class ContainerSupport implements AxiomContainer {
     }
     
     public void serialize(Writer writer, OMOutputFormat format) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void serializeAndConsume(OutputStream output) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void serializeAndConsume(Writer writer) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
     }

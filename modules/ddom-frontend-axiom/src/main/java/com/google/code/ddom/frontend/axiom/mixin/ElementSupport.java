@@ -32,7 +32,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.Options;
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.CoreChildNode;
@@ -46,17 +45,13 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
-import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.google.code.ddom.frontend.axiom.support.Policies;
-import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlInput;
-import com.google.code.ddom.stream.spi.XmlOutput;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class ElementSupport implements AxiomElement {
@@ -251,10 +246,7 @@ public abstract class ElementSupport implements AxiomElement {
     
     private String toString(boolean preserve) throws StreamException {
         StringWriter sw = new StringWriter();
-        XmlInput input = coreGetInput(preserve);
-        XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(sw, new Options());
-        Stream.connect(input, output);
-        while (input.proceed()) {}
+        internalSerialize(sw, preserve);
         return sw.toString();
     }
     

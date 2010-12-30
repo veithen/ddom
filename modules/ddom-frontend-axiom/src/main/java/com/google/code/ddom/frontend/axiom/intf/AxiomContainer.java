@@ -18,7 +18,8 @@ package com.google.code.ddom.frontend.axiom.intf;
 import org.apache.axiom.om.OMContainer;
 
 import com.google.code.ddom.core.CoreParentNode;
+import com.google.code.ddom.stream.spi.StreamException;
 
 public interface AxiomContainer extends CoreParentNode, OMContainer, AxiomNode {
-
+    void internalSerialize(Object out, boolean preserve) throws StreamException;
 }
