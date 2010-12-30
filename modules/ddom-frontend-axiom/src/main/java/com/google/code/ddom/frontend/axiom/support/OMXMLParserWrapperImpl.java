@@ -20,7 +20,9 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 
 public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
     private final AxiomDocument document;
@@ -34,7 +36,19 @@ public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
     }
 
     public OMElement getDocumentElement() {
-        return document.getOMDocumentElement();
+        return getDocumentElement(false);
+    }
+
+    public OMElement getDocumentElement(boolean discardDocument) {
+        try {
+            AxiomElement element = (AxiomElement)document.coreGetDocumentElement();
+            if (discardDocument) {
+                element.coreDetach();
+            }
+            return element;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public void discard(OMElement el) throws OMException {
