@@ -58,7 +58,7 @@ final class XmlOutputHandler implements XmlHandler{
         output.processProcessingInstruction(target, data);
     }
 
-    public void processText(String data) {
+    public void processText(String data) throws StreamException {
         output.processText(data);
     }
 

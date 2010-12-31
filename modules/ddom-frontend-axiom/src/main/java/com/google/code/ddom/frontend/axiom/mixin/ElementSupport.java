@@ -254,7 +254,7 @@ public abstract class ElementSupport implements AxiomElement {
         try {
             return toString(false);
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw AxiomExceptionUtil.translate(ex);
         }
     }
 

@@ -86,9 +86,12 @@ public class StAXOutput extends XmlOutput {
     }
 
     @Override
-    protected void processText(String data) {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected void processText(String data) throws StreamException {
+        try {
+            writer.writeCharacters(data);
+        } catch (XMLStreamException ex) {
+            throw new StreamException(ex);
+        }
     }
 
     @Override

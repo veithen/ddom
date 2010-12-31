@@ -72,7 +72,7 @@ public abstract class XmlOutput {
     protected abstract void attributesCompleted();
     
     protected abstract void processProcessingInstruction(String target, String data);
-    protected abstract void processText(String data);
+    protected abstract void processText(String data) throws StreamException;
     protected abstract void processComment(String data);
     protected abstract void processCDATASection();
     protected abstract void processEntityReference(String name);

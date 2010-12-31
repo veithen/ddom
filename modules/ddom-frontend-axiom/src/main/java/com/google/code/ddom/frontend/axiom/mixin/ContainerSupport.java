@@ -116,7 +116,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             internalSerialize(output, true);
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw AxiomExceptionUtil.translate(ex);
         }
     }
 
@@ -125,7 +125,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             internalSerialize(writer, true);
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw AxiomExceptionUtil.translate(ex);
         }
     }
 
@@ -134,7 +134,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             internalSerialize(output, false);
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw AxiomExceptionUtil.translate(ex);
         }
     }
 
@@ -143,7 +143,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             internalSerialize(writer, false);
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw AxiomExceptionUtil.translate(ex);
         }
     }
 

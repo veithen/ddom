@@ -171,7 +171,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
     
-    protected final void processText(String data) {
+    protected final void processText(String data) throws StreamException {
         if (passThroughHandler == null) {
             if (lastSibling == null && pendingText == null) {
                 pendingText = data;

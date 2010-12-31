@@ -22,6 +22,7 @@ import org.apache.axiom.ts.AxiomTestSuiteBuilder;
 import org.apache.axiom.ts.om.document.TestGetXMLStreamReader;
 import org.apache.axiom.ts.om.element.TestSerialization;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
+import org.apache.axiom.ts.om.element.TestSerializeToOutputStream;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
 import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
@@ -40,6 +41,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.element.TestSerializeAndConsumeWithIncompleteDescendant.class);
         builder.exclude(TestSerializationWithTwoNonBuiltOMElements.class);
         builder.exclude(TestGetXMLStreamReader.class);
+        builder.exclude(TestSerializeToOutputStream.class);
         return builder.build();
     }
 }

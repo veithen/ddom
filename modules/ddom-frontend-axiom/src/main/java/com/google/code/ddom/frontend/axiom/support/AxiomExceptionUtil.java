@@ -15,14 +15,26 @@
  */
 package com.google.code.ddom.frontend.axiom.support;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.axiom.om.OMException;
 
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.stream.spi.StreamException;
 
 public class AxiomExceptionUtil {
     private AxiomExceptionUtil() {}
     
     public static OMException translate(CoreModelException ex) {
         return new OMException(ex);
+    }
+    
+    public static XMLStreamException translate(StreamException ex) {
+        Throwable cause = ex.getCause();
+        if (cause instanceof XMLStreamException) {
+            return (XMLStreamException)cause;
+        } else {
+            return new XMLStreamException(ex.getMessage(), ex);
+        }
     }
 }

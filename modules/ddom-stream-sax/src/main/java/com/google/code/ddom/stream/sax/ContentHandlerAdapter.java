@@ -134,11 +134,19 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
-        handler.processText(new String(ch, start, length));
+        try {
+            handler.processText(new String(ch, start, length));
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-        handler.processText(new String(ch, start, length));
+        try {
+            handler.processText(new String(ch, start, length));
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void comment(char[] ch, int start, int length) throws SAXException {

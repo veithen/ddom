@@ -65,7 +65,7 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().processProcessingInstruction(target, data);
     }
 
-    public void processText(String data) {
+    public void processText(String data) throws StreamException {
         getDelegate().processText(data);
     }
 

@@ -72,7 +72,7 @@ public interface XmlHandler {
     void attributesCompleted();
     
     void processProcessingInstruction(String target, String data);
-    void processText(String data);
+    void processText(String data) throws StreamException;
     void processComment(String data);
     void processCDATASection();
     void processEntityReference(String name);
