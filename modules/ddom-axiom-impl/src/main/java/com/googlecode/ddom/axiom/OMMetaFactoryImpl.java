@@ -23,6 +23,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
+import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
 
 import com.google.code.ddom.DocumentHelper;
@@ -52,12 +53,12 @@ public final class OMMetaFactoryImpl implements OMMetaFactory {
         return metaFactory.getSOAP12Factory();
     }
 
-    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, InputStream in) {
-        return metaFactory.createOMBuilder(omFactory, in);
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, InputStream in) {
+        return metaFactory.createOMBuilder(omFactory, configuration, in);
     }
 
-    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Reader in) {
-        return metaFactory.createOMBuilder(omFactory, in);
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, Reader in) {
+        return metaFactory.createOMBuilder(omFactory, configuration, in);
     }
 
     public OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {

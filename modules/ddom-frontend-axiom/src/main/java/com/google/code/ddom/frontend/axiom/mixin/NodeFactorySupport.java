@@ -23,6 +23,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
+import org.apache.axiom.om.util.StAXParserConfiguration;
 
 import com.google.code.ddom.Options;
 import com.google.code.ddom.core.NodeFactory;
@@ -63,26 +64,16 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
         }
     }
     
-    public final OMXMLParserWrapper createOMBuilder(InputStream in) {
-        return createBuilder(in);
-    }
-
-    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, InputStream in) {
+    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, InputStream in) {
         // TODO: we have currently no way to set the OMFactory!
+        // TODO: translate configuration
         return createBuilder(in);
     }
 
-    public final OMXMLParserWrapper createOMBuilder(Reader in) {
-        return createBuilder(in);
-    }
-
-    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Reader in) {
+    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, Reader in) {
         // TODO: we have currently no way to set the OMFactory!
+        // TODO: translate configuration
         return createBuilder(in);
-    }
-
-    public final OMXMLParserWrapper createStAXOMBuilder(XMLStreamReader parser) {
-        return createBuilder(parser);
     }
 
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
