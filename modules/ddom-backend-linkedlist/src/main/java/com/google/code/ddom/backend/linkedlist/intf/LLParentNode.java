@@ -21,6 +21,8 @@ import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.CyclicRelationshipException;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.WrongDocumentException;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 public interface LLParentNode extends LLNode, CoreParentNode {
     void internalNotifyChildrenModified(int delta);
@@ -51,4 +53,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
 
     // Type safe variant of core model method
     LLChildNode internalGetFirstChild() throws DeferredParsingException;
+
+    void internalGenerateStartEvent(XmlHandler handler) throws StreamException;
+    void internalGenerateEndEvent(XmlHandler handler) throws StreamException;
 }

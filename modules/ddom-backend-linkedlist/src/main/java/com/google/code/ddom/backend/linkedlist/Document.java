@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,7 +201,11 @@ public class Document extends ParentNode implements LLDocument {
         return (CoreDocumentTypeDeclaration)child;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
+    public final void internalGenerateStartEvent(XmlHandler handler) {
+        // TODO
+    }
+
+    public final void internalGenerateEndEvent(XmlHandler handler) {
         // TODO
     }
 }

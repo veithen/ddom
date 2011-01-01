@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
         return null;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startElement(tagName);
     }
 }

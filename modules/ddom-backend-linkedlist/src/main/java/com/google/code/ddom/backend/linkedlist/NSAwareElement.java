@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,7 +149,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         }
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startElement(namespaceURI, localName, prefix);
     }
 }

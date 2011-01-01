@@ -70,7 +70,7 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
         return NSAwareNamedNodeHelper.coreGetQName(this);
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startAttribute(namespaceURI, localName, prefix, coreGetType());
     }
 }

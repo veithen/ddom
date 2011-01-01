@@ -24,6 +24,8 @@ import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreEntityReference;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 public abstract class Attribute extends ParentNode implements CoreAttribute {
     /**
@@ -156,5 +158,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
             }
             return false;
         }
+    }
+
+    public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
+        handler.endAttribute();
     }
 }

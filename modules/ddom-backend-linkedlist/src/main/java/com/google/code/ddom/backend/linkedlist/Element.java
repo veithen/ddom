@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ import com.google.code.ddom.core.NodeInUseException;
 import com.google.code.ddom.core.NodeMigrationException;
 import com.google.code.ddom.core.NodeMigrationPolicy;
 import com.google.code.ddom.core.WrongDocumentException;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
 public abstract class Element extends Container implements CoreElement {
     private Attribute firstAttribute;
@@ -304,5 +306,9 @@ public abstract class Element extends Container implements CoreElement {
 
     public final <T extends CoreAttribute,S> Iterator<S> coreGetAttributesByType(Class<T> type, Mapper<T,S> mapper) {
         return new AttributesByTypeIterator<T,S>(this, type, mapper);
+    }
+
+    public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
+        handler.endElement();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist.support;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
+import com.google.code.ddom.backend.linkedlist.intf.LLLeafNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.core.CoreModelException;
@@ -28,10 +29,21 @@ public class TreeSerializer extends XmlInput {
     private static final int STATE_NONE = 0;
     
     /**
-     * Indicates that the current node is a parent node for which the start events have
-     * already been generated.
+     * Indicates that the current node is a leaf node.
      */
-    private static final int STATE_VISITED = 1;
+    private static final int STATE_LEAF = 1;
+    
+    /**
+     * Indicates that the current node is a parent node and that events for child nodes have not yet
+     * been generated.
+     */
+    private static final int STATE_NOT_VISITED = 2;
+    
+    /**
+     * Indicates that the current node is a parent node and that events for child nodes have already
+     * been generated.
+     */
+    private static final int STATE_VISITED = 3;
     
     /**
      * Indicates that the current node is a parent node for which the builder has been
@@ -39,7 +51,7 @@ public class TreeSerializer extends XmlInput {
      * object model but passed through from the underlying XML source used to build the
      * tree. This state is only reachable if {@link #preserve} is <code>true</code>.
      */
-    private static final int STATE_PASS_THROUGH = 2;
+    private static final int STATE_PASS_THROUGH = 4;
     
     private final LLParentNode root;
     private final boolean preserve;
@@ -67,7 +79,8 @@ public class TreeSerializer extends XmlInput {
             final LLNode nextNode;
             if (previousNode == null) {
                 nextNode = root;
-            } else if (previousNode instanceof LLParentNode && state != STATE_VISITED) {
+                state = STATE_NOT_VISITED;
+            } else if (state == STATE_NOT_VISITED) {
                 final LLParentNode parent = (LLParentNode)previousNode;
                 if (preserve) {
                     LLChildNode child = parent.internalGetFirstChild();
@@ -76,6 +89,7 @@ public class TreeSerializer extends XmlInput {
                         state = STATE_VISITED;
                     } else {
                         nextNode = child;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
                     }
                 } else {
                     LLChildNode child = parent.internalGetFirstChildIfMaterialized();
@@ -89,6 +103,7 @@ public class TreeSerializer extends XmlInput {
                         }
                     } else {
                         nextNode = child;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
                     }
                 }
             } else {
@@ -102,6 +117,7 @@ public class TreeSerializer extends XmlInput {
                         state = STATE_VISITED;
                     } else {
                         nextNode = sibling;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
                     }
                 } else {
                     LLChildNode sibling = previousChildNode.internalGetNextSiblingIfMaterialized();
@@ -116,27 +132,34 @@ public class TreeSerializer extends XmlInput {
                         }
                     } else {
                         nextNode = sibling;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
                     }
                 }
             }
             switch (state) {
+                case STATE_LEAF:
+                    ((LLLeafNode)nextNode).internalGenerateEvents(handler);
+                    node = nextNode;
+                    return true;
+                case STATE_NOT_VISITED:
+                    ((LLParentNode)nextNode).internalGenerateStartEvent(handler);
+                    node = nextNode;
+                    return true;
                 case STATE_VISITED:
-                    handler.completed();
+                    ((LLParentNode)nextNode).internalGenerateEndEvent(handler);
                     if (nextNode == root) {
                         node = null;
+                        handler.completed();
                         return false;
                     } else {
                         node = nextNode;
                         return true;
                     }
-                case STATE_NONE:
-                    nextNode.internalGenerateEvents(handler);
-                    node = nextNode;
-                    return true;
                 default:
                     throw new IllegalStateException();
             }
         } catch (CoreModelException ex) {
+            // TODO: if it's a DeferredParsingException, maybe we can unwrap the exception?
             throw new StreamException(ex);
         }
     }

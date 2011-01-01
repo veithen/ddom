@@ -41,7 +41,11 @@ public class CDATASection extends Container implements CoreCDATASection {
         }
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startCDATASection();
+    }
+
+    public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
+        handler.endCDATASection();
     }
 }

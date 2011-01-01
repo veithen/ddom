@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,19 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
+import com.google.code.ddom.backend.linkedlist.intf.LLLeafNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.core.CoreChildNode;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreLeafNode;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreParentNode;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.HierarchyException;
 import com.google.code.ddom.core.NodeMigrationException;
 
-public abstract class LeafNode extends Node implements LLChildNode, CoreLeafNode {
+public abstract class LeafNode extends Node implements LLLeafNode {
     private LLParentNode owner;
     private LLChildNode nextSibling;
     

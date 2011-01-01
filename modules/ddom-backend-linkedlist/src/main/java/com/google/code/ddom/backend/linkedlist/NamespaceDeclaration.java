@@ -43,7 +43,7 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
         return coreGetTextContent();
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startNamespaceDeclaration(coreGetDeclaredPrefix());
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,11 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         return document;
     }
 
-    public void internalGenerateEvents(XmlHandler handler) {
+    public final void internalGenerateStartEvent(XmlHandler handler) {
+        // TODO
+    }
+
+    public final void internalGenerateEndEvent(XmlHandler handler) {
         // TODO
     }
 

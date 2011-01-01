@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,10 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
-import com.google.code.ddom.core.CoreNode;
-import com.google.code.ddom.core.WrongDocumentException;
+import com.google.code.ddom.core.CoreLeafNode;
+import com.google.code.ddom.stream.spi.StreamException;
+import com.google.code.ddom.stream.spi.XmlHandler;
 
-public interface LLNode extends CoreNode {
-    // TODO: need to check if we really need interface methods for this
-    boolean internalGetFlag(int flag);
-    void internalSetFlag(int flag, boolean value);
-    
-    LLDocument internalGetOwnerDocument();
-    
-    void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException;
+public interface LLLeafNode extends LLChildNode, CoreLeafNode {
+    void internalGenerateEvents(XmlHandler handler) throws StreamException;
 }
