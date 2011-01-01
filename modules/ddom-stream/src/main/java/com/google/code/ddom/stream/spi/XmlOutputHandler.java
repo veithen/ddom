@@ -30,12 +30,16 @@ final class XmlOutputHandler implements XmlHandler{
         output.processDocumentType(rootName, publicId, systemId);
     }
 
-    public void processElement(String tagName) {
-        output.processElement(tagName);
+    public void startElement(String tagName) throws StreamException {
+        output.startElement(tagName);
     }
 
-    public void processElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        output.processElement(namespaceURI, localName, prefix);
+    public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
+        output.startElement(namespaceURI, localName, prefix);
+    }
+
+    public void endElement() throws StreamException {
+        output.endElement();
     }
 
     public void processAttribute(String name, String value, String type) {
@@ -66,15 +70,19 @@ final class XmlOutputHandler implements XmlHandler{
         output.processComment(data);
     }
 
-    public void processCDATASection() {
-        output.processCDATASection();
+    public void startCDATASection() throws StreamException {
+        output.startCDATASection();
+    }
+
+    public void endCDATASection() throws StreamException {
+        output.endCDATASection();
     }
 
     public void processEntityReference(String name) {
         output.processEntityReference(name);
     }
 
-    public void nodeCompleted() throws StreamException {
-        output.nodeCompleted();
+    public void completed() throws StreamException {
+        output.completed();
     }
 }

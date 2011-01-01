@@ -84,8 +84,10 @@ public class DOMInput extends XmlInput {
                 // In the future, there may be other node types that generate events here
                 switch (nodeType) {
                     case Node.ELEMENT_NODE:
+                        handler.endElement();
+                        break loop;
                     case Node.DOCUMENT_NODE:
-                        handler.nodeCompleted();
+                        handler.completed(); // TODO
                         break loop;
                 }
             } else {
@@ -94,9 +96,9 @@ public class DOMInput extends XmlInput {
                         Element element = (Element)currentNode;
                         String localName = element.getLocalName();
                         if (localName == null) {
-                            handler.processElement(element.getTagName());
+                            handler.startElement(element.getTagName());
                         } else {
-                            handler.processElement(element.getNamespaceURI(), localName, element.getPrefix());
+                            handler.startElement(element.getNamespaceURI(), localName, element.getPrefix());
                         }
                         NamedNodeMap attributes = element.getAttributes();
                         for (int length=attributes.getLength(), i=0; i<length; i++) {

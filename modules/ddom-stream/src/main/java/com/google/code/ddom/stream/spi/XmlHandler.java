@@ -19,24 +19,39 @@ public interface XmlHandler {
     void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
     
     void processDocumentType(String rootName, String publicId, String systemId);
+
+    /**
+     * Notify the handler of the beginning of an element in non namespace aware mode.
+     * 
+     * @param tagName
+     *            the name of the element
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void startElement(String tagName) throws StreamException;
     
     /**
-     * Process an element in non namespace aware mode.
+     * Notify the handler of the beginning of an element in namespace aware mode.
      * 
-     * @param tagName the name of the element
+     * @param namespaceURI
+     *            the namespace URI of the element, or <code>null</code> if the element has no
+     *            namespace
+     * @param localName
+     *            the local part of the element's name
+     * @param prefix
+     *            the prefix of the element, or <code>null</code> if the element has no prefix
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    void processElement(String tagName);
+    void startElement(String namespaceURI, String localName, String prefix) throws StreamException;
     
     /**
-     * Process an element in namespace aware mode.
+     * Notify the handler of the end of an element.
      * 
-     * @param namespaceURI the namespace URI of the element, or <code>null</code> if the element has no
-     *                     namespace
-     * @param localName the local part of the element's name
-     * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
-     * @throws StreamException 
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    void processElement(String namespaceURI, String localName, String prefix) throws StreamException;
+    void endElement() throws StreamException;
     
     /**
      * Process an attribute in non namespace aware mode.
@@ -74,12 +89,30 @@ public interface XmlHandler {
     void processProcessingInstruction(String target, String data);
     void processText(String data) throws StreamException;
     void processComment(String data);
-    void processCDATASection();
+    
+    /**
+     * Notify the handler of the beginning of a CDATA section.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void startCDATASection() throws StreamException;
+    
+    /**
+     * Notify the handler of the end of a CDATA section.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void endCDATASection() throws StreamException;
+    
     void processEntityReference(String name);
     
     /**
-     * Inform the consumer that the current element or the document is complete.
-     * @throws StreamException 
+     * Notify the handler that the document or fragment is complete.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    void nodeCompleted() throws StreamException;
+    void completed() throws StreamException;
 }

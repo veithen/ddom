@@ -64,14 +64,14 @@ public class StAXInput extends XmlInput {
                 handler.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
                 return true;
             case XMLStreamReader.END_DOCUMENT:
-                handler.nodeCompleted();
+                handler.completed();
                 return false;
             case XMLStreamReader.DTD:
                 handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
                 return true;
             case XMLStreamReader.START_ELEMENT:
                 if (parserIsNamespaceAware) {
-                    handler.processElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
+                    handler.startElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
                     for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
                         handler.processAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
                     }
@@ -80,7 +80,7 @@ public class StAXInput extends XmlInput {
                     }
                     handler.attributesCompleted();
                 } else {
-                    handler.processElement(reader.getLocalName());
+                    handler.startElement(reader.getLocalName());
                     for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
                         handler.processAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
                     }
@@ -88,7 +88,7 @@ public class StAXInput extends XmlInput {
                 }
                 return true;
             case XMLStreamReader.END_ELEMENT:
-                handler.nodeCompleted();
+                handler.endElement();
                 return true;
             case XMLStreamReader.PROCESSING_INSTRUCTION:
                 handler.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
@@ -98,9 +98,9 @@ public class StAXInput extends XmlInput {
                 handler.processText(reader.getText());
                 return true;
             case XMLStreamReader.CDATA:
-                handler.processCDATASection();
+                handler.startCDATASection();
                 handler.processText(reader.getText());
-                handler.nodeCompleted();
+                handler.endCDATASection();
                 return true;
             case XMLStreamReader.COMMENT:
                 handler.processComment(reader.getText());

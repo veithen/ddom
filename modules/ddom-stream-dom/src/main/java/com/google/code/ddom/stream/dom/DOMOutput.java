@@ -21,6 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlOutput;
 
 /**
@@ -45,6 +46,7 @@ public class DOMOutput extends XmlOutput {
         node = document;
     }
 
+    @Override
     protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         // TODO: process the remaining information
         if (xmlVersion != null) {
@@ -52,6 +54,7 @@ public class DOMOutput extends XmlOutput {
         }
     }
 
+    @Override
     protected void processDocumentType(String rootName, String publicId, String systemId) {
         node.appendChild(document.getImplementation().createDocumentType(rootName, publicId, systemId));
     }
@@ -60,26 +63,36 @@ public class DOMOutput extends XmlOutput {
         return prefix == null ? localName : prefix + ":" + localName;
     }
     
-    protected void processElement(String tagName) {
+    @Override
+    protected void startElement(String tagName) {
         Element element = document.createElement(tagName);
         node.appendChild(element);
         node = element;
     }
 
-    protected void processElement(String namespaceURI, String localName, String prefix) {
+    @Override
+    protected void startElement(String namespaceURI, String localName, String prefix) {
         Element element = document.createElementNS(namespaceURI, getQualifiedName(localName, prefix));
         node.appendChild(element);
         node = element;
     }
 
+    @Override
+    protected void endElement() throws StreamException {
+        node = node.getParentNode();
+    }
+
+    @Override
     protected void processAttribute(String name, String value, String type) {
         ((Element)node).setAttribute(name, value);
     }
 
+    @Override
     protected void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
         ((Element)node).setAttributeNS(namespaceURI, getQualifiedName(localName, prefix), value);
     }
 
+    @Override
     protected void processNamespaceDeclaration(String prefix, String namespaceURI) {
         ((Element)node).setAttributeNS(
                 XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
@@ -88,32 +101,38 @@ public class DOMOutput extends XmlOutput {
                 namespaceURI);
     }
 
+    @Override
     protected void attributesCompleted() {
         // Nothing special to do here
     }
 
-    protected void nodeCompleted() {
-        if (isCDATASection) {
-            String data;
-            if (cdataSectionContent == null) {
-                data = "";
-            } else if (cdataSectionContent instanceof String) {
-                data = (String)cdataSectionContent;
-            } else {
-                data = ((StringBuilder)cdataSectionContent).toString();
-            }
-            node.appendChild(document.createCDATASection(data));
-            isCDATASection = false;
-            cdataSectionContent = null;
-        } else {
-            node = node.getParentNode();
-        }
+    @Override
+    protected void completed() {
+        // TODO: do we still need this?
+        node = node.getParentNode();
     }
 
-    protected void processCDATASection() {
+    @Override
+    protected void startCDATASection() {
         isCDATASection = true;
     }
 
+    @Override
+    protected void endCDATASection() throws StreamException {
+        String data;
+        if (cdataSectionContent == null) {
+            data = "";
+        } else if (cdataSectionContent instanceof String) {
+            data = (String)cdataSectionContent;
+        } else {
+            data = ((StringBuilder)cdataSectionContent).toString();
+        }
+        node.appendChild(document.createCDATASection(data));
+        isCDATASection = false;
+        cdataSectionContent = null;
+    }
+
+    @Override
     protected void processText(String data) {
         if (isCDATASection) {
             if (cdataSectionContent == null) {
@@ -130,14 +149,17 @@ public class DOMOutput extends XmlOutput {
         }
     }
 
+    @Override
     protected void processComment(String data) {
         node.appendChild(document.createComment(data));
     }
 
+    @Override
     protected void processEntityReference(String name) {
         node.appendChild(document.createEntityReference(name));
     }
 
+    @Override
     protected void processProcessingInstruction(String target, String data) {
         node.appendChild(document.createProcessingInstruction(target, data));
     }

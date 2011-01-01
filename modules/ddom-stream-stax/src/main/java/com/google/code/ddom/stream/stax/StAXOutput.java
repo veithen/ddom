@@ -41,15 +41,24 @@ public class StAXOutput extends XmlOutput {
     }
 
     @Override
-    protected void processElement(String tagName) {
+    protected void startElement(String tagName) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void processElement(String namespaceURI, String localName, String prefix) throws StreamException {
+    protected void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
         try {
             writer.writeStartElement(prefix, localName, namespaceURI);
+        } catch (XMLStreamException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    @Override
+    protected void endElement() throws StreamException {
+        try {
+            writer.writeEndElement();
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
         }
@@ -101,7 +110,13 @@ public class StAXOutput extends XmlOutput {
     }
 
     @Override
-    protected void processCDATASection() {
+    protected void startCDATASection() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected void endCDATASection() throws StreamException {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -113,10 +128,9 @@ public class StAXOutput extends XmlOutput {
     }
     
     @Override
-    protected void nodeCompleted() throws StreamException {
+    protected void completed() throws StreamException {
         try {
-            // TODO
-            writer.writeEndElement();
+            writer.writeEndDocument();
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
         }

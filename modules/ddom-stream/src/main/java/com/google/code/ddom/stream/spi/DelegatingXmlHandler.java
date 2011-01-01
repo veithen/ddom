@@ -37,12 +37,16 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().processDocumentType(rootName, publicId, systemId);
     }
 
-    public void processElement(String tagName) {
-        getDelegate().processElement(tagName);
+    public void startElement(String tagName) throws StreamException {
+        getDelegate().startElement(tagName);
     }
 
-    public void processElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        getDelegate().processElement(namespaceURI, localName, prefix);
+    public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
+        getDelegate().startElement(namespaceURI, localName, prefix);
+    }
+
+    public void endElement() throws StreamException {
+        getDelegate().endElement();
     }
 
     public void processAttribute(String name, String value, String type) {
@@ -73,15 +77,19 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().processComment(data);
     }
 
-    public void processCDATASection() {
-        getDelegate().processCDATASection();
+    public void startCDATASection() throws StreamException {
+        getDelegate().startCDATASection();
+    }
+
+    public void endCDATASection() throws StreamException {
+        getDelegate().endCDATASection();
     }
 
     public void processEntityReference(String name) {
         getDelegate().processEntityReference(name);
     }
 
-    public void nodeCompleted() throws StreamException {
-        getDelegate().nodeCompleted();
+    public void completed() throws StreamException {
+        getDelegate().completed();
     }
 }

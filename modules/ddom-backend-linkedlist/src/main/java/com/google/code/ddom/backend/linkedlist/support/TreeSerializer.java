@@ -121,7 +121,7 @@ public class TreeSerializer extends XmlInput {
             }
             switch (state) {
                 case STATE_VISITED:
-                    handler.nodeCompleted();
+                    handler.completed();
                     if (nextNode == root) {
                         node = null;
                         return false;

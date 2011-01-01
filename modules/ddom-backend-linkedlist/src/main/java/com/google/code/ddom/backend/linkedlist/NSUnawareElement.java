@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSUnawareElement;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
@@ -42,7 +43,7 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
         return null;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
-        handler.processElement(tagName);
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.startElement(tagName);
     }
 }

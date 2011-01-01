@@ -21,22 +21,37 @@ public abstract class XmlOutput {
     protected abstract void processDocumentType(String rootName, String publicId, String systemId);
     
     /**
-     * Process an element in non namespace aware mode.
+     * Receive notification of the beginning of an element in non namespace aware mode.
      * 
-     * @param tagName the name of the element
+     * @param tagName
+     *            the name of the element
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    protected abstract void processElement(String tagName);
+    protected abstract void startElement(String tagName) throws StreamException;
     
     /**
-     * Process an element in namespace aware mode.
+     * Receive notification of the beginning of an element in namespace aware mode.
      * 
-     * @param namespaceURI the namespace URI of the element, or <code>null</code> if the element has no
-     *                     namespace
-     * @param localName the local part of the element's name
-     * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
-     * @throws StreamException 
+     * @param namespaceURI
+     *            the namespace URI of the element, or <code>null</code> if the element has no
+     *            namespace
+     * @param localName
+     *            the local part of the element's name
+     * @param prefix
+     *            the prefix of the element, or <code>null</code> if the element has no prefix
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    protected abstract void processElement(String namespaceURI, String localName, String prefix) throws StreamException;
+    protected abstract void startElement(String namespaceURI, String localName, String prefix) throws StreamException;
+    
+    /**
+     * Receive notification of the end of an element.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void endElement() throws StreamException;
     
     /**
      * Process an attribute in non namespace aware mode.
@@ -74,12 +89,30 @@ public abstract class XmlOutput {
     protected abstract void processProcessingInstruction(String target, String data);
     protected abstract void processText(String data) throws StreamException;
     protected abstract void processComment(String data);
-    protected abstract void processCDATASection();
+    
+    /**
+     * Receive notification of the beginning of a CDATA section.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void startCDATASection() throws StreamException;
+    
+    /**
+     * Receive notification of the end of a CDATA section.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void endCDATASection() throws StreamException;
+    
     protected abstract void processEntityReference(String name);
     
     /**
-     * Inform the consumer that the current element or the document is complete.
-     * @throws StreamException 
+     * Receive notification that the document or fragment is complete.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    protected abstract void nodeCompleted() throws StreamException;
+    protected abstract void completed() throws StreamException;
 }

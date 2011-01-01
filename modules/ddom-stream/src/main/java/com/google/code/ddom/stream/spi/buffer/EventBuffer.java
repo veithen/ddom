@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlOutput;
 import com.google.code.ddom.stream.spi.buffer.Event.Type;
 
@@ -85,59 +86,83 @@ public class EventBuffer extends XmlOutput {
         }
     }
 
-    protected void processElement(String tagName) {
-        newEvent().init(Type.NS_UNAWARE_ELEMENT, tagName, null, null, null, null);
+    @Override
+    protected void startElement(String tagName) {
+        newEvent().init(Type.START_NS_UNAWARE_ELEMENT, tagName, null, null, null, null);
     }
 
-    protected void processElement(String namespaceURI, String localName, String prefix) {
-        newEvent().init(Type.NS_AWARE_ELEMENT, localName, namespaceURI, prefix, null, null);
+    @Override
+    protected void startElement(String namespaceURI, String localName, String prefix) {
+        newEvent().init(Type.START_NS_AWARE_ELEMENT, localName, namespaceURI, prefix, null, null);
     }
 
+    @Override
+    protected void endElement() throws StreamException {
+        newEvent().init(Type.END_ELEMENT, null, null, null, null, null);
+    }
+
+    @Override
     protected void processAttribute(String name, String value, String type) {
         newEvent().init(Type.NS_UNAWARE_ATTRIBUTE, name, null, null, value, type);
     }
 
+    @Override
     protected void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
         newEvent().init(Type.NS_AWARE_ATTRIBUTE, localName, namespaceURI, prefix, value, type);
     }
 
+    @Override
     protected void processNamespaceDeclaration(String prefix, String namespaceURI) {
         newEvent().init(Type.NAMESPACE_DECLARATION, null, namespaceURI, prefix, null, null);
     }
 
+    @Override
     protected void attributesCompleted() {
         newEvent().init(Type.ATTRIBUTES_COMPLETE, null, null, null, null, null);
     }
 
-    protected void nodeCompleted() {
-        newEvent().init(Type.NODE_COMPLETE, null, null, null, null, null);
+    @Override
+    protected void completed() {
+        newEvent().init(Type.COMPLETED, null, null, null, null, null);
     }
 
+    @Override
     protected void processProcessingInstruction(String target, String data) {
         newEvent().init(Type.PROCESSING_INSTRUCTION, target, null, null, data, null);
     }
 
+    @Override
     protected void processText(String data) {
         newEvent().init(Type.CHARACTERS, null, null, null, data, null);
     }
 
-    protected void processCDATASection() {
-        newEvent().init(Type.CDATA, null, null, null, null, null);
+    @Override
+    protected void startCDATASection() {
+        newEvent().init(Type.START_CDATA_SECTION, null, null, null, null, null);
     }
 
+    @Override
+    protected void endCDATASection() {
+        newEvent().init(Type.END_CDATA_SECTION, null, null, null, null, null);
+    }
+
+    @Override
     protected void processEntityReference(String name) {
         newEvent().init(Type.ENTITY_REFERENCE, name, null, null, null, null);
     }
 
+    @Override
     protected void processComment(String data) {
         newEvent().init(Type.COMMENT, null, null, null, data, null);
     }
 
+    @Override
     protected void processDocumentType(String rootName, String publicId, String systemId) {
         // TODO Auto-generated method stub
         
     }
 
+    @Override
     protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
             boolean standalone) {
         // TODO Auto-generated method stub

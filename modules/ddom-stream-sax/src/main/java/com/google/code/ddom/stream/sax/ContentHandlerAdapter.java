@@ -58,7 +58,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void endDocument() throws SAXException {
         try {
-            handler.nodeCompleted();
+            handler.completed();
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }
@@ -82,9 +82,9 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
         try {
             processDocumentInfo();
             if (localName.length() == 0) {
-                handler.processElement(qName);
+                handler.startElement(qName);
             } else {
-                handler.processElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName));
+                handler.startElement(SAXStreamUtils.normalizeNamespaceURI(uri), localName, SAXStreamUtils.getPrefixFromQName(qName));
             }
     
             int length = atts.getLength();
@@ -115,19 +115,23 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         try {
-            handler.nodeCompleted();
+            handler.endElement();
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }
     }
 
     public void startCDATA() throws SAXException {
-        handler.processCDATASection();
+        try {
+            handler.startCDATASection();
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void endCDATA() throws SAXException {
         try {
-            handler.nodeCompleted();
+            handler.endCDATASection();
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }

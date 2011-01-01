@@ -150,6 +150,6 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
-        handler.processElement(namespaceURI, localName, prefix);
+        handler.startElement(namespaceURI, localName, prefix);
     }
 }

@@ -17,9 +17,11 @@ package com.google.code.ddom.stream.spi.buffer;
 
 public class Event {
     public enum Type {
-        NS_UNAWARE_ELEMENT,
+        START_NS_UNAWARE_ELEMENT,
         
-        NS_AWARE_ELEMENT,
+        START_NS_AWARE_ELEMENT,
+        
+        END_ELEMENT,
         
         NS_UNAWARE_ATTRIBUTE,
         
@@ -29,7 +31,7 @@ public class Event {
         
         ATTRIBUTES_COMPLETE,
         
-        NODE_COMPLETE,
+        COMPLETED,
         
         PROCESSING_INSTRUCTION,
         
@@ -37,7 +39,9 @@ public class Event {
         
         SPACE,
         
-        CDATA,
+        START_CDATA_SECTION,
+        
+        END_CDATA_SECTION,
         
         ENTITY_REFERENCE,
         
@@ -78,8 +82,8 @@ public class Event {
      * @return The return value depends on the event type:
      * <p>
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
-     * <tr><td>{@link Type#NS_UNAWARE_ELEMENT}</td><td>the name of the element</td></tr>
-     * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the local part of the element name</td></tr>
+     * <tr><td>{@link Type#START_NS_UNAWARE_ELEMENT}</td><td>the name of the element</td></tr>
+     * <tr><td>{@link Type#START_NS_AWARE_ELEMENT}</td><td>the local part of the element name</td></tr>
      * <tr><td>{@link Type#NS_UNAWARE_ATTRIBUTE}</td><td>the name of the attribute</td></tr>
      * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the local part of the attribute name</td></tr>
      * <tr><td>{@link Type#PROCESSING_INSTRUCTION}</td><td>the target of the processing instruction</td></tr>
@@ -100,7 +104,7 @@ public class Event {
      * @return The return value depends on the event type:
      * <p>
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
-     * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the namespace URI of the element, or <code>null</code>
+     * <tr><td>{@link Type#START_NS_AWARE_ELEMENT}</td><td>the namespace URI of the element, or <code>null</code>
      * if the element has no namespace</td></tr>
      * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the namespace URI of the attribute, or <code>null</code>
      * if the attribute has no namespace</td></tr>
@@ -121,7 +125,7 @@ public class Event {
      * @return The return value depends on the event type:
      * <p>
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
-     * <tr><td>{@link Type#NS_AWARE_ELEMENT}</td><td>the prefix of the element, or <code>null</code>
+     * <tr><td>{@link Type#START_NS_AWARE_ELEMENT}</td><td>the prefix of the element, or <code>null</code>
      * if the element has no prefix</td></tr>
      * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the prefix of the attribute, or <code>null</code>
      * if the attribute has no prefix</td></tr>
@@ -139,7 +143,7 @@ public class Event {
 
     /**
      * 
-     * Valid for {@link Type#CHARACTERS}, {@link Type#SPACE}, {@link Type#CDATA}, {@link Type#COMMENT},
+     * Valid for {@link Type#CHARACTERS}, {@link Type#SPACE}, {@link Type#START_CDATA_SECTION}, {@link Type#COMMENT},
      * {@link Type#PROCESSING_INSTRUCTION}, {@link Type#NS_UNAWARE_ATTRIBUTE} and {@link Type#NS_AWARE_ATTRIBUTE}.
      * 
      * @return

@@ -31,6 +31,10 @@ import com.google.code.ddom.stream.spi.XmlOutput;
 
 // TODO: also allow for deferred building of attributes
 public class Builder extends XmlOutput implements LLBuilder {
+    private static final int FRAGMENT = 0;
+    private static final int ELEMENT = 1;
+    private static final int CDATA_SECTION = 2;
+    
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
     private final XmlInput input; // TODO: not sure if we still need this
@@ -96,6 +100,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         passThroughDepth = 0;
     }
 
+    @Override
     protected final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         // TODO: how to handle pass-through here??
         document.coreSetXmlVersion(xmlVersion);
@@ -104,6 +109,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         document.coreSetStandalone(standalone);
     }
 
+    @Override
     protected final void processDocumentType(String rootName, String publicId, String systemId) {
         if (passThroughHandler == null) {
             appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId));
@@ -112,25 +118,33 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
     
-    protected final void processElement(String tagName) {
+    @Override
+    protected final void startElement(String tagName) throws StreamException {
         if (passThroughHandler == null) {
             appendNode(new NSUnawareElement(document, tagName, false));
         } else {
             passThroughDepth++;
-            passThroughHandler.processElement(tagName);
+            passThroughHandler.startElement(tagName);
         }
     }
     
-    protected final void processElement(String namespaceURI, String localName, String prefix) throws StreamException {
+    @Override
+    protected final void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
         if (passThroughHandler == null) {
             Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
             appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
         } else {
             passThroughDepth++;
-            passThroughHandler.processElement(namespaceURI, localName, prefix);
+            passThroughHandler.startElement(namespaceURI, localName, prefix);
         }
     }
     
+    @Override
+    protected final void endElement() throws StreamException {
+        nodeCompleted(ELEMENT);
+    }
+
+    @Override
     protected final void processAttribute(String name, String value, String type) {
         if (passThroughHandler == null) {
             appendAttribute(new NSUnawareAttribute(document, name, value, type));
@@ -139,6 +153,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
 
+    @Override
     protected final void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
         if (passThroughHandler == null) {
             appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type));
@@ -147,6 +162,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
 
+    @Override
     protected final void processNamespaceDeclaration(String prefix, String namespaceURI) {
         if (passThroughHandler == null) {
             appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
@@ -155,6 +171,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
 
+    @Override
     protected final void attributesCompleted() {
         if (passThroughHandler == null) {
             nodeAppended = true;
@@ -163,6 +180,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
 
+    @Override
     protected final void processProcessingInstruction(String target, String data) {
         if (passThroughHandler == null) {
             appendNode(new ProcessingInstruction(document, target, data));
@@ -171,6 +189,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
     
+    @Override
     protected final void processText(String data) throws StreamException {
         if (passThroughHandler == null) {
             if (lastSibling == null && pendingText == null) {
@@ -183,6 +202,7 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
     
+    @Override
     protected final void processComment(String data) {
         if (passThroughHandler == null) {
             appendNode(new Comment(document, data));
@@ -191,15 +211,22 @@ public class Builder extends XmlOutput implements LLBuilder {
         }
     }
     
-    protected final void processCDATASection() {
+    @Override
+    protected final void startCDATASection() throws StreamException {
         if (passThroughHandler == null) {
             appendNode(new CDATASection(document, false));
         } else {
             passThroughDepth++;
-            passThroughHandler.processCDATASection();
+            passThroughHandler.startCDATASection();
         }
     }
     
+    @Override
+    protected final void endCDATASection() throws StreamException {
+        nodeCompleted(CDATA_SECTION);
+    }
+
+    @Override
     protected final void processEntityReference(String name) {
         if (passThroughHandler == null) {
             appendNode(new EntityReference(document, name));
@@ -269,7 +296,12 @@ public class Builder extends XmlOutput implements LLBuilder {
         lastAttribute = attr;
     }
     
-    protected final void nodeCompleted() throws StreamException {
+    @Override
+    protected final void completed() throws StreamException {
+        nodeCompleted(FRAGMENT);
+    }
+    
+    private void nodeCompleted(int nodeType) throws StreamException {
         boolean pop;
         if (passThroughHandler == null) {
             if (pendingText != null) {
@@ -287,7 +319,19 @@ public class Builder extends XmlOutput implements LLBuilder {
             pop = true;
         } else {
             // TODO: do we need to check pendingText???
-            passThroughHandler.nodeCompleted();
+            switch (nodeType) {
+                case FRAGMENT:
+                    passThroughHandler.completed();
+                    break;
+                case ELEMENT:
+                    passThroughHandler.endElement();
+                    break;
+                case CDATA_SECTION:
+                    passThroughHandler.endCDATASection();
+                    break;
+                default:
+                    throw new IllegalStateException();
+            }
             if (passThroughDepth == 0) {
                 pop = true;
                 passThroughHandler = null;
