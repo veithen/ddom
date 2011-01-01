@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,18 +42,22 @@ final class XmlOutputHandler implements XmlHandler{
         output.endElement();
     }
 
-    public void processAttribute(String name, String value, String type) {
-        output.processAttribute(name, value, type);
+    public void startAttribute(String name, String type) throws StreamException {
+        output.startAttribute(name, type);
     }
 
-    public void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
-        output.processAttribute(namespaceURI, localName, prefix, value, type);
+    public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
+        output.startAttribute(namespaceURI, localName, prefix, type);
     }
 
-    public void processNamespaceDeclaration(String prefix, String namespaceURI) {
-        output.processNamespaceDeclaration(prefix, namespaceURI);
+    public void startNamespaceDeclaration(String prefix) throws StreamException {
+        output.startNamespaceDeclaration(prefix);
     }
     
+    public void endAttribute() throws StreamException {
+        output.endAttribute();
+    }
+
     public void attributesCompleted() {
         output.attributesCompleted();
     }

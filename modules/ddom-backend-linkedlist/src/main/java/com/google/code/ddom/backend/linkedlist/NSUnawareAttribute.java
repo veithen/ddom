@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSUnawareAttribute;
-import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
@@ -29,16 +29,16 @@ public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareA
         this.name = name;
     }
 
+    public NSUnawareAttribute(Document document, String name, String type, boolean complete) {
+        super(document, type, complete);
+        this.name = name;
+    }
+
     public final String coreGetName() {
         return name;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
-        try {
-            handler.processAttribute(name, coreGetTextContent(), coreGetType());
-        } catch (DeferredParsingException ex) {
-            // TODO: this should never happen if the event model is consistent with the core model
-            throw new RuntimeException(ex);
-        }
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.startAttribute(name, coreGetType());
     }
 }

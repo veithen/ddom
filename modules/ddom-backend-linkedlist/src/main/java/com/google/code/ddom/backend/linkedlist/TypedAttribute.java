@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,11 @@ public abstract class TypedAttribute extends Attribute implements CoreTypedAttri
 
     public TypedAttribute(Document document, String value, String type) {
         super(document, value);
+        this.type = type;
+    }
+
+    public TypedAttribute(Document document, String type, boolean complete) {
+        super(document, complete);
         this.type = type;
     }
 

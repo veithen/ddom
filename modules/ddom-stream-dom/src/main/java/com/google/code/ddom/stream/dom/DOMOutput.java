@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.google.code.ddom.stream.dom;
 
 import javax.xml.XMLConstants;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -83,22 +84,32 @@ public class DOMOutput extends XmlOutput {
     }
 
     @Override
-    protected void processAttribute(String name, String value, String type) {
-        ((Element)node).setAttribute(name, value);
+    protected void startAttribute(String name, String type) {
+        Attr attr = document.createAttribute(name);
+        ((Element)node).setAttributeNode(attr);
+        node = attr;
     }
 
     @Override
-    protected void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
-        ((Element)node).setAttributeNS(namespaceURI, getQualifiedName(localName, prefix), value);
+    protected void startAttribute(String namespaceURI, String localName, String prefix, String type) {
+        Attr attr = document.createAttributeNS(namespaceURI, getQualifiedName(localName, prefix));
+        ((Element)node).setAttributeNodeNS(attr);
+        node = attr;
     }
 
     @Override
-    protected void processNamespaceDeclaration(String prefix, String namespaceURI) {
-        ((Element)node).setAttributeNS(
+    protected void startNamespaceDeclaration(String prefix) {
+        Attr attr = document.createAttributeNS(
                 XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
                 prefix == null ? XMLConstants.XMLNS_ATTRIBUTE
-                               : XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix,
-                namespaceURI);
+                               : XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix);
+        ((Element)node).setAttributeNodeNS(attr);
+        node = attr;
+    }
+
+    @Override
+    protected void endAttribute() throws StreamException {
+        node = ((Attr)node).getOwnerElement();
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import javax.xml.namespace.QName;
 
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNSAwareAttribute;
-import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
@@ -30,6 +30,13 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
 
     public NSAwareAttribute(Document document, String namespaceURI, String localName, String prefix, String value, String type) {
         super(document, value, type);
+        this.namespaceURI = namespaceURI;
+        this.localName = localName;
+        this.prefix = prefix;
+    }
+
+    public NSAwareAttribute(Document document, String namespaceURI, String localName, String prefix, String type, boolean complete) {
+        super(document, type, complete);
         this.namespaceURI = namespaceURI;
         this.localName = localName;
         this.prefix = prefix;
@@ -63,12 +70,7 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
         return NSAwareNamedNodeHelper.coreGetQName(this);
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
-        try {
-            handler.processAttribute(namespaceURI, localName, prefix, coreGetTextContent(), coreGetType());
-        } catch (DeferredParsingException ex) {
-            // TODO: this should never happen if the event model is consistent with the core model
-            throw new RuntimeException(ex);
-        }
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.startAttribute(namespaceURI, localName, prefix, coreGetType());
     }
 }

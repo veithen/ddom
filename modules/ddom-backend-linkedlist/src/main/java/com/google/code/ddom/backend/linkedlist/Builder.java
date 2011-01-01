@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ import com.google.code.ddom.stream.spi.XmlOutput;
 public class Builder extends XmlOutput implements LLBuilder {
     private static final int FRAGMENT = 0;
     private static final int ELEMENT = 1;
-    private static final int CDATA_SECTION = 2;
+    private static final int ATTRIBUTE = 2;
+    private static final int CDATA_SECTION = 3;
     
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
@@ -145,30 +146,38 @@ public class Builder extends XmlOutput implements LLBuilder {
     }
 
     @Override
-    protected final void processAttribute(String name, String value, String type) {
+    protected final void startAttribute(String name, String type) throws StreamException {
         if (passThroughHandler == null) {
-            appendAttribute(new NSUnawareAttribute(document, name, value, type));
+            appendAttribute(new NSUnawareAttribute(document, name, type, false));
         } else {
-            passThroughHandler.processAttribute(name, value, type);
+            passThroughDepth++;
+            passThroughHandler.startAttribute(name, type);
         }
     }
 
     @Override
-    protected final void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+    protected final void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
         if (passThroughHandler == null) {
-            appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, value, type));
+            appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, type, false));
         } else {
-            passThroughHandler.processAttribute(namespaceURI, localName, prefix, value, type);
+            passThroughDepth++;
+            passThroughHandler.startAttribute(namespaceURI, localName, prefix, type);
         }
     }
 
     @Override
-    protected final void processNamespaceDeclaration(String prefix, String namespaceURI) {
+    protected final void startNamespaceDeclaration(String prefix) throws StreamException {
         if (passThroughHandler == null) {
-            appendAttribute(new NamespaceDeclaration(document, prefix, namespaceURI));
+            appendAttribute(new NamespaceDeclaration(document, prefix, false));
         } else {
-            passThroughHandler.processNamespaceDeclaration(prefix, namespaceURI);
+            passThroughDepth++;
+            passThroughHandler.startNamespaceDeclaration(prefix);
         }
+    }
+
+    @Override
+    protected final void endAttribute() throws StreamException {
+        nodeCompleted(ATTRIBUTE);
     }
 
     @Override
@@ -293,6 +302,8 @@ public class Builder extends XmlOutput implements LLBuilder {
         } else {
             lastAttribute.insertAttributeAfter(attr);
         }
+        nodeStack.push(parent);
+        parent = attr;
         lastAttribute = attr;
     }
     
@@ -326,6 +337,9 @@ public class Builder extends XmlOutput implements LLBuilder {
                 case ELEMENT:
                     passThroughHandler.endElement();
                     break;
+                case ATTRIBUTE:
+                    passThroughHandler.endAttribute();
+                    break;
                 case CDATA_SECTION:
                     passThroughHandler.endCDATASection();
                     break;
@@ -344,7 +358,9 @@ public class Builder extends XmlOutput implements LLBuilder {
             if (nodeStack.isEmpty()) {
                 parent = null;
             } else {
-                lastSibling = (LLChildNode)parent;
+                if (nodeType != ATTRIBUTE) {
+                    lastSibling = (LLChildNode)parent;
+                }
                 // This is important for being a builder of type 2: instead of getting the
                 // parent from the current node, we get it from the node stack.
                 parent = nodeStack.pop();

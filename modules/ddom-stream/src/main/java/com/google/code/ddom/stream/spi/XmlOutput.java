@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,35 +54,45 @@ public abstract class XmlOutput {
     protected abstract void endElement() throws StreamException;
     
     /**
-     * Process an attribute in non namespace aware mode.
+     * Receive notification of the beginning of an attribute in non namespace aware mode.
      * 
      * @param name
-     * @param value
      * @param type
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    protected abstract void processAttribute(String name, String value, String type);
+    protected abstract void startAttribute(String name, String type) throws StreamException;
     
     /**
-     * Process an attribute in namespace aware mode.
+     * Receive notification of the beginning of an attribute in namespace aware mode.
      * 
      * @param namespaceURI
      * @param localName
      * @param prefix
-     * @param value
      * @param type
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    protected abstract void processAttribute(String namespaceURI, String localName, String prefix, String value, String type);
+    protected abstract void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException;
     
     /**
-     * Process a namespace declaration.
+     * Receive notification of the beginning of a namespace declaration.
      * 
      * @param prefix
      *            the prefix being declared, or <code>null</code> if the declaration sets the
      *            default namespace
-     * @param namespaceURI
-     *            the namespace URI; this value must not be <code>null</code>
+     * @throws StreamException
+     *             if an error occurs when processing the event
      */
-    protected abstract void processNamespaceDeclaration(String prefix, String namespaceURI);
+    protected abstract void startNamespaceDeclaration(String prefix) throws StreamException;
+    
+    /**
+     * Receive notification of the end of an attribute.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void endAttribute() throws StreamException;
     
     protected abstract void attributesCompleted();
     

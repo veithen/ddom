@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
@@ -29,6 +30,11 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
         this.declaredPrefix = prefix;
     }
 
+    public NamespaceDeclaration(Document document, String prefix, boolean complete) {
+        super(document, complete);
+        this.declaredPrefix = prefix;
+    }
+
     public final String coreGetDeclaredPrefix() {
         return declaredPrefix;
     }
@@ -37,12 +43,7 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
         return coreGetTextContent();
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
-        try {
-            handler.processNamespaceDeclaration(coreGetDeclaredPrefix(), coreGetDeclaredNamespaceURI());
-        } catch (DeferredParsingException ex) {
-            // TODO: this should never happen if the event model is consistent with the core model
-            throw new RuntimeException(ex);
-        }
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.startNamespaceDeclaration(coreGetDeclaredPrefix());
     }
 }

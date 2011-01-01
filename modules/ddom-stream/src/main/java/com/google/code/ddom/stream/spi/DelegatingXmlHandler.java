@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,18 +49,22 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().endElement();
     }
 
-    public void processAttribute(String name, String value, String type) {
-        getDelegate().processAttribute(name, value, type);
+    public void startAttribute(String name, String type) throws StreamException {
+        getDelegate().startAttribute(name, type);
     }
 
-    public void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
-        getDelegate().processAttribute(namespaceURI, localName, prefix, value, type);
+    public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
+        getDelegate().startAttribute(namespaceURI, localName, prefix, type);
     }
 
-    public void processNamespaceDeclaration(String prefix, String namespaceURI) {
-        getDelegate().processNamespaceDeclaration(prefix, namespaceURI);
+    public void startNamespaceDeclaration(String prefix) throws StreamException {
+        getDelegate().startNamespaceDeclaration(prefix);
     }
     
+    public void endAttribute() throws StreamException {
+        getDelegate().endAttribute();
+    }
+
     public void attributesCompleted() {
         getDelegate().attributesCompleted();
     }

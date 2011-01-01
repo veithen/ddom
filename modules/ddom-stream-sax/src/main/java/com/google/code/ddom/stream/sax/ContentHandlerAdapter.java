@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,20 +92,24 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
                 String attQName = atts.getQName(i);
                 String attLocalName = atts.getLocalName(i);
                 if (attLocalName.length() == 0) {
-                    handler.processAttribute(attQName, atts.getValue(i), atts.getType(i));
+                    handler.startAttribute(attQName, atts.getType(i));
                 } else {
                     String attUri = atts.getURI(i);
                     if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                        handler.processNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(attQName), atts.getValue(i));
+                        handler.startNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(attQName));
                     } else {
-                        handler.processAttribute(
+                        handler.startAttribute(
                                 SAXStreamUtils.normalizeNamespaceURI(attUri),
                                 atts.getLocalName(i),
                                 SAXStreamUtils.getPrefixFromQName(attQName),
-                                atts.getValue(i),
                                 atts.getType(i));
                     }
                 }
+                String value = atts.getValue(i);
+                if (value.length() > 0) {
+                    handler.processText(value);
+                }
+                handler.endAttribute();
             }
             handler.attributesCompleted();
         } catch (StreamException ex) {

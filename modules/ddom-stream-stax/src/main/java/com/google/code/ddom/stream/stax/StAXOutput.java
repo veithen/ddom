@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,19 +65,25 @@ public class StAXOutput extends XmlOutput {
     }
 
     @Override
-    protected void processAttribute(String name, String value, String type) {
+    protected void startAttribute(String name, String type) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
+    protected void startAttribute(String namespaceURI, String localName, String prefix, String type) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void processNamespaceDeclaration(String prefix, String namespaceURI) {
+    protected void startNamespaceDeclaration(String prefix) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected void endAttribute() throws StreamException {
         // TODO
         throw new UnsupportedOperationException();
     }

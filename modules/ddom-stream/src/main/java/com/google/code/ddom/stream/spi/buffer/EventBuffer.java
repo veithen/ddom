@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,18 +102,23 @@ public class EventBuffer extends XmlOutput {
     }
 
     @Override
-    protected void processAttribute(String name, String value, String type) {
-        newEvent().init(Type.NS_UNAWARE_ATTRIBUTE, name, null, null, value, type);
+    protected void startAttribute(String name, String type) {
+        newEvent().init(Type.START_NS_UNAWARE_ATTRIBUTE, name, null, null, null, type);
     }
 
     @Override
-    protected void processAttribute(String namespaceURI, String localName, String prefix, String value, String type) {
-        newEvent().init(Type.NS_AWARE_ATTRIBUTE, localName, namespaceURI, prefix, value, type);
+    protected void startAttribute(String namespaceURI, String localName, String prefix, String type) {
+        newEvent().init(Type.START_NS_AWARE_ATTRIBUTE, localName, namespaceURI, prefix, null, type);
     }
 
     @Override
-    protected void processNamespaceDeclaration(String prefix, String namespaceURI) {
-        newEvent().init(Type.NAMESPACE_DECLARATION, null, namespaceURI, prefix, null, null);
+    protected void startNamespaceDeclaration(String prefix) {
+        newEvent().init(Type.START_NAMESPACE_DECLARATION, null, null, prefix, null, null);
+    }
+
+    @Override
+    protected void endAttribute() throws StreamException {
+        newEvent().init(Type.END_ATTRIBUTE, null, null, null, null, null);
     }
 
     @Override

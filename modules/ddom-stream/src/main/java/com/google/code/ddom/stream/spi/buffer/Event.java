@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,13 @@ public class Event {
         
         END_ELEMENT,
         
-        NS_UNAWARE_ATTRIBUTE,
+        START_NS_UNAWARE_ATTRIBUTE,
         
-        NS_AWARE_ATTRIBUTE,
+        START_NS_AWARE_ATTRIBUTE,
         
-        NAMESPACE_DECLARATION,
+        START_NAMESPACE_DECLARATION,
+        
+        END_ATTRIBUTE,
         
         ATTRIBUTES_COMPLETE,
         
@@ -84,8 +86,8 @@ public class Event {
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
      * <tr><td>{@link Type#START_NS_UNAWARE_ELEMENT}</td><td>the name of the element</td></tr>
      * <tr><td>{@link Type#START_NS_AWARE_ELEMENT}</td><td>the local part of the element name</td></tr>
-     * <tr><td>{@link Type#NS_UNAWARE_ATTRIBUTE}</td><td>the name of the attribute</td></tr>
-     * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the local part of the attribute name</td></tr>
+     * <tr><td>{@link Type#START_NS_UNAWARE_ATTRIBUTE}</td><td>the name of the attribute</td></tr>
+     * <tr><td>{@link Type#START_NS_AWARE_ATTRIBUTE}</td><td>the local part of the attribute name</td></tr>
      * <tr><td>{@link Type#PROCESSING_INSTRUCTION}</td><td>the target of the processing instruction</td></tr>
      * <tr><td>{@link Type#ENTITY_REFERENCE}</td><td>the name of the entity reference</td></tr>
      * </table>
@@ -106,9 +108,9 @@ public class Event {
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
      * <tr><td>{@link Type#START_NS_AWARE_ELEMENT}</td><td>the namespace URI of the element, or <code>null</code>
      * if the element has no namespace</td></tr>
-     * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the namespace URI of the attribute, or <code>null</code>
+     * <tr><td>{@link Type#START_NS_AWARE_ATTRIBUTE}</td><td>the namespace URI of the attribute, or <code>null</code>
      * if the attribute has no namespace</td></tr>
-     * <tr><td>{@link Type#NAMESPACE_DECLARATION}</td><td>the URI of the namespace that the declaration refers to</td>
+     * <tr><td>{@link Type#START_NAMESPACE_DECLARATION}</td><td>the URI of the namespace that the declaration refers to</td>
      * </table>
      * <p>
      * For all other event types, the behavior of this method is undefined.
@@ -127,9 +129,9 @@ public class Event {
      * <table border="2" rules="all" cellpadding="4" cellspacing="0">
      * <tr><td>{@link Type#START_NS_AWARE_ELEMENT}</td><td>the prefix of the element, or <code>null</code>
      * if the element has no prefix</td></tr>
-     * <tr><td>{@link Type#NS_AWARE_ATTRIBUTE}</td><td>the prefix of the attribute, or <code>null</code>
+     * <tr><td>{@link Type#START_NS_AWARE_ATTRIBUTE}</td><td>the prefix of the attribute, or <code>null</code>
      * if the attribute has no prefix</td></tr>
-     * <tr><td>{@link Type#NAMESPACE_DECLARATION}</td><td>the prefix that the declaration refers to, or <code>null</code>
+     * <tr><td>{@link Type#START_NAMESPACE_DECLARATION}</td><td>the prefix that the declaration refers to, or <code>null</code>
      * if the declaration declares the default namespace</td>
      * </table>
      * <p>
@@ -144,7 +146,7 @@ public class Event {
     /**
      * 
      * Valid for {@link Type#CHARACTERS}, {@link Type#SPACE}, {@link Type#START_CDATA_SECTION}, {@link Type#COMMENT},
-     * {@link Type#PROCESSING_INSTRUCTION}, {@link Type#NS_UNAWARE_ATTRIBUTE} and {@link Type#NS_AWARE_ATTRIBUTE}.
+     * {@link Type#PROCESSING_INSTRUCTION}, {@link Type#START_NS_UNAWARE_ATTRIBUTE} and {@link Type#START_NS_AWARE_ATTRIBUTE}.
      * 
      * @return
      */
@@ -154,7 +156,7 @@ public class Event {
 
     /**
      * 
-     * Valid for {@link Type#NS_UNAWARE_ATTRIBUTE} and {@link Type#NS_AWARE_ATTRIBUTE}.
+     * Valid for {@link Type#START_NS_UNAWARE_ATTRIBUTE} and {@link Type#START_NS_AWARE_ATTRIBUTE}.
      * 
      * @return
      */

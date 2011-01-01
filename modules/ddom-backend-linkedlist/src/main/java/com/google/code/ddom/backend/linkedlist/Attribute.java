@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
 
     public Attribute(Document document, String value) {
         super(value);
+        owner = document;
+    }
+    
+    public Attribute(Document document, boolean complete) {
+        super(complete);
         owner = document;
     }
     

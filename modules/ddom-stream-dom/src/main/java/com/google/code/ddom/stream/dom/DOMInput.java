@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,13 +106,16 @@ public class DOMInput extends XmlInput {
                             String attrLocalName = attr.getLocalName();
                             if (attrLocalName == null) {
                                 // TODO: type information
-                                handler.processAttribute(attrLocalName, attr.getValue(), null);
+                                // TODO
+//                                handler.processAttribute(attrLocalName, attr.getValue(), null);
                             } else {
                                 String namespaceURI = attr.getNamespaceURI();
                                 if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-                                    handler.processNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName, attr.getValue());
+                                    // TODO
+//                                    handler.processNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName, attr.getValue());
                                 } else {
-                                    handler.processAttribute(namespaceURI, attrLocalName, attr.getPrefix(), attr.getValue(), null);
+                                    // TODO
+//                                    handler.processAttribute(namespaceURI, attrLocalName, attr.getPrefix(), attr.getValue(), null);
                                 }
                             }
                         }

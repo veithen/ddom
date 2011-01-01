@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,16 +73,31 @@ public class StAXInput extends XmlInput {
                 if (parserIsNamespaceAware) {
                     handler.startElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
                     for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-                        handler.processAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeValue(i), reader.getAttributeType(i));
+                        handler.startAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeType(i));
+                        String value = reader.getAttributeValue(i);
+                        if (value.length() > 0) {
+                            handler.processText(value);
+                        }
+                        handler.endAttribute();
                     }
                     for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
-                        handler.processNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)), emptyToNull(reader.getNamespaceURI(i)));
+                        handler.startNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)));
+                        String uri = reader.getNamespaceURI(i);
+                        if (uri.length() > 0) {
+                            handler.processText(uri);
+                        }
+                        handler.endAttribute();
                     }
                     handler.attributesCompleted();
                 } else {
                     handler.startElement(reader.getLocalName());
                     for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-                        handler.processAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i), reader.getAttributeType(i));
+                        handler.startAttribute(reader.getAttributeLocalName(i), reader.getAttributeType(i));
+                        String value = reader.getAttributeValue(i);
+                        if (value.length() > 0) {
+                            handler.processText(value);
+                        }
+                        handler.endAttribute();
                     }
                     handler.attributesCompleted();
                 }
