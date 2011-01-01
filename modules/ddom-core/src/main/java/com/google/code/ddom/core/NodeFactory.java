@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public interface NodeFactory {
 
     CoreComment createComment(CoreDocument document, String data);
 
-    CoreCDATASection createCDATASection(CoreDocument document);
+    CoreCDATASection createCDATASection(CoreDocument document, String data);
 
     CoreEntityReference createEntityReference(CoreDocument document, String name);
 }

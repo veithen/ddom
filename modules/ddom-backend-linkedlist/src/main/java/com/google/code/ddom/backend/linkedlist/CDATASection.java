@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,10 @@ import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class CDATASection extends Container implements CoreCDATASection {
+    public CDATASection(Document document, Object content) {
+        super(document, content);
+    }
+    
     public CDATASection(Document document, boolean complete) {
         super(document, complete);
     }

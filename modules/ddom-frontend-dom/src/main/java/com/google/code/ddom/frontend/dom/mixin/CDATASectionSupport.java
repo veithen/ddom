@@ -28,13 +28,7 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 @Mixin(CoreCDATASection.class)
 public abstract class CDATASectionSupport implements DOMCDATASection {
     public final DOMTextNode createNewTextNode(String data) {
-        DOMCDATASection newNode = (DOMCDATASection)coreGetNodeFactory().createCDATASection(coreGetOwnerDocument(true));
-        try {
-            newNode.coreSetValue(data);
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
-        }
-        return newNode;
+        return (DOMCDATASection)coreGetNodeFactory().createCDATASection(coreGetOwnerDocument(true), data);
     }
 
     public final String getData() throws DOMException {

@@ -33,8 +33,8 @@ public class TestCoreInsertSiblingsBeforeWithoutPreviousSibling extends BackendT
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, null, "test", null);
-        CoreChildNode child1 = nodeFactory.createCDATASection(document);
-        CoreChildNode child2 = nodeFactory.createComment(document, "test");
+        CoreChildNode child1 = nodeFactory.createCDATASection(document, "test");
+        CoreChildNode child2 = nodeFactory.createComment(document, "data");
         element.coreAppendChild(child1, Policies.REJECT);
         element.coreAppendChild(child2, Policies.REJECT);
         CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document);
