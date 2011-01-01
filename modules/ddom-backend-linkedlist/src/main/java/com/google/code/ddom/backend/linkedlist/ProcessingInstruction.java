@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
@@ -52,7 +53,7 @@ public class ProcessingInstruction extends LeafNode implements CoreProcessingIns
         return appendTo;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
         handler.processProcessingInstruction(target, data);
     }
 }

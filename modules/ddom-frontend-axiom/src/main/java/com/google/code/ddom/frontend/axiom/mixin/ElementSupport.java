@@ -260,7 +260,7 @@ public abstract class ElementSupport implements AxiomElement {
 
     public final String toString() {
         try {
-            return toString(false);
+            return toString(true);
         } catch (StreamException ex) {
             throw new OMException(ex);
         }

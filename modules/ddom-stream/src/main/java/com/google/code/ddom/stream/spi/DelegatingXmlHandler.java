@@ -69,7 +69,7 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().attributesCompleted();
     }
 
-    public void processProcessingInstruction(String target, String data) {
+    public void processProcessingInstruction(String target, String data) throws StreamException {
         getDelegate().processProcessingInstruction(target, data);
     }
 
@@ -77,7 +77,7 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().processText(data);
     }
 
-    public void processComment(String data) {
+    public void processComment(String data) throws StreamException {
         getDelegate().processComment(data);
     }
 

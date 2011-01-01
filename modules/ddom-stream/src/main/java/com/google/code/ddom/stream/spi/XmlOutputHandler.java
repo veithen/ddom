@@ -62,7 +62,7 @@ final class XmlOutputHandler implements XmlHandler{
         output.attributesCompleted();
     }
 
-    public void processProcessingInstruction(String target, String data) {
+    public void processProcessingInstruction(String target, String data) throws StreamException {
         output.processProcessingInstruction(target, data);
     }
 
@@ -70,7 +70,7 @@ final class XmlOutputHandler implements XmlHandler{
         output.processText(data);
     }
 
-    public void processComment(String data) {
+    public void processComment(String data) throws StreamException {
         output.processComment(data);
     }
 

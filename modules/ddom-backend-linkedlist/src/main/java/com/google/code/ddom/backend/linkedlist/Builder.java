@@ -190,7 +190,7 @@ public class Builder extends XmlOutput implements LLBuilder {
     }
 
     @Override
-    protected final void processProcessingInstruction(String target, String data) {
+    protected final void processProcessingInstruction(String target, String data) throws StreamException {
         if (passThroughHandler == null) {
             appendNode(new ProcessingInstruction(document, target, data));
         } else {
@@ -212,7 +212,7 @@ public class Builder extends XmlOutput implements LLBuilder {
     }
     
     @Override
-    protected final void processComment(String data) {
+    protected final void processComment(String data) throws StreamException {
         if (passThroughHandler == null) {
             appendNode(new Comment(document, data));
         } else {

@@ -158,11 +158,19 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     }
 
     public void comment(char[] ch, int start, int length) throws SAXException {
-        handler.processComment(new String(ch, start, length));
+        try {
+            handler.processComment(new String(ch, start, length));
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void processingInstruction(String piTarget, String piData) throws SAXException {
-        handler.processProcessingInstruction(piTarget, piData);
+        try {
+            handler.processProcessingInstruction(piTarget, piData);
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void startEntity(String name) throws SAXException {

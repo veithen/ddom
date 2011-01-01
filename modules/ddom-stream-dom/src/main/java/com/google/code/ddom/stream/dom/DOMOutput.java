@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlOutput;
 
@@ -40,7 +41,7 @@ public class DOMOutput extends XmlOutput {
     private final Document document;
     private Node node;
     private boolean isCDATASection;
-    private Object cdataSectionContent;
+    private final StringAccumulator cdataSectionContent = new StringAccumulator();
     
     public DOMOutput(Document document) {
         this.document = document;
@@ -130,31 +131,15 @@ public class DOMOutput extends XmlOutput {
 
     @Override
     protected void endCDATASection() throws StreamException {
-        String data;
-        if (cdataSectionContent == null) {
-            data = "";
-        } else if (cdataSectionContent instanceof String) {
-            data = (String)cdataSectionContent;
-        } else {
-            data = ((StringBuilder)cdataSectionContent).toString();
-        }
-        node.appendChild(document.createCDATASection(data));
+        node.appendChild(document.createCDATASection(cdataSectionContent.toString()));
         isCDATASection = false;
-        cdataSectionContent = null;
+        cdataSectionContent.clear();
     }
 
     @Override
     protected void processText(String data) {
         if (isCDATASection) {
-            if (cdataSectionContent == null) {
-                cdataSectionContent = data;
-            } else if (cdataSectionContent instanceof String) {
-                StringBuilder buffer = new StringBuilder((String)cdataSectionContent);
-                buffer.append(data);
-                cdataSectionContent = buffer;
-            } else {
-                ((StringBuilder)cdataSectionContent).append(data);
-            }
+            cdataSectionContent.append(data);
         } else {
             node.appendChild(document.createTextNode(data));
         }

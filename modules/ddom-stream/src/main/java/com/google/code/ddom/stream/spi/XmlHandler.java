@@ -96,9 +96,9 @@ public interface XmlHandler {
     
     void attributesCompleted();
     
-    void processProcessingInstruction(String target, String data);
+    void processProcessingInstruction(String target, String data) throws StreamException;
     void processText(String data) throws StreamException;
-    void processComment(String data);
+    void processComment(String data) throws StreamException;
     
     /**
      * Notify the handler of the beginning of a CDATA section.

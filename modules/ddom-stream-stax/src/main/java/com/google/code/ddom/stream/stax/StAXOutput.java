@@ -18,16 +18,38 @@ package com.google.code.ddom.stream.stax;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlOutput;
 
 public class StAXOutput extends XmlOutput {
+    private static final int ATT_NS_AWARE = 1;
+    private static final int ATT_NS_UNAWARE = 2;
+    private static final int ATT_NAMESPACE_DECLARATION = 3;
+    
     private final XMLStreamWriter writer;
+    private boolean coalescing;
+    private final StringAccumulator buffer = new StringAccumulator();
+    private int attType;
+    private String attNamespaceURI;
+    private String attName;
+    private String attPrefix;
 
     public StAXOutput(XMLStreamWriter writer) {
         this.writer = writer;
     }
-
+    
+    private void startCoalescing() {
+        coalescing = true;
+    }
+    
+    private String endCoalescing() {
+        coalescing = false;
+        String data = buffer.toString();
+        buffer.clear();
+        return data;
+    }
+    
     @Override
     protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         // TODO
@@ -65,66 +87,91 @@ public class StAXOutput extends XmlOutput {
     }
 
     @Override
-    protected void startAttribute(String name, String type) {
+    protected void startAttribute(String name, String type) throws StreamException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected void startAttribute(String namespaceURI, String localName, String prefix, String type) {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
+        attType = ATT_NS_AWARE;
+        attNamespaceURI = namespaceURI;
+        attName = localName;
+        attPrefix = prefix;
+        startCoalescing();
     }
 
     @Override
-    protected void startNamespaceDeclaration(String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected void startNamespaceDeclaration(String prefix) throws StreamException {
+        attType = ATT_NAMESPACE_DECLARATION;
+        attPrefix = prefix;
+        startCoalescing();
     }
 
     @Override
     protected void endAttribute() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    protected void attributesCompleted() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    protected void processProcessingInstruction(String target, String data) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    protected void processText(String data) throws StreamException {
         try {
-            writer.writeCharacters(data);
+            switch (attType) {
+                case ATT_NS_AWARE:
+                    writer.writeAttribute(attPrefix, attNamespaceURI, attName, endCoalescing());
+                    break;
+                case ATT_NAMESPACE_DECLARATION:
+                    writer.writeNamespace(attPrefix, endCoalescing());
+                    break;
+            }
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
         }
     }
 
     @Override
-    protected void processComment(String data) {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected void attributesCompleted() {
+        // Nothing special to do here
     }
 
     @Override
-    protected void startCDATASection() {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected void processProcessingInstruction(String target, String data) throws StreamException {
+        try {
+            writer.writeProcessingInstruction(target, data);
+        } catch (XMLStreamException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    @Override
+    protected void processText(String data) throws StreamException {
+        if (coalescing) {
+            buffer.append(data);
+        } else {
+            try {
+                writer.writeCharacters(data);
+            } catch (XMLStreamException ex) {
+                throw new StreamException(ex);
+            }
+        }
+    }
+
+    @Override
+    protected void processComment(String data) throws StreamException {
+        try {
+            writer.writeComment(data);
+        } catch (XMLStreamException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    @Override
+    protected void startCDATASection() throws StreamException {
+        startCoalescing();
     }
 
     @Override
     protected void endCDATASection() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        try {
+            writer.writeCData(endCoalescing());
+        } catch (XMLStreamException ex) {
+            throw new StreamException(ex);
+        }
     }
 
     @Override

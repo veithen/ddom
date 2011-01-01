@@ -96,9 +96,9 @@ public abstract class XmlOutput {
     
     protected abstract void attributesCompleted();
     
-    protected abstract void processProcessingInstruction(String target, String data);
+    protected abstract void processProcessingInstruction(String target, String data) throws StreamException;
     protected abstract void processText(String data) throws StreamException;
-    protected abstract void processComment(String data);
+    protected abstract void processComment(String data) throws StreamException;
     
     /**
      * Receive notification of the beginning of a CDATA section.

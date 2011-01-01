@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLElement;
 import com.google.code.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.ChildNotAllowedException;
@@ -41,7 +42,7 @@ import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
-public abstract class Element extends Container implements CoreElement {
+public abstract class Element extends Container implements LLElement {
     private Attribute firstAttribute;
 
     public Element(Document document, boolean complete) {

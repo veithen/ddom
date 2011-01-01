@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.Implementation;
 import com.google.code.ddom.core.CoreComment;
 import com.google.code.ddom.core.DeferredParsingException;
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
@@ -31,7 +32,7 @@ public class Comment extends CharacterData implements CoreComment {
         return appendTo;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
         handler.processComment(coreGetData());
     }
 }
