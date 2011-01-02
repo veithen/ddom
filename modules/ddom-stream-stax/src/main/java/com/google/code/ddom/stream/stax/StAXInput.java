@@ -48,7 +48,7 @@ public class StAXInput extends XmlInput {
         return value == null || value.length() == 0 ? null : value;
     }
     
-    public boolean proceed() throws StreamException {
+    public void proceed() throws StreamException {
         if (callNext) {
             try {
                 reader.next();
@@ -62,13 +62,13 @@ public class StAXInput extends XmlInput {
         switch (reader.getEventType()) {
             case XMLStreamReader.START_DOCUMENT:
                 handler.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
-                return true;
+                break;
             case XMLStreamReader.END_DOCUMENT:
                 handler.completed();
-                return false;
+                break;
             case XMLStreamReader.DTD:
                 handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
-                return true;
+                break;
             case XMLStreamReader.START_ELEMENT:
                 if (parserIsNamespaceAware) {
                     handler.startElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
@@ -101,28 +101,28 @@ public class StAXInput extends XmlInput {
                     }
                     handler.attributesCompleted();
                 }
-                return true;
+                break;
             case XMLStreamReader.END_ELEMENT:
                 handler.endElement();
-                return true;
+                break;
             case XMLStreamReader.PROCESSING_INSTRUCTION:
                 handler.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
-                return true;
+                break;
             case XMLStreamReader.CHARACTERS:
             case XMLStreamReader.SPACE: // TODO: these should be distinct events
                 handler.processText(reader.getText());
-                return true;
+                break;
             case XMLStreamReader.CDATA:
                 handler.startCDATASection();
                 handler.processText(reader.getText());
                 handler.endCDATASection();
-                return true;
+                break;
             case XMLStreamReader.COMMENT:
                 handler.processComment(reader.getText());
-                return true;
+                break;
             case XMLStreamReader.ENTITY_REFERENCE:
                 handler.processEntityReference(reader.getLocalName());
-                return true;
+                break;
             default:
                 throw new StreamException("Unexpected StAX event: " + reader.getEventType());
         }

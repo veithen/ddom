@@ -80,7 +80,7 @@ public class TreeSerializer extends XmlInput {
     }
     
     @Override
-    public boolean proceed() throws StreamException {
+    public void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         try {
             final LLNode previousNode = node;
@@ -168,25 +168,24 @@ public class TreeSerializer extends XmlInput {
                 case STATE_LEAF:
                     ((LLLeafNode)nextNode).internalGenerateEvents(handler);
                     node = nextNode;
-                    return true;
+                    break;
                 case STATE_NOT_VISITED:
                     ((LLParentNode)nextNode).internalGenerateStartEvent(handler);
                     node = nextNode;
-                    return true;
+                    break;
                 case STATE_ATTRIBUTES_VISITED:
                     handler.attributesCompleted();
                     node = nextNode;
-                    return true;
+                    break;
                 case STATE_VISITED:
                     ((LLParentNode)nextNode).internalGenerateEndEvent(handler);
                     if (nextNode == root) {
                         node = null;
                         handler.completed();
-                        return false;
                     } else {
                         node = nextNode;
-                        return true;
                     }
+                    break;
                 default:
                     throw new IllegalStateException();
             }

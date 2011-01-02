@@ -45,7 +45,7 @@ public class DOMInput extends XmlInput {
         return null;
     }
 
-    public boolean proceed() throws StreamException {
+    public void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         Node currentNode = this.currentNode;
         boolean visited = this.visited;
@@ -132,8 +132,6 @@ public class DOMInput extends XmlInput {
         }
         this.currentNode = currentNode;
         this.visited = visited;
-        // TODO
-        return true;
     }
 
     public void dispose() {

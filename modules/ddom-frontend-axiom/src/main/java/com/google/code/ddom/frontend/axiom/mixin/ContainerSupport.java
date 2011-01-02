@@ -108,7 +108,9 @@ public abstract class ContainerSupport implements AxiomContainer {
         XmlInput input = coreGetInput(preserve);
         XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(out, new Options());
         Stream.connect(input, output);
-        while (input.proceed()) {}
+        do {
+            input.proceed();
+        } while (!input.isComplete());
     }
     
     public final void serialize(OutputStream output) throws XMLStreamException {

@@ -38,7 +38,7 @@ public class SAXInput extends XmlInput {
         return null;
     }
 
-    public boolean proceed() throws StreamException {
+    public void proceed() throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
         ContentHandlerAdapter handler = new ContentHandlerAdapter(getHandler());
         xmlReader.setContentHandler(handler);
@@ -55,7 +55,6 @@ public class SAXInput extends XmlInput {
         } catch (SAXException ex) {
             throw new StreamException(ex);
         }
-        return false;
     }
 
     public void dispose() {

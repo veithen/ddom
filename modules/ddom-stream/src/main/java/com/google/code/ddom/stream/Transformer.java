@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ public class Transformer {
         
         private void to(XmlOutput output) throws StreamException {
             Stream.connect(input, output);
-            while (input.proceed()) {
-                // Just loop
-            }
+            do {
+                input.proceed();
+            } while (!input.isComplete());
         }
         
         public void to(Object destination, Options options) throws StreamException {

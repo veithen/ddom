@@ -17,6 +17,7 @@ package com.google.code.ddom.stream.spi;
 
 final class DelegatingXmlHandler implements XmlHandler{
     private XmlHandler delegate;
+    private boolean complete;
 
     private XmlHandler getDelegate() {
         if (delegate == null) {
@@ -27,6 +28,10 @@ final class DelegatingXmlHandler implements XmlHandler{
 
     void setDelegate(XmlHandler delegate) {
         this.delegate = delegate;
+    }
+    
+    boolean isComplete() {
+        return complete;
     }
 
     public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
@@ -95,5 +100,6 @@ final class DelegatingXmlHandler implements XmlHandler{
 
     public void completed() throws StreamException {
         getDelegate().completed();
+        complete = true;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,13 +42,13 @@ public class StreamSwitch extends StAXInput implements XMLStreamReader {
     }
 
     @Override
-    public boolean proceed() throws StreamException {
+    public void proceed() throws StreamException {
         if (readerAccessed && isOriginalReader) {
             throw new IllegalStateException("The original XMLStreamReader has already been accessed; " +
             		"it is no longer available to build the SOAP body");
         }
         inputAccessed = true;
-        return super.proceed();
+        super.proceed();
     }
     
     private void accessReader() {
