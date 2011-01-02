@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,9 +117,14 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns) {
-        // TODO: namespace declaration?
-        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
+        String namespaceURI = NSUtil.getNamespaceURI(ns);
+        String prefix = NSUtil.getPrefix(ns);
+        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
         element.setOMFactory(this);
+        // TODO: we don't have a test case covering ns == null
+        if (ns != null) {
+            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+        }
         return element;
     }
 
