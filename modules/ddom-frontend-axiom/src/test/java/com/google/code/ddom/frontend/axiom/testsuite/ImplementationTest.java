@@ -40,6 +40,8 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.element.TestSerializeAndConsumeWithIncompleteDescendant.class);
         builder.exclude(TestSerializationWithTwoNonBuiltOMElements.class);
         builder.exclude(TestGetXMLStreamReader.class);
+        builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
+        builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
         return builder.build();
     }
 }

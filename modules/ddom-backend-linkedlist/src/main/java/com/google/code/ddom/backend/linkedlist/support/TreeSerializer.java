@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist.support;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLBuilder;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLElement;
@@ -64,6 +65,13 @@ public class TreeSerializer extends XmlInput {
     private final LLParentNode root;
     private final boolean preserve;
     private LLNode node;
+    
+    /**
+     * The builder for the current node. This is only set if {@link #state} is
+     * {@link #STATE_PASS_THROUGH}.
+     */
+    private LLBuilder builder;
+    
     private int state;
     private LLDocument document;
     
@@ -83,112 +91,120 @@ public class TreeSerializer extends XmlInput {
     public void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         try {
+            if (state == STATE_PASS_THROUGH && !builder.isPassThroughEnabled()) {
+                state = STATE_VISITED;
+                builder = null;
+            }
             final LLNode previousNode = node;
             final LLNode nextNode;
-            if (previousNode == null) {
-                nextNode = root;
-                state = STATE_NOT_VISITED;
-            } else if (state == STATE_NOT_VISITED && previousNode instanceof LLElement) {
-                final LLElement element = (LLElement)previousNode;
-                // TODO: handle case with preserve == false
-                CoreAttribute firstAttribute = element.coreGetFirstAttribute();
-                if (firstAttribute == null) {
-                    nextNode = element;
-                    state = STATE_ATTRIBUTES_VISITED;
-                } else {
-                    nextNode = (LLNode)firstAttribute;
-                    state = STATE_NOT_VISITED;
-                }
-            } else if (state == STATE_NOT_VISITED || state == STATE_ATTRIBUTES_VISITED) {
-                final LLParentNode parent = (LLParentNode)previousNode;
-                if (preserve) {
-                    LLChildNode child = parent.internalGetFirstChild();
-                    if (child == null) {
-                        nextNode = parent;
-                        state = STATE_VISITED;
-                    } else {
-                        nextNode = child;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
-                    }
-                } else {
-                    LLChildNode child = parent.internalGetFirstChildIfMaterialized();
-                    if (child == null) {
-                        nextNode = parent;
-                        if (parent.coreIsComplete()) {
-                            state = STATE_VISITED;
-                        } else {
-                            getDocument().internalGetBuilderFor(parent).setPassThroughHandler(handler);
-                            state = STATE_PASS_THROUGH;
-                        }
-                    } else {
-                        nextNode = child;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
-                    }
-                }
-            } else if (previousNode instanceof LLChildNode) {
-                final LLChildNode previousChildNode = (LLChildNode)previousNode;
-                if (preserve) {
-                    LLChildNode sibling = previousChildNode.internalGetNextSibling();
-                    if (sibling == null) {
-                        nextNode = previousChildNode.internalGetParent();
-                        state = STATE_VISITED;
-                    } else {
-                        nextNode = sibling;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
-                    }
-                } else {
-                    LLChildNode sibling = previousChildNode.internalGetNextSiblingIfMaterialized();
-                    if (sibling == null) {
-                        LLParentNode parent = previousChildNode.internalGetParent();
-                        nextNode = parent;
-                        if (parent.coreIsComplete()) {
-                            state = STATE_VISITED;
-                        } else {
-                            getDocument().internalGetBuilderFor(parent).setPassThroughHandler(handler);
-                            state = STATE_PASS_THROUGH;
-                        }
-                    } else {
-                        nextNode = sibling;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
-                    }
-                }
+            if (state == STATE_PASS_THROUGH) {
+                nextNode = previousNode;
             } else {
-                final CoreAttribute attribute = (CoreAttribute)previousNode;
-                // TODO: handle case with preserve == false
-                CoreAttribute nextAttribute = attribute.coreGetNextAttribute();
-                if (nextAttribute == null) {
-                    nextNode = (LLNode)attribute.coreGetOwnerElement();
-                    state = STATE_ATTRIBUTES_VISITED;
-                } else {
-                    nextNode = (LLNode)nextAttribute;
+                if (previousNode == null) {
+                    nextNode = root;
                     state = STATE_NOT_VISITED;
+                } else if (state == STATE_VISITED && previousNode == root) {
+                    nextNode = null;
+                } else if (state == STATE_NOT_VISITED && previousNode instanceof LLElement) {
+                    final LLElement element = (LLElement)previousNode;
+                    // TODO: handle case with preserve == false
+                    CoreAttribute firstAttribute = element.coreGetFirstAttribute();
+                    if (firstAttribute == null) {
+                        nextNode = element;
+                        state = STATE_ATTRIBUTES_VISITED;
+                    } else {
+                        nextNode = (LLNode)firstAttribute;
+                        state = STATE_NOT_VISITED;
+                    }
+                } else if (state == STATE_NOT_VISITED || state == STATE_ATTRIBUTES_VISITED) {
+                    final LLParentNode parent = (LLParentNode)previousNode;
+                    if (preserve || parent.coreIsComplete()) {
+                        // TODO: bad because it will expand the node
+                        LLChildNode child = parent.internalGetFirstChild();
+                        if (child == null) {
+                            nextNode = parent;
+                            state = STATE_VISITED;
+                        } else {
+                            nextNode = child;
+                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        }
+                    } else {
+                        LLChildNode child = parent.internalGetFirstChildIfMaterialized();
+                        if (child == null) {
+                            nextNode = parent;
+                            builder = getDocument().internalGetBuilderFor(parent);
+                            builder.setPassThroughHandler(handler);
+                            state = STATE_PASS_THROUGH;
+                        } else {
+                            nextNode = child;
+                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        }
+                    }
+                } else if (previousNode instanceof LLChildNode) {
+                    final LLChildNode previousChildNode = (LLChildNode)previousNode;
+                    if (preserve) {
+                        LLChildNode sibling = previousChildNode.internalGetNextSibling();
+                        if (sibling == null) {
+                            nextNode = previousChildNode.internalGetParent();
+                            state = STATE_VISITED;
+                        } else {
+                            nextNode = sibling;
+                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        }
+                    } else {
+                        LLChildNode sibling = previousChildNode.internalGetNextSiblingIfMaterialized();
+                        if (sibling == null) {
+                            LLParentNode parent = previousChildNode.internalGetParent();
+                            nextNode = parent;
+                            if (parent.coreIsComplete()) {
+                                state = STATE_VISITED;
+                            } else {
+                                builder = getDocument().internalGetBuilderFor(parent);
+                                builder.setPassThroughHandler(handler);
+                                state = STATE_PASS_THROUGH;
+                            }
+                        } else {
+                            nextNode = sibling;
+                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        }
+                    }
+                } else {
+                    final CoreAttribute attribute = (CoreAttribute)previousNode;
+                    // TODO: handle case with preserve == false
+                    CoreAttribute nextAttribute = attribute.coreGetNextAttribute();
+                    if (nextAttribute == null) {
+                        nextNode = (LLNode)attribute.coreGetOwnerElement();
+                        state = STATE_ATTRIBUTES_VISITED;
+                    } else {
+                        nextNode = (LLNode)nextAttribute;
+                        state = STATE_NOT_VISITED;
+                    }
                 }
             }
             switch (state) {
                 case STATE_LEAF:
                     ((LLLeafNode)nextNode).internalGenerateEvents(handler);
-                    node = nextNode;
                     break;
                 case STATE_NOT_VISITED:
                     ((LLParentNode)nextNode).internalGenerateStartEvent(handler);
-                    node = nextNode;
                     break;
                 case STATE_ATTRIBUTES_VISITED:
                     handler.attributesCompleted();
-                    node = nextNode;
                     break;
                 case STATE_VISITED:
-                    ((LLParentNode)nextNode).internalGenerateEndEvent(handler);
-                    if (nextNode == root) {
-                        node = null;
+                    if (nextNode == null) {
                         handler.completed();
                     } else {
-                        node = nextNode;
+                        ((LLParentNode)nextNode).internalGenerateEndEvent(handler);
                     }
+                    break;
+                case STATE_PASS_THROUGH:
+                    builder.next();
                     break;
                 default:
                     throw new IllegalStateException();
             }
+            node = nextNode;
         } catch (CoreModelException ex) {
             // TODO: if it's a DeferredParsingException, maybe we can unwrap the exception?
             throw new StreamException(ex);

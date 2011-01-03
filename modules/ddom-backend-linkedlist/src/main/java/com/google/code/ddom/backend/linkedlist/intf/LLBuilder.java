@@ -31,4 +31,11 @@ public interface LLBuilder {
      *            the handler to send events to
      */
     void setPassThroughHandler(XmlHandler handler);
+    
+    /**
+     * Determines if pass-through mode is currently enabled for this builder.
+     * 
+     * @return <code>true</code> if pass-through is enabled, <code>false</code> otherwise
+     */
+    boolean isPassThroughEnabled();
 }

@@ -101,6 +101,10 @@ public class Builder extends XmlOutput implements LLBuilder {
         passThroughDepth = 0;
     }
 
+    public final boolean isPassThroughEnabled() {
+        return passThroughHandler != null;
+    }
+
     @Override
     protected final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         // TODO: how to handle pass-through here??
