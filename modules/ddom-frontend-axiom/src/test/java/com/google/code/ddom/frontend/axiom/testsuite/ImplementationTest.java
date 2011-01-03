@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.apache.axiom.ts.om.document.TestGetXMLStreamReader;
 import org.apache.axiom.ts.om.element.TestSerialization;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
+import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 
@@ -42,6 +43,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetXMLStreamReader.class);
         builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
+        builder.exclude(TestCreateOMTextFromDataHandlerProvider.class);
         return builder.build();
     }
 }

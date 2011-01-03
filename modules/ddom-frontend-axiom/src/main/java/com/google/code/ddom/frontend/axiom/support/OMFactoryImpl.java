@@ -103,16 +103,20 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(QName qname, OMContainer parent) {
-        try {
-            // TODO
-            String namespaceURI = QNameUtil.getNamespaceURI(qname);
-            String prefix = QNameUtil.getPrefix(qname);
-            AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(namespaceURI, qname.getLocalPart(), prefix);
-            element.ensureNamespaceIsDeclared(prefix, namespaceURI);
-            element.setOMFactory(this);
-            return element;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+        if (parent == null) {
+            return createOMElement(qname);
+        } else {
+            try {
+                // TODO
+                String namespaceURI = QNameUtil.getNamespaceURI(qname);
+                String prefix = QNameUtil.getPrefix(qname);
+                AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(namespaceURI, qname.getLocalPart(), prefix);
+                element.ensureNamespaceIsDeclared(prefix, namespaceURI);
+                element.setOMFactory(this);
+                return element;
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         }
     }
 
@@ -129,24 +133,18 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent) {
-        // TODO: namespace declaration?
-        try {
-            AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
-            element.setOMFactory(this);
-            return element;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+        if (parent == null) {
+            return createOMElement(localName, ns);
+        } else {
+            // TODO: namespace declaration?
+            try {
+                AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
+                element.setOMFactory(this);
+                return element;
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         }
-    }
-
-    public final OMSourcedElement createOMElement(OMDataSource source, QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final OMSourcedElement createOMElement(OMDataSource source, String localName, OMNamespace ns) {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 
     public final OMElement createOMElement(String localName, String namespaceURI, String prefix) {
@@ -157,9 +155,20 @@ public class OMFactoryImpl implements OMFactory {
             namespaceURI = null;
         }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
-        // TODO: do we need to generate a namespace declaration?
+        // TODO: not always necessary
+        element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
         element.setOMFactory(this);
         return element;
+    }
+
+    public final OMSourcedElement createOMElement(OMDataSource source, QName qname) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final OMSourcedElement createOMElement(OMDataSource source, String localName, OMNamespace ns) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public final OMNamespace createOMNamespace(String uri, String prefix) {
