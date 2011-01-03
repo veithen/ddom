@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,11 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
-import com.google.code.ddom.backend.linkedlist.Builder;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.stream.spi.XmlInput;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
     void internalCreateBuilder(XmlInput input, LLParentNode target);
-    Builder internalGetBuilderFor(LLParentNode target);
+    LLBuilder internalGetBuilderFor(LLParentNode target);
     void internalMigrateBuilder(LLParentNode from, LLParentNode to);
 }

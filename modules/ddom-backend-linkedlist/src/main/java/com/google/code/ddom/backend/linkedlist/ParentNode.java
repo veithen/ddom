@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.backend.Inject;
+import com.google.code.ddom.backend.linkedlist.intf.LLBuilder;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
@@ -173,7 +174,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
     
     public final void coreBuild() throws DeferredParsingException {
         if (!coreIsComplete()) {
-            Builder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
+            LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
             do {
                 builder.next();
             } while (!coreIsComplete());
@@ -189,7 +190,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
             if (coreIsComplete()) {
                 return null;
             } else {
-                Builder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
+                LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
                 while (content == null && !coreIsComplete()) {
                     builder.next();
                 }

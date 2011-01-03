@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
+import com.google.code.ddom.backend.linkedlist.intf.LLBuilder;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLNode;
@@ -70,7 +71,7 @@ public final class LLChildNodeHelper {
             return null;
         } else {
             if (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete()) {
-                Builder builder = that.internalGetOwnerDocument().internalGetBuilderFor(parent);
+                LLBuilder builder = that.internalGetOwnerDocument().internalGetBuilderFor(parent);
                 do {
                     builder.next();
                 } while (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete());

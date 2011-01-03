@@ -15,9 +15,12 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
+import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 public interface LLBuilder {
+    void next() throws DeferredParsingException;
+    
     /**
      * Enables pass-through mode for this builder. In this mode, events for the current node (and
      * its descendants) are passed directly to the specified handler instead of building nodes for
