@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009-2010 Andreas Veithen
+  ~ Copyright 2009-2011 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
     </parent>
     <artifactId>ddom-api</artifactId>
     <name>DDOM :: Modules :: API</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -39,4 +39,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
