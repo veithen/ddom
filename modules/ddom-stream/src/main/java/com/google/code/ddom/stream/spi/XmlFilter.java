@@ -15,16 +15,6 @@
  */
 package com.google.code.ddom.stream.spi;
 
-public abstract class XmlOutput {
-    private boolean created;
-    
-    XmlHandler doCreateXmlHandler() {
-        if (created) {
-            throw new IllegalStateException("This XmlOutput object has already been used");
-        }
-        created = true;
-        return createXmlHandler();
-    }
-    
-    protected abstract XmlHandler createXmlHandler();
+public abstract class XmlFilter {
+    protected abstract XmlHandler createXmlHandler(XmlHandler target);
 }

@@ -19,6 +19,6 @@ public class Stream {
     private Stream() {}
     
     public static void connect(XmlInput input, XmlOutput output) {
-        input.handler.setDelegate(new XmlOutputHandler(output));
+        input.handler.setDelegate(output.doCreateXmlHandler());
     }
 }

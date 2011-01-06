@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
+import com.google.code.ddom.stream.spi.SimpleXmlOutput;
 import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlOutput;
 import com.google.code.ddom.stream.spi.buffer.Event.Type;
 
 /**
@@ -27,7 +27,7 @@ import com.google.code.ddom.stream.spi.buffer.Event.Type;
  * 
  * @author Andreas Veithen
  */
-public class EventBuffer extends XmlOutput {
+public class EventBuffer extends SimpleXmlOutput {
     private final Event[] buffer = new Event[16];
     private int currentIndex;
     private int nextIndex;

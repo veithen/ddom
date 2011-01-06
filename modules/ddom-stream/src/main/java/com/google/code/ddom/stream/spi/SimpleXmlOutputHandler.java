@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.stream.spi;
 
-final class XmlOutputHandler implements XmlHandler{
-    private final XmlOutput output;
+final class SimpleXmlOutputHandler implements XmlHandler{
+    private final SimpleXmlOutput output;
 
-    XmlOutputHandler(XmlOutput delegate) {
+    SimpleXmlOutputHandler(SimpleXmlOutput delegate) {
         this.output = delegate;
     }
 

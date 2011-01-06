@@ -24,13 +24,13 @@ import com.google.code.ddom.collections.Stack;
 import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
+import com.google.code.ddom.stream.spi.SimpleXmlOutput;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 import com.google.code.ddom.stream.spi.XmlInput;
-import com.google.code.ddom.stream.spi.XmlOutput;
 
 // TODO: also allow for deferred building of attributes
-public class Builder extends XmlOutput implements LLBuilder {
+public class Builder extends SimpleXmlOutput implements LLBuilder {
     private static final int FRAGMENT = 0;
     private static final int ELEMENT = 1;
     private static final int ATTRIBUTE = 2;

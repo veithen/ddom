@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.stax;
+package com.google.code.ddom.stream.sax;
 
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.validation.Schema;
+import javax.xml.validation.ValidatorHandler;
 
+import com.google.code.ddom.stream.spi.XmlFilter;
 import com.google.code.ddom.stream.spi.XmlHandler;
-import com.google.code.ddom.stream.spi.XmlOutput;
 
-public class StAXOutput extends XmlOutput {
-    private final XMLStreamWriter writer;
-
-    public StAXOutput(XMLStreamWriter writer) {
-        this.writer = writer;
+public class ValidationFilter extends XmlFilter {
+    private final Schema schema;
+    
+    public ValidationFilter(Schema schema) {
+        this.schema = schema;
     }
 
     @Override
-    protected XmlHandler createXmlHandler() {
-        return new XMLStreamWriterHandler(writer);
+    protected XmlHandler createXmlHandler(XmlHandler target) {
+        ValidatorHandler vh = schema.newValidatorHandler();
+        // TODO: set error handler
+        vh.setContentHandler(new ContentHandlerAdapter(target));
+        return new XmlHandlerAdapter(vh);
     }
 }

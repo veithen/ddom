@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.google.code.ddom.stream.sax;
 
-public abstract class XmlOutput {
-    private boolean created;
-    
-    XmlHandler doCreateXmlHandler() {
-        if (created) {
-            throw new IllegalStateException("This XmlOutput object has already been used");
-        }
-        created = true;
-        return createXmlHandler();
+import org.xml.sax.ContentHandler;
+
+import com.google.code.ddom.stream.spi.XmlHandler;
+import com.google.code.ddom.stream.spi.XmlOutput;
+
+public class SAXOutput extends XmlOutput {
+    private final ContentHandler handler;
+
+    public SAXOutput(ContentHandler handler) {
+        this.handler = handler;
     }
-    
-    protected abstract XmlHandler createXmlHandler();
+
+    @Override
+    protected XmlHandler createXmlHandler() {
+        return new XmlHandlerAdapter(handler);
+    }
 }

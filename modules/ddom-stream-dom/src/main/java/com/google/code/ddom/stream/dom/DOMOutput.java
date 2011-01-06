@@ -23,8 +23,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
+import com.google.code.ddom.stream.spi.SimpleXmlOutput;
 import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlOutput;
 
 /**
  * 
@@ -37,7 +37,7 @@ import com.google.code.ddom.stream.spi.XmlOutput;
  * @author Andreas Veithen
  */
 // TODO: what about ID attributes???
-public class DOMOutput extends XmlOutput {
+public class DOMOutput extends SimpleXmlOutput {
     private final Document document;
     private Node node;
     private boolean isCDATASection;
