@@ -97,7 +97,7 @@ public interface XmlHandler {
     void attributesCompleted();
     
     void processProcessingInstruction(String target, String data) throws StreamException;
-    void processText(String data) throws StreamException;
+    void processText(String data, boolean ignorable) throws StreamException;
     void processComment(String data) throws StreamException;
     
     /**

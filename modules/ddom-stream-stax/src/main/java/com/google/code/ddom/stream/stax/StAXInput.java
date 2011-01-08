@@ -77,7 +77,7 @@ public class StAXInput extends XmlInput {
                         handler.startAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeType(i));
                         String value = reader.getAttributeValue(i);
                         if (value.length() > 0) {
-                            handler.processText(value);
+                            handler.processText(value, false);
                         }
                         handler.endAttribute();
                     }
@@ -85,7 +85,7 @@ public class StAXInput extends XmlInput {
                         handler.startNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)));
                         String uri = reader.getNamespaceURI(i);
                         if (uri.length() > 0) {
-                            handler.processText(uri);
+                            handler.processText(uri, false);
                         }
                         handler.endAttribute();
                     }
@@ -96,7 +96,7 @@ public class StAXInput extends XmlInput {
                         handler.startAttribute(reader.getAttributeLocalName(i), reader.getAttributeType(i));
                         String value = reader.getAttributeValue(i);
                         if (value.length() > 0) {
-                            handler.processText(value);
+                            handler.processText(value, false);
                         }
                         handler.endAttribute();
                     }
@@ -110,12 +110,14 @@ public class StAXInput extends XmlInput {
                 handler.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
                 break;
             case XMLStreamReader.CHARACTERS:
-            case XMLStreamReader.SPACE: // TODO: these should be distinct events
-                handler.processText(reader.getText());
+                handler.processText(reader.getText(), false);
+                break;
+            case XMLStreamReader.SPACE:
+                handler.processText(reader.getText(), true);
                 break;
             case XMLStreamReader.CDATA:
                 handler.startCDATASection();
-                handler.processText(reader.getText());
+                handler.processText(reader.getText(), false);
                 handler.endCDATASection();
                 break;
             case XMLStreamReader.COMMENT:

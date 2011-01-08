@@ -31,11 +31,12 @@ class XmlPivotHandler implements XmlHandler {
     private static final int ATTRIBUTES_COMPLETED = 9;
     private static final int PROCESSING_INSTRUCTION = 10;
     private static final int TEXT = 11;
-    private static final int COMMENT = 12;
-    private static final int START_CDATA_SECTION = 13;
-    private static final int END_CDATA_SECTION = 14;
-    private static final int ENTITY_REFERENCE = 15;
-    private static final int COMPLETED = 16;
+    private static final int IGNORABLE_TEXT = 12;
+    private static final int COMMENT = 13;
+    private static final int START_CDATA_SECTION = 14;
+    private static final int END_CDATA_SECTION = 15;
+    private static final int ENTITY_REFERENCE = 16;
+    private static final int COMPLETED = 17;
     
     private final XmlPivot pivot;
     private final Stream stream;
@@ -206,11 +207,11 @@ class XmlPivotHandler implements XmlHandler {
         }
     }
 
-    public void processText(String data) throws StreamException {
+    public void processText(String data, boolean ignorable) throws StreamException {
         if (passThrough) {
-            passThrough = pivot.processText(data);
+            passThrough = pivot.processText(data, ignorable);
         } else {
-            addEvent(TEXT);
+            addEvent(ignorable ? IGNORABLE_TEXT : TEXT);
             addToken(data);
         }
     }
@@ -293,7 +294,10 @@ class XmlPivotHandler implements XmlHandler {
                     result = pivot.processProcessingInstruction(getToken(), getToken());
                     break;
                 case TEXT:
-                    result = pivot.processText(getToken());
+                    result = pivot.processText(getToken(), false);
+                    break;
+                case IGNORABLE_TEXT:
+                    result = pivot.processText(getToken(), true);
                     break;
                 case COMMENT:
                     result = pivot.processComment(getToken());

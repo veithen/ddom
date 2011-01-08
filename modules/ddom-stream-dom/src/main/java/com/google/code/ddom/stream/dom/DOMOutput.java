@@ -137,10 +137,11 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void processText(String data) {
+    protected void processText(String data, boolean ignorable) {
         if (isCDATASection) {
             cdataSectionContent.append(data);
         } else {
+            // TODO: process ignorable?
             node.appendChild(document.createTextNode(data));
         }
     }

@@ -203,15 +203,15 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     }
     
     @Override
-    protected final void processText(String data) throws StreamException {
+    protected final void processText(String data, boolean ignorable) throws StreamException {
         if (passThroughHandler == null) {
             if (lastSibling == null && pendingText == null) {
                 pendingText = data;
             } else {
-                appendNode(new Text(document, data));
+                appendNode(new Text(document, data, ignorable));
             }
         } else {
-            passThroughHandler.processText(data);
+            passThroughHandler.processText(data, ignorable);
         }
     }
     
@@ -279,7 +279,8 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     
     private void flushPendingText() {
         if (pendingText != null) {
-            appendSibling(new Text(document, pendingText));
+            // TODO: correctly set ignorable!
+            appendSibling(new Text(document, pendingText, false));
             pendingText = null;
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,12 @@ import com.google.code.ddom.stream.spi.XmlHandler;
 
 // @Implementation
 public class Text extends TextNode implements CoreText {
-    public Text(Document document, String data) {
+    public Text(Document document, String data, boolean ignorable) {
         super(document, data);
+        internalSetFlag(Flags.IGNORABLE, ignorable);
     }
 
     public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
-        handler.processText(coreGetData());
+        handler.processText(coreGetData(), internalGetFlag(Flags.IGNORABLE));
     }
 }

@@ -122,7 +122,7 @@ public class DOMInput extends XmlInput {
                         handler.attributesCompleted();
                         break loop;
                     case Node.TEXT_NODE:
-                        handler.processText(currentNode.getNodeValue());
+                        handler.processText(currentNode.getNodeValue(), false); // TODO: ignorable?
                         break loop;
                     default:
                         // TODO

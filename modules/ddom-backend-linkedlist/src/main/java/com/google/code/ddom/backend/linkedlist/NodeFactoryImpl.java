@@ -84,7 +84,7 @@ public class NodeFactoryImpl implements NodeFactory {
     }
 
     public final CoreText createText(CoreDocument document, String data) {
-        return new Text((Document)document, data);
+        return new Text((Document)document, data, false);
     }
 
     public final CoreComment createComment(CoreDocument document, String data) {

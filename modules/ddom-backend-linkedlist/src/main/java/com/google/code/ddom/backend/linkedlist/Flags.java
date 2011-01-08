@@ -32,4 +32,6 @@ public class Flags {
      * refers to a document node (which may be the parent or simply the owner document).
      */
     public static final int HAS_PARENT = 2;
+    
+    public static final int IGNORABLE = 4;
 }

@@ -106,7 +106,7 @@ public abstract class SimpleXmlOutput extends XmlOutput {
     protected abstract void attributesCompleted();
     
     protected abstract void processProcessingInstruction(String target, String data) throws StreamException;
-    protected abstract void processText(String data) throws StreamException;
+    protected abstract void processText(String data, boolean ignorable) throws StreamException;
     protected abstract void processComment(String data) throws StreamException;
     
     /**

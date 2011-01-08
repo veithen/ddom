@@ -61,7 +61,7 @@ public abstract class XmlPivot extends XmlOutput {
     
     protected abstract boolean processProcessingInstruction(String target, String data);
     
-    protected abstract boolean processText(String data);
+    protected abstract boolean processText(String data, boolean ignorable);
     
     protected abstract boolean processComment(String data);
     

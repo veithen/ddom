@@ -107,7 +107,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
                 }
                 String value = atts.getValue(i);
                 if (value.length() > 0) {
-                    handler.processText(value);
+                    handler.processText(value, false);
                 }
                 handler.endAttribute();
             }
@@ -143,7 +143,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void characters(char[] ch, int start, int length) throws SAXException {
         try {
-            handler.processText(new String(ch, start, length));
+            handler.processText(new String(ch, start, length), false);
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }
@@ -151,7 +151,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
         try {
-            handler.processText(new String(ch, start, length));
+            handler.processText(new String(ch, start, length), true);
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }
