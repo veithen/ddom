@@ -27,7 +27,8 @@ import com.google.code.ddom.stream.spi.XmlOutput;
 public abstract class XmlPivot extends XmlOutput {
     @Override
     protected final XmlHandler createXmlHandler() {
-        return new XmlPivotHandler(this);
+        // TODO: this makes the assumption that the stream is connected when createXmlHandler is called; needs to be documented
+        return new XmlPivotHandler(this, getStream());
     }
 
     protected abstract void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);

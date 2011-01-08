@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
+import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
@@ -37,6 +38,7 @@ class XmlPivotHandler implements XmlHandler {
     private static final int COMPLETED = 16;
     
     private final XmlPivot pivot;
+    private final Stream stream;
     private boolean passThrough = true;
     
     private int[] events = new int[16];
@@ -47,8 +49,9 @@ class XmlPivotHandler implements XmlHandler {
     private int currentTokenIndex;
     private int nextTokenIndex;
     
-    XmlPivotHandler(XmlPivot pivot) {
+    XmlPivotHandler(XmlPivot pivot, Stream stream) {
         this.pivot = pivot;
+        this.stream = stream;
     }
     
     private void addEvent(int event) {
@@ -81,6 +84,10 @@ class XmlPivotHandler implements XmlHandler {
             currentTokenIndex += currentSize;
             tokens = newBuffer;
         }
+    }
+    
+    private boolean hasEvents() {
+        return currentEventIndex != nextEventIndex;
     }
     
     private int getEvent() {
@@ -250,60 +257,69 @@ class XmlPivotHandler implements XmlHandler {
         }
     }
     
-    void next() {
-        boolean result;
-        
-        switch (getEvent()) {
-            case DOCUMENT_TYPE:
-                result = pivot.processDocumentType(getToken(), getToken(), getToken());
-                break;
-            case START_NS_UNAWARE_ELEMENT:
-                result = pivot.startElement(getToken());
-                break;
-            case START_NS_AWARE_ELEMENT:
-                result = pivot.startElement(getToken(), getToken(), getToken());
-                break;
-            case END_ELEMENT:
-                result = pivot.endElement();
-                break;
-            case START_NS_UNAWARE_ATTRIBUTE:
-                result = pivot.startAttribute(getToken(), getToken());
-                break;
-            case START_NS_AWARE_ATTRIBUTE:
-                result = pivot.startAttribute(getToken(), getToken(), getToken(), getToken());
-                break;
-            case START_NAMESPACE_DECLARATION:
-                result = pivot.startNamespaceDeclaration(getToken());
-                break;
-            case END_ATTRIBUTE:
-                result = pivot.endAttribute();
-                break;
-            case ATTRIBUTES_COMPLETED:
-                result = pivot.attributesCompleted();
-                break;
-            case PROCESSING_INSTRUCTION:
-                result = pivot.processProcessingInstruction(getToken(), getToken());
-                break;
-            case TEXT:
-                result = pivot.processText(getToken());
-                break;
-            case COMMENT:
-                result = pivot.processComment(getToken());
-                break;
-            case START_CDATA_SECTION:
-                result = pivot.startCDATASection();
-                break;
-            case END_CDATA_SECTION:
-                result = pivot.endCDATASection();
-                break;
-            case ENTITY_REFERENCE:
-                result = pivot.processEntityReference(getToken());
-                break;
-            case COMPLETED:
-                pivot.completed();
-                result = false;
-                break;
+    void next() throws StreamException {
+        while (hasEvents()) {
+            boolean result;
+            switch (getEvent()) {
+                case DOCUMENT_TYPE:
+                    result = pivot.processDocumentType(getToken(), getToken(), getToken());
+                    break;
+                case START_NS_UNAWARE_ELEMENT:
+                    result = pivot.startElement(getToken());
+                    break;
+                case START_NS_AWARE_ELEMENT:
+                    result = pivot.startElement(getToken(), getToken(), getToken());
+                    break;
+                case END_ELEMENT:
+                    result = pivot.endElement();
+                    break;
+                case START_NS_UNAWARE_ATTRIBUTE:
+                    result = pivot.startAttribute(getToken(), getToken());
+                    break;
+                case START_NS_AWARE_ATTRIBUTE:
+                    result = pivot.startAttribute(getToken(), getToken(), getToken(), getToken());
+                    break;
+                case START_NAMESPACE_DECLARATION:
+                    result = pivot.startNamespaceDeclaration(getToken());
+                    break;
+                case END_ATTRIBUTE:
+                    result = pivot.endAttribute();
+                    break;
+                case ATTRIBUTES_COMPLETED:
+                    result = pivot.attributesCompleted();
+                    break;
+                case PROCESSING_INSTRUCTION:
+                    result = pivot.processProcessingInstruction(getToken(), getToken());
+                    break;
+                case TEXT:
+                    result = pivot.processText(getToken());
+                    break;
+                case COMMENT:
+                    result = pivot.processComment(getToken());
+                    break;
+                case START_CDATA_SECTION:
+                    result = pivot.startCDATASection();
+                    break;
+                case END_CDATA_SECTION:
+                    result = pivot.endCDATASection();
+                    break;
+                case ENTITY_REFERENCE:
+                    result = pivot.processEntityReference(getToken());
+                    break;
+                case COMPLETED:
+                    pivot.completed();
+                    result = false;
+                    break;
+                default:
+                    throw new IllegalStateException();
+            }
+            if (!result) {
+                return;
+            }
         }
-        
+        passThrough = true;
+        do {
+            stream.proceed();
+        } while (passThrough);
     }
 }
