@@ -48,7 +48,8 @@ public class StAXInput extends XmlInput {
         return value == null || value.length() == 0 ? null : value;
     }
     
-    public void proceed() throws StreamException {
+    @Override
+    protected void proceed() throws StreamException {
         if (callNext) {
             try {
                 reader.next();

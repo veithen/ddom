@@ -88,7 +88,7 @@ public class TreeSerializer extends XmlInput {
     }
     
     @Override
-    public void proceed() throws StreamException {
+    protected void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         try {
             if (state == STATE_PASS_THROUGH && !builder.isPassThroughEnabled()) {

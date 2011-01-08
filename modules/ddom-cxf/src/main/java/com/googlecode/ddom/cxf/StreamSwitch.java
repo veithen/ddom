@@ -42,7 +42,7 @@ public class StreamSwitch extends StAXInput implements XMLStreamReader {
     }
 
     @Override
-    public void proceed() throws StreamException {
+    protected void proceed() throws StreamException {
         if (readerAccessed && isOriginalReader) {
             throw new IllegalStateException("The original XMLStreamReader has already been accessed; " +
             		"it is no longer available to build the SOAP body");

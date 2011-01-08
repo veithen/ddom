@@ -85,7 +85,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             try {
                 nodeAppended = false; 
                 do {
-                    input.proceed();
+                    getStream().proceed();
                 } while (parent != null && !nodeAppended);
             } catch (StreamException ex) {
                 streamException = ex;

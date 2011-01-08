@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,10 +107,7 @@ public abstract class ContainerSupport implements AxiomContainer {
     public final void internalSerialize(Object out, boolean preserve) throws StreamException {
         XmlInput input = coreGetInput(preserve);
         XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(out, new Options());
-        Stream.connect(input, output);
-        do {
-            input.proceed();
-        } while (!input.isComplete());
+        new Stream(input, output).flush();
     }
     
     public final void serialize(OutputStream output) throws XMLStreamException {

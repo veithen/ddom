@@ -31,10 +31,7 @@ public class Transformer {
         }
         
         private void to(XmlOutput output) throws StreamException {
-            Stream.connect(input, output);
-            do {
-                input.proceed();
-            } while (!input.isComplete());
+            new Stream(input, output).flush();
         }
         
         public void to(Object destination, Options options) throws StreamException {

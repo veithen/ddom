@@ -16,8 +16,24 @@
 package com.google.code.ddom.stream.spi;
 
 public abstract class XmlInput {
-    final DelegatingXmlHandler handler = new DelegatingXmlHandler();
+    private final DelegatingXmlHandler handler = new DelegatingXmlHandler();
+    private Stream stream;
     
+    void connect(Stream stream, XmlHandler handler) {
+        if (this.stream != null) {
+            throw new IllegalStateException("Already connected");
+        }
+        this.stream = stream;
+        this.handler.setDelegate(handler);
+    }
+    
+    public final Stream getStream() {
+        if (stream == null) {
+            throw new IllegalStateException("Not connected");
+        }
+        return stream;
+    }
+
     /**
      * Get the {@link XmlHandler} object that the implementation must use to produce
      * events. This method completes successfully even if the {@link XmlInput} has
@@ -43,7 +59,7 @@ public abstract class XmlInput {
      * 
      * @throws StreamException
      */
-    public abstract void proceed() throws StreamException;
+    protected abstract void proceed() throws StreamException;
     
     /**
      * 

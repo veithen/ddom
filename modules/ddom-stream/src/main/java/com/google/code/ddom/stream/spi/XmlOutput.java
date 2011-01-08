@@ -16,15 +16,22 @@
 package com.google.code.ddom.stream.spi;
 
 public abstract class XmlOutput {
-    private boolean created;
+    private Stream stream;
     
-    XmlHandler doCreateXmlHandler() {
-        if (created) {
-            throw new IllegalStateException("This XmlOutput object has already been used");
+    XmlHandler connect(Stream stream) {
+        if (this.stream != null) {
+            throw new IllegalStateException("Already connected");
         }
-        created = true;
+        this.stream = stream;
         return createXmlHandler();
     }
     
+    public final Stream getStream() {
+        if (stream == null) {
+            throw new IllegalStateException("Not connected");
+        }
+        return stream;
+    }
+
     protected abstract XmlHandler createXmlHandler();
 }

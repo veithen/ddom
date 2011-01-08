@@ -45,7 +45,7 @@ public class DOMInput extends XmlInput {
         return null;
     }
 
-    public void proceed() throws StreamException {
+    protected void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         Node currentNode = this.currentNode;
         boolean visited = this.visited;

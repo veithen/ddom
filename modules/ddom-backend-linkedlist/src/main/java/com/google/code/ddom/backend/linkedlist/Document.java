@@ -51,7 +51,7 @@ public class Document extends ParentNode implements LLDocument {
 
     public final void internalCreateBuilder(XmlInput input, LLParentNode target) {
         Builder builder = new Builder(input, modelExtension, this, target);
-        Stream.connect(input, builder);
+        new Stream(input, builder);
         builders.add(builder);
     }
     

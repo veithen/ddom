@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,38 @@
  */
 package com.google.code.ddom.stream.spi;
 
-public class Stream {
-    private Stream() {}
+public final class Stream {
+    private final XmlInput input;
+    private boolean proceeding;
     
-    public static void connect(XmlInput input, XmlOutput output) {
-        input.handler.setDelegate(output.doCreateXmlHandler());
+    public Stream(XmlInput input, XmlOutput output) {
+        this.input = input;
+        input.connect(this, output.connect(this));
+    }
+
+    public void proceed() throws StreamException {
+        if (proceeding) {
+            throw new IllegalStateException("Already proceeding");
+        }
+        try {
+            proceeding = true;
+            input.proceed();
+        } finally {
+            proceeding = false;
+        }
+    }
+    
+    public void flush() throws StreamException {
+        if (proceeding) {
+            throw new IllegalStateException("Already proceeding");
+        }
+        try {
+            proceeding = true;
+            do {
+                input.proceed();
+            } while (!input.isComplete());
+        } finally {
+            proceeding = false;
+        }
     }
 }

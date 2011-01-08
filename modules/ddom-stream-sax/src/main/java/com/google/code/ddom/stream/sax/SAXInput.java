@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,8 @@ public class SAXInput extends XmlInput {
         return null;
     }
 
-    public void proceed() throws StreamException {
+    @Override
+    protected void proceed() throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
         ContentHandlerAdapter handler = new ContentHandlerAdapter(getHandler());
         xmlReader.setContentHandler(handler);
