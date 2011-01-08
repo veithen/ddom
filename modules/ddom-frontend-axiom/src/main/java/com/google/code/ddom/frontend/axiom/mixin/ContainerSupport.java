@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
@@ -45,6 +46,7 @@ import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlInput;
 import com.google.code.ddom.stream.spi.XmlOutput;
+import com.google.code.ddom.stream.stax.StAXPivot;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
 public abstract class ContainerSupport implements AxiomContainer {
@@ -168,5 +170,19 @@ public abstract class ContainerSupport implements AxiomContainer {
     public void serializeAndConsume(Writer writer, OMOutputFormat format) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final XMLStreamReader getXMLStreamReader() {
+        return getXMLStreamReader(true);
+    }
+    
+    public final XMLStreamReader getXMLStreamReaderWithoutCaching() {
+        return getXMLStreamReader(false);
+    }
+    
+    public final XMLStreamReader getXMLStreamReader(boolean cache) {
+        StAXPivot pivot = new StAXPivot();
+        new Stream(coreGetInput(cache), pivot);
+        return pivot;
     }
 }

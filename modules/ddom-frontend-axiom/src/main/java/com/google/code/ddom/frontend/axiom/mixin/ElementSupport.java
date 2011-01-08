@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMAttribute;
@@ -229,19 +228,6 @@ public abstract class ElementSupport implements AxiomElement {
 
     public final int getType() {
         return OMNode.ELEMENT_NODE;
-    }
-    
-    public XMLStreamReader getXMLStreamReader() {
-        return getXMLStreamReader(true);
-    }
-    
-    public XMLStreamReader getXMLStreamReaderWithoutCaching() {
-        return getXMLStreamReader(false);
-    }
-    
-    public XMLStreamReader getXMLStreamReader(boolean cache) {
-        // TODO
-        throw new UnsupportedOperationException();
     }
     
     private String toString(boolean preserve) throws StreamException {

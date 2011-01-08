@@ -252,6 +252,7 @@ class XmlPivotHandler implements XmlHandler {
     public void completed() throws StreamException {
         if (passThrough) {
             pivot.completed();
+            passThrough = false;
         } else {
             addEvent(COMPLETED);
         }

@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
+import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 import com.google.code.ddom.stream.spi.XmlOutput;
 
@@ -25,10 +26,17 @@ import com.google.code.ddom.stream.spi.XmlOutput;
  * @author Andreas Veithen
  */
 public abstract class XmlPivot extends XmlOutput {
+    private XmlPivotHandler handler;
+    
     @Override
     protected final XmlHandler createXmlHandler() {
         // TODO: this makes the assumption that the stream is connected when createXmlHandler is called; needs to be documented
-        return new XmlPivotHandler(this, getStream());
+        handler = new XmlPivotHandler(this, getStream());
+        return handler;
+    }
+    
+    protected final void nextEvent() throws StreamException {
+        handler.next();
     }
 
     protected abstract void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
