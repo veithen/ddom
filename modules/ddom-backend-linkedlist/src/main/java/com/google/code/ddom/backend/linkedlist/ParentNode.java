@@ -397,7 +397,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredParsingException {
-        DocumentTypeDeclaration child = new DocumentTypeDeclaration(null, rootName, publicId, systemId);
+        DocumentTypeDeclaration child = new DocumentTypeDeclaration(null, rootName, publicId, systemId, null);
         appendNewlyCreatedChild(child);
         return child;
     }

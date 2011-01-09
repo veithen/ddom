@@ -24,6 +24,6 @@ import com.google.code.ddom.backend.linkedlist.DocumentTypeDeclaration;
 public class NodeFactoryAspectTest {
     @Test(expected=AssertionFailedError.class)
     public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeDeclaration(null, null, null, null);
+        new DocumentTypeDeclaration(null, null, null, null, null);
     }
 }

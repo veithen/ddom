@@ -78,7 +78,7 @@ public class XmlHandlerAdapter implements XmlHandler {
     /* (non-Javadoc)
      * @see com.google.code.ddom.stream.spi.XmlHandler#processDocumentType(java.lang.String, java.lang.String, java.lang.String)
      */
-    public void processDocumentType(String rootName, String publicId, String systemId) {
+    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
         // TODO
         throw new UnsupportedOperationException();
     }

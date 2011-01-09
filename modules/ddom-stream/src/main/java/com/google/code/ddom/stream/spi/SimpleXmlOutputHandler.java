@@ -26,8 +26,8 @@ final class SimpleXmlOutputHandler implements XmlHandler{
         output.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId) {
-        output.processDocumentType(rootName, publicId, systemId);
+    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
+        output.processDocumentType(rootName, publicId, systemId, data);
     }
 
     public void startElement(String tagName) throws StreamException {

@@ -25,12 +25,14 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
     private final String rootName;
     private final String publicId;
     private final String systemId;
+    private final String data; // TODO: has no accessors!
     
-    public DocumentTypeDeclaration(Document document, String rootName, String publicId, String systemId) {
+    public DocumentTypeDeclaration(Document document, String rootName, String publicId, String systemId, String data) {
         super(document);
         this.rootName = rootName;
         this.publicId = publicId;
         this.systemId = systemId;
+        this.data = data;
     }
 
     public final String coreGetRootName() {
@@ -51,6 +53,6 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
     }
 
     public final void internalGenerateEvents(XmlHandler handler) {
-        // TODO
+        handler.processDocumentType(rootName, publicId, systemId, data);
     }
 }

@@ -66,7 +66,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void startDTD(String name, String publicId, String systemId) throws SAXException {
         processDocumentInfo();
-        handler.processDocumentType(name, publicId, systemId);
+        handler.processDocumentType(name, publicId, systemId, null);
     }
 
     public void endDTD() throws SAXException {

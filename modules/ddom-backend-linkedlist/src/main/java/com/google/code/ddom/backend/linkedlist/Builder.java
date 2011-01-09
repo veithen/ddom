@@ -115,11 +115,11 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     }
 
     @Override
-    protected final void processDocumentType(String rootName, String publicId, String systemId) {
+    protected final void processDocumentType(String rootName, String publicId, String systemId, String data) {
         if (passThroughHandler == null) {
-            appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId));
+            appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId, data));
         } else {
-            passThroughHandler.processDocumentType(rootName, publicId, systemId);
+            passThroughHandler.processDocumentType(rootName, publicId, systemId, data);
         }
     }
     
@@ -205,7 +205,9 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     @Override
     protected final void processText(String data, boolean ignorable) throws StreamException {
         if (passThroughHandler == null) {
-            if (lastSibling == null && pendingText == null) {
+            // If the character data is ignorable whitespace, then we know that there will
+            // be (very likely) at least one child element in addition to the text node
+            if (lastSibling == null && pendingText == null && !ignorable) {
                 pendingText = data;
             } else {
                 appendNode(new Text(document, data, ignorable));
@@ -279,7 +281,8 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     
     private void flushPendingText() {
         if (pendingText != null) {
-            // TODO: correctly set ignorable!
+            // We only defer creation of the text node if the character data is not ignorable.
+            // Therefore we can set ignorable=false here.
             appendSibling(new Text(document, pendingText, false));
             pendingText = null;
         }

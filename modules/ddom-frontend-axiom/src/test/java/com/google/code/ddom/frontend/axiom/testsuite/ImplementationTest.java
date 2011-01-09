@@ -19,7 +19,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.axiom.ts.AxiomTestSuiteBuilder;
-import org.apache.axiom.ts.om.document.TestGetXMLStreamReader;
 import org.apache.axiom.ts.om.element.TestSerialization;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
@@ -40,7 +39,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.document.TestSerializeAndConsumeWithIncompleteDescendant.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestSerializeAndConsumeWithIncompleteDescendant.class);
         builder.exclude(TestSerializationWithTwoNonBuiltOMElements.class);
-        builder.exclude(TestGetXMLStreamReader.class);
         builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(TestCreateOMTextFromDataHandlerProvider.class);

@@ -38,8 +38,8 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId) {
-        getDelegate().processDocumentType(rootName, publicId, systemId);
+    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
+        getDelegate().processDocumentType(rootName, publicId, systemId, data);
     }
 
     public void startElement(String tagName) throws StreamException {

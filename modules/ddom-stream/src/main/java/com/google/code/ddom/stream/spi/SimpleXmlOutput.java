@@ -27,7 +27,7 @@ public abstract class SimpleXmlOutput extends XmlOutput {
 
     protected abstract void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
     
-    protected abstract void processDocumentType(String rootName, String publicId, String systemId);
+    protected abstract void processDocumentType(String rootName, String publicId, String systemId, String data);
     
     /**
      * Receive notification of the beginning of an element in non namespace aware mode.

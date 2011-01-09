@@ -18,7 +18,7 @@ package com.google.code.ddom.stream.spi;
 public interface XmlHandler {
     void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
     
-    void processDocumentType(String rootName, String publicId, String systemId);
+    void processDocumentType(String rootName, String publicId, String systemId, String data);
 
     /**
      * Notify the handler of the beginning of an element in non namespace aware mode.

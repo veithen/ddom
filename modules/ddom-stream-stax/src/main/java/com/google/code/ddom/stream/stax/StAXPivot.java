@@ -86,9 +86,10 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     @Override
-    protected boolean processDocumentType(String rootName, String publicId, String systemId) {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected boolean processDocumentType(String rootName, String publicId, String systemId, String data) {
+        eventType = DTD;
+        this.data = data;
+        return false;
     }
 
     @Override
@@ -457,7 +458,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public boolean hasText() {
-        return eventType == CHARACTERS || eventType == COMMENT;
+        return eventType == CHARACTERS || eventType == COMMENT || eventType == DTD || eventType == SPACE;
     }
 
     public String getText() {
@@ -469,7 +470,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public char[] getTextCharacters() {
-        if (hasText()) {
+        if (hasText() && eventType != DTD) {
             return data.toCharArray();
         } else {
             throw new IllegalStateException();
@@ -486,7 +487,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public int getTextLength() {
-        if (hasText()) {
+        if (hasText() && eventType != DTD) {
             return data.length();
         } else {
             throw new IllegalStateException();
@@ -494,7 +495,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public int getTextStart() {
-        if (hasText()) {
+        if (hasText() && eventType != DTD) {
             return 0;
         } else {
             throw new IllegalStateException();

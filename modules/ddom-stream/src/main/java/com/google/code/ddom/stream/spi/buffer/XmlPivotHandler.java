@@ -111,14 +111,15 @@ class XmlPivotHandler implements XmlHandler {
         pivot.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId) {
+    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
         if (passThrough) {
-            passThrough = pivot.processDocumentType(rootName, publicId, systemId);
+            passThrough = pivot.processDocumentType(rootName, publicId, systemId, data);
         } else {
             addEvent(DOCUMENT_TYPE);
             addToken(rootName);
             addToken(publicId);
             addToken(systemId);
+            addToken(data);
         }
     }
     
@@ -264,7 +265,7 @@ class XmlPivotHandler implements XmlHandler {
             boolean result;
             switch (getEvent()) {
                 case DOCUMENT_TYPE:
-                    result = pivot.processDocumentType(getToken(), getToken(), getToken());
+                    result = pivot.processDocumentType(getToken(), getToken(), getToken(), getToken());
                     break;
                 case START_NS_UNAWARE_ELEMENT:
                     result = pivot.startElement(getToken());

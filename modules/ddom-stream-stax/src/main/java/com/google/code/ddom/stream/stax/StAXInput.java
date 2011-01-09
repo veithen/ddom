@@ -68,7 +68,7 @@ public class StAXInput extends XmlInput {
                 handler.completed();
                 break;
             case XMLStreamReader.DTD:
-                handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
+                handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId(), reader.getText());
                 break;
             case XMLStreamReader.START_ELEMENT:
                 if (parserIsNamespaceAware) {

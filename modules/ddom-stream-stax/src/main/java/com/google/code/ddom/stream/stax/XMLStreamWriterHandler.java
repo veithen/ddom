@@ -55,7 +55,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
         throw new UnsupportedOperationException();
     }
     
-    public void processDocumentType(String rootName, String publicId, String systemId) {
+    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
         // TODO
         throw new UnsupportedOperationException();
     }

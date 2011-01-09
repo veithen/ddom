@@ -57,7 +57,7 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void processDocumentType(String rootName, String publicId, String systemId) {
+    protected void processDocumentType(String rootName, String publicId, String systemId, String data) {
         node.appendChild(document.getImplementation().createDocumentType(rootName, publicId, systemId));
     }
 
