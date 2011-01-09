@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,5 +16,12 @@
 package com.google.code.ddom.core;
 
 public interface CoreText extends CoreTextNode {
-
+    /**
+     * Check whether this text node contains element content whitespace (also called
+     * "ignorable whitespace").
+     * 
+     * @return <code>true</code> if the text node contains ignorable whitespace, <code>false</code>
+     *         otherwise
+     */
+    boolean coreIsIgnorable();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
+import com.google.code.ddom.core.CoreText;
 
 public class Flags {
     private Flags() {}
@@ -33,5 +34,8 @@ public class Flags {
      */
     public static final int HAS_PARENT = 2;
     
+    /**
+     * Used to store the information returned by {@link CoreText#coreIsIgnorable()}.
+     */
     public static final int IGNORABLE = 4;
 }

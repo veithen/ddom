@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,7 +106,6 @@ public class DOM3CoreTest extends TestSuite {
         suite.addExclude(".*comparedocumentposition.*");
         suite.addExclude(".*getfeature.*");
         suite.addExclude(".*userdatahandler.*");
-        suite.addExclude(".*iselementcontentwhitespace.*");
         suite.addExclude(".*wellformed.*");
         suite.addExclude(".*userdata.*");
         suite.addExclude(".*infoset.*");

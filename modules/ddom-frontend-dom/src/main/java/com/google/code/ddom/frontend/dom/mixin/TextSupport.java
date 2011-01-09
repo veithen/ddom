@@ -44,4 +44,8 @@ public abstract class TextSupport implements DOMText {
     public final String getNodeName() {
         return "#text";
     }
+
+    public final boolean isElementContentWhitespace() {
+        return coreIsIgnorable();
+    }
 }

@@ -54,4 +54,9 @@ public abstract class CDATASectionSupport implements DOMCDATASection {
     public final String getNodeName() {
         return "#cdata-section";
     }
+
+    public final boolean isElementContentWhitespace() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

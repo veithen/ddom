@@ -28,6 +28,10 @@ public class Text extends TextNode implements CoreText {
     }
 
     public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
-        handler.processText(coreGetData(), internalGetFlag(Flags.IGNORABLE));
+        handler.processText(coreGetData(), coreIsIgnorable());
+    }
+
+    public final boolean coreIsIgnorable() {
+        return internalGetFlag(Flags.IGNORABLE);
     }
 }

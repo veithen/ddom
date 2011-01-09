@@ -134,11 +134,6 @@ public abstract class TextNodeSupport implements DOMTextNode {
         return newText;
     }
 
-    public final boolean isElementContentWhitespace() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public final Node cloneNode(boolean deep) {
         return createNewTextNode(getData());
     }
