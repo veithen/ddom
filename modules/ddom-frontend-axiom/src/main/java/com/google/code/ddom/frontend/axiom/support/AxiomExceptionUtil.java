@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,19 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.axiom.om.OMException;
 
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.stream.spi.StreamException;
 
 public class AxiomExceptionUtil {
     private AxiomExceptionUtil() {}
     
     public static OMException translate(CoreModelException ex) {
-        return new OMException(ex);
+        if (ex instanceof DeferredParsingException) {
+            // For a DeferredParsingException, the cause is required.
+            return new OMException(ex.getCause());
+        } else {
+            return new OMException(ex);
+        }
     }
     
     public static XMLStreamException translate(StreamException ex) {
