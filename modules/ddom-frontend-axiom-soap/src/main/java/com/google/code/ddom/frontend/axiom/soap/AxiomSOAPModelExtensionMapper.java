@@ -41,7 +41,8 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                     soapNamespaceURI = namespaceURI;
                     isSoap12 = true;
                 } else {
-                    throw new RuntimeException(); // TODO
+                    // TODO
+                    return null;
                 }
                 if (!localName.equals("Envelope")) {
                     throw new RuntimeException(); // TODO
