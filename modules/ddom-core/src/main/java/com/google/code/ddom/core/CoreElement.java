@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,8 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * Add a new attribute or replace an existing attribute based on a given
      * {@link AttributeMatcher}. If a matching attribute on this element is found, it is replaced by
      * the specified attribute. If no matching attribute is found, then the specified attribute is
-     * added to this element.
+     * added to this element. If the attribute is already owned by this element, then calling this method
+     * has no effect.
      * 
      * @param matcher
      *            the {@link AttributeMatcher} implementation to use
@@ -95,6 +96,7 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *         matching attribute existed
      * @throws NodeMigrationException 
      */
+    // TODO: getting the values for namespaceURI and name should probably be the job of the AttributeMatcher
     CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException;
     
     /**

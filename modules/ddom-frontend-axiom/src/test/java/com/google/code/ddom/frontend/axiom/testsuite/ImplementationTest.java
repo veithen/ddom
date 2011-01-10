@@ -19,6 +19,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.axiom.ts.AxiomTestSuiteBuilder;
+import org.apache.axiom.ts.om.element.TestAddAttributeAlreadyOwnedByOtherElement;
 import org.apache.axiom.ts.om.element.TestSerialization;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
@@ -42,6 +43,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(TestCreateOMTextFromDataHandlerProvider.class);
+        builder.exclude(TestAddAttributeAlreadyOwnedByOtherElement.class);
         return builder.build();
     }
 }

@@ -140,6 +140,10 @@ public abstract class Element extends Container implements LLElement {
     }
     
     public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
+        if (coreAttr.coreGetOwnerElement() == this) {
+            // TODO: document this and add assertion
+            return coreAttr;
+        }
         Attribute attr = accept(coreAttr, policy);
         Attribute existingAttr = firstAttribute;
         Attribute previousAttr = null;
@@ -170,6 +174,7 @@ public abstract class Element extends Container implements LLElement {
     }
 
     public final void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException {
+        // TODO: we should probably check if the attribute is already owned by the element
         internalAppendAttribute(accept(attr, policy));
     }
 
