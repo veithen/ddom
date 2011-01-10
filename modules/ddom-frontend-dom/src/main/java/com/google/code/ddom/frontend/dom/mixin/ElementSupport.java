@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ public abstract class ElementSupport implements DOMElement {
                 matcher = DOM1AttributeMatcher.INSTANCE;
             }
             try {
-                return (DOMAttribute)coreSetAttribute(matcher, namespaceURI, name, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY);
+                return (DOMAttribute)coreSetAttribute(matcher, namespaceURI, name, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.REPLACED_ATTRIBUTE);
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }

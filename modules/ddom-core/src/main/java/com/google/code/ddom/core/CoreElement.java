@@ -19,6 +19,29 @@ import java.util.Iterator;
 
 public interface CoreElement extends CoreChildNode, CoreParentNode {
     /**
+     * Specifies the value that should be returned by
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, CoreAttribute, NodeMigrationPolicy, ReturnValue)}.
+     * .
+     */
+    public enum ReturnValue {
+        /**
+         * Nothing should be returned.
+         */
+        NONE,
+        
+        /**
+         * The method will return the attribute that was effectively added to the element.
+         */
+        ADDED_ATTRIBUTE,
+        
+        /**
+         * The method will return the attribute that was replaced by the new attribute, or
+         * <code>null</code> if no matching attribute existed
+         */
+        REPLACED_ATTRIBUTE,
+    }
+    
+    /**
      * Get the first attribute of this element.
      * 
      * @return the first attribute, or <code>null</code> if this element has no attributes
@@ -92,12 +115,13 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * @param policy
      *            the policy to apply if the attribute already has an owner element or belongs to a
      *            different document
-     * @return the attribute that was replaced by the new attribute, or <code>null</code> if no
-     *         matching attribute existed
+     * @param returnValue
+     *            specifies the expected return value of the method
+     * @return the attribute as specified by the <code>returnValue</code> parameter
      * @throws NodeMigrationException 
      */
     // TODO: getting the values for namespaceURI and name should probably be the job of the AttributeMatcher
-    CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException;
+    CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException;
     
     /**
      * Append an attribute to this element. The attribute is simply added at the end of the list of

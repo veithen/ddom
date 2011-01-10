@@ -30,6 +30,7 @@ import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.core.CoreNamespaceDeclaration;
 import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.core.CoreTextNode;
@@ -102,11 +103,26 @@ public abstract class Element extends Container implements LLElement {
             matcher.update(attr, prefix, value);
         }
     }
+    
+    private Attribute cloneAttribute(CoreAttribute attr) {
+        if (attr instanceof CoreNSAwareAttribute) {
+            CoreNSAwareAttribute org = ((CoreNSAwareAttribute)attr);
+            try {
+                return new NSAwareAttribute(null, org.coreGetNamespaceURI(), org.coreGetLocalName(), org.coreGetPrefix(), org.coreGetTextContent(), org.coreGetType());
+            } catch (DeferredParsingException ex) {
+                // TODO
+                throw new RuntimeException(ex);
+            }
+        } else {
+            // TODO
+            throw new UnsupportedOperationException();
+        }
+    }
 
-    private Attribute accept(CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
-        boolean hasParent = coreAttr.coreHasOwnerElement();
-        boolean isForeignDocument = !coreIsSameOwnerDocument(coreAttr);
-        boolean isForeignModel = coreAttr.coreGetNodeFactory() != coreGetNodeFactory();
+    private Attribute accept(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException {
+        boolean hasParent = attr.coreHasOwnerElement();
+        boolean isForeignDocument = !coreIsSameOwnerDocument(attr);
+        boolean isForeignModel = attr.coreGetNodeFactory() != coreGetNodeFactory();
         if (hasParent || isForeignDocument || isForeignModel) {
             switch (policy.getAction(hasParent, isForeignDocument, isForeignModel)) {
                 case REJECT:
@@ -124,24 +140,25 @@ public abstract class Element extends Container implements LLElement {
                         // TODO
                         throw new UnsupportedOperationException();
                     } else {
-                        coreAttr.coreRemove();
-                        return (Attribute)coreAttr;
+                        attr.coreRemove();
+                        return (Attribute)attr;
                     }
                 case CLONE:
-                    // TODO
-                    throw new UnsupportedOperationException();
+                    // TODO: probably we need to distinguish between cloning an attribute from the same model and importing it from another model (does that actually ever occur?)
+                    return cloneAttribute(attr);
                 default:
                     // Should never get here unless new values are added to the enum
                     throw new IllegalStateException();
             }
         } else {
-            return (Attribute)coreAttr;
+            return (Attribute)attr;
         }
     }
     
-    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute coreAttr, NodeMigrationPolicy policy) throws NodeMigrationException {
+    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException {
         if (coreAttr.coreGetOwnerElement() == this) {
             // TODO: document this and add assertion
+            // TODO: take returnValue into account
             return coreAttr;
         }
         Attribute attr = accept(coreAttr, policy);
@@ -159,7 +176,6 @@ public abstract class Element extends Container implements LLElement {
             } else {
                 previousAttr.setNextAttribute(attr);
             }
-            return null;
         } else {
             if (previousAttr == null) {
                 firstAttribute = attr;
@@ -169,7 +185,11 @@ public abstract class Element extends Container implements LLElement {
             existingAttr.setOwnerElement(null);
             attr.setNextAttribute(existingAttr.coreGetNextAttribute());
             existingAttr.setNextAttribute(null);
-            return existingAttr;
+        }
+        switch (returnValue) {
+            case ADDED_ATTRIBUTE: return attr;
+            case REPLACED_ATTRIBUTE: return existingAttr;
+            default: return null;
         }
     }
 
