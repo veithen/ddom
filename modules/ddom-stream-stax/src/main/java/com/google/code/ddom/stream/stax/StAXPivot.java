@@ -43,7 +43,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private String[] elementStack = new String[INITIAL_ELEMENT_STACK_SIZE*3];
     private int[] scopeStack = new int[INITIAL_ELEMENT_STACK_SIZE];
     private int namespaceStackSize = INITIAL_NAMESPACE_STACK_SIZE;
-    private String[] namespaceStack = new String[INITIAL_ATTRIBUTE_STACK_SIZE*2];
+    private String[] namespaceStack = new String[INITIAL_NAMESPACE_STACK_SIZE*2];
     private int attributeStackSize = INITIAL_ATTRIBUTE_STACK_SIZE;
     private String[] attributeStack = new String[INITIAL_ATTRIBUTE_STACK_SIZE*5];
     private int bindings;
@@ -625,7 +625,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
                 if (namespaceURI.equals(namespaceStack[i+1])) {
                     String prefix = namespaceStack[i];
                     // Now check that the prefix is not masked
-                    for (int j=i+2; j<bindings*2; j++) {
+                    for (int j=i+2; j<bindings*2; j+=2) {
                         if (ObjectUtils.equals(prefix, namespaceStack[j])) {
                             continue outer;
                         }

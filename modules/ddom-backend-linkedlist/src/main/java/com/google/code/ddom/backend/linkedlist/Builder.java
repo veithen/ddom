@@ -185,7 +185,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     }
 
     @Override
-    protected final void attributesCompleted() {
+    protected final void attributesCompleted() throws StreamException {
         if (passThroughHandler == null) {
             nodeAppended = true;
         } else {

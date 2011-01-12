@@ -35,7 +35,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestSetTextQName.class);
         builder.exclude(TestInsertSiblingAfterLastChild.class);
         builder.exclude(TestBase64Streaming.class);
-        builder.exclude(TestSerialization.class);
+//        builder.exclude(TestSerialization.class);
         builder.exclude(org.apache.axiom.ts.om.document.TestSerializeAndConsumeWithIncompleteDescendant.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestSerializeAndConsumeWithIncompleteDescendant.class);
         builder.exclude(TestSerializationWithTwoNonBuiltOMElements.class);

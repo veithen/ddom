@@ -30,6 +30,10 @@ public class StringAccumulator {
         }
     }
     
+    public boolean isEmpty() {
+        return content == null;
+    }
+    
     public String toString() {
         if (content == null) {
             return "";

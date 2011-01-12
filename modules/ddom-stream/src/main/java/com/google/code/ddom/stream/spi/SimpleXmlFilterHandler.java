@@ -22,7 +22,7 @@ class SimpleXmlFilterHandler implements XmlHandler {
         this.filter = filter;
     }
 
-    public void attributesCompleted() {
+    public void attributesCompleted() throws StreamException {
         filter.attributesCompleted();
     }
 

@@ -24,7 +24,7 @@ public class SimpleXmlFilter extends XmlFilter {
         return new SimpleXmlFilterHandler(this);
     }
 
-    protected void attributesCompleted() {
+    protected void attributesCompleted() throws StreamException {
         target.attributesCompleted();
     }
 

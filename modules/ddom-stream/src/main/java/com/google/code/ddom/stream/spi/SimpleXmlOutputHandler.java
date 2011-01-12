@@ -58,7 +58,7 @@ final class SimpleXmlOutputHandler implements XmlHandler{
         output.endAttribute();
     }
 
-    public void attributesCompleted() {
+    public void attributesCompleted() throws StreamException {
         output.attributesCompleted();
     }
 

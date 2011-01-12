@@ -70,7 +70,7 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().endAttribute();
     }
 
-    public void attributesCompleted() {
+    public void attributesCompleted() throws StreamException {
         getDelegate().attributesCompleted();
     }
 

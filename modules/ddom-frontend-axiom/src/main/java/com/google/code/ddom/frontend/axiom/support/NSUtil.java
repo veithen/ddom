@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,20 @@ public class NSUtil {
     private NSUtil() {}
     
     public static String getNamespaceURI(OMNamespace ns) {
-        // TODO: maybe still need to handle empty strings returned by OMNamespace
-        return ns == null ? null : ns.getNamespaceURI();
+        if (ns == null) {
+            return null;
+        } else {
+            String uri = ns.getNamespaceURI();
+            return uri == null || uri.length() == 0 ? null : uri;
+        }
     }
     
     public static String getPrefix(OMNamespace ns) {
-        // TODO: maybe still need to handle empty strings returned by OMNamespace
-        return ns == null ? null : ns.getPrefix();
+        if (ns == null) {
+            return null;
+        } else {
+            String prefix = ns.getPrefix();
+            return prefix == null || prefix.length() == 0 ? null : prefix;
+        }
     }
 }
