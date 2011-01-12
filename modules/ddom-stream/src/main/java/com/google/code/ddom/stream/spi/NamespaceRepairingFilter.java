@@ -15,23 +15,6 @@
  */
 package com.google.code.ddom.stream.spi;
 
-public abstract class XmlFilter {
-    private Stream stream;
-    
-    XmlHandler connect(Stream stream, XmlHandler handler) {
-        if (this.stream != null) {
-            throw new IllegalStateException("Already connected");
-        }
-        this.stream = stream;
-        return createXmlHandler(handler);
-    }
-    
-    public final Stream getStream() {
-        if (stream == null) {
-            throw new IllegalStateException("Not connected");
-        }
-        return stream;
-    }
+public class NamespaceRepairingFilter extends SimpleXmlFilter {
 
-    protected abstract XmlHandler createXmlHandler(XmlHandler target);
 }

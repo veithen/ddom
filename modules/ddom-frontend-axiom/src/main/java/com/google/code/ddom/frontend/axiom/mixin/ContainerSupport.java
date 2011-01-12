@@ -42,6 +42,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
+import com.google.code.ddom.stream.spi.NamespaceRepairingFilter;
 import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlInput;
@@ -109,7 +110,7 @@ public abstract class ContainerSupport implements AxiomContainer {
     public final void internalSerialize(Object out, boolean preserve) throws StreamException {
         XmlInput input = coreGetInput(preserve);
         XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(out, new Options());
-        new Stream(input, output).flush();
+        new Stream(input, output, new NamespaceRepairingFilter()).flush();
     }
     
     public final void serialize(OutputStream output) throws XMLStreamException {
