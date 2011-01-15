@@ -57,5 +57,7 @@ public class OMNamespaceImpl implements OMNamespace {
         }
     }
     
-    // TODO: implement hashCode
+    public int hashCode() {
+        return namespaceURI.hashCode() ^ (prefix != null ? prefix.hashCode() : 0);
+    }
 }

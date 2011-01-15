@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,18 @@ import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceBuilder;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11BodyExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11EnvelopeExtension;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11FaultDetailExtension;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11FaultExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11HeaderExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12BodyExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12EnvelopeExtension;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12FaultDetailExtension;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12FaultExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12HeaderExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAPEnvelopeExtension;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAPFaultDetailExtension;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAPFaultExtension;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAPHeaderExtension;
 
 public abstract class SOAPVersionEx {
@@ -55,13 +61,23 @@ public abstract class SOAPVersionEx {
         public Class<? extends SOAPBodyExtension> getSOAPBodyExtension() {
             return SOAP11BodyExtension.class;
         }
+
+        @Override
+        public Class<? extends SOAPFaultExtension> getSOAPFaultExtension() {
+            return SOAP11FaultExtension.class;
+        }
+
+        @Override
+        public Class<? extends SOAPFaultDetailExtension> getSOAPFaultDetailExtension() {
+            return SOAP11FaultDetailExtension.class;
+        }
     };
 
     public static final SOAPVersionEx SOAP12 = new SOAPVersionEx(
             SOAP12Version.getSingleton(),
             new SequenceBuilder()
-                .addItem(SOAP11HeaderExtension.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
-                .addItem(SOAP11BodyExtension.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
+                .addItem(SOAP12HeaderExtension.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
+                .addItem(SOAP12BodyExtension.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
                 .enableMatchByInterface().build()) {
         
         public Class<? extends SOAPEnvelopeExtension> getSOAPEnvelopeExtension() {
@@ -76,6 +92,16 @@ public abstract class SOAPVersionEx {
         @Override
         public Class<? extends SOAPBodyExtension> getSOAPBodyExtension() {
             return SOAP12BodyExtension.class;
+        }
+
+        @Override
+        public Class<? extends SOAPFaultExtension> getSOAPFaultExtension() {
+            return SOAP12FaultExtension.class;
+        }
+
+        @Override
+        public Class<? extends SOAPFaultDetailExtension> getSOAPFaultDetailExtension() {
+            return SOAP12FaultDetailExtension.class;
         }
     };
     
@@ -102,4 +128,6 @@ public abstract class SOAPVersionEx {
     public abstract Class<? extends SOAPEnvelopeExtension> getSOAPEnvelopeExtension();
     public abstract Class<? extends SOAPHeaderExtension> getSOAPHeaderExtension();
     public abstract Class<? extends SOAPBodyExtension> getSOAPBodyExtension();
+    public abstract Class<? extends SOAPFaultExtension> getSOAPFaultExtension();
+    public abstract Class<? extends SOAPFaultDetailExtension> getSOAPFaultDetailExtension();
 }

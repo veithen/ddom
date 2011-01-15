@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
@@ -119,12 +121,16 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFault(org.apache.axiom.soap.SOAPBody)
-     */
-    public SOAPFault createSOAPFault(SOAPBody parent) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFault createSOAPFault(SOAPBody body) throws SOAPProcessingException {
+        try {
+            AxiomSOAPFault fault = (AxiomSOAPFault)((AxiomSOAPBody)body).coreAppendElement(
+                    soapVersionEx.getSOAPFaultExtension(), soapVersionEx.getEnvelopeURI(),
+                    SOAPConstants.BODY_FAULT_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+            fault.setOMFactory(this);
+            return fault;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     /* (non-Javadoc)
@@ -167,20 +173,24 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultDetail()
-     */
-    public SOAPFaultDetail createSOAPFaultDetail() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFaultDetail createSOAPFaultDetail() throws SOAPProcessingException {
+        AxiomSOAPFaultDetail detail = (AxiomSOAPFaultDetail)nodeFactory.createElement(null,
+                soapVersionEx.getSOAPFaultDetailExtension(), soapVersionEx.getEnvelopeURI(),
+                SOAPConstants.SOAPFAULT_DETAIL_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+        detail.setOMFactory(this);
+        return detail;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultDetail(org.apache.axiom.soap.SOAPFault)
-     */
-    public SOAPFaultDetail createSOAPFaultDetail(SOAPFault parent) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFaultDetail createSOAPFaultDetail(SOAPFault fault) throws SOAPProcessingException {
+        try {
+            AxiomSOAPFaultDetail detail = (AxiomSOAPFaultDetail)((AxiomSOAPFault)fault).coreAppendElement(
+                    soapVersionEx.getSOAPFaultDetailExtension(), soapVersionEx.getEnvelopeURI(),
+                    SOAPConstants.SOAPFAULT_DETAIL_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+            detail.setOMFactory(this);
+            return detail;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     /* (non-Javadoc)

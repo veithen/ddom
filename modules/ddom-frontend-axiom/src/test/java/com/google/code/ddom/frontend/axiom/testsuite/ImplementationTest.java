@@ -18,8 +18,7 @@ package com.google.code.ddom.frontend.axiom.testsuite;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.axiom.ts.AxiomTestSuiteBuilder;
-import org.apache.axiom.ts.om.element.TestSerialization;
+import org.apache.axiom.ts.OMTestSuiteBuilder;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
@@ -30,7 +29,7 @@ import com.google.code.ddom.frontend.axiom.DDOMAxiomUtil;
 
 public class ImplementationTest extends TestCase {
     public static TestSuite suite() {
-        AxiomTestSuiteBuilder builder = new AxiomTestSuiteBuilder(DDOMAxiomUtil.INSTANCE.getMetaFactory());
+        OMTestSuiteBuilder builder = new OMTestSuiteBuilder(DDOMAxiomUtil.INSTANCE.getMetaFactory());
         // TODO
         builder.exclude(TestSetTextQName.class);
         builder.exclude(TestInsertSiblingAfterLastChild.class);

@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.intf;
 
-import org.apache.axiom.soap.SOAPBody;
+import org.apache.axiom.soap.SOAPFaultDetail;
 
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 
-public interface AxiomSOAPBody extends AxiomElement, SOAPBody, HasSOAPVersion {
+public interface AxiomSOAPFaultDetail extends AxiomElement, SOAPFaultDetail {
 
 }

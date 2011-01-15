@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.soap.intf;
+package com.google.code.ddom.frontend.axiom.soap.ext;
 
-import org.apache.axiom.soap.SOAPBody;
-
-import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
-
-public interface AxiomSOAPBody extends AxiomElement, SOAPBody, HasSOAPVersion {
+public interface SOAP12FaultDetailExtension extends SOAPFaultDetailExtension {
 
 }

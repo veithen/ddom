@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.soap.intf;
+package com.google.code.ddom.frontend.axiom.soap.mixin;
 
-import org.apache.axiom.soap.SOAPBody;
+import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12BodyExtension;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
+import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
-import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
-
-public interface AxiomSOAPBody extends AxiomElement, SOAPBody, HasSOAPVersion {
-
+@Mixin(SOAP12BodyExtension.class)
+public abstract class SOAP12BodySupport implements AxiomSOAPBody {
+    public final SOAPVersionEx getSOAPVersionEx() {
+        return SOAPVersionEx.SOAP12;
+    }
 }

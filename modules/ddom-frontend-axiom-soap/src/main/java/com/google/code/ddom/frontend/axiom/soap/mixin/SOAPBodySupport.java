@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,27 +17,53 @@ package com.google.code.ddom.frontend.axiom.soap.mixin;
 
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.soap.SOAPConstants;
 import org.apache.axiom.soap.SOAPFault;
 
+import com.google.code.ddom.core.CoreElement;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
+import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.frontend.axiom.support.Policies;
 
 @Mixin(SOAPBodyExtension.class)
 public abstract class SOAPBodySupport implements AxiomSOAPBody {
-    public SOAPFault addFault(Exception e) throws OMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFault addFault(Exception e) throws OMException {
+        try {
+            SOAPVersionEx version = getSOAPVersionEx();
+            AxiomSOAPFault fault = (AxiomSOAPFault)coreAppendElement(version.getSOAPFaultExtension(),
+                    version.getEnvelopeURI(), SOAPConstants.BODY_FAULT_LOCAL_NAME,
+                    SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+            // TODO: fill fault with exception data
+            return fault;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
-    public void addFault(SOAPFault soapFault) throws OMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void addFault(SOAPFault soapFault) throws OMException {
+        try {
+            coreAppendChild((AxiomSOAPFault)soapFault, Policies.NODE_MIGRATION_POLICY);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
-    public SOAPFault getFault() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFault getFault() {
+        try {
+            CoreElement firstElement = coreGetFirstChildByType(CoreElement.class);
+            return firstElement instanceof SOAPFault ? (SOAPFault)firstElement : null;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final boolean hasFault() {
+        return getFault() != null;
     }
 
     public String getFirstElementLocalName() {
@@ -46,11 +72,6 @@ public abstract class SOAPBodySupport implements AxiomSOAPBody {
     }
 
     public OMNamespace getFirstElementNS() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean hasFault() {
         // TODO
         throw new UnsupportedOperationException();
     }
