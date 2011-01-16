@@ -23,19 +23,79 @@ import org.apache.axiom.soap.SOAPFaultReason;
 import org.apache.axiom.soap.SOAPFaultRole;
 import org.apache.axiom.soap.SOAPProcessingException;
 
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(AxiomSOAPFault.class)
 public abstract class SOAPFaultSupport implements AxiomSOAPFault {
-    public SOAPFaultCode getCode() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFaultCode getCode() {
+        try {
+            return (AxiomSOAPFaultCode)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 0, false);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
-    public SOAPFaultDetail getDetail() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setCode(SOAPFaultCode soapFaultCode) throws SOAPProcessingException {
+        try {
+            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 0, (AxiomSOAPFaultCode)soapFaultCode);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final SOAPFaultReason getReason() {
+        try {
+            return (AxiomSOAPFaultReason)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 1, false);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void setReason(SOAPFaultReason reason) throws SOAPProcessingException {
+        try {
+            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 1, (AxiomSOAPFaultReason)reason);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final SOAPFaultRole getRole() {
+        try {
+            return (AxiomSOAPFaultRole)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 2, false);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void setRole(SOAPFaultRole role) throws SOAPProcessingException {
+        try {
+            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 2, (AxiomSOAPFaultRole)role);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final SOAPFaultDetail getDetail() {
+        try {
+            return (AxiomSOAPFaultDetail)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 3, false);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void setDetail(SOAPFaultDetail detail) throws SOAPProcessingException {
+        try {
+            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 3, (AxiomSOAPFaultDetail)detail);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public Exception getException() throws OMException {
@@ -48,42 +108,12 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPFaultReason getReason() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public SOAPFaultRole getRole() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setCode(SOAPFaultCode soapFaultCode) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setDetail(SOAPFaultDetail detail) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public void setException(Exception e) throws OMException {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     public void setNode(SOAPFaultNode node) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setReason(SOAPFaultReason reason) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setRole(SOAPFaultRole role) throws SOAPProcessingException {
         // TODO
         throw new UnsupportedOperationException();
     }

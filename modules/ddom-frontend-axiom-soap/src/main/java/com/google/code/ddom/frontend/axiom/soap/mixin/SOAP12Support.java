@@ -19,12 +19,16 @@ import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Body;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Envelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Fault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultCode;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultReason;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
 import com.google.code.ddom.frontend.axiom.soap.intf.HasSOAPVersion;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
-@Mixin({AxiomSOAP12Body.class, AxiomSOAP12Envelope.class, AxiomSOAP12Fault.class, AxiomSOAP12FaultDetail.class, AxiomSOAP12Header.class})
+@Mixin({AxiomSOAP12Body.class, AxiomSOAP12Envelope.class, AxiomSOAP12Fault.class, AxiomSOAP12FaultCode.class,
+        AxiomSOAP12FaultDetail.class, AxiomSOAP12FaultReason.class, AxiomSOAP12FaultRole.class, AxiomSOAP12Header.class})
 public abstract class SOAP12Support implements HasSOAPVersion {
     public final SOAPVersionEx getSOAPVersionEx() {
         return SOAPVersionEx.SOAP12;

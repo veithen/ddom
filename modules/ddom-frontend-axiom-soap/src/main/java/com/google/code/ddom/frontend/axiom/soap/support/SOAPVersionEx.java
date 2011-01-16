@@ -27,17 +27,26 @@ import com.google.code.ddom.core.SequenceBuilder;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Body;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Envelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Fault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultCode;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultReason;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Header;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Body;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Envelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Fault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultCode;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultReason;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 
 public abstract class SOAPVersionEx {
@@ -46,6 +55,12 @@ public abstract class SOAPVersionEx {
             new SequenceBuilder()
                 .addItem(AxiomSOAP11Header.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
                 .addItem(AxiomSOAP11Body.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
+                .enableMatchByInterface().build(),
+            new SequenceBuilder()
+                .addItem(AxiomSOAPFaultCode.class, null, "faultcode")
+                .addItem(AxiomSOAPFaultReason.class, null, "faultstring")
+                .addItem(AxiomSOAPFaultRole.class, null, "faultactor")
+                .addItem(AxiomSOAPFaultDetail.class, null, "detail")
                 .enableMatchByInterface().build()) {
         
         @Override
@@ -69,6 +84,21 @@ public abstract class SOAPVersionEx {
         }
 
         @Override
+        public Class<? extends AxiomSOAPFaultCode> getSOAPFaultCodeClass() {
+            return AxiomSOAP11FaultCode.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultReason> getSOAPFaultReasonClass() {
+            return AxiomSOAP11FaultReason.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultRole> getSOAPFaultRoleClass() {
+            return AxiomSOAP11FaultRole.class;
+        }
+
+        @Override
         public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
             return AxiomSOAP11FaultDetail.class;
         }
@@ -79,6 +109,12 @@ public abstract class SOAPVersionEx {
             new SequenceBuilder()
                 .addItem(AxiomSOAP12Header.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
                 .addItem(AxiomSOAP12Body.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
+                .enableMatchByInterface().build(),
+            new SequenceBuilder()
+                .addItem(AxiomSOAPFaultCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Code")
+                .addItem(AxiomSOAPFaultReason.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Reason")
+                .addItem(AxiomSOAPFaultRole.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Role")
+                .addItem(AxiomSOAPFaultDetail.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Detail")
                 .enableMatchByInterface().build()) {
         
         @Override
@@ -102,6 +138,21 @@ public abstract class SOAPVersionEx {
         }
 
         @Override
+        public Class<? extends AxiomSOAPFaultCode> getSOAPFaultCodeClass() {
+            return AxiomSOAP12FaultCode.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultReason> getSOAPFaultReasonClass() {
+            return AxiomSOAP12FaultReason.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultRole> getSOAPFaultRoleClass() {
+            return AxiomSOAP12FaultRole.class;
+        }
+
+        @Override
         public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
             return AxiomSOAP12FaultDetail.class;
         }
@@ -109,10 +160,12 @@ public abstract class SOAPVersionEx {
     
     private final SOAPVersion soapVersion;
     private final Sequence envelopeSequence;
+    private final Sequence faultSequence;
     
-    public SOAPVersionEx(SOAPVersion soapVersion, Sequence envelopeSequence) {
+    public SOAPVersionEx(SOAPVersion soapVersion, Sequence envelopeSequence, Sequence faultSequence) {
         this.soapVersion = soapVersion;
         this.envelopeSequence = envelopeSequence;
+        this.faultSequence = faultSequence;
     }
 
     public SOAPVersion getSOAPVersion() {
@@ -127,9 +180,16 @@ public abstract class SOAPVersionEx {
         return envelopeSequence;
     }
 
+    public Sequence getFaultSequence() {
+        return faultSequence;
+    }
+
     public abstract Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass();
     public abstract Class<? extends AxiomSOAPHeader> getSOAPHeaderClass();
     public abstract Class<? extends AxiomSOAPBody> getSOAPBodyClass();
     public abstract Class<? extends AxiomSOAPFault> getSOAPFaultClass();
+    public abstract Class<? extends AxiomSOAPFaultCode> getSOAPFaultCodeClass();
+    public abstract Class<? extends AxiomSOAPFaultReason> getSOAPFaultReasonClass();
+    public abstract Class<? extends AxiomSOAPFaultRole> getSOAPFaultRoleClass();
     public abstract Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass();
 }

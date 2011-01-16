@@ -28,8 +28,17 @@ import org.apache.axiom.ts.soap.envelope.TestDiscardHeader;
 import org.apache.axiom.ts.soap.envelope.TestGetBodyWithParser;
 import org.apache.axiom.ts.soap.envelope.TestGetHeaderWithParser;
 import org.apache.axiom.ts.soap.factory.TestGetDefaultFaultEnvelope;
+import org.apache.axiom.ts.soap.fault.TestGetCodeWithParser;
+import org.apache.axiom.ts.soap.fault.TestGetDetailWithParser;
+import org.apache.axiom.ts.soap.fault.TestGetReasonWithParser;
+import org.apache.axiom.ts.soap.fault.TestGetRoleWithParser;
+import org.apache.axiom.ts.soap.fault.TestSetDetail;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
 import org.apache.axiom.ts.soap12.envelope.TestAddElementAfterBody;
+import org.apache.axiom.ts.soap12.fault.TestGetNode;
+import org.apache.axiom.ts.soap12.fault.TestGetNodeWithParser;
+import org.apache.axiom.ts.soap12.fault.TestMoreChildrenAddition;
+import org.apache.axiom.ts.soap12.fault.TestSetNode;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
@@ -49,6 +58,11 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetBodyWithParser.class);
         builder.exclude(TestGetHeaderWithParser.class);
         builder.exclude(TestGetAllDetailEntriesWithParser.class);
+        builder.exclude(TestGetCodeWithParser.class);
+        builder.exclude(TestGetDetailWithParser.class);
+        builder.exclude(TestGetReasonWithParser.class);
+        builder.exclude(TestGetRoleWithParser.class);
+        builder.exclude(TestGetNodeWithParser.class);
         
         // TODO: this requires some more thinking
         builder.exclude(TestBodyHeaderOrder.class);
@@ -56,6 +70,12 @@ public class ImplementationTest extends TestCase {
         
         // TODO
         builder.exclude(TestGetDefaultFaultEnvelope.class);
+        builder.exclude(TestGetNode.class);
+        builder.exclude(TestSetNode.class);
+        builder.exclude(TestMoreChildrenAddition.class);
+        
+        // TODO: split this test case up into two parts
+        builder.exclude(TestSetDetail.class);
         
         return builder.build();
     }

@@ -25,20 +25,19 @@ import javax.xml.soap.SOAPException;
 
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.SequenceOperation;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SAAJSOAPFault.class)
 public abstract class SOAPFaultSupport implements SAAJSOAPFault {
-    private CoreNSAwareElement getFaultCodeElement(SequenceOperation operation) throws CoreModelException {
-        return coreQuerySequence(getSOAPVersion().getFaultSequence(), 0, operation);
+    private CoreNSAwareElement getFaultCodeElement(boolean create) throws CoreModelException {
+        return coreGetElementFromSequence(getSOAPVersion().getFaultSequence(), 0, create);
     }
     
     public String getFaultCode() {
         try {
-            CoreNSAwareElement faultCodeElement = getFaultCodeElement(SequenceOperation.GET);
+            CoreNSAwareElement faultCodeElement = getFaultCodeElement(false);
             return faultCodeElement == null ? null : faultCodeElement.coreGetTextContent();
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
@@ -62,7 +61,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
 
     public final void setFaultCode(QName faultCode) throws SOAPException {
         try {
-            CoreNSAwareElement faultCodeElement = getFaultCodeElement(SequenceOperation.GET_OR_CREATE);
+            CoreNSAwareElement faultCodeElement = getFaultCodeElement(true);
             // TODO: incorrect; generate namespace declaration
             faultCodeElement.coreSetValue(faultCode.getPrefix() + ":" + faultCode.getLocalPart());
         } catch (CoreModelException ex) {
@@ -79,20 +78,20 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
             if (namespaceURI == null) {
                 throw new SOAPException("No NamespaceURI, SOAP requires faultcode content to be a QName");
             }
-            CoreNSAwareElement faultCodeElement = getFaultCodeElement(SequenceOperation.GET_OR_CREATE);
+            CoreNSAwareElement faultCodeElement = getFaultCodeElement(true);
             faultCodeElement.coreSetValue(faultCode);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
 
-    private CoreNSAwareElement getFaultStringElement(SequenceOperation operation) throws CoreModelException {
-        return coreQuerySequence(getSOAPVersion().getFaultSequence(), 1, operation);
+    private CoreNSAwareElement getFaultStringElement(boolean create) throws CoreModelException {
+        return coreGetElementFromSequence(getSOAPVersion().getFaultSequence(), 1, create);
     }
     
     public final String getFaultString() {
         try {
-            CoreNSAwareElement faultStringElement = getFaultStringElement(SequenceOperation.GET);
+            CoreNSAwareElement faultStringElement = getFaultStringElement(false);
             return faultStringElement == null ? null : faultStringElement.coreGetTextContent();
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
@@ -111,14 +110,14 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
 
     public final void setFaultString(String faultString) throws SOAPException {
         try {
-            getFaultStringElement(SequenceOperation.GET_OR_CREATE).coreSetValue(faultString);
+            getFaultStringElement(true).coreSetValue(faultString);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
     
-    private CoreNSAwareElement getFaultActorElement(SequenceOperation operation) throws CoreModelException {
-        return coreQuerySequence(getSOAPVersion().getFaultSequence(), 2, operation);
+    private CoreNSAwareElement getFaultActorElement(boolean create) throws CoreModelException {
+        return coreGetElementFromSequence(getSOAPVersion().getFaultSequence(), 2, create);
     }
     
     public String getFaultActor() {
@@ -128,7 +127,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
 
     public final void setFaultActor(String faultActor) throws SOAPException {
         try {
-            getFaultActorElement(SequenceOperation.GET_OR_CREATE).coreSetValue(faultActor);
+            getFaultActorElement(true).coreSetValue(faultActor);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -136,7 +135,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
 
     public Detail getDetail() {
         try {
-            return (Detail)coreQuerySequence(getSOAPVersion().getFaultSequence(), 3, SequenceOperation.GET);
+            return (Detail)coreGetElementFromSequence(getSOAPVersion().getFaultSequence(), 3, false);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }
@@ -144,7 +143,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
 
     public Detail addDetail() throws SOAPException {
         try {
-            return (Detail)coreQuerySequence(getSOAPVersion().getFaultSequence(), 3, SequenceOperation.CREATE);
+            return (Detail)coreCreateElementInSequence(getSOAPVersion().getFaultSequence(), 3);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }

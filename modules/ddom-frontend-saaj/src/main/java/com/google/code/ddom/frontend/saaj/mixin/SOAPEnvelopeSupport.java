@@ -22,7 +22,6 @@ import javax.xml.soap.SOAPHeader;
 
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.ElementAlreadyExistsException;
-import com.google.code.ddom.core.SequenceOperation;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
@@ -32,7 +31,7 @@ import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
     public final SOAPHeader getHeader() throws SOAPException {
         try {
-            return (SOAPHeader)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 0, SequenceOperation.GET);
+            return (SOAPHeader)coreGetElementFromSequence(getSOAPVersion().getEnvelopeSequence(), 0, false);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -40,7 +39,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
     
     public final SOAPHeader addHeader() throws SOAPException {
         try {
-            return (SOAPHeader)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 0, SequenceOperation.CREATE);
+            return (SOAPHeader)coreCreateElementInSequence(getSOAPVersion().getEnvelopeSequence(), 0);
         } catch (ElementAlreadyExistsException ex) {
             throw new SOAPException("Can't add a header when one is already present");
         } catch (CoreModelException ex) {
@@ -50,7 +49,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
 
     public final SOAPBody getBody() throws SOAPException {
         try {
-            return (SOAPBody)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 1, SequenceOperation.GET);
+            return (SOAPBody)coreGetElementFromSequence(getSOAPVersion().getEnvelopeSequence(), 1, false);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -58,7 +57,7 @@ public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {
 
     public final SOAPBody addBody() throws SOAPException {
         try {
-            return (SOAPBody)coreQuerySequence(getSOAPVersion().getEnvelopeSequence(), 1, SequenceOperation.CREATE);
+            return (SOAPBody)coreCreateElementInSequence(getSOAPVersion().getEnvelopeSequence(), 1);
         } catch (ElementAlreadyExistsException ex) {
             throw new SOAPException("Can't add a body when one is already present");
         } catch (CoreModelException ex) {

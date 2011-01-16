@@ -23,7 +23,6 @@ import org.apache.axiom.soap.SOAPHeader;
 import org.apache.axiom.soap.SOAPVersion;
 
 import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.SequenceOperation;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
@@ -38,7 +37,7 @@ public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
 
     public final SOAPBody getBody() throws OMException {
         try {
-            return (SOAPBody)coreQuerySequence(getSOAPVersionEx().getEnvelopeSequence(), 1, SequenceOperation.GET);
+            return (SOAPBody)coreGetElementFromSequence(getSOAPVersionEx().getEnvelopeSequence(), 1, false);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

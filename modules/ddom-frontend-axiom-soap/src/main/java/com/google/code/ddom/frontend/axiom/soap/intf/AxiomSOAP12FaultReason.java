@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.core;
+package com.google.code.ddom.frontend.axiom.soap.intf;
 
-public enum SequenceOperation {
-    /**
-     * Get an element from the sequence. If no element is found, return <code>null</code>.
-     */
-    GET,
+import com.google.code.ddom.core.ext.ModelExtensionInterface;
 
-    /**
-     * Create the element from the sequence. If the element already exists, an
-     * {@link ElementAlreadyExistsException} is thrown.
-     */
-    CREATE,
+@ModelExtensionInterface(parent=AxiomSOAPFaultReason.class)
+public interface AxiomSOAP12FaultReason extends AxiomSOAPFaultReason {
 
-    /**
-     * Get or create an element from the sequence. If the element is not found, create a new one.
-     */
-    GET_OR_CREATE
 }

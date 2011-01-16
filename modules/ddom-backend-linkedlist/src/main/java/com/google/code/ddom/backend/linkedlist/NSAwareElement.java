@@ -27,12 +27,16 @@ import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.ElementAlreadyExistsException;
 import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceItem;
-import com.google.code.ddom.core.SequenceOperation;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 
 @Implementation(factory=NSAwareElementFactory.class)
 public class NSAwareElement extends Element implements CoreNSAwareElement {
+    private static final int SEQOP_GET = 1;
+    private static final int SEQOP_GET_OR_CREATE = 2;
+    private static final int SEQOP_CREATE = 3;
+    private static final int SEQOP_INSERT = 4;
+    
     private String namespaceURI;
     private String localName;
     private String prefix;
@@ -86,7 +90,19 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         return namespaceURI.equals(this.namespaceURI) ? prefix : null;
     }
 
-    public final CoreNSAwareElement coreQuerySequence(Sequence sequence, int index, SequenceOperation operation) throws CoreModelException {
+    public final CoreNSAwareElement coreGetElementFromSequence(Sequence sequence, int index, boolean create) throws CoreModelException {
+        return querySequence(sequence, index, null, create ? SEQOP_GET_OR_CREATE : SEQOP_GET);
+    }
+
+    public final CoreNSAwareElement coreCreateElementInSequence(Sequence sequence, int index) throws CoreModelException {
+        return querySequence(sequence, index, null, SEQOP_CREATE);
+    }
+
+    public final void coreInsertElementInSequence(Sequence sequence, int index, CoreNSAwareElement element) throws CoreModelException {
+        querySequence(sequence, index, element, SEQOP_INSERT);
+    }
+
+    private final CoreNSAwareElement querySequence(Sequence sequence, int index, CoreNSAwareElement newElement, int operation) throws CoreModelException {
         int ptr = 0;
         CoreChildNode child = coreGetFirstChild();
         CoreNSAwareElement previousElement = null;
@@ -101,10 +117,15 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
                     }
                 }
                 if (ptr == index) {
-                    if (operation == SequenceOperation.CREATE) {
-                        throw new ElementAlreadyExistsException(sequence, index);
-                    } else {
-                        return element;
+                    switch (operation) {
+                        case SEQOP_GET:
+                        case SEQOP_GET_OR_CREATE:
+                            return element;
+                        case SEQOP_CREATE:
+                            throw new ElementAlreadyExistsException(sequence, index);
+                        case SEQOP_INSERT:
+                            element.coreReplaceWith(newElement);
+                            return null;
                     }
                 } else if (ptr > index) {
                     nextElement = element;
@@ -115,18 +136,22 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
             }
             child = child.coreGetNextSibling();
         }
-        if (operation == SequenceOperation.GET) {
+        if (operation == SEQOP_GET) {
             return null;
         } else {
             CoreDocument document = coreGetOwnerDocument(true);
             SequenceItem item = sequence.item(index);
             CoreNSAwareElement element;
-            String namespaceURI = item.getNamespaceURI();
-            String prefix = namespaceURI == null ? null : coreLookupPrefix(namespaceURI, false);
-            if (item.isUseExtensionInterface()) {
-                element = coreGetNodeFactory().createElement(document, item.getExtensionInterface(), item.getNamespaceURI(), item.getLocalName(), prefix);
+            if (operation == SEQOP_INSERT) {
+                element = newElement;
             } else {
-                element = coreGetNodeFactory().createElement(document, item.getNamespaceURI(), item.getLocalName(), prefix);
+                String namespaceURI = item.getNamespaceURI();
+                String prefix = namespaceURI == null ? null : coreLookupPrefix(namespaceURI, false);
+                if (item.isUseExtensionInterface()) {
+                    element = coreGetNodeFactory().createElement(document, item.getExtensionInterface(), item.getNamespaceURI(), item.getLocalName(), prefix);
+                } else {
+                    element = coreGetNodeFactory().createElement(document, item.getNamespaceURI(), item.getLocalName(), prefix);
+                }
             }
             if (previousElement != null) {
                 previousElement.coreInsertSiblingAfter(element);
