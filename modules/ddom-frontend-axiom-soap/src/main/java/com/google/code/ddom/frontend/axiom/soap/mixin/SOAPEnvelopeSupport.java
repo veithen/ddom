@@ -45,14 +45,14 @@ public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
         }
     }
 
-    public String getSOAPBodyFirstElementLocalName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getSOAPBodyFirstElementLocalName() {
+        SOAPBody body = getBody();
+        return body == null ? null : body.getFirstElementLocalName();
     }
 
-    public OMNamespace getSOAPBodyFirstElementNS() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMNamespace getSOAPBodyFirstElementNS() {
+        SOAPBody body = getBody();
+        return body == null ? null : body.getFirstElementNS();
     }
 
     public final SOAPVersion getVersion() {

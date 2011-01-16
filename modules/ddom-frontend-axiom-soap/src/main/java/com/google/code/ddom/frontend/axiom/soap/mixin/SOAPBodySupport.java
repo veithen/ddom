@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.mixin;
 
+import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.soap.SOAPConstants;
@@ -66,13 +67,13 @@ public abstract class SOAPBodySupport implements AxiomSOAPBody {
         return getFault() != null;
     }
 
-    public String getFirstElementLocalName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getFirstElementLocalName() {
+        OMElement element = getFirstElement();
+        return element == null ? null : element.getLocalName();
     }
 
-    public OMNamespace getFirstElementNS() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMNamespace getFirstElementNS() {
+        OMElement element = getFirstElement();
+        return element == null ? null : element.getNamespace();
     }
 }
