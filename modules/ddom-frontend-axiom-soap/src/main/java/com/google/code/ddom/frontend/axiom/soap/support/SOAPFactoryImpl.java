@@ -73,8 +73,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         // TODO
         SOAPEnvelope defaultEnvelope = getDefaultEnvelope();
         SOAPFault fault = createSOAPFault(defaultEnvelope.getBody());
-//        createSOAPFaultCode(fault);
-//        createSOAPFaultReason(fault);
+        createSOAPFaultCode(fault);
+        createSOAPFaultReason(fault);
         createSOAPFaultDetail(fault);
         return defaultEnvelope;
     }
