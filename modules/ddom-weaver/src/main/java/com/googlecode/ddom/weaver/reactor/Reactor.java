@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,7 +150,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
                         superclass == null ? null : getClassInfo(new ClassRef(clazz.getSuperclass())),
                         interfaceInfos, extensions);
                 for (ReactorPlugin plugin : plugins) {
-                    plugin.processNonWeavableClassInfo(nonWeavableClassInfo, clazz, extensions);
+                    plugin.processNonWeavableClassInfo(nonWeavableClassInfo, clazz, extensions, this);
                 }
                 classInfo = nonWeavableClassInfo;
             }

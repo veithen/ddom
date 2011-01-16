@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,11 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import javax.xml.soap.SOAPException;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11FaultExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
-import com.google.code.ddom.frontend.saaj.support.SOAPVersion;
 
-@Mixin(SOAP11FaultExtension.class)
+@Mixin(SAAJSOAP11Fault.class)
 public abstract class SOAP11FaultSupport implements SAAJSOAPFault {
-    public final SOAPVersion getSOAPVersion() {
-        return SOAPVersion.SOAP11;
-    }
-
     public final String getFaultRole() {
         throw new UnsupportedOperationException("Not supported in SOAP 1.1");
     }

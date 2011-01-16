@@ -24,84 +24,86 @@ import org.apache.axiom.soap.SOAPVersion;
 
 import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceBuilder;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11BodyExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11EnvelopeExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11FaultDetailExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11FaultExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11HeaderExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12BodyExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12EnvelopeExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12FaultDetailExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12FaultExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12HeaderExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPBodyExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPEnvelopeExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPFaultDetailExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPFaultExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPHeaderExtension;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Body;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Envelope;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Fault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Header;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Body;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Envelope;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Fault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 
 public abstract class SOAPVersionEx {
     public static final SOAPVersionEx SOAP11 = new SOAPVersionEx(
             SOAP11Version.getSingleton(),
             new SequenceBuilder()
-                .addItem(SOAP11HeaderExtension.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
-                .addItem(SOAP11BodyExtension.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
+                .addItem(AxiomSOAP11Header.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
+                .addItem(AxiomSOAP11Body.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
                 .enableMatchByInterface().build()) {
         
-        public Class<? extends SOAPEnvelopeExtension> getSOAPEnvelopeExtension() {
-            return SOAP11EnvelopeExtension.class;
+        @Override
+        public Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass() {
+            return AxiomSOAP11Envelope.class;
         }
 
         @Override
-        public Class<? extends SOAPHeaderExtension> getSOAPHeaderExtension() {
-            return SOAP11HeaderExtension.class;
+        public Class<? extends AxiomSOAPHeader> getSOAPHeaderClass() {
+            return AxiomSOAP11Header.class;
         }
 
         @Override
-        public Class<? extends SOAPBodyExtension> getSOAPBodyExtension() {
-            return SOAP11BodyExtension.class;
+        public Class<? extends AxiomSOAPBody> getSOAPBodyClass() {
+            return AxiomSOAP11Body.class;
         }
 
         @Override
-        public Class<? extends SOAPFaultExtension> getSOAPFaultExtension() {
-            return SOAP11FaultExtension.class;
+        public Class<? extends AxiomSOAPFault> getSOAPFaultClass() {
+            return AxiomSOAP11Fault.class;
         }
 
         @Override
-        public Class<? extends SOAPFaultDetailExtension> getSOAPFaultDetailExtension() {
-            return SOAP11FaultDetailExtension.class;
+        public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
+            return AxiomSOAP11FaultDetail.class;
         }
     };
 
     public static final SOAPVersionEx SOAP12 = new SOAPVersionEx(
             SOAP12Version.getSingleton(),
             new SequenceBuilder()
-                .addItem(SOAP12HeaderExtension.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
-                .addItem(SOAP12BodyExtension.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
+                .addItem(AxiomSOAP12Header.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
+                .addItem(AxiomSOAP12Body.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
                 .enableMatchByInterface().build()) {
         
-        public Class<? extends SOAPEnvelopeExtension> getSOAPEnvelopeExtension() {
-            return SOAP12EnvelopeExtension.class;
+        @Override
+        public Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass() {
+            return AxiomSOAP12Envelope.class;
         }
 
         @Override
-        public Class<? extends SOAPHeaderExtension> getSOAPHeaderExtension() {
-            return SOAP12HeaderExtension.class;
+        public Class<? extends AxiomSOAPHeader> getSOAPHeaderClass() {
+            return AxiomSOAP12Header.class;
         }
 
         @Override
-        public Class<? extends SOAPBodyExtension> getSOAPBodyExtension() {
-            return SOAP12BodyExtension.class;
+        public Class<? extends AxiomSOAPBody> getSOAPBodyClass() {
+            return AxiomSOAP12Body.class;
         }
 
         @Override
-        public Class<? extends SOAPFaultExtension> getSOAPFaultExtension() {
-            return SOAP12FaultExtension.class;
+        public Class<? extends AxiomSOAPFault> getSOAPFaultClass() {
+            return AxiomSOAP12Fault.class;
         }
 
         @Override
-        public Class<? extends SOAPFaultDetailExtension> getSOAPFaultDetailExtension() {
-            return SOAP12FaultDetailExtension.class;
+        public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
+            return AxiomSOAP12FaultDetail.class;
         }
     };
     
@@ -125,9 +127,9 @@ public abstract class SOAPVersionEx {
         return envelopeSequence;
     }
 
-    public abstract Class<? extends SOAPEnvelopeExtension> getSOAPEnvelopeExtension();
-    public abstract Class<? extends SOAPHeaderExtension> getSOAPHeaderExtension();
-    public abstract Class<? extends SOAPBodyExtension> getSOAPBodyExtension();
-    public abstract Class<? extends SOAPFaultExtension> getSOAPFaultExtension();
-    public abstract Class<? extends SOAPFaultDetailExtension> getSOAPFaultDetailExtension();
+    public abstract Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass();
+    public abstract Class<? extends AxiomSOAPHeader> getSOAPHeaderClass();
+    public abstract Class<? extends AxiomSOAPBody> getSOAPBodyClass();
+    public abstract Class<? extends AxiomSOAPFault> getSOAPFaultClass();
+    public abstract Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass();
 }

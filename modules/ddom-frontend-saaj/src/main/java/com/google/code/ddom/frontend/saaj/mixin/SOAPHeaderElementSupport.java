@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,10 @@ import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
-import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderElementExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
-@Mixin(SOAPHeaderElementExtension.class)
+@Mixin(SAAJSOAPHeaderElement.class)
 public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement {
     private String getSOAPAttribute(String localName) {
         try {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,17 @@ import javax.xml.soap.SOAPEnvelope;
 
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11EnvelopeExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12EnvelopeExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Envelope;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Envelope;
 
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements SAAJDocument {
     public final SOAPEnvelope createSOAP11Envelope() {
-        return (SOAPEnvelope)coreGetNodeFactory().createElement(this, SOAP11EnvelopeExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Envelope", "SOAP-ENV");
+        return coreGetNodeFactory().createElement(this, SAAJSOAP11Envelope.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Envelope", "SOAP-ENV");
     }
 
     public final SOAPEnvelope createSOAP12Envelope() {
-        return (SOAPEnvelope)coreGetNodeFactory().createElement(this, SOAP12EnvelopeExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Envelope", "SOAP-ENV");
+        return coreGetNodeFactory().createElement(this, SAAJSOAP12Envelope.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Envelope", "SOAP-ENV");
     }
 }

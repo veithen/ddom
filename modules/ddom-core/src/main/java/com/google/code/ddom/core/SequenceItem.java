@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package com.google.code.ddom.core;
 public class SequenceItem {
     private final String namespaceURI;
     private final String localName;
-    private final Class<?> extensionInterface;
+    private final Class<? extends CoreNSAwareElement> extensionInterface;
     private final boolean useExtensionInterface;
     
-    SequenceItem(String namespaceURI, String localName, Class<?> extensionInterface,
+    SequenceItem(String namespaceURI, String localName, Class<? extends CoreNSAwareElement> extensionInterface,
             boolean useExtensionInterface) {
         this.namespaceURI = namespaceURI;
         this.localName = localName;
@@ -37,7 +37,7 @@ public class SequenceItem {
         return localName;
     }
 
-    public Class<?> getExtensionInterface() {
+    public Class<? extends CoreNSAwareElement> getExtensionInterface() {
         return extensionInterface;
     }
 

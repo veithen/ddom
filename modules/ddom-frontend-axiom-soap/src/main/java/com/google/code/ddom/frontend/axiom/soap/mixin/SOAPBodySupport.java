@@ -24,19 +24,18 @@ import org.apache.axiom.soap.SOAPFault;
 import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPBodyExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
 
-@Mixin(SOAPBodyExtension.class)
+@Mixin(AxiomSOAPBody.class)
 public abstract class SOAPBodySupport implements AxiomSOAPBody {
     public final SOAPFault addFault(Exception e) throws OMException {
         try {
             SOAPVersionEx version = getSOAPVersionEx();
-            AxiomSOAPFault fault = (AxiomSOAPFault)coreAppendElement(version.getSOAPFaultExtension(),
+            AxiomSOAPFault fault = coreAppendElement(version.getSOAPFaultClass(),
                     version.getEnvelopeURI(), SOAPConstants.BODY_FAULT_LOCAL_NAME,
                     SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
             // TODO: fill fault with exception data

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,15 +28,13 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
  * 
  * @author Andreas Veithen
  */
-public class ReifyingIterator<T> implements Iterator<T> {
+public class ReifyingIterator<T extends SAAJSOAPElement> implements Iterator<T> {
     private final ChildIterator<CoreNSAwareElement> parent;
-    private final Class<?> extensionInterface;
-    private final Class<? extends T> type;
+    private final Class<? extends T> childType;
 
-    public ReifyingIterator(ChildIterator<CoreNSAwareElement> parent, Class<?> extensionInterface, Class<? extends T> type) {
+    public ReifyingIterator(ChildIterator<CoreNSAwareElement> parent, Class<? extends T> childType) {
         this.parent = parent;
-        this.extensionInterface = extensionInterface;
-        this.type = type;
+        this.childType = childType;
     }
 
     public boolean hasNext() {
@@ -44,18 +42,16 @@ public class ReifyingIterator<T> implements Iterator<T> {
     }
 
     public T next() {
-        CoreNSAwareElement element = parent.next();
-        if (type.isInstance(element)) {
-            return type.cast(element);
-        } else {
-            try {
-                SAAJSOAPElement newElement = SAAJUtil.reify(element, extensionInterface);
-                parent.replace(newElement);
-                return type.cast(newElement);
-            } catch (CoreModelException ex) {
-                throw new RuntimeException(ex); // TODO
+        try {
+            CoreNSAwareElement element = parent.next();
+            T reifiedElement = SAAJUtil.reify(element, childType);
+            if (reifiedElement != element) {
+                parent.replace(reifiedElement);
             }
-       }
+            return reifiedElement;
+        } catch (CoreModelException ex) {
+            throw new RuntimeException(ex); // TODO
+        }
     }
 
     public void remove() {

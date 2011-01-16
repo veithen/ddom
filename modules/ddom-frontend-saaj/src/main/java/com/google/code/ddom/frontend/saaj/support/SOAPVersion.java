@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +19,25 @@ import javax.xml.soap.SOAPConstants;
 
 import com.google.code.ddom.core.Sequence;
 import com.google.code.ddom.core.SequenceBuilder;
-import com.google.code.ddom.frontend.saaj.ext.DetailExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11BodyExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11HeaderExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12HeaderExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAPFaultElementExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJDetail;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Body;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Header;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Body;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Header;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFaultElement;
 
 public abstract class SOAPVersion {
     public static final SOAPVersion SOAP11 = new SOAPVersion(
             SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE,
             new SequenceBuilder()
-                .addItem(SOAP11HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Header")
-                .addItem(SOAP11BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body")
+                .addItem(SAAJSOAP11Header.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Header")
+                .addItem(SAAJSOAP11Body.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body")
                 .enableMatchByInterface().build(),
             new SequenceBuilder()
-                .addItem(SOAPFaultElementExtension.class, null, "faultcode")
-                .addItem(SOAPFaultElementExtension.class, null, "faultstring")
-                .addItem(SOAPFaultElementExtension.class, null, "faultactor")
-                .addItem(DetailExtension.class, null, "detail").build(),
+                .addItem(SAAJSOAPFaultElement.class, null, "faultcode")
+                .addItem(SAAJSOAPFaultElement.class, null, "faultstring")
+                .addItem(SAAJSOAPFaultElement.class, null, "faultactor")
+                .addItem(SAAJDetail.class, null, "detail").build(),
             "actor") {
         
         @Override
@@ -54,14 +54,14 @@ public abstract class SOAPVersion {
     public static final SOAPVersion SOAP12 = new SOAPVersion(
             SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE,
             new SequenceBuilder()
-                .addItem(SOAP12HeaderExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Header")
-                .addItem(SOAP12BodyExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Body")
+                .addItem(SAAJSOAP12Header.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Header")
+                .addItem(SAAJSOAP12Body.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Body")
                 .enableMatchByInterface().build(),
             new SequenceBuilder()
-                .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Code")
-                .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Reason")
-                .addItem(SOAPFaultElementExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
-                .addItem(DetailExtension.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build(),
+                .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Code")
+                .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Reason")
+                .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
+                .addItem(SAAJDetail.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build(),
             "role") {
         
         @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,17 @@ import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.DetailEntryExtension;
-import com.google.code.ddom.frontend.saaj.ext.DetailExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetail;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetailEntry;
 import com.google.code.ddom.frontend.saaj.support.NameUtil;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
-@Mixin(DetailExtension.class)
+@Mixin(SAAJDetail.class)
 public abstract class DetailSupport implements SAAJDetail {
     public final DetailEntry addDetailEntry(Name name) throws SOAPException {
         try {
-            return (SAAJDetailEntry)coreAppendElement(DetailEntryExtension.class, NameUtil.getNamespaceURI(name), name.getLocalName(), NameUtil.getPrefix(name));
+            return coreAppendElement(SAAJDetailEntry.class, NameUtil.getNamespaceURI(name), name.getLocalName(), NameUtil.getPrefix(name));
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -47,13 +45,13 @@ public abstract class DetailSupport implements SAAJDetail {
 
     public final DetailEntry addDetailEntry(QName qname) throws SOAPException {
         try {
-            return (SAAJDetailEntry)coreAppendElement(DetailEntryExtension.class, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+            return coreAppendElement(SAAJDetailEntry.class, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
 
-    public final Iterator<DetailEntry> getDetailEntries() {
-        return new ReifyingIterator<DetailEntry>(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class), DetailEntryExtension.class, DetailEntry.class);
+    public final Iterator getDetailEntries() {
+        return new ReifyingIterator<SAAJDetailEntry>(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class), SAAJDetailEntry.class);
     }
 }

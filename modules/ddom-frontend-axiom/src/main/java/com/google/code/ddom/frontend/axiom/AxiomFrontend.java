@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
-import com.google.code.ddom.commons.cl.EmptyClassCollection;
 import com.google.code.ddom.commons.cl.Module;
 import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
@@ -40,10 +39,6 @@ public class AxiomFrontend implements Frontend {
             aggregate.add(module.getPackage("com.google.code.ddom.frontend.axiom.mixin.dom"));
         }
         return aggregate;
-    }
-
-    public ClassCollection getModelExtensionInterfaces() {
-        return EmptyClassCollection.INSTANCE;
     }
 
     public ModelExtension getModelExtension() {

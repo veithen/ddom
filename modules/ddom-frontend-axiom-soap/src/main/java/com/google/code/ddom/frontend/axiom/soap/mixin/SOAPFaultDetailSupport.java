@@ -23,12 +23,11 @@ import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPFaultDetailExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
 
-@Mixin(SOAPFaultDetailExtension.class)
+@Mixin(AxiomSOAPFaultDetail.class)
 public abstract class SOAPFaultDetailSupport implements AxiomSOAPFaultDetail {
     public final void addDetailEntry(OMElement detailElement) {
         try {

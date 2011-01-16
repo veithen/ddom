@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,12 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
             if (prefix != null && prefix.length() == 0) {
                 prefix = null;
             }
-            return (SAAJSOAPElement)coreAppendElement(getChildExtensionInterface(), uri, localName, prefix);
+            Class<? extends SAAJSOAPElement> childType = getChildType();
+            if (childType.equals(SAAJSOAPElement.class)) {
+                return (SOAPElement)coreAppendElement(uri, localName, prefix);
+            } else {
+                return coreAppendElement(childType, uri, localName, prefix);
+            }
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -76,7 +81,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
 
     public final SOAPElement addChildElement(SOAPElement element) throws SOAPException {
         try {
-            SAAJSOAPElement reifiedElement = SAAJUtil.reify((CoreNSAwareElement)element, getChildExtensionInterface());
+            SAAJSOAPElement reifiedElement = SAAJUtil.reify((CoreNSAwareElement)element, getChildType());
             // TODO: probably we need to use another policy here
             coreAppendChild(reifiedElement, Policies.NODE_MIGRATION_POLICY);
             return reifiedElement;
@@ -190,22 +195,17 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
 
     // May be overridden by other mixins!
-    public Class<?> getChildExtensionInterface() {
-        return null;
-    }
-
-    // May be overridden by other mixins!
-    public Class<?> getChildType() {
-        return SOAPElement.class;
+    public Class<? extends SAAJSOAPElement> getChildType() {
+        return SAAJSOAPElement.class;
     }
     
     private Iterator getChildElements(ChildIterator<CoreNSAwareElement> childIterator) {
-        Class<?> extensionInterface = getChildExtensionInterface();
-        if (extensionInterface == null) {
+        Class<? extends SAAJSOAPElement> childType = getChildType();
+        if (childType.equals(SAAJSOAPElement.class)) {
             // The iterator actually returns SOAPElements
             return childIterator;
         } else {
-            return new ReifyingIterator<SOAPElement>(childIterator, extensionInterface, getChildType().asSubclass(SOAPElement.class));
+            return new ReifyingIterator<SAAJSOAPElement>(childIterator, childType);
         }
     }
     

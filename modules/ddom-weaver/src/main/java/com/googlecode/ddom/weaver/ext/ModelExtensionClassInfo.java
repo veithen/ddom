@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,8 +54,8 @@ class ModelExtensionClassInfo {
     }
     
     String getSuperClassName() {
-        ClassInfo superInterface = extensionInterface.getClassInfo().getInterfaces()[0];
-        return superInterface == rootInterface ? implementation.getName() : getModelExtensionClassName(superInterface);
+        ClassInfo parentInterface = extensionInterface.getParent();
+        return parentInterface == rootInterface ? implementation.getName() : getModelExtensionClassName(parentInterface);
     }
     
     boolean isAbstract() {

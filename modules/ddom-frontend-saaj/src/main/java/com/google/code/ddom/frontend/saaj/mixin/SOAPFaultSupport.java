@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,10 @@ import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.core.SequenceOperation;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAPFaultExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
-@Mixin(SOAPFaultExtension.class)
+@Mixin(SAAJSOAPFault.class)
 public abstract class SOAPFaultSupport implements SAAJSOAPFault {
     private CoreNSAwareElement getFaultCodeElement(SequenceOperation operation) throws CoreModelException {
         return coreQuerySequence(getSOAPVersion().getFaultSequence(), 0, operation);

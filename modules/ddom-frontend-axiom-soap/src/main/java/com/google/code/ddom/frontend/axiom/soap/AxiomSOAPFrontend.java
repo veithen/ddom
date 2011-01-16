@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,6 @@ public class AxiomSOAPFrontend extends AxiomFrontend {
         }
         aggregate.add(Module.forClass(AxiomSOAPFrontend.class).getPackage("com.google.code.ddom.frontend.axiom.soap.mixin"));
         return aggregate;
-    }
-
-    @Override
-    public ClassCollection getModelExtensionInterfaces() {
-        return Module.forClass(AxiomSOAPFrontend.class).getPackage("com.google.code.ddom.frontend.axiom.soap.ext");
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import com.google.code.ddom.core.ext.ModelExtension;
 public interface Frontend {
     // TODO: we should hide the context/configuration data (current parameters) behind some class to allow for extensibility in the future
     ClassCollection getMixins(Map<String,Frontend> frontends);
-    
-    ClassCollection getModelExtensionInterfaces();
     
     ModelExtension getModelExtension();
     

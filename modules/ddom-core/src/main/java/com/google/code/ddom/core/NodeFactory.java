@@ -56,7 +56,7 @@ public interface NodeFactory {
      */
     CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix);
     
-    CoreNSAwareElement createElement(CoreDocument document, Class<?> extensionInterface, String namespaceURI, String localName, String prefix);
+    <T extends CoreNSAwareElement> T createElement(CoreDocument document, Class<T> extensionInterface, String namespaceURI, String localName, String prefix);
     
     CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type);
     

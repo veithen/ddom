@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,9 @@ import org.apache.axiom.soap.RolePlayer;
 import org.apache.axiom.soap.SOAPHeaderBlock;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPHeaderExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 
-@Mixin(SOAPHeaderExtension.class)
+@Mixin(AxiomSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
     public SOAPHeaderBlock addHeaderBlock(String localName, OMNamespace ns) throws OMException {
         // TODO

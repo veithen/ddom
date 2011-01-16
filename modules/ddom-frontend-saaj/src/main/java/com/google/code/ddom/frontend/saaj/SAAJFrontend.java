@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ public class SAAJFrontend extends DOMFrontend {
         aggregate.add(super.getMixins(frontends));
         aggregate.add(Module.forClass(SAAJFrontend.class).getPackage("com.google.code.ddom.frontend.saaj.mixin"));
         return aggregate;
-    }
-
-    @Override
-    public ClassCollection getModelExtensionInterfaces() {
-        return Module.forClass(SAAJFrontend.class).getPackage("com.google.code.ddom.frontend.saaj.ext");
     }
 
     public ModelExtension getModelExtension() {

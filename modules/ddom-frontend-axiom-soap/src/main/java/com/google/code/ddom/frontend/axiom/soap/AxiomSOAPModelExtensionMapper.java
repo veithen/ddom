@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package com.google.code.ddom.frontend.axiom.soap;
 
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP11EnvelopeExtension;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAP12EnvelopeExtension;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Envelope;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Envelope;
 
 // TODO: this should only be used if a plain OMFactory is used; however, it is always used
 public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
@@ -47,7 +47,7 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                 if (!localName.equals("Envelope")) {
                     throw new RuntimeException(); // TODO
                 }
-                return isSoap12 ? SOAP12EnvelopeExtension.class : SOAP11EnvelopeExtension.class;
+                return isSoap12 ? AxiomSOAP12Envelope.class : AxiomSOAP11Envelope.class;
             default:
                 return null;
         }

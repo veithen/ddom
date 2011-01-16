@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.core.ext.Abstract;
+import com.google.code.ddom.core.ext.ModelExtensionInterface;
 import com.googlecode.ddom.weaver.reactor.Extensions;
 import com.googlecode.ddom.weaver.reactor.NonWeavableClassInfo;
-import com.googlecode.ddom.weaver.reactor.ReactorException;
 import com.googlecode.ddom.weaver.reactor.ReactorPlugin;
 import com.googlecode.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
 import com.googlecode.ddom.weaver.reactor.WeavableClassInjector;
@@ -31,14 +30,9 @@ import com.googlecode.ddom.weaver.realm.ClassRealm;
 
 public class ModelExtensionPlugin extends ReactorPlugin {
     private final List<ClassRef> requiredImplementations = new ArrayList<ClassRef>();
-    private final List<ClassRef> modelExtensionInterfaces = new ArrayList<ClassRef>();
 
     public void addRequiredImplementation(ClassRef iface) {
         requiredImplementations.add(iface);
-    }
-    
-    public void addModelExtensionInterface(ClassRef iface) {
-        modelExtensionInterfaces.add(iface);
     }
     
     @Override
@@ -47,11 +41,7 @@ public class ModelExtensionPlugin extends ReactorPlugin {
         for (ClassRef classRef : this.requiredImplementations) {
             requiredImplementations.add(realm.getClassInfo(classRef));
         }
-        List<ModelExtensionInterfaceInfo> modelExtensionInterfaces = new ArrayList<ModelExtensionInterfaceInfo>(this.modelExtensionInterfaces.size());
-        for (ClassRef classRef : this.modelExtensionInterfaces) {
-            modelExtensionInterfaces.add(realm.getClassInfo(classRef).get(ModelExtensionInterfaceInfo.class));
-        }
-        extensions.set(new ModelExtensionGenerator(requiredImplementations, modelExtensionInterfaces));
+        extensions.set(new ModelExtensionGenerator(requiredImplementations));
     }
 
     @Override
@@ -60,19 +50,13 @@ public class ModelExtensionPlugin extends ReactorPlugin {
     }
 
     @Override
-    public void processNonWeavableClassInfo(NonWeavableClassInfo classInfo, Class<?> clazz, Extensions extensions) {
-        boolean isExtensionInterface = false;
-        for (ClassRef classRef : modelExtensionInterfaces) {
-            if (classRef.getClassName().equals(classInfo.getName())) {
-                isExtensionInterface = true;
-                break;
-            }
-        }
-        if (isExtensionInterface) {
-            if (classInfo.getInterfaces().length != 1) {
-                throw new ReactorException("A model extension interface must have exactly one superinterface: " + classInfo.getName());
-            }
-            extensions.set(new ModelExtensionInterfaceInfo(classInfo, clazz.getAnnotation(Abstract.class) != null));
+    public void processNonWeavableClassInfo(NonWeavableClassInfo classInfo, Class<?> clazz, Extensions extensions, ClassRealm realm) {
+        ModelExtensionInterface annotation = clazz.getAnnotation(ModelExtensionInterface.class);
+        if (annotation != null) {
+            ModelExtensionInterfaceInfo modelExtensionInterface = new ModelExtensionInterfaceInfo(classInfo,
+                    annotation.isAbstract(), realm.getClassInfo(new ClassRef(annotation.parent())));
+            extensions.set(modelExtensionInterface);
+            realm.get(ModelExtensionGenerator.class).addModelExtensionInterface(modelExtensionInterface);
         } else {
             extensions.set(ModelExtensionInterfaceInfo.class, null);
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,11 +62,6 @@ public class ModelWeaver {
     }
 
     public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
-        for (Frontend frontend : frontends.values()) {
-            for (ClassRef classRef : frontend.getModelExtensionInterfaces().getClassRefs()) {
-                modelExtensionPlugin.addModelExtensionInterface(classRef);
-            }
-        }
         reactor.addPlugin(modelExtensionPlugin);
         // TODO: clean this up
         ModelExtension modelExtension = frontends.values().iterator().next().getModelExtension();

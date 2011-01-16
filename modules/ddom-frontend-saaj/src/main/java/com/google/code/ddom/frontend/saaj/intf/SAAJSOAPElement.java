@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,5 @@ import javax.xml.soap.SOAPElement;
 import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
 
 public interface SAAJSOAPElement extends SOAPElement, DOMNSAwareElement, SAAJNode {
-    Class<?> getChildExtensionInterface();
-    Class<?> getChildType();
+    Class<? extends SAAJSOAPElement> getChildType();
 }

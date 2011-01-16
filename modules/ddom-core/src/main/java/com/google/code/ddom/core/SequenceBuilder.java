@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class SequenceBuilder {
         return this;
     }
     
-    public SequenceBuilder addItem(Class<?> extensionInterface, String namespaceURI, String localName) {
+    public SequenceBuilder addItem(Class<? extends CoreNSAwareElement> extensionInterface, String namespaceURI, String localName) {
         items.add(new SequenceItem(namespaceURI, localName, extensionInterface, true));
         return this;
     }

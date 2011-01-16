@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,9 @@ import org.apache.axiom.soap.SOAPProcessingException;
 import org.apache.axiom.soap.SOAPVersion;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPHeaderBlockExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 
-@Mixin(SOAPHeaderBlockExtension.class)
+@Mixin(AxiomSOAPHeaderBlock.class)
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     public boolean getMustUnderstand() throws SOAPProcessingException {
         // TODO

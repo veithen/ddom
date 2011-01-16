@@ -77,8 +77,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPEnvelope createSOAPEnvelope() throws SOAPProcessingException {
-        AxiomSOAPEnvelope element = (AxiomSOAPEnvelope)nodeFactory.createElement(null,
-                soapVersionEx.getSOAPEnvelopeExtension(), soapVersionEx.getEnvelopeURI(),
+        AxiomSOAPEnvelope element = nodeFactory.createElement(null,
+                soapVersionEx.getSOAPEnvelopeClass(), soapVersionEx.getEnvelopeURI(),
                 SOAPConstants.SOAPENVELOPE_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
         element.setOMFactory(this);
         return element;
@@ -96,8 +96,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
 
     public final SOAPHeader createSOAPHeader(SOAPEnvelope envelope) throws SOAPProcessingException {
         try {
-            AxiomSOAPHeader header = (AxiomSOAPHeader)((AxiomSOAPEnvelope)envelope).coreAppendElement(
-                    soapVersionEx.getSOAPHeaderExtension(), soapVersionEx.getEnvelopeURI(),
+            AxiomSOAPHeader header = ((AxiomSOAPEnvelope)envelope).coreAppendElement(
+                    soapVersionEx.getSOAPHeaderClass(), soapVersionEx.getEnvelopeURI(),
                     SOAPConstants.HEADER_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
             header.setOMFactory(this);
             return header;
@@ -113,8 +113,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
 
     public final SOAPBody createSOAPBody(SOAPEnvelope envelope) throws SOAPProcessingException {
         try {
-            AxiomSOAPBody body = (AxiomSOAPBody)((AxiomSOAPEnvelope)envelope).coreAppendElement(
-                    soapVersionEx.getSOAPBodyExtension(), soapVersionEx.getEnvelopeURI(),
+            AxiomSOAPBody body = ((AxiomSOAPEnvelope)envelope).coreAppendElement(
+                    soapVersionEx.getSOAPBodyClass(), soapVersionEx.getEnvelopeURI(),
                     SOAPConstants.BODY_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
             body.setOMFactory(this);
             return body;
@@ -133,8 +133,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
 
     public final SOAPFault createSOAPFault(SOAPBody body) throws SOAPProcessingException {
         try {
-            AxiomSOAPFault fault = (AxiomSOAPFault)((AxiomSOAPBody)body).coreAppendElement(
-                    soapVersionEx.getSOAPFaultExtension(), soapVersionEx.getEnvelopeURI(),
+            AxiomSOAPFault fault = ((AxiomSOAPBody)body).coreAppendElement(
+                    soapVersionEx.getSOAPFaultClass(), soapVersionEx.getEnvelopeURI(),
                     SOAPConstants.BODY_FAULT_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
             fault.setOMFactory(this);
             return fault;
@@ -184,8 +184,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFaultDetail createSOAPFaultDetail() throws SOAPProcessingException {
-        AxiomSOAPFaultDetail detail = (AxiomSOAPFaultDetail)nodeFactory.createElement(null,
-                soapVersionEx.getSOAPFaultDetailExtension(), soapVersionEx.getEnvelopeURI(),
+        AxiomSOAPFaultDetail detail = nodeFactory.createElement(null,
+                soapVersionEx.getSOAPFaultDetailClass(), soapVersionEx.getEnvelopeURI(),
                 SOAPConstants.SOAPFAULT_DETAIL_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
         detail.setOMFactory(this);
         return detail;
@@ -193,8 +193,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
 
     public final SOAPFaultDetail createSOAPFaultDetail(SOAPFault fault) throws SOAPProcessingException {
         try {
-            AxiomSOAPFaultDetail detail = (AxiomSOAPFaultDetail)((AxiomSOAPFault)fault).coreAppendElement(
-                    soapVersionEx.getSOAPFaultDetailExtension(), soapVersionEx.getEnvelopeURI(),
+            AxiomSOAPFaultDetail detail = ((AxiomSOAPFault)fault).coreAppendElement(
+                    soapVersionEx.getSOAPFaultDetailClass(), soapVersionEx.getEnvelopeURI(),
                     SOAPConstants.SOAPFAULT_DETAIL_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
             detail.setOMFactory(this);
             return detail;

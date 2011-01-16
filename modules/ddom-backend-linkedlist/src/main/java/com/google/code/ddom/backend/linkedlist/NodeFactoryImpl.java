@@ -59,8 +59,8 @@ public class NodeFactoryImpl implements NodeFactory {
         return nsAwareElementFactory.create(modelExtension == null ? null : modelExtension.mapElement(namespaceURI, localName), (Document)document, namespaceURI, localName, prefix, true);
     }
     
-    public final CoreNSAwareElement createElement(CoreDocument document, Class<?> extensionInterface, String namespaceURI, String localName, String prefix) {
-        return nsAwareElementFactory.create(extensionInterface, (Document)document, namespaceURI, localName, prefix, true);
+    public final <T extends CoreNSAwareElement> T createElement(CoreDocument document, Class<T> extensionInterface, String namespaceURI, String localName, String prefix) {
+        return extensionInterface.cast(nsAwareElementFactory.create(extensionInterface, (Document)document, namespaceURI, localName, prefix, true));
     }
     
     public final CoreNSUnawareAttribute createAttribute(CoreDocument document, String name, String value, String type) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,10 @@ import org.apache.axiom.soap.SOAPVersion;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.SequenceOperation;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.axiom.soap.ext.SOAPEnvelopeExtension;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
-@Mixin(SOAPEnvelopeExtension.class)
+@Mixin(AxiomSOAPEnvelope.class)
 public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
     public SOAPHeader getHeader() throws OMException {
         // TODO

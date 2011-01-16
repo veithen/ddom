@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,11 @@ package com.google.code.ddom.frontend.axiom.soap.intf;
 
 import org.apache.axiom.soap.SOAPHeaderBlock;
 
+import com.google.code.ddom.core.CoreNSAwareElement;
+import com.google.code.ddom.core.ext.ModelExtensionInterface;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 
+@ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
 public interface AxiomSOAPHeaderBlock extends AxiomElement, SOAPHeaderBlock {
 
 }

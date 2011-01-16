@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 package com.google.code.ddom.frontend.saaj.mixin;
 
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12FaultExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAPFaultExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Body;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
 
-@Mixin(SOAP12BodyExtension.class)
+@Mixin(SAAJSOAP12Body.class)
 public abstract class SOAP12BodySupport implements SAAJSOAPBody {
-    public final Class<? extends SOAPFaultExtension> getSOAPFaultExtension() {
-        return SOAP12FaultExtension.class;
+    public final Class<? extends SAAJSOAPFault> getSOAPFaultClass() {
+        return SAAJSOAP12Fault.class;
     }
 }

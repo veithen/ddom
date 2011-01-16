@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,21 +25,16 @@ import javax.xml.soap.SOAPHeaderElement;
 import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
-import com.google.code.ddom.frontend.saaj.ext.SOAPHeaderExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
-@Mixin(SOAPHeaderExtension.class)
+@Mixin(SAAJSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
-    public final Class<?> getChildType() {
-        return SOAPHeaderElement.class;
-    }
-
     public final SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
         // TODO: need unit test with empty prefix/namespace
         try {
-            return (SAAJSOAPHeaderElement)coreAppendElement(getChildExtensionInterface(), name.getURI(), name.getLocalName(), name.getPrefix());
+            return (SAAJSOAPHeaderElement)coreAppendElement(getChildType(), name.getURI(), name.getLocalName(), name.getPrefix());
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -47,7 +42,7 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
 
     public final SOAPHeaderElement addHeaderElement(QName qname) throws SOAPException {
         try {
-            return (SAAJSOAPHeaderElement)coreAppendElement(getChildExtensionInterface(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+            return (SAAJSOAPHeaderElement)coreAppendElement(getChildType(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }

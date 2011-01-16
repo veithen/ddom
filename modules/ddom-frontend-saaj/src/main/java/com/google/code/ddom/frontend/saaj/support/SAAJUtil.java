@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 public final class SAAJUtil {
     private SAAJUtil() {}
     
-    public static SAAJSOAPElement reify(CoreNSAwareElement element, Class<?> extensionInterface) throws CoreModelException {
-        if (extensionInterface == null || extensionInterface.isInstance(element)) {
-            return (SAAJSOAPElement)element;
+    public static <T extends SAAJSOAPElement> T reify(CoreNSAwareElement element, Class<T> childType) throws CoreModelException {
+        if (childType.isInstance(element)) {
+            return childType.cast(element);
         } else {
-            CoreNSAwareElement newElement = element.coreGetNodeFactory().createElement(
-                    element.coreGetOwnerDocument(true), extensionInterface, element.coreGetNamespaceURI(),
+            T newElement = element.coreGetNodeFactory().createElement(
+                    element.coreGetOwnerDocument(true), childType, element.coreGetNamespaceURI(),
                     element.coreGetLocalName(), element.coreGetPrefix());
             // TODO: maybe there is a more efficient way to do this
             CoreChildNode child;
@@ -41,7 +41,7 @@ public final class SAAJUtil {
 //            while ((attr = element.coreGetFirstAttribute()) != null) {
 //                newElement.core
 //            }
-            return (SAAJSOAPElement)newElement;
+            return newElement;
         }
     }
 }

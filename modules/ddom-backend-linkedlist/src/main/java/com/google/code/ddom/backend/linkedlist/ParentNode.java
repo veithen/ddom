@@ -414,10 +414,10 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return child;
     }
     
-    public final CoreNSAwareElement coreAppendElement(Class<?> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException {
+    public final <T extends CoreNSAwareElement> T coreAppendElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException {
         NSAwareElement child = nsAwareElementFactory.create(extensionInterface, null, namespaceURI, localName, prefix, true);
         appendNewlyCreatedChild(child);
-        return child;
+        return extensionInterface.cast(child);
     }
     
     public final CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredParsingException {

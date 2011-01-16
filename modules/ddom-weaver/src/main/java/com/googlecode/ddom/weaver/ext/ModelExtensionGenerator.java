@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,11 @@ class ModelExtensionGenerator {
     private static final Logger log = Logger.getLogger(ModelExtensionGenerator.class.getName());
     
     private final List<ClassInfo> requiredImplementations;
-    private final List<ModelExtensionInterfaceInfo> modelExtensionInterfaces;
+    private final List<ModelExtensionInterfaceInfo> modelExtensionInterfaces = new ArrayList<ModelExtensionInterfaceInfo>();
     private final Map<ClassInfo,WeavableClassInfo> implementationMap = new HashMap<ClassInfo,WeavableClassInfo>();
 
-    ModelExtensionGenerator(List<ClassInfo> requiredImplementations, List<ModelExtensionInterfaceInfo> modelExtensionInterfaces) {
+    ModelExtensionGenerator(List<ClassInfo> requiredImplementations) {
         this.requiredImplementations = requiredImplementations;
-        this.modelExtensionInterfaces = modelExtensionInterfaces;
     }
     
     void addImplementation(WeavableClassInfo weavableClass) {
@@ -58,6 +57,10 @@ class ModelExtensionGenerator {
         if (!found) {
             throw new ReactorException("The class " + weavableClass + " was annotated with @Implementation, but this is not expected");
         }
+    }
+
+    void addModelExtensionInterface(ModelExtensionInterfaceInfo modelExtensionInterface) {
+        modelExtensionInterfaces.add(modelExtensionInterface);
     }
 
     void validate() {
@@ -95,12 +98,7 @@ class ModelExtensionGenerator {
 //        for (ClassInfo modelExtension : TopologicalSort.sort(modelExtensionInterfaces, inheritanceRelation)) {
         Map<ClassInfo,ModelExtensionInfo> modelExtensionMap = new HashMap<ClassInfo,ModelExtensionInfo>();
         for (ModelExtensionInterfaceInfo iface : modelExtensionInterfaces) {
-            // TODO: this needs cleanup
-            ClassInfo rootInterface = iface.getClassInfo();
-            do {
-                // The number of super interface has already been validated by loadModelExtension
-                rootInterface = rootInterface.getInterfaces()[0];
-            } while (modelExtensionInterfaces.contains(rootInterface.get(ModelExtensionInterfaceInfo.class)));
+            ClassInfo rootInterface = iface.getRoot();
             ModelExtensionInfo modelExtensionInfo = modelExtensionMap.get(rootInterface);
             if (modelExtensionInfo == null) {
                 List<WeavableClassInfo> implementations = getImplementations(rootInterface);

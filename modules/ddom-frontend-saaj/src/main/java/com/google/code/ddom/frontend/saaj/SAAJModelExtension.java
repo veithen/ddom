@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,46 +18,46 @@ package com.google.code.ddom.frontend.saaj;
 import javax.xml.soap.SOAPConstants;
 
 import com.google.code.ddom.core.ext.SimpleModelExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11BodyExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11EnvelopeExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11FaultExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP11HeaderExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12BodyExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12EnvelopeExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12FaultExtension;
-import com.google.code.ddom.frontend.saaj.ext.SOAP12HeaderExtension;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Body;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Envelope;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Header;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Body;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Envelope;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Header;
 
 public class SAAJModelExtension extends SimpleModelExtension {
     public Class<?> mapElement(String namespaceURI, String localName) {
         if (localName.equals("Envelope")) {
             if (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(namespaceURI)) {
-                return SOAP11EnvelopeExtension.class;
+                return SAAJSOAP11Envelope.class;
             } else if (SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(namespaceURI)) {
-                return SOAP12EnvelopeExtension.class;
+                return SAAJSOAP12Envelope.class;
             } else {
                 return null;
             }
         } else if (localName.equals("Body")) {
             if (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(namespaceURI)) {
-                return SOAP11BodyExtension.class;
+                return SAAJSOAP11Body.class;
             } else if (SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(namespaceURI)) {
-                return SOAP12BodyExtension.class;
+                return SAAJSOAP12Body.class;
             } else {
                 return null;
             }
         } else if (localName.equals("Header")) {
             if (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(namespaceURI)) {
-                return SOAP11HeaderExtension.class;
+                return SAAJSOAP11Header.class;
             } else if (SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(namespaceURI)) {
-                return SOAP12HeaderExtension.class;
+                return SAAJSOAP12Header.class;
             } else {
                 return null;
             }
         } else if (localName.equals("Fault")) {
             if (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(namespaceURI)) {
-                return SOAP11FaultExtension.class;
+                return SAAJSOAP11Fault.class;
             } else if (SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(namespaceURI)) {
-                return SOAP12FaultExtension.class;
+                return SAAJSOAP12Fault.class;
             } else {
                 return null;
             }

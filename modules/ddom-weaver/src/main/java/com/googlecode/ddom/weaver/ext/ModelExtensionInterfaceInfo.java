@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@
 package com.googlecode.ddom.weaver.ext;
 
 import com.googlecode.ddom.weaver.reactor.NonWeavableClassInfo;
+import com.googlecode.ddom.weaver.realm.ClassInfo;
 
 class ModelExtensionInterfaceInfo {
     private final NonWeavableClassInfo classInfo;
     private final boolean isAbstract;
+    private final ClassInfo parent;
     
-    ModelExtensionInterfaceInfo(NonWeavableClassInfo classInfo, boolean isAbstract) {
+    ModelExtensionInterfaceInfo(NonWeavableClassInfo classInfo, boolean isAbstract, ClassInfo parent) {
         this.classInfo = classInfo;
         this.isAbstract = isAbstract;
+        this.parent = parent;
     }
 
     NonWeavableClassInfo getClassInfo() {
@@ -32,5 +35,14 @@ class ModelExtensionInterfaceInfo {
 
     boolean isAbstract() {
         return isAbstract;
+    }
+
+    ClassInfo getParent() {
+        return parent;
+    }
+    
+    ClassInfo getRoot() {
+        ModelExtensionInterfaceInfo parentInfo = parent.get(ModelExtensionInterfaceInfo.class);
+        return parentInfo == null ? parent : parentInfo.getRoot();
     }
 }
