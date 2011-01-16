@@ -27,6 +27,7 @@ import org.apache.axiom.ts.soap.envelope.TestBodyHeaderOrder;
 import org.apache.axiom.ts.soap.envelope.TestDiscardHeader;
 import org.apache.axiom.ts.soap.envelope.TestGetBodyWithParser;
 import org.apache.axiom.ts.soap.envelope.TestGetHeaderWithParser;
+import org.apache.axiom.ts.soap.factory.TestGetDefaultFaultEnvelope;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
 import org.apache.axiom.ts.soap12.envelope.TestAddElementAfterBody;
 
@@ -52,6 +53,9 @@ public class ImplementationTest extends TestCase {
         // TODO: this requires some more thinking
         builder.exclude(TestBodyHeaderOrder.class);
         builder.exclude(TestAddElementAfterBody.class);
+        
+        // TODO
+        builder.exclude(TestGetDefaultFaultEnvelope.class);
         
         return builder.build();
     }

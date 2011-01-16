@@ -66,6 +66,16 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return env;
     }
 
+    public final SOAPEnvelope getDefaultFaultEnvelope() throws SOAPProcessingException {
+        // TODO
+        SOAPEnvelope defaultEnvelope = getDefaultEnvelope();
+        SOAPFault fault = createSOAPFault(defaultEnvelope.getBody());
+//        createSOAPFaultCode(fault);
+//        createSOAPFaultReason(fault);
+        createSOAPFaultDetail(fault);
+        return defaultEnvelope;
+    }
+
     public final SOAPEnvelope createSOAPEnvelope() throws SOAPProcessingException {
         AxiomSOAPEnvelope element = (AxiomSOAPEnvelope)nodeFactory.createElement(null,
                 soapVersionEx.getSOAPEnvelopeExtension(), soapVersionEx.getEnvelopeURI(),
@@ -437,14 +447,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPMessage(org.apache.axiom.soap.SOAPEnvelope, org.apache.axiom.om.OMXMLParserWrapper)
      */
     public SOAPMessage createSOAPMessage(SOAPEnvelope envelope, OMXMLParserWrapper parserWrapper) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#getDefaultFaultEnvelope()
-     */
-    public SOAPEnvelope getDefaultFaultEnvelope() throws SOAPProcessingException {
         // TODO
         throw new UnsupportedOperationException();
     }
