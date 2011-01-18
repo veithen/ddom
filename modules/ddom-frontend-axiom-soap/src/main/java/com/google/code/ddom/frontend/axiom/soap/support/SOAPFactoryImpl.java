@@ -37,7 +37,9 @@ import org.apache.axiom.soap.SOAPMessage;
 import org.apache.axiom.soap.SOAPProcessingException;
 import org.apache.axiom.soap.SOAPVersion;
 
+import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
@@ -79,12 +81,18 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return defaultEnvelope;
     }
 
-    public final SOAPEnvelope createSOAPEnvelope() throws SOAPProcessingException {
-        AxiomSOAPEnvelope element = nodeFactory.createElement(null,
-                soapVersionEx.getSOAPEnvelopeClass(), soapVersionEx.getEnvelopeURI(),
-                SOAPConstants.SOAPENVELOPE_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+    private <T extends AxiomElement> T createElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) {
+        T element = nodeFactory.createElement(null, extensionInterface, namespaceURI, localName, prefix);
         element.setOMFactory(this);
+        if (namespaceURI != null) {
+            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+        }
         return element;
+    }
+    
+    public final SOAPEnvelope createSOAPEnvelope() throws SOAPProcessingException {
+        return createElement(soapVersionEx.getSOAPEnvelopeClass(), soapVersionEx.getEnvelopeURI(),
+                SOAPConstants.SOAPENVELOPE_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
     }
 
     public SOAPEnvelope createSOAPEnvelope(OMNamespace ns) {
@@ -127,11 +135,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFault createSOAPFault() throws SOAPProcessingException {
-        AxiomSOAPFault element = nodeFactory.createElement(null,
-                soapVersionEx.getSOAPFaultClass(), soapVersionEx.getEnvelopeURI(),
+        return createElement(soapVersionEx.getSOAPFaultClass(), soapVersionEx.getEnvelopeURI(),
                 SOAPConstants.BODY_FAULT_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-        element.setOMFactory(this);
-        return element;
     }
 
     public final SOAPFault createSOAPFault(SOAPBody body) throws SOAPProcessingException {
@@ -239,11 +244,8 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFaultDetail createSOAPFaultDetail() throws SOAPProcessingException {
-        AxiomSOAPFaultDetail detail = nodeFactory.createElement(null,
-                soapVersionEx.getSOAPFaultDetailClass(), soapVersionEx.getEnvelopeURI(),
+        return createElement(soapVersionEx.getSOAPFaultDetailClass(), soapVersionEx.getEnvelopeURI(),
                 soapVersionEx.getSOAPVersion().getFaultDetailQName().getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-        detail.setOMFactory(this);
-        return detail;
     }
 
     public final SOAPFaultDetail createSOAPFaultDetail(SOAPFault fault) throws SOAPProcessingException {

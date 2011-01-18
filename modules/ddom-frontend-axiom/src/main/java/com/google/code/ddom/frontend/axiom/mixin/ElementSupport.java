@@ -159,11 +159,40 @@ public abstract class ElementSupport implements AxiomElement {
         }
     }
 
-    public QName getTextAsQName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final QName getTextAsQName() {
+        try {
+            return resolveQName(coreGetTextContent());
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
+    public final QName resolveQName(String qname) {
+        try {
+            String prefix;
+            String localName;
+            int colonIndex = qname.indexOf(':');
+            if (colonIndex == -1) {
+                prefix = null;
+                localName = qname;
+            } else {
+                prefix = qname.substring(0, colonIndex);
+                localName = qname.substring(colonIndex+1);
+            }
+            // TODO: we don't cover the case where prefix is not null, but also not bound
+            String namespaceURI = coreLookupNamespaceURI(prefix, true);
+            if (namespaceURI == null) {
+                return new QName(localName);
+            } else if (prefix == null) {
+                return new QName(namespaceURI, localName);
+            } else {
+                return new QName(namespaceURI, localName, prefix);
+            }
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
     }
@@ -220,11 +249,6 @@ public abstract class ElementSupport implements AxiomElement {
         return coreGetAttributesByType(AxiomNamespaceDeclaration.class, NamespaceDeclarationMapper.INSTANCE);
     }
     
-    public QName resolveQName(String qname) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public final int getType() {
         return OMNode.ELEMENT_NODE;
     }
