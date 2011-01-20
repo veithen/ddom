@@ -333,7 +333,10 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
                     flushPendingText();
                 }
             }
-            modelExtensionMapper.endElement(); // TODO: not entirely correct
+            // TODO: this only applies to namespace aware elements!
+            if (nodeType == ELEMENT) {
+                modelExtensionMapper.endElement();
+            }
             parent.internalSetComplete(true);
             pop = true;
         } else {

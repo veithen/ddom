@@ -15,42 +15,51 @@
  */
 package com.google.code.ddom.frontend.axiom.soap;
 
+import org.apache.axiom.soap.SOAPConstants;
+
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Envelope;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Envelope;
+import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
 // TODO: this should only be used if a plain OMFactory is used; however, it is always used
 public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
-    private static final String SOAP11_NAMESPACE_URI = "http://schemas.xmlsoap.org/soap/envelope/";
-    private static final String SOAP12_NAMESPACE_URI = "http://www.w3.org/2003/05/soap-envelope";
+    private static final SOAPVersionEx[] SOAP_VERSIONS = { SOAPVersionEx.SOAP11, SOAPVersionEx.SOAP12 };
     
     private int depth;
-    private String soapNamespaceURI;
-    private boolean isSoap12;
+    private SOAPVersionEx version;
+    private boolean inBody;
     
     public Class<?> startElement(String namespaceURI, String localName) {
-        switch (depth++) {
-            case 0:
-                if (namespaceURI == null) {
-                    // TODO
-                    return null;
-                } else if (namespaceURI.equals(SOAP11_NAMESPACE_URI)) {
-                    soapNamespaceURI = namespaceURI;
-                    isSoap12 = false;
-                } else if (namespaceURI.equals(SOAP12_NAMESPACE_URI)) {
-                    soapNamespaceURI = namespaceURI;
-                    isSoap12 = true;
+        depth++;
+        if (depth == 1) {
+            if (namespaceURI != null && localName.equals(SOAPConstants.SOAPENVELOPE_LOCAL_NAME)) {
+                for (SOAPVersionEx candidate : SOAP_VERSIONS) {
+                    if (candidate.getEnvelopeURI().equals(namespaceURI)) {
+                        version = candidate;
+                        return version.getSOAPEnvelopeClass();
+                    }
+                }
+            }
+        } else if (version != null) {
+            if (depth == 2) {
+                if (version.getEnvelopeURI().equals(namespaceURI)) {
+                    if (localName.equals(SOAPConstants.HEADER_LOCAL_NAME)) {
+                        return version.getSOAPHeaderClass();
+                    } else if (localName.equals(SOAPConstants.BODY_LOCAL_NAME)) {
+                        inBody = true;
+                        return version.getSOAPBodyClass();
+                    }
+                }
+            } else if (depth == 3) {
+                if (inBody) {
+                    if (localName.equals(SOAPConstants.BODY_FAULT_LOCAL_NAME)) {
+                        return version.getSOAPFaultClass();
+                    }
                 } else {
-                    // TODO
-                    return null;
+                    
                 }
-                if (!localName.equals("Envelope")) {
-                    throw new RuntimeException(); // TODO
-                }
-                return isSoap12 ? AxiomSOAP12Envelope.class : AxiomSOAP11Envelope.class;
-            default:
-                return null;
+            }
         }
+        return null;
     }
 
     public void endElement() {
