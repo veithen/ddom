@@ -15,7 +15,11 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.mixin;
 
+import org.apache.axiom.om.OMFactory;
+
 import com.google.code.ddom.frontend.Mixin;
+import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Body;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Envelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Fault;
@@ -29,8 +33,12 @@ import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
 @Mixin({AxiomSOAP11Body.class, AxiomSOAP11Envelope.class, AxiomSOAP11Fault.class, AxiomSOAP11FaultCode.class,
         AxiomSOAP11FaultDetail.class, AxiomSOAP11FaultReason.class, AxiomSOAP11FaultRole.class, AxiomSOAP11Header.class})
-public abstract class SOAP11Support implements HasSOAPVersion {
+public abstract class SOAP11Support implements AxiomElement, HasSOAPVersion {
     public final SOAPVersionEx getSOAPVersionEx() {
         return SOAPVersionEx.SOAP11;
+    }
+    
+    public OMFactory getDefaultOMFactory() {
+        return ((AxiomNodeFactory)coreGetNodeFactory()).getSOAP11Factory();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,12 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.mixin;
 
+import javax.xml.stream.XMLStreamReader;
+
+import org.apache.axiom.om.OMXMLParserWrapper;
+import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
+import org.xml.sax.InputSource;
 
 import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.Mixin;
@@ -34,5 +39,15 @@ public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {
 
     public final SOAPFactory getSOAP12Factory() {
         return soap12Factory;
+    }
+
+    public final OMXMLParserWrapper createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {
+        // TODO: this only works because createOMBuilder may actually create a SOAP model
+        return createOMBuilder(null, configuration, is);
+    }
+
+    public final OMXMLParserWrapper createStAXSOAPModelBuilder(XMLStreamReader reader) {
+        // TODO: this only works because createStAXOMBuilder may actually create a SOAP model
+        return createStAXOMBuilder(null, reader);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,13 @@
  */
 package com.google.code.ddom.frontend.axiom.mixin;
 
-import java.io.InputStream;
-import java.io.Reader;
-
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
+import org.xml.sax.InputSource;
 
 import com.google.code.ddom.Options;
 import com.google.code.ddom.core.NodeFactory;
@@ -64,16 +62,10 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
         }
     }
     
-    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, InputStream in) {
+    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, InputSource is) {
         // TODO: we have currently no way to set the OMFactory!
         // TODO: translate configuration
-        return createBuilder(in);
-    }
-
-    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, Reader in) {
-        // TODO: we have currently no way to set the OMFactory!
-        // TODO: translate configuration
-        return createBuilder(in);
+        return createBuilder(is);
     }
 
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {

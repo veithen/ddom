@@ -64,6 +64,10 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return soapVersionEx.getSOAPVersion();
     }
     
+    public final String getSoapVersionURI() {
+        return soapVersionEx.getEnvelopeURI();
+    }
+
     public final SOAPEnvelope getDefaultEnvelope() throws SOAPProcessingException {
         SOAPEnvelope env = createSOAPEnvelope();
         createSOAPHeader(env);
@@ -460,14 +464,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#getNamespace()
      */
     public OMNamespace getNamespace() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#getSoapVersionURI()
-     */
-    public String getSoapVersionURI() {
         // TODO
         throw new UnsupportedOperationException();
     }
