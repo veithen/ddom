@@ -20,17 +20,11 @@ import junit.framework.TestSuite;
 
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.ts.SOAPTestSuiteBuilder;
-import org.apache.axiom.ts.soap.body.TestGetFaultWithParser;
-import org.apache.axiom.ts.soap.body.TestHasFaultWithParser;
 import org.apache.axiom.ts.soap.envelope.TestAddHeaderToIncompleteEnvelope;
 import org.apache.axiom.ts.soap.envelope.TestBodyHeaderOrder;
 import org.apache.axiom.ts.soap.envelope.TestDiscardHeader;
-import org.apache.axiom.ts.soap.envelope.TestGetBodyWithParser;
-import org.apache.axiom.ts.soap.envelope.TestGetHeaderWithParser;
 import org.apache.axiom.ts.soap.factory.TestGetDefaultFaultEnvelope;
-import org.apache.axiom.ts.soap.fault.TestGetCodeWithParser;
 import org.apache.axiom.ts.soap.fault.TestGetDetailWithParser;
-import org.apache.axiom.ts.soap.fault.TestGetReasonWithParser;
 import org.apache.axiom.ts.soap.fault.TestGetRoleWithParser;
 import org.apache.axiom.ts.soap.fault.TestSetDetail;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
@@ -49,18 +43,12 @@ public class ImplementationTest extends TestCase {
         DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
         OMMetaFactory metaFactory = documentHelper.getAPIObject(ModelDefinitionBuilder.buildModelDefinition("axiom-soap"), OMMetaFactory.class);
         SOAPTestSuiteBuilder builder = new SOAPTestSuiteBuilder(metaFactory);
-        
-        // TODO: Axiom test suite doesn't use OMXMLBuilderFactory here
-        builder.exclude(TestGetFaultWithParser.class);
-        builder.exclude(TestHasFaultWithParser.class);
+
+        // TODO
         builder.exclude(TestAddHeaderToIncompleteEnvelope.class);
         builder.exclude(TestDiscardHeader.class);
-        builder.exclude(TestGetBodyWithParser.class);
-        builder.exclude(TestGetHeaderWithParser.class);
         builder.exclude(TestGetAllDetailEntriesWithParser.class);
-        builder.exclude(TestGetCodeWithParser.class);
         builder.exclude(TestGetDetailWithParser.class);
-        builder.exclude(TestGetReasonWithParser.class);
         builder.exclude(TestGetRoleWithParser.class);
         builder.exclude(TestGetNodeWithParser.class);
         

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
  */
 package com.googlecode.ddom.axiom;
 
-import java.io.InputStream;
-import java.io.Reader;
-
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axiom.om.OMFactory;
@@ -25,6 +22,7 @@ import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
+import org.xml.sax.InputSource;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
@@ -53,15 +51,19 @@ public final class OMMetaFactoryImpl implements OMMetaFactory {
         return metaFactory.getSOAP12Factory();
     }
 
-    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, InputStream in) {
-        return metaFactory.createOMBuilder(omFactory, configuration, in);
-    }
-
-    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, Reader in) {
-        return metaFactory.createOMBuilder(omFactory, configuration, in);
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, InputSource is) {
+        return metaFactory.createOMBuilder(omFactory, configuration, is);
     }
 
     public OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
         return metaFactory.createStAXOMBuilder(omFactory, parser);
+    }
+
+    public OMXMLParserWrapper createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {
+        return metaFactory.createSOAPModelBuilder(configuration, is);
+    }
+
+    public OMXMLParserWrapper createStAXSOAPModelBuilder(XMLStreamReader reader) {
+        return metaFactory.createStAXSOAPModelBuilder(reader);
     }
 }
