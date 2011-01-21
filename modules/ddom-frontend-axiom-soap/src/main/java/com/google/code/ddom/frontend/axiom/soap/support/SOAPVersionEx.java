@@ -32,6 +32,7 @@ import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultDetail;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultReason;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Header;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11HeaderBlock;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Body;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Envelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Fault;
@@ -40,6 +41,7 @@ import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultDetail;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultReason;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12HeaderBlock;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
@@ -48,6 +50,7 @@ import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 
 public abstract class SOAPVersionEx {
     public static final SOAPVersionEx SOAP11 = new SOAPVersionEx(
@@ -71,6 +74,11 @@ public abstract class SOAPVersionEx {
         @Override
         public Class<? extends AxiomSOAPHeader> getSOAPHeaderClass() {
             return AxiomSOAP11Header.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPHeaderBlock> getSOAPHeaderBlockClass() {
+            return AxiomSOAP11HeaderBlock.class;
         }
 
         @Override
@@ -125,6 +133,11 @@ public abstract class SOAPVersionEx {
         @Override
         public Class<? extends AxiomSOAPHeader> getSOAPHeaderClass() {
             return AxiomSOAP12Header.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPHeaderBlock> getSOAPHeaderBlockClass() {
+            return AxiomSOAP12HeaderBlock.class;
         }
 
         @Override
@@ -186,6 +199,7 @@ public abstract class SOAPVersionEx {
 
     public abstract Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass();
     public abstract Class<? extends AxiomSOAPHeader> getSOAPHeaderClass();
+    public abstract Class<? extends AxiomSOAPHeaderBlock> getSOAPHeaderBlockClass();
     public abstract Class<? extends AxiomSOAPBody> getSOAPBodyClass();
     public abstract Class<? extends AxiomSOAPFault> getSOAPFaultClass();
     public abstract Class<? extends AxiomSOAPFaultCode> getSOAPFaultCodeClass();

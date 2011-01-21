@@ -22,6 +22,6 @@ import com.google.code.ddom.core.ext.ModelExtensionInterface;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 
 @ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
-public interface AxiomSOAPHeader extends AxiomElement, SOAPHeader {
+public interface AxiomSOAPHeader extends AxiomElement, SOAPHeader, HasSOAPVersion {
 
 }

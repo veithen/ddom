@@ -15,25 +15,72 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.mixin;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axiom.soap.SOAPConstants;
 import org.apache.axiom.soap.SOAPProcessingException;
 import org.apache.axiom.soap.SOAPVersion;
 
+import com.google.code.ddom.core.CoreAttribute;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
+import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(AxiomSOAPHeaderBlock.class)
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
-    public boolean getMustUnderstand() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    private void setAttributeValue(QName qname, String value) {
+        coreSetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
+    }
+    
+    public final String getRole() {
+        return getAttributeValue(getSOAPVersionEx().getSOAPVersion().getRoleAttributeQName());
+    }
+
+    public final void setRole(String roleURI) {
+        setAttributeValue(getSOAPVersionEx().getSOAPVersion().getRoleAttributeQName(), roleURI);
+    }
+
+    public final boolean getMustUnderstand() throws SOAPProcessingException {
+        try {
+            CoreAttribute attr = coreGetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND);
+            if (attr == null) {
+                return false;
+            } else {
+                String value = attr.coreGetTextContent();
+                if (value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE) || value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_1)) {
+                    return true;
+                } else if (value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE) || value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_0)) {
+                    return false;
+                } else {
+                    throw new SOAPProcessingException("Invalid value for mustUnderstand attribute");
+                }
+            }
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void setMustUnderstand(boolean mustUnderstand) {
+        coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
+                SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX,
+                mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE : SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE);
+    }
+
+    public final void setMustUnderstand(String mustUnderstand) throws SOAPProcessingException {
+        if (SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE.equals(mustUnderstand) ||
+                SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE.equals(mustUnderstand) ||
+                SOAPConstants.ATTR_MUSTUNDERSTAND_0.equals(mustUnderstand) ||
+                SOAPConstants.ATTR_MUSTUNDERSTAND_1.equals(mustUnderstand)) {
+            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
+                    SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, mustUnderstand);
+        } else {
+            throw new SOAPProcessingException("mustUndertand must be one of \"true\", \"false\", \"0\" or \"1\"");
+        }
     }
 
     public boolean getRelay() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public String getRole() {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -48,27 +95,12 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
         throw new UnsupportedOperationException();
     }
 
-    public void setMustUnderstand(boolean mustUnderstand) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setMustUnderstand(String mustUnderstand) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public void setProcessed() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     public void setRelay(boolean relay) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setRole(String roleURI) {
         // TODO
         throw new UnsupportedOperationException();
     }

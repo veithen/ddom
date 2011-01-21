@@ -28,11 +28,13 @@ import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultDetail;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultReason;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12HeaderBlock;
 import com.google.code.ddom.frontend.axiom.soap.intf.HasSOAPVersion;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 
 @Mixin({AxiomSOAP12Body.class, AxiomSOAP12Envelope.class, AxiomSOAP12Fault.class, AxiomSOAP12FaultCode.class,
-        AxiomSOAP12FaultDetail.class, AxiomSOAP12FaultReason.class, AxiomSOAP12FaultRole.class, AxiomSOAP12Header.class})
+        AxiomSOAP12FaultDetail.class, AxiomSOAP12FaultReason.class, AxiomSOAP12FaultRole.class,
+        AxiomSOAP12Header.class, AxiomSOAP12HeaderBlock.class})
 public abstract class SOAP12Support implements AxiomElement, HasSOAPVersion {
     public final SOAPVersionEx getSOAPVersionEx() {
         return SOAPVersionEx.SOAP12;

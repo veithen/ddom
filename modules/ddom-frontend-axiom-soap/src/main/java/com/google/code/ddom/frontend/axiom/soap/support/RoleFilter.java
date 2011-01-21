@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.soap.intf;
+package com.google.code.ddom.frontend.axiom.soap.support;
 
-import org.apache.axiom.soap.SOAPHeaderBlock;
+import com.google.code.ddom.collections.Filter;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.ext.ModelExtensionInterface;
-import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+public class RoleFilter implements Filter<AxiomSOAPHeaderBlock> {
+    private final String role;
+    
+    public RoleFilter(String role) {
+        this.role = role;
+    }
 
-@ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
-public interface AxiomSOAPHeaderBlock extends AxiomElement, SOAPHeaderBlock, HasSOAPVersion {
-
+    public boolean accept(AxiomSOAPHeaderBlock item) {
+        return role.equals(item.getRole());
+    }
 }

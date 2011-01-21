@@ -18,34 +18,65 @@ package com.google.code.ddom.frontend.axiom.soap.mixin;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.soap.RolePlayer;
 import org.apache.axiom.soap.SOAPHeaderBlock;
 
+import com.google.code.ddom.collections.FilteredIterator;
+import com.google.code.ddom.core.Axis;
+import com.google.code.ddom.core.CoreChildNode;
+import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
+import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
+import com.google.code.ddom.frontend.axiom.soap.support.RoleFilter;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.google.code.ddom.frontend.axiom.support.NSUtil;
 
 @Mixin(AxiomSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
-    public SOAPHeaderBlock addHeaderBlock(String localName, OMNamespace ns) throws OMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPHeaderBlock addHeaderBlock(String localName, OMNamespace ns) {
+        try {
+            return coreAppendElement(getSOAPVersionEx().getSOAPHeaderBlockClass(), NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
-    public Iterator examineAllHeaderBlocks() {
-        // TODO
-        throw new UnsupportedOperationException();
+    // TODO: is remove supposed to work?
+    public final Iterator examineAllHeaderBlocks() {
+        return coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class);
     }
 
-    public Iterator examineHeaderBlocks(String role) {
-        // TODO
-        throw new UnsupportedOperationException();
+    // TODO: is remove supposed to work?
+    public final Iterator examineHeaderBlocks(String role) {
+        return new FilteredIterator<AxiomSOAPHeaderBlock>(
+                coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class), new RoleFilter(role));
     }
 
+    // TODO: is remove supposed to work?
     public Iterator examineMustUnderstandHeaderBlocks(String role) {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final ArrayList getHeaderBlocksWithNSURI(String nsURI) {
+        try {
+            ArrayList<AxiomSOAPHeaderBlock> result = new ArrayList<AxiomSOAPHeaderBlock>();
+            CoreChildNode child = coreGetFirstChild();
+            while (child != null) {
+                if (child instanceof AxiomSOAPHeaderBlock) {
+                    AxiomSOAPHeaderBlock headerBlock = (AxiomSOAPHeaderBlock)child;
+                    if (nsURI.equals(headerBlock.coreGetNamespaceURI())) {
+                        result.add(headerBlock);
+                    }
+                }
+                child = child.coreGetNextSibling();
+            }
+            return result;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public Iterator extractAllHeaderBlocks() {
@@ -54,11 +85,6 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
     }
 
     public Iterator extractHeaderBlocks(String role) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public ArrayList getHeaderBlocksWithNSURI(String nsURI) {
         // TODO
         throw new UnsupportedOperationException();
     }

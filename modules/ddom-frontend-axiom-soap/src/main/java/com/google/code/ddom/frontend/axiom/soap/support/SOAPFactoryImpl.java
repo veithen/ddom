@@ -121,6 +121,30 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         }
     }
 
+    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns) throws SOAPProcessingException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, SOAPHeader parent) throws SOAPProcessingException {
+        return parent.addHeaderBlock(localName, ns);
+    }
+
+    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, OMDataSource ds)
+            throws SOAPProcessingException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axiom.soap.SOAPFactory#createSOAPHeaderBlock(java.lang.String, org.apache.axiom.om.OMNamespace, org.apache.axiom.soap.SOAPHeader, org.apache.axiom.om.OMXMLParserWrapper)
+     */
+    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns,
+            SOAPHeader parent, OMXMLParserWrapper builder) throws SOAPProcessingException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
     public SOAPBody createSOAPBody() throws SOAPProcessingException {
         // TODO
         throw new UnsupportedOperationException();
@@ -396,42 +420,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultValue(org.apache.axiom.soap.SOAPFaultSubCode, org.apache.axiom.om.OMXMLParserWrapper)
      */
     public SOAPFaultValue createSOAPFaultValue(SOAPFaultSubCode parent, OMXMLParserWrapper builder) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPHeaderBlock(java.lang.String, org.apache.axiom.om.OMNamespace)
-     */
-    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns)
-            throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPHeaderBlock(java.lang.String, org.apache.axiom.om.OMNamespace, org.apache.axiom.soap.SOAPHeader)
-     */
-    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, SOAPHeader parent)
-            throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPHeaderBlock(java.lang.String, org.apache.axiom.om.OMNamespace, org.apache.axiom.om.OMDataSource)
-     */
-    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, OMDataSource ds)
-            throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPHeaderBlock(java.lang.String, org.apache.axiom.om.OMNamespace, org.apache.axiom.soap.SOAPHeader, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns,
-            SOAPHeader parent, OMXMLParserWrapper builder) throws SOAPProcessingException {
         // TODO
         throw new UnsupportedOperationException();
     }
