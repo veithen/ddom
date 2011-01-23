@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend.axiom.testsuite;
+package com.google.code.ddom.frontend.axiom;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.ts.OMTestSuiteBuilder;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
@@ -25,11 +26,16 @@ import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 
-import com.google.code.ddom.frontend.axiom.DDOMAxiomUtil;
+import com.google.code.ddom.DocumentHelper;
+import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+
 
 public class ImplementationTest extends TestCase {
     public static TestSuite suite() {
-        OMTestSuiteBuilder builder = new OMTestSuiteBuilder(DDOMAxiomUtil.INSTANCE.getMetaFactory());
+        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
+        OMMetaFactory metaFactory = documentHelper.getAPIObject(ModelDefinitionBuilder.buildModelDefinition("axiom"), OMMetaFactory.class);
+        OMTestSuiteBuilder builder = new OMTestSuiteBuilder(metaFactory);
         // TODO
         builder.exclude(TestSetTextQName.class);
         builder.exclude(TestInsertSiblingAfterLastChild.class);
