@@ -26,16 +26,15 @@ import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
-
+import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.ModelRegistry;
 
 public class ImplementationTest extends TestCase {
-    public static TestSuite suite() {
-        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
-        OMMetaFactory metaFactory = documentHelper.getAPIObject(ModelDefinitionBuilder.buildModelDefinition("axiom"), OMMetaFactory.class);
-        OMTestSuiteBuilder builder = new OMTestSuiteBuilder(metaFactory);
+    public static TestSuite suite() throws Exception {
+        ModelRegistry modelRegistry = ModelRegistry.getInstance(ImplementationTest.class.getClassLoader());
+        Model model = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("axiom"));
+        OMTestSuiteBuilder builder = new OMTestSuiteBuilder((OMMetaFactory)model.getNodeFactory());
         // TODO
         builder.exclude(TestSetTextQName.class);
         builder.exclude(TestInsertSiblingAfterLastChild.class);

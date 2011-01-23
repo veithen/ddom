@@ -24,19 +24,21 @@ import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.ModelLoaderException;
+import com.google.code.ddom.spi.model.ModelRegistry;
 
 public final class OMMetaFactoryImpl implements OMMetaFactory {
     private static final ModelDefinition modelDefinition = ModelDefinitionBuilder.buildModelDefinition("axiom-soap");
     
     private final OMMetaFactory metaFactory;
     
-    public OMMetaFactoryImpl() {
-        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(OMMetaFactoryImpl.class.getClassLoader());
-        metaFactory = documentHelper.getAPIObject(modelDefinition, OMMetaFactory.class);
+    public OMMetaFactoryImpl() throws ModelLoaderException {
+        ModelRegistry modelRegistry = ModelRegistry.getInstance(OMMetaFactoryImpl.class.getClassLoader());
+        Model model = modelRegistry.getModel(modelDefinition);
+        metaFactory = (OMMetaFactory)model.getNodeFactory();
     }
 
     public OMFactory getOMFactory() {

@@ -37,15 +37,15 @@ import org.apache.axiom.ts.soap12.fault.TestGetNodeWithParser;
 import org.apache.axiom.ts.soap12.fault.TestMoreChildrenAddition;
 import org.apache.axiom.ts.soap12.fault.TestSetNode;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.ModelRegistry;
 
 public class ImplementationTest extends TestCase {
-    public static TestSuite suite() {
-        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
-        OMMetaFactory metaFactory = documentHelper.getAPIObject(ModelDefinitionBuilder.buildModelDefinition("axiom-soap"), OMMetaFactory.class);
-        SOAPTestSuiteBuilder builder = new SOAPTestSuiteBuilder(metaFactory);
+    public static TestSuite suite() throws Exception {
+        ModelRegistry modelRegistry = ModelRegistry.getInstance(ImplementationTest.class.getClassLoader());
+        Model model = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("axiom-soap"));
+        SOAPTestSuiteBuilder builder = new SOAPTestSuiteBuilder((OMMetaFactory)model.getNodeFactory());
 
         // TODO
         builder.exclude(TestAddHeaderToIncompleteEnvelope.class);

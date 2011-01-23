@@ -24,8 +24,6 @@ import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
-import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
-import com.google.code.ddom.frontend.axiom.support.APIObjectFactoryImpl;
 import com.google.code.ddom.spi.Provider;
 
 @Provider(name="axiom")
@@ -46,6 +44,6 @@ public class AxiomFrontend implements Frontend {
     }
 
     public APIObjectFactory getAPIObjectFactory(NodeFactory nodeFactory) {
-        return new APIObjectFactoryImpl((AxiomNodeFactory)nodeFactory);
+        return null;
     }
 }
