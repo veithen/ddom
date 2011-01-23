@@ -25,7 +25,7 @@ import org.apache.cxf.phase.Phase;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
-import com.google.code.ddom.spi.model.ModelLoaderRegistry;
+import com.google.code.ddom.spi.model.ModelRegistry;
 
 public class SAAJInInterceptor extends AbstractSoapInterceptor {
     private final Model saajModel;
@@ -33,7 +33,7 @@ public class SAAJInInterceptor extends AbstractSoapInterceptor {
     public SAAJInInterceptor(String phase) {
         super(phase);
         try {
-            saajModel = ModelLoaderRegistry.getInstance(SAAJInInterceptor.class.getClassLoader()).getModel(ModelDefinitionBuilder.buildModelDefinition("saaj"));
+            saajModel = ModelRegistry.getInstance(SAAJInInterceptor.class.getClassLoader()).getModel(ModelDefinitionBuilder.buildModelDefinition("saaj"));
         } catch (ModelLoaderException ex) {
             throw new RuntimeException(ex); // TODO: what is the right exception to throw here??
         }

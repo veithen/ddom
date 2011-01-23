@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,30 +26,35 @@ import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
 
-public class ModelLoaderRegistry {
-    private static final ClassLoaderLocal<ModelLoaderRegistry> registries = new ClassLoaderLocal<ModelLoaderRegistry>();
+/**
+ * Maps {@link ModelDefinition} instances to {@link Model} instances.
+ * 
+ * @author Andreas Veithen
+ */
+public class ModelRegistry {
+    private static final ClassLoaderLocal<ModelRegistry> registries = new ClassLoaderLocal<ModelRegistry>();
     
     private final Map<String,ModelLoader> loaders;
     private final Map<ModelDefinition,Model> modelCache = new ConcurrentHashMap<ModelDefinition,Model>();
 
-    private ModelLoaderRegistry(Map<String,ModelLoader> loaders) {
+    private ModelRegistry(Map<String,ModelLoader> loaders) {
         this.loaders = loaders;
     }
     
-    public static ModelLoaderRegistry getInstance(ClassLoader classLoader) {
-        ModelLoaderRegistry registry = registries.get(classLoader);
+    public static ModelRegistry getInstance(ClassLoader classLoader) {
+        ModelRegistry registry = registries.get(classLoader);
         if (registry == null) {
             Map<String,ModelLoader> loaders = new HashMap<String,ModelLoader>();
             for (Map.Entry<String,ModelLoaderFactory> entry : ProviderFinder.find(classLoader, ModelLoaderFactory.class).entrySet()) {
                 loaders.put(entry.getKey(), entry.getValue().createModelLoader(classLoader));
             }
-            registry = new ModelLoaderRegistry(loaders);
+            registry = new ModelRegistry(loaders);
             registries.put(classLoader, registry);
         }
         return registry;
     }
 
-    public static ModelLoaderRegistry getInstance() throws ProviderFinderException {
+    public static ModelRegistry getInstance() throws ProviderFinderException {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
                 return Thread.currentThread().getContextClassLoader();
@@ -57,15 +62,25 @@ public class ModelLoaderRegistry {
         }));
     }
     
-    public Model getModel(ModelDefinition modelDefinition) throws ModelLoaderException {
-        Model model = modelCache.get(modelDefinition);
+    /**
+     * Get a {@link Model} instance for a given definition. This method will either return an
+     * previously instantiated model with the same definition or locate an appropriate
+     * {@link ModelLoader} to create a new instance.
+     * 
+     * @param definition
+     *            the model definition
+     * @return the model
+     * @throws ModelLoaderException
+     */
+    public Model getModel(ModelDefinition definition) throws ModelLoaderException {
+        Model model = modelCache.get(definition);
         if (model == null) {
             if (loaders.isEmpty()) {
                 throw new ModelLoaderException("Unable to create model; no model loaders have been registered");
             }
             for (ModelLoader loader : loaders.values()) {
                 try {
-                    model = loader.loadModel(modelDefinition);
+                    model = loader.loadModel(definition);
                     if (model != null) {
                         break;
                     }
@@ -78,7 +93,7 @@ public class ModelLoaderRegistry {
             if (model == null) {
                 throw new ModelLoaderException("Unable to create model; none of the registered model loaders (" + loaders.keySet() + ") was able to load the model");
             }
-            modelCache.put(modelDefinition, model);
+            modelCache.put(definition, model);
         }
         return model;
     }

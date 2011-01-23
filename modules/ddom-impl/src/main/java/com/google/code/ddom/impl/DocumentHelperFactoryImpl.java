@@ -17,7 +17,7 @@ package com.google.code.ddom.impl;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
-import com.google.code.ddom.spi.model.ModelLoaderRegistry;
+import com.google.code.ddom.spi.model.ModelRegistry;
 import com.google.code.ddom.stream.spi.StreamFactory;
 
 public class DocumentHelperFactoryImpl extends DocumentHelperFactory {
@@ -29,11 +29,11 @@ public class DocumentHelperFactoryImpl extends DocumentHelperFactory {
     
     @Override
     public DocumentHelper newInstance(ClassLoader classLoader) {
-        return new DocumentHelperImpl(ModelLoaderRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
+        return new DocumentHelperImpl(ModelRegistry.getInstance(classLoader), StreamFactory.getInstance(classLoader));
     }
     
     @Override
     public DocumentHelper newInstance() {
-        return new DocumentHelperImpl(ModelLoaderRegistry.getInstance(), StreamFactory.getInstance());
+        return new DocumentHelperImpl(ModelRegistry.getInstance(), StreamFactory.getInstance());
     }
 }

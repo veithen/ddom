@@ -26,7 +26,7 @@ import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
-import com.google.code.ddom.spi.model.ModelLoaderRegistry;
+import com.google.code.ddom.spi.model.ModelRegistry;
 import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
@@ -34,17 +34,17 @@ import com.google.code.ddom.stream.spi.XmlInput;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
 public class DocumentHelperImpl implements DocumentHelper {
-    private final ModelLoaderRegistry modelLoaderRegistry;
+    private final ModelRegistry modelRegistry;
     private final StreamFactory streamFactory;
     
-    DocumentHelperImpl(ModelLoaderRegistry modelLoaderRegistry, StreamFactory streamFactory) {
-        this.modelLoaderRegistry = modelLoaderRegistry;
+    DocumentHelperImpl(ModelRegistry modelRegistry, StreamFactory streamFactory) {
+        this.modelRegistry = modelRegistry;
         this.streamFactory = streamFactory;
     }
     
     public Object newDocument(ModelDefinition modelDefinition) {
         try {
-            Model model = modelLoaderRegistry.getModel(modelDefinition);
+            Model model = modelRegistry.getModel(modelDefinition);
             return model.getNodeFactory().createDocument();
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
@@ -60,7 +60,7 @@ public class DocumentHelperImpl implements DocumentHelper {
         // TODO: check for null here!
         Model model;
         try {
-            model = modelLoaderRegistry.getModel(modelDefinition);
+            model = modelRegistry.getModel(modelDefinition);
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
         }
@@ -118,7 +118,7 @@ public class DocumentHelperImpl implements DocumentHelper {
     
     public <T> T getAPIObject(ModelDefinition modelDefinition, Class<T> clazz) {
         try {
-            APIObjectFactory apiObjectFactory = modelLoaderRegistry.getModel(modelDefinition).getAPIObjectFactory();
+            APIObjectFactory apiObjectFactory = modelRegistry.getModel(modelDefinition).getAPIObjectFactory();
             return apiObjectFactory == null ? null : clazz.cast(apiObjectFactory.getAPIObject(clazz));
         } catch (ModelLoaderException ex) {
             throw new DocumentHelperException(ex);
