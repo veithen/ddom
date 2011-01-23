@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
  */
 package com.googlecode.ddom.saaj;
 
+import static org.junit.Assert.assertEquals;
+
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -37,6 +39,28 @@ public class SOAPMessageTest {
         SOAPMessage message = factory.createMessage();
         message.createAttachmentPart();
         // The attachment part is not added to the message
-        Assert.assertEquals(0, message.countAttachments());
+        assertEquals(0, message.countAttachments());
+    }
+    
+    @Validated @Test
+    public void testGetSetCharacterSetEncoding() throws Exception {
+        SOAPMessage message = factory.createMessage();
+        String encoding = "ISO-8859-15";
+        message.setProperty(SOAPMessage.CHARACTER_SET_ENCODING, encoding);
+        assertEquals(encoding, message.getProperty(SOAPMessage.CHARACTER_SET_ENCODING));
+    }
+    
+    /**
+     * Tests that calling {@link SOAPMessage#setProperty(String, Object)} doesn't throw an exception
+     * for unknown property names. Although that the Javadoc of that method suggests that a
+     * {@link SOAPException} should be thrown, this is not the case for the reference
+     * implementation.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testSetPropertyUnknown() throws Exception {
+        SOAPMessage message = factory.createMessage();
+        message.setProperty("some.unknown.property", "test");
     }
 }
