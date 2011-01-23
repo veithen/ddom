@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.google.code.ddom.Options;
 import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.core.CoreDocumentFragment;
 import com.google.code.ddom.core.NodeFactory;
-import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
 
@@ -54,7 +53,7 @@ public class BackendTestCase extends TestCase {
     protected final CoreDocument parse(String xml) {
         CoreDocument document = nodeFactory.createDocument();
         try {
-            document.coreSetContent(new SimpleFragmentSource(streamFactory.getInput(new StringReader(xml), new Options(), true)));
+            document.coreSetContent(streamFactory.getSource(new StringReader(xml), new Options(), true));
         } catch (StreamException ex) {
             Assert.fail(ex.getMessage());
             return null;
@@ -65,7 +64,7 @@ public class BackendTestCase extends TestCase {
     protected final CoreDocumentFragment parse(CoreDocument document, String xml) {
         CoreDocumentFragment fragment = document.coreGetNodeFactory().createDocumentFragment(document);
         try {
-            fragment.coreSetContent(new SimpleFragmentSource(streamFactory.getInput(new StringReader(xml), new Options(), true)));
+            fragment.coreSetContent(streamFactory.getSource(new StringReader(xml), new Options(), true));
         } catch (StreamException ex) {
             Assert.fail(ex.getMessage());
             return null;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,17 +42,18 @@ import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.google.code.ddom.stream.options.ValidationPolicy;
+import com.google.code.ddom.stream.spi.SimpleXmlSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
-import com.google.code.ddom.stream.spi.XmlInput;
 import com.google.code.ddom.stream.spi.XmlOutput;
+import com.google.code.ddom.stream.spi.XmlSource;
 import com.google.code.ddom.stream.stax.CommentFilterStreamReader;
 import com.google.code.ddom.stream.stax.StAXInput;
 import com.google.code.ddom.stream.stax.StAXOutput;
 
 @Provider(name="woodstox")
 public class WoodstoxStreamProvider implements StreamProvider {
-    public XmlInput getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public XmlSource getSource(Object object, OptionsTracker options, boolean preserve) throws StreamException {
         // TODO: who actually closes the streams???
         InputStream byteStream;
         Reader characterStream;
@@ -60,22 +61,22 @@ public class WoodstoxStreamProvider implements StreamProvider {
         URL url;
         String encoding;
         String publicId;
-        if (source instanceof InputStream) {
-            byteStream = (InputStream)source;
+        if (object instanceof InputStream) {
+            byteStream = (InputStream)object;
             characterStream = null;
             systemId = null;
             url = null;
             encoding = null;
             publicId = null;
-        } else if (source instanceof Reader) {
-            characterStream = (Reader)source;
+        } else if (object instanceof Reader) {
+            characterStream = (Reader)object;
             byteStream = null;
             systemId = null;
             url = null;
             encoding = null;
             publicId = null;
-        } else if (source instanceof InputSource) {
-            InputSource is = (InputSource)source;
+        } else if (object instanceof InputSource) {
+            InputSource is = (InputSource)object;
             byteStream = is.getByteStream();
             characterStream = is.getCharacterStream();
             systemId = is.getSystemId();
@@ -85,11 +86,11 @@ public class WoodstoxStreamProvider implements StreamProvider {
             if (byteStream == null && characterStream == null && systemId == null) {
                 throw new StreamException("Invalid InputSource object");
             }
-        } else if (source instanceof URL) {
+        } else if (object instanceof URL) {
             byteStream = null;
             characterStream = null;
             systemId = null;
-            url = (URL)source;
+            url = (URL)object;
             encoding = null;
             publicId = null;
         } else {
@@ -147,7 +148,7 @@ public class WoodstoxStreamProvider implements StreamProvider {
         if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
             reader = new CommentFilterStreamReader(reader);
         }
-        return new StAXInput(reader, config.getSymbols());
+        return new SimpleXmlSource(new StAXInput(reader, config.getSymbols()));
     }
     
     public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {

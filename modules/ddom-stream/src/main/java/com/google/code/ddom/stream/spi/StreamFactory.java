@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,56 +68,56 @@ public final class StreamFactory {
     }
 
     /**
-     * Get a {@link XmlInput} from a given source object using a given provider.
+     * Get a {@link XmlSource} from a given source object using a given provider.
      * 
      * @param providerName
-     * @param source
+     * @param object
      * @param options
      * @param preserve
-     * @return the {@link XmlInput} instance that reads the data from the given <code>source</code>
+     * @return the {@link XmlSource} instance that reads the data from the given <code>object</code>
      * @throws NoStreamProviderFoundException
      *             if the provider was not found or if the provider doesn't support the type of
      *             source object passed as argument
      * @throws StreamException
      */
-    public XmlInput getInput(String providerName, Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public XmlSource getSource(String providerName, Object object, OptionsTracker options, boolean preserve) throws StreamException {
         StreamProvider provider = providers.get(providerName);
         if (provider == null) {
             throw new NoStreamProviderFoundException("Provider '" + providerName + "' not found");
         } else {
-            XmlInput input = provider.getInput(source, options, preserve);
-            if (input == null) {
-                throw new NoStreamProviderFoundException("Provider '" + providerName + "' doesn't support source objects of type " + source.getClass().getName());
+            XmlSource source = provider.getSource(object, options, preserve);
+            if (source == null) {
+                throw new NoStreamProviderFoundException("Provider '" + providerName + "' doesn't support source objects of type " + object.getClass().getName());
             } else {
-                return input;
+                return source;
             }
         }
     }
     
-    public XmlInput getInput(String providerName, Object source, Options options, boolean preserve) throws StreamException {
+    public XmlSource getSource(String providerName, Object object, Options options, boolean preserve) throws StreamException {
         OptionsTracker tracker = options.createTracker();
-        XmlInput input = getInput(providerName, source, tracker, preserve);
+        XmlSource source = getSource(providerName, object, tracker, preserve);
         // TODO: clean up producer if this fails
         tracker.finish();
-        return input;
+        return source;
     }
     
-    public XmlInput getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException {
+    public XmlSource getSource(Object object, OptionsTracker options, boolean preserve) throws StreamException {
         for (StreamProvider provider : providers.values()) {
-            XmlInput input = provider.getInput(source, options, preserve);
-            if (input != null) {
-                return input;
+            XmlSource source = provider.getSource(object, options, preserve);
+            if (source != null) {
+                return source;
             }
         }
-        throw new NoStreamProviderFoundException("No provider found for source objects of type " + source.getClass().getName());
+        throw new NoStreamProviderFoundException("No provider found for source objects of type " + object.getClass().getName());
     }
     
-    public XmlInput getInput(Object source, Options options, boolean preserve) throws StreamException {
+    public XmlSource getSource(Object object, Options options, boolean preserve) throws StreamException {
         OptionsTracker tracker = options.createTracker();
-        XmlInput input = getInput(source, tracker, preserve);
+        XmlSource source = getSource(object, tracker, preserve);
         // TODO: clean up producer if this fails
         tracker.finish();
-        return input;
+        return source;
     }
     
     public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {

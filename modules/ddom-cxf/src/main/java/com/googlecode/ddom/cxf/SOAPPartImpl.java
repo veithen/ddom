@@ -32,7 +32,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.stream.dom.DOMInput;
-import com.google.code.ddom.stream.spi.SimpleFragmentSource;
+import com.google.code.ddom.stream.spi.SimpleXmlSource;
 
 public class SOAPPartImpl extends AbstractSOAPPartImpl {
     private final Model saajModel;
@@ -50,7 +50,7 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             Document domDocument = (Document)message.getContent(Node.class);
             
             SAAJDocument saajDocument = (SAAJDocument)saajModel.getNodeFactory().createDocument();
-            saajDocument.coreSetContent(new SimpleFragmentSource(new DOMInput(domDocument)));
+            saajDocument.coreSetContent(new SimpleXmlSource(new DOMInput(domDocument)));
             
             // We build the document at this point because we need to access the (empty) body anyway
             // and there is not much content after the body. Building the document allows DDOM to
@@ -68,7 +68,7 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             // TODO: need a better name for this thing
             StreamSwitch streamSwitch = new StreamSwitch(message.getContent(XMLStreamReader.class), body);
             
-            body.coreSetContent(new SimpleFragmentSource(streamSwitch));
+            body.coreSetContent(new SimpleXmlSource(streamSwitch));
             
             message.setContent(XMLStreamReader.class, streamSwitch);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public interface StreamProvider {
      * @return
      * @throws StreamException
      */
-    XmlInput getInput(Object source, OptionsTracker options, boolean preserve) throws StreamException;
+    XmlSource getSource(Object object, OptionsTracker options, boolean preserve) throws StreamException;
     
     XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException;
     

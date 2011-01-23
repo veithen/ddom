@@ -30,7 +30,6 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.google.code.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
-import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
 
@@ -55,7 +54,7 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
     private OMXMLParserWrapper createBuilder(Object source) {
         try {
             AxiomDocument document = (AxiomDocument)createDocument();
-            document.coreSetContent(new SimpleFragmentSource(streamFactory.getInput(source, new Options(), false)));
+            document.coreSetContent(streamFactory.getSource(source, new Options(), false));
             return new OMXMLParserWrapperImpl(document);
         } catch (StreamException ex) {
             throw new OMException(ex);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,9 @@ import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelRegistry;
-import com.google.code.ddom.stream.spi.SimpleFragmentSource;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
-import com.google.code.ddom.stream.spi.XmlInput;
+import com.google.code.ddom.stream.spi.XmlSource;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
 public class DocumentHelperImpl implements DocumentHelper {
@@ -56,7 +55,7 @@ public class DocumentHelperImpl implements DocumentHelper {
     }
     
     // TODO: need to make sure that if an exception occurs, all resources (input streams!!) are released properly
-    public Object parse(ModelDefinition modelDefinition, Object source, Options options, boolean preserve) {
+    public Object parse(ModelDefinition modelDefinition, Object object, Options options, boolean preserve) {
         // TODO: check for null here!
         Model model;
         try {
@@ -65,21 +64,21 @@ public class DocumentHelperImpl implements DocumentHelper {
             throw new DocumentHelperException(ex);
         }
         OptionsTracker tracker = options.createTracker();
-        XmlInput input;
+        XmlSource source;
         try {
             // TODO: this is bad because we need to reconfigure the underlying parser every time!
-            input = streamFactory.getInput(source, tracker, preserve);
+            source = streamFactory.getSource(object, tracker, preserve);
         } catch (StreamException ex) {
             // TODO
             throw new RuntimeException(ex.getMessage(), ex.getCause());
         }
-        if (input == null) {
+        if (source == null) {
             // TODO
-            throw new RuntimeException("Don't know how to parse sources of type " + source.getClass().getName(), null);
+            throw new RuntimeException("Don't know how to parse sources of type " + object.getClass().getName(), null);
         }
         tracker.finish();
         CoreDocument document = model.getNodeFactory().createDocument();
-        document.coreSetContent(new SimpleFragmentSource(input));
+        document.coreSetContent(source);
         return document;
     }
 

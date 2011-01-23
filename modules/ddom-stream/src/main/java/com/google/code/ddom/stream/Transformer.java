@@ -58,11 +58,11 @@ public class Transformer {
     }
     
     public Source from(String providerName, Object source, Options options, boolean preserve) throws StreamException {
-        return new Source(streamFactory.getInput(providerName, source, options, preserve));
+        return new Source(streamFactory.getSource(providerName, source, options, preserve).getInput());
     }
     
     public Source from(Object source, Options options, boolean preserve) throws StreamException {
-        return new Source(streamFactory.getInput(source, options, preserve));
+        return new Source(streamFactory.getSource(source, options, preserve).getInput());
     }
     
     public Source from(Object source) throws StreamException {

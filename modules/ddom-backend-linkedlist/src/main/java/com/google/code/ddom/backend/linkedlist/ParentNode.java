@@ -51,7 +51,7 @@ import com.google.code.ddom.core.NodeMigrationPolicy;
 import com.google.code.ddom.core.NodeNotFoundException;
 import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.core.ext.ModelExtension;
-import com.google.code.ddom.stream.spi.FragmentSource;
+import com.google.code.ddom.stream.spi.XmlSource;
 import com.google.code.ddom.stream.spi.XmlInput;
 
 public abstract class ParentNode extends Node implements LLParentNode {
@@ -62,7 +62,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
     
     /**
      * The content of this node. This is a {@link CoreChildNode} if the node is expanded, a
-     * {@link FragmentSource} if the content is sourced or a {@link String} if the value has been
+     * {@link XmlSource} if the content is sourced or a {@link String} if the value has been
      * set.
      */
     private Object content;
@@ -84,11 +84,11 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return content instanceof CoreChildNode;
     }
 
-    public final void coreSetContent(FragmentSource source) {
+    public final void coreSetContent(XmlSource source) {
         // TODO: need to clear any existing content!
         internalSetComplete(false);
         // TODO: getting the producer should be deferred!
-        internalGetOwnerDocument().internalCreateBuilder(source.getProducer(), this);
+        internalGetOwnerDocument().internalCreateBuilder(source.getInput(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }
