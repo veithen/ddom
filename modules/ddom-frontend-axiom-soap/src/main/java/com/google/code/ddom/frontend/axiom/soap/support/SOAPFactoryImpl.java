@@ -15,7 +15,10 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.support;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.om.OMDataSource;
+import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.soap.SOAPBody;
@@ -39,33 +42,26 @@ import org.apache.axiom.soap.SOAPVersion;
 
 import com.google.code.ddom.core.AttributeMatcher;
 import com.google.code.ddom.core.CoreModelException;
+import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
-import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
 
 public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
-    private final SOAPVersionEx soapVersionEx;
+    private final SOAPVersionEx soapVersion;
 
     public SOAPFactoryImpl(AxiomNodeFactory nodeFactory, SOAPVersionEx soapVersionEx) {
         super(nodeFactory);
-        this.soapVersionEx = soapVersionEx;
+        this.soapVersion = soapVersionEx;
     }
 
     public final SOAPVersion getSOAPVersion() {
-        return soapVersionEx.getSOAPVersion();
+        return soapVersion.getSOAPVersion();
     }
     
     public final String getSoapVersionURI() {
-        return soapVersionEx.getEnvelopeURI();
+        return soapVersion.getEnvelopeURI();
     }
 
     public final SOAPEnvelope getDefaultEnvelope() throws SOAPProcessingException {
@@ -85,18 +81,36 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return defaultEnvelope;
     }
 
-    private <T extends AxiomElement> T createElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) {
-        T element = nodeFactory.createElement(null, extensionInterface, namespaceURI, localName, prefix);
-        element.setOMFactory(this);
-        if (namespaceURI != null) {
-            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+    private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, String namespaceURI, String localName) {
+        if (parent == null) {
+            String prefix = namespaceURI == null ? null : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;
+            T element = nodeFactory.createElement(null, extensionInterface, namespaceURI, localName, prefix);
+            element.setOMFactory(this);
+            if (prefix != null) {
+                element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+            }
+            return element;
+        } else {
+            try {
+                T element = ((AxiomElement)parent).coreAppendElement(extensionInterface, namespaceURI, localName, namespaceURI == null ? null : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+                element.setOMFactory(this);
+                return element;
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         }
-        return element;
+    }
+    
+    private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, String localName) {
+        return createElement(parent, extensionInterface, soapVersion.getEnvelopeURI(), localName);
+    }
+    
+    private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, QName qname) {
+        return createElement(parent, extensionInterface, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
     }
     
     public final SOAPEnvelope createSOAPEnvelope() throws SOAPProcessingException {
-        return createElement(soapVersionEx.getSOAPEnvelopeClass(), soapVersionEx.getEnvelopeURI(),
-                SOAPConstants.SOAPENVELOPE_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+        return createElement(null, soapVersion.getSOAPEnvelopeClass(), SOAPConstants.SOAPENVELOPE_LOCAL_NAME);
     }
 
     public SOAPEnvelope createSOAPEnvelope(OMNamespace ns) {
@@ -104,21 +118,12 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPHeader createSOAPHeader() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPHeader createSOAPHeader() throws SOAPProcessingException {
+        return createSOAPHeader(null);
     }
 
     public final SOAPHeader createSOAPHeader(SOAPEnvelope envelope) throws SOAPProcessingException {
-        try {
-            AxiomSOAPHeader header = ((AxiomSOAPEnvelope)envelope).coreAppendElement(
-                    soapVersionEx.getSOAPHeaderClass(), soapVersionEx.getEnvelopeURI(),
-                    SOAPConstants.HEADER_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-            header.setOMFactory(this);
-            return header;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
+        return createElement(envelope, soapVersion.getSOAPHeaderClass(), SOAPConstants.HEADER_LOCAL_NAME);
     }
 
     public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns) throws SOAPProcessingException {
@@ -136,47 +141,20 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPHeaderBlock(java.lang.String, org.apache.axiom.om.OMNamespace, org.apache.axiom.soap.SOAPHeader, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns,
-            SOAPHeader parent, OMXMLParserWrapper builder) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public SOAPBody createSOAPBody() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPBody createSOAPBody() throws SOAPProcessingException {
+        return createSOAPBody(null);
     }
 
     public final SOAPBody createSOAPBody(SOAPEnvelope envelope) throws SOAPProcessingException {
-        try {
-            AxiomSOAPBody body = ((AxiomSOAPEnvelope)envelope).coreAppendElement(
-                    soapVersionEx.getSOAPBodyClass(), soapVersionEx.getEnvelopeURI(),
-                    SOAPConstants.BODY_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-            body.setOMFactory(this);
-            return body;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
+        return createElement(envelope, soapVersion.getSOAPBodyClass(), SOAPConstants.BODY_LOCAL_NAME);
     }
 
     public final SOAPFault createSOAPFault() throws SOAPProcessingException {
-        return createElement(soapVersionEx.getSOAPFaultClass(), soapVersionEx.getEnvelopeURI(),
-                SOAPConstants.BODY_FAULT_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+        return createSOAPFault(null);
     }
 
     public final SOAPFault createSOAPFault(SOAPBody body) throws SOAPProcessingException {
-        try {
-            AxiomSOAPFault fault = ((AxiomSOAPBody)body).coreAppendElement(
-                    soapVersionEx.getSOAPFaultClass(), soapVersionEx.getEnvelopeURI(),
-                    SOAPConstants.BODY_FAULT_LOCAL_NAME, SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-            fault.setOMFactory(this);
-            return fault;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
+        return createElement(body, soapVersion.getSOAPFaultClass(), SOAPConstants.BODY_FAULT_LOCAL_NAME);
     }
 
     /* (non-Javadoc)
@@ -187,109 +165,36 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFault(org.apache.axiom.soap.SOAPBody, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFault createSOAPFault(SOAPBody parent, OMXMLParserWrapper builder) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultCode()
-     */
-    public SOAPFaultCode createSOAPFaultCode() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFaultCode createSOAPFaultCode() throws SOAPProcessingException {
+        return createSOAPFaultCode(null);
     }
 
     public final SOAPFaultCode createSOAPFaultCode(SOAPFault fault) throws SOAPProcessingException {
-        try {
-            AxiomSOAPFaultCode code = ((AxiomSOAPFault)fault).coreAppendElement(
-                    soapVersionEx.getSOAPFaultCodeClass(), soapVersionEx.getEnvelopeURI(),
-                    soapVersionEx.getSOAPVersion().getFaultCodeQName().getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-            code.setOMFactory(this);
-            return code;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
+        return createElement(fault, soapVersion.getSOAPFaultCodeClass(), soapVersion.getFaultCodeQName());
     }
 
-    public final SOAPFaultCode createSOAPFaultCode(SOAPFault parent, OMXMLParserWrapper builder) {
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultReason()
-     */
-    public SOAPFaultReason createSOAPFaultReason() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFaultReason createSOAPFaultReason() throws SOAPProcessingException {
+        return createSOAPFaultReason(null);
     }
 
     public final SOAPFaultReason createSOAPFaultReason(SOAPFault fault) throws SOAPProcessingException {
-        try {
-            AxiomSOAPFaultReason code = ((AxiomSOAPFault)fault).coreAppendElement(
-                    soapVersionEx.getSOAPFaultReasonClass(), soapVersionEx.getEnvelopeURI(),
-                    soapVersionEx.getSOAPVersion().getFaultReasonQName().getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-            code.setOMFactory(this);
-            return code;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
+        return createElement(fault, soapVersion.getSOAPFaultReasonClass(), soapVersion.getFaultReasonQName());
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultReason(org.apache.axiom.soap.SOAPFault, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFaultReason createSOAPFaultReason(SOAPFault parent, OMXMLParserWrapper builder) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultRole()
-     */
-    public SOAPFaultRole createSOAPFaultRole() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPFaultRole createSOAPFaultRole() throws SOAPProcessingException {
+        return createSOAPFaultRole(null);
     }
 
     public final SOAPFaultRole createSOAPFaultRole(SOAPFault fault) throws SOAPProcessingException {
-        try {
-            AxiomSOAPFaultRole role = ((AxiomSOAPFault)fault).coreAppendElement(
-                    soapVersionEx.getSOAPFaultRoleClass(), soapVersionEx.getEnvelopeURI(),
-                    soapVersionEx.getSOAPVersion().getFaultRoleQName().getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-            role.setOMFactory(this);
-            return role;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-    }
-
-    public final SOAPFaultRole createSOAPFaultRole(SOAPFault parent, OMXMLParserWrapper builder) {
-        throw new UnsupportedOperationException();
+        return createElement(fault, soapVersion.getSOAPFaultRoleClass(), soapVersion.getFaultRoleQName());
     }
 
     public final SOAPFaultDetail createSOAPFaultDetail() throws SOAPProcessingException {
-        return createElement(soapVersionEx.getSOAPFaultDetailClass(), soapVersionEx.getEnvelopeURI(),
-                soapVersionEx.getSOAPVersion().getFaultDetailQName().getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+        return createSOAPFaultDetail(null);
     }
 
     public final SOAPFaultDetail createSOAPFaultDetail(SOAPFault fault) throws SOAPProcessingException {
-        try {
-            AxiomSOAPFaultDetail detail = ((AxiomSOAPFault)fault).coreAppendElement(
-                    soapVersionEx.getSOAPFaultDetailClass(), soapVersionEx.getEnvelopeURI(),
-                    soapVersionEx.getSOAPVersion().getFaultDetailQName().getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
-            detail.setOMFactory(this);
-            return detail;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-    }
-
-    public final SOAPFaultDetail createSOAPFaultDetail(SOAPFault parent, OMXMLParserWrapper builder) {
-        throw new UnsupportedOperationException();
+        return createElement(fault, soapVersion.getSOAPFaultDetailClass(), soapVersion.getFaultDetailQName());
     }
 
     /* (non-Javadoc)
@@ -304,14 +209,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultNode(org.apache.axiom.soap.SOAPFault)
      */
     public SOAPFaultNode createSOAPFaultNode(SOAPFault parent) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultNode(org.apache.axiom.soap.SOAPFault, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFaultNode createSOAPFaultNode(SOAPFault parent, OMXMLParserWrapper builder) {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -343,23 +240,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultSubCode(org.apache.axiom.soap.SOAPFaultCode, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultCode parent, OMXMLParserWrapper builder) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultSubCode(org.apache.axiom.soap.SOAPFaultSubCode, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultSubCode parent,
-            OMXMLParserWrapper builder) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultText()
      */
     public SOAPFaultText createSOAPFaultText() throws SOAPProcessingException {
@@ -371,14 +251,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultText(org.apache.axiom.soap.SOAPFaultReason)
      */
     public SOAPFaultText createSOAPFaultText(SOAPFaultReason parent) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultText(org.apache.axiom.soap.SOAPFaultReason, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFaultText createSOAPFaultText(SOAPFaultReason parent, OMXMLParserWrapper builder) {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -409,33 +281,9 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultValue(org.apache.axiom.soap.SOAPFaultCode, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFaultValue createSOAPFaultValue(SOAPFaultCode parent, OMXMLParserWrapper builder) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultValue(org.apache.axiom.soap.SOAPFaultSubCode, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPFaultValue createSOAPFaultValue(SOAPFaultSubCode parent, OMXMLParserWrapper builder) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPMessage()
      */
     public SOAPMessage createSOAPMessage() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPMessage(org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPMessage createSOAPMessage(OMXMLParserWrapper builder) {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -456,28 +304,71 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPEnvelope(org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPEnvelope createSOAPEnvelope(OMXMLParserWrapper builder) {
-        // TODO
+    //
+    // Methods used by StAXBuilder and StAXOMBuilder.
+    //
+
+    public final SOAPMessage createSOAPMessage(OMXMLParserWrapper builder) {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPHeader(org.apache.axiom.soap.SOAPEnvelope, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPHeader createSOAPHeader(SOAPEnvelope envelope, OMXMLParserWrapper builder) {
-        // TODO
+    public final SOAPEnvelope createSOAPEnvelope(OMXMLParserWrapper builder) {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPBody(org.apache.axiom.soap.SOAPEnvelope, org.apache.axiom.om.OMXMLParserWrapper)
-     */
-    public SOAPBody createSOAPBody(SOAPEnvelope envelope, OMXMLParserWrapper builder) {
-        // TODO
+    public final SOAPHeader createSOAPHeader(SOAPEnvelope envelope, OMXMLParserWrapper builder) {
         throw new UnsupportedOperationException();
     }
 
+    public final SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, SOAPHeader parent, OMXMLParserWrapper builder) throws SOAPProcessingException {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPBody createSOAPBody(SOAPEnvelope envelope, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+    
+    public final SOAPFault createSOAPFault(SOAPBody parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+    
+    public final SOAPFaultCode createSOAPFaultCode(SOAPFault parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultCode parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultSubCode parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultValue createSOAPFaultValue(SOAPFaultCode parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultValue createSOAPFaultValue(SOAPFaultSubCode parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultReason createSOAPFaultReason(SOAPFault parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultRole createSOAPFaultRole(SOAPFault parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultDetail createSOAPFaultDetail(SOAPFault parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultNode createSOAPFaultNode(SOAPFault parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultText createSOAPFaultText(SOAPFaultReason parent, OMXMLParserWrapper builder) {
+        throw new UnsupportedOperationException();
+    }
 }

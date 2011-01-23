@@ -16,7 +16,6 @@
 package com.google.code.ddom.frontend.axiom.soap;
 
 import org.apache.axiom.soap.SOAPConstants;
-import org.apache.axiom.soap.SOAPVersion;
 
 import com.google.code.ddom.core.ext.ModelExtensionMapper;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
@@ -30,7 +29,7 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
     private static final int STATE_FAULT = 3;
     
     private int depth;
-    private SOAPVersionEx versionEx;
+    private SOAPVersionEx version;
     private int state;
     
     public Class<?> startElement(String namespaceURI, String localName) {
@@ -39,21 +38,21 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
             if (namespaceURI != null && localName.equals(SOAPConstants.SOAPENVELOPE_LOCAL_NAME)) {
                 for (SOAPVersionEx candidate : SOAP_VERSIONS) {
                     if (candidate.getEnvelopeURI().equals(namespaceURI)) {
-                        versionEx = candidate;
-                        return versionEx.getSOAPEnvelopeClass();
+                        version = candidate;
+                        return version.getSOAPEnvelopeClass();
                     }
                 }
             }
-        } else if (versionEx != null) {
+        } else if (version != null) {
             switch (depth) {
                 case 2:
-                    if (versionEx.getEnvelopeURI().equals(namespaceURI)) {
+                    if (version.getEnvelopeURI().equals(namespaceURI)) {
                         if (localName.equals(SOAPConstants.HEADER_LOCAL_NAME)) {
                             state = STATE_HEADER;
-                            return versionEx.getSOAPHeaderClass();
+                            return version.getSOAPHeaderClass();
                         } else if (localName.equals(SOAPConstants.BODY_LOCAL_NAME)) {
                             state = STATE_BODY;
-                            return versionEx.getSOAPBodyClass();
+                            return version.getSOAPBodyClass();
                         }
                     }
                     break;
@@ -61,21 +60,20 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                     if (state == STATE_BODY) {
                         if (localName.equals(SOAPConstants.BODY_FAULT_LOCAL_NAME)) {
                             state = STATE_FAULT;
-                            return versionEx.getSOAPFaultClass();
+                            return version.getSOAPFaultClass();
                         }
                     }
                     break;
                 case 4:
                     if (state == STATE_FAULT) {
-                        SOAPVersion version = versionEx.getSOAPVersion();
                         if (localName.equals(version.getFaultCodeQName().getLocalPart())) {
-                            return versionEx.getSOAPFaultCodeClass();
+                            return version.getSOAPFaultCodeClass();
                         } else if (localName.equals(version.getFaultReasonQName().getLocalPart())) {
-                            return versionEx.getSOAPFaultReasonClass();
+                            return version.getSOAPFaultReasonClass();
                         } else if (localName.equals(version.getFaultRoleQName().getLocalPart())) {
-                            return versionEx.getSOAPFaultRoleClass();
+                            return version.getSOAPFaultRoleClass();
                         } else if (localName.equals(version.getFaultDetailQName().getLocalPart())) {
-                            return versionEx.getSOAPFaultDetailClass();
+                            return version.getSOAPFaultDetailClass();
                         }
                     }
             }

@@ -26,7 +26,10 @@ import org.apache.axiom.ts.soap.envelope.TestDiscardHeader;
 import org.apache.axiom.ts.soap.factory.TestGetDefaultFaultEnvelope;
 import org.apache.axiom.ts.soap.fault.TestGetDetailWithParser;
 import org.apache.axiom.ts.soap.fault.TestGetRoleWithParser;
+import org.apache.axiom.ts.soap.fault.TestSetCode;
 import org.apache.axiom.ts.soap.fault.TestSetDetail;
+import org.apache.axiom.ts.soap.fault.TestSetReason;
+import org.apache.axiom.ts.soap.fault.TestSetRole;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
 import org.apache.axiom.ts.soap12.envelope.TestAddElementAfterBody;
 import org.apache.axiom.ts.soap12.fault.TestGetNode;
@@ -64,6 +67,9 @@ public class ImplementationTest extends TestCase {
         
         // TODO: split this test case up into two parts
         builder.exclude(TestSetDetail.class);
+        builder.exclude(TestSetCode.class);
+        builder.exclude(TestSetReason.class);
+        builder.exclude(TestSetRole.class);
         
         return builder.build();
     }

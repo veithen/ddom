@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.frontend.axiom.soap.support;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.soap.SOAP11Constants;
 import org.apache.axiom.soap.SOAP11Version;
 import org.apache.axiom.soap.SOAP12Constants;
@@ -189,11 +191,27 @@ public abstract class SOAPVersionEx {
         return soapVersion.getEnvelopeURI();
     }
 
-    public Sequence getEnvelopeSequence() {
+    public final QName getFaultCodeQName() {
+        return soapVersion.getFaultCodeQName();
+    }
+
+    public final QName getFaultReasonQName() {
+        return soapVersion.getFaultReasonQName();
+    }
+
+    public final QName getFaultRoleQName() {
+        return soapVersion.getFaultRoleQName();
+    }
+
+    public final QName getFaultDetailQName() {
+        return soapVersion.getFaultDetailQName();
+    }
+
+    public final Sequence getEnvelopeSequence() {
         return envelopeSequence;
     }
 
-    public Sequence getFaultSequence() {
+    public final Sequence getFaultSequence() {
         return faultSequence;
     }
 
