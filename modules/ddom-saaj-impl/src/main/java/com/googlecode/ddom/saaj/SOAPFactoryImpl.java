@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,22 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPFault;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
+import com.google.code.ddom.core.NodeFactory;
+import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
+import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.google.code.ddom.spi.model.ModelLoaderException;
+import com.google.code.ddom.spi.model.ModelRegistry;
 
 public class SOAPFactoryImpl extends SOAPFactory {
-    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(SOAPFactoryImpl.class.getClassLoader());
+    private static final ModelRegistry modelRegistry = ModelRegistry.getInstance(SOAPFactoryImpl.class.getClassLoader());
+    private static final ModelDefinition modelDefinition = ModelDefinitionBuilder.buildModelDefinition("saaj");
     
-    private SAAJDocument createDocument() {
-        return (SAAJDocument)documentHelper.newDocument("saaj");
+    private final NodeFactory nodeFactory;
+    
+    public SOAPFactoryImpl() throws ModelLoaderException {
+        nodeFactory = modelRegistry.getModel(modelDefinition).getNodeFactory();
     }
     
     @Override
@@ -44,10 +49,8 @@ public class SOAPFactoryImpl extends SOAPFactory {
 
     @Override
     public final SOAPElement createElement(Name name) throws SOAPException {
-        // TODO: creating a document should no longer be necessary
-        CoreDocument document = createDocument();
         // TODO: need to check if conventions for empty/null prefix/uri are respected
-        return (SOAPElement)document.coreGetNodeFactory().createElement(document, name.getURI(), name.getLocalName(), name.getPrefix());
+        return (SOAPElement)nodeFactory.createElement(null, name.getURI(), name.getLocalName(), name.getPrefix());
     }
 
     @Override
@@ -58,10 +61,13 @@ public class SOAPFactoryImpl extends SOAPFactory {
 
     @Override
     public final SOAPElement createElement(String localName, String prefix, String uri) throws SOAPException {
-        // TODO: creating a document should no longer be necessary
-        CoreDocument document = createDocument();
         // TODO: add a unit test that checks the type of returned object if the name corresponds to a SOAP envelope, body, etc.
-        return (SOAPElement)document.coreGetNodeFactory().createElement(document, uri, localName, prefix);
+        return (SOAPElement)nodeFactory.createElement(null, uri, localName, prefix);
+    }
+
+    @Override
+    public final SOAPElement createElement(QName qname) throws SOAPException {
+        return (SOAPElement)nodeFactory.createElement(null, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
     }
 
     @Override

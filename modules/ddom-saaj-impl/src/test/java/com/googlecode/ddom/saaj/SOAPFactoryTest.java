@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -35,7 +34,7 @@ public class SOAPFactoryTest {
     @ValidatedTestResource(reference=SOAPFactory1_1Impl.class, actual=SOAPFactoryImpl.class)
     private SOAPFactory factory;
 
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void test() throws SOAPException {
         SOAPElement parent = factory.createElement(new QName("urn:test", "parent"));
         SOAPElement orgChild = factory.createElement(new QName("urn:test", "child"));

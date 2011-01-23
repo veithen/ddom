@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 
+import com.google.code.ddom.spi.model.ModelLoaderException;
+
 public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
     @Override
     protected MessageFactory newMessageFactory(String protocol) throws SOAPException {
@@ -37,15 +39,19 @@ public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
 
     @Override
     protected SOAPFactory newSOAPFactory(String protocol) throws SOAPException {
-        // TODO: distinguish SOAP versions
-        if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol)) {
-            return new SOAPFactoryImpl();
-        } else if (SOAPConstants.SOAP_1_2_PROTOCOL.equals(protocol)) {
-            return new SOAPFactoryImpl();
-        } else if (SOAPConstants.DYNAMIC_SOAP_PROTOCOL.equals(protocol)) {
-            return new SOAPFactoryImpl();
-        } else {
-            throw new SOAPException("Unknown Protocol: " + protocol + " specified for creating SOAPFactory");
+        try {
+            // TODO: distinguish SOAP versions
+            if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol)) {
+                return new SOAPFactoryImpl();
+            } else if (SOAPConstants.SOAP_1_2_PROTOCOL.equals(protocol)) {
+                return new SOAPFactoryImpl();
+            } else if (SOAPConstants.DYNAMIC_SOAP_PROTOCOL.equals(protocol)) {
+                return new SOAPFactoryImpl();
+            } else {
+                throw new SOAPException("Unknown Protocol: " + protocol + " specified for creating SOAPFactory");
+            }
+        } catch (ModelLoaderException ex) {
+            throw new SOAPException(ex);
         }
     }
 }

@@ -169,9 +169,8 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
     
-    public QName getElementQName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final QName getElementQName() {
+        return coreGetQName();
     }
 
     public SOAPElement setElementQName(QName newName) throws SOAPException {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Iterator;
 
 import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
@@ -159,5 +160,23 @@ public class SOAPElementTest {
         element.appendChild(element.getOwnerDocument().createElementNS("urn:ns", "p:child"));
         element.addTextNode("bar");
         assertEquals("foo", element.getValue());
+    }
+    
+    @Validated @Test
+    public void testGetElementQNameWithNamespace() {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
+        assertEquals(new QName("urn:test", "test", "p"), element.getElementQName());
+    }
+    
+    @Validated @Test
+    public void testGetElementQNameWithoutNamespace() {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        assertEquals(new QName("test"), element.getElementQName());
+    }
+
+    @Validated @Test
+    public void testGetElementQNameWithDefaultNamespace() {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", null);
+        assertEquals(new QName("urn:test", "test"), element.getElementQName());
     }
 }
