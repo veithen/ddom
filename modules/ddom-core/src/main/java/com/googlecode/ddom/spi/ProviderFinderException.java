@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi;
+package com.googlecode.ddom.spi;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class ProviderFinderException extends RuntimeException {
+    private static final long serialVersionUID = 326752730372173628L;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Provider {
-    String name();
+    public ProviderFinderException() {
+    }
+
+    public ProviderFinderException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ProviderFinderException(String message) {
+        super(message);
+    }
+
+    public ProviderFinderException(Throwable cause) {
+        super(cause);
+    }
 }

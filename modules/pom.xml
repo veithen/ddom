@@ -49,7 +49,6 @@
         <module>ddom-mime</module>
         <module>ddom-model-dom</module>
         <module>ddom-saaj-impl</module>
-        <module>ddom-spi</module>
         <module>ddom-spring-ws</module>
         <module>ddom-stream</module>
         <module>ddom-stream-dom</module>

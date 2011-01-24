@@ -22,9 +22,9 @@ import com.google.code.ddom.commons.cl.Module;
 import com.google.code.ddom.frontend.APIObjectFactory;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.dom.support.APIObjectFactoryImpl;
-import com.google.code.ddom.spi.Provider;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.spi.Provider;
 
 @Provider(name="dom")
 public class DOMFrontend implements Frontend {

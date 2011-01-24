@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.spi.Provider;
+import com.googlecode.ddom.spi.Provider;
 
 @Provider(name="static")
 public class StaticModelLoaderFactory implements ModelLoaderFactory {

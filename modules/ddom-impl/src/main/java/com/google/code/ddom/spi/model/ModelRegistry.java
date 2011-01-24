@@ -23,8 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.model.ModelDefinition;
-import com.google.code.ddom.spi.ProviderFinder;
-import com.google.code.ddom.spi.ProviderFinderException;
+import com.googlecode.ddom.spi.ProviderFinder;
+import com.googlecode.ddom.spi.ProviderFinderException;
 
 /**
  * Maps {@link ModelDefinition} instances to {@link Model} instances.

@@ -25,6 +25,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>ddom-core</artifactId>
-    <name>DDOM :: Modules :: Core Model</name>
+    <name>DDOM :: Modules :: Core</name>
     <packaging>jar</packaging>
 </project>

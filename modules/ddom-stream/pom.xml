@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-spi</artifactId>
+            <artifactId>ddom-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

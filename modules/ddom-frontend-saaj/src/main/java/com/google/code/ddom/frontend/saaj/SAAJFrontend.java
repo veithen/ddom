@@ -22,8 +22,8 @@ import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.Module;
 import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.dom.DOMFrontend;
-import com.google.code.ddom.spi.Provider;
 import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.spi.Provider;
 
 @Provider(name="saaj")
 public class SAAJFrontend extends DOMFrontend {

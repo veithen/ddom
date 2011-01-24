@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.apache.maven.plugin.MojoFailureException;
 
 import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.frontend.Frontend;
-import com.google.code.ddom.spi.ProviderFinder;
+import com.googlecode.ddom.spi.ProviderFinder;
 import com.googlecode.ddom.weaver.ModelWeaver;
 import com.googlecode.ddom.weaver.ModelWeaverException;
 
