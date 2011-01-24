@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.stream.spi;
 
 import com.google.code.ddom.OptionsTracker;
 import com.googlecode.ddom.stream.StreamException;

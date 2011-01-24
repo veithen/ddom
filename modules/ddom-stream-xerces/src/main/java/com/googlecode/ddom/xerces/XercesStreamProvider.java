@@ -23,7 +23,7 @@ import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.spi.Input;
 import com.google.code.ddom.stream.spi.Output;
 import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.StreamProvider;
+import com.googlecode.ddom.stream.spi.StreamProvider;
 import com.googlecode.ddom.xerces.xni.parser.XMLInputSource;
 
 @Provider(name="xerces")

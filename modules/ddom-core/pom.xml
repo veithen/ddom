@@ -27,4 +27,16 @@
     <artifactId>ddom-core</artifactId>
     <name>DDOM :: Modules :: Core</name>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

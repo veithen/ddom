@@ -22,11 +22,11 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.stream.spi.StreamFactory;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.StreamFactory;
 
 public class BackendTestCase extends TestCase {
     // We define constants for this so that we can easily locate tests that depend on the builder type

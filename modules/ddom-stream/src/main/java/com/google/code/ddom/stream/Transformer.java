@@ -16,9 +16,9 @@
 package com.google.code.ddom.stream;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.stream.spi.StreamFactory;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlOutput;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,4 +30,4 @@
  * The API gives the parser and consumer some freedom to negotiate the best way to exchange
  * data, so that the incurred overhead is minimal.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.stream;

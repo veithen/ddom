@@ -18,12 +18,12 @@ package com.google.code.ddom.stream.sax;
 import javax.xml.transform.sax.SAXSource;
 
 import com.google.code.ddom.OptionsTracker;
-import com.google.code.ddom.stream.spi.StreamProvider;
 import com.googlecode.ddom.spi.Provider;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlOutput;
 import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.spi.StreamProvider;
 
 @Provider(name="sax")
 public class SAXStreamProvider implements StreamProvider {

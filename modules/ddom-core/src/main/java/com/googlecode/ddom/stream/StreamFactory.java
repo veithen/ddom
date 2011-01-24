@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.stream;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -24,9 +24,7 @@ import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.googlecode.ddom.spi.ProviderFinder;
 import com.googlecode.ddom.spi.ProviderFinderException;
-import com.googlecode.ddom.stream.StreamException;
-import com.googlecode.ddom.stream.XmlOutput;
-import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.spi.StreamProvider;
 
 public final class StreamFactory {
     private static final ClassLoaderLocal<StreamFactory> factories = new ClassLoaderLocal<StreamFactory>();
