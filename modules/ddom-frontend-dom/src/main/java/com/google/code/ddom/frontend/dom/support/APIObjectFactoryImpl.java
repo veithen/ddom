@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.dom.support;
 
 import org.w3c.dom.DOMImplementation;
 
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.APIObjectFactory;
+import com.googlecode.ddom.core.NodeFactory;
 
 public class APIObjectFactoryImpl implements APIObjectFactory {
     private final DOMImplementation domImplementation;

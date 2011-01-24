@@ -17,9 +17,9 @@ package com.google.code.ddom.frontend.axiom.mixin.nosoap;
 
 import org.apache.axiom.soap.SOAPFactory;
 
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
+import com.googlecode.ddom.core.NodeFactory;
 
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomNodeFactory {

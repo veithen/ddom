@@ -27,13 +27,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.UserDataHandler;
 
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
 
 public class DocumentTypeImpl implements DOMDocumentType {
     private DOMDocumentTypeDeclaration declaration;

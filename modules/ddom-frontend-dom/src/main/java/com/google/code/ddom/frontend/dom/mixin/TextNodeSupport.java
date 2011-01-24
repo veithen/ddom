@@ -19,14 +19,14 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.core.CoreCDATASection;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreParentNode;
-import com.google.code.ddom.core.CoreTextNode;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.CoreTextNode;
 
 @Mixin({CoreTextNode.class, CoreCDATASection.class})
 public abstract class TextNodeSupport implements DOMTextNode {

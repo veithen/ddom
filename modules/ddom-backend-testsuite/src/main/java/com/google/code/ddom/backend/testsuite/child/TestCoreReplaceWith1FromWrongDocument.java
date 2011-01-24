@@ -18,9 +18,9 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.Policies;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.WrongDocumentException;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.WrongDocumentException;
 
 public class TestCoreReplaceWith1FromWrongDocument extends BackendTestCase {
     public TestCoreReplaceWith1FromWrongDocument(BackendTestSuiteConfig config) {

@@ -17,9 +17,9 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreText;
-import com.google.code.ddom.core.NoParentException;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreText;
+import com.googlecode.ddom.core.NoParentException;
 
 public class TestCoreInsertSiblingAfterOnOrphan extends BackendTestCase {
     public TestCoreInsertSiblingAfterOnOrphan(BackendTestSuiteConfig config) {

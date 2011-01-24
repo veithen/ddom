@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.frontend.axiom.soap;
 
-import com.google.code.ddom.core.ext.ModelExtension;
-import com.google.code.ddom.core.ext.ModelExtensionMapper;
+import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.core.ext.ModelExtensionMapper;
 
 public class AxiomSOAPModelExtension implements ModelExtension {
     public Class<?> mapElement(String namespaceURI, String localName) {

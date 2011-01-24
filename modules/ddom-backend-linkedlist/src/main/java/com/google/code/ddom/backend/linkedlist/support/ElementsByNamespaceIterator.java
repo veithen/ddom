@@ -17,9 +17,9 @@ package com.google.code.ddom.backend.linkedlist.support;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.core.Axis;
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreParentNode;
 
 public class ElementsByNamespaceIterator extends AbstractNodeIterator<CoreNSAwareElement> {
     private final String namespaceURI;

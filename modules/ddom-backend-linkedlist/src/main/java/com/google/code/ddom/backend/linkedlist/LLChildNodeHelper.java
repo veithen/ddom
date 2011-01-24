@@ -20,15 +20,15 @@ import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreDocumentFragment;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.HierarchyException;
-import com.google.code.ddom.core.NoParentException;
-import com.google.code.ddom.core.NodeMigrationException;
-import com.google.code.ddom.core.SelfRelationshipException;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreDocumentFragment;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.HierarchyException;
+import com.googlecode.ddom.core.NoParentException;
+import com.googlecode.ddom.core.NodeMigrationException;
+import com.googlecode.ddom.core.SelfRelationshipException;
 
 public final class LLChildNodeHelper {
     private LLChildNodeHelper() {}

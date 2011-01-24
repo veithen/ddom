@@ -22,9 +22,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMOutputFormat;
 
-import com.google.code.ddom.core.CoreLeafNode;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomLeafNode;
+import com.googlecode.ddom.core.CoreLeafNode;
 
 @Mixin(CoreLeafNode.class)
 public abstract class LeafNodeSupport implements AxiomLeafNode {

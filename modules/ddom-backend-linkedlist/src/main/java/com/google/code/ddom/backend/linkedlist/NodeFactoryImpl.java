@@ -17,21 +17,21 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.ExtensionFactoryLocator;
 import com.google.code.ddom.backend.Inject;
-import com.google.code.ddom.core.CoreCDATASection;
-import com.google.code.ddom.core.CoreComment;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreDocumentFragment;
-import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
-import com.google.code.ddom.core.CoreEntityReference;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.CoreNSUnawareAttribute;
-import com.google.code.ddom.core.CoreNSUnawareElement;
-import com.google.code.ddom.core.CoreNamespaceDeclaration;
-import com.google.code.ddom.core.CoreProcessingInstruction;
-import com.google.code.ddom.core.CoreText;
-import com.google.code.ddom.core.NodeFactory;
-import com.google.code.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreDocumentFragment;
+import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
+import com.googlecode.ddom.core.CoreEntityReference;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreNSUnawareAttribute;
+import com.googlecode.ddom.core.CoreNSUnawareElement;
+import com.googlecode.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.core.CoreProcessingInstruction;
+import com.googlecode.ddom.core.CoreText;
+import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.ext.ModelExtension;
 
 public class NodeFactoryImpl implements NodeFactory {
     public static final NodeFactory INSTANCE = new NodeFactoryImpl();

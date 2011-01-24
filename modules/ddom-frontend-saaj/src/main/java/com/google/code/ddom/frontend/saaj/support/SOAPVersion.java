@@ -17,14 +17,14 @@ package com.google.code.ddom.frontend.saaj.support;
 
 import javax.xml.soap.SOAPConstants;
 
-import com.google.code.ddom.core.Sequence;
-import com.google.code.ddom.core.SequenceBuilder;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetail;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Body;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Header;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Body;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Header;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFaultElement;
+import com.googlecode.ddom.core.Sequence;
+import com.googlecode.ddom.core.SequenceBuilder;
 
 public abstract class SOAPVersion {
     public static final SOAPVersion SOAP11 = new SOAPVersion(

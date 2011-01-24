@@ -20,13 +20,13 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
-import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class AttributeSupport implements AxiomAttribute {

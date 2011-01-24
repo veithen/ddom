@@ -23,11 +23,11 @@ import javax.xml.soap.Detail;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareElement;
 
 @Mixin(SAAJSOAPFault.class)
 public abstract class SOAPFaultSupport implements SAAJSOAPFault {

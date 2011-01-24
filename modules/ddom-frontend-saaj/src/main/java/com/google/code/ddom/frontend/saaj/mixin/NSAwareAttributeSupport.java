@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
 
 /**
  * Mixin that implements the {@link Name} interface on namespace aware attributes. This is used to

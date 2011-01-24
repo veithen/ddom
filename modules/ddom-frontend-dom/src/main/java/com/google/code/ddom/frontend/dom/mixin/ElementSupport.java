@@ -23,13 +23,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.TypeInfo;
 
-import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
-import com.google.code.ddom.core.CoreNamespaceDeclaration;
-import com.google.code.ddom.core.CoreTypedAttribute;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
@@ -42,6 +35,13 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.stream.spi.Symbols;
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.core.CoreTypedAttribute;
 
 @Mixin(CoreElement.class)
 public abstract class ElementSupport implements DOMElement {

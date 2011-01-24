@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.frontend.saaj.intf;
 
-import com.google.code.ddom.core.ext.ModelExtensionInterface;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
+import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
 @ModelExtensionInterface(parent=SAAJSOAPFault.class)
 public interface SAAJSOAP11Fault extends SAAJSOAPFault {

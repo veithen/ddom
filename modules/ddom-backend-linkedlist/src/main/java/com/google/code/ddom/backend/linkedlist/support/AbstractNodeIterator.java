@@ -17,13 +17,13 @@ package com.google.code.ddom.backend.linkedlist.support;
 
 import java.util.NoSuchElementException;
 
-import com.google.code.ddom.core.Axis;
-import com.google.code.ddom.core.ChildIterator;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreParentNode;
-import com.google.code.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.ChildIterator;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public abstract class AbstractNodeIterator<T extends CoreChildNode> implements ChildIterator<T> {
     private final CoreParentNode startNode;

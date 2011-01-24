@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.saaj.support;
 
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.core.CoreModelException;
 
 public final class SAAJExceptionUtil {
     private SAAJExceptionUtil() {}

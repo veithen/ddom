@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
-import com.google.code.ddom.core.CoreLeafNode;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.core.CoreLeafNode;
 
 public interface LLLeafNode extends LLChildNode, CoreLeafNode {
     void internalGenerateEvents(XmlHandler handler) throws StreamException;

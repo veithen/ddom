@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.axiom.support;
 
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.core.Mapper;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
+import com.googlecode.ddom.core.Mapper;
 
 public class NamespaceDeclarationMapper implements Mapper<AxiomNamespaceDeclaration,OMNamespace> {
     public static final NamespaceDeclarationMapper INSTANCE = new NamespaceDeclarationMapper();

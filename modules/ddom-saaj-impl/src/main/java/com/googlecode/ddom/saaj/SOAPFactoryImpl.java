@@ -23,13 +23,13 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPFault;
 
-import com.google.code.ddom.core.NodeFactory;
-import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelRegistry;
+import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.util.QNameUtil;
 
 public class SOAPFactoryImpl extends SOAPFactory {
     private static final ModelRegistry modelRegistry = ModelRegistry.getInstance(SOAPFactoryImpl.class.getClassLoader());

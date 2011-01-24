@@ -20,8 +20,8 @@ import java.util.Map;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.CoreElement;
 import com.google.code.ddom.frontend.dom.support.UserData;
+import com.googlecode.ddom.core.CoreElement;
 
 public interface DOMNode extends Node {
     Map<String,UserData> getUserDataMap(boolean create);

@@ -18,15 +18,15 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreDocumentFragment;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreParentNode;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.HierarchyException;
-import com.google.code.ddom.core.NodeMigrationException;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreDocumentFragment;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.HierarchyException;
+import com.googlecode.ddom.core.NodeMigrationException;
 
 public abstract class Container extends ParentNode implements LLChildNode {
     private LLParentNode owner;

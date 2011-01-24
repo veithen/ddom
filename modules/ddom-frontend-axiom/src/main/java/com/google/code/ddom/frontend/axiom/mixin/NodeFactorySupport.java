@@ -24,7 +24,6 @@ import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.xml.sax.InputSource;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
@@ -32,6 +31,7 @@ import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.google.code.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
+import com.googlecode.ddom.core.NodeFactory;
 
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomNodeFactory {

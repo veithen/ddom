@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.axiom.mixin.dom;
 
-import com.google.code.ddom.core.CoreProcessingInstruction;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
+import com.googlecode.ddom.core.CoreProcessingInstruction;
 
 @Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements AxiomProcessingInstruction {

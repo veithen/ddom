@@ -22,12 +22,6 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.Axis;
-import com.google.code.ddom.core.ChildIterator;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.IdentityMapper;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.Policies;
@@ -36,6 +30,12 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.google.code.ddom.frontend.saaj.support.SAAJUtil;
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.ChildIterator;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.IdentityMapper;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class SOAPElementSupport implements SAAJSOAPElement {

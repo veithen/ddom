@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.testsuite.parent;
 
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreParentNode;
-import com.google.code.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.NodeFactory;
 
 public interface ParentNodeFactory {
     Class<? extends CoreParentNode> getNodeClass();

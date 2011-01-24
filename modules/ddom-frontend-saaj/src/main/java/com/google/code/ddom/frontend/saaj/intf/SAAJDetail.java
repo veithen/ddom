@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.Detail;
 
-import com.google.code.ddom.core.ext.ModelExtensionInterface;
+import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
 @ModelExtensionInterface(parent=SAAJSOAPFaultElement.class)
 public interface SAAJDetail extends Detail, SAAJSOAPElement {

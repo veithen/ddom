@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
-import com.google.code.ddom.core.CoreNode;
-import com.google.code.ddom.core.WrongDocumentException;
+import com.googlecode.ddom.core.CoreNode;
+import com.googlecode.ddom.core.WrongDocumentException;
 
 public interface LLNode extends CoreNode {
     // TODO: need to check if we really need interface methods for this

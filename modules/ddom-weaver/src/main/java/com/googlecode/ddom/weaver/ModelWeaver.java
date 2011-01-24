@@ -20,9 +20,9 @@ import java.util.Map;
 
 import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.frontend.Frontend;
+import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.weaver.dump.DumpPlugin;
 import com.googlecode.ddom.weaver.ext.ModelExtensionPlugin;
 import com.googlecode.ddom.weaver.inject.InjectionPlugin;

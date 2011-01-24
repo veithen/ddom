@@ -17,10 +17,10 @@ package com.google.code.ddom.backend.testsuite.element;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.google.code.ddom.core.Axis;
-import com.google.code.ddom.core.ChildIterator;
-import com.google.code.ddom.core.CoreComment;
-import com.google.code.ddom.core.CoreElement;
+import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.ChildIterator;
+import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.core.CoreElement;
 
 public class TestCoreGetChildrenByTypeAndRemove extends BackendTestCase {
     public TestCoreGetChildrenByTypeAndRemove(BackendTestSuiteConfig config) {

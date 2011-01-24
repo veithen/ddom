@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.EntityReference;
 
-import com.google.code.ddom.core.CoreEntityReference;
+import com.googlecode.ddom.core.CoreEntityReference;
 
 public interface DOMEntityReference extends CoreEntityReference, EntityReference, DOMCoreLeafNode {
 

@@ -17,8 +17,8 @@ package com.google.code.ddom.frontend.axiom.soap;
 
 import org.apache.axiom.soap.SOAPConstants;
 
-import com.google.code.ddom.core.ext.ModelExtensionMapper;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
+import com.googlecode.ddom.core.ext.ModelExtensionMapper;
 
 // TODO: this should only be used if a plain OMFactory is used; however, it is always used
 public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {

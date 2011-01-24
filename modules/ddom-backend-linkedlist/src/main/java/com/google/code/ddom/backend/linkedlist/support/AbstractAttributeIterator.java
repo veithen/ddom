@@ -18,9 +18,9 @@ package com.google.code.ddom.backend.linkedlist.support;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.Mapper;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.Mapper;
 
 public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> implements Iterator<S> {
     private final CoreElement element;

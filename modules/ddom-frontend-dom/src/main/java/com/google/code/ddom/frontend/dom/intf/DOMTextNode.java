@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.core.CoreTextNode;
+import com.googlecode.ddom.core.CoreTextNode;
 
 public interface DOMTextNode extends CoreTextNode, Text, DOMCharacterData {
     /**

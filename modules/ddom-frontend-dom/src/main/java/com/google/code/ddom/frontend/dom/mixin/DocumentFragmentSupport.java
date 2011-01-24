@@ -20,12 +20,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.CoreDocumentFragment;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.core.CoreDocumentFragment;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
 
 @Mixin(CoreDocumentFragment.class)
 public abstract class DocumentFragmentSupport implements DOMDocumentFragment {

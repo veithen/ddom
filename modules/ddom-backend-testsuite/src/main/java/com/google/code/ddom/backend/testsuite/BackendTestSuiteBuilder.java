@@ -19,14 +19,14 @@ import junit.framework.TestSuite;
 
 import com.google.code.ddom.backend.testsuite.nsaware.NSAwareNamedNodeFactory;
 import com.google.code.ddom.backend.testsuite.parent.ParentNodeFactory;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.CoreNSAwareNamedNode;
-import com.google.code.ddom.core.CoreParentNode;
-import com.google.code.ddom.core.CoreTypedAttribute;
-import com.google.code.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreNSAwareNamedNode;
+import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.CoreTypedAttribute;
+import com.googlecode.ddom.core.NodeFactory;
 
 public class BackendTestSuiteBuilder {
     private BackendTestSuiteBuilder() {}

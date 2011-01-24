@@ -16,8 +16,8 @@
 package com.google.code.ddom.backend.linkedlist.intf;
 
 import com.google.code.ddom.backend.linkedlist.Flags;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public interface LLChildNode extends LLNode, CoreChildNode {
     /**

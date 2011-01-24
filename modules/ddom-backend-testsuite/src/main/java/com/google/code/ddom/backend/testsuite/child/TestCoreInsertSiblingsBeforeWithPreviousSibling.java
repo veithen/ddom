@@ -19,11 +19,11 @@ import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
 import com.google.code.ddom.backend.testsuite.Policies;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreComment;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreDocumentFragment;
-import com.google.code.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreDocumentFragment;
+import com.googlecode.ddom.core.CoreElement;
 
 public class TestCoreInsertSiblingsBeforeWithPreviousSibling extends BackendTestCase {
     public TestCoreInsertSiblingsBeforeWithPreviousSibling(BackendTestSuiteConfig config) {

@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 
 public interface AxiomNamespaceDeclaration extends CoreNamespaceDeclaration {
     OMNamespace getOMNamespace();

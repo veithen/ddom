@@ -17,7 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import javax.xml.namespace.QName;
 
-import com.google.code.ddom.core.CoreNSAwareNamedNode;
+import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 
 public final class NSAwareNamedNodeHelper {
     private NSAwareNamedNodeHelper() {}

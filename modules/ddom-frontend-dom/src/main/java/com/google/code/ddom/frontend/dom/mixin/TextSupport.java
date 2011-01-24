@@ -18,10 +18,10 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.CoreText;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMText;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
+import com.googlecode.ddom.core.CoreText;
 
 @Mixin(CoreText.class)
 public abstract class TextSupport implements DOMText {

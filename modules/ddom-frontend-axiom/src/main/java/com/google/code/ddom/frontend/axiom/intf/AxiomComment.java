@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMComment;
 
-import com.google.code.ddom.core.CoreComment;
+import com.googlecode.ddom.core.CoreComment;
 
 public interface AxiomComment extends CoreComment, OMComment, AxiomLeafNode {
 

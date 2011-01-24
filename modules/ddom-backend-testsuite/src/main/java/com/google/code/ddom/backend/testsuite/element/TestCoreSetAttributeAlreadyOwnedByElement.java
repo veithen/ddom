@@ -19,14 +19,14 @@ import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.NSAwareAttributeMatcher;
 import com.google.code.ddom.backend.testsuite.Policies;
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreElement.ReturnValue;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreElement.ReturnValue;
 
 /**
  * Tests that
- * {@link CoreElement#coreSetAttribute(com.google.code.ddom.core.AttributeMatcher, String, String, CoreAttribute, com.google.code.ddom.core.NodeMigrationPolicy)}
+ * {@link CoreElement#coreSetAttribute(com.googlecode.ddom.core.AttributeMatcher, String, String, CoreAttribute, com.googlecode.ddom.core.NodeMigrationPolicy)}
  * is a no-op if the specified attribute is already owned by the element.
  */
 public class TestCoreSetAttributeAlreadyOwnedByElement extends BackendTestCase {

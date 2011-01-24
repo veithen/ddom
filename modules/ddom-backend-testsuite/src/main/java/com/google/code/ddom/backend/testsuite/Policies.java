@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.testsuite;
 
-import com.google.code.ddom.core.NodeMigrationPolicy;
+import com.googlecode.ddom.core.NodeMigrationPolicy;
 
 public final class Policies {
     private Policies() {}

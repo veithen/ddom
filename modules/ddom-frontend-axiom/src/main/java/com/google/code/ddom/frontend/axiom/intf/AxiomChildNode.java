@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMNode;
 
-import com.google.code.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreChildNode;
 
 public interface AxiomChildNode extends CoreChildNode, OMNode, AxiomNode {
 

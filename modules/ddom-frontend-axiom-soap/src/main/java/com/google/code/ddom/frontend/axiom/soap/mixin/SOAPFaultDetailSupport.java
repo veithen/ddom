@@ -19,13 +19,13 @@ import java.util.Iterator;
 
 import org.apache.axiom.om.OMElement;
 
-import com.google.code.ddom.core.Axis;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
+import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.CoreModelException;
 
 @Mixin(AxiomSOAPFaultDetail.class)
 public abstract class SOAPFaultDetailSupport implements AxiomSOAPFaultDetail {

@@ -17,12 +17,12 @@ package com.google.code.ddom.backend.testsuite;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.NodeFactory;
 
 public final class NSAwareAttributeMatcher implements AttributeMatcher {
     public static final NSAwareAttributeMatcher INSTANCE = new NSAwareAttributeMatcher();

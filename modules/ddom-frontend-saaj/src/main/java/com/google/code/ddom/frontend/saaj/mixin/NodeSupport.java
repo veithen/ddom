@@ -18,11 +18,11 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNode;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreModelException;
 
 @Mixin(CoreChildNode.class)
 public abstract class NodeSupport implements SAAJNode {

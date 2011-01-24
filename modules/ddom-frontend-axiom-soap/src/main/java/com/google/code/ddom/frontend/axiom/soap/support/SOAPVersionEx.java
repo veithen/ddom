@@ -24,8 +24,6 @@ import org.apache.axiom.soap.SOAP12Version;
 import org.apache.axiom.soap.SOAPConstants;
 import org.apache.axiom.soap.SOAPVersion;
 
-import com.google.code.ddom.core.Sequence;
-import com.google.code.ddom.core.SequenceBuilder;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Body;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Envelope;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP11Fault;
@@ -53,6 +51,8 @@ import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
+import com.googlecode.ddom.core.Sequence;
+import com.googlecode.ddom.core.SequenceBuilder;
 
 public abstract class SOAPVersionEx {
     public static final SOAPVersionEx SOAP11 = new SOAPVersionEx(

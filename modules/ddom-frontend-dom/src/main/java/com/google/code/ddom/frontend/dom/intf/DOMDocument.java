@@ -19,8 +19,8 @@ import java.util.Map;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.frontend.dom.support.UserData;
+import com.googlecode.ddom.core.CoreDocument;
 
 public interface DOMDocument extends CoreDocument, Document, DOMParentNode {
     int getStructureVersion();

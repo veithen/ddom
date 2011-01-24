@@ -17,11 +17,11 @@ package com.google.code.ddom.frontend.dom.support;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
-import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.google.code.ddom.frontend.dom.intf.DOMNode;
+import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
+import com.googlecode.ddom.core.CoreNode;
 
 public final class NodeUtil {
     private NodeUtil() {}

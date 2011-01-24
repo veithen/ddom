@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.backend.linkedlist.support;
 
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.Mapper;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.Mapper;
 
 public class AttributesByTypeIterator<T extends CoreAttribute,S> extends AbstractAttributeIterator<T,S> {
     public AttributesByTypeIterator(CoreElement element, Class<T> type, Mapper<T,S> mapper) {

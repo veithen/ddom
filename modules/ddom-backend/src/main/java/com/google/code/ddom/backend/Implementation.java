@@ -25,17 +25,17 @@ import java.lang.annotation.Target;
  * This annotation must be applied to one and only one implementation of the following
  * interfaces:
  * <ul>
- * <li>{@link com.google.code.ddom.core.CoreCDATASection}
- * <li>{@link com.google.code.ddom.core.CoreComment}
- * <li>{@link com.google.code.ddom.core.CoreDocumentTypeDeclaration}
- * <li>{@link com.google.code.ddom.core.CoreEntityReference}
- * <li>{@link com.google.code.ddom.core.CoreNamespaceDeclaration}
- * <li>{@link com.google.code.ddom.core.CoreNSAwareAttribute}
- * <li>{@link com.google.code.ddom.core.CoreNSAwareElement}
- * <li>{@link com.google.code.ddom.core.CoreNSUnawareAttribute}
- * <li>{@link com.google.code.ddom.core.CoreNSUnawareElement}
- * <li>{@link com.google.code.ddom.core.CoreProcessingInstruction}
- * <li>{@link com.google.code.ddom.core.CoreText}
+ * <li>{@link com.googlecode.ddom.core.CoreCDATASection}
+ * <li>{@link com.googlecode.ddom.core.CoreComment}
+ * <li>{@link com.googlecode.ddom.core.CoreDocumentTypeDeclaration}
+ * <li>{@link com.googlecode.ddom.core.CoreEntityReference}
+ * <li>{@link com.googlecode.ddom.core.CoreNamespaceDeclaration}
+ * <li>{@link com.googlecode.ddom.core.CoreNSAwareAttribute}
+ * <li>{@link com.googlecode.ddom.core.CoreNSAwareElement}
+ * <li>{@link com.googlecode.ddom.core.CoreNSUnawareAttribute}
+ * <li>{@link com.googlecode.ddom.core.CoreNSUnawareElement}
+ * <li>{@link com.googlecode.ddom.core.CoreProcessingInstruction}
+ * <li>{@link com.googlecode.ddom.core.CoreText}
  * </ul>
  * The weaver uses this information to generate the model extension classes.
  * 

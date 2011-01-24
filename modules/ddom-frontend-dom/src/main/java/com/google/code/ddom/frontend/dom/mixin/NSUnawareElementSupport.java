@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.frontend.dom.mixin;
 
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreNSUnawareElement;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareElement;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreNSUnawareElement;
 
 @Mixin(CoreNSUnawareElement.class)
 public abstract class NSUnawareElementSupport implements DOMNSUnawareElement {

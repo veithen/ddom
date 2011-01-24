@@ -17,12 +17,12 @@ package com.google.code.ddom.frontend.saaj.mixin;
 
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNSAwareAttribute;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
 
 @Mixin(SAAJSOAPHeaderElement.class)
 public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement {

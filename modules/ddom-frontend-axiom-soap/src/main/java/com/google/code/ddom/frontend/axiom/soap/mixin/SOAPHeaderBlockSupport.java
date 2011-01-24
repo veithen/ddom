@@ -21,12 +21,12 @@ import org.apache.axiom.soap.SOAPConstants;
 import org.apache.axiom.soap.SOAPProcessingException;
 import org.apache.axiom.soap.SOAPVersion;
 
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreModelException;
 
 @Mixin(AxiomSOAPHeaderBlock.class)
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {

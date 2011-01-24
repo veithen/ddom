@@ -35,9 +35,6 @@ import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
-import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomCDATASection;
 import com.google.code.ddom.frontend.axiom.intf.AxiomComment;
@@ -48,6 +45,9 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
 import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.util.QNameUtil;
 
 public class OMFactoryImpl implements OMFactory {
     protected final AxiomNodeFactory nodeFactory;

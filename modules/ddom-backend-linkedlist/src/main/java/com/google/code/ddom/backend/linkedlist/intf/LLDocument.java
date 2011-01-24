@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
-import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.stream.spi.XmlInput;
+import com.googlecode.ddom.core.CoreDocument;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
     void internalCreateBuilder(XmlInput input, LLParentNode target);

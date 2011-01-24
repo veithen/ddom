@@ -19,9 +19,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMException;
 
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.stream.spi.StreamException;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public class AxiomExceptionUtil {
     private AxiomExceptionUtil() {}

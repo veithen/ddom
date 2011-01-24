@@ -32,9 +32,9 @@ import org.xml.sax.SAXParseException;
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
+import com.googlecode.ddom.core.CoreDocument;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private static final ModelDefinition DOM = ModelDefinitionBuilder.buildModelDefinition("dom");

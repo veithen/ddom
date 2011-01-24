@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.core.CoreTypedAttribute;
+import com.googlecode.ddom.core.CoreTypedAttribute;
 
 public interface DOMTypedAttribute extends CoreTypedAttribute, DOMAttribute {
 

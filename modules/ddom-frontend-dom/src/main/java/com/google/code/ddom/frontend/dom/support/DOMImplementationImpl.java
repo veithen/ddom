@@ -20,9 +20,9 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
+import com.googlecode.ddom.core.NodeFactory;
 
 public class DOMImplementationImpl implements DOMImplementation {
     private final NodeFactory nodeFactory;

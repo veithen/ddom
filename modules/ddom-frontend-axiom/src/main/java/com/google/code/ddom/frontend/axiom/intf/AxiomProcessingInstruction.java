@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMProcessingInstruction;
 
-import com.google.code.ddom.core.CoreProcessingInstruction;
+import com.googlecode.ddom.core.CoreProcessingInstruction;
 
 public interface AxiomProcessingInstruction extends CoreProcessingInstruction, OMProcessingInstruction, AxiomLeafNode {
 

@@ -21,14 +21,14 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.soap.SOAPConstants;
 import org.apache.axiom.soap.SOAPFault;
 
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
 
 @Mixin(AxiomSOAPBody.class)
 public abstract class SOAPBodySupport implements AxiomSOAPBody {

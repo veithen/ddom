@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.frontend.dom.support;
 
-import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.NodeFactory;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.NodeFactory;
 
 /**
  * {@link AttributeMatcher} implementation that matches attributes based on their name, i.e. based

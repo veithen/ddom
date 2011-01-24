@@ -16,9 +16,9 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
-import com.google.code.ddom.core.CoreNSUnawareAttribute;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.core.CoreNSUnawareAttribute;
 
 // @Implementation
 public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareAttribute {

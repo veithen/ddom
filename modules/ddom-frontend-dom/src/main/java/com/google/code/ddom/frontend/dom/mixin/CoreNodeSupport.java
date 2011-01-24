@@ -19,11 +19,11 @@ import java.util.Map;
 
 import org.w3c.dom.DOMImplementation;
 
-import com.google.code.ddom.core.CoreNode;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreNode;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.support.UserData;
+import com.googlecode.ddom.core.CoreNode;
 
 @Mixin(CoreNode.class)
 public abstract class CoreNodeSupport implements DOMCoreNode {

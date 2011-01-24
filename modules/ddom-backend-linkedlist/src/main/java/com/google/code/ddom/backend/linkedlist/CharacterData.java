@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.core.CoreCharacterData;
 
 public abstract class CharacterData extends LeafNode implements CoreCharacterData {
     private String data;

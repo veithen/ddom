@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.core.CoreCharacterData;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNode;
+import com.googlecode.ddom.core.CoreCharacterData;
 
 @Mixin(CoreCharacterData.class)
 public abstract class CharacterDataSupport implements SAAJNode, CoreCharacterData {

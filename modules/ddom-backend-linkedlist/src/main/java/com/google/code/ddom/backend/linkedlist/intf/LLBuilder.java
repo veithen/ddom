@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
-import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public interface LLBuilder {
     void next() throws DeferredParsingException;

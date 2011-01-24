@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.CoreNode;
+import com.googlecode.ddom.core.CoreNode;
 
 /**
  * DOM {@link Node} that directly maps to a {@link CoreNode}.

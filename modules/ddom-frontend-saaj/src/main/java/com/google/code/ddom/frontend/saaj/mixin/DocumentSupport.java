@@ -18,11 +18,11 @@ package com.google.code.ddom.frontend.saaj.mixin;
 import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPEnvelope;
 
-import com.google.code.ddom.core.CoreDocument;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Envelope;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Envelope;
+import com.googlecode.ddom.core.CoreDocument;
 
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements SAAJDocument {

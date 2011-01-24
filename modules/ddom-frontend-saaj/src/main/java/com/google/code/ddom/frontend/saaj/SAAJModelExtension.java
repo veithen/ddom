@@ -17,7 +17,6 @@ package com.google.code.ddom.frontend.saaj;
 
 import javax.xml.soap.SOAPConstants;
 
-import com.google.code.ddom.core.ext.SimpleModelExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Body;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Envelope;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
@@ -26,6 +25,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Body;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Envelope;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Header;
+import com.googlecode.ddom.core.ext.SimpleModelExtension;
 
 public class SAAJModelExtension extends SimpleModelExtension {
     public Class<?> mapElement(String namespaceURI, String localName) {

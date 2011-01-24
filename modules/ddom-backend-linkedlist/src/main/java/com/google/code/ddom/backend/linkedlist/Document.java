@@ -20,17 +20,17 @@ import java.util.List;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
-import com.google.code.ddom.core.ChildNotAllowedException;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreDocumentTypeDeclaration;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.ext.ModelExtension;
 import com.google.code.ddom.stream.spi.Stream;
 import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.google.code.ddom.stream.spi.Symbols;
 import com.google.code.ddom.stream.spi.XmlHandler;
 import com.google.code.ddom.stream.spi.XmlInput;
+import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.ext.ModelExtension;
 
 public class Document extends ParentNode implements LLDocument {
     private final ModelExtension modelExtension;

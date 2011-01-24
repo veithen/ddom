@@ -18,11 +18,11 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.Policies;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreDocumentFragment;
-import com.google.code.ddom.core.CoreElement;
-import com.google.code.ddom.core.CoreText;
-import com.google.code.ddom.core.WrongDocumentException;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreDocumentFragment;
+import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreText;
+import com.googlecode.ddom.core.WrongDocumentException;
 
 public class TestCoreInsertSiblingsBeforeFromWrongDocument extends BackendTestCase {
     public TestCoreInsertSiblingsBeforeFromWrongDocument(BackendTestSuiteConfig config) {

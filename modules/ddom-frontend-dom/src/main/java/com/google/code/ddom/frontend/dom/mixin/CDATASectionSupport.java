@@ -18,12 +18,12 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.CoreCDATASection;
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMCDATASection;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreModelException;
 
 @Mixin(CoreCDATASection.class)
 public abstract class CDATASectionSupport implements DOMCDATASection {

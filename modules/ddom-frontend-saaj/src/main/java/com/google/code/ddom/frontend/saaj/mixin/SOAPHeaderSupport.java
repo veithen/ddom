@@ -22,12 +22,12 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeaderElement;
 
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.util.QNameUtil;
 
 @Mixin(SAAJSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {

@@ -25,7 +25,6 @@ import org.apache.cxf.phase.Phase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
@@ -33,6 +32,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.stream.dom.DOMInput;
 import com.google.code.ddom.stream.spi.SimpleXmlSource;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public class SOAPPartImpl extends AbstractSOAPPartImpl {
     private final Model saajModel;

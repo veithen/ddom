@@ -16,11 +16,11 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLNode;
-import com.google.code.ddom.core.CoreDocument;
-import com.google.code.ddom.core.CoreNode;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.NodeFactory;
-import com.google.code.ddom.core.WrongDocumentException;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreNode;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.WrongDocumentException;
 
 public abstract class Node implements LLNode {
     private int flags;

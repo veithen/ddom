@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom.intf;
 
-import com.google.code.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreNSAwareElement;
 
 public interface DOMNSAwareElement extends CoreNSAwareElement, DOMElement, DOMNSAwareNamedNode {
 

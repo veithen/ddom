@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.Comment;
 
-import com.google.code.ddom.core.CoreComment;
+import com.googlecode.ddom.core.CoreComment;
 
 public interface DOMComment extends CoreComment, Comment, DOMCharacterData {
 

@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * Marks a field for injection by the weaver. The injection mechanism is used to inject front-end
  * specific resources into the back-end classes. The weaver generates code that initializes fields
- * having this annotation. Currently, only {@link com.google.code.ddom.core.ext.ModelExtension}
+ * having this annotation. Currently, only {@link com.googlecode.ddom.core.ext.ModelExtension}
  * instances can be injected. Note that injection only works in weavable classes.
  * 
  * @author Andreas Veithen

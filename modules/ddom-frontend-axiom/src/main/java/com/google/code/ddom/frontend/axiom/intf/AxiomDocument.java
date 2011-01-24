@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMDocument;
 
-import com.google.code.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreDocument;
 
 public interface AxiomDocument extends CoreDocument, OMDocument, AxiomContainer {
 

@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMText;
 
-import com.google.code.ddom.core.CoreTextNode;
+import com.googlecode.ddom.core.CoreTextNode;
 
 public interface AxiomTextNode extends CoreTextNode, OMText, AxiomLeafNode {
 

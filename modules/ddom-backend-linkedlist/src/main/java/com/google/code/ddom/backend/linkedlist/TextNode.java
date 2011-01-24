@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.core.CoreTextNode;
-import com.google.code.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.CoreTextNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public abstract class TextNode extends CharacterData implements CoreTextNode {
     public TextNode(Document document, String data) {

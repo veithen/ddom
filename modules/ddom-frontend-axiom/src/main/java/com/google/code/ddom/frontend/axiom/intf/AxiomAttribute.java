@@ -17,7 +17,7 @@ package com.google.code.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMAttribute;
 
-import com.google.code.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.CoreNSAwareAttribute;
 
 public interface AxiomAttribute extends CoreNSAwareAttribute, OMAttribute, AxiomNamedNode {
 

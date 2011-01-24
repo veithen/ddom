@@ -17,10 +17,10 @@ package com.google.code.ddom.frontend.saaj.support;
 
 import java.util.Iterator;
 
-import com.google.code.ddom.core.ChildIterator;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNSAwareElement;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
+import com.googlecode.ddom.core.ChildIterator;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareElement;
 
 /**
  * Iterator wrapper that silently replaces generic {@link org.w3c.dom.Element} instances by new

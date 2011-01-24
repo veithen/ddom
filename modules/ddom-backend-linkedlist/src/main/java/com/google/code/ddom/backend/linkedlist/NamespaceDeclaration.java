@@ -16,10 +16,10 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.Implementation;
-import com.google.code.ddom.core.CoreNamespaceDeclaration;
-import com.google.code.ddom.core.DeferredParsingException;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 // @Implementation
 public class NamespaceDeclaration extends Attribute implements CoreNamespaceDeclaration {

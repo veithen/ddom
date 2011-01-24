@@ -15,14 +15,14 @@
  */
 package com.google.code.ddom.backend.linkedlist.intf;
 
-import com.google.code.ddom.core.ChildNotAllowedException;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreParentNode;
-import com.google.code.ddom.core.CyclicRelationshipException;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.WrongDocumentException;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.CyclicRelationshipException;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.WrongDocumentException;
 
 public interface LLParentNode extends LLNode, CoreParentNode {
     void internalNotifyChildrenModified(int delta);

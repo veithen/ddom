@@ -4,10 +4,10 @@ import java.util.Iterator;
 
 import org.w3c.dom.Element;
 
-import com.google.code.ddom.core.Axis;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
 import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
+import com.googlecode.ddom.core.Axis;
 
 // TODO: clean this up
 public class ElementsByTagNameNS extends ElementsBy {

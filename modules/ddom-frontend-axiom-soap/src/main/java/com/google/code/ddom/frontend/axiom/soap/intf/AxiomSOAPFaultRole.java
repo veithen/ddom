@@ -17,9 +17,9 @@ package com.google.code.ddom.frontend.axiom.soap.intf;
 
 import org.apache.axiom.soap.SOAPFaultRole;
 
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.ext.ModelExtensionInterface;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
 @ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
 public interface AxiomSOAPFaultRole extends AxiomElement, SOAPFaultRole {

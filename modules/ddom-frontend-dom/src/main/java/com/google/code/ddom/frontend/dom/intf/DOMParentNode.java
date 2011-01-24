@@ -18,7 +18,7 @@ package com.google.code.ddom.frontend.dom.intf;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.google.code.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.CoreParentNode;
 
 public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
     Node shallowClone();

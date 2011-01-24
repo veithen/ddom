@@ -20,9 +20,9 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.core.CoreAttribute;
-import com.google.code.ddom.core.CoreTypedAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreTypedAttribute;
 
 public class AttributesNamedNodeMap implements NamedNodeMap {
     private final DOMElement element;

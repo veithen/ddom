@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.frontend.axiom.intf;
 
-import com.google.code.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreCDATASection;
 
 public interface AxiomCDATASection extends CoreCDATASection, AxiomTextNode {
 

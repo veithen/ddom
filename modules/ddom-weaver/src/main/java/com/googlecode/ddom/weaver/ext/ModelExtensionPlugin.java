@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.core.ext.ModelExtensionInterface;
+import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 import com.googlecode.ddom.weaver.reactor.Extensions;
 import com.googlecode.ddom.weaver.reactor.NonWeavableClassInfo;
 import com.googlecode.ddom.weaver.reactor.ReactorPlugin;

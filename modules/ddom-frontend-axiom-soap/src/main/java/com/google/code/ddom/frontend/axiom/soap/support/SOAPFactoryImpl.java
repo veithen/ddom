@@ -40,13 +40,13 @@ import org.apache.axiom.soap.SOAPMessage;
 import org.apache.axiom.soap.SOAPProcessingException;
 import org.apache.axiom.soap.SOAPVersion;
 
-import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.util.QNameUtil;
 
 public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     private final SOAPVersionEx soapVersion;

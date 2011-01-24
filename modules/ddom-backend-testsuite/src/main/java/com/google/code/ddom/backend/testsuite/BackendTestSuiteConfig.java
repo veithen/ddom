@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.testsuite;
 
-import com.google.code.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.NodeFactory;
 
 public final class BackendTestSuiteConfig {
     private final NodeFactory nodeFactory;

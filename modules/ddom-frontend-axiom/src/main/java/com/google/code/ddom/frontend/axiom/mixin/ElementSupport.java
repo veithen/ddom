@@ -31,14 +31,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.core.AttributeMatcher;
-import com.google.code.ddom.core.Axis;
-import com.google.code.ddom.core.CoreChildNode;
-import com.google.code.ddom.core.CoreModelException;
-import com.google.code.ddom.core.CoreNSAwareElement;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.IdentityMapper;
-import com.google.code.ddom.core.util.QNameUtil;
 import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
@@ -51,6 +43,14 @@ import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.google.code.ddom.frontend.axiom.support.Policies;
 import com.google.code.ddom.stream.spi.StreamException;
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.IdentityMapper;
+import com.googlecode.ddom.core.util.QNameUtil;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class ElementSupport implements AxiomElement {

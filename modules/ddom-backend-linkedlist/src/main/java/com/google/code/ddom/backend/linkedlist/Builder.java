@@ -21,13 +21,13 @@ import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.collections.ArrayStack;
 import com.google.code.ddom.collections.Stack;
-import com.google.code.ddom.core.DeferredParsingException;
-import com.google.code.ddom.core.ext.ModelExtension;
-import com.google.code.ddom.core.ext.ModelExtensionMapper;
 import com.google.code.ddom.stream.spi.SimpleXmlOutput;
 import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.XmlHandler;
 import com.google.code.ddom.stream.spi.XmlInput;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.core.ext.ModelExtensionMapper;
 
 // TODO: also allow for deferred building of attributes
 public class Builder extends SimpleXmlOutput implements LLBuilder {

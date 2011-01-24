@@ -20,9 +20,9 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-import com.google.code.ddom.core.CoreModelException;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
+import com.googlecode.ddom.core.CoreModelException;
 
 public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
     private final AxiomDocument document;
