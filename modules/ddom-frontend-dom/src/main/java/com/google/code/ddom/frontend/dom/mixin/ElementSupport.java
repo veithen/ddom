@@ -34,7 +34,6 @@ import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.Policies;
-import com.google.code.ddom.stream.spi.Symbols;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreElement;
@@ -42,6 +41,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.CoreTypedAttribute;
+import com.googlecode.ddom.symbols.Symbols;
 
 @Mixin(CoreElement.class)
 public abstract class ElementSupport implements DOMElement {

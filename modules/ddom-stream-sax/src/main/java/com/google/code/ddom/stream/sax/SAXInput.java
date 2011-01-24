@@ -22,9 +22,9 @@ import javax.xml.transform.sax.SAXSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.Symbols;
-import com.google.code.ddom.stream.spi.XmlInput;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.symbols.Symbols;
 
 public class SAXInput extends XmlInput {
     private final SAXSource source;

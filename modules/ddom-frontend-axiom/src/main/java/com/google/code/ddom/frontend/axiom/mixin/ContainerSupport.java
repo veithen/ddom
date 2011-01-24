@@ -37,10 +37,6 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
 import com.google.code.ddom.stream.spi.NamespaceRepairingFilter;
-import com.google.code.ddom.stream.spi.Stream;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlInput;
-import com.google.code.ddom.stream.spi.XmlOutput;
 import com.google.code.ddom.stream.stax.StAXPivot;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -48,6 +44,10 @@ import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.util.QNameUtil;
+import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlOutput;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
 public abstract class ContainerSupport implements AxiomContainer {

@@ -16,10 +16,10 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
-import com.google.code.ddom.stream.spi.XmlHandler;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
+import com.googlecode.ddom.stream.XmlHandler;
 
 public class DocumentFragment extends ParentNode implements CoreDocumentFragment {
     private Document document;

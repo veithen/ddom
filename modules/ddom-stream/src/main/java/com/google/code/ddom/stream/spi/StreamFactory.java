@@ -24,6 +24,9 @@ import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.spi.ProviderFinder;
 import com.google.code.ddom.spi.ProviderFinderException;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlOutput;
+import com.googlecode.ddom.stream.XmlSource;
 
 public final class StreamFactory {
     private static final ClassLoaderLocal<StreamFactory> factories = new ClassLoaderLocal<StreamFactory>();

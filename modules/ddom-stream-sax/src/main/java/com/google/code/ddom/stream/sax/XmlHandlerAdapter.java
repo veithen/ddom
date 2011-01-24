@@ -17,8 +17,8 @@ package com.google.code.ddom.stream.sax;
 
 import org.xml.sax.ContentHandler;
 
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 
 public class XmlHandlerAdapter implements XmlHandler {
     private final ContentHandler handler;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.stream;
 
 public interface XmlHandler {
     void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);

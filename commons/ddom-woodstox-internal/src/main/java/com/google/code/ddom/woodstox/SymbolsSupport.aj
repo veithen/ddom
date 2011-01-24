@@ -16,7 +16,7 @@
 package com.google.code.ddom.woodstox;
 
 import com.ctc.wstx.util.SymbolTable;
-import com.google.code.ddom.stream.spi.Symbols;
+import com.googlecode.ddom.symbols.Symbols;
 
 /**
  * Aspect that adds the {@link Symbols} interface to the existing {@link SymbolTable} class.

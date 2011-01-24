@@ -29,9 +29,9 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.google.code.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
-import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.stream.StreamException;
 
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomNodeFactory {

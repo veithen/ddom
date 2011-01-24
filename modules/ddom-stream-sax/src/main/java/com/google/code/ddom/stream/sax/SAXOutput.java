@@ -17,8 +17,8 @@ package com.google.code.ddom.stream.sax;
 
 import org.xml.sax.ContentHandler;
 
-import com.google.code.ddom.stream.spi.XmlHandler;
-import com.google.code.ddom.stream.spi.XmlOutput;
+import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.XmlOutput;
 
 public class SAXOutput extends XmlOutput {
     private final ContentHandler handler;

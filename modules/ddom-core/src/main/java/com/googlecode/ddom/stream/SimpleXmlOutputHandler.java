@@ -13,93 +13,80 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.stream;
 
-final class DelegatingXmlHandler implements XmlHandler{
-    private XmlHandler delegate;
-    private boolean complete;
+final class SimpleXmlOutputHandler implements XmlHandler{
+    private final SimpleXmlOutput output;
 
-    private XmlHandler getDelegate() {
-        if (delegate == null) {
-            throw new IllegalStateException("Delegate has not been set");
-        }
-        return delegate;
-    }
-
-    void setDelegate(XmlHandler delegate) {
-        this.delegate = delegate;
-    }
-    
-    boolean isComplete() {
-        return complete;
+    SimpleXmlOutputHandler(SimpleXmlOutput delegate) {
+        this.output = delegate;
     }
 
     public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
-        getDelegate().setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
+        output.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {
-        getDelegate().processDocumentType(rootName, publicId, systemId, data);
+        output.processDocumentType(rootName, publicId, systemId, data);
     }
 
     public void startElement(String tagName) throws StreamException {
-        getDelegate().startElement(tagName);
+        output.startElement(tagName);
     }
 
     public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        getDelegate().startElement(namespaceURI, localName, prefix);
+        output.startElement(namespaceURI, localName, prefix);
     }
 
     public void endElement() throws StreamException {
-        getDelegate().endElement();
+        output.endElement();
     }
 
     public void startAttribute(String name, String type) throws StreamException {
-        getDelegate().startAttribute(name, type);
+        output.startAttribute(name, type);
     }
 
     public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
-        getDelegate().startAttribute(namespaceURI, localName, prefix, type);
+        output.startAttribute(namespaceURI, localName, prefix, type);
     }
 
     public void startNamespaceDeclaration(String prefix) throws StreamException {
-        getDelegate().startNamespaceDeclaration(prefix);
+        output.startNamespaceDeclaration(prefix);
     }
     
     public void endAttribute() throws StreamException {
-        getDelegate().endAttribute();
+        output.endAttribute();
     }
 
     public void attributesCompleted() throws StreamException {
-        getDelegate().attributesCompleted();
+        output.attributesCompleted();
     }
 
     public void processProcessingInstruction(String target, String data) throws StreamException {
-        getDelegate().processProcessingInstruction(target, data);
+        output.processProcessingInstruction(target, data);
     }
 
     public void processText(String data, boolean ignorable) throws StreamException {
-        getDelegate().processText(data, ignorable);
+        output.processText(data, ignorable);
     }
 
     public void processComment(String data) throws StreamException {
-        getDelegate().processComment(data);
+        output.processComment(data);
     }
 
     public void startCDATASection() throws StreamException {
-        getDelegate().startCDATASection();
+        output.startCDATASection();
     }
 
     public void endCDATASection() throws StreamException {
-        getDelegate().endCDATASection();
+        output.endCDATASection();
     }
 
     public void processEntityReference(String name) {
-        getDelegate().processEntityReference(name);
+        output.processEntityReference(name);
     }
 
     public void completed() throws StreamException {
-        getDelegate().completed();
-        complete = true;
+        output.completed();
     }
 }

@@ -13,25 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.stream;
 
-public abstract class XmlFilter {
-    private Stream stream;
-    
-    XmlHandler connect(Stream stream, XmlHandler handler) {
-        if (this.stream != null) {
-            throw new IllegalStateException("Already connected");
-        }
-        this.stream = stream;
-        return createXmlHandler(handler);
-    }
-    
-    public final Stream getStream() {
-        if (stream == null) {
-            throw new IllegalStateException("Not connected");
-        }
-        return stream;
-    }
-
-    protected abstract XmlHandler createXmlHandler(XmlHandler target);
+public interface XmlSource {
+    XmlInput getInput();
+    boolean isDestructive();
 }

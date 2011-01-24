@@ -24,8 +24,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.ext.Locator2;
 
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 
 public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     private final XmlHandler handler;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.symbols;
 
 // TODO: specify that args must not be null
 // TODO: we should support interning as well; reason: when importing or adopting nodes from another document, we don't need to lookup the symbols again (if the symbol tables of both documents have interning enabled)

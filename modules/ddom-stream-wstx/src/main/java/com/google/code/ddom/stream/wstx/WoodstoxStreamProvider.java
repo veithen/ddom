@@ -42,14 +42,14 @@ import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.google.code.ddom.stream.options.ValidationPolicy;
-import com.google.code.ddom.stream.spi.SimpleXmlSource;
-import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
-import com.google.code.ddom.stream.spi.XmlOutput;
-import com.google.code.ddom.stream.spi.XmlSource;
 import com.google.code.ddom.stream.stax.CommentFilterStreamReader;
 import com.google.code.ddom.stream.stax.StAXInput;
 import com.google.code.ddom.stream.stax.StAXOutput;
+import com.googlecode.ddom.stream.SimpleXmlSource;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlOutput;
+import com.googlecode.ddom.stream.XmlSource;
 
 @Provider(name="woodstox")
 public class WoodstoxStreamProvider implements StreamProvider {

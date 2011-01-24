@@ -23,8 +23,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
-import com.google.code.ddom.stream.spi.SimpleXmlOutput;
-import com.google.code.ddom.stream.spi.StreamException;
+import com.googlecode.ddom.stream.SimpleXmlOutput;
+import com.googlecode.ddom.stream.StreamException;
 
 /**
  * 

@@ -17,8 +17,8 @@ package com.google.code.ddom.stream.dom;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.stream.spi.XmlInput;
-import com.google.code.ddom.stream.spi.XmlSource;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlSource;
 
 public final class DOMSource implements XmlSource {
     private final Node node;

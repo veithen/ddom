@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.stream.spi;
 
+import com.googlecode.ddom.stream.StreamException;
+
 public class NoStreamProviderFoundException extends StreamException {
     private static final long serialVersionUID = -576024908459776789L;
 

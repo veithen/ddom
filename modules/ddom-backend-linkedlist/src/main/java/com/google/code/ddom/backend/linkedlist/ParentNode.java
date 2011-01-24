@@ -25,8 +25,6 @@ import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterat
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
 import com.google.code.ddom.backend.linkedlist.support.TreeSerializer;
-import com.google.code.ddom.stream.spi.XmlSource;
-import com.google.code.ddom.stream.spi.XmlInput;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.ChildNotAllowedException;
@@ -53,6 +51,8 @@ import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.NodeNotFoundException;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlSource;
 
 public abstract class ParentNode extends Node implements LLParentNode {
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);

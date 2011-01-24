@@ -21,10 +21,10 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.codehaus.stax2.DTDInfo;
 
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.Symbols;
-import com.google.code.ddom.stream.spi.XmlHandler;
-import com.google.code.ddom.stream.spi.XmlInput;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.symbols.Symbols;
 
 public class StAXInput extends XmlInput {
     private final XMLStreamReader reader;

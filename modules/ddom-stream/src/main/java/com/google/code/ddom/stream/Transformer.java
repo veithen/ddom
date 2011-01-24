@@ -16,11 +16,11 @@
 package com.google.code.ddom.stream;
 
 import com.google.code.ddom.Options;
-import com.google.code.ddom.stream.spi.Stream;
-import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
-import com.google.code.ddom.stream.spi.XmlInput;
-import com.google.code.ddom.stream.spi.XmlOutput;
+import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlOutput;
 
 public class Transformer {
     public class Source {

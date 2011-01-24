@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.stream;
 
 /**
  * Base class for {@link XmlOutput} implementations that have no need for a separate

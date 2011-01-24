@@ -42,7 +42,6 @@ import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.google.code.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.google.code.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.google.code.ddom.frontend.axiom.support.Policies;
-import com.google.code.ddom.stream.spi.StreamException;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -51,6 +50,7 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.util.QNameUtil;
+import com.googlecode.ddom.stream.StreamException;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class ElementSupport implements AxiomElement {

@@ -31,7 +31,7 @@
         <dependency>
             <!-- TODO: not good: we are in commons and ddom-stream is in modules; solve this later -->
             <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-stream</artifactId>
+            <artifactId>ddom-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -20,8 +20,6 @@ import javax.xml.namespace.QName;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.google.code.ddom.backend.Implementation;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
@@ -29,6 +27,8 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ElementAlreadyExistsException;
 import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.SequenceItem;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 
 @Implementation(factory=NSAwareElementFactory.class)
 public class NSAwareElement extends Element implements CoreNSAwareElement {

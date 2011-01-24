@@ -22,11 +22,11 @@ import com.google.code.ddom.backend.linkedlist.intf.LLElement;
 import com.google.code.ddom.backend.linkedlist.intf.LLLeafNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
-import com.google.code.ddom.stream.spi.XmlInput;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.XmlInput;
 
 public class TreeSerializer extends XmlInput {
     private static final int STATE_NONE = 0;

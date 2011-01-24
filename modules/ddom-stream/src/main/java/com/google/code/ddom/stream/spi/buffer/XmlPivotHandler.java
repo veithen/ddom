@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
-import com.google.code.ddom.stream.spi.Stream;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 
 class XmlPivotHandler implements XmlHandler {
     private static final int DOCUMENT_TYPE = 1;

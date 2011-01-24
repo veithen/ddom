@@ -21,8 +21,6 @@ import java.util.List;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLElement;
 import com.google.code.ddom.backend.linkedlist.support.AttributesByTypeIterator;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreAttribute;
@@ -42,6 +40,8 @@ import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 
 public abstract class Element extends Container implements LLElement {
     private Attribute firstAttribute;

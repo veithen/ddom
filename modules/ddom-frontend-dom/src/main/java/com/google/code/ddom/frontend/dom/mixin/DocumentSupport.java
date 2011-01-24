@@ -54,7 +54,6 @@ import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.frontend.dom.support.UserData;
-import com.google.code.ddom.stream.spi.Symbols;
 import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreDocument;
@@ -63,6 +62,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.core.CoreTypedAttribute;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.symbols.Symbols;
 
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements DOMDocument {

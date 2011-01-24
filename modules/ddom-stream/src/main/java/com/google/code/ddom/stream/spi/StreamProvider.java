@@ -16,6 +16,9 @@
 package com.google.code.ddom.stream.spi;
 
 import com.google.code.ddom.OptionsTracker;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlOutput;
+import com.googlecode.ddom.stream.XmlSource;
 
 // TODO: refer to the @Provider annotation
 public interface StreamProvider {

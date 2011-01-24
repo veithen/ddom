@@ -25,11 +25,11 @@ import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelRegistry;
-import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamFactory;
-import com.google.code.ddom.stream.spi.XmlSource;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlSource;
 
 // TODO: need a solution to dispose the parser and to close the underlying stream
 public class DocumentHelperImpl implements DocumentHelper {

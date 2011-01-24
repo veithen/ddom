@@ -18,8 +18,8 @@ package com.google.code.ddom.stream.sax;
 import javax.xml.validation.Schema;
 import javax.xml.validation.ValidatorHandler;
 
-import com.google.code.ddom.stream.spi.XmlFilter;
-import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.stream.XmlFilter;
+import com.googlecode.ddom.stream.XmlHandler;
 
 public class ValidationFilter extends XmlFilter {
     private final Schema schema;

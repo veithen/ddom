@@ -15,8 +15,8 @@
  */
 package com.googlecode.ddom.core;
 
-import com.google.code.ddom.stream.spi.XmlSource;
-import com.google.code.ddom.stream.spi.XmlInput;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlSource;
 
 public interface CoreParentNode extends CoreNode {
     /**

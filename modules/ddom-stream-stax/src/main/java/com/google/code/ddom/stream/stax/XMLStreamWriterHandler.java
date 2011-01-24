@@ -19,8 +19,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 
 public class XMLStreamWriterHandler implements XmlHandler {
     private static final int ATT_NS_AWARE = 1;

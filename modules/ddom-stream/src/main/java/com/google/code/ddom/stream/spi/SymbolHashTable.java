@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.google.code.ddom.stream.spi;
+
+import com.googlecode.ddom.symbols.Symbols;
 
 /**
  * Symbol table implementation based on a hash table data structure. The implementation has the

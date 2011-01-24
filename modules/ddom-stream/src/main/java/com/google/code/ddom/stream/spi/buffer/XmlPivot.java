@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.stream.spi.buffer;
 
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.XmlHandler;
-import com.google.code.ddom.stream.spi.XmlOutput;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.XmlOutput;
 
 /**
  * Base class for {@link XmlOutput} implementations that appear as pull parser implementations to

@@ -20,11 +20,11 @@ import javax.xml.stream.XMLStreamReader;
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.spi.Provider;
 import com.google.code.ddom.stream.options.CommentPolicy;
-import com.google.code.ddom.stream.spi.SimpleXmlSource;
-import com.google.code.ddom.stream.spi.StreamException;
 import com.google.code.ddom.stream.spi.StreamProvider;
-import com.google.code.ddom.stream.spi.XmlOutput;
-import com.google.code.ddom.stream.spi.XmlSource;
+import com.googlecode.ddom.stream.SimpleXmlSource;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlOutput;
+import com.googlecode.ddom.stream.XmlSource;
 
 @Provider(name="stax")
 public class StAXStreamProvider implements StreamProvider {

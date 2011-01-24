@@ -18,6 +18,8 @@ package com.google.code.ddom.stream.spi;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.googlecode.ddom.symbols.Symbols;
+
 public class SymbolHashTableTest {
     @Test
     public void testLookupString() {

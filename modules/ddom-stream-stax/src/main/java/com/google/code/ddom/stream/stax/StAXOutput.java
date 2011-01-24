@@ -17,8 +17,8 @@ package com.google.code.ddom.stream.stax;
 
 import javax.xml.stream.XMLStreamWriter;
 
-import com.google.code.ddom.stream.spi.XmlHandler;
-import com.google.code.ddom.stream.spi.XmlOutput;
+import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.XmlOutput;
 
 public class StAXOutput extends XmlOutput {
     private final XMLStreamWriter writer;

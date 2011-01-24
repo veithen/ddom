@@ -18,6 +18,8 @@ package com.google.code.ddom.stream.spi;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
+import com.googlecode.ddom.stream.SimpleXmlFilter;
+import com.googlecode.ddom.stream.StreamException;
 
 public class NamespaceRepairingFilter extends SimpleXmlFilter {
     private String[] namespaceStack = new String[32];
