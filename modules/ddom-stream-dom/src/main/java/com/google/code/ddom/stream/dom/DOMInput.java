@@ -19,9 +19,11 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.ProcessingInstruction;
 
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
@@ -35,9 +37,6 @@ public class DOMInput extends XmlInput {
     
     public DOMInput(Node rootNode) {
         this.rootNode = rootNode;
-        if (rootNode instanceof Document) {
-            currentNode = rootNode;
-        }
     }
 
     public Symbols getSymbols() {
@@ -92,6 +91,16 @@ public class DOMInput extends XmlInput {
                 }
             } else {
                 switch (nodeType) {
+                    case Node.DOCUMENT_NODE:
+                        if (currentNode != null) {
+                            Document document = (Document)currentNode;
+                            handler.setDocumentInfo(document.getXmlVersion(), document.getXmlEncoding(), document.getInputEncoding(), document.getXmlStandalone());
+                        }
+                        break;
+                    case Node.DOCUMENT_TYPE_NODE:
+                        DocumentType docType = (DocumentType)currentNode;
+                        handler.processDocumentType(docType.getName(), docType.getPublicId(), docType.getSystemId(), null);
+                        break loop;
                     case Node.ELEMENT_NODE:
                         Element element = (Element)currentNode;
                         String localName = element.getLocalName();
@@ -101,28 +110,40 @@ public class DOMInput extends XmlInput {
                             handler.startElement(element.getNamespaceURI(), localName, element.getPrefix());
                         }
                         NamedNodeMap attributes = element.getAttributes();
+                        // TODO: we should not push all attributes at once
                         for (int length=attributes.getLength(), i=0; i<length; i++) {
                             Attr attr = (Attr)attributes.item(i);
                             String attrLocalName = attr.getLocalName();
                             if (attrLocalName == null) {
                                 // TODO: type information
-                                // TODO
-//                                handler.processAttribute(attrLocalName, attr.getValue(), null);
+                                handler.startAttribute(attr.getName(), null);
                             } else {
                                 String namespaceURI = attr.getNamespaceURI();
                                 if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-                                    // TODO
-//                                    handler.processNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName, attr.getValue());
+                                    handler.startNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName);
                                 } else {
-                                    // TODO
-//                                    handler.processAttribute(namespaceURI, attrLocalName, attr.getPrefix(), attr.getValue(), null);
+                                    handler.startAttribute(namespaceURI, attrLocalName, attr.getPrefix(), null);
                                 }
                             }
+                            handler.processText(attr.getValue(), false);
+                            handler.endAttribute();
                         }
                         handler.attributesCompleted();
                         break loop;
                     case Node.TEXT_NODE:
                         handler.processText(currentNode.getNodeValue(), false); // TODO: ignorable?
+                        break loop;
+                    case Node.CDATA_SECTION_NODE:
+                        handler.startCDATASection();
+                        handler.processText(currentNode.getNodeValue(), false);
+                        handler.endCDATASection();
+                        break loop;
+                    case Node.COMMENT_NODE:
+                        handler.processComment(currentNode.getNodeValue());
+                        break loop;
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        ProcessingInstruction pi = (ProcessingInstruction)currentNode;
+                        handler.processProcessingInstruction(pi.getTarget(), pi.getData());
                         break loop;
                     default:
                         // TODO
