@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,10 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.ctc.wstx.stax.WstxInputFactory;
 
 public class XMLConformanceTestSuiteTest {
     private static XMLConformanceTestSuite suite;
@@ -67,6 +61,7 @@ public class XMLConformanceTestSuiteTest {
         }
     }
     
+/*
     @Test
     public void testParseWithWoodstox() throws Exception {
         XMLInputFactory factory = new WstxInputFactory();
@@ -90,4 +85,5 @@ public class XMLConformanceTestSuiteTest {
             }
         }
     }
+*/
 }

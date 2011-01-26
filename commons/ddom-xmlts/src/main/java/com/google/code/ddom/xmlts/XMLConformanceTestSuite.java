@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.google.code.ddom.xmlts;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
@@ -33,9 +32,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.xml.XMLConstants;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.collections.Filter;
 import com.google.code.ddom.collections.FilteredCollection;
@@ -63,21 +64,6 @@ public class XMLConformanceTestSuite {
     
     private XMLConformanceTestSuite() {}
     
-    private static String getElementText(XMLStreamReader reader) throws XMLStreamException {
-        StringBuilder buffer = new StringBuilder();
-        int level = 0;
-        while (reader.next() != XMLStreamReader.END_ELEMENT || level != 0) {
-            if (reader.isCharacters()) {
-                buffer.append(reader.getText());
-            } else if (reader.isStartElement()) {
-                level++;
-            } else if (reader.isEndElement()) {
-                level--;
-            }
-        }
-        return buffer.toString();
-    }
-
     public synchronized static XMLConformanceTestSuite load() {
         if (instance == null) {
             XMLConformanceTestSuite suite = new XMLConformanceTestSuite();
@@ -108,48 +94,58 @@ public class XMLConformanceTestSuite {
         return result;
     }
     
-    private void load(URL url, Set<String> exclusions) throws IOException, XMLStreamException {
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        InputStream in = url.openStream();
-        try {
-            XMLStreamReader reader = factory.createXMLStreamReader(url.toExternalForm(), in);
-            while (!reader.isStartElement()) {
-                reader.next();
-            }
-            reader.require(XMLStreamReader.START_ELEMENT, null, "TESTSUITE");
-            while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
-                parseTestCases(reader, url, exclusions);
-            }
-        } finally {
-            in.close();
+    private void require(Element element, String expected) {
+        String actual = element.getTagName();
+        if (!actual.equals(expected)) {
+            throw new Error("Unexpected element " + actual + "; expected " + expected);
         }
     }
     
-    private void parseTestCases(XMLStreamReader reader, URL base, Set<String> exclusions) throws IOException, XMLStreamException {
-        reader.require(XMLStreamReader.START_ELEMENT, null, "TESTCASES");
-        String relativeBase = reader.getAttributeValue(XMLConstants.XML_NS_URI, "base");
+    private void load(URL url, Set<String> exclusions) throws Exception {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(false);
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Element root = documentBuilder.parse(url.toExternalForm()).getDocumentElement();
+        require(root, "TESTSUITE");
+        Node child = root.getFirstChild();
+        while (child != null) {
+            if (child instanceof Element) {
+                parseTestCases((Element)child, url, exclusions);
+            }
+            child = child.getNextSibling();
+        }
+    }
+    
+    private void parseTestCases(Element element, URL base, Set<String> exclusions) throws IOException {
+        require(element, "TESTCASES");
+        String relativeBase = element.getAttribute("xml:base");
         if (relativeBase != null) {
             base = new URL(base, relativeBase);
         }
-        while (reader.nextTag() == XMLStreamReader.START_ELEMENT) {
-            if (reader.getLocalName().equals("TESTCASES")) {
-                parseTestCases(reader, base, exclusions);
-            } else {
-                parseTest(reader, base, exclusions);
+        Node child = element.getFirstChild();
+        while (child != null) {
+            if (child instanceof Element) {
+                Element childElement = (Element)child;
+                if (childElement.getTagName().equals("TESTCASES")) {
+                    parseTestCases(childElement, base, exclusions);
+                } else {
+                    parseTest(childElement, base, exclusions);
+                }
             }
+            child = child.getNextSibling();
         }
     }
     
-    private void parseTest(XMLStreamReader reader, URL base, Set<String> exclusions) throws IOException, XMLStreamException {
-        reader.require(XMLStreamReader.START_ELEMENT, null, "TEST");
-        String id = reader.getAttributeValue(null, "ID");
-        String uri = reader.getAttributeValue(null, "URI");
-        String output = reader.getAttributeValue(null, "OUTPUT");
-        String version = reader.getAttributeValue(null, "VERSION");
-        String edition = reader.getAttributeValue(null, "EDITION");
+    private void parseTest(Element element, URL base, Set<String> exclusions) throws IOException {
+        require(element, "TEST");
+        String id = element.getAttribute("ID");
+        String uri = element.getAttribute("URI");
+        String output = element.getAttribute("OUTPUT");
+        String version = element.getAttribute("VERSION");
+        String edition = element.getAttribute("EDITION");
         Set<XMLVersion> versions;
-        if (version == null || version.equals("1.0")) {
-            if (edition == null) {
+        if (version.length() == 0 || version.equals("1.0")) {
+            if (edition.length() == 0) {
                 versions = EnumSet.complementOf(EnumSet.of(XMLVersion.XML_1_1));
             } else {
                 String[] editionArray = edition.split(" ");
@@ -166,12 +162,12 @@ public class XMLConformanceTestSuite {
         }
         tests.put(id, new XMLConformanceTest(
                 id,
-                exclusions.contains(id) ? Type.EXCLUDED : typeMap.get(reader.getAttributeValue(null, "TYPE")),
+                exclusions.contains(id) ? Type.EXCLUDED : typeMap.get(element.getAttribute("TYPE")),
                 versions,
-                !"no".equals(reader.getAttributeValue(null, "NAMESPACE")),
+                !"no".equals(element.getAttribute("NAMESPACE")),
                 new URL(base, uri),
-                output == null ? null : new URL(base, output),
-                getElementText(reader)));
+                output.length() == 0 ? null : new URL(base, output),
+                element.getTextContent()));
     }
     
     public XMLConformanceTest getTest(String id) {
