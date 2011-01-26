@@ -30,9 +30,9 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.spi.model.Model;
-import com.google.code.ddom.stream.dom.DOMInput;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.SimpleXmlSource;
+import com.googlecode.ddom.stream.dom.DOMInput;
 
 public class SOAPPartImpl extends AbstractSOAPPartImpl {
     private final Model saajModel;

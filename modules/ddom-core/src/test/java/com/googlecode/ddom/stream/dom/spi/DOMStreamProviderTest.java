@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.dom;
+package com.googlecode.ddom.stream.dom.spi;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
