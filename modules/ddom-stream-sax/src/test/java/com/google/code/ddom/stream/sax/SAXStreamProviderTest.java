@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,15 +30,15 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.w3c.dom.Document;
 
 import com.google.code.ddom.collections.AndFilter;
-import com.google.code.ddom.stream.Transformer;
 import com.google.code.ddom.xmlts.Filters;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
 import com.google.code.ddom.xmlts.XMLConformanceTestUtils;
+import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.dom.DOMOutput;
 
+// TODO: implement unit tests that specifically test the SAXStreamProvider (as for the DOMStreamProvider)
 public class SAXStreamProviderTest extends TestCase {
-    private static final Transformer transformer = Transformer.getInstance();
-    
     private final XMLConformanceTest test;
 
     public SAXStreamProviderTest(XMLConformanceTest test) {
@@ -57,7 +57,7 @@ public class SAXStreamProviderTest extends TestCase {
         DocumentBuilder domBuilder = domFactory.newDocumentBuilder();
         
         Document actual = domBuilder.newDocument();
-        transformer.from(source).to(actual);
+        new Stream(new SAXInput(source), new DOMOutput(actual)).flush();
         XMLConformanceTestUtils.coalesceTextNodes(actual);
         
         Document expected = domBuilder.parse(test.getSystemId());
