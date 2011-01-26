@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.sax;
+package com.googlecode.ddom.stream.filter;
 
 import javax.xml.validation.Schema;
 import javax.xml.validation.ValidatorHandler;
 
 import com.googlecode.ddom.stream.XmlFilter;
 import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.sax.ContentHandlerAdapter;
+import com.googlecode.ddom.stream.sax.XmlHandlerAdapter;
 
 public class ValidationFilter extends XmlFilter {
     private final Schema schema;

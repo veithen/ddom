@@ -1,1 +1,2 @@
 com.googlecode.ddom.stream.dom.spi.DOMStreamProvider
+com.googlecode.ddom.stream.sax.spi.SAXStreamProvider

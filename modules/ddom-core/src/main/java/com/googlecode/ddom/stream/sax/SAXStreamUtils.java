@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.sax;
+package com.googlecode.ddom.stream.sax;
 
 public class SAXStreamUtils {
     public static String normalizeNamespaceURI(String uri) {

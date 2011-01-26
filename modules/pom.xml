@@ -49,7 +49,6 @@
         <module>ddom-saaj-impl</module>
         <module>ddom-spring-ws</module>
         <module>ddom-stream</module>
-        <module>ddom-stream-sax</module>
         <module>ddom-stream-stax</module>
         <module>ddom-stream-wstx</module>
         <!-- module>ddom-stream-xerces</module -->
