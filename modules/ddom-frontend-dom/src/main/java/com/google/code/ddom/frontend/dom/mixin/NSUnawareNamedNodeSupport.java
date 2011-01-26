@@ -17,10 +17,10 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareNamedNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreNSUnawareNamedNode;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSUnawareNamedNode.class)
 public abstract class NSUnawareNamedNodeSupport implements DOMNSUnawareNamedNode {

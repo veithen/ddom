@@ -35,12 +35,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-frontend</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-backend</artifactId>
+            <artifactId>ddom-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -17,9 +17,9 @@ package com.google.code.ddom.frontend.axiom.mixin;
 
 import org.apache.axiom.om.OMNode;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomComment;
 import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreComment.class)
 public abstract class CommentSupport implements AxiomComment {

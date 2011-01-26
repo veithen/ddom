@@ -20,9 +20,9 @@ import java.util.Map;
 import com.google.code.ddom.commons.cl.ClassCollection;
 import com.google.code.ddom.commons.cl.ClassCollectionAggregate;
 import com.google.code.ddom.commons.cl.Module;
-import com.google.code.ddom.frontend.Frontend;
 import com.google.code.ddom.frontend.dom.DOMFrontend;
 import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.frontend.Frontend;
 import com.googlecode.ddom.spi.Provider;
 
 @Provider(name="saaj")

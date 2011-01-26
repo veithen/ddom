@@ -17,11 +17,11 @@ package com.google.code.ddom.frontend.axiom.mixin;
 
 import org.apache.axiom.om.OMElement;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements AxiomDocument {

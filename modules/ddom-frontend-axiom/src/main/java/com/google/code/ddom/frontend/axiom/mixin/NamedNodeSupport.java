@@ -19,9 +19,9 @@ import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamedNode;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
+import com.googlecode.ddom.frontend.Mixin;
 
 /**
  * 

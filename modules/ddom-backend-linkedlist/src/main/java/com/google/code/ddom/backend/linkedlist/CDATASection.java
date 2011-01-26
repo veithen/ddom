@@ -15,7 +15,7 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreCDATASection;
 import com.googlecode.ddom.core.CoreChildNode;

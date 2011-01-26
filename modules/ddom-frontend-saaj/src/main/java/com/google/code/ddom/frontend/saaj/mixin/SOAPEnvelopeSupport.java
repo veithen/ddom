@@ -20,12 +20,12 @@ import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
 import com.google.code.ddom.frontend.saaj.support.NameImpl;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.ElementAlreadyExistsException;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPEnvelope.class)
 public abstract class SOAPEnvelopeSupport implements SAAJSOAPEnvelope {

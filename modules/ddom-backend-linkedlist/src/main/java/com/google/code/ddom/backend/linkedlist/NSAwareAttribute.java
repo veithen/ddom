@@ -17,7 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import javax.xml.namespace.QName;
 
-import com.google.code.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;

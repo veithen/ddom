@@ -3,7 +3,7 @@ package com.googlecode.ddom.weaver.asm;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.code.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(IBase.class)
 public abstract class BaseMixin implements IBase, IBaseMixin {

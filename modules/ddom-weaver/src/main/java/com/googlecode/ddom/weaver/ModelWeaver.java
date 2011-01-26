@@ -18,11 +18,11 @@ package com.googlecode.ddom.weaver;
 import java.util.Collections;
 import java.util.Map;
 
-import com.google.code.ddom.backend.Backend;
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.google.code.ddom.frontend.Frontend;
+import com.googlecode.ddom.backend.Backend;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.frontend.Frontend;
 import com.googlecode.ddom.weaver.dump.DumpPlugin;
 import com.googlecode.ddom.weaver.ext.ModelExtensionPlugin;
 import com.googlecode.ddom.weaver.inject.InjectionPlugin;

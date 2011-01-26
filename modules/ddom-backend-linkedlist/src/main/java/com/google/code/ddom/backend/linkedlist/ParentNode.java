@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.ExtensionFactoryLocator;
-import com.google.code.ddom.backend.Inject;
 import com.google.code.ddom.backend.linkedlist.intf.LLBuilder;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
@@ -25,6 +23,8 @@ import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterat
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
 import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
 import com.google.code.ddom.backend.linkedlist.support.TreeSerializer;
+import com.googlecode.ddom.backend.ExtensionFactoryLocator;
+import com.googlecode.ddom.backend.Inject;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.ChildNotAllowedException;

@@ -18,9 +18,9 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMComment;
 import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreComment.class)
 public abstract class CommentSupport implements DOMComment {

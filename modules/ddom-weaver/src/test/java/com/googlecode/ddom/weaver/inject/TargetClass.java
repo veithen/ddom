@@ -15,7 +15,7 @@
  */
 package com.googlecode.ddom.weaver.inject;
 
-import com.google.code.ddom.backend.Inject;
+import com.googlecode.ddom.backend.Inject;
 
 public class TargetClass implements TargetInterface {
     @Inject

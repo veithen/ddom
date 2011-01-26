@@ -18,12 +18,12 @@ package com.google.code.ddom.frontend.axiom.mixin;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNode;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreChildNode.class)
 public abstract class NodeSupport implements AxiomNode {

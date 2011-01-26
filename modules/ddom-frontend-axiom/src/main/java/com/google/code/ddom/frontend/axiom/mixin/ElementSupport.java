@@ -31,7 +31,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
@@ -50,6 +49,7 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.util.QNameUtil;
+import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.stream.StreamException;
 
 @Mixin(CoreNSAwareElement.class)

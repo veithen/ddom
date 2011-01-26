@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.backend;
+package com.googlecode.ddom.frontend;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Marks a field for injection by the weaver. The injection mechanism is used to inject front-end
- * specific resources into the back-end classes. The weaver generates code that initializes fields
- * having this annotation. Currently, only {@link com.googlecode.ddom.core.ext.ModelExtension}
- * instances can be injected. Note that injection only works in weavable classes.
- * 
- * @author Andreas Veithen
- */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.FIELD)
-public @interface Inject {
+@Target(ElementType.TYPE)
+public @interface Mixin {
+    /**
+     * Get the target type. The mixin will be applied to classes implementing one or more of the
+     * specified interfaces.
+     * 
+     * @return the target type
+     */
+    Class<?>[] value();
 }

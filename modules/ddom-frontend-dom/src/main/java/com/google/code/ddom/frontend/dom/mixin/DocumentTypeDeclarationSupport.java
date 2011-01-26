@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.frontend.dom.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentType;
 import com.google.code.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreDocumentTypeDeclaration.class)
 public abstract class DocumentTypeDeclarationSupport implements DOMDocumentTypeDeclaration {

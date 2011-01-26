@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
-import com.google.code.ddom.frontend.APIObjectFactory;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.frontend.APIObjectFactory;
 
 /**
  * Represents a (woven) model corresponding to a given

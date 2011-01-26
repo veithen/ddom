@@ -37,7 +37,7 @@ class ImplementationBuilder extends AbstractClassVisitor implements WeavableClas
     
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        if (desc.equals("Lcom/google/code/ddom/backend/Implementation;")) {
+        if (desc.equals("Lcom/googlecode/ddom/backend/Implementation;")) {
             isImplementation = true;
             constructors = new ArrayList<ConstructorInfo>();
             return new AbstractAnnotationVisitor() {

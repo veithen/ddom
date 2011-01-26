@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.frontend;
+package com.googlecode.ddom.frontend;
 
 import java.util.Map;
 

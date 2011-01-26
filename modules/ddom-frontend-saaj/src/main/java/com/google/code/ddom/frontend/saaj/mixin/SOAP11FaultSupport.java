@@ -17,9 +17,9 @@ package com.google.code.ddom.frontend.saaj.mixin;
 
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAP11Fault.class)
 public abstract class SOAP11FaultSupport implements SAAJSOAPFault {

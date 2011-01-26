@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.dom.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMTypedAttribute;
 import com.googlecode.ddom.core.CoreTypedAttribute;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreTypedAttribute.class)
 public abstract class TypedAttributeSupport implements DOMTypedAttribute {

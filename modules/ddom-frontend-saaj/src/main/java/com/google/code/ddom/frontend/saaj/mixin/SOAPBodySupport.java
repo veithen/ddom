@@ -25,7 +25,6 @@ import javax.xml.soap.SOAPFault;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBodyElement;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
@@ -33,6 +32,7 @@ import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.util.QNameUtil;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPBody.class)
 public abstract class SOAPBodySupport implements SAAJSOAPBody {

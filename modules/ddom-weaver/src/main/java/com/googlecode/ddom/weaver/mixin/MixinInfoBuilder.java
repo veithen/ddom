@@ -66,7 +66,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        if (desc.equals("Lcom/google/code/ddom/frontend/Mixin;")) {
+        if (desc.equals("Lcom/googlecode/ddom/frontend/Mixin;")) {
             final List<Type> targetTypes = this.targetTypes;
             return new AbstractAnnotationVisitor() {
                 @Override

@@ -22,10 +22,10 @@ import org.apache.axiom.soap.SOAPBody;
 import org.apache.axiom.soap.SOAPHeader;
 import org.apache.axiom.soap.SOAPVersion;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(AxiomSOAPEnvelope.class)
 public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {

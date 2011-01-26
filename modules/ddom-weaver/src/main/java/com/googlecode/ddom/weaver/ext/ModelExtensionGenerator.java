@@ -76,7 +76,7 @@ class ModelExtensionGenerator {
 
     /**
      * Get all weavable classes that are annotated with
-     * {@link com.google.code.ddom.backend.Implementation} and implement (are assignable to) a given
+     * {@link com.googlecode.ddom.backend.Implementation} and implement (are assignable to) a given
      * interface.
      * 
      * @param iface

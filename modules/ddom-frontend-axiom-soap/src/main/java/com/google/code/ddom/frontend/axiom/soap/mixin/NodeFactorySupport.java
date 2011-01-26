@@ -22,11 +22,11 @@ import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPNodeFactory;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPFactoryImpl;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {

@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJText;
 import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreComment.class)
 public abstract class CommentSupport implements SAAJText {

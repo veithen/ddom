@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJText;
 import com.googlecode.ddom.core.CoreTextNode;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreTextNode.class)
 public abstract class TextSupport implements SAAJText {

@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAP12Fault.class)
 public abstract class SOAP12FaultSupport implements SAAJSOAPFault {

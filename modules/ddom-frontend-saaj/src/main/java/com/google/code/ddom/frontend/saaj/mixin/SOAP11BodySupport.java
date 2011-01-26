@@ -15,11 +15,11 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Body;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAP11Body.class)
 public abstract class SOAP11BodySupport implements SAAJSOAPBody {

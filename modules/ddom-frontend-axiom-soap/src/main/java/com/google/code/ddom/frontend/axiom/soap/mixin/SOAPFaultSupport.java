@@ -23,7 +23,6 @@ import org.apache.axiom.soap.SOAPFaultReason;
 import org.apache.axiom.soap.SOAPFaultRole;
 import org.apache.axiom.soap.SOAPProcessingException;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
@@ -31,6 +30,7 @@ import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(AxiomSOAPFault.class)
 public abstract class SOAPFaultSupport implements AxiomSOAPFault {

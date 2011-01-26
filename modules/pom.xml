@@ -32,14 +32,12 @@
         <module>ddom-api</module>
         <module>ddom-axiom-impl</module>
         <module>ddom-axis2</module>
-        <module>ddom-backend</module>
         <module>ddom-backend-linkedlist</module>
         <module>ddom-backend-testsuite</module>
         <module>ddom-commons</module>
         <module>ddom-core</module>
         <module>ddom-cxf</module>
         <module>ddom-dom-utils</module>
-        <module>ddom-frontend</module>
         <module>ddom-frontend-axiom</module>
         <module>ddom-frontend-axiom-soap</module>
         <module>ddom-frontend-dom</module>

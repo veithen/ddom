@@ -17,10 +17,10 @@ package com.google.code.ddom.frontend.axiom.mixin;
 
 import org.apache.axiom.om.OMFactory;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomInformationItem;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.core.CoreNode;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNode.class)
 public abstract class InformationItemSupport implements AxiomInformationItem {

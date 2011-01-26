@@ -18,12 +18,12 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreChildNode.class)
 public abstract class CoreChildNodeSupport implements DOMCoreChildNode {

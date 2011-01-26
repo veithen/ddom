@@ -22,9 +22,9 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMNamespace;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
 import com.googlecode.ddom.core.CoreTextNode;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreTextNode.class)
 public abstract class TextNodeSupport implements AxiomTextNode {

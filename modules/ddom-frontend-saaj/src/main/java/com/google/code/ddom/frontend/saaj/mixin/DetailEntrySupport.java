@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetailEntry;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJDetailEntry.class)
 public abstract class DetailEntrySupport implements SAAJDetailEntry {

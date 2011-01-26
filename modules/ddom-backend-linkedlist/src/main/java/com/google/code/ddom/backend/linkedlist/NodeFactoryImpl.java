@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.google.code.ddom.backend.ExtensionFactoryLocator;
-import com.google.code.ddom.backend.Inject;
+import com.googlecode.ddom.backend.ExtensionFactoryLocator;
+import com.googlecode.ddom.backend.Inject;
 import com.googlecode.ddom.core.CoreCDATASection;
 import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreDocument;

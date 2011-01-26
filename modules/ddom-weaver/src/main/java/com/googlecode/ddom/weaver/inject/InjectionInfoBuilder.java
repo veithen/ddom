@@ -44,7 +44,7 @@ class InjectionInfoBuilder extends AbstractClassVisitor implements WeavableClass
     public FieldVisitor visitField(final int access, final String fieldName, final String fieldDesc, String signature, Object value) {
         return new AbstractFieldVisitor() {
             public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-                if (desc.equals("Lcom/google/code/ddom/backend/Inject;")) {
+                if (desc.equals("Lcom/googlecode/ddom/backend/Inject;")) {
                     String fieldType = Type.getType(fieldDesc).getClassName();
                     if (!bindings.containsKey(fieldType)) {
                         throw new ReactorException("Don't know how to inject a field with type " + fieldType);

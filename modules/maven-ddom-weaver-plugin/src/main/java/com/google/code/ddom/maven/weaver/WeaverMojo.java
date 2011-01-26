@@ -27,8 +27,8 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
-import com.google.code.ddom.backend.Backend;
-import com.google.code.ddom.frontend.Frontend;
+import com.googlecode.ddom.backend.Backend;
+import com.googlecode.ddom.frontend.Frontend;
 import com.googlecode.ddom.spi.ProviderFinder;
 import com.googlecode.ddom.weaver.ModelWeaver;
 import com.googlecode.ddom.weaver.ModelWeaverException;

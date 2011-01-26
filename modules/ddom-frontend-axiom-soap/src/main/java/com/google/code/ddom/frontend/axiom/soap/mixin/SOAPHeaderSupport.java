@@ -23,7 +23,6 @@ import org.apache.axiom.soap.RolePlayer;
 import org.apache.axiom.soap.SOAPHeaderBlock;
 
 import com.google.code.ddom.collections.FilteredIterator;
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.google.code.ddom.frontend.axiom.soap.support.RoleFilter;
@@ -32,6 +31,7 @@ import com.google.code.ddom.frontend.axiom.support.NSUtil;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(AxiomSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {

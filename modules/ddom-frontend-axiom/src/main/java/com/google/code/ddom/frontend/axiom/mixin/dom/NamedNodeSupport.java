@@ -15,9 +15,9 @@
  */
 package com.google.code.ddom.frontend.axiom.mixin.dom;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNamedNode;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSAwareNamedNode.class)
 public abstract class NamedNodeSupport implements AxiomNamedNode {

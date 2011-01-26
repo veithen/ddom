@@ -37,7 +37,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
@@ -62,6 +61,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.core.CoreTypedAttribute;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.symbols.Symbols;
 
 @Mixin(CoreDocument.class)

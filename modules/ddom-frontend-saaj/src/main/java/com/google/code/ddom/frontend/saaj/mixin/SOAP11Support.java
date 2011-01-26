@@ -15,12 +15,12 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.HasSOAPVersion;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Envelope;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11HeaderElement;
 import com.google.code.ddom.frontend.saaj.support.SOAPVersion;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin({SAAJSOAP11Envelope.class, SAAJSOAP11Fault.class, SAAJSOAP11HeaderElement.class})
 public abstract class SOAP11Support implements HasSOAPVersion {

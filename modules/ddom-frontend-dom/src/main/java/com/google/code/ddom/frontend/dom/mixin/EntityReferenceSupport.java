@@ -18,11 +18,11 @@ package com.google.code.ddom.frontend.dom.mixin;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMEntityReference;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreEntityReference;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreEntityReference.class)
 public abstract class EntityReferenceSupport implements DOMEntityReference {

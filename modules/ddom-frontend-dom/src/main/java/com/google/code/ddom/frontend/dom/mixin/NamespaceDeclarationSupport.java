@@ -20,10 +20,10 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNamespaceDeclaration.class)
 public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclaration {

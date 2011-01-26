@@ -19,11 +19,11 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSAwareNamedNode.class)
 public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {

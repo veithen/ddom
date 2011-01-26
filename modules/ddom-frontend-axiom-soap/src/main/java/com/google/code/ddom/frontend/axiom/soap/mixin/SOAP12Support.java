@@ -17,7 +17,6 @@ package com.google.code.ddom.frontend.axiom.soap.mixin;
 
 import org.apache.axiom.om.OMFactory;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Body;
@@ -31,6 +30,7 @@ import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
 import com.google.code.ddom.frontend.axiom.soap.intf.AxiomSOAP12HeaderBlock;
 import com.google.code.ddom.frontend.axiom.soap.intf.HasSOAPVersion;
 import com.google.code.ddom.frontend.axiom.soap.support.SOAPVersionEx;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin({AxiomSOAP12Body.class, AxiomSOAP12Envelope.class, AxiomSOAP12Fault.class, AxiomSOAP12FaultCode.class,
         AxiomSOAP12FaultDetail.class, AxiomSOAP12FaultReason.class, AxiomSOAP12FaultRole.class,

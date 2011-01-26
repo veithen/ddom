@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.frontend.saaj.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBodyElement;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPBodyElement.class)
 public abstract class SOAPBodyElementSupport implements SAAJSOAPBodyElement {

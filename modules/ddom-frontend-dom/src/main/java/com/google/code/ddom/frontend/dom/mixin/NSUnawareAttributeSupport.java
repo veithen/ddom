@@ -17,9 +17,9 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNSUnawareAttribute;
 import com.googlecode.ddom.core.CoreNSUnawareAttribute;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSUnawareAttribute.class)
 public abstract class NSUnawareAttributeSupport implements DOMNSUnawareAttribute {

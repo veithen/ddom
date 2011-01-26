@@ -22,7 +22,6 @@ import javax.xml.soap.DetailEntry;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetail;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetailEntry;
 import com.google.code.ddom.frontend.saaj.support.NameUtil;
@@ -32,6 +31,7 @@ import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.util.QNameUtil;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJDetail.class)
 public abstract class DetailSupport implements SAAJDetail {

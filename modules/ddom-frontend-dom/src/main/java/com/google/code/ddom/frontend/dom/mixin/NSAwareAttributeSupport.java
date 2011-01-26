@@ -17,9 +17,9 @@ package com.google.code.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class NSAwareAttributeSupport implements DOMNSAwareAttribute {

@@ -15,10 +15,10 @@
  */
 package com.google.code.ddom.frontend.dom.mixin;
 
-import com.google.code.ddom.frontend.Mixin;
 import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class NSAwareElementSupport implements DOMNSAwareElement {

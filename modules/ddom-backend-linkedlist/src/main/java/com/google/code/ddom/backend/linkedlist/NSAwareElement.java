@@ -19,7 +19,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.google.code.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
