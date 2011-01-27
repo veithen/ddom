@@ -184,14 +184,6 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     @Override
-    protected boolean processProcessingInstruction(String target, String data) {
-        eventType = PROCESSING_INSTRUCTION;
-        localName = target;
-        this.data = data;
-        return false;
-    }
-
-    @Override
     protected boolean processText(String data, boolean ignorable) {
         if (coalesce) {
             accumulator.append(data);
@@ -204,9 +196,29 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     @Override
-    protected boolean processComment(String data) {
+    protected boolean startProcessingInstruction(String target) {
+        eventType = PROCESSING_INSTRUCTION;
+        localName = target;
+        coalesce = true;
+        return true;
+    }
+
+    @Override
+    protected boolean endProcessingInstruction() {
+        data = stopCoalescing();
+        return false;
+    }
+
+    @Override
+    protected boolean startComment() {
         eventType = COMMENT;
-        this.data = data;
+        coalesce = true;
+        return true;
+    }
+
+    @Override
+    protected boolean endComment() {
+        data = stopCoalescing();
         return false;
     }
 

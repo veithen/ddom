@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,25 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
-public class Comment extends CharacterData implements CoreComment {
-    public Comment(Document document, String data) {
-        super(document, data);
+public class Comment extends CharacterDataContainer implements CoreComment {
+    public Comment(Document document, boolean complete) {
+        super(document, complete);
     }
 
-    @Override
-    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-        return appendTo;
+    public Comment(Document document, Object content) {
+        super(document, content);
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
-        handler.processComment(coreGetData());
+//    @Override
+//    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
+//        return appendTo;
+//    }
+
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
+        handler.startComment();
+    }
+
+    public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
+        handler.endComment();
     }
 }

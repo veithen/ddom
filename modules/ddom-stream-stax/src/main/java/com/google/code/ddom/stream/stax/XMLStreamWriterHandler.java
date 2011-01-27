@@ -34,6 +34,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
     private String attNamespaceURI;
     private String attName;
     private String attPrefix;
+    private String piTarget;
 
     public XMLStreamWriterHandler(XMLStreamWriter writer) {
         this.writer = writer;
@@ -113,18 +114,13 @@ public class XMLStreamWriterHandler implements XmlHandler {
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
         }
+        attNamespaceURI = null;
+        attName = null;
+        attPrefix = null;
     }
 
     public void attributesCompleted() {
         // Nothing special to do here
-    }
-
-    public void processProcessingInstruction(String target, String data) throws StreamException {
-        try {
-            writer.writeProcessingInstruction(target, data);
-        } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
-        }
     }
 
     public void processText(String data, boolean ignorable) throws StreamException {
@@ -139,9 +135,26 @@ public class XMLStreamWriterHandler implements XmlHandler {
         }
     }
 
-    public void processComment(String data) throws StreamException {
+    public void startProcessingInstruction(String target) throws StreamException {
+        piTarget = target;
+        startCoalescing();
+    }
+
+    public void endProcessingInstruction() throws StreamException {
         try {
-            writer.writeComment(data);
+            writer.writeProcessingInstruction(piTarget, endCoalescing());
+        } catch (XMLStreamException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public void startComment() throws StreamException {
+        startCoalescing();
+    }
+
+    public void endComment() throws StreamException {
+        try {
+            writer.writeComment(endCoalescing());
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
         }

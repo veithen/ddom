@@ -15,69 +15,23 @@
  */
 package com.googlecode.ddom.stream;
 
-class SimpleXmlFilterHandler implements XmlHandler {
+final class SimpleXmlFilterHandler implements XmlHandler {
     private final SimpleXmlFilter filter;
 
     SimpleXmlFilterHandler(SimpleXmlFilter filter) {
         this.filter = filter;
     }
 
-    public void attributesCompleted() throws StreamException {
-        filter.attributesCompleted();
-    }
-
-    public void completed() throws StreamException {
-        filter.completed();
-    }
-
-    public void endAttribute() throws StreamException {
-        filter.endAttribute();
-    }
-
-    public void endCDATASection() throws StreamException {
-        filter.endCDATASection();
-    }
-
-    public void endElement() throws StreamException {
-        filter.endElement();
-    }
-
-    public void processComment(String data) throws StreamException {
-        filter.processComment(data);
+    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+        filter.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {
         filter.processDocumentType(rootName, publicId, systemId, data);
     }
 
-    public void processEntityReference(String name) {
-        filter.processEntityReference(name);
-    }
-
-    public void processProcessingInstruction(String piTarget, String data) throws StreamException {
-        filter.processProcessingInstruction(piTarget, data);
-    }
-
-    public void processText(String data, boolean ignorable) throws StreamException {
-        filter.processText(data, ignorable);
-    }
-
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
-            boolean standalone) {
-        filter.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
-    }
-
-    public void startAttribute(String namespaceURI, String localName, String prefix, String type)
-            throws StreamException {
-        filter.startAttribute(namespaceURI, localName, prefix, type);
-    }
-
-    public void startAttribute(String name, String type) throws StreamException {
-        filter.startAttribute(name, type);
-    }
-
-    public void startCDATASection() throws StreamException {
-        filter.startCDATASection();
+    public void startElement(String tagName) throws StreamException {
+        filter.startElement(tagName);
     }
 
     public void startElement(String namespaceURI, String localName, String prefix)
@@ -85,11 +39,64 @@ class SimpleXmlFilterHandler implements XmlHandler {
         filter.startElement(namespaceURI, localName, prefix);
     }
 
-    public void startElement(String tagName) throws StreamException {
-        filter.startElement(tagName);
+    public void endElement() throws StreamException {
+        filter.endElement();
+    }
+
+    public void startAttribute(String name, String type) throws StreamException {
+        filter.startAttribute(name, type);
+    }
+
+    public void startAttribute(String namespaceURI, String localName, String prefix, String type)
+            throws StreamException {
+        filter.startAttribute(namespaceURI, localName, prefix, type);
     }
 
     public void startNamespaceDeclaration(String prefix) throws StreamException {
         filter.startNamespaceDeclaration(prefix);
+    }
+
+    public void endAttribute() throws StreamException {
+        filter.endAttribute();
+    }
+
+    public void attributesCompleted() throws StreamException {
+        filter.attributesCompleted();
+    }
+
+    public void processText(String data, boolean ignorable) throws StreamException {
+        filter.processText(data, ignorable);
+    }
+
+    public void startProcessingInstruction(String target) throws StreamException {
+        filter.startProcessingInstruction(target);
+    }
+
+    public void endProcessingInstruction() throws StreamException {
+        filter.endProcessingInstruction();
+    }
+
+    public void startComment() throws StreamException {
+        filter.startComment();
+    }
+
+    public void endComment() throws StreamException {
+        filter.endComment();
+    }
+
+    public void startCDATASection() throws StreamException {
+        filter.startCDATASection();
+    }
+
+    public void endCDATASection() throws StreamException {
+        filter.endCDATASection();
+    }
+
+    public void processEntityReference(String name) {
+        filter.processEntityReference(name);
+    }
+
+    public void completed() throws StreamException {
+        filter.completed();
     }
 }

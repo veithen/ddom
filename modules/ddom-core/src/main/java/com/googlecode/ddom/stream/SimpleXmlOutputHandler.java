@@ -62,16 +62,24 @@ final class SimpleXmlOutputHandler implements XmlHandler{
         output.attributesCompleted();
     }
 
-    public void processProcessingInstruction(String target, String data) throws StreamException {
-        output.processProcessingInstruction(target, data);
-    }
-
     public void processText(String data, boolean ignorable) throws StreamException {
         output.processText(data, ignorable);
     }
 
-    public void processComment(String data) throws StreamException {
-        output.processComment(data);
+    public void startProcessingInstruction(String target) throws StreamException {
+        output.startProcessingInstruction(target);
+    }
+
+    public void endProcessingInstruction() throws StreamException {
+        output.endProcessingInstruction();
+    }
+
+    public void startComment() throws StreamException {
+        output.startComment();
+    }
+
+    public void endComment() throws StreamException {
+        output.endComment();
     }
 
     public void startCDATASection() throws StreamException {

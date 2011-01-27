@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@ import com.google.code.ddom.frontend.dom.intf.DOMCharacterData;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreCDATASection;
 import com.googlecode.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.frontend.Mixin;
 
-@Mixin({CoreCharacterData.class, CoreCDATASection.class})
+@Mixin({CoreCharacterData.class, CoreComment.class, CoreCDATASection.class})
 public abstract class CharacterDataSupport implements DOMCharacterData {
     public final int getLength() {
         return getData().length();

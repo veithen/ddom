@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,28 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.frontend.dom.intf.DOMProcessingInstruction;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements DOMProcessingInstruction {
     public final String getData() {
-        return coreGetData();
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void setData(String data) throws DOMException {
-        coreSetData(data);
+        try {
+            coreSetValue(data);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final String getTarget() {
@@ -42,11 +52,11 @@ public abstract class ProcessingInstructionSupport implements DOMProcessingInstr
     }
 
     public final String getTextContent() {
-        return coreGetData();
+        return getData();
     }
 
     public final void setTextContent(String textContent) {
-        coreSetData(textContent);
+        setData(textContent);
     }
 
     public final short getNodeType() {

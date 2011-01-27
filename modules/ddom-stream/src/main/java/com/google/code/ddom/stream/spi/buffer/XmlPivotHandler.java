@@ -19,7 +19,7 @@ import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
-class XmlPivotHandler implements XmlHandler {
+final class XmlPivotHandler implements XmlHandler {
     private static final int DOCUMENT_TYPE = 1;
     private static final int START_NS_UNAWARE_ELEMENT = 2;
     private static final int START_NS_AWARE_ELEMENT = 3;
@@ -29,14 +29,16 @@ class XmlPivotHandler implements XmlHandler {
     private static final int START_NAMESPACE_DECLARATION = 7;
     private static final int END_ATTRIBUTE = 8;
     private static final int ATTRIBUTES_COMPLETED = 9;
-    private static final int PROCESSING_INSTRUCTION = 10;
-    private static final int TEXT = 11;
-    private static final int IGNORABLE_TEXT = 12;
-    private static final int COMMENT = 13;
-    private static final int START_CDATA_SECTION = 14;
-    private static final int END_CDATA_SECTION = 15;
-    private static final int ENTITY_REFERENCE = 16;
-    private static final int COMPLETED = 17;
+    private static final int TEXT = 10;
+    private static final int IGNORABLE_TEXT = 11;
+    private static final int START_PROCESSING_INSTRUCTION = 12;
+    private static final int END_PROCESSING_INSTRUCTION = 13;
+    private static final int START_COMMENT = 14;
+    private static final int END_COMMENT = 15;
+    private static final int START_CDATA_SECTION = 16;
+    private static final int END_CDATA_SECTION = 17;
+    private static final int ENTITY_REFERENCE = 18;
+    private static final int COMPLETED = 19;
     
     private final XmlPivot pivot;
     private final Stream stream;
@@ -198,16 +200,6 @@ class XmlPivotHandler implements XmlHandler {
         }
     }
 
-    public void processProcessingInstruction(String target, String data) throws StreamException {
-        if (passThrough) {
-            passThrough = pivot.processProcessingInstruction(target, data);
-        } else {
-            addEvent(PROCESSING_INSTRUCTION);
-            addToken(target);
-            addToken(data);
-        }
-    }
-
     public void processText(String data, boolean ignorable) throws StreamException {
         if (passThrough) {
             passThrough = pivot.processText(data, ignorable);
@@ -217,12 +209,36 @@ class XmlPivotHandler implements XmlHandler {
         }
     }
 
-    public void processComment(String data) throws StreamException {
+    public void startProcessingInstruction(String target) throws StreamException {
         if (passThrough) {
-            passThrough = pivot.processComment(data);
+            passThrough = pivot.startProcessingInstruction(target);
         } else {
-            addEvent(COMMENT);
-            addToken(data);
+            addEvent(START_PROCESSING_INSTRUCTION);
+            addToken(target);
+        }
+    }
+
+    public void endProcessingInstruction() throws StreamException {
+        if (passThrough) {
+            passThrough = pivot.endProcessingInstruction();
+        } else {
+            addEvent(END_PROCESSING_INSTRUCTION);
+        }
+    }
+
+    public void startComment() throws StreamException {
+        if (passThrough) {
+            passThrough = pivot.startComment();
+        } else {
+            addEvent(START_COMMENT);
+        }
+    }
+
+    public void endComment() throws StreamException {
+        if (passThrough) {
+            passThrough = pivot.endComment();
+        } else {
+            addEvent(END_COMMENT);
         }
     }
 
@@ -291,17 +307,23 @@ class XmlPivotHandler implements XmlHandler {
                 case ATTRIBUTES_COMPLETED:
                     result = pivot.attributesCompleted();
                     break;
-                case PROCESSING_INSTRUCTION:
-                    result = pivot.processProcessingInstruction(getToken(), getToken());
-                    break;
                 case TEXT:
                     result = pivot.processText(getToken(), false);
                     break;
                 case IGNORABLE_TEXT:
                     result = pivot.processText(getToken(), true);
                     break;
-                case COMMENT:
-                    result = pivot.processComment(getToken());
+                case START_PROCESSING_INSTRUCTION:
+                    result = pivot.startProcessingInstruction(getToken());
+                    break;
+                case END_PROCESSING_INSTRUCTION:
+                    result = pivot.endProcessingInstruction();
+                    break;
+                case START_COMMENT:
+                    result = pivot.startComment();
+                    break;
+                case END_COMMENT:
+                    result = pivot.endComment();
                     break;
                 case START_CDATA_SECTION:
                     result = pivot.startCDATASection();

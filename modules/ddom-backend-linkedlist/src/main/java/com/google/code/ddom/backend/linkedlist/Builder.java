@@ -35,6 +35,8 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     private static final int ELEMENT = 1;
     private static final int ATTRIBUTE = 2;
     private static final int CDATA_SECTION = 3;
+    private static final int COMMENT = 4;
+    private static final int PROCESSING_INSTRUCTION = 5;
     
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
@@ -194,15 +196,6 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     }
 
     @Override
-    protected final void processProcessingInstruction(String target, String data) throws StreamException {
-        if (passThroughHandler == null) {
-            appendNode(new ProcessingInstruction(document, target, data));
-        } else {
-            passThroughHandler.processProcessingInstruction(target, data);
-        }
-    }
-    
-    @Override
     protected final void processText(String data, boolean ignorable) throws StreamException {
         if (passThroughHandler == null) {
             // If the character data is ignorable whitespace, then we know that there will
@@ -218,12 +211,33 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     }
     
     @Override
-    protected final void processComment(String data) throws StreamException {
+    protected final void startProcessingInstruction(String target) throws StreamException {
         if (passThroughHandler == null) {
-            appendNode(new Comment(document, data));
+            appendNode(new ProcessingInstruction(document, target, false));
         } else {
-            passThroughHandler.processComment(data);
+            passThroughDepth++;
+            passThroughHandler.startProcessingInstruction(target);
         }
+    }
+    
+    @Override
+    protected final void endProcessingInstruction() throws StreamException {
+        nodeCompleted(PROCESSING_INSTRUCTION);
+    }
+
+    @Override
+    protected final void startComment() throws StreamException {
+        if (passThroughHandler == null) {
+            appendNode(new Comment(document, false));
+        } else {
+            passThroughDepth++;
+            passThroughHandler.startComment();
+        }
+    }
+    
+    @Override
+    protected final void endComment() throws StreamException {
+        nodeCompleted(COMMENT);
     }
     
     @Override
@@ -350,6 +364,12 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
                     break;
                 case ATTRIBUTE:
                     passThroughHandler.endAttribute();
+                    break;
+                case PROCESSING_INSTRUCTION:
+                    passThroughHandler.endProcessingInstruction();
+                    break;
+                case COMMENT:
+                    passThroughHandler.endComment();
                     break;
                 case CDATA_SECTION:
                     passThroughHandler.endCDATASection();

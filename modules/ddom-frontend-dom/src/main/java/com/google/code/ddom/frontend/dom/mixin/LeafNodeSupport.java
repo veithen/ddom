@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,12 @@ import com.google.code.ddom.frontend.dom.intf.NormalizationConfig;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.google.code.ddom.frontend.dom.support.EmptyNodeList;
 import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreLeafNode;
+import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.frontend.Mixin;
 
-@Mixin({CoreLeafNode.class, CoreCDATASection.class})
+@Mixin({CoreLeafNode.class, CoreProcessingInstruction.class, CoreComment.class, CoreCDATASection.class})
 public abstract class LeafNodeSupport implements DOMLeafNode {
     public final boolean hasAttributes() {
         return false;

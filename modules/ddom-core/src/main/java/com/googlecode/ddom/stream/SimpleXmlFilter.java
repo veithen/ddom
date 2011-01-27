@@ -24,62 +24,16 @@ public class SimpleXmlFilter extends XmlFilter {
         return new SimpleXmlFilterHandler(this);
     }
 
-    protected void attributesCompleted() throws StreamException {
-        target.attributesCompleted();
-    }
-
-    protected void completed() throws StreamException {
-        target.completed();
-    }
-
-    protected void endAttribute() throws StreamException {
-        target.endAttribute();
-    }
-
-    protected void endCDATASection() throws StreamException {
-        target.endCDATASection();
-    }
-
-    protected void endElement() throws StreamException {
-        target.endElement();
-    }
-
-    protected void processComment(String data) throws StreamException {
-        target.processComment(data);
+    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+        target.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
     }
 
     protected void processDocumentType(String rootName, String publicId, String systemId, String data) {
         target.processDocumentType(rootName, publicId, systemId, data);
     }
 
-    protected void processEntityReference(String name) {
-        target.processEntityReference(name);
-    }
-
-    protected void processProcessingInstruction(String piTarget, String data) throws StreamException {
-        target.processProcessingInstruction(piTarget, data);
-    }
-
-    protected void processText(String data, boolean ignorable) throws StreamException {
-        target.processText(data, ignorable);
-    }
-
-    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
-            boolean standalone) {
-        target.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
-    }
-
-    protected void startAttribute(String namespaceURI, String localName, String prefix, String type)
-            throws StreamException {
-        target.startAttribute(namespaceURI, localName, prefix, type);
-    }
-
-    protected void startAttribute(String name, String type) throws StreamException {
-        target.startAttribute(name, type);
-    }
-
-    protected void startCDATASection() throws StreamException {
-        target.startCDATASection();
+    protected void startElement(String tagName) throws StreamException {
+        target.startElement(tagName);
     }
 
     protected void startElement(String namespaceURI, String localName, String prefix)
@@ -87,12 +41,65 @@ public class SimpleXmlFilter extends XmlFilter {
         target.startElement(namespaceURI, localName, prefix);
     }
 
-    protected void startElement(String tagName) throws StreamException {
-        target.startElement(tagName);
+    protected void endElement() throws StreamException {
+        target.endElement();
+    }
+
+    protected void startAttribute(String name, String type) throws StreamException {
+        target.startAttribute(name, type);
+    }
+
+    protected void startAttribute(String namespaceURI, String localName, String prefix, String type)
+            throws StreamException {
+        target.startAttribute(namespaceURI, localName, prefix, type);
     }
 
     protected void startNamespaceDeclaration(String prefix) throws StreamException {
         target.startNamespaceDeclaration(prefix);
+    }
+
+    protected void endAttribute() throws StreamException {
+        target.endAttribute();
+    }
+
+    protected void attributesCompleted() throws StreamException {
+        target.attributesCompleted();
+    }
+
+    protected void processText(String data, boolean ignorable) throws StreamException {
+        target.processText(data, ignorable);
+    }
+
+    protected void startProcessingInstruction(String piTarget) throws StreamException {
+        target.startProcessingInstruction(piTarget);
+    }
+
+    protected void endProcessingInstruction() throws StreamException {
+        target.endProcessingInstruction();
+    }
+
+    protected void startComment() throws StreamException {
+        target.startComment();
+    }
+
+    protected void endComment() throws StreamException {
+        target.endComment();
+    }
+
+    protected void startCDATASection() throws StreamException {
+        target.startCDATASection();
+    }
+
+    protected void endCDATASection() throws StreamException {
+        target.endCDATASection();
+    }
+
+    protected void processEntityReference(String name) {
+        target.processEntityReference(name);
+    }
+
+    protected void completed() throws StreamException {
+        target.completed();
     }
 
 }

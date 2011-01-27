@@ -22,6 +22,7 @@ import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreComment.class)
+// TODO: getValue/setValue methods???
 public abstract class CommentSupport implements AxiomComment {
     public final int getType() {
         return OMNode.COMMENT_NODE;

@@ -159,7 +159,10 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void comment(char[] ch, int start, int length) throws SAXException {
         try {
-            handler.processComment(new String(ch, start, length));
+            // TODO: is this correct? or can SAX generate several calls to this method for the same comment?
+            handler.startComment();
+            handler.processText(new String(ch, start, length), false);
+            handler.endComment();
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }
@@ -167,7 +170,9 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void processingInstruction(String piTarget, String piData) throws SAXException {
         try {
-            handler.processProcessingInstruction(piTarget, piData);
+            handler.startProcessingInstruction(piTarget);
+            handler.processText(piData, false);
+            handler.endProcessingInstruction();
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }

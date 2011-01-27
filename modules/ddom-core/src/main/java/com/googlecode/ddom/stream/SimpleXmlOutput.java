@@ -105,9 +105,41 @@ public abstract class SimpleXmlOutput extends XmlOutput {
     
     protected abstract void attributesCompleted() throws StreamException;
     
-    protected abstract void processProcessingInstruction(String target, String data) throws StreamException;
     protected abstract void processText(String data, boolean ignorable) throws StreamException;
-    protected abstract void processComment(String data) throws StreamException;
+    
+    /**
+     * Receive notification of the beginning of a processing instruction.
+     * 
+     * @param target
+     *            the target of the processing instruction
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void startProcessingInstruction(String target) throws StreamException;
+    
+    /**
+     * Receive notification of the end of a processing instruction.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void endProcessingInstruction() throws StreamException;
+    
+    /**
+     * Receive notification of the beginning of a comment.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void startComment() throws StreamException;
+    
+    /**
+     * Receive notification of the end of a comment.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    protected abstract void endComment() throws StreamException;
     
     /**
      * Receive notification of the beginning of a CDATA section.

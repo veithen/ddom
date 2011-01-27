@@ -24,7 +24,6 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.SimpleXmlOutput;
-import com.googlecode.ddom.stream.StreamException;
 
 /**
  * 
@@ -40,12 +39,20 @@ import com.googlecode.ddom.stream.StreamException;
 public class DOMOutput extends SimpleXmlOutput {
     private final Document document;
     private Node node;
-    private boolean isCDATASection;
-    private final StringAccumulator cdataSectionContent = new StringAccumulator();
+    private boolean coalescing;
+    private final StringAccumulator buffer = new StringAccumulator();
+    private String piTarget;
     
     public DOMOutput(Document document) {
         this.document = document;
         node = document;
+    }
+    
+    private String endCoalescing() {
+        String content = buffer.toString();
+        coalescing = false;
+        buffer.clear();
+        return content;
     }
 
     @Override
@@ -80,7 +87,7 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void endElement() throws StreamException {
+    protected void endElement() {
         node = node.getParentNode();
     }
 
@@ -109,7 +116,7 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void endAttribute() throws StreamException {
+    protected void endAttribute() {
         node = ((Attr)node).getOwnerElement();
     }
 
@@ -126,20 +133,18 @@ public class DOMOutput extends SimpleXmlOutput {
 
     @Override
     protected void startCDATASection() {
-        isCDATASection = true;
+        coalescing = true;
     }
 
     @Override
-    protected void endCDATASection() throws StreamException {
-        node.appendChild(document.createCDATASection(cdataSectionContent.toString()));
-        isCDATASection = false;
-        cdataSectionContent.clear();
+    protected void endCDATASection() {
+        node.appendChild(document.createCDATASection(endCoalescing()));
     }
 
     @Override
     protected void processText(String data, boolean ignorable) {
-        if (isCDATASection) {
-            cdataSectionContent.append(data);
+        if (coalescing) {
+            buffer.append(data);
         } else {
             // TODO: process ignorable?
             node.appendChild(document.createTextNode(data));
@@ -147,8 +152,13 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void processComment(String data) {
-        node.appendChild(document.createComment(data));
+    protected void startComment() {
+        coalescing = true;
+    }
+
+    @Override
+    protected void endComment() {
+        node.appendChild(document.createComment(endCoalescing()));
     }
 
     @Override
@@ -157,7 +167,14 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void processProcessingInstruction(String target, String data) {
-        node.appendChild(document.createProcessingInstruction(target, data));
+    protected void startProcessingInstruction(String target) {
+        coalescing = true;
+        piTarget = target;
+    }
+
+    @Override
+    protected void endProcessingInstruction() {
+        node.appendChild(document.createProcessingInstruction(piTarget, endCoalescing()));
+        piTarget = null;
     }
 }

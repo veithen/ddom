@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,8 @@
  */
 package com.googlecode.ddom.core;
 
-public interface CoreProcessingInstruction extends CoreLeafNode {
+//TODO: document that only CoreText nodes are allowed as children + add unit test
+public interface CoreProcessingInstruction extends CoreChildNode, CoreParentNode {
     String coreGetTarget();
     void coreSetTarget(String target);
-    String coreGetData();
-    void coreSetData(String data);
 }

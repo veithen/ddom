@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,17 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
-public class ProcessingInstruction extends LeafNode implements CoreProcessingInstruction {
+public class ProcessingInstruction extends CharacterDataContainer implements CoreProcessingInstruction {
     private String target;
-    private String data;
 
-    public ProcessingInstruction(Document document, String target, String data) {
-        super(document);
+    public ProcessingInstruction(Document document, String target, boolean complete) {
+        super(document, complete);
         this.target = target;
-        this.data = data;
+    }
+
+    public ProcessingInstruction(Document document, String target, Object content) {
+        super(document, content);
+        this.target = target;
     }
 
     public final String coreGetTarget() {
@@ -40,20 +43,17 @@ public class ProcessingInstruction extends LeafNode implements CoreProcessingIns
         this.target = target;
     }
 
-    public final String coreGetData() {
-        return data;
+//    @Override
+//    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
+//        return appendTo;
+//    }
+
+
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
+        handler.startProcessingInstruction(target);
     }
 
-    public final void coreSetData(String data) {
-        this.data = data;
-    }
-
-    @Override
-    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-        return appendTo;
-    }
-
-    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
-        handler.processProcessingInstruction(target, data);
+    public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
+        handler.endProcessingInstruction();
     }
 }

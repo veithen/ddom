@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,32 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.frontend.dom.intf.DOMComment;
+import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreComment.class)
+// TODO: there is probably some code here that can be combined with the mixins for CoreProcessingInstruction and CoreCDATASection
 public abstract class CommentSupport implements DOMComment {
     public final Node cloneNode(boolean deep) {
         return (Node)coreGetNodeFactory().createComment(coreGetOwnerDocument(true), getData());
     }
 
     public final String getData() {
-        return coreGetData();
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
-    
+
     public final void setData(String data) throws DOMException {
-        coreSetData(data);
+        try {
+            coreSetValue(data);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final short getNodeType() {

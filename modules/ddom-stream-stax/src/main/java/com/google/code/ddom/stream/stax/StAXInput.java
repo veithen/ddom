@@ -107,7 +107,9 @@ public class StAXInput extends XmlInput {
                 handler.endElement();
                 break;
             case XMLStreamReader.PROCESSING_INSTRUCTION:
-                handler.processProcessingInstruction(reader.getPITarget(), reader.getPIData());
+                handler.startProcessingInstruction(reader.getPITarget());
+                handler.processText(reader.getPIData(), false);
+                handler.endProcessingInstruction();
                 break;
             case XMLStreamReader.CHARACTERS:
                 handler.processText(reader.getText(), false);
@@ -121,7 +123,9 @@ public class StAXInput extends XmlInput {
                 handler.endCDATASection();
                 break;
             case XMLStreamReader.COMMENT:
-                handler.processComment(reader.getText());
+                handler.startComment();
+                handler.processText(reader.getText(), false);
+                handler.endComment();
                 break;
             case XMLStreamReader.ENTITY_REFERENCE:
                 handler.processEntityReference(reader.getLocalName());

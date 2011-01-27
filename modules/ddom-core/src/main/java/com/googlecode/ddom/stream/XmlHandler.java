@@ -96,9 +96,52 @@ public interface XmlHandler {
     
     void attributesCompleted() throws StreamException;
     
-    void processProcessingInstruction(String target, String data) throws StreamException;
+    /**
+     * TODO
+     * 
+     * @param data
+     * @param ignorable
+     *            Specifies if the character data represents element content whitespace (also called
+     *            "ignorable whitespace"). This should always be <code>false</code> if the character
+     *            data appears in a comment or processing instruction.
+     * @throws StreamException
+     */
+    // TODO: what about ignorable in CDATA sections???
     void processText(String data, boolean ignorable) throws StreamException;
-    void processComment(String data) throws StreamException;
+    
+    /**
+     * Notify the handler of the beginning of a processing instruction.
+     * 
+     * @param target
+     *            the target of the processing instruction
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void startProcessingInstruction(String target) throws StreamException;
+    
+    /**
+     * Notify the handler of the end of a processing instruction.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void endProcessingInstruction() throws StreamException;
+    
+    /**
+     * Notify the handler of the beginning of a comment.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void startComment() throws StreamException;
+    
+    /**
+     * Notify the handler of the end of a comment.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void endComment() throws StreamException;
     
     /**
      * Notify the handler of the beginning of a CDATA section.

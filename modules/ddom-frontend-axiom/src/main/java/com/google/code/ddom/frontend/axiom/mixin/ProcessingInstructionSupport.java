@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.google.code.ddom.frontend.axiom.mixin;
 import org.apache.axiom.om.OMNode;
 
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
+import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.frontend.Mixin;
 
@@ -31,16 +33,24 @@ import com.googlecode.ddom.frontend.Mixin;
  */
 @Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements AxiomProcessingInstruction {
-    public void setTarget(String target) {
+    public final void setTarget(String target) {
         coreSetTarget(target);
     }
 
-    public void setValue(String value) {
-        coreSetData(value);
+    public final void setValue(String value) {
+        try {
+            coreSetValue(value);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
-    public String getValue() {
-        return coreGetData();
+    public final String getValue() {
+        try {
+            return coreGetTextContent();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public final int getType() {

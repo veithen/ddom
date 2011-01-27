@@ -68,14 +68,6 @@ public class XmlHandlerAdapter implements XmlHandler {
     }
 
     /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#processComment(java.lang.String)
-     */
-    public void processComment(String data) throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
      * @see com.google.code.ddom.stream.spi.XmlHandler#processDocumentType(java.lang.String, java.lang.String, java.lang.String)
      */
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {
@@ -87,14 +79,6 @@ public class XmlHandlerAdapter implements XmlHandler {
      * @see com.google.code.ddom.stream.spi.XmlHandler#processEntityReference(java.lang.String)
      */
     public void processEntityReference(String name) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#processProcessingInstruction(java.lang.String, java.lang.String)
-     */
-    public void processProcessingInstruction(String target, String data) throws StreamException {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -162,6 +146,38 @@ public class XmlHandlerAdapter implements XmlHandler {
      * @see com.google.code.ddom.stream.spi.XmlHandler#startNamespaceDeclaration(java.lang.String)
      */
     public void startNamespaceDeclaration(String prefix) throws StreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /* (non-Javadoc)
+     * @see com.googlecode.ddom.stream.XmlHandler#endComment()
+     */
+    public void endComment() throws StreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /* (non-Javadoc)
+     * @see com.googlecode.ddom.stream.XmlHandler#endProcessingInstruction()
+     */
+    public void endProcessingInstruction() throws StreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /* (non-Javadoc)
+     * @see com.googlecode.ddom.stream.XmlHandler#startComment()
+     */
+    public void startComment() throws StreamException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /* (non-Javadoc)
+     * @see com.googlecode.ddom.stream.XmlHandler#startProcessingInstruction(java.lang.String)
+     */
+    public void startProcessingInstruction(String target) throws StreamException {
         // TODO
         throw new UnsupportedOperationException();
     }

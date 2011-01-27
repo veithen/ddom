@@ -15,26 +15,24 @@
  */
 package com.google.code.ddom.backend.linkedlist;
 
-import com.googlecode.ddom.backend.Implementation;
-import com.googlecode.ddom.core.CoreCDATASection;
-import com.googlecode.ddom.stream.StreamException;
-import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreText;
+import com.googlecode.ddom.core.DeferredParsingException;
 
-// @Implementation
-public class CDATASection extends CharacterDataContainer implements CoreCDATASection {
-    public CDATASection(Document document, Object content) {
+public abstract class CharacterDataContainer extends Container {
+    public CharacterDataContainer(Document document, Object content) {
         super(document, content);
     }
     
-    public CDATASection(Document document, boolean complete) {
+    public CharacterDataContainer(Document document, boolean complete) {
         super(document, complete);
     }
 
-    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
-        handler.startCDATASection();
-    }
-
-    public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
-        handler.endCDATASection();
+    public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)
+            throws ChildNotAllowedException, DeferredParsingException {
+        if (!(newChild instanceof CoreText)) {
+            throw new ChildNotAllowedException();
+        }
     }
 }

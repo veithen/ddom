@@ -30,6 +30,7 @@ import org.w3c.domts.level3.core.domconfigurationcansetparameter03;
 import org.w3c.domts.level3.core.domconfigurationcansetparameter06;
 import org.w3c.domts.level3.core.elementsetidattributens05;
 import org.w3c.domts.level3.core.namespacedeclarations02;
+import org.w3c.domts.level3.core.nodegettextcontent14;
 import org.w3c.domts.level3.core.nodeinsertbefore14;
 import org.w3c.domts.level3.core.nodeinsertbefore15;
 import org.w3c.domts.level3.core.nodeinsertbefore25;
@@ -126,6 +127,9 @@ public class DOM3CoreTest extends TestSuite {
         // TODO: only the wrong exception type is thrown here
         suite.addExclude(nodeinsertbefore14.class);
         suite.addExclude(nodeinsertbefore15.class);
+        
+        // TODO
+        suite.addExclude(nodegettextcontent14.class);
         
         return new JUnitTestSuiteAdapter(suite);
     }

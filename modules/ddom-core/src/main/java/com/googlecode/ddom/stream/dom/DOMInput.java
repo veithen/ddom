@@ -139,11 +139,15 @@ public class DOMInput extends XmlInput {
                         handler.endCDATASection();
                         break loop;
                     case Node.COMMENT_NODE:
-                        handler.processComment(currentNode.getNodeValue());
+                        handler.startComment();
+                        handler.processText(currentNode.getNodeValue(), false);
+                        handler.endComment();
                         break loop;
                     case Node.PROCESSING_INSTRUCTION_NODE:
                         ProcessingInstruction pi = (ProcessingInstruction)currentNode;
-                        handler.processProcessingInstruction(pi.getTarget(), pi.getData());
+                        handler.startProcessingInstruction(pi.getTarget());
+                        handler.processText(pi.getData(), false);
+                        handler.endProcessingInstruction();
                         break loop;
                     default:
                         // TODO

@@ -17,15 +17,16 @@ package com.google.code.ddom.frontend.saaj.mixin;
 
 import com.google.code.ddom.frontend.saaj.intf.SAAJNode;
 import com.googlecode.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.frontend.Mixin;
 
-@Mixin(CoreCharacterData.class)
+@Mixin({CoreCharacterData.class, CoreComment.class})
 public abstract class CharacterDataSupport implements SAAJNode, CoreCharacterData {
     public final String getValue() {
-        return coreGetData();
+        return getNodeValue();
     }
 
     public final void setValue(String value) {
-        coreSetData(value);
+        setNodeValue(value);
     }
 }
