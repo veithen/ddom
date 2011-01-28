@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.Inject;
 import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
@@ -29,7 +30,6 @@ import com.googlecode.ddom.core.CoreNSUnawareAttribute;
 import com.googlecode.ddom.core.CoreNSUnawareElement;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
-import com.googlecode.ddom.core.CoreText;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.core.ext.ModelExtension;
 
@@ -83,8 +83,8 @@ public class NodeFactoryImpl implements NodeFactory {
         return new DocumentFragment((Document)document);
     }
 
-    public final CoreText createText(CoreDocument document, String data) {
-        return new Text((Document)document, data, false);
+    public final CoreCharacterData createCharacterData(CoreDocument document, String data) {
+        return new CharacterData((Document)document, data, false);
     }
 
     public final CoreComment createComment(CoreDocument document, String data) {

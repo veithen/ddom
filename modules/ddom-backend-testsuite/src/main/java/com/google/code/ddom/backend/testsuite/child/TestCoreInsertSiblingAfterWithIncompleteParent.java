@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package com.google.code.ddom.backend.testsuite.child;
 
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreNSAwareElement;
-import com.googlecode.ddom.core.CoreText;
 
 public class TestCoreInsertSiblingAfterWithIncompleteParent extends BackendTestCase {
     public TestCoreInsertSiblingAfterWithIncompleteParent(BackendTestSuiteConfig config) {
@@ -29,7 +29,7 @@ public class TestCoreInsertSiblingAfterWithIncompleteParent extends BackendTestC
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = parse("<root><a>test</a><b>test</b></root>");
-        CoreText text = nodeFactory.createText(document, "text1");
+        CoreCharacterData text = nodeFactory.createCharacterData(document, "text1");
         CoreNSAwareElement a = (CoreNSAwareElement)document.coreGetDocumentElement().coreGetFirstChild();
         a.coreInsertSiblingAfter(text);
         if (builderType >= BUILDER_TYPE_2) {

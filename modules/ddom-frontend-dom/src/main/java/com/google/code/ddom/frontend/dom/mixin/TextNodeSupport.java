@@ -22,13 +22,13 @@ import org.w3c.dom.Text;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.core.CoreTextNode;
 import com.googlecode.ddom.frontend.Mixin;
 
-@Mixin({CoreTextNode.class, CoreCDATASection.class})
+@Mixin({CoreCharacterData.class, CoreCDATASection.class})
 public abstract class TextNodeSupport implements DOMTextNode {
     public final Text splitText(int offset) throws DOMException {
         String text = getData();
@@ -52,13 +52,13 @@ public abstract class TextNodeSupport implements DOMTextNode {
         DOMTextNode first = getWholeTextStartNode();
         DOMTextNode last = getWholeTextEndNode();
         if (first == last) {
-            return first.coreGetData();
+            return first.getData();
         } else {
             try {
                 StringBuilder buffer = new StringBuilder();
                 DOMTextNode current = first;
                 while (true) {
-                    buffer.append(current.coreGetData());
+                    buffer.append(current.getData());
                     if (current == last) {
                         break;
                     } else {
@@ -109,7 +109,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
     public final Text replaceWholeText(String content) throws DOMException {
         DOMTextNode newText;
         if (content.length() > 0) {
-            newText = (DOMTextNode)coreGetNodeFactory().createText(coreGetOwnerDocument(true), content);
+            newText = (DOMTextNode)coreGetNodeFactory().createCharacterData(coreGetOwnerDocument(true), content);
         } else {
             newText = null;
         }

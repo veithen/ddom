@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
 import com.google.code.ddom.backend.testsuite.Policies;
 import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.CoreText;
 
 public class TestCoreCoalesce extends BackendTestCase {
     public TestCoreCoalesce(BackendTestSuiteConfig config) {
@@ -37,23 +37,23 @@ public class TestCoreCoalesce extends BackendTestCase {
     protected void runTest() throws Exception {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, "test");
-        CoreText text1 = nodeFactory.createText(document, "A");
+        CoreCharacterData text1 = nodeFactory.createCharacterData(document, "A");
         element.coreAppendChild(text1, Policies.REJECT);
-        CoreText text2 = nodeFactory.createText(document, "B");
+        CoreCharacterData text2 = nodeFactory.createCharacterData(document, "B");
         element.coreAppendChild(text2, Policies.REJECT);
         CoreCDATASection cdata = nodeFactory.createCDATASection(document, "C");
         element.coreAppendChild(cdata, Policies.REJECT);
-        CoreText text3 = nodeFactory.createText(document, "D");
+        CoreCharacterData text3 = nodeFactory.createCharacterData(document, "D");
         element.coreAppendChild(text3, Policies.REJECT);
         CoreComment comment = nodeFactory.createComment(document, "test");
         element.coreAppendChild(comment, Policies.REJECT);
-        CoreText text4 = nodeFactory.createText(document, "E");
+        CoreCharacterData text4 = nodeFactory.createCharacterData(document, "E");
         element.coreAppendChild(text4, Policies.REJECT);
         element.coreCoalesce(true);
         
         CoreChildNode child = element.coreGetFirstChild();
-        Assert.assertTrue(child instanceof CoreText);
-        Assert.assertEquals("ABCD", ((CoreText)child).coreGetData());
+        Assert.assertTrue(child instanceof CoreCharacterData);
+        Assert.assertEquals("ABCD", ((CoreCharacterData)child).coreGetData());
         child = child.coreGetNextSibling();
         Assert.assertSame(comment, child);
         child = child.coreGetNextSibling();

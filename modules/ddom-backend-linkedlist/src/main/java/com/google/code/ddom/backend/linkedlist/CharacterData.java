@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,17 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 
-public abstract class CharacterData extends LeafNode implements CoreCharacterData {
+public class CharacterData extends LeafNode implements CoreCharacterData {
     private String data;
 
-    public CharacterData(Document document, String data) {
+    public CharacterData(Document document, String data, boolean ignorable) {
         super(document);
         this.data = data;
+        internalSetFlag(Flags.IGNORABLE, ignorable);
     }
 
     public final String coreGetData() {
@@ -31,5 +35,32 @@ public abstract class CharacterData extends LeafNode implements CoreCharacterDat
 
     public final void coreSetData(String data) {
         this.data = data;
+    }
+
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.processText(coreGetData(), coreIsIgnorable());
+    }
+
+    public final boolean coreIsIgnorable() {
+        return internalGetFlag(Flags.IGNORABLE);
+    }
+
+    @Override
+    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
+        String data = coreGetData();
+        if (appendTo == null) {
+            return data;
+        } else {
+            StringBuilder builder;
+            if (appendTo instanceof String) {
+                String existing = (String)appendTo;
+                builder = new StringBuilder(existing.length() + data.length());
+                builder.append(existing);
+            } else {
+                builder = (StringBuilder)appendTo;
+            }
+            builder.append(data);
+            return builder;
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.core;
+package com.google.code.ddom.frontend.axiom.mixin;
 
-public interface CoreTextNode extends CoreCharacterData {
+import org.apache.axiom.om.OMNode;
 
+import com.google.code.ddom.frontend.axiom.intf.AxiomCharacterData;
+import com.googlecode.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.frontend.Mixin;
+
+@Mixin(CoreCharacterData.class)
+public abstract class CharacterDataSupport implements AxiomCharacterData {
+    public final int getType() {
+        return OMNode.TEXT_NODE;
+    }
+
+    public String getText() {
+        return coreGetData();
+    }
 }

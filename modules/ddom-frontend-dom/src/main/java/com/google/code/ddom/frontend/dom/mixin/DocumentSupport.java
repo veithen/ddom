@@ -196,7 +196,7 @@ public abstract class DocumentSupport implements DOMDocument {
                 case Node.COMMENT_NODE:
                     return (Node)nodeFactory.createComment(this, node.getNodeValue());
                 case Node.TEXT_NODE:
-                    return (Node)nodeFactory.createText(this, node.getNodeValue());
+                    return (Node)nodeFactory.createCharacterData(this, node.getNodeValue());
                 case Node.CDATA_SECTION_NODE:
                     return (Node)coreGetNodeFactory().createCDATASection(this, node.getNodeValue());
                 case Node.PROCESSING_INSTRUCTION_NODE:
@@ -391,7 +391,7 @@ public abstract class DocumentSupport implements DOMDocument {
     }
 
     public final Text createTextNode(String data) {
-        return (Text)coreGetNodeFactory().createText(this, data);
+        return (Text)coreGetNodeFactory().createCharacterData(this, data);
     }
 
     public final Comment createComment(String data) {

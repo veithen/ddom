@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package com.google.code.ddom.backend.testsuite.parent;
 import org.junit.Assert;
 
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.core.CoreText;
 
 public class TestCoreSetValue extends ParentNodeTestCase {
     public TestCoreSetValue(BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {
@@ -35,8 +35,8 @@ public class TestCoreSetValue extends ParentNodeTestCase {
         parent.coreSetValue("test");
         Assert.assertFalse(parent.coreIsExpanded());
         CoreChildNode child = parent.coreGetFirstChild();
-        Assert.assertTrue(child instanceof CoreText);
-        Assert.assertEquals("test", ((CoreText)child).coreGetData());
+        Assert.assertTrue(child instanceof CoreCharacterData);
+        Assert.assertEquals("test", ((CoreCharacterData)child).coreGetData());
         Assert.assertTrue(parent.coreIsExpanded());
         Assert.assertEquals(1, parent.coreGetChildCount());
     }

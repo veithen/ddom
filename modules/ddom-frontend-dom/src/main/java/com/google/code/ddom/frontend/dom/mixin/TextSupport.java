@@ -20,13 +20,13 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.frontend.dom.intf.DOMText;
 import com.google.code.ddom.frontend.dom.intf.DOMTextNode;
-import com.googlecode.ddom.core.CoreText;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.frontend.Mixin;
 
-@Mixin(CoreText.class)
+@Mixin(CoreCharacterData.class)
 public abstract class TextSupport implements DOMText {
     public final DOMTextNode createNewTextNode(String data) {
-        return (DOMTextNode)coreGetNodeFactory().createText(coreGetOwnerDocument(true), data);
+        return (DOMTextNode)coreGetNodeFactory().createCharacterData(coreGetOwnerDocument(true), data);
     }
 
     public final String getData() {

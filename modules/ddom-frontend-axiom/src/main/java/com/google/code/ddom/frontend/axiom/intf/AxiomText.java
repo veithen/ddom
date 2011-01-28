@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.google.code.ddom.frontend.axiom.intf;
 
-import com.googlecode.ddom.core.CoreText;
+import org.apache.axiom.om.OMText;
 
-public interface AxiomText extends CoreText, AxiomTextNode {
+public interface AxiomText extends OMText, AxiomChildNode {
 
 }

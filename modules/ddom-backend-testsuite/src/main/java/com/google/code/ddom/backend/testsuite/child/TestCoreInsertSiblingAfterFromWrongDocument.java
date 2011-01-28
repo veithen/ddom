@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.Policies;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.CoreText;
 import com.googlecode.ddom.core.WrongDocumentException;
 
 public class TestCoreInsertSiblingAfterFromWrongDocument extends BackendTestCase {
@@ -33,8 +33,8 @@ public class TestCoreInsertSiblingAfterFromWrongDocument extends BackendTestCase
         CoreDocument document1 = nodeFactory.createDocument();
         CoreDocument document2 = nodeFactory.createDocument();
         CoreElement parent = nodeFactory.createElement(document1, "test");
-        CoreText text1 = nodeFactory.createText(document1, "text1");
-        CoreText text2 = nodeFactory.createText(document2, "text2");
+        CoreCharacterData text1 = nodeFactory.createCharacterData(document1, "text1");
+        CoreCharacterData text2 = nodeFactory.createCharacterData(document2, "text2");
         parent.coreAppendChild(text1, Policies.REJECT);
         try {
             text1.coreInsertSiblingAfter(text2);

@@ -25,6 +25,7 @@ import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreCDATASection;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
@@ -32,8 +33,6 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
-import com.googlecode.ddom.core.CoreText;
-import com.googlecode.ddom.core.CoreTextNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.Mapper;
 import com.googlecode.ddom.core.NodeInUseException;
@@ -271,9 +270,10 @@ public abstract class Element extends Container implements LLElement {
     }
 
     public final void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException {
+        // TODO: clean up local variable names (text --> characterData)
         CoreDocument document = internalGetOwnerDocument();
         // TODO: using a collection here is very bad!!
-        List<CoreTextNode> textNodes = new ArrayList<CoreTextNode>();
+        List<CoreCharacterData> textNodes = new ArrayList<CoreCharacterData>();
         CoreChildNode child = coreGetFirstChild();
         boolean forceReplace = false;
         while (true) {
@@ -283,7 +283,7 @@ public abstract class Element extends Container implements LLElement {
             if (child == null) {
                 isText = false;
             } else {
-                if (child instanceof CoreText) {
+                if (child instanceof CoreCharacterData) {
                     isText = true;
                 } else if (child instanceof CoreCDATASection) {
                     if (includeCDATASections) {
@@ -297,7 +297,7 @@ public abstract class Element extends Container implements LLElement {
                 }
             }
             if (isText) {
-                CoreTextNode textNode = (CoreTextNode)child;
+                CoreCharacterData textNode = (CoreCharacterData)child;
                 if (textNode.coreGetData().length() == 0) {
                     textNode.coreDetach();
                 } else {
@@ -306,17 +306,17 @@ public abstract class Element extends Container implements LLElement {
             } else {
                 if (forceReplace || textNodes.size() > 1) {
                     StringBuilder buffer = new StringBuilder();
-                    for (CoreTextNode textNode : textNodes) {
+                    for (CoreCharacterData textNode : textNodes) {
                         buffer.append(textNode.coreGetData());
                     }
-                    CoreTextNode first = textNodes.get(0);
-                    CoreText newTextNode = coreGetNodeFactory().createText(document, buffer.toString());
+                    CoreCharacterData first = textNodes.get(0);
+                    CoreCharacterData newTextNode = coreGetNodeFactory().createCharacterData(document, buffer.toString());
                     try {
                         first.coreInsertSiblingBefore(newTextNode);
                     } catch (CoreModelException ex) {
                         throw new Error(ex); // TODO: we should never get here
                     }
-                    for (CoreTextNode textNode : textNodes) {
+                    for (CoreCharacterData textNode : textNodes) {
                         textNode.coreDetach();
                     }
                     forceReplace = false;

@@ -37,6 +37,7 @@ import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomCDATASection;
+import com.google.code.ddom.frontend.axiom.intf.AxiomCharacterData;
 import com.google.code.ddom.frontend.axiom.intf.AxiomComment;
 import com.google.code.ddom.frontend.axiom.intf.AxiomContainer;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
@@ -44,7 +45,6 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
-import com.google.code.ddom.frontend.axiom.intf.AxiomTextNode;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.util.QNameUtil;
@@ -189,14 +189,14 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMText createOMText(String data) {
-        AxiomText text = (AxiomText)nodeFactory.createText(null, data);
+        AxiomText text = (AxiomText)nodeFactory.createCharacterData(null, data);
         text.setOMFactory(this);
         return text;
     }
 
     public final OMText createOMText(OMContainer parent, String data) {
         try {
-            AxiomText text = (AxiomText)((AxiomContainer)parent).coreAppendText(data);
+            AxiomCharacterData text = (AxiomCharacterData)((AxiomContainer)parent).coreAppendCharacterData(data);
             text.setOMFactory(this);
             return text;
         } catch (CoreModelException ex) {
@@ -225,11 +225,11 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMText createOMText(OMContainer parent, String data, int type) {
-        AxiomTextNode node;
+        AxiomText node;
         try {
             switch (type) {
                 case OMNode.TEXT_NODE:
-                    node = (AxiomTextNode)((AxiomContainer)parent).coreAppendText(data);
+                    node = (AxiomText)((AxiomContainer)parent).coreAppendCharacterData(data);
                     break;
                 case OMNode.CDATA_SECTION_NODE:
                     AxiomCDATASection cdataSection = (AxiomCDATASection)((AxiomContainer)parent).coreAppendCDATASection();

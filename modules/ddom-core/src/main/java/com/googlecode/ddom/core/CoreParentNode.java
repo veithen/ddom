@@ -153,7 +153,7 @@ public interface CoreParentNode extends CoreNode {
     
     CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredParsingException;
     
-    CoreText coreAppendText(String data) throws ChildNotAllowedException, DeferredParsingException;
+    CoreCharacterData coreAppendCharacterData(String data) throws ChildNotAllowedException, DeferredParsingException;
 
     CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredParsingException;
 

@@ -33,7 +33,7 @@ public class TestCoreAppendChildrenFromWrongDocument extends ParentNodeTestCase 
         CoreParentNode parent = parentNodeFactory.createNode(nodeFactory, document1);
         CoreDocument document2 = nodeFactory.createDocument();
         CoreDocumentFragment fragment = nodeFactory.createDocumentFragment(document2);
-        fragment.coreAppendChild(nodeFactory.createText(document2, "text"), Policies.REJECT);
+        fragment.coreAppendChild(nodeFactory.createCharacterData(document2, "text"), Policies.REJECT);
         try {
             parent.coreAppendChildren(fragment);
             fail("Expected WrongDocumentException");

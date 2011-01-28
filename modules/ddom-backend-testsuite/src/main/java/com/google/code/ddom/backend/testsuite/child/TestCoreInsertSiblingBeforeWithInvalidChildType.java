@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.Policies;
 import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.CoreText;
 
 public class TestCoreInsertSiblingBeforeWithInvalidChildType extends BackendTestCase {
     public TestCoreInsertSiblingBeforeWithInvalidChildType(BackendTestSuiteConfig config) {
@@ -33,7 +33,7 @@ public class TestCoreInsertSiblingBeforeWithInvalidChildType extends BackendTest
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement parent = nodeFactory.createElement(document, "test");
-        CoreText text = nodeFactory.createText(document, "text1");
+        CoreCharacterData text = nodeFactory.createCharacterData(document, "text1");
         CoreDocumentTypeDeclaration dtd = nodeFactory.createDocumentTypeDeclaration(document, "root", null, null);
         parent.coreAppendChild(text, Policies.REJECT);
         try {

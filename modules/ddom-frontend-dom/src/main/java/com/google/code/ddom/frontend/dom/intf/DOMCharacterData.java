@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.CharacterData;
 
-import com.googlecode.ddom.core.CoreCharacterData;
-
-public interface DOMCharacterData extends CoreCharacterData, CharacterData, DOMCoreLeafNode {
+public interface DOMCharacterData extends CharacterData, DOMCoreChildNode {
 
 }

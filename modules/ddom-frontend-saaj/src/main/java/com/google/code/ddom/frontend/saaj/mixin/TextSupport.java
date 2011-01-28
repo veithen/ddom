@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 package com.google.code.ddom.frontend.saaj.mixin;
 
 import com.google.code.ddom.frontend.saaj.intf.SAAJText;
-import com.googlecode.ddom.core.CoreTextNode;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.frontend.Mixin;
 
-@Mixin(CoreTextNode.class)
+@Mixin(CoreCharacterData.class)
 public abstract class TextSupport implements SAAJText {
     public boolean isComment() {
         return false;

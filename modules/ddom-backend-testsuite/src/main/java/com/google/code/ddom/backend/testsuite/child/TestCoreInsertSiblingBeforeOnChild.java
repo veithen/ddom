@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package com.google.code.ddom.backend.testsuite.child;
 import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.Policies;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.CoreText;
 import com.googlecode.ddom.core.CyclicRelationshipException;
 
 public class TestCoreInsertSiblingBeforeOnChild extends BackendTestCase {
@@ -32,7 +32,7 @@ public class TestCoreInsertSiblingBeforeOnChild extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, null, "test", null);
-        CoreText text = nodeFactory.createText(document, "test");
+        CoreCharacterData text = nodeFactory.createCharacterData(document, "test");
         element.coreAppendChild(text, Policies.REJECT);
         try {
             text.coreInsertSiblingBefore(element);

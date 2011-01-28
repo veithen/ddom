@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
 import com.google.code.ddom.backend.testsuite.Policies;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.CoreText;
 
 public class TestCoreDetach extends BackendTestCase {
     public TestCoreDetach(BackendTestSuiteConfig config) {
@@ -34,11 +34,11 @@ public class TestCoreDetach extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, "test");
-        CoreText text1 = nodeFactory.createText(document, "text1");
+        CoreCharacterData text1 = nodeFactory.createCharacterData(document, "text1");
         element.coreAppendChild(text1, Policies.REJECT);
-        CoreText text2 = nodeFactory.createText(document, "text1");
+        CoreCharacterData text2 = nodeFactory.createCharacterData(document, "text1");
         element.coreAppendChild(text2, Policies.REJECT);
-        CoreText text3 = nodeFactory.createText(document, "text1");
+        CoreCharacterData text3 = nodeFactory.createCharacterData(document, "text1");
         element.coreAppendChild(text3, Policies.REJECT);
         
         text2.coreDetach();

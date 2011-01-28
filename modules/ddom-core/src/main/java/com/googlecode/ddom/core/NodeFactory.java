@@ -68,7 +68,7 @@ public interface NodeFactory {
     
     CoreDocumentFragment createDocumentFragment(CoreDocument document);
 
-    CoreText createText(CoreDocument document, String data);
+    CoreCharacterData createCharacterData(CoreDocument document, String data);
 
     CoreComment createComment(CoreDocument document, String data);
 

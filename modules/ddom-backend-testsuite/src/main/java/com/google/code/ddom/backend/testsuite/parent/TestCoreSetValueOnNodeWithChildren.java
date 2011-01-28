@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import org.junit.Assert;
 
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.Policies;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.core.CoreText;
 
 public class TestCoreSetValueOnNodeWithChildren extends ParentNodeTestCase {
     public TestCoreSetValueOnNodeWithChildren(BackendTestSuiteConfig config, ParentNodeFactory parentNodeFactory) {
@@ -33,8 +33,8 @@ public class TestCoreSetValueOnNodeWithChildren extends ParentNodeTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreParentNode parent = parentNodeFactory.createNode(nodeFactory, document);
-        CoreText child1 = nodeFactory.createText(document, "text1");
-        CoreText child2 = nodeFactory.createText(document, "text2");
+        CoreCharacterData child1 = nodeFactory.createCharacterData(document, "text1");
+        CoreCharacterData child2 = nodeFactory.createCharacterData(document, "text2");
         parent.coreAppendChild(child1, Policies.REJECT);
         parent.coreAppendChild(child2, Policies.REJECT);
         Assert.assertTrue(parent.coreIsExpanded());
@@ -44,8 +44,8 @@ public class TestCoreSetValueOnNodeWithChildren extends ParentNodeTestCase {
         Assert.assertFalse(parent.coreIsExpanded());
         Assert.assertEquals(1, parent.coreGetChildCount());
         CoreChildNode child = parent.coreGetFirstChild();
-        Assert.assertTrue(child instanceof CoreText);
-        Assert.assertEquals("test", ((CoreText)child).coreGetData());
+        Assert.assertTrue(child instanceof CoreCharacterData);
+        Assert.assertEquals("test", ((CoreCharacterData)child).coreGetData());
         Assert.assertTrue(parent.coreIsExpanded());
         
         Assert.assertFalse(child1.coreHasParent());

@@ -41,7 +41,6 @@ import com.googlecode.ddom.core.CoreNSUnawareElement;
 import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
-import com.googlecode.ddom.core.CoreText;
 import com.googlecode.ddom.core.CyclicRelationshipException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.HierarchyException;
@@ -200,7 +199,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
         if (content instanceof String) {
             // TODO: no cast here
-            LLChildNode firstChild = new Text((Document)internalGetOwnerDocument(), (String)content, false);
+            LLChildNode firstChild = new CharacterData((Document)internalGetOwnerDocument(), (String)content, false);
             firstChild.internalSetParent(this);
             content = firstChild;
             return firstChild;
@@ -426,8 +425,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return child;
     }
     
-    public final CoreText coreAppendText(String data) throws ChildNotAllowedException, DeferredParsingException {
-        Text child = new Text(null, data, false);
+    public final CoreCharacterData coreAppendCharacterData(String data) throws ChildNotAllowedException, DeferredParsingException {
+        CharacterData child = new CharacterData(null, data, false);
         appendNewlyCreatedChild(child);
         return child;
     }

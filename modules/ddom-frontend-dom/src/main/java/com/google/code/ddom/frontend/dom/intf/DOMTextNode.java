@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,7 @@ package com.google.code.ddom.frontend.dom.intf;
 
 import org.w3c.dom.Text;
 
-import com.googlecode.ddom.core.CoreTextNode;
-
-public interface DOMTextNode extends CoreTextNode, Text, DOMCharacterData {
+public interface DOMTextNode extends Text, DOMCharacterData {
     /**
      * Create a new text node of the same type as this one.
      * 

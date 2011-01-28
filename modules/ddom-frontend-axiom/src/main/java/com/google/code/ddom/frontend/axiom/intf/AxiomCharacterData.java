@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.core;
+package com.google.code.ddom.frontend.axiom.intf;
 
-public interface CoreText extends CoreTextNode {
-    /**
-     * Check whether this text node contains element content whitespace (also called
-     * "ignorable whitespace").
-     * 
-     * @return <code>true</code> if the text node contains ignorable whitespace, <code>false</code>
-     *         otherwise
-     */
-    boolean coreIsIgnorable();
+import com.googlecode.ddom.core.CoreCharacterData;
+
+public interface AxiomCharacterData extends CoreCharacterData, AxiomText {
+
 }

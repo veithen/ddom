@@ -17,7 +17,7 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
-import com.googlecode.ddom.core.CoreText;
+import com.googlecode.ddom.core.CoreCharacterData;
 
 public class Flags {
     private Flags() {}
@@ -35,7 +35,7 @@ public class Flags {
     public static final int HAS_PARENT = 2;
     
     /**
-     * Used to store the information returned by {@link CoreText#coreIsIgnorable()}.
+     * Used to store the information returned by {@link CoreCharacterData#coreIsIgnorable()}.
      */
     public static final int IGNORABLE = 4;
 }

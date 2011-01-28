@@ -18,11 +18,11 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreEntityReference;
-import com.googlecode.ddom.core.CoreText;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
@@ -89,7 +89,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildNotAllowedException {
-        if (!(newChild instanceof CoreText || newChild instanceof CoreEntityReference)) {
+        if (!(newChild instanceof CoreCharacterData || newChild instanceof CoreEntityReference)) {
             throw new ChildNotAllowedException();
         }
     }

@@ -16,8 +16,8 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
-import com.googlecode.ddom.core.CoreText;
 import com.googlecode.ddom.core.DeferredParsingException;
 
 public abstract class CharacterDataContainer extends Container {
@@ -31,7 +31,7 @@ public abstract class CharacterDataContainer extends Container {
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)
             throws ChildNotAllowedException, DeferredParsingException {
-        if (!(newChild instanceof CoreText)) {
+        if (!(newChild instanceof CoreCharacterData)) {
             throw new ChildNotAllowedException();
         }
     }

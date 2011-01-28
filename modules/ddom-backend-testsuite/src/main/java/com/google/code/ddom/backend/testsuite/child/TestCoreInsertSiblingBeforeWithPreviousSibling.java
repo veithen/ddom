@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ import com.google.code.ddom.backend.testsuite.BackendTestCase;
 import com.google.code.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.google.code.ddom.backend.testsuite.CoreAssert;
 import com.google.code.ddom.backend.testsuite.Policies;
+import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.CoreText;
 
 public class TestCoreInsertSiblingBeforeWithPreviousSibling extends BackendTestCase {
     public TestCoreInsertSiblingBeforeWithPreviousSibling(BackendTestSuiteConfig config) {
@@ -32,11 +32,11 @@ public class TestCoreInsertSiblingBeforeWithPreviousSibling extends BackendTestC
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement parent = nodeFactory.createElement(document, "test");
-        CoreText text1 = nodeFactory.createText(document, "text1");
-        CoreText text2 = nodeFactory.createText(document, "text2");
+        CoreCharacterData text1 = nodeFactory.createCharacterData(document, "text1");
+        CoreCharacterData text2 = nodeFactory.createCharacterData(document, "text2");
         parent.coreAppendChild(text1, Policies.REJECT);
         parent.coreAppendChild(text2, Policies.REJECT);
-        CoreText newSibling = nodeFactory.createText(document, "sibling");
+        CoreCharacterData newSibling = nodeFactory.createCharacterData(document, "sibling");
         text2.coreInsertSiblingBefore(newSibling);
         assertEquals(3, parent.coreGetChildCount());
         assertSame(parent, newSibling.coreGetParent());

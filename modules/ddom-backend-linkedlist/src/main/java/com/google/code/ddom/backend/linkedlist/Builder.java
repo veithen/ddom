@@ -203,7 +203,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             if (lastSibling == null && pendingText == null && !ignorable) {
                 pendingText = data;
             } else {
-                appendNode(new Text(document, data, ignorable));
+                appendNode(new CharacterData(document, data, ignorable));
             }
         } else {
             passThroughHandler.processText(data, ignorable);
@@ -297,7 +297,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
         if (pendingText != null) {
             // We only defer creation of the text node if the character data is not ignorable.
             // Therefore we can set ignorable=false here.
-            appendSibling(new Text(document, pendingText, false));
+            appendSibling(new CharacterData(document, pendingText, false));
             pendingText = null;
         }
     }
