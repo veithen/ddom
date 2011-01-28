@@ -111,7 +111,7 @@ public class NamespaceRepairingFilter extends SimpleXmlFilter {
     protected void attributesCompleted() throws StreamException {
         for (int i=scopeStack[scopes-1]; i<bindings; i++) {
             super.startNamespaceDeclaration(namespaceStack[i*2]);
-            super.processText(namespaceStack[i*2+1], false);
+            super.processCharacterData(namespaceStack[i*2+1], false);
             super.endAttribute();
         }
         super.attributesCompleted();
@@ -124,11 +124,11 @@ public class NamespaceRepairingFilter extends SimpleXmlFilter {
     }
 
     @Override
-    protected void processText(String data, boolean ignorable) throws StreamException {
+    protected void processCharacterData(String data, boolean ignorable) throws StreamException {
         if (inNamespaceDeclaration) {
             namespaceURI.append(data);
         } else {
-            super.processText(data, ignorable);
+            super.processCharacterData(data, ignorable);
         }
     }
 }

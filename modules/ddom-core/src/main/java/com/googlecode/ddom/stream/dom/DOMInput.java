@@ -125,28 +125,28 @@ public class DOMInput extends XmlInput {
                                     handler.startAttribute(namespaceURI, attrLocalName, attr.getPrefix(), null);
                                 }
                             }
-                            handler.processText(attr.getValue(), false);
+                            handler.processCharacterData(attr.getValue(), false);
                             handler.endAttribute();
                         }
                         handler.attributesCompleted();
                         break loop;
                     case Node.TEXT_NODE:
-                        handler.processText(currentNode.getNodeValue(), false); // TODO: ignorable?
+                        handler.processCharacterData(currentNode.getNodeValue(), false); // TODO: ignorable?
                         break loop;
                     case Node.CDATA_SECTION_NODE:
                         handler.startCDATASection();
-                        handler.processText(currentNode.getNodeValue(), false);
+                        handler.processCharacterData(currentNode.getNodeValue(), false);
                         handler.endCDATASection();
                         break loop;
                     case Node.COMMENT_NODE:
                         handler.startComment();
-                        handler.processText(currentNode.getNodeValue(), false);
+                        handler.processCharacterData(currentNode.getNodeValue(), false);
                         handler.endComment();
                         break loop;
                     case Node.PROCESSING_INSTRUCTION_NODE:
                         ProcessingInstruction pi = (ProcessingInstruction)currentNode;
                         handler.startProcessingInstruction(pi.getTarget());
-                        handler.processText(pi.getData(), false);
+                        handler.processCharacterData(pi.getData(), false);
                         handler.endProcessingInstruction();
                         break loop;
                     default:

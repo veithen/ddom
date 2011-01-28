@@ -38,7 +38,7 @@ public class CharacterData extends LeafNode implements CoreCharacterData {
     }
 
     public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
-        handler.processText(coreGetData(), coreIsIgnorable());
+        handler.processCharacterData(coreGetData(), coreIsIgnorable());
     }
 
     public final boolean coreIsIgnorable() {

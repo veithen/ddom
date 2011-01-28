@@ -184,7 +184,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     @Override
-    protected boolean processText(String data, boolean ignorable) {
+    protected boolean processCharacterData(String data, boolean ignorable) {
         if (coalesce) {
             accumulator.append(data);
             return true;

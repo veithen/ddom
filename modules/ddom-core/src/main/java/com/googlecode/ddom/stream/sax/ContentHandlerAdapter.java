@@ -107,7 +107,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
                 }
                 String value = atts.getValue(i);
                 if (value.length() > 0) {
-                    handler.processText(value, false);
+                    handler.processCharacterData(value, false);
                 }
                 handler.endAttribute();
             }
@@ -143,7 +143,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void characters(char[] ch, int start, int length) throws SAXException {
         try {
-            handler.processText(new String(ch, start, length), false);
+            handler.processCharacterData(new String(ch, start, length), false);
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }
@@ -151,7 +151,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
         try {
-            handler.processText(new String(ch, start, length), true);
+            handler.processCharacterData(new String(ch, start, length), true);
         } catch (StreamException ex) {
             throw new SAXException(ex);
         }
@@ -161,7 +161,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
         try {
             // TODO: is this correct? or can SAX generate several calls to this method for the same comment?
             handler.startComment();
-            handler.processText(new String(ch, start, length), false);
+            handler.processCharacterData(new String(ch, start, length), false);
             handler.endComment();
         } catch (StreamException ex) {
             throw new SAXException(ex);
@@ -171,7 +171,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     public void processingInstruction(String piTarget, String piData) throws SAXException {
         try {
             handler.startProcessingInstruction(piTarget);
-            handler.processText(piData, false);
+            handler.processCharacterData(piData, false);
             handler.endProcessingInstruction();
         } catch (StreamException ex) {
             throw new SAXException(ex);

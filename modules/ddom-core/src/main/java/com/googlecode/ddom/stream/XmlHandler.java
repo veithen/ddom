@@ -107,7 +107,7 @@ public interface XmlHandler {
      * @throws StreamException
      */
     // TODO: what about ignorable in CDATA sections???
-    void processText(String data, boolean ignorable) throws StreamException;
+    void processCharacterData(String data, boolean ignorable) throws StreamException;
     
     /**
      * Notify the handler of the beginning of a processing instruction.

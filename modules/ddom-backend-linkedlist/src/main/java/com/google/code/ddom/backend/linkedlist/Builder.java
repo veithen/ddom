@@ -196,7 +196,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     }
 
     @Override
-    protected final void processText(String data, boolean ignorable) throws StreamException {
+    protected final void processCharacterData(String data, boolean ignorable) throws StreamException {
         if (passThroughHandler == null) {
             // If the character data is ignorable whitespace, then we know that there will
             // be (very likely) at least one child element in addition to the text node
@@ -206,7 +206,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
                 appendNode(new CharacterData(document, data, ignorable));
             }
         } else {
-            passThroughHandler.processText(data, ignorable);
+            passThroughHandler.processCharacterData(data, ignorable);
         }
     }
     

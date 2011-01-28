@@ -64,8 +64,8 @@ final class SimpleXmlFilterHandler implements XmlHandler {
         filter.attributesCompleted();
     }
 
-    public void processText(String data, boolean ignorable) throws StreamException {
-        filter.processText(data, ignorable);
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
+        filter.processCharacterData(data, ignorable);
     }
 
     public void startProcessingInstruction(String target) throws StreamException {

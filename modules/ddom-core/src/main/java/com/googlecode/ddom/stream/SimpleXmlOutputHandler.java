@@ -62,8 +62,8 @@ final class SimpleXmlOutputHandler implements XmlHandler{
         output.attributesCompleted();
     }
 
-    public void processText(String data, boolean ignorable) throws StreamException {
-        output.processText(data, ignorable);
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
+        output.processCharacterData(data, ignorable);
     }
 
     public void startProcessingInstruction(String target) throws StreamException {

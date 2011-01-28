@@ -66,8 +66,8 @@ public class SimpleXmlFilter extends XmlFilter {
         target.attributesCompleted();
     }
 
-    protected void processText(String data, boolean ignorable) throws StreamException {
-        target.processText(data, ignorable);
+    protected void processCharacterData(String data, boolean ignorable) throws StreamException {
+        target.processCharacterData(data, ignorable);
     }
 
     protected void startProcessingInstruction(String piTarget) throws StreamException {

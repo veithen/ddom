@@ -200,9 +200,9 @@ final class XmlPivotHandler implements XmlHandler {
         }
     }
 
-    public void processText(String data, boolean ignorable) throws StreamException {
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
         if (passThrough) {
-            passThrough = pivot.processText(data, ignorable);
+            passThrough = pivot.processCharacterData(data, ignorable);
         } else {
             addEvent(ignorable ? IGNORABLE_TEXT : TEXT);
             addToken(data);
@@ -308,10 +308,10 @@ final class XmlPivotHandler implements XmlHandler {
                     result = pivot.attributesCompleted();
                     break;
                 case TEXT:
-                    result = pivot.processText(getToken(), false);
+                    result = pivot.processCharacterData(getToken(), false);
                     break;
                 case IGNORABLE_TEXT:
-                    result = pivot.processText(getToken(), true);
+                    result = pivot.processCharacterData(getToken(), true);
                     break;
                 case START_PROCESSING_INSTRUCTION:
                     result = pivot.startProcessingInstruction(getToken());

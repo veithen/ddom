@@ -74,8 +74,8 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().attributesCompleted();
     }
 
-    public void processText(String data, boolean ignorable) throws StreamException {
-        getDelegate().processText(data, ignorable);
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
+        getDelegate().processCharacterData(data, ignorable);
     }
 
     public void startProcessingInstruction(String target) throws StreamException {

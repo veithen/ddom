@@ -142,7 +142,7 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void processText(String data, boolean ignorable) {
+    protected void processCharacterData(String data, boolean ignorable) {
         if (coalescing) {
             buffer.append(data);
         } else {

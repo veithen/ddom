@@ -86,7 +86,7 @@ public class XmlHandlerAdapter implements XmlHandler {
     /* (non-Javadoc)
      * @see com.google.code.ddom.stream.spi.XmlHandler#processText(java.lang.String)
      */
-    public void processText(String data, boolean ignorable) throws StreamException {
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
         // TODO
         throw new UnsupportedOperationException();
     }

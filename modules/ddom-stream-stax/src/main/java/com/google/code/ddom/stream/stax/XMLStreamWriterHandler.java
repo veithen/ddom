@@ -123,7 +123,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
         // Nothing special to do here
     }
 
-    public void processText(String data, boolean ignorable) throws StreamException {
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
         if (coalescing) {
             buffer.append(data);
         } else {
