@@ -39,6 +39,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ddom-xmlts</artifactId>
             <version>${project.version}</version>

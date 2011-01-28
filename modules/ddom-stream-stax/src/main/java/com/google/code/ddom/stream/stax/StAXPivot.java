@@ -29,8 +29,8 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
-import com.google.code.ddom.stream.spi.buffer.XmlPivot;
 import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.pivot.XmlPivot;
 
 public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private static final int INITIAL_ELEMENT_STACK_SIZE = 8;

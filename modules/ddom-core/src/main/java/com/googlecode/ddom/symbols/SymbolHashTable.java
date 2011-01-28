@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.spi;
+package com.googlecode.ddom.symbols;
 
-import com.googlecode.ddom.symbols.Symbols;
 
 /**
  * Symbol table implementation based on a hash table data structure. The implementation has the

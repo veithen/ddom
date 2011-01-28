@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.google.code.ddom.backend.linkedlist.intf.LLDocument;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
-import com.google.code.ddom.stream.spi.SymbolHashTable;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
@@ -30,6 +29,7 @@ import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.symbols.SymbolHashTable;
 import com.googlecode.ddom.symbols.Symbols;
 
 public class Document extends ParentNode implements LLDocument {

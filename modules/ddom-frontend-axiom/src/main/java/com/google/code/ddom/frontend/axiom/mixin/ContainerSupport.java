@@ -35,7 +35,6 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.Policies;
-import com.google.code.ddom.stream.spi.NamespaceRepairingFilter;
 import com.google.code.ddom.stream.stax.StAXPivot;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -48,6 +47,7 @@ import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlOutput;
+import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
 public abstract class ContainerSupport implements AxiomContainer {
