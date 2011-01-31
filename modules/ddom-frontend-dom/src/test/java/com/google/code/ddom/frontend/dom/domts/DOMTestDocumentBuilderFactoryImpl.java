@@ -28,12 +28,12 @@ import org.w3c.domts.DocumentBuilderSetting;
 
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
-import com.google.code.ddom.stream.options.CoalescingFeature;
-import com.google.code.ddom.stream.options.EntityReferencePolicy;
-import com.google.code.ddom.stream.options.NamespaceAwareness;
-import com.google.code.ddom.stream.options.ValidationPolicy;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.googlecode.ddom.stream.options.CoalescingFeature;
+import com.googlecode.ddom.stream.options.EntityReferencePolicy;
+import com.googlecode.ddom.stream.options.NamespaceAwareness;
+import com.googlecode.ddom.stream.options.ValidationPolicy;
 
 public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFactory {
     private interface Strategy {

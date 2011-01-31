@@ -22,9 +22,9 @@ import org.xml.sax.InputSource;
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.model.ModelDefinition;
-import com.google.code.ddom.stream.options.NamespaceAwareness;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.googlecode.ddom.stream.options.NamespaceAwareness;
 
 public class DDOMUtil extends DOMUtil {
     public static final DDOMUtil INSTANCE = new DDOMUtil();

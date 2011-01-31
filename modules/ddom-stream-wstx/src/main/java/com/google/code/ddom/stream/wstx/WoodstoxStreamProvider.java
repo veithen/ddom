@@ -36,10 +36,6 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import com.ctc.wstx.util.URLUtil;
 import com.google.code.ddom.OptionsTracker;
-import com.google.code.ddom.stream.options.CoalescingFeature;
-import com.google.code.ddom.stream.options.EntityReferencePolicy;
-import com.google.code.ddom.stream.options.NamespaceAwareness;
-import com.google.code.ddom.stream.options.ValidationPolicy;
 import com.google.code.ddom.stream.stax.StAXInput;
 import com.google.code.ddom.stream.stax.StAXOutput;
 import com.googlecode.ddom.spi.Provider;
@@ -47,6 +43,10 @@ import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlOutput;
 import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.options.CoalescingFeature;
+import com.googlecode.ddom.stream.options.EntityReferencePolicy;
+import com.googlecode.ddom.stream.options.NamespaceAwareness;
+import com.googlecode.ddom.stream.options.ValidationPolicy;
 import com.googlecode.ddom.stream.spi.StreamProvider;
 
 @Provider(name="woodstox")

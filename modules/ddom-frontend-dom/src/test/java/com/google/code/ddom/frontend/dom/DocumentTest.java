@@ -33,7 +33,6 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.google.code.ddom.utils.dom.DOM;
 import com.google.code.ddom.utils.test.InvocationCounter;
 import com.google.code.ddom.utils.test.Validated;
@@ -41,6 +40,7 @@ import com.google.code.ddom.utils.test.ValidatedTestResource;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
 import com.googlecode.ddom.core.CoreNSUnawareAttribute;
 import com.googlecode.ddom.core.CoreNSUnawareElement;
+import com.googlecode.ddom.stream.options.NamespaceAwareness;
 
 /**
  * @author Andreas Veithen

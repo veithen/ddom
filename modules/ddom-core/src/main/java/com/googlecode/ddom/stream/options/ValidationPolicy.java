@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.stream.options;
+package com.googlecode.ddom.stream.options;
 
-public enum NamespaceAwareness {
-    /**
-     * Enable namespace aware parsing. If no option is specified, this mode SHOULD be the default.
-     * However, it can only be enforced by setting this option explicitly.
-     */
+public enum ValidationPolicy {
     ENABLE,
-    
-    /**
-     * Disable namespace aware parsing.
-     */
-    DISABLE;
-    
-    public static NamespaceAwareness get(boolean value) {
-        return value ? ENABLE : DISABLE;
-    }
+    DISABLE
 }

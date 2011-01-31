@@ -22,10 +22,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import com.google.code.ddom.Options;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
-import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.stream.options.NamespaceAwareness;
 
 public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
     private static final ModelDefinition DOM = ModelDefinitionBuilder.buildModelDefinition("dom");
