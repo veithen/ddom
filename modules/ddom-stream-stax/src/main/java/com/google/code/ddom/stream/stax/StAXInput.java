@@ -54,87 +54,96 @@ public class StAXInput extends XmlInput {
             try {
                 reader.next();
             } catch (XMLStreamException ex) {
-                throw new StreamException(ex);
+                throw new StAXException(ex);
             }
         } else {
             callNext = true;
         }
         XmlHandler handler = getHandler();
-        switch (reader.getEventType()) {
-            case XMLStreamReader.START_DOCUMENT:
-                handler.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
-                break;
-            case XMLStreamReader.END_DOCUMENT:
-                handler.completed();
-                break;
-            case XMLStreamReader.DTD:
-                handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId(), reader.getText());
-                break;
-            case XMLStreamReader.START_ELEMENT:
-                if (parserIsNamespaceAware) {
-                    handler.startElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
-                    for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-                        handler.startAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeType(i));
-                        String value = reader.getAttributeValue(i);
-                        if (value.length() > 0) {
-                            handler.processCharacterData(value, false);
+        try {
+            switch (reader.getEventType()) {
+                case XMLStreamReader.START_DOCUMENT:
+                    handler.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
+                    break;
+                case XMLStreamReader.END_DOCUMENT:
+                    handler.completed();
+                    break;
+                case XMLStreamReader.DTD:
+                    handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId(), reader.getText());
+                    break;
+                case XMLStreamReader.START_ELEMENT:
+                    if (parserIsNamespaceAware) {
+                        handler.startElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
+                        for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
+                            handler.startAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeType(i));
+                            String value = reader.getAttributeValue(i);
+                            if (value.length() > 0) {
+                                handler.processCharacterData(value, false);
+                            }
+                            handler.endAttribute();
                         }
-                        handler.endAttribute();
-                    }
-                    for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
-                        handler.startNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)));
-                        String uri = reader.getNamespaceURI(i);
-                        if (uri.length() > 0) {
-                            handler.processCharacterData(uri, false);
+                        for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
+                            handler.startNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)));
+                            String uri = reader.getNamespaceURI(i);
+                            if (uri.length() > 0) {
+                                handler.processCharacterData(uri, false);
+                            }
+                            handler.endAttribute();
                         }
-                        handler.endAttribute();
-                    }
-                    handler.attributesCompleted();
-                } else {
-                    handler.startElement(reader.getLocalName());
-                    for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-                        handler.startAttribute(reader.getAttributeLocalName(i), reader.getAttributeType(i));
-                        String value = reader.getAttributeValue(i);
-                        if (value.length() > 0) {
-                            handler.processCharacterData(value, false);
+                        handler.attributesCompleted();
+                    } else {
+                        handler.startElement(reader.getLocalName());
+                        for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
+                            handler.startAttribute(reader.getAttributeLocalName(i), reader.getAttributeType(i));
+                            String value = reader.getAttributeValue(i);
+                            if (value.length() > 0) {
+                                handler.processCharacterData(value, false);
+                            }
+                            handler.endAttribute();
                         }
-                        handler.endAttribute();
+                        handler.attributesCompleted();
                     }
-                    handler.attributesCompleted();
-                }
-                break;
-            case XMLStreamReader.END_ELEMENT:
-                handler.endElement();
-                break;
-            case XMLStreamReader.PROCESSING_INSTRUCTION:
-                handler.startProcessingInstruction(reader.getPITarget());
-                handler.processCharacterData(reader.getPIData(), false);
-                handler.endProcessingInstruction();
-                break;
-            case XMLStreamReader.CHARACTERS:
-                handler.processCharacterData(reader.getText(), false);
-                break;
-            case XMLStreamReader.SPACE:
-                handler.processCharacterData(reader.getText(), true);
-                break;
-            case XMLStreamReader.CDATA:
-                handler.startCDATASection();
-                handler.processCharacterData(reader.getText(), false);
-                handler.endCDATASection();
-                break;
-            case XMLStreamReader.COMMENT:
-                handler.startComment();
-                handler.processCharacterData(reader.getText(), false);
-                handler.endComment();
-                break;
-            case XMLStreamReader.ENTITY_REFERENCE:
-                handler.processEntityReference(reader.getLocalName());
-                break;
-            default:
-                throw new StreamException("Unexpected StAX event: " + reader.getEventType());
+                    break;
+                case XMLStreamReader.END_ELEMENT:
+                    handler.endElement();
+                    break;
+                case XMLStreamReader.PROCESSING_INSTRUCTION:
+                    handler.startProcessingInstruction(reader.getPITarget());
+                    handler.processCharacterData(reader.getPIData(), false);
+                    handler.endProcessingInstruction();
+                    break;
+                case XMLStreamReader.CHARACTERS:
+                    handler.processCharacterData(reader.getText(), false);
+                    break;
+                case XMLStreamReader.SPACE:
+                    handler.processCharacterData(reader.getText(), true);
+                    break;
+                case XMLStreamReader.CDATA:
+                    handler.startCDATASection();
+                    handler.processCharacterData(reader.getText(), false);
+                    handler.endCDATASection();
+                    break;
+                case XMLStreamReader.COMMENT:
+                    handler.startComment();
+                    handler.processCharacterData(reader.getText(), false);
+                    handler.endComment();
+                    break;
+                case XMLStreamReader.ENTITY_REFERENCE:
+                    handler.processEntityReference(reader.getLocalName());
+                    break;
+                default:
+                    throw new StreamException("Unexpected StAX event: " + reader.getEventType());
+            }
+        } catch (RuntimeException ex) {
+            Throwable cause = ex.getCause();
+            if (cause instanceof XMLStreamException) {
+                throw new StAXException((XMLStreamException)cause);
+            } else {
+                throw ex;
+            }
         }
     }
-
+    
     public void dispose() {
         // TODO: this doesn't close the stream
         try {

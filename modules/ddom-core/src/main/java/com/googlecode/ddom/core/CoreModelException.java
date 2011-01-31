@@ -36,4 +36,8 @@ public class CoreModelException extends Exception {
     public CoreModelException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public CoreModelException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,13 @@
  */
 package com.googlecode.ddom.core;
 
+import com.googlecode.ddom.stream.StreamException;
+
 /**
  * Indicates that a parsing error occurred. This exception may be thrown by any core model method
- * that accesses parts of the tree that have not been visited before. The cause associated with this
- * exception (as returned by {@link Throwable#getCause()}) further describes the parsing error. It
- * will be an exception specific to the underlying parser, e.g. a
+ * that accesses parts of the tree that have not been visited before. This exception wraps a
+ * {@link StreamException} that further describes the parsing error. The {@link StreamException}
+ * itself typically wraps an exception specific to the underlying parser, e.g. a
  * {@link javax.xml.stream.XMLStreamException}.
  * 
  * @author Andreas Veithen
@@ -30,10 +32,26 @@ public class DeferredParsingException extends CoreModelException {
     /**
      * Constructor.
      * 
-     * @param message the detail message
      * @param cause the cause
      */
-    public DeferredParsingException(String message, Throwable cause) {
-        super(message, cause);
+    public DeferredParsingException(StreamException cause) {
+        super(cause);
+    }
+
+    @Override
+    public Throwable initCause(Throwable cause) {
+        if (!(cause instanceof StreamException)) {
+            throw new IllegalArgumentException();
+        }
+        return super.initCause(cause);
+    }
+    
+    /**
+     * Get the {@link StreamException} wrapped by this exception.
+     * 
+     * @return the wrapped exception
+     */
+    public StreamException getStreamException() {
+        return (StreamException)getCause();
     }
 }

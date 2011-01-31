@@ -18,8 +18,6 @@ package com.googlecode.ddom.jaxp;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.stream.Location;
-import javax.xml.stream.XMLStreamException;
 
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -33,6 +31,7 @@ import com.google.code.ddom.Options;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.stream.LocationAwareStreamException;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
@@ -96,16 +95,23 @@ public class DocumentBuilderImpl extends DocumentBuilder {
         try {
             document.coreBuild();
         } catch (DeferredParsingException ex) {
-            throw new SAXException(ex);
+            throw toSAXException(ex.getStreamException());
         }
         // TODO: close the reader and the underlying stream
         return (Document)document;
     }
 
-    private SAXParseException toSAXParseException(XMLStreamException ex) {
-        Location location = ex.getLocation();
-        return new SAXParseException(ex.getMessage(), location.getPublicId(),
-                location.getSystemId(), location.getLineNumber(), location.getColumnNumber());
+    private SAXException toSAXException(StreamException ex) {
+        Throwable cause = ex.getCause();
+        if (cause instanceof SAXException) {
+            return (SAXException)cause;
+        } else if (ex instanceof LocationAwareStreamException) {
+            LocationAwareStreamException ex2 = (LocationAwareStreamException)ex;
+            return new SAXParseException(ex2.getMessage(), ex2.getPublicId(),
+                    ex2.getSystemId(), ex2.getLineNumber(), ex2.getColumnNumber());
+        } else {
+            return new SAXException(ex);
+        }
     }
     
     @Override

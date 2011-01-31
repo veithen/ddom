@@ -94,7 +94,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             }
         }
         if (streamException != null) {
-            throw new DeferredParsingException(streamException.getMessage(), streamException.getCause());
+            throw new DeferredParsingException(streamException);
         }
     }
 

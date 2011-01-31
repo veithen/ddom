@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 
 import com.google.code.ddom.utils.test.InputStreamTestWrapper;
 import com.google.code.ddom.utils.test.Validated;
@@ -110,5 +111,17 @@ public class DocumentBuilderTest {
         factory.setIgnoringComments(true);
         Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader("<root><!--comment--></root>")));
         Assert.assertNull(document.getDocumentElement().getFirstChild());
+    }
+    
+    @Validated @Test
+    public void testSAXParseExceptionLocation() throws Exception {
+        try {
+            factory.newDocumentBuilder().parse(new InputSource(new StringReader("<root>\n  &xxx;\n</root>")));
+            Assert.fail("Expected SAXParseException");
+        } catch (SAXParseException ex) {
+            Assert.assertEquals(2, ex.getLineNumber());
+            Assert.assertTrue(ex.getColumnNumber() >= 3);
+            Assert.assertTrue(ex.getColumnNumber() <= 8);
+        }
     }
 }
