@@ -19,13 +19,10 @@ public final class Stream {
     private final XmlInput input;
     private boolean proceeding;
     
-    public Stream(XmlInput input, XmlOutput output, XmlFilter... filters) {
+    public Stream(XmlInput input, XmlOutput output) {
         this.input = input;
-        XmlHandler handler = output.connect(this);
-        for (XmlFilter filter : filters) {
-            handler = filter.createXmlHandler(handler);
-        }
-        input.connect(this, handler);
+        input.append(output);
+        input.connect(this);
     }
 
     public void proceed() throws StreamException {

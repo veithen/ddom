@@ -15,25 +15,32 @@
  */
 package com.googlecode.ddom.stream;
 
-public abstract class XmlInput {
+public abstract class XmlInput extends XmlValve {
     private final DelegatingXmlHandler handler = new DelegatingXmlHandler();
-    private Stream stream;
+    private XmlValve nextValve;
     
-    void connect(Stream stream, XmlHandler handler) {
-        if (this.stream != null) {
-            throw new IllegalStateException("Already connected");
+    @Override
+    final void doAppend(XmlValve valve) {
+        if (nextValve == null) {
+            nextValve = valve;
+        } else {
+            nextValve.append(valve);
         }
-        this.stream = stream;
-        this.handler.setDelegate(handler);
-    }
-    
-    public final Stream getStream() {
-        if (stream == null) {
-            throw new IllegalStateException("Not connected");
-        }
-        return stream;
     }
 
+    @Override
+    final XmlHandler doConnect(Stream stream) {
+        if (nextValve == null) {
+            throw new IllegalStateException("Pipeline is not terminated by an XmlOutput");
+        }
+        handler.setDelegate(nextValve.connect(stream));
+        return null;
+    }
+    
+    public final void addFilter(XmlFilter filter) {
+        append(filter);
+    }
+    
     /**
      * Get the {@link XmlHandler} object that the implementation must use to produce
      * events. This method completes successfully even if the {@link XmlInput} has

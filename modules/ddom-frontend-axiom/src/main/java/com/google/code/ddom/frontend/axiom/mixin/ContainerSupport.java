@@ -110,7 +110,8 @@ public abstract class ContainerSupport implements AxiomContainer {
     public final void internalSerialize(Object out, boolean preserve) throws StreamException {
         XmlInput input = coreGetInput(preserve);
         XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(out, new Options());
-        new Stream(input, output, new NamespaceRepairingFilter()).flush();
+        input.addFilter(new NamespaceRepairingFilter());
+        new Stream(input, output).flush();
     }
     
     public final void serialize(OutputStream output) throws XMLStreamException {

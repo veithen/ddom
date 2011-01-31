@@ -15,23 +15,25 @@
  */
 package com.googlecode.ddom.stream;
 
-public abstract class XmlFilter {
-    private Stream stream;
+public abstract class XmlFilter extends XmlValve {
+    private XmlValve nextValve;
     
-    XmlHandler connect(Stream stream, XmlHandler handler) {
-        if (this.stream != null) {
-            throw new IllegalStateException("Already connected");
+    @Override
+    final void doAppend(XmlValve valve) {
+        if (nextValve == null) {
+            nextValve = valve;
+        } else {
+            nextValve.append(valve);
         }
-        this.stream = stream;
-        return createXmlHandler(handler);
     }
     
-    public final Stream getStream() {
-        if (stream == null) {
-            throw new IllegalStateException("Not connected");
+    @Override
+    final XmlHandler doConnect(Stream stream) {
+        if (nextValve == null) {
+            throw new IllegalStateException("Pipeline is not terminated by an XmlOutput");
         }
-        return stream;
+        return createXmlHandler(nextValve.connect(stream));
     }
-
+    
     protected abstract XmlHandler createXmlHandler(XmlHandler target);
 }
