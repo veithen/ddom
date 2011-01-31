@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.jaxp;
+package com.googlecode.ddom.jaxp;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -46,7 +46,7 @@ public class ParseTest extends TestCase {
     @Override
     protected void runTest() throws Throwable {
         Document expected = parse(new org.apache.xerces.jaxp.DocumentBuilderFactoryImpl());
-        Document actual = parse(new com.google.code.ddom.jaxp.DocumentBuilderFactoryImpl());
+        Document actual = parse(new com.googlecode.ddom.jaxp.DocumentBuilderFactoryImpl());
         
         // TODO: need to check if we should enhance the event model to include the necessary information to generate xml:base attributes
         XMLConformanceTestUtils.removeXmlBaseAttributes(expected);
