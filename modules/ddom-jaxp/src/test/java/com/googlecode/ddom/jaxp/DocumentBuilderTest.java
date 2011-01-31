@@ -25,7 +25,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
@@ -106,7 +105,7 @@ public class DocumentBuilderTest {
         Assert.assertEquals(1, document.getDocumentElement().getChildNodes().getLength());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testIgnoringComments() throws Exception {
         factory.setIgnoringComments(true);
         Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader("<root><!--comment--></root>")));

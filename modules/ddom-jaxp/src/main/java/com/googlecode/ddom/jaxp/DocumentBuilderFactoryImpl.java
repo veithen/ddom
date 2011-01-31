@@ -25,7 +25,6 @@ import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.google.code.ddom.spi.model.Model;
 import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.google.code.ddom.spi.model.ModelRegistry;
-import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 
 public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
@@ -56,12 +55,11 @@ public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
         }
         Options options = new Options();
         options.set(NamespaceAwareness.get(isNamespaceAware()));
-        options.set(isIgnoringComments() ? CommentPolicy.REMOVE : CommentPolicy.PRESERVE);
 // TODO       props.put(XMLInputFactory.IS_VALIDATING, isValidating());
 // TODO       private boolean whitespace = false;
 // TODO        props.put(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, isExpandEntityReferences());
 // TODO        props.put(XMLInputFactory.IS_COALESCING, isCoalescing());
-        return new DocumentBuilderImpl(model, options);
+        return new DocumentBuilderImpl(model, options, isIgnoringComments());
     }
 
     @Override

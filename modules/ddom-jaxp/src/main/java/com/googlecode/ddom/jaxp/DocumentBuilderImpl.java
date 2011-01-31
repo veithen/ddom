@@ -33,8 +33,10 @@ import com.google.code.ddom.Options;
 import com.google.code.ddom.spi.model.Model;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
+import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
@@ -42,11 +44,13 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     
     private final Model model;
     private final Options options;
+    private final boolean ignoringComments;
     private ErrorHandler errorHandler;
 
-    DocumentBuilderImpl(Model model, Options options) {
+    DocumentBuilderImpl(Model model, Options options, boolean ignoringComments) {
         this.model = model;
         this.options = options;
+        this.ignoringComments = ignoringComments;
     }
     
     @Override
@@ -80,6 +84,12 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             source = streamFactory.getSource(is, options, false);
         } catch (StreamException ex) {
             throw new SAXException(ex);
+        }
+        if (ignoringComments) {
+            // We build the tree anyway, so we can't take advantage of the non-destructiveness anyway
+            XmlInput input = source.getInput();
+            input.addFilter(new CommentFilter());
+            source = new SimpleXmlSource(input);
         }
         CoreDocument document = model.getNodeFactory().createDocument();
         document.coreSetContent(source);

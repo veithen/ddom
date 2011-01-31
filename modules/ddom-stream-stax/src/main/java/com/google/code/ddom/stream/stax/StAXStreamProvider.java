@@ -18,7 +18,6 @@ package com.google.code.ddom.stream.stax;
 import javax.xml.stream.XMLStreamReader;
 
 import com.google.code.ddom.OptionsTracker;
-import com.google.code.ddom.stream.options.CommentPolicy;
 import com.googlecode.ddom.spi.Provider;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
@@ -31,9 +30,6 @@ public class StAXStreamProvider implements StreamProvider {
     public XmlSource getSource(Object object, OptionsTracker options, boolean preserve) throws StreamException {
         if (object instanceof XMLStreamReader) {
             XMLStreamReader reader = (XMLStreamReader)object;
-            if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
-                reader = new CommentFilterStreamReader(reader);
-            }
             // TODO: implement canonicalization!
             return new SimpleXmlSource(new StAXInput(reader, null));
         } else {

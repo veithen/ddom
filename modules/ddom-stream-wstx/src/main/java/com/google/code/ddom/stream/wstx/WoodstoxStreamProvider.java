@@ -37,11 +37,9 @@ import com.ctc.wstx.stax.WstxOutputFactory;
 import com.ctc.wstx.util.URLUtil;
 import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.stream.options.CoalescingFeature;
-import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.options.EntityReferencePolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 import com.google.code.ddom.stream.options.ValidationPolicy;
-import com.google.code.ddom.stream.stax.CommentFilterStreamReader;
 import com.google.code.ddom.stream.stax.StAXInput;
 import com.google.code.ddom.stream.stax.StAXOutput;
 import com.googlecode.ddom.spi.Provider;
@@ -144,9 +142,6 @@ public class WoodstoxStreamProvider implements StreamProvider {
             reader = factory.createSR(config, systemId, bs, false, false);
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
-        }
-        if (options.getAndMarkAsProcessed(CommentPolicy.class) == CommentPolicy.REMOVE) {
-            reader = new CommentFilterStreamReader(reader);
         }
         return new SimpleXmlSource(new StAXInput(reader, config.getSymbols()));
     }
