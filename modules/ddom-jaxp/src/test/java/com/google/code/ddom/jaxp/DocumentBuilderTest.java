@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,5 +104,12 @@ public class DocumentBuilderTest {
         factory.setCoalescing(false);
         Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader(buffer.toString())));
         Assert.assertEquals(1, document.getDocumentElement().getChildNodes().getLength());
+    }
+    
+    @Validated @Test @Ignore // TODO
+    public void testIgnoringComments() throws Exception {
+        factory.setIgnoringComments(true);
+        Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader("<root><!--comment--></root>")));
+        Assert.assertNull(document.getDocumentElement().getFirstChild());
     }
 }

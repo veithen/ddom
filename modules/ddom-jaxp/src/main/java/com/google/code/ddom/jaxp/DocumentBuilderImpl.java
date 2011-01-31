@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,26 +29,29 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.Options;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
-import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.spi.model.Model;
 import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.StreamFactory;
+import com.googlecode.ddom.stream.XmlSource;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
-    private static final ModelDefinition DOM = ModelDefinitionBuilder.buildModelDefinition("dom");
+    private static final StreamFactory streamFactory = StreamFactory.getInstance(DocumentBuilderImpl.class.getClassLoader());
     
+    private final Model model;
     private final Options options;
     private ErrorHandler errorHandler;
 
-    DocumentBuilderImpl(Options options) {
+    DocumentBuilderImpl(Model model, Options options) {
+        this.model = model;
         this.options = options;
     }
     
     @Override
     public DOMImplementation getDOMImplementation() {
-        return DocumentHelperFactory.INSTANCE.newInstance().getAPIObject(DOM, DOMImplementation.class);
+        return (DOMImplementation)model.getAPIObjectFactory().getAPIObject(DOMImplementation.class);
     }
 
     @Override
@@ -66,16 +69,25 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 
     @Override
     public Document newDocument() {
-        // TODO: do this properly
-        return (Document)DocumentHelperFactory.INSTANCE.newInstance().newDocument(DOM);
+        return (Document)model.getNodeFactory().createDocument();
     }
 
     @Override
     public Document parse(InputSource is) throws SAXException, IOException {
         // TODO: catch StreamException/DeferredParsingException and translate to SAXException
-        DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
-        CoreDocument document = (CoreDocument)documentHelper.parse(DOM, is, options);
-        documentHelper.buildDocument(document);
+        XmlSource source;
+        try {
+            source = streamFactory.getSource(is, options, false);
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
+        CoreDocument document = model.getNodeFactory().createDocument();
+        document.coreSetContent(source);
+        try {
+            document.coreBuild();
+        } catch (DeferredParsingException ex) {
+            throw new SAXException(ex);
+        }
         // TODO: close the reader and the underlying stream
         return (Document)document;
     }

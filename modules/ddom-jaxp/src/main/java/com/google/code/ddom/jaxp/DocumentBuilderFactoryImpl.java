@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.google.code.ddom.Options;
+import com.google.code.ddom.model.ModelDefinition;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.google.code.ddom.spi.model.Model;
+import com.google.code.ddom.spi.model.ModelLoaderException;
+import com.google.code.ddom.spi.model.ModelRegistry;
 import com.google.code.ddom.stream.options.CommentPolicy;
 import com.google.code.ddom.stream.options.NamespaceAwareness;
 
 public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
+    private static final ModelDefinition DOM = ModelDefinitionBuilder.buildModelDefinition("dom");
+    private static final ModelRegistry modelRegistry = ModelRegistry.getInstance(DocumentBuilderFactoryImpl.class.getClassLoader());
+    
     @Override
     public Object getAttribute(String name) throws IllegalArgumentException {
         // TODO Auto-generated method stub
@@ -38,6 +46,14 @@ public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
 
     @Override
     public DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
+        Model model;
+        try {
+            model = modelRegistry.getModel(DOM);
+        } catch (ModelLoaderException ex) {
+            ParserConfigurationException pce = new ParserConfigurationException("Unable to load model");
+            pce.initCause(ex);
+            throw pce;
+        }
         Options options = new Options();
         options.set(NamespaceAwareness.get(isNamespaceAware()));
         options.set(isIgnoringComments() ? CommentPolicy.REMOVE : CommentPolicy.PRESERVE);
@@ -45,7 +61,7 @@ public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
 // TODO       private boolean whitespace = false;
 // TODO        props.put(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, isExpandEntityReferences());
 // TODO        props.put(XMLInputFactory.IS_COALESCING, isCoalescing());
-        return new DocumentBuilderImpl(options);
+        return new DocumentBuilderImpl(model, options);
     }
 
     @Override
