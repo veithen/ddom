@@ -17,7 +17,7 @@ package com.google.code.ddom.impl;
 
 import com.google.code.ddom.DocumentHelper;
 import com.google.code.ddom.DocumentHelperFactory;
-import com.google.code.ddom.spi.model.ModelRegistry;
+import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.stream.StreamFactory;
 
 public class DocumentHelperFactoryImpl extends DocumentHelperFactory {

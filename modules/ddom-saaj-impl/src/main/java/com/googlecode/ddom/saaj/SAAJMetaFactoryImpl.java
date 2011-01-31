@@ -21,7 +21,7 @@ import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 
-import com.google.code.ddom.spi.model.ModelLoaderException;
+import com.googlecode.ddom.model.spi.ModelLoaderException;
 
 public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
     @Override

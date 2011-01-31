@@ -16,6 +16,8 @@
 package com.google.code.ddom.spi.model;
 
 import com.google.code.ddom.model.ModelDefinition;
+import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.spi.ModelLoader;
 
 /**
  * {@link ModelLoader} implementation that loads precompiled models.

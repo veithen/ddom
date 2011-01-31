@@ -27,8 +27,8 @@ import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 
 import com.google.code.ddom.model.ModelDefinitionBuilder;
-import com.google.code.ddom.spi.model.Model;
-import com.google.code.ddom.spi.model.ModelRegistry;
+import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelRegistry;
 
 public class ImplementationTest extends TestCase {
     public static TestSuite suite() throws Exception {

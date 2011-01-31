@@ -29,8 +29,8 @@ import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
-import com.google.code.ddom.spi.model.Model;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.dom.DOMInput;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.spi.model;
+package com.googlecode.ddom.model;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -23,6 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.google.code.ddom.model.ModelDefinition;
+import com.googlecode.ddom.model.spi.ModelLoader;
+import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.model.spi.ModelLoaderFactory;
 import com.googlecode.ddom.spi.ProviderFinder;
 import com.googlecode.ddom.spi.ProviderFinderException;
 

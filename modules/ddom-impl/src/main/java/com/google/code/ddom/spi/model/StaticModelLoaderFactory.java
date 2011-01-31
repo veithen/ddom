@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.spi.model;
 
+import com.googlecode.ddom.model.spi.ModelLoader;
+import com.googlecode.ddom.model.spi.ModelLoaderFactory;
 import com.googlecode.ddom.spi.Provider;
 
 @Provider(name="static")

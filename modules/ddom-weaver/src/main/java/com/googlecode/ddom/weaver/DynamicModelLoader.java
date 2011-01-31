@@ -19,13 +19,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.google.code.ddom.model.ModelDefinition;
-import com.google.code.ddom.spi.model.Model;
-import com.google.code.ddom.spi.model.ModelLoader;
-import com.google.code.ddom.spi.model.ModelLoaderException;
 import com.googlecode.ddom.backend.Backend;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.APIObjectFactory;
 import com.googlecode.ddom.frontend.Frontend;
+import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.spi.ModelLoader;
+import com.googlecode.ddom.model.spi.ModelLoaderException;
 
 /**
  * {@link ModelLoader} implementation that creates models using load time weaving.

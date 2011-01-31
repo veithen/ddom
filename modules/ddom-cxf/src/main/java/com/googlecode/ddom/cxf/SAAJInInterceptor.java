@@ -23,9 +23,9 @@ import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.phase.Phase;
 
 import com.google.code.ddom.model.ModelDefinitionBuilder;
-import com.google.code.ddom.spi.model.Model;
-import com.google.code.ddom.spi.model.ModelLoaderException;
-import com.google.code.ddom.spi.model.ModelRegistry;
+import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelRegistry;
+import com.googlecode.ddom.model.spi.ModelLoaderException;
 
 public class SAAJInInterceptor extends AbstractSoapInterceptor {
     private final Model saajModel;

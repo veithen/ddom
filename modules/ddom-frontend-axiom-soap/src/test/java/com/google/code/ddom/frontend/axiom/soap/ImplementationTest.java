@@ -38,8 +38,8 @@ import org.apache.axiom.ts.soap12.fault.TestMoreChildrenAddition;
 import org.apache.axiom.ts.soap12.fault.TestSetNode;
 
 import com.google.code.ddom.model.ModelDefinitionBuilder;
-import com.google.code.ddom.spi.model.Model;
-import com.google.code.ddom.spi.model.ModelRegistry;
+import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelRegistry;
 
 public class ImplementationTest extends TestCase {
     public static TestSuite suite() throws Exception {

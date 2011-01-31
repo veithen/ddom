@@ -28,7 +28,7 @@ import javax.xml.soap.SOAPPart;
 import org.apache.cxf.binding.soap.SoapMessage;
 
 import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPMessageImpl;
-import com.google.code.ddom.spi.model.Model;
+import com.googlecode.ddom.model.Model;
 
 public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     private final Model saajModel;
