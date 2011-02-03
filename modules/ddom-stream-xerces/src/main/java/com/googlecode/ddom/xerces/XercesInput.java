@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,20 @@ package com.googlecode.ddom.xerces;
 
 import java.io.IOException;
 
-import com.google.code.ddom.stream.spi.Input;
-import com.google.code.ddom.stream.spi.Output;
-import com.google.code.ddom.stream.spi.StreamException;
-import com.google.code.ddom.stream.spi.Symbols;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.symbols.Symbols;
 import com.googlecode.ddom.xerces.parsers.XML11Configuration;
 import com.googlecode.ddom.xerces.xni.XNIException;
 import com.googlecode.ddom.xerces.xni.parser.XMLInputSource;
 import com.googlecode.ddom.xerces.xni.parser.XMLPullParserConfiguration;
 
-public class XercesInput implements Input {
+public class XercesInput extends XmlInput {
     private final XMLPullParserConfiguration config;
-    private final OutputHandler handler;
     
     public XercesInput(XMLInputSource is) throws IOException {
         config = new XML11Configuration();
-        handler = new OutputHandler();
-        config.setDocumentHandler(handler);
+        config.setDocumentHandler(new XercesAdapter(getHandler()));
         config.setInputSource(is);
     }
 
@@ -42,10 +39,9 @@ public class XercesInput implements Input {
         return null;
     }
 
-    public boolean proceed(Output output) throws StreamException {
-        handler.setOutput(output);
+    protected void proceed() throws StreamException {
         try {
-            return config.parse(false);
+            config.parse(false);
         } catch (XNIException ex) {
             throw new StreamException(ex);
         } catch (IOException ex) {

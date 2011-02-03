@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.ddom.xerces;
 
-import com.google.code.ddom.stream.spi.Output;
+import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.xerces.xni.Augmentations;
 import com.googlecode.ddom.xerces.xni.NamespaceContext;
 import com.googlecode.ddom.xerces.xni.QName;
@@ -27,11 +27,11 @@ import com.googlecode.ddom.xerces.xni.XMLString;
 import com.googlecode.ddom.xerces.xni.XNIException;
 import com.googlecode.ddom.xerces.xni.parser.XMLDocumentSource;
 
-public class OutputHandler implements XMLDocumentHandler {
-    private Output output;
+public class XercesAdapter implements XMLDocumentHandler {
+    private final XmlHandler handler;
 
-    public void setOutput(Output output) {
-        this.output = output;
+    public XercesAdapter(XmlHandler handler) {
+        this.handler = handler;
     }
 
     /* (non-Javadoc)
