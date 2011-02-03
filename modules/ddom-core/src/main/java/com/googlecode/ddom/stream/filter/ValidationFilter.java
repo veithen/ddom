@@ -18,6 +18,8 @@ package com.googlecode.ddom.stream.filter;
 import javax.xml.validation.Schema;
 import javax.xml.validation.ValidatorHandler;
 
+import org.xml.sax.ErrorHandler;
+
 import com.googlecode.ddom.stream.XmlFilter;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.sax.ContentHandlerAdapter;
@@ -25,9 +27,14 @@ import com.googlecode.ddom.stream.sax.XmlHandlerAdapter;
 
 public class ValidationFilter extends XmlFilter {
     private final Schema schema;
+    private ErrorHandler errorHandler;
     
     public ValidationFilter(Schema schema) {
         this.schema = schema;
+    }
+
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
     }
 
     @Override
@@ -35,6 +42,9 @@ public class ValidationFilter extends XmlFilter {
         ValidatorHandler vh = schema.newValidatorHandler();
         // TODO: set error handler
         vh.setContentHandler(new ContentHandlerAdapter(target));
+        if (errorHandler != null) {
+            vh.setErrorHandler(errorHandler);
+        }
         return new XmlHandlerAdapter(vh);
     }
 }

@@ -18,6 +18,7 @@ package com.googlecode.ddom.jaxp;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.validation.Schema;
 
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -32,11 +33,11 @@ import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.stream.LocationAwareStreamException;
-import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.filter.ValidationFilter;
 
 public class DocumentBuilderImpl extends DocumentBuilder {
     private static final StreamFactory streamFactory = StreamFactory.getInstance(DocumentBuilderImpl.class.getClassLoader());
@@ -44,12 +45,16 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     private final Model model;
     private final Options options;
     private final boolean ignoringComments;
+    private final boolean sortAttributes;
+    private final Schema schema;
     private ErrorHandler errorHandler;
 
-    DocumentBuilderImpl(Model model, Options options, boolean ignoringComments) {
+    DocumentBuilderImpl(Model model, Options options, boolean ignoringComments, boolean sortAttributes, Schema schema) {
         this.model = model;
         this.options = options;
         this.ignoringComments = ignoringComments;
+        this.sortAttributes = sortAttributes;
+        this.schema = schema;
     }
     
     @Override
@@ -69,29 +74,62 @@ public class DocumentBuilderImpl extends DocumentBuilder {
         return false;
 //        return (Boolean)xmlInputFactoryProperties.get(XMLInputFactory.IS_VALIDATING);
     }
+    
+    @Override
+    public Schema getSchema() {
+        return schema;
+    }
+
+    @Override
+    public void setEntityResolver(EntityResolver er) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
 
     @Override
     public Document newDocument() {
         return (Document)model.getNodeFactory().createDocument();
     }
-
+    
+    void applyFilters(XmlInput input) {
+        if (ignoringComments) {
+            input.addFilter(new CommentFilter());
+        }
+        if (schema != null) {
+            ValidationFilter validationFilter = new ValidationFilter(schema);
+            validationFilter.setErrorHandler(errorHandler);
+            input.addFilter(validationFilter);
+        }
+        if (sortAttributes) {
+            input.addFilter(new AttributeReorderingFilter());
+        }
+    }
+    
     @Override
     public Document parse(InputSource is) throws SAXException, IOException {
-        // TODO: catch StreamException/DeferredParsingException and translate to SAXException
-        XmlSource source;
+        final XmlSource source;
         try {
             source = streamFactory.getSource(is, options, false);
         } catch (StreamException ex) {
-            throw new SAXException(ex);
-        }
-        if (ignoringComments) {
-            // We build the tree anyway, so we can't take advantage of the non-destructiveness anyway
-            XmlInput input = source.getInput();
-            input.addFilter(new CommentFilter());
-            source = new SimpleXmlSource(input);
+            throw toSAXException(ex);
         }
         CoreDocument document = model.getNodeFactory().createDocument();
-        document.coreSetContent(source);
+        document.coreSetContent(new XmlSource() {
+            public XmlInput getInput() {
+                XmlInput input = source.getInput();
+                applyFilters(input);
+                return input;
+            }
+            
+            public boolean isDestructive() {
+                return source.isDestructive();
+            }
+        });
         try {
             document.coreBuild();
         } catch (DeferredParsingException ex) {
@@ -112,16 +150,5 @@ public class DocumentBuilderImpl extends DocumentBuilder {
         } else {
             return new SAXException(ex);
         }
-    }
-    
-    @Override
-    public void setEntityResolver(EntityResolver er) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setErrorHandler(ErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
     }
 }
