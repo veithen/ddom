@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Andreas Veithen
+  ~ Copyright 2009-2011 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -99,6 +99,75 @@
         </test-case>
         <test-case id="Text__78281">
             <doubt>Uses input file that is not well formed with respect to namespaces.</doubt>
+        </test-case>
+        <test-case id="ConflictResolution__77833">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="ConflictResolution__77897">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="ConflictResolution__77898">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="ConflictResolution__77902">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Elements__89171">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Elements__89175">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Elements__89177">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include__77736">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_Include_IncludedStylesheetShouldHaveDifferentBaseUri">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_RelUriTest1">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_RelUriTest2">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_RelUriTest3">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_RelUriTest4">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_RelUriTest5">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_RelUriTest6">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Include_NestedIncludes">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Output__84011">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Output__84012">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Output__84014">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Output__84016">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Output__84017">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Output__84018">
+            <doubt>Assumes that URLs are case insensitive</doubt>
+        </test-case>
+        <test-case id="Text__78309">
+            <doubt>Assumes that URLs are case insensitive</doubt>
         </test-case>
     </test-catalog>
 </test-suite>
