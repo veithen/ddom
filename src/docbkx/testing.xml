@@ -20,7 +20,7 @@
                 CXF POMs for that:
             </para>
             <screen>$ <userinput>mvn clean install -Dcxf.saaj.impl.groupId=com.google.code.ddom \
--Dcxf.saaj.impl.artifactId=ddom-saaj-impl -Dcxf.saaj.impl.version=&version;</userinput></screen>
+-Dcxf.saaj.impl.artifactId=ddom-saaj-impl -Dcxf.saaj.impl.version=<?eval ${project.version}?></userinput></screen>
             <para>
                 This works with the current trunk (2.4.0-SNAPSHOT). For previous versions,
                 remove the <literal>cxf.</literal> prefix from the Maven properties.

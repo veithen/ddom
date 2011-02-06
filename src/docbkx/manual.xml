@@ -3,7 +3,7 @@
 <book xmlns:xi="http://www.w3.org/2001/XInclude">
     <bookinfo>
         <title>DDOM Manual</title>
-        <releaseinfo>&version;</releaseinfo>
+        <releaseinfo><?eval ${project.version}?></releaseinfo>
         <legalnotice>
             <para>
                 Copyright 2009-2010 Andreas Veithen
