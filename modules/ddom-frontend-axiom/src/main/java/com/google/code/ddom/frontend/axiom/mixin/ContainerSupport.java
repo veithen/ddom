@@ -41,7 +41,6 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
-import com.googlecode.ddom.core.util.QNameUtil;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
@@ -64,7 +63,7 @@ public abstract class ContainerSupport implements AxiomContainer {
     }
     
     public final Iterator getChildrenWithName(QName qname) {
-        return coreGetElementsByName(Axis.CHILDREN, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
+        return coreGetElementsByName(Axis.CHILDREN, qname.getNamespaceURI(), qname.getLocalPart());
     }
     
     public final Iterator getChildrenWithLocalName(String localName) {
@@ -78,7 +77,7 @@ public abstract class ContainerSupport implements AxiomContainer {
     
     public final OMElement getFirstChildWithName(QName qname) {
         // TODO: we should avoid usage of an iterator here; this would also improve error reporting (because the iterator can only throw unchecked exceptions)
-        Iterator<CoreNSAwareElement> it = coreGetElementsByName(Axis.CHILDREN, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
+        Iterator<CoreNSAwareElement> it = coreGetElementsByName(Axis.CHILDREN, qname.getNamespaceURI(), qname.getLocalPart());
         return it.hasNext() ? (AxiomElement)it.next() : null;
     }
     

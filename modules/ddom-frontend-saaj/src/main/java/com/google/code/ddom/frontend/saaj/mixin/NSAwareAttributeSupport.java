@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public abstract class NSAwareAttributeSupport implements SAAJNSAwareAttribute {
     public final String getQualifiedName() {
         String prefix = coreGetPrefix();
         String localName = coreGetLocalName();
-        return prefix == null ? localName : prefix + ":" + localName;
+        return prefix.length() == 0 ? localName : prefix + ":" + localName;
     }
     
     public final String getURI() {

@@ -220,21 +220,16 @@ public abstract class Element extends Container implements LLElement {
         for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
-                String declaredPrefix = decl.coreGetDeclaredPrefix();
-                if (prefix == null) {
-                    if (declaredPrefix == null) {
-                        return decl.coreGetDeclaredNamespaceURI();
-                    }
-                } else {
-                    if (prefix.equals(declaredPrefix)) {
-                        return decl.coreGetDeclaredNamespaceURI();
-                    }
+                if (prefix.equals(decl.coreGetDeclaredPrefix())) {
+                    return decl.coreGetDeclaredNamespaceURI();
                 }
             }
         }
         CoreElement parentElement = coreGetParentElement();
         if (parentElement != null) {
             return parentElement.coreLookupNamespaceURI(prefix, strict);
+        } else if (prefix.length() == 0) {
+            return "";
         } else {
             return null;
         }

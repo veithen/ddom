@@ -15,8 +15,6 @@
  */
 package com.google.code.ddom.frontend.axiom.support;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreDocument;
@@ -34,7 +32,7 @@ public final class AxiomAttributeMatcher implements AttributeMatcher {
     public boolean matches(CoreAttribute attr, String namespaceURI, String name) {
         if (attr instanceof CoreNSAwareAttribute) {
             CoreNSAwareAttribute nsAwareAttr = (CoreNSAwareAttribute)attr;
-            return ObjectUtils.equals(namespaceURI, nsAwareAttr.coreGetNamespaceURI())
+            return namespaceURI.equals(nsAwareAttr.coreGetNamespaceURI())
                     && name.equals(nsAwareAttr.coreGetLocalName());
         } else if (namespaceURI == null && attr instanceof CoreNSUnawareAttribute) {
             // TODO: this needs testing; for the moment, we don't implement OMAttribute on NS unaware attributes

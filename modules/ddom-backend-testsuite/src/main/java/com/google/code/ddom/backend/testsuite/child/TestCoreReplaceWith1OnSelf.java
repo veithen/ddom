@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public class TestCoreReplaceWith1OnSelf extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreChildNode child1 = nodeFactory.createDocumentTypeDeclaration(document, "test", null, "test.dtd");
         CoreChildNode child2 = nodeFactory.createComment(document, "comment");
-        CoreChildNode child3 = nodeFactory.createElement(document, null, "root", null);
+        CoreChildNode child3 = nodeFactory.createElement(document, "", "root", "");
         document.coreAppendChild(child1, Policies.REJECT);
         document.coreAppendChild(child2, Policies.REJECT);
         document.coreAppendChild(child3, Policies.REJECT);

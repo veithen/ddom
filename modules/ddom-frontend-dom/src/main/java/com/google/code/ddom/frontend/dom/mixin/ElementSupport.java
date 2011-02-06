@@ -59,9 +59,9 @@ public abstract class ElementSupport implements DOMElement {
 
     public final Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return (DOMAttribute)coreGetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : localName);
+            return (DOMAttribute)coreGetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
         } else {
-            return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
+            return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
         }
     }
     
@@ -93,7 +93,7 @@ public abstract class ElementSupport implements DOMElement {
         String prefix;
         String localName;
         if (i == -1) {
-            prefix = null;
+            prefix = "";
             localName = qualifiedName;
         } else {
             // Use symbol table to avoid creation of new String objects
@@ -104,6 +104,7 @@ public abstract class ElementSupport implements DOMElement {
         if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getDeclaredPrefix(localName, prefix), null, value);
         } else {
+            namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
             NSUtil.validateAttributeName(namespaceURI, localName, prefix);
             coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
         }
@@ -124,8 +125,8 @@ public abstract class ElementSupport implements DOMElement {
             String name;
             AttributeMatcher matcher;
             if (newAttr instanceof CoreNSAwareAttribute) {
-                namespaceURI = newAttr.getNamespaceURI();
-                name = newAttr.getLocalName();
+                namespaceURI = ((CoreNSAwareAttribute)newAttr).coreGetNamespaceURI();
+                name = ((CoreNSAwareAttribute)newAttr).coreGetLocalName();
                 matcher = DOM2AttributeMatcher.INSTANCE;
             } else if (newAttr instanceof CoreNamespaceDeclaration) {
                 namespaceURI = null;

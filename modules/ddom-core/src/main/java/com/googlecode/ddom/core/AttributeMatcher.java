@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public interface AttributeMatcher {
         public boolean matches(CoreAttribute attr, String namespaceURI, String name) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 String prefix = ((CoreNamespaceDeclaration)attr).coreGetDeclaredPrefix();
-                return name == null && prefix == null || name != null && name.equals(prefix);
+                return name.equals(prefix);
             } else {
                 return false;
             }

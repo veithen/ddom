@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
  * 
  * <h3>Namespace conventions</h3>
  * <ul>
- * <li>By convention, the core model uses <code>null</code> (instead of the empty string) as the namespace URI for
- * named nodes that have no namespace. If also uses <code>null</code> as the prefix for nodes
+ * <li>By convention, the core model uses the empty string (instead of <code>null</code>) as the namespace URI for
+ * named nodes that have no namespace. If also uses the empty string as the prefix for nodes
  * that have no namespace or are in the default namespace. These two conventions apply to the following methods
  * (non exhaustive list):
  * <ul>
@@ -35,14 +35,11 @@
  * <li>{@link com.googlecode.ddom.core.CoreNamespaceDeclaration#coreGetDeclaredPrefix()}
  * </ul>
  * For methods that take a prefix or namespace URI as a parameter, the behavior is undefined if
- * an empty string is used instead of <code>null</code>. It is the responsibility of the frontend
+ * <code>null</code> is used instead of the empty string. It is the responsibility of the frontend
  * to conform to these conventions. The rationale for this choice is that some frontend APIs use
  * different conventions (allowing or requiring empty strings in the cases described above),
  * in which case the frontend must translate prefixes and namespace URIs. By doing so, it naturally
  * enforces the conventions of the core model. Requiring the backend to validate namespace prefixes and
  * URIs would then add an unnecessary overhead.
- * <p>
- * The {@link com.googlecode.ddom.core.util.QNameUtil} class provides utility methods implementing
- * these conventions to extract namespace URIs and prefixes from {@link javax.xml.namespace.QName} instances.
  */
 package com.googlecode.ddom.core;

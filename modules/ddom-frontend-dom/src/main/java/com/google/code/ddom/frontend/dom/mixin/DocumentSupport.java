@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -168,10 +168,12 @@ public abstract class DocumentSupport implements DOMDocument {
         NodeFactory nodeFactory = coreGetNodeFactory();
         try {
             switch (node.getNodeType()) {
-                case Node.ELEMENT_NODE:
+                case Node.ELEMENT_NODE: {
                     Element element = (Element)node;
                     // TODO: detect DOM 1 elements (as with attributes)
-                    DOMElement importedElement = (DOMElement)nodeFactory.createElement(this, element.getNamespaceURI(), element.getLocalName(), element.getPrefix());
+                    String namespaceURI = element.getNamespaceURI();
+                    String prefix = element.getPrefix();
+                    DOMElement importedElement = (DOMElement)nodeFactory.createElement(this, namespaceURI == null ? "" : namespaceURI, element.getLocalName(), prefix == null ? "" : prefix);
                     NamedNodeMap attributes = element.getAttributes();
                     for (int length = attributes.getLength(), i=0; i<length; i++) {
                         importedElement.coreAppendAttribute((DOMAttribute)importNode(attributes.item(i), true), Policies.ATTRIBUTE_MIGRATION_POLICY);
@@ -180,7 +182,8 @@ public abstract class DocumentSupport implements DOMDocument {
                         importChildren(element, importedElement);
                     }
                     return importedElement;
-                case Node.ATTRIBUTE_NODE:
+                }
+                case Node.ATTRIBUTE_NODE: {
                     Attr attr = (Attr)node;
                     String localName = attr.getLocalName();
                     DOMAttribute importedAttr;
@@ -188,11 +191,14 @@ public abstract class DocumentSupport implements DOMDocument {
                     if (localName == null) {
                         importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, attr.getName(), null, null);
                     } else {
-                        importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, attr.getNamespaceURI(), localName, attr.getPrefix(), null, null);
+                        String namespaceURI = attr.getNamespaceURI();
+                        String prefix = attr.getPrefix();
+                        importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, namespaceURI == null ? "" : namespaceURI, localName, prefix == null ? "" : prefix, null, null);
                     }
                     // Children of attributes are always imported, regardless of the value of the "deep" parameter
                     importChildren(attr, importedAttr);
                     return importedAttr;
+                }
                 case Node.COMMENT_NODE:
                     return (Node)nodeFactory.createComment(this, node.getNodeValue());
                 case Node.TEXT_NODE:
@@ -287,21 +293,17 @@ public abstract class DocumentSupport implements DOMDocument {
                 throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
             }
             
-            // TODO: this is suggested by the documentrenamenode04 test case, but not specified in the DOM3 specs; check what is the required behavior also for the Document#createXXX methods
-            if (namespaceURI != null && namespaceURI.length() == 0) {
-                namespaceURI = null;
-            }
-            
             int i = NSUtil.validateQualifiedName(qualifiedName);
             String prefix;
             String localName;
             if (i == -1) {
-                prefix = null;
+                prefix = "";
                 localName = qualifiedName;
             } else {
                 prefix = qualifiedName.substring(0, i);
                 localName = qualifiedName.substring(i+1);
             }
+            namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
             if (node instanceof CoreTypedAttribute) {
                 NSUtil.validateAttributeName(namespaceURI, localName, prefix);
             } else {
@@ -341,7 +343,7 @@ public abstract class DocumentSupport implements DOMDocument {
         String prefix;
         String localName;
         if (i == -1) {
-            prefix = null;
+            prefix = "";
             localName = qualifiedName;
         } else {
             // Use symbol table to avoid creation of new String objects
@@ -364,7 +366,7 @@ public abstract class DocumentSupport implements DOMDocument {
         String prefix;
         String localName;
         if (i == -1) {
-            prefix = null;
+            prefix = "";
             localName = qualifiedName;
         } else {
             // Use symbol table to avoid creation of new String objects

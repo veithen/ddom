@@ -26,7 +26,6 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
-import com.googlecode.ddom.core.util.QNameUtil;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPHeader.class)
@@ -42,7 +41,7 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
 
     public final SOAPHeaderElement addHeaderElement(QName qname) throws SOAPException {
         try {
-            return (SAAJSOAPHeaderElement)coreAppendElement(getChildType(), QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+            return (SAAJSOAPHeaderElement)coreAppendElement(getChildType(), qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }

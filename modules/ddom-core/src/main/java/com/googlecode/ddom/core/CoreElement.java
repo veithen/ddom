@@ -142,7 +142,7 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * Look up the namespace URI associated to the given prefix.
      * 
      * @param prefix
-     *            The prefix to look for. If this parameter is <code>null</code> then the URI of the
+     *            The prefix to look for. If this parameter is the empty string, then the URI of the
      *            default namespace will be returned.
      * @param strict
      *            If this parameter is set to <code>true</code>, only namespace declarations will be
@@ -150,8 +150,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            its ancestors are also taken into account (limited to instanced of
      *            {@link CoreNSAwareElement}), even if no explicit namespace declarations exists for
      *            these prefixes.
-     * @return the namespace URI or <code>null</code> if none is found
-     * @throws DeferredParsingException 
+     * @return the namespace URI or <code>null</code> if the prefix is not bound; if the prefix is
+     *         the empty string and no default namespace declaration exists, then an empty string is
+     *         returned
+     * @throws DeferredParsingException
      */
     String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredParsingException;
     

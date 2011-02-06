@@ -31,7 +31,6 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
-import com.googlecode.ddom.core.util.QNameUtil;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPBody.class)
@@ -51,7 +50,7 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
 
     public final SOAPBodyElement addBodyElement(QName qname) throws SOAPException {
         try {
-            return coreAppendElement(SAAJSOAPBodyElement.class, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+            return coreAppendElement(SAAJSOAPBodyElement.class, qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }

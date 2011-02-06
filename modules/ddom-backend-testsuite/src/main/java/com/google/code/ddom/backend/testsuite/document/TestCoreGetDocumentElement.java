@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +32,10 @@ public class TestCoreGetDocumentElement extends BackendTestCase {
     protected void runTest() throws Exception {
         CoreDocument document = nodeFactory.createDocument();
         Assert.assertNull(document.coreGetDocumentElement());
-        CoreElement element1 = nodeFactory.createElement(document, null, "root1", null);
+        CoreElement element1 = nodeFactory.createElement(document, "", "root1", "");
         document.coreAppendChild(element1, Policies.REJECT);
         Assert.assertSame(element1, document.coreGetDocumentElement());
-        CoreElement element2 = nodeFactory.createElement(document, null, "root2", null);
+        CoreElement element2 = nodeFactory.createElement(document, "", "root2", "");
         element1.coreReplaceWith(element2);
         Assert.assertSame(element2, document.coreGetDocumentElement());
     }

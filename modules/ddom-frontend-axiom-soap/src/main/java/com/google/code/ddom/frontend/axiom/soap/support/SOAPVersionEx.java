@@ -62,10 +62,10 @@ public abstract class SOAPVersionEx {
                 .addItem(AxiomSOAP11Body.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
                 .enableMatchByInterface().build(),
             new SequenceBuilder()
-                .addItem(AxiomSOAPFaultCode.class, null, "faultcode")
-                .addItem(AxiomSOAPFaultReason.class, null, "faultstring")
-                .addItem(AxiomSOAPFaultRole.class, null, "faultactor")
-                .addItem(AxiomSOAPFaultDetail.class, null, "detail")
+                .addItem(AxiomSOAPFaultCode.class, "", "faultcode")
+                .addItem(AxiomSOAPFaultReason.class, "", "faultstring")
+                .addItem(AxiomSOAPFaultRole.class, "", "faultactor")
+                .addItem(AxiomSOAPFaultDetail.class, "", "detail")
                 .enableMatchByInterface().build()) {
         
         @Override

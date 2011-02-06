@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@ package com.googlecode.ddom.stream.sax;
 
 public class SAXStreamUtils {
     public static String normalizeNamespaceURI(String uri) {
-        return uri.length() == 0 ? null : uri;
+        return uri == null ? "" : uri;
     }
     
     public static String getPrefixFromQName(String qName) {
         int i = qName.indexOf(':');
-        return i == -1 ? null : qName.substring(0, i);
+        return i == -1 ? "" : qName.substring(0, i);
     }
     
     public static String getDeclaredPrefixFromQName(String qName) {
         int i = qName.indexOf(':');
-        return i == -1 ? null : qName.substring(i+1);
+        return i == -1 ? "" : qName.substring(i+1);
     }
 }

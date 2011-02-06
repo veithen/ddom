@@ -15,8 +15,6 @@
  */
 package com.googlecode.ddom.stream.filter;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.SimpleXmlFilter;
 import com.googlecode.ddom.stream.StreamException;
@@ -32,11 +30,11 @@ public class NamespaceRepairingFilter extends SimpleXmlFilter {
     
     private boolean isBound(String prefix, String namespaceURI) {
         for (int i=(bindings-1)*2; i>=0; i-=2) {
-            if (ObjectUtils.equals(prefix, namespaceStack[i])) {
-                return ObjectUtils.equals(namespaceURI, namespaceStack[i+1]);
+            if (prefix.equals(namespaceStack[i])) {
+                return namespaceURI.equals(namespaceStack[i+1]);
             }
         }
-        return prefix == null && namespaceURI == null;
+        return prefix.length() == 0 && namespaceURI.length() == 0;
     }
     
     private void setPrefix(String prefix, String namespaceURI) {
@@ -81,7 +79,7 @@ public class NamespaceRepairingFilter extends SimpleXmlFilter {
     @Override
     protected void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
         super.startAttribute(namespaceURI, localName, prefix, type);
-        if (namespaceURI != null && !isBound(prefix, namespaceURI)) {
+        if (namespaceURI.length() != 0 && !isBound(prefix, namespaceURI)) {
             setPrefix(prefix, namespaceURI);
         }
     }
@@ -95,7 +93,7 @@ public class NamespaceRepairingFilter extends SimpleXmlFilter {
     @Override
     protected void endAttribute() throws StreamException {
         if (inNamespaceDeclaration) {
-            String namespaceURI = this.namespaceURI.isEmpty() ? null : this.namespaceURI.toString();
+            String namespaceURI = this.namespaceURI.toString();
             if (!isBound(prefix, namespaceURI)) {
                 setPrefix(prefix, namespaceURI);
             }

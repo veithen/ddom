@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ public interface CoreNSAwareNamedNode extends CoreNode {
     /**
      * Get the namespace URI of this node.
      * 
-     * @return The namespace URI of the node, or <code>null</code> if the node has no namespace.
+     * @return The namespace URI of the node, or the empty string if the node has no namespace.
      */
     String coreGetNamespaceURI();
     
@@ -30,8 +30,8 @@ public interface CoreNSAwareNamedNode extends CoreNode {
     /**
      * Get the namespace prefix of this node.
      * 
-     * @return The namespace prefix, or <code>null</code> if the node has no prefix, i.e. if the
-     *         node has no namespace or is in the default namespace.
+     * @return The namespace prefix, or the empty if the node has no prefix, i.e. if the node has no
+     *         namespace or is in the default namespace.
      */
     String coreGetPrefix();
     

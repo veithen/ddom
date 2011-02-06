@@ -100,6 +100,12 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     @Override
     protected boolean startElement(String namespaceURI, String localName, String prefix) {
         eventType = START_ELEMENT;
+        if (namespaceURI.length() == 0) {
+            namespaceURI = null;
+        }
+        if (prefix.length() == 0) {
+            prefix = null;
+        }
         this.namespaceURI = namespaceURI;
         this.localName = localName;
         this.prefix = prefix;
@@ -145,9 +151,9 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
             System.arraycopy(attributeStack, 0, newStack, 0, attributeCount*5);
             attributeStack = newStack;
         }
-        attributeStack[attributeCount*5] = namespaceURI;
+        attributeStack[attributeCount*5] = namespaceURI.length() == 0 ? null : namespaceURI;
         attributeStack[attributeCount*5+1] = localName;
-        attributeStack[attributeCount*5+2] = prefix;
+        attributeStack[attributeCount*5+2] = prefix.length() == 0 ? null : prefix;
         attributeStack[attributeCount*5+3] = type;
         return true;
     }
@@ -162,14 +168,15 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
             System.arraycopy(namespaceStack, 0, newStack, 0, attributeStackSize*5);
             namespaceStack = newStack;
         }
-        namespaceStack[bindings*2] = prefix;
+        namespaceStack[bindings*2] = prefix.length() == 0 ? null : prefix;
         return true;
     }
 
     @Override
     protected boolean endAttribute() {
         if (isNamespaceDeclaration) {
-            namespaceStack[bindings*2+1] = stopCoalescing();
+            String namespaceURI = stopCoalescing();
+            namespaceStack[bindings*2+1] = namespaceURI.length() == 0 ? null : namespaceURI;
             bindings++;
         } else {
             attributeStack[attributeCount*5+4] = stopCoalescing();

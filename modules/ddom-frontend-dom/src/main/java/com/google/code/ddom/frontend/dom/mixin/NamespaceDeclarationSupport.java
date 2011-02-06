@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclara
     }
 
     public final String getPrefix() {
-        return coreGetDeclaredPrefix() == null ? null : XMLConstants.XMLNS_ATTRIBUTE;
+        return coreGetDeclaredPrefix().length() == 0 ? null : XMLConstants.XMLNS_ATTRIBUTE;
     }
 
     public final void setPrefix(String prefix) throws DOMException {
@@ -51,12 +51,12 @@ public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclara
 
     public final String getLocalName() {
         String declaredPrefix = coreGetDeclaredPrefix();
-        return declaredPrefix == null ? XMLConstants.XMLNS_ATTRIBUTE : declaredPrefix;
+        return declaredPrefix.length() == 0 ? XMLConstants.XMLNS_ATTRIBUTE : declaredPrefix;
     }
 
     public final String getName() {
         String declaredPrefix = coreGetDeclaredPrefix();
-        if (declaredPrefix == null) {
+        if (declaredPrefix.length() == 0) {
             return XMLConstants.XMLNS_ATTRIBUTE;
         } else {
             return XMLConstants.XMLNS_ATTRIBUTE + ":" + declaredPrefix;

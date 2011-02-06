@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,8 +116,18 @@ public abstract class NodeSupport implements DOMNode {
     
     public final String lookupNamespaceURI(String prefix) {
         try {
+            if (prefix == null) {
+                prefix = "";
+            } else if (prefix.length() == 0) {
+                return null;
+            }
             CoreElement contextElement = getNamespaceContext();
-            return contextElement == null ? null : contextElement.coreLookupNamespaceURI(prefix, false);
+            if (contextElement == null) {
+                return null;
+            } else {
+                String namespaceURI = contextElement.coreLookupNamespaceURI(prefix, false);
+                return namespaceURI == null || namespaceURI.length() == 0 ? null : namespaceURI;
+            }
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -129,7 +139,12 @@ public abstract class NodeSupport implements DOMNode {
         } else {
             try {
                 CoreElement contextElement = getNamespaceContext();
-                return contextElement == null ? null : contextElement.coreLookupPrefix(namespaceURI, false);
+                if (contextElement == null) {
+                    return null;
+                } else {
+                    String prefix = contextElement.coreLookupPrefix(namespaceURI, false);
+                    return prefix == null || prefix.length() == 0 ? null : prefix;
+                }
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }
@@ -138,8 +153,11 @@ public abstract class NodeSupport implements DOMNode {
 
     public final boolean isDefaultNamespace(String namespaceURI) {
         try {
+            if (namespaceURI == null) {
+                namespaceURI = "";
+            }
             CoreElement contextElement = getNamespaceContext();
-            return contextElement == null ? false : ObjectUtils.equals(namespaceURI, contextElement.coreLookupNamespaceURI(null, false));
+            return contextElement == null ? false : namespaceURI.equals(contextElement.coreLookupNamespaceURI("", false));
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

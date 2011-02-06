@@ -44,8 +44,8 @@ public class StAXInput extends XmlInput {
         return symbols;
     }
 
-    private String emptyToNull(String value) {
-        return value == null || value.length() == 0 ? null : value;
+    private String nullToEmptyString(String value) {
+        return value == null ? "" : value;
     }
     
     @Override
@@ -73,9 +73,9 @@ public class StAXInput extends XmlInput {
                     break;
                 case XMLStreamReader.START_ELEMENT:
                     if (parserIsNamespaceAware) {
-                        handler.startElement(emptyToNull(reader.getNamespaceURI()), reader.getLocalName(), emptyToNull(reader.getPrefix()));
+                        handler.startElement(nullToEmptyString(reader.getNamespaceURI()), reader.getLocalName(), nullToEmptyString(reader.getPrefix()));
                         for (int count = reader.getAttributeCount(), i=0; i<count; i++) {
-                            handler.startAttribute(emptyToNull(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), emptyToNull(reader.getAttributePrefix(i)), reader.getAttributeType(i));
+                            handler.startAttribute(nullToEmptyString(reader.getAttributeNamespace(i)), reader.getAttributeLocalName(i), nullToEmptyString(reader.getAttributePrefix(i)), reader.getAttributeType(i));
                             String value = reader.getAttributeValue(i);
                             if (value.length() > 0) {
                                 handler.processCharacterData(value, false);
@@ -83,7 +83,7 @@ public class StAXInput extends XmlInput {
                             handler.endAttribute();
                         }
                         for (int count = reader.getNamespaceCount(), i=0; i<count; i++) {
-                            handler.startNamespaceDeclaration(emptyToNull(reader.getNamespacePrefix(i)));
+                            handler.startNamespaceDeclaration(nullToEmptyString(reader.getNamespacePrefix(i)));
                             String uri = reader.getNamespaceURI(i);
                             if (uri.length() > 0) {
                                 handler.processCharacterData(uri, false);

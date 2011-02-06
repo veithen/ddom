@@ -30,7 +30,6 @@ import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
-import com.googlecode.ddom.core.util.QNameUtil;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJDetail.class)
@@ -45,7 +44,7 @@ public abstract class DetailSupport implements SAAJDetail {
 
     public final DetailEntry addDetailEntry(QName qname) throws SOAPException {
         try {
-            return coreAppendElement(SAAJDetailEntry.class, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+            return coreAppendElement(SAAJDetailEntry.class, qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }

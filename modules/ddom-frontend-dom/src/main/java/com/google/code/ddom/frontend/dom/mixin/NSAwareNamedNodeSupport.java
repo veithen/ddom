@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,16 +28,18 @@ import com.googlecode.ddom.frontend.Mixin;
 @Mixin(CoreNSAwareNamedNode.class)
 public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
     public final String getNamespaceURI() {
-        return coreGetNamespaceURI();
+        String namespaceURI = coreGetNamespaceURI();
+        return namespaceURI.length() == 0 ? null : namespaceURI;
     }
     
     public final String getPrefix() {
-        return coreGetPrefix();
+        String prefix = coreGetPrefix();
+        return prefix.length() == 0 ? null : prefix;
     }
     
     public final void setPrefix(String prefix) throws DOMException {
         if (prefix == null || prefix.length() == 0) {
-            coreSetPrefix(null);
+            coreSetPrefix("");
         } else {
             String namespaceURI = getNamespaceURI();
             if (namespaceURI == null) {

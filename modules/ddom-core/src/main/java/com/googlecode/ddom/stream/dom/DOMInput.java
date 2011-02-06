@@ -44,6 +44,10 @@ public class DOMInput extends XmlInput {
         return null;
     }
 
+    private static String nullToEmptyString(String s) {
+        return s == null ? "" : s;
+    }
+    
     protected void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         Node currentNode = this.currentNode;
@@ -107,7 +111,7 @@ public class DOMInput extends XmlInput {
                         if (localName == null) {
                             handler.startElement(element.getTagName());
                         } else {
-                            handler.startElement(element.getNamespaceURI(), localName, element.getPrefix());
+                            handler.startElement(nullToEmptyString(element.getNamespaceURI()), localName, nullToEmptyString(element.getPrefix()));
                         }
                         NamedNodeMap attributes = element.getAttributes();
                         // TODO: we should not push all attributes at once
@@ -120,9 +124,9 @@ public class DOMInput extends XmlInput {
                             } else {
                                 String namespaceURI = attr.getNamespaceURI();
                                 if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-                                    handler.startNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? null : attrLocalName);
+                                    handler.startNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : attrLocalName);
                                 } else {
-                                    handler.startAttribute(namespaceURI, attrLocalName, attr.getPrefix(), null);
+                                    handler.startAttribute(nullToEmptyString(namespaceURI), attrLocalName, nullToEmptyString(attr.getPrefix()), null);
                                 }
                             }
                             handler.processCharacterData(attr.getValue(), false);

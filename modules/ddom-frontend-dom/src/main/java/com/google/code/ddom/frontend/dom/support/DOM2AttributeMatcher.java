@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 package com.google.code.ddom.frontend.dom.support;
-
-import org.apache.commons.lang.ObjectUtils;
 
 import com.google.code.ddom.frontend.dom.intf.DOMAttribute;
 import com.googlecode.ddom.core.AttributeMatcher;
@@ -56,8 +54,8 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
             // Optimization: first compare the local names because they are in general
             // shorter and have higher "uniqueness"
             return name.equals(nsAwareAttr.coreGetLocalName())
-                    && ObjectUtils.equals(namespaceURI, nsAwareAttr.coreGetNamespaceURI());
-        } else if (namespaceURI == null && attr instanceof CoreNSUnawareAttribute) {
+                    && namespaceURI.equals(nsAwareAttr.coreGetNamespaceURI());
+        } else if (namespaceURI.length() == 0 && attr instanceof CoreNSUnawareAttribute) {
             return name.equals(((CoreNSUnawareAttribute)attr).coreGetName());
         } else {
             return false;

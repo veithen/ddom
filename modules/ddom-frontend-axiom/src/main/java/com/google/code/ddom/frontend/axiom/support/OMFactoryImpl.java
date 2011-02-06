@@ -47,7 +47,6 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.intf.AxiomText;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreModelException;
-import com.googlecode.ddom.core.util.QNameUtil;
 
 public class OMFactoryImpl implements OMFactory {
     protected final AxiomNodeFactory nodeFactory;
@@ -89,13 +88,13 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(QName qname) {
-        String namespaceURI = QNameUtil.getNamespaceURI(qname);
-        String prefix = QNameUtil.getPrefix(qname);
-        if (prefix == null && namespaceURI != null) {
+        String namespaceURI = qname.getNamespaceURI();
+        String prefix = qname.getPrefix();
+        if (prefix.length() == 0 && namespaceURI.length() != 0) {
             prefix = OMSerializerUtil.getNextNSPrefix();
         }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, qname.getLocalPart(), prefix);
-        if (prefix != null) {
+        if (prefix.length() != 0) {
             element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
         }
         element.setOMFactory(this);
@@ -108,8 +107,8 @@ public class OMFactoryImpl implements OMFactory {
         } else {
             try {
                 // TODO
-                String namespaceURI = QNameUtil.getNamespaceURI(qname);
-                String prefix = QNameUtil.getPrefix(qname);
+                String namespaceURI = qname.getNamespaceURI();
+                String prefix = qname.getPrefix();
                 AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(namespaceURI, qname.getLocalPart(), prefix);
                 element.ensureNamespaceIsDeclared(prefix, namespaceURI);
                 element.setOMFactory(this);

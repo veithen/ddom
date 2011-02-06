@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class TestCoreInsertSiblingsAfterWithIncomplete extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = nodeFactory.createElement(document, null, "test", null);
+        CoreElement element = nodeFactory.createElement(document, "", "test", "");
         CoreComment comment = nodeFactory.createComment(document, "test");
         element.coreAppendChild(comment, Policies.REJECT);
         CoreDocumentFragment fragment = parse(document, "<?pi?><a>test</a>");

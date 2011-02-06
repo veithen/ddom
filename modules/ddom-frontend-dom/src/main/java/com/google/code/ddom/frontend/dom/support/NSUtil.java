@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,11 +91,11 @@ public final class NSUtil {
     }
     
     public static String normalizeNamespaceURI(String namespaceURI) {
-        return namespaceURI == null || namespaceURI.length() == 0 ? null : namespaceURI;
+        return namespaceURI == null ? "" : namespaceURI;
     }
     
     public static void validateNamespace(String namespaceURI, String prefix) {
-        if (prefix != null && namespaceURI == null) {
+        if (prefix.length() != 0 && namespaceURI.length() == 0) {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
         }
         if (XMLConstants.XML_NS_PREFIX.equals(prefix) && !XMLConstants.XML_NS_URI.equals(namespaceURI)) {
@@ -105,7 +105,7 @@ public final class NSUtil {
     
     public static void validateAttributeName(String namespaceURI, String localName, String prefix) {
         validateNamespace(namespaceURI, prefix);
-        if (prefix == null && localName.equals(XMLConstants.XMLNS_ATTRIBUTE) && !namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+        if (prefix.length() == 0 && localName.equals(XMLConstants.XMLNS_ATTRIBUTE) && !namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
         }
         if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix)) {
@@ -114,10 +114,10 @@ public final class NSUtil {
     }
     
     public static String getDeclaredPrefix(String localName, String prefix) {
-        if (prefix != null && prefix.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
+        if (prefix.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
             return localName;
-        } else if (prefix == null && localName.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
-            return null;
+        } else if (prefix.length() == 0 && localName.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
+            return "";
         } else {
             throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
         }

@@ -22,19 +22,19 @@ public class NSUtil {
     
     public static String getNamespaceURI(OMNamespace ns) {
         if (ns == null) {
-            return null;
+            return "";
         } else {
             String uri = ns.getNamespaceURI();
-            return uri == null || uri.length() == 0 ? null : uri;
+            return uri == null ? "" : uri;
         }
     }
     
     public static String getPrefix(OMNamespace ns) {
         if (ns == null) {
-            return null;
+            return "";
         } else {
             String prefix = ns.getPrefix();
-            return prefix == null || prefix.length() == 0 ? null : prefix;
+            return prefix == null ? "" : prefix;
         }
     }
 }

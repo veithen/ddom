@@ -42,16 +42,27 @@ public interface NodeFactory {
      */
     CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId);
     
+    /**
+     * Create a namespace unaware element.
+     * 
+     * @param document
+     * @param tagName
+     *            the name of the element
+     * @return
+     */
     CoreNSUnawareElement createElement(CoreDocument document, String tagName);
     
     /**
      * Create a namespace aware element.
      * 
-     * @param namespaceURI the namespace URI of the element, or <code>null</code> if the element has no
-     *                     namespace
-     * @param localName the local part of the element's name
-     * @param prefix the prefix of the element, or <code>null</code> if the element has no prefix
-     * @param complete
+     * @param document
+     * @param namespaceURI
+     *            the namespace URI of the element, or the empty string if the element has no
+     *            namespace
+     * @param localName
+     *            the local part of the element's name
+     * @param prefix
+     *            the prefix of the element, or the empty string if the element has no prefix
      * @return the element
      */
     CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix);

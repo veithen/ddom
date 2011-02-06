@@ -46,7 +46,6 @@ import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreModelException;
-import com.googlecode.ddom.core.util.QNameUtil;
 
 public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     private final SOAPVersionEx soapVersion;
@@ -82,17 +81,17 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, String namespaceURI, String localName) {
+        String prefix = namespaceURI.length() == 0 ? "" : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;
         if (parent == null) {
-            String prefix = namespaceURI == null ? null : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;
             T element = nodeFactory.createElement(null, extensionInterface, namespaceURI, localName, prefix);
             element.setOMFactory(this);
-            if (prefix != null) {
+            if (prefix.length() != 0) {
                 element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
             }
             return element;
         } else {
             try {
-                T element = ((AxiomElement)parent).coreAppendElement(extensionInterface, namespaceURI, localName, namespaceURI == null ? null : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
+                T element = ((AxiomElement)parent).coreAppendElement(extensionInterface, namespaceURI, localName, prefix);
                 element.setOMFactory(this);
                 return element;
             } catch (CoreModelException ex) {
@@ -106,7 +105,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
     
     private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, QName qname) {
-        return createElement(parent, extensionInterface, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
+        return createElement(parent, extensionInterface, qname.getNamespaceURI(), qname.getLocalPart());
     }
     
     public final SOAPEnvelope createSOAPEnvelope() throws SOAPProcessingException {

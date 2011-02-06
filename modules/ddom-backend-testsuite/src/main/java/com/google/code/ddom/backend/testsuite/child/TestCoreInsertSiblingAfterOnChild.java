@@ -31,7 +31,7 @@ public class TestCoreInsertSiblingAfterOnChild extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
-        CoreElement element = nodeFactory.createElement(document, null, "test", null);
+        CoreElement element = nodeFactory.createElement(document, "", "test", "");
         CoreCharacterData text = nodeFactory.createCharacterData(document, "test");
         element.coreAppendChild(text, Policies.REJECT);
         try {

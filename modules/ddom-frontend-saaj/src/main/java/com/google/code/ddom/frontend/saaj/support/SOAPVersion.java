@@ -34,10 +34,10 @@ public abstract class SOAPVersion {
                 .addItem(SAAJSOAP11Body.class, SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE, "Body")
                 .enableMatchByInterface().build(),
             new SequenceBuilder()
-                .addItem(SAAJSOAPFaultElement.class, null, "faultcode")
-                .addItem(SAAJSOAPFaultElement.class, null, "faultstring")
-                .addItem(SAAJSOAPFaultElement.class, null, "faultactor")
-                .addItem(SAAJDetail.class, null, "detail").build(),
+                .addItem(SAAJSOAPFaultElement.class, "", "faultcode")
+                .addItem(SAAJSOAPFaultElement.class, "", "faultstring")
+                .addItem(SAAJSOAPFaultElement.class, "", "faultactor")
+                .addItem(SAAJDetail.class, "", "detail").build(),
             "actor") {
         
         @Override

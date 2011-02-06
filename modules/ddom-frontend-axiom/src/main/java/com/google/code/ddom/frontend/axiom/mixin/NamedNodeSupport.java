@@ -39,8 +39,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
     
     public final OMNamespace getNamespace() {
         String namespaceURI = coreGetNamespaceURI();
-        // TODO: handle null prefix!
-        return namespaceURI == null ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
+        return namespaceURI.length() == 0 ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
     }
 
     public final void setNamespace(OMNamespace namespace) {

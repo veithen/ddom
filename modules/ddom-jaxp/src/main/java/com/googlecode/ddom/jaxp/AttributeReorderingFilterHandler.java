@@ -39,13 +39,13 @@ class AttributeReorderingFilterHandler extends XmlHandlerWrapper {
 
     @Override
     public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
-        sortedAttributes.put(prefix == null ? localName : (prefix + ":" + localName),
+        sortedAttributes.put(prefix.length() == 0 ? localName : (prefix + ":" + localName),
                 attributes.startAttribute(namespaceURI, localName, prefix, type));
     }
 
     @Override
     public void startNamespaceDeclaration(String prefix) throws StreamException {
-        sortedAttributes.put(prefix == null ? "xmlns" : ("xmlns:" + prefix),
+        sortedAttributes.put(prefix.length() == 0 ? "xmlns" : ("xmlns:" + prefix),
                 attributes.startNamespaceDeclaration(prefix));
     }
 

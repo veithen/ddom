@@ -69,7 +69,11 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     private static String getQualifiedName(String localName, String prefix) {
-        return prefix == null ? localName : prefix + ":" + localName;
+        return prefix.length() == 0 ? localName : prefix + ":" + localName;
+    }
+    
+    private static String emptyStringToNull(String s) {
+        return s.length() == 0 ? null : s;
     }
     
     @Override
@@ -81,7 +85,7 @@ public class DOMOutput extends SimpleXmlOutput {
 
     @Override
     protected void startElement(String namespaceURI, String localName, String prefix) {
-        Element element = document.createElementNS(namespaceURI, getQualifiedName(localName, prefix));
+        Element element = document.createElementNS(emptyStringToNull(namespaceURI), getQualifiedName(localName, prefix));
         node.appendChild(element);
         node = element;
     }
@@ -100,7 +104,7 @@ public class DOMOutput extends SimpleXmlOutput {
 
     @Override
     protected void startAttribute(String namespaceURI, String localName, String prefix, String type) {
-        Attr attr = document.createAttributeNS(namespaceURI, getQualifiedName(localName, prefix));
+        Attr attr = document.createAttributeNS(emptyStringToNull(namespaceURI), getQualifiedName(localName, prefix));
         ((Element)node).setAttributeNodeNS(attr);
         node = attr;
     }
@@ -109,8 +113,8 @@ public class DOMOutput extends SimpleXmlOutput {
     protected void startNamespaceDeclaration(String prefix) {
         Attr attr = document.createAttributeNS(
                 XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-                prefix == null ? XMLConstants.XMLNS_ATTRIBUTE
-                               : XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix);
+                prefix.length() == 0 ? XMLConstants.XMLNS_ATTRIBUTE
+                                     : XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix);
         ((Element)node).setAttributeNodeNS(attr);
         node = attr;
     }

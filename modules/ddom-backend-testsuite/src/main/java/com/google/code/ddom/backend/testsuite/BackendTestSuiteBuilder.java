@@ -102,7 +102,7 @@ public class BackendTestSuiteBuilder {
             }
             
             public CoreParentNode createNode(NodeFactory nodeFactory, CoreDocument document) {
-                return nodeFactory.createElement(document, null, "element", null);
+                return nodeFactory.createElement(document, "", "element", "");
             }
         });
         return suite;

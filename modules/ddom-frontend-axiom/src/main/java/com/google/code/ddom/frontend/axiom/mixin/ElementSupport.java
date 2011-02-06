@@ -29,7 +29,6 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
-import org.apache.commons.lang.ObjectUtils;
 
 import com.google.code.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
@@ -48,7 +47,6 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.IdentityMapper;
-import com.googlecode.ddom.core.util.QNameUtil;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.stream.StreamException;
 
@@ -58,7 +56,7 @@ public abstract class ElementSupport implements AxiomElement {
     
     public final void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException {
         String existingNamespaceURI = coreLookupNamespaceURI(prefix, true);
-        if (!ObjectUtils.equals(existingNamespaceURI, namespaceURI)) {
+        if (!namespaceURI.equals(existingNamespaceURI)) {
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
         }
     }
@@ -79,7 +77,7 @@ public abstract class ElementSupport implements AxiomElement {
     }
     
     public final OMAttribute getAttribute(QName qname) {
-        return (AxiomAttribute)coreGetAttribute(AxiomAttributeMatcher.INSTANCE, QNameUtil.getNamespaceURI(qname), qname.getLocalPart());
+        return (AxiomAttribute)coreGetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
     }
     
     public final String getAttributeValue(QName qname) {
@@ -151,7 +149,7 @@ public abstract class ElementSupport implements AxiomElement {
 
     public void setText(QName qname) {
         try {
-            ensureNamespaceIsDeclared(QNameUtil.getPrefix(qname), QNameUtil.getNamespaceURI(qname));
+            ensureNamespaceIsDeclared(qname.getPrefix(), qname.getNamespaceURI());
             // TODO
             coreSetValue(qname.getPrefix() + ":" + qname.getLocalPart());
         } catch (CoreModelException ex) {
@@ -173,17 +171,17 @@ public abstract class ElementSupport implements AxiomElement {
             String localName;
             int colonIndex = qname.indexOf(':');
             if (colonIndex == -1) {
-                prefix = null;
+                prefix = "";
                 localName = qname;
             } else {
                 prefix = qname.substring(0, colonIndex);
                 localName = qname.substring(colonIndex+1);
             }
-            // TODO: we don't cover the case where prefix is not null, but also not bound
+            // TODO: we don't cover the case where prefix is not bound
             String namespaceURI = coreLookupNamespaceURI(prefix, true);
-            if (namespaceURI == null) {
+            if (namespaceURI.length() == 0) {
                 return new QName(localName);
-            } else if (prefix == null) {
+            } else if (prefix.length() == 0) {
                 return new QName(namespaceURI, localName);
             } else {
                 return new QName(namespaceURI, localName, prefix);

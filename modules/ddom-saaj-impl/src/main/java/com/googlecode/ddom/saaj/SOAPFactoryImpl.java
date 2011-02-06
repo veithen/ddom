@@ -27,7 +27,6 @@ import com.google.code.ddom.frontend.saaj.support.NameImpl;
 import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.core.util.QNameUtil;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 
@@ -67,7 +66,7 @@ public class SOAPFactoryImpl extends SOAPFactory {
 
     @Override
     public final SOAPElement createElement(QName qname) throws SOAPException {
-        return (SOAPElement)nodeFactory.createElement(null, QNameUtil.getNamespaceURI(qname), qname.getLocalPart(), QNameUtil.getPrefix(qname));
+        return (SOAPElement)nodeFactory.createElement(null, qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
     }
 
     @Override
