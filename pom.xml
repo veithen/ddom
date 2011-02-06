@@ -55,6 +55,7 @@
     </scm>
     
     <modules>
+        <module>legal-files</module>
         <module>commons</module>
         <module>modules</module>
         <module>tests</module>
@@ -267,6 +268,10 @@
                             <Export-Package>*;-noimport:=true</Export-Package>
                         </instructions>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-remote-resources-plugin</artifactId>
+                    <version>1.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
