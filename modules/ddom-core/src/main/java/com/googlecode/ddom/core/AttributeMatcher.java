@@ -28,7 +28,7 @@ public interface AttributeMatcher {
      * <dt><code>namespaceURI</code>
      * <dd>Not used.
      * <dt><code>name</code>
-     * <dd>The prefix declared by the namespace declaration, or <code>null</code> for the default
+     * <dd>The prefix declared by the namespace declaration, or the empty string for the default
      * namespace declaration.
      * <dt><code>value</code>
      * <dd>The namespace URI of the namespace declaration.
