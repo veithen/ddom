@@ -37,7 +37,7 @@ import com.googlecode.ddom.core.NodeFactory;
  * <dt><code>prefix</code>
  * <dd>Not used.
  * </dl>
- * If the namespace URI is <code>null</code>, then this class will also match namespace unaware
+ * If the namespace URI is the emtpy string, then this class will also match namespace unaware
  * attributes. Note that the class doesn't match namespace declarations (for which
  * {@link AttributeMatcher#NAMESPACE_DECLARATION} can be used).
  * 
