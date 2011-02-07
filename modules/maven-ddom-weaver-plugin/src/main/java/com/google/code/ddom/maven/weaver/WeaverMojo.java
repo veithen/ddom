@@ -101,7 +101,7 @@ public class WeaverMojo extends AbstractMojo {
             frontendImpls.put(frontend, frontendImpl);
         }
         
-        if (!outputDirectory.mkdirs()) {
+        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoFailureException("Unable to create directory " + outputDirectory);
         }
         
