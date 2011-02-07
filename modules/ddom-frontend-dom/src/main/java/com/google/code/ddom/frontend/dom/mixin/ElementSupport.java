@@ -121,25 +121,17 @@ public abstract class ElementSupport implements DOMElement {
             // and replaces itself.
             return newAttr;
         } else {
-            String namespaceURI;
-            String name;
             AttributeMatcher matcher;
             if (newAttr instanceof CoreNSAwareAttribute) {
-                namespaceURI = ((CoreNSAwareAttribute)newAttr).coreGetNamespaceURI();
-                name = ((CoreNSAwareAttribute)newAttr).coreGetLocalName();
                 matcher = DOM2AttributeMatcher.INSTANCE;
             } else if (newAttr instanceof CoreNamespaceDeclaration) {
-                namespaceURI = null;
-                name = ((CoreNamespaceDeclaration)newAttr).coreGetDeclaredPrefix();
                 matcher = AttributeMatcher.NAMESPACE_DECLARATION;
             } else {
                 // Must be a DOM1 (namespace unaware) attribute
-                namespaceURI = null;
-                name = newAttr.getName();
                 matcher = DOM1AttributeMatcher.INSTANCE;
             }
             try {
-                return (DOMAttribute)coreSetAttribute(matcher, namespaceURI, name, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.REPLACED_ATTRIBUTE);
+                return (DOMAttribute)coreSetAttribute(matcher, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.REPLACED_ATTRIBUTE);
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }

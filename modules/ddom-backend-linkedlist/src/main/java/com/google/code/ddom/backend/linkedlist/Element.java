@@ -154,13 +154,15 @@ public abstract class Element extends Container implements LLElement {
         }
     }
     
-    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException {
+    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException {
         if (coreAttr.coreGetOwnerElement() == this) {
             // TODO: document this and add assertion
             // TODO: take returnValue into account
             return coreAttr;
         }
         Attribute attr = accept(coreAttr, policy);
+        String namespaceURI = matcher.getNamespaceURI(attr);
+        String name = matcher.getName(attr); 
         Attribute existingAttr = firstAttribute;
         Attribute previousAttr = null;
         while (existingAttr != null && !matcher.matches(existingAttr, namespaceURI, name)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,14 @@ public final class AxiomAttributeMatcher implements AttributeMatcher {
         } else {
             return false;
         }
+    }
+
+    public String getNamespaceURI(CoreAttribute attr) {
+        return ((CoreNSAwareAttribute)attr).coreGetNamespaceURI();
+    }
+
+    public String getName(CoreAttribute attr) {
+        return ((CoreNSAwareAttribute)attr).coreGetLocalName();
     }
 
     public CoreAttribute createAttribute(NodeFactory nodeFactory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {

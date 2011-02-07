@@ -52,6 +52,14 @@ public interface AttributeMatcher {
             return nodeFactory.createNamespaceDeclaration(document, name, value);
         }
 
+        public String getNamespaceURI(CoreAttribute attr) {
+            return null;
+        }
+
+        public String getName(CoreAttribute attr) {
+            return ((CoreNamespaceDeclaration)attr).coreGetDeclaredPrefix();
+        }
+
         public void update(CoreAttribute attr, String prefix, String value) {
             try {
                 attr.coreSetValue(value);
@@ -65,11 +73,14 @@ public interface AttributeMatcher {
     /**
      * Check if the given attribute matches. The values of the <code>namespaceURI</code> and
      * <code>name</code> parameters are those passed to
-     * {@link CoreElement#coreGetAttribute(AttributeMatcher, String, String)},
-     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, String, String)} or
-     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, CoreAttribute)}. It is
+     * {@link CoreElement#coreGetAttribute(AttributeMatcher, String, String)} or
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, String, String)}, or
+     * they are determined by the return values of {@link #getNamespaceURI(CoreAttribute)} and
+     * {@link #getName(CoreAttribute)} if
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, CoreAttribute, NodeMigrationPolicy, com.googlecode.ddom.core.CoreElement.ReturnValue)}
+     * is used. It is
      * not required that these parameters strictly represent the namespace URI and local name of the
-     * attribute Their exact meaning is defined by the particular {@link AttributeMatcher}
+     * attribute. Their exact meaning is defined by the particular {@link AttributeMatcher}
      * implementation.
      * 
      * @param attr
@@ -82,6 +93,26 @@ public interface AttributeMatcher {
      */
     boolean matches(CoreAttribute attr, String namespaceURI, String name);
 
+    /**
+     * Get the <tt>namespaceURI</tt> parameter for an existing attribute. This method is used by
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, CoreAttribute, NodeMigrationPolicy, com.googlecode.ddom.core.CoreElement.ReturnValue)}
+     * which passes its return value as parameter to {@link #matches(CoreAttribute, String, String)}.
+     * 
+     * @param attr the attribute
+     * @return the <tt>namespaceURI</tt> parameter to be passed to {@link #matches(CoreAttribute, String, String)}
+     */
+    String getNamespaceURI(CoreAttribute attr);
+    
+    /**
+     * Get the <tt>name</tt> parameter for an existing attribute. This method is used by
+     * {@link CoreElement#coreSetAttribute(AttributeMatcher, CoreAttribute, NodeMigrationPolicy, com.googlecode.ddom.core.CoreElement.ReturnValue)}
+     * which passes its return value as parameter to {@link #matches(CoreAttribute, String, String)}.
+     * 
+     * @param attr the attribute
+     * @return the <tt>name</tt> parameter to be passed to {@link #matches(CoreAttribute, String, String)}
+     */
+    String getName(CoreAttribute attr);
+    
     /**
      * Create a new attribute node. The values of the <code>namespaceURI</code>, <code>name</code>,
      * <code>prefix</code> and <code>value</code> parameters are those passed to

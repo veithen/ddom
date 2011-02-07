@@ -88,9 +88,8 @@ public abstract class ElementSupport implements AxiomElement {
     public final OMAttribute addAttribute(OMAttribute attr) {
         AxiomAttribute axiomAttr = (AxiomAttribute)attr;
         try {
-            String namespaceURI = axiomAttr.coreGetNamespaceURI();
-            ensureNamespaceIsDeclared(axiomAttr.coreGetPrefix(), namespaceURI);
-            return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, namespaceURI, axiomAttr.coreGetLocalName(), axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.ADDED_ATTRIBUTE);
+            ensureNamespaceIsDeclared(axiomAttr.coreGetPrefix(), axiomAttr.coreGetNamespaceURI());
+            return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.ADDED_ATTRIBUTE);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

@@ -37,6 +37,14 @@ public final class NSAwareAttributeMatcher implements AttributeMatcher {
         }
     }
 
+    public String getNamespaceURI(CoreAttribute attr) {
+        return ((CoreNSAwareAttribute)attr).coreGetNamespaceURI();
+    }
+
+    public String getName(CoreAttribute attr) {
+        return ((CoreNSAwareAttribute)attr).coreGetLocalName();
+    }
+
     public CoreAttribute createAttribute(NodeFactory nodeFactory, CoreDocument document, String namespaceURI, String name, String prefix, String value) {
         return nodeFactory.createAttribute(document, namespaceURI, name, prefix, value, null);
     }

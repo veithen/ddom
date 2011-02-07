@@ -104,12 +104,6 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * 
      * @param matcher
      *            the {@link AttributeMatcher} implementation to use
-     * @param namespaceURI
-     *            the <code>namespaceURI</code> parameter to pass to
-     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
-     * @param name
-     *            the <code>name</code> parameter to pass to
-     *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
      * @param attr
      *            the new attribute to add
      * @param policy
@@ -120,8 +114,7 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * @return the attribute as specified by the <code>returnValue</code> parameter
      * @throws NodeMigrationException 
      */
-    // TODO: getting the values for namespaceURI and name should probably be the job of the AttributeMatcher
-    CoreAttribute coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException;
+    CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException;
     
     /**
      * Append an attribute to this element. The attribute is simply added at the end of the list of
