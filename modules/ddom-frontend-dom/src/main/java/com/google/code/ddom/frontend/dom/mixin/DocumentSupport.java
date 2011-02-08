@@ -53,7 +53,7 @@ import com.google.code.ddom.frontend.dom.support.NSUtil;
 import com.google.code.ddom.frontend.dom.support.NodeUtil;
 import com.google.code.ddom.frontend.dom.support.Policies;
 import com.google.code.ddom.frontend.dom.support.UserData;
-import com.google.code.ddom.utils.dom.iterator.DescendantsIterator;
+import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
@@ -241,7 +241,7 @@ public abstract class DocumentSupport implements DOMDocument {
 
     public final Element getElementById(String elementId) {
         try {
-            for (Iterator<DOMElement> it = new DescendantsIterator<DOMElement>(DOMElement.class, this); it.hasNext(); ) {
+            for (Iterator<DOMElement> it = coreGetChildrenByType(Axis.DESCENDANTS, DOMElement.class); it.hasNext(); ) {
                 DOMElement element = it.next();
                 for (CoreAttribute attr = element.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
                     if (((Attr)attr).isId() && elementId.equals(attr.coreGetTextContent())) {
