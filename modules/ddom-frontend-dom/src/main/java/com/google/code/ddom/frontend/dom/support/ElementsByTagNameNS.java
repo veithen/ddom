@@ -17,12 +17,14 @@ package com.google.code.ddom.frontend.dom.support;
 
 import java.util.Iterator;
 
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
 import com.google.code.ddom.frontend.dom.intf.DOMElement;
+import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
 import com.google.code.ddom.frontend.dom.intf.DOMParentNode;
 import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.ElementMatcher;
 
 // TODO: clean this up
 public class ElementsByTagNameNS extends ElementsBy {
@@ -30,8 +32,7 @@ public class ElementsByTagNameNS extends ElementsBy {
     private final String namespaceURI;
     private final String localName;
     
-    public ElementsByTagNameNS(DOMDocument document, DOMParentNode node, String namespaceURI,
-            String localName) {
+    public ElementsByTagNameNS(DOMDocument document, DOMParentNode node, String namespaceURI, String localName) {
         super(document);
         this.node = node;
         this.namespaceURI = namespaceURI == null ? "" : namespaceURI;
@@ -39,20 +40,18 @@ public class ElementsByTagNameNS extends ElementsBy {
     }
 
     @Override
-    protected Iterator<Element> createIterator() {
+    protected Iterator<? extends Node> createIterator() {
         boolean nsWildcard = "*".equals(namespaceURI);
         boolean localNameWildcard = localName.equals("*");
         if (nsWildcard && localNameWildcard) {
             // TODO: there seems to be no unit test checking whether the iterator should return DOM1 elements!
-            return (Iterator)node.coreGetChildrenByType(Axis.DESCENDANTS, DOMElement.class);
+            return node.coreGetChildrenByType(Axis.DESCENDANTS, DOMElement.class);
         } else if (nsWildcard) {
-            return (Iterator)node.coreGetElementsByLocalName(Axis.DESCENDANTS, localName);
+            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_LOCAL_NAME, null, localName);
         } else if (localNameWildcard) {
-            return (Iterator)node.coreGetElementsByNamespace(Axis.DESCENDANTS, namespaceURI);
+            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_NAMESPACE_URI, namespaceURI, null);
         } else {
-            // TODO: handle the cast problem properly
-            return (Iterator)node.coreGetElementsByName(Axis.DESCENDANTS, namespaceURI, localName);
-//            return new ElementNameFilterIterator(iterator, namespaceURI, localName);
+            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_QNAME, namespaceURI, localName);
         }
     }
 }

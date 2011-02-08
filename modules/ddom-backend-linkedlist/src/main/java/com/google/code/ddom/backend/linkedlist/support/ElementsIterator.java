@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,24 @@
 package com.google.code.ddom.backend.linkedlist.support;
 
 import com.googlecode.ddom.core.Axis;
-import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.ElementMatcher;
 
-public class ElementsByLocalNameIterator extends AbstractNodeIterator<CoreNSAwareElement> {
-    private final String localName;
+public class ElementsIterator<T extends CoreElement> extends AbstractNodeIterator<T> {
+    private final ElementMatcher<? super T> matcher;
+    private final String namespaceURI;
+    private final String name;
 
-    public ElementsByLocalNameIterator(CoreParentNode startNode, Axis axis, String localName) {
-        super(startNode, CoreNSAwareElement.class, axis);
-        this.localName = localName;
+    public ElementsIterator(CoreParentNode startNode, Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name) {
+        super(startNode, type, axis);
+        this.matcher = matcher;
+        this.namespaceURI = namespaceURI;
+        this.name = name;
     }
 
     @Override
-    protected final boolean matches(CoreNSAwareElement node) {
-        return node.coreGetLocalName().equals(localName);
+    protected final boolean matches(T node) {
+        return matcher.matches(node, namespaceURI, name);
     }
 }

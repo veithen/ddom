@@ -34,6 +34,7 @@ import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.frontend.Mixin;
 
@@ -217,12 +218,8 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public Iterator getChildElements(QName qname) {
-        String namespaceURI = qname.getNamespaceURI();
-        if (namespaceURI.length() == 0) {
-            namespaceURI = null;
-        }
-        return getChildElements(coreGetElementsByName(Axis.CHILDREN, namespaceURI, qname.getLocalPart()));
+    public final Iterator getChildElements(QName qname) {
+        return getChildElements(coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, qname.getNamespaceURI(), qname.getLocalPart()));
     }
 
     public void setEncodingStyle(String encodingStyle) throws SOAPException {

@@ -19,9 +19,7 @@ import com.google.code.ddom.backend.linkedlist.intf.LLBuilder;
 import com.google.code.ddom.backend.linkedlist.intf.LLChildNode;
 import com.google.code.ddom.backend.linkedlist.intf.LLParentNode;
 import com.google.code.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
-import com.google.code.ddom.backend.linkedlist.support.ElementsByLocalNameIterator;
-import com.google.code.ddom.backend.linkedlist.support.ElementsByNameIterator;
-import com.google.code.ddom.backend.linkedlist.support.ElementsByNamespaceIterator;
+import com.google.code.ddom.backend.linkedlist.support.ElementsIterator;
 import com.google.code.ddom.backend.linkedlist.support.TreeSerializer;
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.Inject;
@@ -34,6 +32,7 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
+import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreEntityReference;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
@@ -43,6 +42,7 @@ import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.core.CyclicRelationshipException;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeMigrationException;
@@ -453,16 +453,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return new ChildrenByTypeIterator<T>(this, axis, type);
     }
 
-    public final ChildIterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName) {
-        return new ElementsByNameIterator(this, axis, namespaceURI, localName);
-    }
-
-    public final ChildIterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI) {
-        return new ElementsByNamespaceIterator(this, axis, namespaceURI);
-    }
-
-    public final ChildIterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName) {
-        return new ElementsByLocalNameIterator(this, axis, localName);
+    public <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name) {
+        return new ElementsIterator<T>(this, axis, type, matcher, namespaceURI, name);
     }
 
     public <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredParsingException {

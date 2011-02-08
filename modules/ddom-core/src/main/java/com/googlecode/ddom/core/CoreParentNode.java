@@ -162,9 +162,8 @@ public interface CoreParentNode extends CoreNode {
     CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredParsingException;
     
     <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
-    ChildIterator<CoreNSAwareElement> coreGetElementsByName(Axis axis, String namespaceURI, String localName);
-    ChildIterator<CoreNSAwareElement> coreGetElementsByNamespace(Axis axis, String namespaceURI);
-    ChildIterator<CoreNSAwareElement> coreGetElementsByLocalName(Axis axis, String localName);
+    
+    <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name);
     
     <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredParsingException;
 }
