@@ -79,7 +79,7 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
             throw new SOAPException(""); // TODO
         } else {
             try {
-                return coreAppendElement(getSOAPFaultClass(), getNamespaceURI(), "Fault", getPrefix());
+                return coreAppendElement(getSOAPVersion().getSOAPFaultClass(), getNamespaceURI(), "Fault", getPrefix());
             } catch (CoreModelException ex) {
                 throw SAAJExceptionUtil.toSOAPException(ex);
             }

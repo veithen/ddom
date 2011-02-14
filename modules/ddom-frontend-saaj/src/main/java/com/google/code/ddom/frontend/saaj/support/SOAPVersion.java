@@ -19,9 +19,12 @@ import javax.xml.soap.SOAPConstants;
 
 import com.google.code.ddom.frontend.saaj.intf.SAAJDetail;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Body;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP11Header;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Body;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Header;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFaultElement;
 import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.SequenceBuilder;
@@ -40,6 +43,11 @@ public abstract class SOAPVersion {
                 .addItem(SAAJDetail.class, "", "detail").build(),
             "actor") {
         
+        @Override
+        public Class<? extends SAAJSOAPFault> getSOAPFaultClass() {
+            return SAAJSOAP11Fault.class;
+        }
+
         @Override
         public String formatMustUnderstand(boolean mustUnderstand) {
             return mustUnderstand ? "1" : "0";
@@ -64,6 +72,11 @@ public abstract class SOAPVersion {
                 .addItem(SAAJDetail.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build(),
             "role") {
         
+        @Override
+        public Class<? extends SAAJSOAPFault> getSOAPFaultClass() {
+            return SAAJSOAP12Fault.class;
+        }
+
         @Override
         public String formatMustUnderstand(boolean mustUnderstand) {
             return mustUnderstand ? "true" : "false";
@@ -95,7 +108,9 @@ public abstract class SOAPVersion {
     public Sequence getEnvelopeSequence() {
         return envelopeSequence;
     }
-
+    
+    public abstract Class<? extends SAAJSOAPFault> getSOAPFaultClass();
+    
     public Sequence getFaultSequence() {
         return faultSequence;
     }

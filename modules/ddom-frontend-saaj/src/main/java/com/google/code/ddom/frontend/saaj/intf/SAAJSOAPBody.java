@@ -21,7 +21,6 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
 @ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
-public interface SAAJSOAPBody extends SOAPBody, SAAJSOAPElement {
-    // TODO: move this to SOAPVersion
-    Class<? extends SAAJSOAPFault> getSOAPFaultClass();
+public interface SAAJSOAPBody extends SOAPBody, SAAJSOAPElement, HasSOAPVersion {
+
 }
