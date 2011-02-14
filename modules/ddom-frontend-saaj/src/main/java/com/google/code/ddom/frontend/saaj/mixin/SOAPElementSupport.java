@@ -40,6 +40,16 @@ import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class SOAPElementSupport implements SAAJSOAPElement {
+    public final String getValue() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+    
+    public final void setValue(String value) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
     public SOAPElement addChildElement(Name name) throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
