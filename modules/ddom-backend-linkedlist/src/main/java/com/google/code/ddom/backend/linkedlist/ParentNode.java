@@ -180,6 +180,16 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
     }
     
+    public final boolean coreIsEmpty() throws DeferredParsingException {
+        if (content == null && !coreIsComplete()) {
+            LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
+            do {
+                builder.next();
+            } while (content == null && !coreIsComplete());
+        }
+        return content == null;
+    }
+
     public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
         return internalGetFirstChild();
     }

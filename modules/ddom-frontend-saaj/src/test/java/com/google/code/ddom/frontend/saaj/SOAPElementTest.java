@@ -116,6 +116,15 @@ public class SOAPElementTest {
     }
     
     @Validated @Test
+    public void testAddTextNode2() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.addTextNode("ABC");
+        element.addTextNode("DEF");
+        assertEquals(2, element.getChildNodes().getLength());
+        assertEquals("ABCDEF", element.getTextContent());
+    }
+    
+    @Validated @Test
     public void testAddChildElement() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         SOAPElement child = element.addChildElement("test", "p", "urn:ns");

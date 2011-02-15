@@ -70,6 +70,19 @@ public interface CoreParentNode extends CoreNode {
     
     CoreChildNode coreGetFirstChild() throws DeferredParsingException;
     CoreChildNode coreGetLastChild() throws DeferredParsingException;
+    
+    /**
+     * Determine if this node has any children. In contrast to {@link #coreGetChildCount()}, this
+     * method will not necessarily build the entire node.
+     * 
+     * @return <code>true</code> if this node doesn't have any children; <code>false</code> if this
+     *         node has at least one child or if it is unexpanded and a value is set
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing.
+     */
+    boolean coreIsEmpty() throws DeferredParsingException;
+    
+    // TODO: specify behavior if node is unexpanded
     int coreGetChildCount() throws DeferredParsingException;
 
     /**

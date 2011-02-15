@@ -108,8 +108,11 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
 
     public final SOAPElement addTextNode(String text) throws SOAPException {
         try {
-            // TODO: this actually replaces the content instead of adding a text node
-            coreSetValue(text);
+            if (coreIsEmpty()) {
+                coreSetValue(text);
+            } else {
+                coreAppendCharacterData(text);
+            }
             return this;
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
