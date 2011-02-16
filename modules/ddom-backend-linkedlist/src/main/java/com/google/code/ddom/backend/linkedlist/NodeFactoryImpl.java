@@ -43,7 +43,7 @@ public class NodeFactoryImpl implements NodeFactory {
     
     private NodeFactoryImpl() {}
     
-    public CoreDocument createDocument() {
+    public final CoreDocument createDocument() {
         return new Document(modelExtension == null ? ModelExtension.NULL : modelExtension);
     }
 
