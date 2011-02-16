@@ -70,7 +70,8 @@ public interface CoreParentNode extends CoreNode {
      * 
      * @param policy
      *            the policy to use when collecting the text content; must not be <code>null</code>
-     * @return the text content of the node
+     * @return the text content of the node; if the node has no text content, then an empty string
+     *         is returned
      * @throws DeferredParsingException
      *             If an error occurs during deferred parsing.
      */

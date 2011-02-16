@@ -28,6 +28,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
+import com.google.code.ddom.frontend.saaj.support.SAAJPolicies;
 import com.google.code.ddom.frontend.saaj.support.SAAJUtil;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.Axis;
@@ -41,8 +42,12 @@ import com.googlecode.ddom.frontend.Mixin;
 @Mixin(CoreNSAwareElement.class)
 public abstract class SOAPElementSupport implements SAAJSOAPElement {
     public final String getValue() {
-        // TODO
-        throw new UnsupportedOperationException();
+        try {
+            String value = coreGetTextContent(SAAJPolicies.GET_VALUE);
+            return value.length() == 0 ? null : value;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
     
     public final void setValue(String value) {

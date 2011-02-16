@@ -29,7 +29,6 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
@@ -133,14 +132,14 @@ public class SOAPElementTest {
         assertEquals("test", child.getLocalName());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testGetValueSingleTextChild() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addTextNode("test");
         assertEquals("test", element.getValue());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testGetValueTwoTextChildren() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addTextNode("foo");
@@ -149,20 +148,20 @@ public class SOAPElementTest {
         assertEquals("foobar", element.getValue());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testGetValueSingleElementChild() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.appendChild(element.getOwnerDocument().createElementNS("urn:ns", "p:child"));
         assertNull(element.getValue());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testGetValueNoChildren() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         assertNull(element.getValue());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testGetValueMixedContent() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addTextNode("foo");
