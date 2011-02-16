@@ -233,6 +233,16 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
     }
     
+    public final boolean coreHasValue() throws DeferredParsingException {
+        if (content == null && !coreIsComplete()) {
+            LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
+            do {
+                builder.next();
+            } while (content == null && !coreIsComplete());
+        }
+        return content instanceof String;
+    }
+
     public final boolean coreIsEmpty() throws DeferredParsingException {
         if (content == null && !coreIsComplete()) {
             LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);

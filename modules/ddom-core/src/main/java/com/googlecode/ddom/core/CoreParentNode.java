@@ -38,6 +38,24 @@ public interface CoreParentNode extends CoreNode {
     
     void coreSetContent(XmlSource source);
     
+    /**
+     * Determine if the content of this node is represented in compact form. This is the case if
+     * both of the following conditions are met:
+     * <ol>
+     * <li>The node is currently not expanded, i.e. its child nodes have not been created yet.
+     * <li>After expansion, the node would have a single child of type {@link CoreCharacterData}.
+     * </ol>
+     * Note that this method will always return <code>false</code> if {@link #coreIsEmpty()} returns
+     * <code>true</code>.
+     * 
+     * @return <code>true</code> if the node has a value; <code>false</code> otherwise
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing. This may happen because the method
+     *             needs to check if in the underlying stream, the node has a single child
+     *             information item of type text.
+     */
+    boolean coreHasValue() throws DeferredParsingException;
+    
     // Temporarily marked as deprecated. In most cases coreGetTextContent should be used.
     // However, this method may later be changed to return objects (e.g. QNames).
     @Deprecated
@@ -78,6 +96,7 @@ public interface CoreParentNode extends CoreNode {
     String coreGetTextContent(TextCollectorPolicy policy) throws DeferredParsingException;
     
     // TODO: specify behavior if the element neither has children nor a value
+    // TODO: maybe this is no longer required since we have coreHasValue
     boolean coreIsExpanded();
     
     CoreChildNode coreGetFirstChild() throws DeferredParsingException;

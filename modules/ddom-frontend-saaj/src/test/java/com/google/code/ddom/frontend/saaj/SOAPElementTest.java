@@ -27,11 +27,13 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
+import javax.xml.soap.Text;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestResource;
@@ -168,6 +170,36 @@ public class SOAPElementTest {
         element.appendChild(element.getOwnerDocument().createElementNS("urn:ns", "p:child"));
         element.addTextNode("bar");
         assertEquals("foo", element.getValue());
+    }
+    
+    @Validated @Test
+    public void testSetValueNoChildren() {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        String value = "test";
+        element.setValue(value);
+        assertEquals(value, element.getValue());
+        Node child = element.getFirstChild();
+        assertTrue(child instanceof Text);
+        assertEquals(value, ((Text)child).getValue());
+        assertNull(child.getNextSibling());
+    }
+    
+    @Validated @Test
+    public void testSetValueSingleTextChild() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.addTextNode("initial content");
+        Text text = (Text)element.getFirstChild();
+        String value = "new value";
+        element.setValue(value);
+        assertEquals(value, text.getValue());
+    }
+    
+    @Validated @Test(expected=IllegalStateException.class)
+    public void testSetValueTwoTextChildren() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.addTextNode("foo");
+        element.addTextNode("bar");
+        element.setValue("test");
     }
     
     @Validated @Test

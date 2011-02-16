@@ -33,6 +33,8 @@ import com.google.code.ddom.frontend.saaj.support.SAAJUtil;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
+import com.googlecode.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ElementMatcher;
@@ -51,8 +53,19 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
     
     public final void setValue(String value) {
-        // TODO
-        throw new UnsupportedOperationException();
+        try {
+            if (coreIsEmpty() || coreHasValue()) {
+                coreSetValue(value);
+            } else {
+                CoreChildNode firstChild = coreGetFirstChild();
+                if (!(firstChild instanceof CoreCharacterData) || firstChild.coreGetNextSibling() != null) {
+                    throw new IllegalStateException("Can only use setValue on a SOAPElement that has a single child of type Text");
+                }
+                ((CoreCharacterData)firstChild).coreSetData(value);
+            }
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public SOAPElement addChildElement(Name name) throws SOAPException {
