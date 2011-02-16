@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -35,6 +34,10 @@ public class ProcessingInstruction extends CharacterDataContainer implements Cor
         this.target = target;
     }
 
+    public final int coreGetNodeType() {
+        return PROCESSING_INSTRUCTION_NODE;
+    }
+
     public final String coreGetTarget() {
         return target;
     }
@@ -42,12 +45,6 @@ public class ProcessingInstruction extends CharacterDataContainer implements Cor
     public final void coreSetTarget(String target) {
         this.target = target;
     }
-
-//    @Override
-//    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-//        return appendTo;
-//    }
-
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startProcessingInstruction(target);

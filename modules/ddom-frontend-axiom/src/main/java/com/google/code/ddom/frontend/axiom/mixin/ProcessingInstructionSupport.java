@@ -21,6 +21,7 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 /**
@@ -47,7 +48,7 @@ public abstract class ProcessingInstructionSupport implements AxiomProcessingIns
 
     public final String getValue() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

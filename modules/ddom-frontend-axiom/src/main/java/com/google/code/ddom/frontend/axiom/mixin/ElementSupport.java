@@ -47,6 +47,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.IdentityMapper;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.stream.StreamException;
 
@@ -131,8 +132,7 @@ public abstract class ElementSupport implements AxiomElement {
 
     public final String getText() {
         try {
-            // TODO: there may be a mismatch between the way coreGetTextContent collects the text and what is expected for Axiom's getText
-            return coreGetTextContent();
+            return coreGetTextContent(Policies.GET_TEXT_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -158,7 +158,8 @@ public abstract class ElementSupport implements AxiomElement {
 
     public final QName getTextAsQName() {
         try {
-            return resolveQName(coreGetTextContent());
+            // TODO: need unit tests to determine expected behavior if the node has children with unexpected types
+            return resolveQName(coreGetTextContent(TextCollectorPolicy.DEFAULT));
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

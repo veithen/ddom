@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.google.code.ddom.backend.linkedlist;
 import com.google.code.ddom.backend.linkedlist.intf.LLNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreNode;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.core.WrongDocumentException;
 
@@ -56,6 +55,4 @@ public abstract class Node implements LLNode {
             throw new WrongDocumentException();
         }
     }
-
-    abstract CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException;
 }

@@ -27,6 +27,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPFault;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPFault.class)
@@ -38,7 +39,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
     public String getFaultCode() {
         try {
             CoreNSAwareElement faultCodeElement = getFaultCodeElement(false);
-            return faultCodeElement == null ? null : faultCodeElement.coreGetTextContent();
+            return faultCodeElement == null ? null : faultCodeElement.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }
@@ -92,7 +93,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
     public final String getFaultString() {
         try {
             CoreNSAwareElement faultStringElement = getFaultStringElement(false);
-            return faultStringElement == null ? null : faultStringElement.coreGetTextContent();
+            return faultStringElement == null ? null : faultStringElement.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }

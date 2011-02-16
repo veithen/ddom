@@ -63,7 +63,18 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreClear() throws DeferredParsingException;
     
-    String coreGetTextContent() throws DeferredParsingException;
+    /**
+     * Collect the text content from this node. Since different APIs define different rules to get
+     * the text content of a parent node, a {@link TextCollectorPolicy} object is used to define
+     * these rules.
+     * 
+     * @param policy
+     *            the policy to use when collecting the text content; must not be <code>null</code>
+     * @return the text content of the node
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing.
+     */
+    String coreGetTextContent(TextCollectorPolicy policy) throws DeferredParsingException;
     
     // TODO: specify behavior if the element neither has children nor a value
     boolean coreIsExpanded();

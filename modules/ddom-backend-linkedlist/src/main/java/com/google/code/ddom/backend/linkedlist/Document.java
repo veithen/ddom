@@ -49,6 +49,10 @@ public class Document extends ParentNode implements LLDocument {
         symbols = new SymbolHashTable();
     }
 
+    public final int coreGetNodeType() {
+        return DOCUMENT_NODE;
+    }
+
     public final void internalCreateBuilder(XmlInput input, LLParentNode target) {
         Builder builder = new Builder(input, modelExtension, this, target);
         new Stream(input, builder);

@@ -16,7 +16,6 @@
 package com.google.code.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.core.CoreCharacterData;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -27,6 +26,10 @@ public class CharacterData extends LeafNode implements CoreCharacterData {
         super(document);
         this.data = data;
         internalSetFlag(Flags.IGNORABLE, ignorable);
+    }
+
+    public final int coreGetNodeType() {
+        return CHARACTER_DATA_NODE;
     }
 
     public final String coreGetData() {
@@ -43,24 +46,5 @@ public class CharacterData extends LeafNode implements CoreCharacterData {
 
     public final boolean coreIsIgnorable() {
         return internalGetFlag(Flags.IGNORABLE);
-    }
-
-    @Override
-    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-        String data = coreGetData();
-        if (appendTo == null) {
-            return data;
-        } else {
-            StringBuilder builder;
-            if (appendTo instanceof String) {
-                String existing = (String)appendTo;
-                builder = new StringBuilder(existing.length() + data.length());
-                builder.append(existing);
-            } else {
-                builder = (StringBuilder)appendTo;
-            }
-            builder.append(data);
-            return builder;
-        }
     }
 }

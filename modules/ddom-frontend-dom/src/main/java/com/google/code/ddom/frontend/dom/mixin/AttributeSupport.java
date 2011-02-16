@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreAttribute.class)
@@ -43,7 +44,7 @@ public abstract class AttributeSupport implements DOMAttribute {
     
     public final String getValue() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
@@ -82,7 +83,7 @@ public abstract class AttributeSupport implements DOMAttribute {
 
     public final String getTextContent() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

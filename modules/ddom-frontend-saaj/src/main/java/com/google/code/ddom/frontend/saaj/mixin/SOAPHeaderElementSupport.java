@@ -22,6 +22,7 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPHeaderElement.class)
@@ -29,7 +30,7 @@ public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement 
     private String getSOAPAttribute(String localName) {
         try {
             CoreNSAwareAttribute attr = (CoreNSAwareAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, getSOAPVersion().getEnvelopeNamespaceURI(), localName);
-            return attr == null ? null : attr.coreGetTextContent();
+            return attr == null ? null : attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }

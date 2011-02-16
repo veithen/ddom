@@ -23,13 +23,14 @@ import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements DOMProcessingInstruction {
     public final String getData() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

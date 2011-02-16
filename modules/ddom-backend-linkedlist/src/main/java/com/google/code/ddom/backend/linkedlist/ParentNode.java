@@ -48,6 +48,7 @@ import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.NodeNotFoundException;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.stream.XmlInput;
@@ -136,25 +137,77 @@ public abstract class ParentNode extends Node implements LLParentNode {
         internalNotifyChildrenCleared();
     }
 
-    public final String coreGetTextContent() throws DeferredParsingException {
+    public final String coreGetTextContent(TextCollectorPolicy policy) throws DeferredParsingException {
         if (content instanceof String) {
             return (String)content;
         } else {
-            CharSequence content = internalCollectTextContent(null);
-            return content == null ? "" : content.toString();
+            LLChildNode node = internalGetFirstChild();
+            if (node == null) {
+                return "";
+            } else {
+                CharSequence text = null;
+                int depth = 0;
+                loop: while (true) {
+                    boolean recurse = false;
+                    if (node instanceof CoreCharacterData) {
+                        String data = ((CoreCharacterData)node).coreGetData();
+                        if (text == null) {
+                            text = data;
+                        } else if (text instanceof String) {
+                            String existing = (String)text;
+                            StringBuilder builder = new StringBuilder(existing.length() + data.length());
+                            builder.append(existing);
+                            builder.append(data);
+                            text = builder;
+                        } else {
+                            ((StringBuilder)text).append(data);
+                        }
+                    } else {
+                        switch (policy.getAction(node.coreGetNodeType())) {
+                            case RECURSE:
+                                recurse = true;
+                                break;
+                            case SKIP:
+                                break;
+                            case STOP:
+                                break loop;
+                            case FAIL:
+                                // TODO
+                                throw new Error();
+                        }
+                    }
+                    while (true) {
+                        if (recurse) {
+                            // TODO: this will expand compact parent nodes; optimize this!
+                            LLChildNode firstChild = ((LLParentNode)node).internalGetFirstChild();
+                            if (firstChild == null) {
+                                recurse = false;
+                            } else {
+                                node = firstChild;
+                                depth++;
+                                break;
+                            }
+                        } else {
+                            LLChildNode sibling = node.internalGetNextSibling();
+                            if (sibling == null) {
+                                if (depth == 0) {
+                                    break loop;
+                                } else {
+                                    node = (LLChildNode)node.internalGetParent();
+                                    depth--;
+                                }
+                            } else {
+                                node = sibling;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return text == null ? "" : text.toString();
+            }
         }
     }
     
-    @Override
-    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-        CharSequence content = appendTo;
-        for (LLChildNode node = internalGetFirstChild(); node != null; node = node.internalGetNextSibling()) {
-            // TODO: define this method in LLNode
-            content = ((Node)node).internalCollectTextContent(content);
-        }
-        return content;
-    }
-
     public final LLChildNode internalGetFirstChildIfMaterialized() {
         return (LLChildNode)content;
     }

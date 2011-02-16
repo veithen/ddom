@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreEntityReference;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
@@ -29,14 +28,12 @@ public class EntityReference extends LeafNode implements CoreEntityReference {
         this.name = name;
     }
 
-    public final String coreGetName() {
-        return name;
+    public final int coreGetNodeType() {
+        return ENTITY_REFERENCE_NODE;
     }
 
-    @Override
-    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String coreGetName() {
+        return name;
     }
 
     public final void internalGenerateEvents(XmlHandler handler) {

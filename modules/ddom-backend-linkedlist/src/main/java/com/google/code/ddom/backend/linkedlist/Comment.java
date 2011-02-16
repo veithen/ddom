@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreComment;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -31,10 +30,9 @@ public class Comment extends CharacterDataContainer implements CoreComment {
         super(document, content);
     }
 
-//    @Override
-//    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-//        return appendTo;
-//    }
+    public final int coreGetNodeType() {
+        return COMMENT_NODE;
+    }
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startComment();

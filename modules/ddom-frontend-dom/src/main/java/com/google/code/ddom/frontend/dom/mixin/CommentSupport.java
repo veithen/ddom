@@ -22,6 +22,7 @@ import com.google.code.ddom.frontend.dom.intf.DOMComment;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreComment.class)
@@ -33,7 +34,7 @@ public abstract class CommentSupport implements DOMComment {
 
     public final String getData() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

@@ -42,6 +42,10 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
         this.prefix = prefix;
     }
 
+    public final int coreGetNodeType() {
+        return NS_AWARE_ATTRIBUTE_NODE;
+    }
+
     public final String coreGetNamespaceURI() {
         return namespaceURI;
     }

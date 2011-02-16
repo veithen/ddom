@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.w3c.dom.Node;
 
 import com.google.code.ddom.frontend.dom.intf.*;
 import com.google.code.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.google.code.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
@@ -56,7 +57,7 @@ public abstract class DocumentFragmentSupport implements DOMDocumentFragment {
 
     public final String getTextContent() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(Policies.GET_TEXT_CONTENT);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

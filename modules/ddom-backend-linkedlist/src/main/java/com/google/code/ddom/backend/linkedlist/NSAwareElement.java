@@ -48,6 +48,10 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.prefix = prefix;
     }
 
+    public final int coreGetNodeType() {
+        return NS_AWARE_ELEMENT_NODE;
+    }
+
     public final String coreGetNamespaceURI() {
         return namespaceURI;
     }

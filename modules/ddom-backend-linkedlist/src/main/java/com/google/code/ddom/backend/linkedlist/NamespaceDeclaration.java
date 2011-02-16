@@ -18,6 +18,7 @@ package com.google.code.ddom.backend.linkedlist;
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -35,12 +36,16 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
         this.declaredPrefix = prefix;
     }
 
+    public final int coreGetNodeType() {
+        return NAMESPACE_DECLARATION_NODE;
+    }
+
     public final String coreGetDeclaredPrefix() {
         return declaredPrefix;
     }
     
     public final String coreGetDeclaredNamespaceURI() throws DeferredParsingException {
-        return coreGetTextContent();
+        return coreGetTextContent(TextCollectorPolicy.DEFAULT);
     }
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {

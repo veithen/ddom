@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,14 @@ import com.google.code.ddom.frontend.axiom.intf.AxiomElement;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class AttributeSupport implements AxiomAttribute {
     public final String getAttributeValue() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -62,33 +62,25 @@ public abstract class AttributeSupport implements AxiomAttribute {
         return (AxiomElement)coreGetOwnerElement();
     }
 
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
         } else if (obj instanceof OMAttribute) {
             OMAttribute other = (OMAttribute)obj;
-            try {
-                // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
-                return coreGetLocalName().equals(other.getLocalName())
-                        && ObjectUtils.equals(getNamespace(), other.getNamespace())
-                        && coreGetTextContent().equals(other.getAttributeValue());
-            } catch (DeferredParsingException ex) {
-                throw AxiomExceptionUtil.translate(ex);
-            }
+            // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
+            return coreGetLocalName().equals(other.getLocalName())
+                    && ObjectUtils.equals(getNamespace(), other.getNamespace())
+                    && getAttributeValue().equals(other.getAttributeValue());
         } else {
             return false;
         }
     }
 
-    public int hashCode() {
-        try {
-            String value = coreGetTextContent();
-            // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
-            OMNamespace namespace = getNamespace();
-            return coreGetLocalName().hashCode() ^ (value != null ? value.hashCode() : 0) ^
-                    (namespace != null ? namespace.hashCode() : 0);
-        } catch (DeferredParsingException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
+    public final int hashCode() {
+        String value = getAttributeValue();
+        // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
+        OMNamespace namespace = getNamespace();
+        return coreGetLocalName().hashCode() ^ (value != null ? value.hashCode() : 0) ^
+                (namespace != null ? namespace.hashCode() : 0);
     }
 }

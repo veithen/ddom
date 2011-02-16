@@ -30,6 +30,10 @@ public class CDATASection extends CharacterDataContainer implements CoreCDATASec
         super(document, complete);
     }
 
+    public final int coreGetNodeType() {
+        return CDATA_SECTION_NODE;
+    }
+
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startCDATASection();
     }

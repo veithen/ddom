@@ -34,6 +34,10 @@ public class NSUnawareAttribute extends TypedAttribute implements CoreNSUnawareA
         this.name = name;
     }
 
+    public final int coreGetNodeType() {
+        return NS_UNAWARE_ATTRIBUTE_NODE;
+    }
+
     public final String coreGetName() {
         return name;
     }

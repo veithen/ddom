@@ -209,7 +209,7 @@ public abstract class ElementSupport implements DOMElement {
     
     public final String getTextContent() {
         try {
-            return coreGetTextContent();
+            return coreGetTextContent(Policies.GET_TEXT_CONTENT);
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

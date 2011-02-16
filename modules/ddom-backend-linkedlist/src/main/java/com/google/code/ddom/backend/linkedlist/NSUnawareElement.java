@@ -29,6 +29,10 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
         this.tagName = tagName;
     }
 
+    public final int coreGetNodeType() {
+        return NS_UNAWARE_ELEMENT_NODE;
+    }
+
     public final String coreGetName() {
         return tagName;
     }

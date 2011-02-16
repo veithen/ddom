@@ -26,6 +26,7 @@ import com.google.code.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.google.code.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(AxiomSOAPHeaderBlock.class)
@@ -48,7 +49,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
             if (attr == null) {
                 return false;
             } else {
-                String value = attr.coreGetTextContent();
+                String value = attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
                 if (value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE) || value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_1)) {
                     return true;
                 } else if (value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE) || value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_0)) {

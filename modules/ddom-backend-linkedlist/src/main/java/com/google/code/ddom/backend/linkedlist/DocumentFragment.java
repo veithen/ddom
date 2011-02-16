@@ -30,6 +30,10 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         this.document = document;
     }
 
+    public final int coreGetNodeType() {
+        return DOCUMENT_FRAGMENT_NODE;
+    }
+
     public final void internalNotifyChildrenModified(int delta) {
         children += delta;
     }

@@ -61,6 +61,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.core.CoreTypedAttribute;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.symbols.Symbols;
 
@@ -244,7 +245,7 @@ public abstract class DocumentSupport implements DOMDocument {
             for (Iterator<DOMElement> it = coreGetChildrenByType(Axis.DESCENDANTS, DOMElement.class); it.hasNext(); ) {
                 DOMElement element = it.next();
                 for (CoreAttribute attr = element.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
-                    if (((Attr)attr).isId() && elementId.equals(attr.coreGetTextContent())) {
+                    if (((Attr)attr).isId() && elementId.equals(attr.coreGetTextContent(TextCollectorPolicy.DEFAULT))) {
                         return element;
                     }
                 }

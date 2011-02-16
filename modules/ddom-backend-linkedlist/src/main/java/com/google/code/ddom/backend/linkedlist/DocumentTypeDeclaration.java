@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.google.code.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
@@ -35,6 +34,10 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
         this.data = data;
     }
 
+    public final int coreGetNodeType() {
+        return DOCUMENT_TYPE_DECLARATION_NODE;
+    }
+
     public final String coreGetRootName() {
         return rootName;
     }
@@ -45,11 +48,6 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
 
     public final String coreGetSystemId() {
         return systemId;
-    }
-
-    @Override
-    final CharSequence internalCollectTextContent(CharSequence appendTo) throws DeferredParsingException {
-        return appendTo;
     }
 
     public final void internalGenerateEvents(XmlHandler handler) {

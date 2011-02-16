@@ -38,6 +38,7 @@ import com.googlecode.ddom.core.Mapper;
 import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
@@ -107,7 +108,8 @@ public abstract class Element extends Container implements LLElement {
         if (attr instanceof CoreNSAwareAttribute) {
             CoreNSAwareAttribute org = ((CoreNSAwareAttribute)attr);
             try {
-                return new NSAwareAttribute(null, org.coreGetNamespaceURI(), org.coreGetLocalName(), org.coreGetPrefix(), org.coreGetTextContent(), org.coreGetType());
+                // TODO: need a better way to clone the children
+                return new NSAwareAttribute(null, org.coreGetNamespaceURI(), org.coreGetLocalName(), org.coreGetPrefix(), org.coreGetTextContent(TextCollectorPolicy.DEFAULT), org.coreGetType());
             } catch (DeferredParsingException ex) {
                 // TODO
                 throw new RuntimeException(ex);
