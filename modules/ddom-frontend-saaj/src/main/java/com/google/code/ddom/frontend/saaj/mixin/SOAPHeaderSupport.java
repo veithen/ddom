@@ -23,28 +23,16 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeaderElement;
 
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeader;
-import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
-import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
-import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 
 @Mixin(SAAJSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
     public final SOAPHeaderElement addHeaderElement(Name name) throws SOAPException {
-        // TODO: need unit test with empty prefix/namespace
-        try {
-            return (SAAJSOAPHeaderElement)coreAppendElement(getChildType(), name.getURI(), name.getLocalName(), name.getPrefix());
-        } catch (CoreModelException ex) {
-            throw SAAJExceptionUtil.toSOAPException(ex);
-        }
+        return (SOAPHeaderElement)addChildElement(name);
     }
 
     public final SOAPHeaderElement addHeaderElement(QName qname) throws SOAPException {
-        try {
-            return (SAAJSOAPHeaderElement)coreAppendElement(getChildType(), qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
-        } catch (CoreModelException ex) {
-            throw SAAJExceptionUtil.toSOAPException(ex);
-        }
+        return (SOAPHeaderElement)addChildElement(qname);
     }
 
     public SOAPHeaderElement addNotUnderstoodHeaderElement(QName arg0)

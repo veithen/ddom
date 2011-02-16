@@ -17,10 +17,9 @@ package com.google.code.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.SOAPFault;
 
-import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
-@ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
-public interface SAAJSOAPFault extends SOAPFault, SAAJSOAPElement, HasSOAPVersion {
+@ModelExtensionInterface(isAbstract=true, parent=SAAJSOAPBodyElement.class)
+public interface SAAJSOAPFault extends SOAPFault, SAAJSOAPBodyElement, HasSOAPVersion {
     
 }

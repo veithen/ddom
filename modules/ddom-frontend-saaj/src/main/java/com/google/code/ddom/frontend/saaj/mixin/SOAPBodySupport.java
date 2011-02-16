@@ -40,20 +40,11 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
     }
 
     public final SOAPBodyElement addBodyElement(Name name) throws SOAPException {
-        // TODO: need unit test with empty prefix/namespace
-        try {
-            return coreAppendElement(SAAJSOAPBodyElement.class, name.getURI(), name.getLocalName(), name.getPrefix());
-        } catch (CoreModelException ex) {
-            throw SAAJExceptionUtil.toSOAPException(ex);
-        }
+        return (SOAPBodyElement)addChildElement(name);
     }
 
     public final SOAPBodyElement addBodyElement(QName qname) throws SOAPException {
-        try {
-            return coreAppendElement(SAAJSOAPBodyElement.class, qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
-        } catch (CoreModelException ex) {
-            throw SAAJExceptionUtil.toSOAPException(ex);
-        }
+        return (SOAPBodyElement)addChildElement(qname);
     }
 
     public SOAPBodyElement addDocument(Document arg0) throws SOAPException {

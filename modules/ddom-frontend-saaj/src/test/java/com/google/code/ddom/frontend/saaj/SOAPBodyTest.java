@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,13 @@ public abstract class SOAPBodyTest extends AbstractTestCase {
     }
     
     @Validated @Test
+    public final void testAddChildElementUsingTriplet() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        SOAPElement element = body.addChildElement("test", "p", "urn:ns");
+        assertTrue(element instanceof SOAPBodyElement);
+    }
+    
+    @Validated @Test
     public final void testAddBodyElementUsingName() throws Exception {
         SOAPEnvelope env = createSOAPEnvelope();
         SOAPBody body = env.addBody();
@@ -90,6 +97,28 @@ public abstract class SOAPBodyTest extends AbstractTestCase {
         assertEquals("test", element.getLocalName());
         assertEquals("ns", element.getPrefix());
         assertEquals("http://example.org", element.getNamespaceURI());
+    }
+    
+    @Validated @Test
+    public final void testAddChildElementFaultUsingTriplet() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        SOAPElement element = body.addChildElement("Fault", "soap-env", soapVersion);
+        assertTrue(element instanceof SOAPFault);
+    }
+    
+    @Validated @Test
+    public final void testAddBodyElementFaultUsingName() throws Exception {
+        SOAPEnvelope env = createSOAPEnvelope();
+        SOAPBody body = env.addBody();
+        SOAPBodyElement element = body.addBodyElement(env.createName("Fault", "soap-env", soapVersion));
+        assertTrue(element instanceof SOAPFault);
+    }
+    
+    @Validated @Test
+    public final void testAddBodyElementFaultUsingQName() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        SOAPBodyElement element = body.addBodyElement(new QName(soapVersion, "Fault", "soap-env"));
+        assertTrue(element instanceof SOAPFault);
     }
     
     @Validated @Test

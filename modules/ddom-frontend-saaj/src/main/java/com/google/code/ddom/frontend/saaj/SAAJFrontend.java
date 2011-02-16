@@ -36,6 +36,6 @@ public class SAAJFrontend extends DOMFrontend {
     }
 
     public ModelExtension getModelExtension() {
-        return new SAAJModelExtension();
+        return SAAJModelExtension.INSTANCE;
     }
 }

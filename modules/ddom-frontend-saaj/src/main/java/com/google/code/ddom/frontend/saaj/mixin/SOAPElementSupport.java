@@ -24,7 +24,9 @@ import javax.xml.soap.SOAPException;
 
 import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.google.code.ddom.frontend.dom.support.Policies;
+import com.google.code.ddom.frontend.saaj.SAAJModelExtension;
 import com.google.code.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
+import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPBodyElement;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.google.code.ddom.frontend.saaj.support.ReifyingIterator;
 import com.google.code.ddom.frontend.saaj.support.SAAJExceptionUtil;
@@ -68,14 +70,13 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         }
     }
 
-    public SOAPElement addChildElement(Name name) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement addChildElement(Name name) throws SOAPException {
+        // TODO: need unit test with empty prefix/namespace
+        return internalAddChildElement(name.getURI(), name.getLocalName(), name.getPrefix());
     }
     
-    public SOAPElement addChildElement(QName qname) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement addChildElement(QName qname) throws SOAPException {
+        return internalAddChildElement(qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
     }
 
     public SOAPElement addChildElement(String localName) throws SOAPException {
@@ -90,18 +91,20 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
 
     public final SOAPElement addChildElement(String localName, String prefix, String uri) throws SOAPException {
+        return internalAddChildElement(uri == null ? "" : uri, localName, prefix == null ? "" : prefix);
+    }
+    
+    private SOAPElement internalAddChildElement(String namespaceURI, String localName, String prefix) throws SOAPException {
         try {
-            if (uri != null && uri.length() == 0) {
-                uri = null;
-            }
-            if (prefix != null && prefix.length() == 0) {
-                prefix = null;
-            }
             Class<? extends SAAJSOAPElement> childType = getChildType();
+            Class<?> extensionInterface = SAAJModelExtension.INSTANCE.mapElement(namespaceURI, localName);
+            if (extensionInterface != null && childType.isAssignableFrom(extensionInterface)) {
+                childType = extensionInterface.asSubclass(childType);
+            }
             if (childType.equals(SAAJSOAPElement.class)) {
-                return (SOAPElement)coreAppendElement(uri, localName, prefix);
+                return (SOAPElement)coreAppendElement(namespaceURI, localName, prefix);
             } else {
-                return coreAppendElement(childType, uri, localName, prefix);
+                return coreAppendElement(childType, namespaceURI, localName, prefix);
             }
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);

@@ -25,9 +25,15 @@ import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Body;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Envelope;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
 import com.google.code.ddom.frontend.saaj.intf.SAAJSOAP12Header;
+import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.core.ext.SimpleModelExtension;
 
-public class SAAJModelExtension extends SimpleModelExtension {
+public final class SAAJModelExtension extends SimpleModelExtension {
+    public static final ModelExtension INSTANCE = new SAAJModelExtension();
+    
+    // TODO: this causes an issue in the weaver
+//    private SAAJModelExtension() {}
+    
     public Class<?> mapElement(String namespaceURI, String localName) {
         if (localName.equals("Envelope")) {
             if (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(namespaceURI)) {

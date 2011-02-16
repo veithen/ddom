@@ -72,6 +72,13 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
     }
     
     @Validated @Test
+    public final void testAddChildElementUsingTriplet() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        SOAPElement element = header.addChildElement("test", "p", "urn:ns");
+        assertTrue(element instanceof SOAPHeaderElement);
+    }
+    
+    @Validated @Test
     public final void testAddHeaderElementUsingName() throws Exception {
         SOAPEnvelope env = createSOAPEnvelope();
         SOAPHeader header = env.addHeader();
