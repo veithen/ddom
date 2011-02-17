@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.ddom.cxf;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Iterator;
 
 import javax.xml.soap.AttachmentPart;
@@ -122,12 +120,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
 
     @Override
     public void setContentDescription(String arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void writeTo(OutputStream arg0) throws SOAPException, IOException {
         // TODO
         throw new UnsupportedOperationException();
     }

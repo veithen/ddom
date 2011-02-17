@@ -20,6 +20,7 @@ import java.io.InputStream;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 
 import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
@@ -39,10 +40,10 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
         this.soapVersion = soapVersion;
     }
     
-    public SOAPPartImpl(SOAPVersion soapVersion, InputStream in) {
-        throw new UnsupportedOperationException();
-//        super((SAAJDocument)documentHelper.parse("saaj", in));
-//        this.soapVersion = soapVersion;
+    public SOAPPartImpl(NodeFactory nodeFactory, SOAPVersion soapVersion, InputStream in) {
+        super(new StreamSource(in));
+        this.nodeFactory = nodeFactory;
+        this.soapVersion = soapVersion;
     }
     
     @Override

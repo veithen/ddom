@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  */
 package com.google.code.ddom.frontend.saaj.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Iterator;
 
 import javax.xml.soap.SOAPElement;
@@ -22,7 +25,9 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPPart;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -42,8 +47,16 @@ import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
 
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
+import com.googlecode.ddom.stream.Options;
+import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.StreamFactory;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlOutput;
 
 public abstract class AbstractSOAPPartImpl extends SOAPPart {
+    private static final StreamFactory streamFactory = StreamFactory.getInstance(AbstractSOAPPartImpl.class.getClassLoader());
+    
     // TODO: should be private
     protected SAAJDocument document;
     private Source source;
@@ -53,6 +66,10 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
     
     public AbstractSOAPPartImpl(SAAJDocument document) {
         this.document = document;
+    }
+    
+    public AbstractSOAPPartImpl(Source source) {
+        this.source = source;
     }
     
     protected abstract SAAJDocument createInitialDocument();
@@ -84,11 +101,55 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
     }
 
     @Override
-    public Source getContent() throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Source getContent() throws SOAPException {
+        if (source instanceof StreamSource) {
+            // We need to copy the content of the StreamSource so that the SOAP part can still
+            // be accessed later.
+            // TODO: repeated calls to getContent() will created multiple copies; this is unnecessary
+            byte[] content;
+            try {
+                // TODO: this will not work for StreamSources containing a Reader
+                // TODO: need to close the input stream?
+                // TODO: depending on the type of input stream, there may be smarter ways to clone the stream
+                content = IOUtils.toByteArray(((StreamSource)source).getInputStream());
+            } catch (IOException ex) {
+                throw new SOAPException(ex);
+            }
+            source = new StreamSource(new ByteArrayInputStream(content));
+            return new StreamSource(new ByteArrayInputStream(content));
+        } else {
+            // TODO: can we guarantee that document != null ?
+            return new DOMSource(document);
+        }
     }
-
+    
+    public final void writeTo(OutputStream out) throws IOException {
+        // TODO: there is some code duplication here
+        if (source instanceof StreamSource) {
+            // We need to copy the content of the StreamSource so that the SOAP part can still
+            // be accessed later.
+            // TODO: repeated calls to getContent() will created multiple copies; this is unnecessary
+                // TODO: this will not work for StreamSources containing a Reader
+                // TODO: need to close the input stream?
+                // TODO: depending on the type of input stream, there may be smarter ways to clone the stream
+            byte[] content = IOUtils.toByteArray(((StreamSource)source).getInputStream());
+            source = new StreamSource(new ByteArrayInputStream(content));
+            out.write(content);
+        } else {
+            try {
+                XmlInput input = document.coreGetInput(true);
+                // TODO: set encoding?
+                XmlOutput output = streamFactory.getOutput(out, new Options());
+                new Stream(input, output).flush();
+            } catch (StreamException ex) {
+                // TODO: maybe we can extract an existing IOException??
+                IOException ex2 = new IOException();
+                ex2.initCause(ex);
+                throw ex2;
+            }
+        }
+    }
+    
     @Override
     public Iterator getMatchingMimeHeaders(String[] arg0) {
         // TODO

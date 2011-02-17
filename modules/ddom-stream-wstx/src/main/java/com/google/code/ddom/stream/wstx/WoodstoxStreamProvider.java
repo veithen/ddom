@@ -24,6 +24,7 @@ import java.net.URL;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.InputSource;
 
@@ -91,6 +92,14 @@ public class WoodstoxStreamProvider implements StreamProvider {
             url = (URL)object;
             encoding = null;
             publicId = null;
+        } else if (object instanceof StreamSource) {
+            StreamSource source = (StreamSource)object;
+            byteStream = source.getInputStream();
+            characterStream = source.getReader();
+            systemId = source.getSystemId();
+            url = null;
+            encoding = null;
+            publicId = source.getPublicId();
         } else {
             return null;
         }

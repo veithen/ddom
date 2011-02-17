@@ -15,6 +15,8 @@
  */
 package com.google.code.ddom.frontend.saaj.impl;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +44,13 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     }
 
     @Override
-    public void setProperty(String property, Object value) throws SOAPException {
+    public final void setProperty(String property, Object value) throws SOAPException {
         properties.put(property, value);
+    }
+
+    @Override
+    public final void writeTo(OutputStream out) throws SOAPException, IOException {
+        // TODO: obviously only correct for messages without attachments
+        ((AbstractSOAPPartImpl)getSOAPPart()).writeTo(out);
     }
 }

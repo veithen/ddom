@@ -49,6 +49,6 @@ public class MessageFactoryImpl extends MessageFactory {
     
     @Override
     public SOAPMessage createMessage(MimeHeaders headers, InputStream in) throws IOException, SOAPException {
-        return new SOAPMessageImpl(new SOAPPartImpl(soapVersion, in));
+        return new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion, in));
     }
 }

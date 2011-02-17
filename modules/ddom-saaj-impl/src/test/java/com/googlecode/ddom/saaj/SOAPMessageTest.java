@@ -16,11 +16,21 @@
 package com.googlecode.ddom.saaj;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPPart;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -62,5 +72,36 @@ public class SOAPMessageTest {
     public void testSetPropertyUnknown() throws Exception {
         SOAPMessage message = factory.createMessage();
         message.setProperty("some.unknown.property", "test");
+    }
+    
+    /**
+     * Tests the behavior of {@link SOAPPart#getContent()} for a plain SOAP message created from an
+     * input stream.
+     * 
+     * @throws Exception
+     * 
+     * @see SOAPPartTest#testGetContent()
+     */
+    @Validated @Test
+    public void testWriteTo() throws Exception {
+        MimeHeaders headers = new MimeHeaders();
+        headers.addHeader("Content-Type", "text/xml; charset=utf-8");
+        InputStream in = SOAPPartTest.class.getResourceAsStream("message.xml");
+        byte[] orgContent = IOUtils.toByteArray(in);
+        SOAPMessage message = factory.createMessage(headers, new ByteArrayInputStream(orgContent));
+        
+        // Get the content before accessing the SOAP part
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        message.writeTo(baos);
+        byte[] content1 = baos.toByteArray();
+        assertTrue(Arrays.equals(orgContent, content1));
+        
+        // Now access the SOAP part and get the content again
+        message.getSOAPPart().getEnvelope();
+        baos = new ByteArrayOutputStream();
+        message.writeTo(baos);
+        byte[] content2 = baos.toByteArray();
+        // The content is equivalent, but not exactly the same
+        assertFalse(Arrays.equals(orgContent, content2));
     }
 }
