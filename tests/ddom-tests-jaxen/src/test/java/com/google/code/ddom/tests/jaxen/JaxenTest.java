@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,16 @@ import org.apache.axiom.test.jaxen.JaxenXPathTestBase;
 import org.jaxen.Navigator;
 import org.jaxen.dom.DocumentNavigator;
 
-import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.Options;
+import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.googlecode.ddom.model.ModelRegistry;
+import com.googlecode.ddom.stream.StreamFactory;
 
 public class JaxenTest extends JaxenXPathTestBase {
+    private static final ModelRegistry modelRegistry = ModelRegistry.getInstance(JaxenTest.class.getClassLoader());
+    private static final StreamFactory streamFactory = StreamFactory.getInstance(JaxenTest.class.getClassLoader());
+    
     public JaxenTest(String name) {
         super(name);
     }
@@ -35,11 +42,13 @@ public class JaxenTest extends JaxenXPathTestBase {
 
     @Override
     protected Object loadDocument(InputStream in) throws Exception {
-        return DocumentHelperFactory.INSTANCE.newInstance().parse("dom", in);
+        DOMDocument document = (DOMDocument)modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("dom")).getNodeFactory().createDocument();
+        document.coreSetContent(streamFactory.getSource(in, new Options(), false));
+        return document;
     }
 
     @Override
     protected void releaseDocument(Object document) {
-        DocumentHelperFactory.INSTANCE.newInstance().disposeDocument(document);
+        // TODO
     }
 }

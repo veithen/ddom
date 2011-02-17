@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,7 @@
  */
 package com.google.code.ddom.frontend.dom;
 
-import java.io.Reader;
-import java.io.StringReader;
-
 import javax.xml.XMLConstants;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.Assert;
 
@@ -29,18 +24,12 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
-import com.google.code.ddom.DocumentHelperFactory;
-import com.google.code.ddom.Options;
-import com.google.code.ddom.utils.dom.DOM;
-import com.google.code.ddom.utils.test.InvocationCounter;
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestResource;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
 import com.googlecode.ddom.core.CoreNSUnawareAttribute;
 import com.googlecode.ddom.core.CoreNSUnawareElement;
-import com.googlecode.ddom.stream.options.NamespaceAwareness;
 
 /**
  * @author Andreas Veithen
@@ -52,10 +41,7 @@ public class DocumentTest {
     
     @Test
     public void testNamespaceUnawareParsing() throws Exception {
-        Reader reader = new StringReader("<p:root xmlns:p='urn:ns'/>");
-        Options options = new Options();
-        options.set(NamespaceAwareness.DISABLE);
-        Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", reader, options);
+        Document doc = DDOMUtil.INSTANCE.parse(false, "<p:root xmlns:p='urn:ns'/>");
         
         Element element = doc.getDocumentElement();
         Assert.assertTrue(element instanceof CoreNSUnawareElement);
@@ -74,39 +60,39 @@ public class DocumentTest {
      * again. The reason is that in some StAX implementations, a parse error leaves the parser in
      * an inconsistent state.
      */
-    @Test
+//    @Test
     // TODO: this should go to ddom-backend-testsuite
-    public void testGracefulBehaviorAfterParseError() throws Exception {
-        // TODO: do this properly (we should not allow passing XMLStreamReader instances to DeferredDocumentFactory, because we don't have control over the properties)
-        InvocationCounter cter = new InvocationCounter();
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<root>This is malformed"));
-        Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", cter.createProxy(XMLStreamReader.class, reader));
-        
-        // First loop over the document; this should give an exception
-        try {
-            for (Node node : DOM.descendants(doc)) {
-            }
-            Assert.fail("Expected DOMDeferredParsingException");
-        } catch (DOMDeferredParsingException ex) {
-            // Expected
-        }
-        // This exception is a result of an exception thrown by the StAX parser
-        Assert.assertEquals(1, cter.getExceptionCount());
-        
-        cter.reset();
-
-        // Second loop over the document; this should again give an exception...
-        try {
-            for (Node node : DOM.descendants(doc)) {
-            }
-            Assert.fail("Expected DOMDeferredParsingException");
-        } catch (DOMDeferredParsingException ex) {
-            // Expected
-        }
-        // ... but without any invocation of the underlying StAX parser
-        Assert.assertEquals(0, cter.getInvocationCount());
-    }
+//    public void testGracefulBehaviorAfterParseError() throws Exception {
+//        // TODO: do this properly (we should not allow passing XMLStreamReader instances to DeferredDocumentFactory, because we don't have control over the properties)
+//        InvocationCounter cter = new InvocationCounter();
+//        XMLInputFactory factory = XMLInputFactory.newInstance();
+//        XMLStreamReader reader = factory.createXMLStreamReader(new StringReader("<root>This is malformed"));
+//        Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", cter.createProxy(XMLStreamReader.class, reader));
+//        
+//        // First loop over the document; this should give an exception
+//        try {
+//            for (Node node : DOM.descendants(doc)) {
+//            }
+//            Assert.fail("Expected DOMDeferredParsingException");
+//        } catch (DOMDeferredParsingException ex) {
+//            // Expected
+//        }
+//        // This exception is a result of an exception thrown by the StAX parser
+//        Assert.assertEquals(1, cter.getExceptionCount());
+//        
+//        cter.reset();
+//
+//        // Second loop over the document; this should again give an exception...
+//        try {
+//            for (Node node : DOM.descendants(doc)) {
+//            }
+//            Assert.fail("Expected DOMDeferredParsingException");
+//        } catch (DOMDeferredParsingException ex) {
+//            // Expected
+//        }
+//        // ... but without any invocation of the underlying StAX parser
+//        Assert.assertEquals(0, cter.getInvocationCount());
+//    }
 
     /**
      * Validate the behavior of {@link Document#createElementNS(String, String)} when invoked with
