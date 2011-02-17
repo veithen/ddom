@@ -23,13 +23,13 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.Options;
 import com.google.code.ddom.frontend.axiom.intf.AxiomDocument;
 import com.google.code.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.google.code.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.google.code.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 

@@ -21,8 +21,8 @@ import javax.xml.soap.SOAPEnvelope;
 import org.w3c.dom.Document;
 
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 

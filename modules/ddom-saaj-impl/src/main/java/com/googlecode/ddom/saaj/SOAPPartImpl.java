@@ -21,10 +21,10 @@ import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.transform.Source;
 
-import com.google.code.ddom.Options;
 import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 

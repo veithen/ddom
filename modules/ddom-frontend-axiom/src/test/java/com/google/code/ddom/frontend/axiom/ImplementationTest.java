@@ -26,8 +26,8 @@ import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 
 public class ImplementationTest extends TestCase {

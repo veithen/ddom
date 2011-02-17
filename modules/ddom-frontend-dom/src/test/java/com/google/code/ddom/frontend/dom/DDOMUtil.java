@@ -19,12 +19,12 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.Options;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.options.NamespaceAwareness;

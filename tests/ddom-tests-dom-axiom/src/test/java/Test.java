@@ -22,7 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.google.code.ddom.DocumentHelperFactory;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.googlecode.ddom.model.ModelDefinitionBuilder;
 
 public class Test {
     @org.junit.Test

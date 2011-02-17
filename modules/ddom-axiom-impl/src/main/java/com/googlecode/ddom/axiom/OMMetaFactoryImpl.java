@@ -24,9 +24,9 @@ import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
 import org.xml.sax.InputSource;
 
-import com.google.code.ddom.model.ModelDefinition;
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelDefinition;
+import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 

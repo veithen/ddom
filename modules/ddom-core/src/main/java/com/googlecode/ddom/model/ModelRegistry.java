@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
-import com.google.code.ddom.model.ModelDefinition;
 import com.googlecode.ddom.model.spi.ModelLoader;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 import com.googlecode.ddom.model.spi.ModelLoaderFactory;

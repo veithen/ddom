@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Andreas Veithen
+  ~ Copyright 2009-2011 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>ddom-api</module>
         <module>ddom-axiom-impl</module>
         <module>ddom-axis2</module>
         <module>ddom-backend-linkedlist</module>

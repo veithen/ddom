@@ -19,8 +19,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Map;
 
-import com.google.code.ddom.Options;
-import com.google.code.ddom.OptionsTracker;
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.googlecode.ddom.spi.ProviderFinder;
 import com.googlecode.ddom.spi.ProviderFinderException;

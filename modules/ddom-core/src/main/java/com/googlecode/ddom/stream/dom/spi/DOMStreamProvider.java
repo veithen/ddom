@@ -18,8 +18,8 @@ package com.googlecode.ddom.stream.dom.spi;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.google.code.ddom.OptionsTracker;
 import com.googlecode.ddom.spi.Provider;
+import com.googlecode.ddom.stream.OptionsTracker;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlOutput;
 import com.googlecode.ddom.stream.XmlSource;

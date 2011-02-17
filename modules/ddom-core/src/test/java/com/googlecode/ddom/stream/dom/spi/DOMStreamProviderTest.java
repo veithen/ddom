@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.Options;
+import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlSource;
 

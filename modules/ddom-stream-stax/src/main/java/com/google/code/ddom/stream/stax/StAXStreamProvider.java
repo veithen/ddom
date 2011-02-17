@@ -17,8 +17,8 @@ package com.google.code.ddom.stream.stax;
 
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.code.ddom.OptionsTracker;
 import com.googlecode.ddom.spi.Provider;
+import com.googlecode.ddom.stream.OptionsTracker;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlOutput;

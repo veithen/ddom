@@ -20,7 +20,7 @@ import com.googlecode.ddom.frontend.APIObjectFactory;
 
 /**
  * Represents a (woven) model corresponding to a given
- * {@link com.google.code.ddom.model.ModelDefinition}.
+ * {@link com.googlecode.ddom.model.ModelDefinition}.
  * 
  * @author Andreas Veithen
  */

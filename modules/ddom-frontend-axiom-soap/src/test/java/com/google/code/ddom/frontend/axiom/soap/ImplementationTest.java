@@ -37,8 +37,8 @@ import org.apache.axiom.ts.soap12.fault.TestGetNodeWithParser;
 import org.apache.axiom.ts.soap12.fault.TestMoreChildrenAddition;
 import org.apache.axiom.ts.soap12.fault.TestSetNode;
 
-import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 
 public class ImplementationTest extends TestCase {

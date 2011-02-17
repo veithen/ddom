@@ -18,8 +18,8 @@ package com.googlecode.ddom.xerces;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.google.code.ddom.OptionsTracker;
 import com.googlecode.ddom.spi.Provider;
+import com.googlecode.ddom.stream.OptionsTracker;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlOutput;

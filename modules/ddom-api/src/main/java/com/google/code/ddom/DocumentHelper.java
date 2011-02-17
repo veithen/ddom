@@ -15,7 +15,8 @@
  */
 package com.google.code.ddom;
 
-import com.google.code.ddom.model.ModelDefinition;
+import com.googlecode.ddom.model.ModelDefinition;
+import com.googlecode.ddom.stream.Options;
 
 public interface DocumentHelper {
     Object newDocument(ModelDefinition model);

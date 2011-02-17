@@ -15,8 +15,8 @@
  */
 package com.googlecode.ddom.model.spi;
 
-import com.google.code.ddom.model.ModelDefinition;
 import com.googlecode.ddom.model.Model;
+import com.googlecode.ddom.model.ModelDefinition;
 
 /**
  * Produces a {@link Model} from a given {@link ModelDefinition}.
