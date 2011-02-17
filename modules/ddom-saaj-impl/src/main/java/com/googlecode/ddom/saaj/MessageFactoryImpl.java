@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,28 @@ import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.model.ModelRegistry;
+import com.googlecode.ddom.model.spi.ModelLoaderException;
+
 public class MessageFactoryImpl extends MessageFactory {
     private final SOAPVersion soapVersion;
+    private final NodeFactory nodeFactory;
     
-    public MessageFactoryImpl(SOAPVersion soapVersion) {
+    public MessageFactoryImpl(SOAPVersion soapVersion) throws SOAPException {
         this.soapVersion = soapVersion;
+        ModelRegistry modelRegistry = ModelRegistry.getInstance(SOAPFactoryImpl.class.getClassLoader());
+        try {
+            nodeFactory = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("saaj")).getNodeFactory();
+        } catch (ModelLoaderException ex) {
+            throw new SOAPException(ex);
+        }
     }
 
     @Override
     public SOAPMessage createMessage() throws SOAPException {
-        return new SOAPMessageImpl(new SOAPPartImpl(soapVersion));
+        return new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion));
     }
     
     @Override

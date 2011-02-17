@@ -21,33 +21,45 @@ import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.transform.Source;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
+import com.google.code.ddom.Options;
 import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
+import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.StreamFactory;
 
 public class SOAPPartImpl extends AbstractSOAPPartImpl {
-    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance(SOAPPartImpl.class.getClassLoader());
+    private static final StreamFactory streamFactory = StreamFactory.getInstance(SOAPPartImpl.class.getClassLoader());
     
+    private final NodeFactory nodeFactory;
     private final SOAPVersion soapVersion;
     
-    public SOAPPartImpl(SOAPVersion soapVersion) {
+    public SOAPPartImpl(NodeFactory nodeFactory, SOAPVersion soapVersion) {
+        this.nodeFactory = nodeFactory;
         this.soapVersion = soapVersion;
     }
     
     public SOAPPartImpl(SOAPVersion soapVersion, InputStream in) {
-        super((SAAJDocument)documentHelper.parse("saaj", in));
-        this.soapVersion = soapVersion;
+        throw new UnsupportedOperationException();
+//        super((SAAJDocument)documentHelper.parse("saaj", in));
+//        this.soapVersion = soapVersion;
     }
     
     @Override
     protected SAAJDocument createInitialDocument() {
-        return (SAAJDocument)documentHelper.newDocument("saaj");
+        return (SAAJDocument)nodeFactory.createDocument();
     }
 
     @Override
     protected SAAJDocument createDocumentFromSource(Source source) {
-        return (SAAJDocument)documentHelper.parse("saaj", source);
+        SAAJDocument document = createInitialDocument();
+        try {
+            document.coreSetContent(streamFactory.getSource(source, new Options(), false));
+        } catch (StreamException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
+        return document;
     }
 
     @Override
