@@ -21,7 +21,6 @@ import org.xml.sax.InputSource;
 
 import com.google.code.ddom.Options;
 import com.google.code.ddom.frontend.dom.intf.DOMDocument;
-import com.google.code.ddom.model.ModelDefinition;
 import com.google.code.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelRegistry;
