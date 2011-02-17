@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,30 +20,41 @@ import javax.xml.soap.SOAPEnvelope;
 
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DocumentHelper;
-import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.frontend.saaj.intf.SAAJDocument;
+import com.google.code.ddom.model.ModelDefinitionBuilder;
+import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.model.ModelRegistry;
+import com.googlecode.ddom.model.spi.ModelLoaderException;
 
 public class DDOMSAAJUtil extends SAAJUtil {
     public static final DDOMSAAJUtil INSTANCE = new DDOMSAAJUtil();
     
-    private static final DocumentHelper documentHelper = DocumentHelperFactory.INSTANCE.newInstance();
+    private final NodeFactory nodeFactory;
     
-    private DDOMSAAJUtil() {}
+    private DDOMSAAJUtil() {
+        ModelRegistry modelRegistry = ModelRegistry.getInstance(DDOMSAAJUtil.class.getClassLoader());
+        try {
+            nodeFactory = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("saaj")).getNodeFactory();
+        } catch (ModelLoaderException ex) {
+            throw new Error(ex);
+        }
+    }
     
     @Override
     public SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix) {
-        Document document = (Document)documentHelper.newDocument("saaj");
+        Document document = (Document)nodeFactory.createDocument();
         return (SOAPElement)document.createElementNS(namespaceURI, prefix == null ? localName : prefix + ":" + localName);
     }
 
     @Override
     public SOAPEnvelope createSOAP11Envelope() {
-        return ((SAAJDocument)documentHelper.newDocument("saaj")).createSOAP11Envelope();
+        // TODO: we may also create the envelope without an owner document
+        return ((SAAJDocument)nodeFactory.createDocument()).createSOAP11Envelope();
     }
     
     @Override
     public SOAPEnvelope createSOAP12Envelope() {
-        return ((SAAJDocument)documentHelper.newDocument("saaj")).createSOAP12Envelope();
+        // TODO: we may also create the envelope without an owner document
+        return ((SAAJDocument)nodeFactory.createDocument()).createSOAP12Envelope();
     }
 }
