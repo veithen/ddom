@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.Assert;
 
@@ -28,12 +29,16 @@ import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DocumentHelperFactory;
+import com.googlecode.ddom.jaxp.DocumentBuilderFactoryImpl;
 
 public class ReceiverTest {
     @Test
     public void testUsernameToken() throws Exception {
-        Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
+        DocumentBuilderFactory dbf = new DocumentBuilderFactoryImpl();
+        // TODO: enable deferred parsing
+        dbf.setNamespaceAware(true);
+        // TODO: need to close the input stream?
+        Document doc = dbf.newDocumentBuilder().parse(ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
         WSSecurityEngine engine = WSSecurityEngine.getInstance();
         CallbackHandler cb = new CallbackHandler() {
             public void handle(Callback[] callbacks) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.google.code.ddom.tests.wss4j.sender;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -24,13 +25,17 @@ import org.apache.ws.security.message.WSSecUsernameToken;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DocumentHelperFactory;
 import com.google.code.ddom.tests.wss4j.receiver.ReceiverTest;
+import com.googlecode.ddom.jaxp.DocumentBuilderFactoryImpl;
 
 public class SenderTest {
     @Test
     public void testUsernameToken() throws Exception {
-        Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
+        DocumentBuilderFactory dbf = new DocumentBuilderFactoryImpl();
+        // TODO: enable deferred parsing
+        dbf.setNamespaceAware(true);
+        // TODO: need to close the input stream?
+        Document doc = dbf.newDocumentBuilder().parse(ReceiverTest.class.getResourceAsStream("UsernameToken.xml"));
         WSSecUsernameToken builder = new WSSecUsernameToken();
         builder.setUserInfo("user", "password");
         WSSecHeader secHeader = new WSSecHeader();

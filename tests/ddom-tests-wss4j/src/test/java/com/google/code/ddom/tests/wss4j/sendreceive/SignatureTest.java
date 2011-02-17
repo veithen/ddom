@@ -1,6 +1,8 @@
 package com.google.code.ddom.tests.wss4j.sendreceive;
+
 import java.util.Vector;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -16,7 +18,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.code.ddom.DocumentHelperFactory;
+import com.googlecode.ddom.jaxp.DocumentBuilderFactoryImpl;
 
 /*
  * Copyright 2009-2010 Andreas Veithen
@@ -42,7 +44,11 @@ public class SignatureTest {
         sign.setKeyIdentifierType(WSConstants.BST_DIRECT_REFERENCE);
         sign.setParts(parts);
 
-        Document doc = (Document)DocumentHelperFactory.INSTANCE.newInstance().parse("dom", SignatureTest.class.getResourceAsStream(file));
+        DocumentBuilderFactory dbf = new DocumentBuilderFactoryImpl();
+        // TODO: enable deferred parsing
+        dbf.setNamespaceAware(true);
+        // TODO: need to close the input stream?
+        Document doc = dbf.newDocumentBuilder().parse(SignatureTest.class.getResourceAsStream(file));
         
         WSSecHeader secHeader = new WSSecHeader();
         secHeader.insertSecurityHeader(doc);
