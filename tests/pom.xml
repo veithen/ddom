@@ -32,6 +32,7 @@
         <!-- TODO -->
         <!-- module>ddom-tests-dom-axiom</module -->
         <module>ddom-tests-jaxen</module>
+        <module>ddom-tests-jaxrpc-ri</module>
         <module>ddom-tests-wss4j</module>
         <module>ddom-tests-xslt</module>
     </modules>

@@ -31,6 +31,7 @@ import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPMessageImpl;
 
 public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     private final SOAPPartImpl soapPart;
+    private final MimeHeaders headers = new MimeHeaders();
     private final List<AttachmentPartImpl> attachments = new ArrayList<AttachmentPartImpl>();
     
     public SOAPMessageImpl(SOAPPartImpl soapPart) {
@@ -77,9 +78,8 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     }
 
     @Override
-    public MimeHeaders getMimeHeaders() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final MimeHeaders getMimeHeaders() {
+        return headers;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     @Override
     public boolean saveRequired() {
         // TODO
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     @Override
