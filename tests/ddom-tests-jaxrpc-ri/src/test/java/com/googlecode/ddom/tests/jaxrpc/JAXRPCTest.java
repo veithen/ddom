@@ -17,6 +17,7 @@ package com.googlecode.ddom.tests.jaxrpc;
 
 import static org.junit.Assert.assertEquals;
 
+import javax.xml.rpc.ServiceFactory;
 import javax.xml.rpc.Stub;
 
 import org.eclipse.jetty.server.Connector;
@@ -58,7 +59,7 @@ public class JAXRPCTest {
         server.setHandler(handlers);
         server.start();
         
-        echo = new TestService_Impl().getEchoPort();
+        echo = ((TestService)ServiceFactory.newInstance().loadService(TestService.class)).getEchoPort();
         ((Stub)echo)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/echo");
     }
     
