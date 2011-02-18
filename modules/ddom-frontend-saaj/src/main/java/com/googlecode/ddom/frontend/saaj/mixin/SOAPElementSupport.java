@@ -36,7 +36,6 @@ import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.SAAJModelExtension;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
-import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPBodyElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.googlecode.ddom.frontend.saaj.support.ReifyingIterator;
 import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
