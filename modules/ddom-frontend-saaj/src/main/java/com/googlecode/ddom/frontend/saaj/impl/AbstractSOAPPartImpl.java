@@ -469,17 +469,17 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
 
     public final Node insertBefore(Node newChild, Node refChild) throws DOMException {
         initDocument();
-        return insertBefore(newChild, refChild);
+        return document.insertBefore(newChild, refChild);
     }
 
     public final boolean isDefaultNamespace(String namespaceURI) {
         initDocument();
-        return isDefaultNamespace(namespaceURI);
+        return document.isDefaultNamespace(namespaceURI);
     }
 
     public final boolean isEqualNode(Node arg) {
         initDocument();
-        return isEqualNode(arg);
+        return document.isEqualNode(arg);
     }
 
     public final boolean isSameNode(Node other) {
@@ -509,7 +509,7 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
 
     public final Node removeChild(Node oldChild) throws DOMException {
         initDocument();
-        return removeChild(oldChild);
+        return document.removeChild(oldChild);
     }
 
     public final Node replaceChild(Node newChild, Node oldChild) throws DOMException {

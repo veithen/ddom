@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.tests.jaxrpc;
+package com.googlecode.ddom.tests.jaxrpc.calculator;
 
 import java.rmi.RemoteException;
 
-public class EchoImpl implements Echo {
-    public String echo(String arg) throws RemoteException {
-        return arg;
+public class CalculatorImpl implements Calculator {
+    public int add(int operand1, int operand2) throws RemoteException {
+        return operand1 + operand2;
     }
 }

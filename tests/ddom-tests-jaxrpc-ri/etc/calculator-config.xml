@@ -15,13 +15,11 @@
   ~ limitations under the License.
   -->
 <configuration xmlns="http://java.sun.com/xml/ns/jax-rpc/ri/config">
-    <wsdl location="${basedir}/src/test/resources/webapp/WEB-INF/testservice.wsdl" packageName="com.googlecode.ddom.tests.jaxrpc">
-        <!--
+    <wsdl location="${basedir}/src/test/resources/webapp/WEB-INF/calculator.wsdl" packageName="com.googlecode.ddom.tests.jaxrpc.calculator">
         <handlerChains>
             <chain runAt="client">
-                <handler className="hello.DummyHandler"/>
+                <handler className="com.googlecode.ddom.tests.jaxrpc.calculator.ClientPerfHandler"/>
             </chain>
         </handlerChains>
-        -->
     </wsdl>
 </configuration>

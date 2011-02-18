@@ -70,8 +70,8 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>filter-resources</id>
-                        <phase>generate-sources</phase>
+                        <id>filter-wscompile-configs</id>
+                        <phase>generate-test-sources</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -92,32 +92,27 @@
                 <executions>
                     <execution>
                         <id>wscompile</id>
-                        <phase>generate-sources</phase>
+                        <phase>generate-test-sources</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
                             <target>
-                                <taskdef name="wscompile" classname="com.sun.xml.rpc.tools.ant.Wscompile" classpathref="maven.plugin.classpath"/>
+                                <mkdir dir="${project.build.directory}/tool"/>
+                                <javac srcdir="src/tool/java" destdir="${project.build.directory}/tool" classpathref="maven.plugin.classpath"/>
+                                <path id="tool.classpath">
+                                    <pathelement location="${project.build.directory}/tool"/>
+                                    <path refid="maven.compile.classpath"/>
+                                </path>
+                                <taskdef name="wscompile" classname="com.sun.xml.rpc.tools.ant.Wscompile" classpathref="tool.classpath"/>
                                 <mkdir dir="${project.build.directory}/gen-src"/>
                                 <mkdir dir="${project.build.directory}/gen-classes"/>
-                                <wscompile both="true" config="${project.build.directory}/etc/config.xml" classpathref="maven.runtime.classpath" sourcebase="${project.build.directory}/gen-src" base="${project.build.directory}/gen-classes"/>
+                                <wscompile both="true" config="${project.build.directory}/etc/echo-config.xml" classpathref="maven.runtime.classpath" sourcebase="${project.build.directory}/gen-src" base="${project.build.directory}/gen-classes"/>
+                                <wscompile both="true" config="${project.build.directory}/etc/calculator-config.xml" classpathref="maven.runtime.classpath" sourcebase="${project.build.directory}/gen-src" base="${project.build.directory}/gen-classes"/>
                             </target>
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.sun.xml.rpc</groupId>
-                        <artifactId>jaxrpc-impl</artifactId>
-                        <version>${jaxrpcri.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>javax.mail</groupId>
-                        <artifactId>mail</artifactId>
-                        <version>1.4</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -125,9 +120,9 @@
                 <executions>
                     <execution>
                         <id>add-source</id>
-                        <phase>generate-sources</phase>
+                        <phase>generate-test-sources</phase>
                         <goals>
-                            <goal>add-source</goal>
+                            <goal>add-test-source</goal>
                         </goals>
                         <configuration>
                             <sources>

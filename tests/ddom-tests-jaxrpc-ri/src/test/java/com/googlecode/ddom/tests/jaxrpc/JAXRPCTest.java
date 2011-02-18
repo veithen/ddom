@@ -29,13 +29,18 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.googlecode.ddom.tests.jaxrpc.calculator.Calculator;
+import com.googlecode.ddom.tests.jaxrpc.calculator.CalculatorService;
+import com.googlecode.ddom.tests.jaxrpc.echo.Echo;
+import com.googlecode.ddom.tests.jaxrpc.echo.EchoService;
 
 public class JAXRPCTest {
     private static final int PORT = 9999;
     
     private static Server server;
-    private static Echo echo;
     
     @BeforeClass
     public static void startServer() throws Exception {
@@ -58,14 +63,20 @@ public class JAXRPCTest {
 
         server.setHandler(handlers);
         server.start();
-        
-        echo = ((TestService)ServiceFactory.newInstance().loadService(TestService.class)).getEchoPort();
-        ((Stub)echo)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/echo");
     }
     
     @Test
     public void testWithoutHandlers() throws Exception {
+        Echo echo = ((EchoService)ServiceFactory.newInstance().loadService(EchoService.class)).getEchoPort();
+        ((Stub)echo)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/echo");
         assertEquals("Hi!", echo.echo("Hi!"));
+    }
+    
+    @Test @Ignore
+    public void testWithHandlers() throws Exception {
+        Calculator calculator = ((CalculatorService)ServiceFactory.newInstance().loadService(CalculatorService.class)).getCalculatorPort();
+        ((Stub)calculator)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/calculator");
+        assertEquals(5, calculator.add(2, 3));
     }
     
     @AfterClass

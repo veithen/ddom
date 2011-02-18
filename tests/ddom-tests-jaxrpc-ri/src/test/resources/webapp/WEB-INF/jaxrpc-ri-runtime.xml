@@ -15,12 +15,20 @@
   ~ limitations under the License.
   -->
 <endpoints xmlns="http://java.sun.com/xml/ns/jax-rpc/ri/runtime" version="1.0">
-    <endpoint name="TestService"
-              interface="com.googlecode.ddom.tests.jaxrpc.Echo"
-              implementation="com.googlecode.ddom.tests.jaxrpc.EchoImpl"
-              tie="com.googlecode.ddom.tests.jaxrpc.Echo_Tie"
-              wsdl="/WEB-INF/testservice.wsdl"
-              service="{urn:test}TestService"
-              port="{urn:test}EchoPort"
+    <endpoint name="EchoService"
+              interface="com.googlecode.ddom.tests.jaxrpc.echo.Echo"
+              implementation="com.googlecode.ddom.tests.jaxrpc.echo.EchoImpl"
+              tie="com.googlecode.ddom.tests.jaxrpc.echo.Echo_Tie"
+              wsdl="/WEB-INF/echo.wsdl"
+              service="{urn:echo}EchoService"
+              port="{urn:echo}EchoPort"
               urlpattern="/jaxrpc/echo"/>
+    <endpoint name="CalculatorService"
+              interface="com.googlecode.ddom.tests.jaxrpc.calculator.Calculator"
+              implementation="com.googlecode.ddom.tests.jaxrpc.calculator.CalculatorImpl"
+              tie="com.googlecode.ddom.tests.jaxrpc.calculator.Calculator_Tie"
+              wsdl="/WEB-INF/calculator.wsdl"
+              service="{urn:calculator}CalculatorService"
+              port="{urn:calculator}CalculatorPort"
+              urlpattern="/jaxrpc/calculator"/>
 </endpoints>
