@@ -37,6 +37,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.SAAJModelExtension;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
+import com.googlecode.ddom.frontend.saaj.support.NameImpl;
 import com.googlecode.ddom.frontend.saaj.support.ReifyingIterator;
 import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.frontend.saaj.support.SAAJPolicies;
@@ -198,9 +199,8 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public Name getElementName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Name getElementName() {
+        return new NameImpl(coreGetLocalName(), coreGetPrefix(), coreGetNamespaceURI());
     }
     
     public final QName getElementQName() {

@@ -219,4 +219,31 @@ public class SOAPElementTest {
         SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", null);
         assertEquals(new QName("urn:test", "test"), element.getElementQName());
     }
+    
+    @Validated @Test
+    public void testGetElementNameWithNamespace() {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
+        Name name = element.getElementName();
+        assertEquals("urn:test", name.getURI());
+        assertEquals("test", name.getLocalName());
+        assertEquals("p", name.getPrefix());
+    }
+    
+    @Validated @Test
+    public void testGetElementNameWithoutNamespace() {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        Name name = element.getElementName();
+        assertEquals("", name.getURI());
+        assertEquals("test", name.getLocalName());
+        assertEquals("", name.getPrefix());
+    }
+
+    @Validated @Test
+    public void testGetElementNameWithDefaultNamespace() {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", null);
+        Name name = element.getElementName();
+        assertEquals("urn:test", name.getURI());
+        assertEquals("test", name.getLocalName());
+        assertEquals("", name.getPrefix());
+    }
 }
