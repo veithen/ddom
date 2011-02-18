@@ -105,7 +105,7 @@
                         <configuration>
                             <target>
                                 <mkdir dir="${project.build.directory}/tool"/>
-                                <javac srcdir="src/tool/java" destdir="${project.build.directory}/tool" classpathref="maven.plugin.classpath"/>
+                                <javac srcdir="src/tool/java" destdir="${project.build.directory}/tool" classpathref="maven.plugin.classpath" includeantruntime="false"/>
                                 <path id="tool.classpath">
                                     <pathelement location="${project.build.directory}/tool"/>
                                     <path refid="maven.compile.classpath"/>
