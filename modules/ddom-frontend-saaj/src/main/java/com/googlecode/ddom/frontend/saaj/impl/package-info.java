@@ -13,24 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
-
-import javax.xml.soap.SOAPEnvelope;
-
-import com.googlecode.ddom.frontend.saaj.intf.SAAJDocument;
-
-public interface SOAPVersion {
-    SOAPVersion SOAP11 = new SOAPVersion() {
-        public SOAPEnvelope createEnvelope(SAAJDocument document) {
-            return document.createSOAP11Envelope();
-        }
-    };
-
-    SOAPVersion SOAP12 = new SOAPVersion() {
-        public SOAPEnvelope createEnvelope(SAAJDocument document) {
-            return document.createSOAP12Envelope();
-        }
-    };
-    
-    SOAPEnvelope createEnvelope(SAAJDocument document);
-}
+/**
+ * Contains SAAJ implementation classes that are not directly to the XML object model.
+ */
+package com.googlecode.ddom.frontend.saaj.impl;

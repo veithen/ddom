@@ -13,24 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.googlecode.ddom.frontend.saaj;
 
+import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 
-import com.googlecode.ddom.frontend.saaj.intf.SAAJDocument;
-
-public interface SOAPVersion {
-    SOAPVersion SOAP11 = new SOAPVersion() {
-        public SOAPEnvelope createEnvelope(SAAJDocument document) {
-            return document.createSOAP11Envelope();
-        }
-    };
-
-    SOAPVersion SOAP12 = new SOAPVersion() {
-        public SOAPEnvelope createEnvelope(SAAJDocument document) {
-            return document.createSOAP12Envelope();
-        }
-    };
-    
-    SOAPEnvelope createEnvelope(SAAJDocument document);
+public abstract class SAAJUtil {
+    public abstract SOAPElement createSOAPElement(String namespaceURI, String localName, String prefix);
+    public abstract SOAPEnvelope createSOAP11Envelope();
+    public abstract SOAPEnvelope createSOAP12Envelope();
 }

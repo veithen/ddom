@@ -25,7 +25,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPPart;
 
-import com.google.code.ddom.frontend.saaj.impl.AbstractSOAPMessageImpl;
+import com.googlecode.ddom.frontend.saaj.impl.AbstractSOAPMessageImpl;
 
 public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     private final SOAPPartImpl soapPart;

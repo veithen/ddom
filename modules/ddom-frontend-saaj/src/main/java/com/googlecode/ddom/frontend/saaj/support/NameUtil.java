@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.googlecode.ddom.frontend.saaj.support;
 
-import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.Name;
 
-import com.googlecode.ddom.frontend.saaj.intf.SAAJDocument;
-
-public interface SOAPVersion {
-    SOAPVersion SOAP11 = new SOAPVersion() {
-        public SOAPEnvelope createEnvelope(SAAJDocument document) {
-            return document.createSOAP11Envelope();
-        }
-    };
-
-    SOAPVersion SOAP12 = new SOAPVersion() {
-        public SOAPEnvelope createEnvelope(SAAJDocument document) {
-            return document.createSOAP12Envelope();
-        }
-    };
+// TODO: check what the SAAJ spec says about null/empty prefies/URIs
+public final class NameUtil {
+    private NameUtil() {}
     
-    SOAPEnvelope createEnvelope(SAAJDocument document);
+    public static String getNamespaceURI(Name name) {
+        String uri = name.getURI();
+        return uri == null || uri.length() == 0 ? null : uri;
+    }
+    
+    public static String getPrefix(Name name) {
+        String prefix = name.getPrefix();
+        return prefix == null || prefix.length() == 0 ? null : prefix;
+    }
 }
