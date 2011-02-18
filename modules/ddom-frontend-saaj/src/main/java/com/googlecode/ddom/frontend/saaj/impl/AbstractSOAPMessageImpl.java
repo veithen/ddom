@@ -18,12 +18,17 @@ package com.googlecode.ddom.frontend.saaj.impl;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.soap.AttachmentPart;
+import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
+
+import com.google.code.ddom.collections.FilteredIterator;
 
 public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     private final Map<String,Object> properties = new HashMap<String,Object>();
@@ -46,6 +51,11 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     @Override
     public final void setProperty(String property, Object value) throws SOAPException {
         properties.put(property, value);
+    }
+
+    @Override
+    public final Iterator getAttachments(MimeHeaders headers) {
+        return new FilteredIterator<AttachmentPart>(getAttachments(), new AttachmentFilter(headers));
     }
 
     @Override

@@ -17,13 +17,16 @@ package com.googlecode.ddom.saaj;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Iterator;
 
+import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
@@ -51,6 +54,44 @@ public class SOAPMessageTest {
         message.createAttachmentPart();
         // The attachment part is not added to the message
         assertEquals(0, message.countAttachments());
+    }
+    
+    @Validated @Test
+    public void testAddAttachmentPart() throws Exception {
+        SOAPMessage message = factory.createMessage();
+        AttachmentPart attachment = message.createAttachmentPart();
+        message.addAttachmentPart(attachment);
+        Iterator it = message.getAttachments();
+        assertTrue(it.hasNext());
+        assertSame(attachment, it.next());
+        assertFalse(it.hasNext());
+    }
+    
+    @Validated @Test
+    public void testGetAttachmentsFiltered() throws Exception {
+        SOAPMessage message = factory.createMessage();
+        
+        AttachmentPart att1 = message.createAttachmentPart();
+        att1.addMimeHeader("Content-Type", "text/plain");
+        message.addAttachmentPart(att1);
+        
+        AttachmentPart att2 = message.createAttachmentPart();
+        att2.addMimeHeader("Content-Type", "application/octet-stream");
+        message.addAttachmentPart(att2);
+        
+        AttachmentPart att3 = message.createAttachmentPart();
+        att3.addMimeHeader("Content-ID", "<123456@example.com>");
+        att3.addMimeHeader("Content-Type", "text/plain");
+        message.addAttachmentPart(att3);
+        
+        MimeHeaders headers = new MimeHeaders();
+        headers.addHeader("Content-Type", "text/plain");
+        Iterator it = message.getAttachments(headers);
+        assertTrue(it.hasNext());
+        assertSame(att1, it.next());
+        assertTrue(it.hasNext());
+        assertSame(att3, it.next());
+        assertFalse(it.hasNext());
     }
     
     @Validated @Test

@@ -58,15 +58,8 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     }
 
     @Override
-    public Iterator getAttachments() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Iterator getAttachments(MimeHeaders arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator getAttachments() {
+        return attachments.iterator();
     }
 
     @Override

@@ -77,12 +77,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     }
 
     @Override
-    public Iterator getAttachments(MimeHeaders arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String getContentDescription() {
         // TODO
         throw new UnsupportedOperationException();
