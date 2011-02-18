@@ -31,9 +31,9 @@ public abstract class NodeSupport implements SAAJNode {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPElement getParentElement() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement getParentElement() {
+        // TODO: need unit test coverage for cases where the parent is not an element
+        return (SOAPElement)coreGetParentElement();
     }
 
     public final void detachNode() {

@@ -30,6 +30,7 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.Text;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
@@ -245,5 +246,12 @@ public class SOAPElementTest {
         assertEquals("urn:test", name.getURI());
         assertEquals("test", name.getLocalName());
         assertEquals("", name.getPrefix());
+    }
+    
+    @Validated @Test
+    public void testGetParentElement() throws Exception {
+        SOAPElement parent = saajUtil.createSOAPElement(null, "parent", null);
+        SOAPElement child = parent.addChildElement(new QName("child"));
+        assertSame(parent, child.getParentElement());
     }
 }
