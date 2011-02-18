@@ -45,6 +45,7 @@
         <module>ddom-mime</module>
         <module>ddom-model-dom</module>
         <module>ddom-saaj-impl</module>
+        <module>ddom-saaj-ri-compat</module>
         <module>ddom-spring-ws</module>
         <module>ddom-stream-stax</module>
         <module>ddom-stream-wstx</module>

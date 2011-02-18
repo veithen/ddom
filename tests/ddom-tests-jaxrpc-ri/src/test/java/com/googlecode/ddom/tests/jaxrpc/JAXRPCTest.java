@@ -15,7 +15,7 @@
  */
 package com.googlecode.ddom.tests.jaxrpc;
 
-import java.net.URISyntaxException;
+import static org.junit.Assert.assertEquals;
 
 import javax.xml.rpc.Stub;
 
@@ -26,26 +26,29 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class ServerRunner {
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) throws Exception {
-        System.out.println("Starting Server");
-
-        Server server = new Server();
+public class JAXRPCTest {
+    private static final int PORT = 9999;
+    
+    private static Server server;
+    private static Echo echo;
+    
+    @BeforeClass
+    public static void startServer() throws Exception {
+        server = new Server();
 
         SelectChannelConnector connector = new SelectChannelConnector();
-        connector.setPort(9999);
+        connector.setPort(PORT);
         server.setConnectors(new Connector[] {connector});
 
         WebAppContext webappcontext = new WebAppContext();
         webappcontext.setContextPath("/");
 
         String warPath = null;
-        warPath = ServerRunner.class.getResource("/webapp").toURI().getPath();
+        warPath = JAXRPCTest.class.getResource("/webapp").toURI().getPath();
         
         webappcontext.setWar(warPath);
 
@@ -54,13 +57,19 @@ public class ServerRunner {
 
         server.setHandler(handlers);
         server.start();
-        try {
-            Echo echo = new TestService_Impl().getEchoPort();
-            ((Stub)echo)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:9999/jaxrpc/echo");
-            System.out.println(echo.echo("Hi!"));
-        } finally {    
-            server.stop();
-            server.destroy();
-        }
+        
+        echo = new TestService_Impl().getEchoPort();
+        ((Stub)echo)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/echo");
+    }
+    
+    @Test
+    public void testWithoutHandlers() throws Exception {
+        assertEquals("Hi!", echo.echo("Hi!"));
+    }
+    
+    @AfterClass
+    public static void stopServer() throws Exception {
+        server.stop();
+        server.destroy();
     }
 }

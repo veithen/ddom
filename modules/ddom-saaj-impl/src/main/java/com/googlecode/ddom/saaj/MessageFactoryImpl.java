@@ -17,6 +17,7 @@ package com.googlecode.ddom.saaj;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -27,10 +28,12 @@ import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.spi.ProviderFinder;
 
 public class MessageFactoryImpl extends MessageFactory {
     private final SOAPVersion soapVersion;
     private final NodeFactory nodeFactory;
+    private final CompatibilityPolicy compatibilityPolicy;
     
     public MessageFactoryImpl(SOAPVersion soapVersion) throws SOAPException {
         this.soapVersion = soapVersion;
@@ -40,15 +43,23 @@ public class MessageFactoryImpl extends MessageFactory {
         } catch (ModelLoaderException ex) {
             throw new SOAPException(ex);
         }
+        Map<String,CompatibilityPolicy> policies = ProviderFinder.find(MessageFactoryImpl.class.getClassLoader(), CompatibilityPolicy.class);
+        if (policies.isEmpty()) {
+            compatibilityPolicy = DefaultCompatibilityPolicy.INSTANCE;
+        } else if (policies.size() == 1) {
+            compatibilityPolicy = policies.values().iterator().next();
+        } else {
+            throw new SOAPException("Multiple compatibility policies found in classpath");
+        }
     }
 
     @Override
     public SOAPMessage createMessage() throws SOAPException {
-        return new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion));
+        return compatibilityPolicy.wrapMessage(new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion)));
     }
     
     @Override
     public SOAPMessage createMessage(MimeHeaders headers, InputStream in) throws IOException, SOAPException {
-        return new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion, in));
+        return compatibilityPolicy.wrapMessage(new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion, in)));
     }
 }
