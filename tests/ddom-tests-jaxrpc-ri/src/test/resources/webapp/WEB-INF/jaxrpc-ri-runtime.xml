@@ -31,4 +31,12 @@
               service="{urn:calculator}CalculatorService"
               port="{urn:calculator}CalculatorPort"
               urlpattern="/jaxrpc/calculator"/>
+    <endpoint name="AttachmentsService"
+              interface="com.googlecode.ddom.tests.jaxrpc.attachments.Attachments"
+              implementation="com.googlecode.ddom.tests.jaxrpc.attachments.AttachmentsImpl"
+              tie="com.googlecode.ddom.tests.jaxrpc.attachments.Attachments_Tie"
+              wsdl="/WEB-INF/attachments.wsdl"
+              service="{urn:attachments}AttachmentsService"
+              port="{urn:attachments}AttachmentsPort"
+              urlpattern="/jaxrpc/attachments"/>
 </endpoints>

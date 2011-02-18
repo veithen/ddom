@@ -17,6 +17,7 @@ package com.googlecode.ddom.tests.jaxrpc;
 
 import static org.junit.Assert.assertEquals;
 
+import javax.activation.DataHandler;
 import javax.xml.rpc.ServiceFactory;
 import javax.xml.rpc.Stub;
 
@@ -32,6 +33,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.googlecode.ddom.tests.jaxrpc.attachments.Attachments;
+import com.googlecode.ddom.tests.jaxrpc.attachments.AttachmentsService;
 import com.googlecode.ddom.tests.jaxrpc.calculator.Calculator;
 import com.googlecode.ddom.tests.jaxrpc.calculator.CalculatorService;
 import com.googlecode.ddom.tests.jaxrpc.echo.Echo;
@@ -77,6 +80,13 @@ public class JAXRPCTest {
         Calculator calculator = ((CalculatorService)ServiceFactory.newInstance().loadService(CalculatorService.class)).getCalculatorPort();
         ((Stub)calculator)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/calculator");
         assertEquals(5, calculator.add(2, 3));
+    }
+    
+    @Test @Ignore
+    public void testSwA() throws Exception {
+        Attachments attachments = ((AttachmentsService)ServiceFactory.newInstance().loadService(AttachmentsService.class)).getAttachmentsPort();
+        ((Stub)attachments)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/attachments");
+        assertEquals("OK", attachments.addAttachment("12345", new DataHandler("This is a test", "text/plain")));
     }
     
     @AfterClass
