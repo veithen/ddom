@@ -19,7 +19,9 @@ import javax.xml.namespace.QName;
 import javax.xml.rpc.handler.soap.SOAPMessageContext;
 import javax.xml.soap.SOAPException;
 
-public class ClientPerfHandler extends PerfHandlerBase {
+public class ServerPerfHandler extends PerfHandlerBase {
+    private static final String TIMESTAMPS_PROPERTY = ServerPerfHandler.class.getName() + ".Timestamps";
+    
     @Override
     public QName[] getHeaders() {
         return null;
@@ -27,18 +29,20 @@ public class ClientPerfHandler extends PerfHandlerBase {
 
     @Override
     public boolean handleRequest(SOAPMessageContext context) throws SOAPException {
-        Timestamps timestamps = new Timestamps();
-        timestamps.addTimestamp();
-        addPerfData(context.getMessage(), timestamps);
+        Timestamps timestamps = extractPerfData(context.getMessage());
+        if (timestamps != null) {
+            timestamps.addTimestamp();
+            context.setProperty(TIMESTAMPS_PROPERTY, timestamps);
+        }
         return true;
     }
 
     @Override
     public boolean handleResponse(SOAPMessageContext context) throws SOAPException {
-        Timestamps timestamps = extractPerfData(context.getMessage());
+        Timestamps timestamps = (Timestamps)context.getProperty(TIMESTAMPS_PROPERTY);
         if (timestamps != null) {
             timestamps.addTimestamp();
-            PerfDataCollector.reportPerfData(timestamps);
+            addPerfData(context.getMessage(), timestamps);
         }
         return true;
     }

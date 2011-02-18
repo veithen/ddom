@@ -33,7 +33,12 @@ public abstract class SOAPHandler extends GenericHandler {
 
     @Override
     public final boolean handleResponse(MessageContext context) {
-        return handleResponse((SOAPMessageContext)context);
+        try {
+            return handleResponse((SOAPMessageContext)context);
+        } catch (SOAPException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
@@ -45,7 +50,7 @@ public abstract class SOAPHandler extends GenericHandler {
         return true;
     }
 
-    public boolean handleResponse(SOAPMessageContext context) {
+    public boolean handleResponse(SOAPMessageContext context) throws SOAPException {
         return true;
     }
 

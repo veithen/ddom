@@ -15,10 +15,15 @@
  */
 package com.googlecode.ddom.tests.jaxrpc.calculator;
 
+import java.util.Iterator;
+
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPHeaderElement;
+import javax.xml.soap.SOAPMessage;
 
 public abstract class PerfHandlerBase extends SOAPHandler {
     protected static final String PERF_NAMESPACE_URI = "urn:performance";
@@ -28,7 +33,34 @@ public abstract class PerfHandlerBase extends SOAPHandler {
     protected static final QName TIMESTAMP_QNAME = new QName(PERF_NAMESPACE_URI, "Timestamp", PERF_PREFIX);
     
     protected void addTimestamp(SOAPHeaderElement perfData) throws SOAPException {
-        SOAPElement timestamp = perfData.addChildElement(TIMESTAMP_QNAME);
-        timestamp.setValue(String.valueOf(System.currentTimeMillis()));
+    }
+    
+    protected void addPerfData(SOAPMessage message, Timestamps timestamps) throws SOAPException {
+        SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+        SOAPHeader header = envelope.getHeader();
+        if (header == null) {
+            header = envelope.addHeader();
+        }
+        SOAPHeaderElement perfData = header.addHeaderElement(PERF_DATA_QNAME);
+        for (long timestamp : timestamps.getTimestamps()) {
+            perfData.addChildElement(TIMESTAMP_QNAME).setValue(String.valueOf(timestamp));
+        }
+    }
+    
+    protected Timestamps extractPerfData(SOAPMessage message) throws SOAPException {
+        SOAPHeader header = message.getSOAPHeader();
+        if (header == null) {
+            return null;
+        }
+        Iterator it = header.getChildElements(PERF_DATA_QNAME);
+        if (!it.hasNext()) {
+            return null;
+        }
+        SOAPHeaderElement element = (SOAPHeaderElement)it.next();
+        Timestamps timestamps = new Timestamps();
+        for (Iterator it2 = element.getChildElements(TIMESTAMP_QNAME); it2.hasNext(); ) {
+            timestamps.addTimestamp(Long.parseLong(((SOAPElement)it2.next()).getValue()));
+        }
+        return timestamps;
     }
 }

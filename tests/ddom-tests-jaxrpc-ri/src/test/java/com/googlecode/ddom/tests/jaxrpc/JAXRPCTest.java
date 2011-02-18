@@ -16,6 +16,7 @@
 package com.googlecode.ddom.tests.jaxrpc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.activation.DataHandler;
 import javax.xml.rpc.ServiceFactory;
@@ -37,6 +38,7 @@ import com.googlecode.ddom.tests.jaxrpc.attachments.Attachments;
 import com.googlecode.ddom.tests.jaxrpc.attachments.AttachmentsService;
 import com.googlecode.ddom.tests.jaxrpc.calculator.Calculator;
 import com.googlecode.ddom.tests.jaxrpc.calculator.CalculatorService;
+import com.googlecode.ddom.tests.jaxrpc.calculator.PerfDataCollector;
 import com.googlecode.ddom.tests.jaxrpc.echo.Echo;
 import com.googlecode.ddom.tests.jaxrpc.echo.EchoService;
 
@@ -75,11 +77,13 @@ public class JAXRPCTest {
         assertEquals("Hi!", echo.echo("Hi!"));
     }
     
-    @Test @Ignore
+    @Test
     public void testWithHandlers() throws Exception {
+        PerfDataCollector.clearPerfData();
         Calculator calculator = ((CalculatorService)ServiceFactory.newInstance().loadService(CalculatorService.class)).getCalculatorPort();
         ((Stub)calculator)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/calculator");
         assertEquals(5, calculator.add(2, 3));
+        assertNotNull(PerfDataCollector.getLastPerfData());
     }
     
     @Test @Ignore

@@ -20,6 +20,9 @@
             <chain runAt="client">
                 <handler className="com.googlecode.ddom.tests.jaxrpc.calculator.ClientPerfHandler"/>
             </chain>
+            <chain runAt="server">
+                <handler className="com.googlecode.ddom.tests.jaxrpc.calculator.ServerPerfHandler"/>
+            </chain>
         </handlerChains>
     </wsdl>
 </configuration>
