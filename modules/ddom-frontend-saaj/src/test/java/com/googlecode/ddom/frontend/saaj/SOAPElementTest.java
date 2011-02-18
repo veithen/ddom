@@ -30,7 +30,6 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.Text;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
