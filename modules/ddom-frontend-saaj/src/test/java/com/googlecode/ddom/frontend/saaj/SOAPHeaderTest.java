@@ -16,6 +16,7 @@
 package com.googlecode.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -93,6 +94,36 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         assertEquals("test", element.getLocalName());
         assertEquals("ns", element.getPrefix());
         assertEquals("http://example.org", element.getNamespaceURI());
+    }
+    
+    @Validated @Test
+    public final void testExamineMustUnderstandHeaderElements() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        
+        SOAPHeaderElement element1 = header.addHeaderElement(new QName("urn:ns", "header1"));
+        element1.setActor("urn:actor1");
+        element1.setMustUnderstand(true);
+        
+        SOAPHeaderElement element2 = header.addHeaderElement(new QName("urn:ns", "header2"));
+        element2.setActor("urn:actor2");
+        element2.setMustUnderstand(true);
+        
+        SOAPHeaderElement element3 = header.addHeaderElement(new QName("urn:ns", "header3"));
+        element3.setActor("urn:actor2");
+        element3.setMustUnderstand(false);
+        
+        SOAPHeaderElement element4 = header.addHeaderElement(new QName("urn:ns", "header4"));
+        element4.setActor("urn:actor2");
+        element4.setMustUnderstand(true);
+        
+        header.addHeaderElement(new QName("urn:ns", "header5"));
+        
+        Iterator it = header.examineMustUnderstandHeaderElements("urn:actor2");
+        assertTrue(it.hasNext());
+        assertSame(element2, it.next());
+        assertTrue(it.hasNext());
+        assertSame(element4, it.next());
+        assertFalse(it.hasNext());
     }
     
     @Validated @Test @Ignore // TODO

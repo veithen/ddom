@@ -22,8 +22,11 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeaderElement;
 
+import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeader;
+import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
+import com.googlecode.ddom.frontend.saaj.support.MustUnderstandHeaderElementMatcher;
 
 @Mixin(SAAJSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
@@ -69,9 +72,9 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
         throw new UnsupportedOperationException();
     }
 
-    public Iterator examineMustUnderstandHeaderElements(String arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator examineMustUnderstandHeaderElements(String actor) {
+        // TODO: we may potentially have an issue with elements that have not been reified yet (i.e. that have been created using plain DOM methods)
+        return coreGetElements(Axis.CHILDREN, SAAJSOAPHeaderElement.class, MustUnderstandHeaderElementMatcher.INSTANCE, null, actor);
     }
 
     public Iterator extractAllHeaderElements() {
