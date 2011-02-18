@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
@@ -103,5 +104,22 @@ public class SOAPMessageTest {
         byte[] content2 = baos.toByteArray();
         // The content is equivalent, but not exactly the same
         assertFalse(Arrays.equals(orgContent, content2));
+    }
+    
+    /**
+     * Tests that {@link SOAPMessage#writeTo(java.io.OutputStream)} performs namespace repairing.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testWriteToNamespaceRepairing() throws Exception {
+        SOAPMessage message = factory.createMessage();
+        SOAPPart part = message.getSOAPPart();
+        SOAPBody body = part.getEnvelope().getBody();
+        body.appendChild(part.createElementNS("urn:ns", "p:test"));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        message.writeTo(baos);
+        String content = baos.toString("UTF-8");
+        assertTrue(content.contains("<p:test xmlns:p=\"urn:ns\"/>"));
     }
 }

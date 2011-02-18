@@ -53,6 +53,7 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlOutput;
+import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
 
 public abstract class AbstractSOAPPartImpl extends SOAPPart {
     private static final StreamFactory streamFactory = StreamFactory.getInstance(AbstractSOAPPartImpl.class.getClassLoader());
@@ -138,6 +139,7 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
         } else {
             try {
                 XmlInput input = document.coreGetInput(true);
+                input.addFilter(new NamespaceRepairingFilter());
                 // TODO: set encoding?
                 XmlOutput output = streamFactory.getOutput(out, new Options());
                 new Stream(input, output).flush();
