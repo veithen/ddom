@@ -25,7 +25,9 @@ import java.util.Iterator;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.Text;
 
@@ -72,6 +74,51 @@ public class SOAPElementTest {
         assertEquals("urn:ns2", element.lookupNamespaceURI("p"));
         assertNull(element.lookupPrefix("urn:ns1"));
         assertEquals("p", element.lookupPrefix("urn:ns2"));
+    }
+    
+    /**
+     * Test that {@link SOAPElement#getAttributeValue(Name)} returns <code>null</code> if the
+     * requested attribute doesn't exist.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetAttributeValueByNameNonExisting() throws Exception {
+        SOAPEnvelope envelope = saajUtil.createSOAP11Envelope();
+        SOAPBody body = envelope.addBody();
+        SOAPElement element = body.addChildElement("test", "p", "urn:test");
+        assertNull(element.getAttributeValue(envelope.createName("attr")));
+    }
+    
+    /**
+     * Test the behavior of {@link SOAPElement#getAttributeValue(Name)} for an attribute without
+     * namespace.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetAttributeValueByNameWithoutNamespace() throws Exception {
+        SOAPEnvelope envelope = saajUtil.createSOAP11Envelope();
+        SOAPBody body = envelope.addBody();
+        SOAPElement element = body.addChildElement("test", "p", "urn:test");
+        element.setAttributeNS(null, "attr", "value");
+        assertEquals("value", element.getAttributeValue(envelope.createName("attr")));
+    }
+    
+    /**
+     * Test the behavior of {@link SOAPElement#getAttributeValue(Name)} for an attribute with
+     * namespace. In particular, check that the prefix is not considered when matching attribute
+     * names.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetAttributeValueByNameWithNamespace() throws Exception {
+        SOAPEnvelope envelope = saajUtil.createSOAP11Envelope();
+        SOAPBody body = envelope.addBody();
+        SOAPElement element = body.addChildElement("test", "p", "urn:test");
+        element.setAttributeNS("urn:test", "p:attr", "value");
+        assertEquals("value", element.getAttributeValue(envelope.createName("attr", "", "urn:test")));
     }
     
     /**

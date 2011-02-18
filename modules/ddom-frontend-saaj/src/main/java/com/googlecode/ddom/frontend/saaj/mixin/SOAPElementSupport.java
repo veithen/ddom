@@ -27,12 +27,14 @@ import com.google.code.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
+import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.IdentityMapper;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.SAAJModelExtension;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
@@ -156,9 +158,14 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         return this;
     }
 
-    public String getAttributeValue(Name name) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getAttributeValue(Name name) {
+        try {
+            // TODO: we should really have a coreGetAttributeValue method
+            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName());
+            return attr == null ? null : attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
     
     public String getAttributeValue(QName qname) {
