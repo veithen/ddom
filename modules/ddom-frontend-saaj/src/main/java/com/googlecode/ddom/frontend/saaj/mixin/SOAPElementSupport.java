@@ -32,6 +32,7 @@ import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.TextCollectorPolicy;
@@ -186,9 +187,12 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public String getNamespaceURI(String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getNamespaceURI(String prefix) {
+        try {
+            return coreLookupNamespaceURI(prefix, true);
+        } catch (DeferredParsingException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public Iterator getNamespacePrefixes() {

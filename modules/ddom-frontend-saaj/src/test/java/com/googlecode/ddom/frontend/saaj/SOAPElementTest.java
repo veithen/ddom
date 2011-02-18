@@ -300,4 +300,37 @@ public class SOAPElementTest {
         SOAPElement child = parent.addChildElement(new QName("child"));
         assertSame(parent, child.getParentElement());
     }
+    
+    @Validated @Test
+    public void testGetNamespaceURIForPrefixDeclaredOnParent() throws Exception {
+        SOAPElement parent = saajUtil.createSOAPElement("urn:ns", "test", "p");
+        parent.addNamespaceDeclaration("p", "urn:ns");
+        SOAPElement child = parent.addChildElement(new QName("child"));
+        assertEquals("urn:ns", child.getNamespaceURI("p"));
+    }
+    
+    /**
+     * Test that {@link SOAPElement#getNamespaceURI(String)} only takes into account explicit
+     * namespace declarations. This is in contrast to
+     * {@link org.w3c.dom.Node#lookupNamespaceURI(String)}, which also takes into account prefixes
+     * used on elements, but for which no explicit namespace declaration exists.
+     */
+    @Validated @Test
+    public void testGetNamespaceURIStrictLookup() {
+        SOAPElement element = saajUtil.createSOAPElement("urn:ns", "test", "p");
+        assertNull(element.getNamespaceURI("p"));
+    }
+    
+    @Validated @Test
+    public void testGetNamespaceURIUnbound() {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        assertNull(element.getNamespaceURI("p"));
+    }
+    
+    @Validated @Test
+    public void testGetNamespaceURIDefault() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement("urn:ns", "test", null);
+        element.addNamespaceDeclaration("", "urn:ns");
+        assertEquals("urn:ns", element.getNamespaceURI(""));
+    }
 }
