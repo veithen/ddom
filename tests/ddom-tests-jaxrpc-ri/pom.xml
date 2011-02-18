@@ -76,10 +76,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/etc</outputDirectory>
+                            <outputDirectory>${project.build.directory}/config</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>etc</directory>
+                                    <directory>src/test/config</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
@@ -107,8 +107,8 @@
                                 <taskdef name="wscompile" classname="com.sun.xml.rpc.tools.ant.Wscompile" classpathref="tool.classpath"/>
                                 <mkdir dir="${project.build.directory}/gen-src"/>
                                 <mkdir dir="${project.build.directory}/gen-classes"/>
-                                <wscompile both="true" config="${project.build.directory}/etc/echo-config.xml" classpathref="maven.runtime.classpath" sourcebase="${project.build.directory}/gen-src" base="${project.build.directory}/gen-classes"/>
-                                <wscompile both="true" config="${project.build.directory}/etc/calculator-config.xml" classpathref="maven.runtime.classpath" sourcebase="${project.build.directory}/gen-src" base="${project.build.directory}/gen-classes"/>
+                                <wscompile both="true" config="${project.build.directory}/config/echo-config.xml" classpathref="maven.runtime.classpath" sourcebase="${project.build.directory}/gen-src" base="${project.build.directory}/gen-classes"/>
+                                <wscompile both="true" config="${project.build.directory}/config/calculator-config.xml" classpathref="maven.runtime.classpath" sourcebase="${project.build.directory}/gen-src" base="${project.build.directory}/gen-classes"/>
                             </target>
                         </configuration>
                     </execution>
