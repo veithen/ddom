@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,11 @@ public class AttachmentPartImpl extends AttachmentPart {
     private final MimeHeaders headers = new MimeHeaders();
     private DataHandler dataHandler;
     
+    @Override
+    public final DataHandler getDataHandler() throws SOAPException {
+        return dataHandler;
+    }
+
     @Override
     public final void setDataHandler(DataHandler dataHandler) {
         this.dataHandler = dataHandler;
@@ -81,12 +86,6 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     @Override
     public Object getContent() throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public DataHandler getDataHandler() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }

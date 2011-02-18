@@ -26,6 +26,10 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import javax.activation.DataHandler;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
+import javax.xml.namespace.QName;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -162,5 +166,19 @@ public class SOAPMessageTest {
         message.writeTo(baos);
         String content = baos.toString("UTF-8");
         assertTrue(content.contains("<p:test xmlns:p=\"urn:ns\"/>"));
+    }
+    
+    @Validated @Test
+    public void testWriteToWithAttachment() throws Exception {
+        SOAPMessage message = factory.createMessage();
+        message.getSOAPPart().getEnvelope().getBody().addBodyElement(new QName("urn:ns", "test", "p"));
+        AttachmentPart attachment = message.createAttachmentPart();
+        attachment.setDataHandler(new DataHandler("This is a test", "text/plain"));
+        message.addAttachmentPart(attachment);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        message.writeTo(baos);
+        MimeMultipart mp = new MimeMultipart(new ByteArrayDataSource(baos.toByteArray(), "multipart/related"));
+        mp.getBodyPart(0);
+        mp.getBodyPart(1);
     }
 }

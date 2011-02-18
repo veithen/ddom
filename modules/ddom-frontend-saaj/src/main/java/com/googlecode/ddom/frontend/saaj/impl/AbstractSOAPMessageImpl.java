@@ -29,6 +29,8 @@ import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 
 import com.google.code.ddom.collections.FilteredIterator;
+import com.googlecode.ddom.mime.MultipartWriter;
+import com.googlecode.ddom.mime.PartWriter;
 
 public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     private final Map<String,Object> properties = new HashMap<String,Object>();
@@ -60,7 +62,25 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
 
     @Override
     public final void writeTo(OutputStream out) throws SOAPException, IOException {
-        // TODO: obviously only correct for messages without attachments
-        ((AbstractSOAPPartImpl)getSOAPPart()).writeTo(out);
+        Iterator it = getAttachments();
+        if (it.hasNext()) {
+            // TODO: need to generate proper boundary
+            MultipartWriter multipart = new MultipartWriter(out, "boundary");
+            {
+                PartWriter part = multipart.startPart();
+                OutputStream partStream = part.getOutputStream();
+                ((AbstractSOAPPartImpl)getSOAPPart()).writeTo(partStream);
+                partStream.close();
+            }
+            do {
+                AttachmentPart attachment = (AttachmentPart)it.next();
+                PartWriter part = multipart.startPart();
+                OutputStream partStream = part.getOutputStream();
+                attachment.getDataHandler().writeTo(partStream);
+                partStream.close();
+            } while (it.hasNext());
+        } else {
+            ((AbstractSOAPPartImpl)getSOAPPart()).writeTo(out);
+        }
     }
 }
