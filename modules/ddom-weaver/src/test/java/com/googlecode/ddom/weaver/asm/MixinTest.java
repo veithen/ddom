@@ -15,8 +15,6 @@
  */
 package com.googlecode.ddom.weaver.asm;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import com.google.code.ddom.commons.cl.ClassRef;
@@ -39,7 +37,6 @@ public class MixinTest {
         reactor.generateModel(targetClassLoader);
         
         IBase base = (IBase)targetClassLoader.loadClass("com.googlecode.ddom.weaver.asm.Base").newInstance();
-        System.out.println(Arrays.asList(base.getClass().getInterfaces()));
         ((IBaseMixin)base).addItem("test");
     }
 }
