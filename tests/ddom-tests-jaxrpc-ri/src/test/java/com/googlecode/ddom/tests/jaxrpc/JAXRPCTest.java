@@ -42,6 +42,7 @@ import com.googlecode.ddom.tests.jaxrpc.calculator.PerfDataCollector;
 import com.googlecode.ddom.tests.jaxrpc.echo.Echo;
 import com.googlecode.ddom.tests.jaxrpc.echo.EchoService;
 
+// TODO: add a test using the JAX-RPC handler provided by WSS4J (see http://svn.apache.org/repos/asf/webservices/wss4j/tags/1_5_11/test/interop/TestJAXRPCHandler.java)
 public class JAXRPCTest {
     private static final int PORT = 9999;
     
