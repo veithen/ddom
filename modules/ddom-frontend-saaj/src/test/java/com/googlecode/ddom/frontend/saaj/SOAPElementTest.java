@@ -172,6 +172,21 @@ public class SOAPElementTest {
         assertEquals("ABCDEF", element.getTextContent());
     }
     
+    /**
+     * Checks the behavior of {@link SOAPElement#addTextNode(String)} when called with a string that
+     * contains a character that is invalid according to the XML specification. The reference
+     * implementation doesn't check for invalid characters.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testAddTextNodeWithInvalidChar() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        String testString = String.valueOf((char)24);
+        element.addTextNode(testString);
+        assertEquals(testString, element.getTextContent());
+    }
+    
     @Validated @Test
     public void testAddChildElement() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
