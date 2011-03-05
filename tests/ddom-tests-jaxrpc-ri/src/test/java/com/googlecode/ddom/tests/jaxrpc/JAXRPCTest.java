@@ -87,7 +87,7 @@ public class JAXRPCTest {
         assertNotNull(PerfDataCollector.getLastPerfData());
     }
     
-    @Test @Ignore
+    @Test @Ignore // TODO
     public void testSwA() throws Exception {
         Attachments attachments = ((AttachmentsService)ServiceFactory.newInstance().loadService(AttachmentsService.class)).getAttachmentsPort();
         ((Stub)attachments)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/attachments");
