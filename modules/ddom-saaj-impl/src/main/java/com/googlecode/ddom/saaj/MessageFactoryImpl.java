@@ -19,18 +19,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import com.googlecode.ddom.core.NodeFactory;
+import com.googlecode.ddom.frontend.saaj.impl.AttachmentSet;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 import com.googlecode.ddom.spi.ProviderFinder;
 
-public class MessageFactoryImpl extends MessageFactory {
+public abstract class MessageFactoryImpl extends MessageFactory {
+    private static final MimeType SOAP11_CONTENT_TYPE;
+    private static final MimeType SOAP12_CONTENT_TYPE;
+    private static final MimeType MULTIPART_RELATED;
+    
+    static {
+        try {
+            SOAP11_CONTENT_TYPE = new MimeType("text", "xml");
+            SOAP12_CONTENT_TYPE = new MimeType("application", "soap+xml");
+            MULTIPART_RELATED = new MimeType("multipart", "related");
+        } catch (MimeTypeParseException ex) {
+            throw new Error(ex);
+        }
+    }
+    
     private final SOAPVersion soapVersion;
     private final NodeFactory nodeFactory;
     private final CompatibilityPolicy compatibilityPolicy;
@@ -55,11 +72,81 @@ public class MessageFactoryImpl extends MessageFactory {
 
     @Override
     public SOAPMessage createMessage() throws SOAPException {
-        return compatibilityPolicy.wrapMessage(new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion)));
+        return compatibilityPolicy.wrapMessage(new SOAPMessageImpl(new MimeHeaders(), new SOAPPartImpl(nodeFactory, soapVersion), new SimpleAttachmentSet()));
     }
     
     @Override
     public SOAPMessage createMessage(MimeHeaders headers, InputStream in) throws IOException, SOAPException {
-        return compatibilityPolicy.wrapMessage(new SOAPMessageImpl(new SOAPPartImpl(nodeFactory, soapVersion, in)));
+        String contentTypeString = null;
+        if (headers == null) {
+            headers = new MimeHeaders();
+        } else {
+            String[] values = headers.getHeader("Content-Type");
+            if (values != null) {
+                contentTypeString = values[0];
+            }
+        }
+        SOAPVersion soapVersionFromContentType;
+        AttachmentSet attachments;
+        if (contentTypeString == null) {
+            if (soapVersion == null) {
+                throw new SOAPException("No content type specified");
+            }
+            headers.addHeader("Content-Type", soapVersion.getContentType());
+            soapVersionFromContentType = soapVersion;
+            attachments = new SimpleAttachmentSet();
+        } else {
+            MimeType contentType;
+            try {
+                contentType = new MimeType(contentTypeString);
+            } catch (MimeTypeParseException ex) {
+                throw new SOAPException("Unable to parse content type", ex);
+            }
+            soapVersionFromContentType = getSOAPVersionFromContentType(contentType);
+            if (soapVersionFromContentType != null) {
+                attachments = new SimpleAttachmentSet();
+            } else if (contentType.match(MULTIPART_RELATED)) {
+                String typeString = contentType.getParameter("type");
+                if (typeString == null) {
+                    throw new SOAPException("No type parameter");
+                }
+                MimeType type;
+                try {
+                    type = new MimeType(typeString);
+                } catch (MimeTypeParseException ex) {
+                    throw new SOAPException("Unable to parse the type parameter", ex);
+                }
+                soapVersionFromContentType = getSOAPVersionFromContentType(type);
+                if (soapVersionFromContentType == null) {
+                    throw new SOAPException("Unrecognized content type");
+                }
+                
+                // TODO: parse attachments here
+                throw new UnsupportedOperationException();
+                
+            } else {
+                throw new SOAPException("Unrecognized content type");
+            }
+        }
+        // Note: the case where there is a mismatch between the SOAP versions is already covered
+        // by getSOAPVersionFromContentType.
+        SOAPVersion actualSOAPVersion = soapVersionFromContentType != null ? soapVersionFromContentType : soapVersion;
+        return compatibilityPolicy.wrapMessage(new SOAPMessageImpl(headers, new SOAPPartImpl(nodeFactory, actualSOAPVersion, in), attachments));
+    }
+    
+    private SOAPVersion getSOAPVersionFromContentType(MimeType contentType) throws SOAPException {
+        SOAPVersion soapVersionFromContentType;
+        if (contentType.match(SOAP11_CONTENT_TYPE)) {
+            soapVersionFromContentType = SOAPVersion.SOAP11;
+        } else if (contentType.match(SOAP12_CONTENT_TYPE)) {
+            soapVersionFromContentType = SOAPVersion.SOAP12;
+        } else {
+            soapVersionFromContentType = null;
+        }
+        if (soapVersion != null && soapVersionFromContentType != null && soapVersionFromContentType != soapVersion) {
+            throw new SOAPException("The SOAP version specified by the content type " + contentType.getBaseType() + " is not supported by this factory");
+        } else {
+            return soapVersionFromContentType;
+        }
     }
 }

@@ -15,10 +15,6 @@
  */
 package com.googlecode.ddom.saaj;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPElement;
@@ -26,24 +22,16 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPPart;
 
 import com.googlecode.ddom.frontend.saaj.impl.AbstractSOAPMessageImpl;
+import com.googlecode.ddom.frontend.saaj.impl.AttachmentSet;
 
 public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
+    private MimeHeaders headers;
     private final SOAPPartImpl soapPart;
-    private final MimeHeaders headers = new MimeHeaders();
-    private final List<AttachmentPartImpl> attachments = new ArrayList<AttachmentPartImpl>();
     
-    public SOAPMessageImpl(SOAPPartImpl soapPart) {
+    public SOAPMessageImpl(MimeHeaders headers, SOAPPartImpl soapPart, AttachmentSet attachments) {
+        super(attachments);
+        this.headers = headers;
         this.soapPart = soapPart;
-    }
-
-    @Override
-    public final void addAttachmentPart(AttachmentPart attachmentPart) {
-        attachments.add((AttachmentPartImpl)attachmentPart);
-    }
-
-    @Override
-    public final int countAttachments() {
-        return attachments.size();
     }
 
     @Override
@@ -55,11 +43,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     public AttachmentPart getAttachment(SOAPElement arg0) throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public final Iterator getAttachments() {
-        return attachments.iterator();
     }
 
     @Override

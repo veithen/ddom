@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,27 @@
  */
 package com.googlecode.ddom.saaj;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
-import com.google.code.ddom.utils.test.ValidatedTestResource;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
-import com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl;
 
 @RunWith(ValidatedTestRunner.class)
-public class MessageFactoryTest {
-    @ValidatedTestResource(reference=SOAPMessageFactory1_1Impl.class, actual=SOAP11MessageFactory.class)
-    private MessageFactory factory;
+public abstract class MessageFactoryTest {
+    protected abstract MessageFactory getFactory();
     
     @Validated @Test
     public void testDefaultMessageContent() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         assertNotNull(message);
         SOAPPart soapPart = message.getSOAPPart();
         assertNotNull(soapPart);

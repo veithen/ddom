@@ -109,7 +109,7 @@ public class SOAPPartTest {
     public void testGetContent() throws Exception {
         MimeHeaders headers = new MimeHeaders();
         headers.addHeader("Content-Type", "text/xml; charset=utf-8");
-        InputStream in = SOAPPartTest.class.getResourceAsStream("message.xml");
+        InputStream in = SOAPPartTest.class.getResourceAsStream("soap11/message.xml");
         byte[] orgContent = IOUtils.toByteArray(in);
         SOAPMessage message = factory.createMessage(headers, new ByteArrayInputStream(orgContent));
         

@@ -34,7 +34,12 @@ import com.googlecode.ddom.mime.PartWriter;
 
 public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     private final Map<String,Object> properties = new HashMap<String,Object>();
+    private final AttachmentSet attachments;
     
+    public AbstractSOAPMessageImpl(AttachmentSet attachments) {
+        this.attachments = attachments;
+    }
+
     @Override
     public final SOAPHeader getSOAPHeader() throws SOAPException {
         return getSOAPPart().getEnvelope().getHeader();
@@ -56,8 +61,24 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     }
 
     @Override
+    public final void addAttachmentPart(AttachmentPart attachmentPart) {
+        attachments.add(attachmentPart);
+    }
+
+    @Override
+    public final int countAttachments() {
+        return attachments.count();
+    }
+
+    @Override
+    public final Iterator getAttachments() {
+        return attachments.iterator();
+    }
+
+    @Override
     public final Iterator getAttachments(MimeHeaders headers) {
-        return new FilteredIterator<AttachmentPart>(getAttachments(), new AttachmentFilter(headers));
+        // TODO: generics issue here
+        return new FilteredIterator<AttachmentPart>((Iterator<AttachmentPart>)attachments.iterator(), new AttachmentFilter(headers));
     }
 
     @Override

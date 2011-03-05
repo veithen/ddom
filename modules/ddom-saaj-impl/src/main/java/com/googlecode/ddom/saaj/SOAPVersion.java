@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,22 @@ public interface SOAPVersion {
         public SOAPEnvelope createEnvelope(SAAJDocument document) {
             return document.createSOAP11Envelope();
         }
+
+        public String getContentType() {
+            return "text/xml";
+        }
     };
 
     SOAPVersion SOAP12 = new SOAPVersion() {
         public SOAPEnvelope createEnvelope(SAAJDocument document) {
             return document.createSOAP12Envelope();
         }
+
+        public String getContentType() {
+            return "application/soap+xml";
+        }
     };
     
     SOAPEnvelope createEnvelope(SAAJDocument document);
+    String getContentType();
 }

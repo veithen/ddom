@@ -15,8 +15,6 @@
  */
 package com.googlecode.ddom.cxf;
 
-import java.util.Iterator;
-
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPElement;
@@ -34,6 +32,7 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     private SOAPPart soapPart;
     
     public SOAPMessageImpl(Model saajModel, SoapMessage message) {
+        super(new CXFAttachmentSet(message));
         this.saajModel = saajModel;
         this.message = message;
     }
@@ -47,18 +46,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     }
 
     @Override
-    public final void addAttachmentPart(AttachmentPart attachmentPart) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public final int countAttachments() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public final AttachmentPart createAttachmentPart() {
         // TODO
         throw new UnsupportedOperationException();
@@ -66,12 +53,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
 
     @Override
     public AttachmentPart getAttachment(SOAPElement arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Iterator getAttachments() {
         // TODO
         throw new UnsupportedOperationException();
     }

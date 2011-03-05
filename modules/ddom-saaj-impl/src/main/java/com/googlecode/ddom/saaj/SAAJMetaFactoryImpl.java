@@ -27,11 +27,11 @@ public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
     @Override
     protected MessageFactory newMessageFactory(String protocol) throws SOAPException {
         if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol)) {
-            return new MessageFactoryImpl(SOAPVersion.SOAP11);
+            return new SOAP11MessageFactory();
         } else if (SOAPConstants.SOAP_1_2_PROTOCOL.equals(protocol)) {
-            return new MessageFactoryImpl(SOAPVersion.SOAP12);
+            return new SOAP12MessageFactory();
         } else if (SOAPConstants.DYNAMIC_SOAP_PROTOCOL.equals(protocol)) {
-            return new MessageFactoryImpl(null); 
+            return new DynamicMessageFactory(); 
         } else {
             throw new SOAPException("Unknown Protocol: " + protocol + " specified for creating MessageFactory");
         }
