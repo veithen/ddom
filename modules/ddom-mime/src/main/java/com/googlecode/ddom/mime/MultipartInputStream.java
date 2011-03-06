@@ -181,15 +181,16 @@ public class MultipartInputStream extends InputStream {
         return buffer[(bufferPosition + delta) % buffer.length] & 0xFF;
     }
     
-    private void searchDelimiter() {
+    private void searchDelimiter() throws IOException {
         final byte[] delimiter = this.delimiter;
         final byte[] buffer = this.buffer;
+        final int delimiterLength = delimiter.length;
+        fillBuffer(delimiterLength);
         final int bufferPosition = this.bufferPosition;
         final int bufferLen = this.bufferLen;
-        final int delimiterLength = delimiter.length;
         final int bufferSize = buffer.length;
         int nonDelimiterBytes = this.nonDelimiterBytes;
-        while (bufferLen > nonDelimiterBytes + delimiterLength) {
+        while (bufferLen >= nonDelimiterBytes + delimiterLength) {
             boolean found = true;
             int pos = bufferPosition + nonDelimiterBytes;
             for (int i=0; i<delimiterLength; i++) {
@@ -206,7 +207,7 @@ public class MultipartInputStream extends InputStream {
                 delimiterFound = true;
                 break;
             } else {
-                nonDelimiterBytes += shift[buffer[(bufferPosition + nonDelimiterBytes + delimiterLength) % bufferSize]];
+                nonDelimiterBytes += shift[buffer[(bufferPosition + nonDelimiterBytes + delimiterLength) % bufferSize] & 0xFF];
             }
         }
         this.nonDelimiterBytes = nonDelimiterBytes;
@@ -220,9 +221,6 @@ public class MultipartInputStream extends InputStream {
     private void discard(int bytes) {
         bufferPosition = (bufferPosition + bytes) % buffer.length;
         bufferLen -= bytes;
-        if (state == STATE_PREAMBLE || state == STATE_CONTENT) {
-            nonDelimiterBytes -= bytes;
-        }
     }
     
     private String readAscii(int length) {
@@ -237,6 +235,7 @@ public class MultipartInputStream extends InputStream {
             }
         }
         this.bufferPosition = bufferPosition;
+        bufferLen -= length;
         String result = builder.toString();
         builder.setLength(0);
         return result;
@@ -248,14 +247,14 @@ public class MultipartInputStream extends InputStream {
             discard(2);
             state = STATE_END;
         } else if (lookAhead(0) == '\r' && lookAhead(1) == '\n') {
-            state = STATE_HEADERS;
             discard(2);
+            state = STATE_HEADERS;
         } else {
             throw new IOException("Unexpected characters after delimiter");
         }
     }
     
-    public void nextPart() throws IOException {
+    public boolean nextPart() throws IOException {
         int delimiterLen = delimiter.length;
         fillBuffer(delimiterLen);
         if (state == STATE_START) {
@@ -277,10 +276,14 @@ public class MultipartInputStream extends InputStream {
                 do {
                     searchDelimiter();
                     discard(nonDelimiterBytes);
+                    nonDelimiterBytes = 0;
                 } while (!delimiterFound);
                 processDelimiter();
             }
+        } else if (state == STATE_CONTENT && delimiterFound && nonDelimiterBytes == 0) {
+            processDelimiter();
         }
+        return state == STATE_HEADERS;
     }
     
     public boolean nextHeader() throws IOException {
@@ -288,8 +291,12 @@ public class MultipartInputStream extends InputStream {
             throw new IllegalStateException();
         }
         if (lookAhead(0) == '\r' && lookAhead(1) == '\n') {
+            discard(2);
             headerName = null;
             headerValue = null;
+            state = STATE_CONTENT;
+            delimiterFound = false;
+            nonDelimiterBytes = 0;
             return false;
         } else {
             int len = 0;
@@ -319,6 +326,36 @@ public class MultipartInputStream extends InputStream {
         return headerValue;
     }
     
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        if (state != STATE_CONTENT) {
+            throw new IllegalStateException();
+        }
+        if (delimiterFound && nonDelimiterBytes == 0) {
+            return -1;
+        } else {
+            if (nonDelimiterBytes == 0) {
+                searchDelimiter();
+            }
+            int c = Math.min(nonDelimiterBytes, len);
+            int currentBufferPosition = bufferPosition;
+            int newBufferPosition = currentBufferPosition + c;
+            int bufferSize = buffer.length;
+            if (newBufferPosition > bufferSize) {
+                newBufferPosition -= bufferSize;
+                int c1 = bufferSize - currentBufferPosition;
+                System.arraycopy(buffer, currentBufferPosition, b, off, c1);
+                System.arraycopy(buffer, 0, b, off+c1, c-c1);
+            } else {
+                System.arraycopy(buffer, currentBufferPosition, b, off, c);
+            }
+            bufferPosition = newBufferPosition;
+            bufferLen -= c;
+            nonDelimiterBytes -= c;
+            return c;
+        }
+    }
+
     /* (non-Javadoc)
      * @see java.io.InputStream#read()
      */
