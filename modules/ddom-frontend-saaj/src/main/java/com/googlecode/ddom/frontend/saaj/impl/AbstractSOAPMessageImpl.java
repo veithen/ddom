@@ -110,6 +110,7 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
             MultipartWriter multipart = new MultipartWriter(out, "boundary");
             {
                 PartWriter part = multipart.startPart();
+                // TODO: write headers
                 OutputStream partStream = part.getOutputStream();
                 ((AbstractSOAPPartImpl)getSOAPPart()).writeTo(partStream);
                 partStream.close();
@@ -117,10 +118,13 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
             do {
                 AttachmentPart attachment = (AttachmentPart)it.next();
                 PartWriter part = multipart.startPart();
+                // TODO: write headers
                 OutputStream partStream = part.getOutputStream();
                 attachment.getDataHandler().writeTo(partStream);
                 partStream.close();
             } while (it.hasNext());
+            // TODO: looks like we have no test coverage for this instruction:
+            multipart.complete();
         } else {
             ((AbstractSOAPPartImpl)getSOAPPart()).writeTo(out);
         }
