@@ -44,6 +44,7 @@ public class AttachmentPartImpl extends AttachmentPart {
     @Override
     public final void setDataHandler(DataHandler dataHandler) {
         this.dataHandler = dataHandler;
+        headers.setHeader("Content-Type", dataHandler.getContentType());
     }
 
     public final void removeAllMimeHeaders() {

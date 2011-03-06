@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
+import javax.mail.BodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import javax.xml.namespace.QName;
@@ -189,12 +190,18 @@ public abstract class SOAPMessageTest {
         SOAPMessage message = getFactory().createMessage();
         message.getSOAPPart().getEnvelope().getBody().addBodyElement(new QName("urn:ns", "test", "p"));
         AttachmentPart attachment = message.createAttachmentPart();
-        attachment.setDataHandler(new DataHandler("This is a test", "text/plain"));
+        attachment.setDataHandler(new DataHandler("This is a test", "text/plain; charset=iso-8859-15"));
         message.addAttachmentPart(attachment);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         message.writeTo(baos);
+        System.out.write(baos.toByteArray());
         MimeMultipart mp = new MimeMultipart(new ByteArrayDataSource(baos.toByteArray(), "multipart/related"));
-        mp.getBodyPart(0);
-        mp.getBodyPart(1);
+        assertEquals(2, mp.getCount());
+        BodyPart part1 = mp.getBodyPart(0);
+        // TODO
+//        assertEquals(messageSet.getVersion().getContentType(), part1.getContentType());
+        BodyPart part2 = mp.getBodyPart(1);
+        // Note: text/plain is the default content type, so we need to include the parameters in the assertion
+        assertEquals("text/plain; charset=iso-8859-15", part2.getContentType());
     }
 }

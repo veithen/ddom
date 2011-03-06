@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import javax.activation.DataHandler;
+import javax.mail.util.ByteArrayDataSource;
 import javax.xml.rpc.ServiceFactory;
 import javax.xml.rpc.Stub;
 
@@ -31,7 +32,6 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.googlecode.ddom.tests.jaxrpc.attachments.Attachments;
@@ -87,11 +87,13 @@ public class JAXRPCTest {
         assertNotNull(PerfDataCollector.getLastPerfData());
     }
     
-    @Test @Ignore // TODO
+    // TODO: also add a test that receives an attachment from the service
+    @Test
     public void testSwA() throws Exception {
         Attachments attachments = ((AttachmentsService)ServiceFactory.newInstance().loadService(AttachmentsService.class)).getAttachmentsPort();
         ((Stub)attachments)._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + PORT + "/jaxrpc/attachments");
-        assertEquals("OK", attachments.addAttachment("12345", new DataHandler("This is a test", "text/plain")));
+        assertEquals("OK", attachments.addAttachment("12345", new DataHandler(
+                new ByteArrayDataSource("This is a test".getBytes("UTF-8"), "application/octet-stream"))));
     }
     
     @AfterClass

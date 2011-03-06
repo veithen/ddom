@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.soap.AttachmentPart;
+import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
@@ -104,7 +105,7 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     @Override
     public final void writeTo(OutputStream out) throws SOAPException, IOException {
         // TODO: use MessageProfile here
-        Iterator it = getAttachments();
+        Iterator<? extends AttachmentPart> it = attachments.iterator();
         if (it.hasNext()) {
             // TODO: need to generate proper boundary
             MultipartWriter multipart = new MultipartWriter(out, "boundary");
@@ -116,9 +117,12 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
                 partStream.close();
             }
             do {
-                AttachmentPart attachment = (AttachmentPart)it.next();
+                AttachmentPart attachment = it.next();
                 PartWriter part = multipart.startPart();
-                // TODO: write headers
+                for (Iterator it2 = attachment.getAllMimeHeaders(); it2.hasNext(); ) {
+                    MimeHeader header = (MimeHeader)it2.next();
+                    part.addHeader(header.getName(), header.getValue());
+                }
                 OutputStream partStream = part.getOutputStream();
                 attachment.getDataHandler().writeTo(partStream);
                 partStream.close();
