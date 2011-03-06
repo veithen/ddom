@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.saaj;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
@@ -24,8 +25,16 @@ import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 
 public class AttachmentPartImpl extends AttachmentPart {
-    private final MimeHeaders headers = new MimeHeaders();
+    private final MimeHeaders headers;
     private DataHandler dataHandler;
+    
+    public AttachmentPartImpl(MimeHeaders headers) {
+        this.headers = headers;
+    }
+    
+    public AttachmentPartImpl() {
+        this(new MimeHeaders());
+    }
     
     @Override
     public final DataHandler getDataHandler() throws SOAPException {
@@ -85,9 +94,13 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     @Override
-    public Object getContent() throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Object getContent() throws SOAPException {
+        // TODO: null check?
+        try {
+            return dataHandler.getContent();
+        } catch (IOException ex) {
+            throw new SOAPException("Unable to get the content of the data handler", ex);
+        }
     }
 
     @Override

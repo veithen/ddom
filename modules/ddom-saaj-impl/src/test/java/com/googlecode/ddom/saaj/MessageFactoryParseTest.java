@@ -29,7 +29,6 @@ import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPMessage;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -62,7 +61,7 @@ public abstract class MessageFactoryParseTest {
      */
     public abstract void testWithoutContentType() throws Exception;
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testSwA() throws Exception {
         MimeHeaders headers = new MimeHeaders();
         headers.addHeader("Content-Type", "multipart/related; type=\"" + messageSet.getVersion().getContentType() + "\"; boundary=\"----=_Part_0_1486975107.1299323234167\"");

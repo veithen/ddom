@@ -80,7 +80,8 @@
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4</version>
-            <scope>test</scope>
+            <!-- TODO: for the moment, we rely on ByteArrayDataSource -->
+            <!-- scope>test</scope -->
         </dependency>
     </dependencies>
     <build>
