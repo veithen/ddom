@@ -18,9 +18,10 @@ package com.googlecode.ddom.saaj;
 import javax.xml.soap.SOAPException;
 
 import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
+import com.googlecode.ddom.saaj.compat.DefaultCompatibilityPolicy;
 
 public class SOAP11MessageFactory extends MessageFactoryImpl {
     public SOAP11MessageFactory() throws SOAPException {
-        super(SOAPVersion.SOAP11);
+        super(SOAPVersion.SOAP11, DefaultCompatibilityPolicy.INSTANCE);
     }
 }

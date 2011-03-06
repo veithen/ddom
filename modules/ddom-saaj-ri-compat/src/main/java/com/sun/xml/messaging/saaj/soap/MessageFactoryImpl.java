@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.sun.xml.messaging.saaj.soap;
 
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
+import com.googlecode.ddom.saaj.compat.MessageFactoryWrapper;
 
-/**
- * Default {@link CompatibilityPolicy} implementation that strictly adheres to what is required by
- * the SAAJ specification.
- * 
- * @author Andreas Veithen
- */
-public final class DefaultCompatibilityPolicy implements CompatibilityPolicy {
-    public static CompatibilityPolicy INSTANCE = new DefaultCompatibilityPolicy();
-    
-    private DefaultCompatibilityPolicy() {}
-    
-    public SOAPMessage wrapMessage(SOAPMessage message) {
-        return message;
+public class MessageFactoryImpl extends MessageFactoryWrapper {
+    public MessageFactoryImpl(MessageFactory parent) {
+        super(parent);
+    }
+
+    public SOAPMessage createMessage(boolean isFastInfoset, boolean acceptFastInfoset) throws SOAPException {
+        // TODO
+        return createMessage();
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.saaj.compat;
 
+import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
 
 /**
@@ -24,6 +25,22 @@ import javax.xml.soap.SOAPMessage;
  * @author Andreas Veithen
  */
 public interface CompatibilityPolicy {
+    /**
+     * Wrap the given {@link MessageFactory}. This method may be used to support client code that
+     * expects the {@link MessageFactory} to implement a particular interface (or to extend a
+     * particular class) defined by a specific SAAJ implementation.
+     * <p>
+     * Wrappers can be constructed with the help of {@link MessageFactoryWrapper}.
+     * <p>
+     * Note that {@link SOAPMessage} instances will be passed to {@link #wrapMessage(SOAPMessage)}
+     * regardless of whether this method returns the original factory or not.
+     * 
+     * @param factory
+     *            the factory to wrap
+     * @return the wrapped factory, or the original factory if no wrapping is needed
+     */
+    MessageFactory wrapMessageFactory(MessageFactory factory);
+    
     /**
      * Wrap the given {@link SOAPMessage}. This method may be used to support client code that
      * expects the {@link SOAPMessage} to implement a particular interface (or to extend a

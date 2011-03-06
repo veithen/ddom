@@ -15,26 +15,47 @@
  */
 package com.googlecode.ddom.saaj;
 
+import java.util.Map;
+
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SAAJMetaFactory;
 import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 
+import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
+import com.googlecode.ddom.saaj.compat.DefaultCompatibilityPolicy;
+import com.googlecode.ddom.spi.ProviderFinder;
 
 public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
+    private final CompatibilityPolicy compatibilityPolicy;
+    
+    public SAAJMetaFactoryImpl() throws SOAPException {
+        Map<String,CompatibilityPolicy> policies = ProviderFinder.find(MessageFactoryImpl.class.getClassLoader(), CompatibilityPolicy.class);
+        if (policies.isEmpty()) {
+            compatibilityPolicy = DefaultCompatibilityPolicy.INSTANCE;
+        } else if (policies.size() == 1) {
+            compatibilityPolicy = policies.values().iterator().next();
+        } else {
+            throw new SOAPException("Multiple compatibility policies found in classpath");
+        }
+    }
+    
     @Override
     protected MessageFactory newMessageFactory(String protocol) throws SOAPException {
+        SOAPVersion version;
         if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol)) {
-            return new SOAP11MessageFactory();
+            version = SOAPVersion.SOAP11;
         } else if (SOAPConstants.SOAP_1_2_PROTOCOL.equals(protocol)) {
-            return new SOAP12MessageFactory();
+            version = SOAPVersion.SOAP12;
         } else if (SOAPConstants.DYNAMIC_SOAP_PROTOCOL.equals(protocol)) {
-            return new DynamicMessageFactory(); 
+            version = null; 
         } else {
             throw new SOAPException("Unknown Protocol: " + protocol + " specified for creating MessageFactory");
         }
+        return compatibilityPolicy.wrapMessageFactory(new MessageFactoryImpl(version, compatibilityPolicy));
     }
 
     @Override

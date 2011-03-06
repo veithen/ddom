@@ -17,8 +17,10 @@ package com.googlecode.ddom.saaj;
 
 import javax.xml.soap.SOAPException;
 
+import com.googlecode.ddom.saaj.compat.DefaultCompatibilityPolicy;
+
 public class DynamicMessageFactory extends MessageFactoryImpl {
     public DynamicMessageFactory() throws SOAPException {
-        super(null);
+        super(null, DefaultCompatibilityPolicy.INSTANCE);
     }
 }

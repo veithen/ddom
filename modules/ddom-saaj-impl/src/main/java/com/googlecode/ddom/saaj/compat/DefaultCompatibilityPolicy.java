@@ -13,30 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj.compat.ri;
+package com.googlecode.ddom.saaj.compat;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
 
-import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
-import com.googlecode.ddom.spi.Provider;
-import com.sun.xml.messaging.saaj.soap.MessageFactoryImpl;
-import com.sun.xml.messaging.saaj.soap.MessageImpl;
 
 /**
- * {@link CompatibilityPolicy} implementation for Sun's SAAJ reference implementation. This policy
- * can be used to provide support for Sun's JAX-RPC reference implementation (which makes use of
- * classes specific to the SAAJ reference implementation).
+ * Default {@link CompatibilityPolicy} implementation that strictly adheres to what is required by
+ * the SAAJ specification.
  * 
  * @author Andreas Veithen
  */
-@Provider(name="saaj-ri")
-public class SAAJRICompatibilityPolicy implements CompatibilityPolicy {
-    public MessageFactory wrapMessageFactory(MessageFactory factory) {
-        return new MessageFactoryImpl(factory);
-    }
+public final class DefaultCompatibilityPolicy implements CompatibilityPolicy {
+    public static CompatibilityPolicy INSTANCE = new DefaultCompatibilityPolicy();
     
+    private DefaultCompatibilityPolicy() {}
+    
+    public MessageFactory wrapMessageFactory(MessageFactory factory) {
+        return factory;
+    }
+
     public SOAPMessage wrapMessage(SOAPMessage message) {
-        return new MessageImpl(message);
+        return message;
     }
 }

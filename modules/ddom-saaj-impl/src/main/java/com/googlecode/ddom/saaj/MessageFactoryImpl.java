@@ -17,7 +17,6 @@ package com.googlecode.ddom.saaj;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -35,28 +34,20 @@ import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
-import com.googlecode.ddom.spi.ProviderFinder;
 
-public abstract class MessageFactoryImpl extends MessageFactory {
+public class MessageFactoryImpl extends MessageFactory {
     private final SOAPVersion soapVersion;
     private final NodeFactory nodeFactory;
     private final CompatibilityPolicy compatibilityPolicy;
     
-    public MessageFactoryImpl(SOAPVersion soapVersion) throws SOAPException {
+    public MessageFactoryImpl(SOAPVersion soapVersion, CompatibilityPolicy compatibilityPolicy) throws SOAPException {
         this.soapVersion = soapVersion;
+        this.compatibilityPolicy = compatibilityPolicy;
         ModelRegistry modelRegistry = ModelRegistry.getInstance(SOAPFactoryImpl.class.getClassLoader());
         try {
             nodeFactory = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("saaj")).getNodeFactory();
         } catch (ModelLoaderException ex) {
             throw new SOAPException(ex);
-        }
-        Map<String,CompatibilityPolicy> policies = ProviderFinder.find(MessageFactoryImpl.class.getClassLoader(), CompatibilityPolicy.class);
-        if (policies.isEmpty()) {
-            compatibilityPolicy = DefaultCompatibilityPolicy.INSTANCE;
-        } else if (policies.size() == 1) {
-            compatibilityPolicy = policies.values().iterator().next();
-        } else {
-            throw new SOAPException("Multiple compatibility policies found in classpath");
         }
     }
 
