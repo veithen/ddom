@@ -15,12 +15,20 @@
  */
 package com.googlecode.ddom.saaj;
 
-import javax.xml.soap.SOAPException;
+import javax.xml.soap.MessageFactory;
 
-import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.sun.xml.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl;
 
-public class SOAP11MessageFactory extends MessageFactoryImpl {
-    public SOAP11MessageFactory() throws SOAPException {
-        super(SOAPVersion.SOAP11);
+public class SOAP12MessageTest extends SOAPMessageTest {
+    @ValidatedTestResource(reference=SOAPMessageFactory1_2Impl.class, actual=SOAP12MessageFactory.class)
+    private MessageFactory factory;
+    
+    public SOAP12MessageTest() {
+        super(MessageSet.SOAP12);
+    }
+
+    protected MessageFactory getFactory() {
+        return factory;
     }
 }

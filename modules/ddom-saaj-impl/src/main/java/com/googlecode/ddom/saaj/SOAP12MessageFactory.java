@@ -17,6 +17,8 @@ package com.googlecode.ddom.saaj;
 
 import javax.xml.soap.SOAPException;
 
+import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
+
 public class SOAP12MessageFactory extends MessageFactoryImpl {
     public SOAP12MessageFactory() throws SOAPException {
         super(SOAPVersion.SOAP12);

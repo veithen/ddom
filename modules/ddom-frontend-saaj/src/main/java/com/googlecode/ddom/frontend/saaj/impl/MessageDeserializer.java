@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.googlecode.ddom.frontend.saaj.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 
-import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
-
-public class SOAP11MessageFactory extends MessageFactoryImpl {
-    public SOAP11MessageFactory() throws SOAPException {
-        super(SOAPVersion.SOAP11);
-    }
+public interface MessageDeserializer {
+    MimeHeaders getSOAPPartHeaders() throws IOException, SOAPException;
+    InputStream getSOAPPartInputStream() throws IOException, SOAPException;
+    AttachmentSet getAttachments() throws IOException, SOAPException;
 }

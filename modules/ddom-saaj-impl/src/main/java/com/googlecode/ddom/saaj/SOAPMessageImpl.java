@@ -22,14 +22,16 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPPart;
 
 import com.googlecode.ddom.frontend.saaj.impl.AbstractSOAPMessageImpl;
+import com.googlecode.ddom.frontend.saaj.impl.AttachmentPartImpl;
 import com.googlecode.ddom.frontend.saaj.impl.AttachmentSet;
+import com.googlecode.ddom.frontend.saaj.impl.MessageProfile;
 
 public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     private MimeHeaders headers;
     private final SOAPPartImpl soapPart;
     
-    public SOAPMessageImpl(MimeHeaders headers, SOAPPartImpl soapPart, AttachmentSet attachments) {
-        super(attachments);
+    public SOAPMessageImpl(MessageProfile profile, MimeHeaders headers, SOAPPartImpl soapPart, AttachmentSet attachments) {
+        super(profile, attachments);
         this.headers = headers;
         this.soapPart = soapPart;
     }
@@ -71,18 +73,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     public void removeAttachments(MimeHeaders arg0) {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void saveChanges() throws SOAPException {
-        // TODO
-//        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean saveRequired() {
-        // TODO
-        return false;
     }
 
     @Override

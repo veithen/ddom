@@ -34,9 +34,12 @@ import com.googlecode.ddom.mime.PartWriter;
 
 public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     private final Map<String,Object> properties = new HashMap<String,Object>();
+    private MessageProfile profile;
     private final AttachmentSet attachments;
+    private boolean saveRequired;
     
-    public AbstractSOAPMessageImpl(AttachmentSet attachments) {
+    public AbstractSOAPMessageImpl(MessageProfile profile, AttachmentSet attachments) {
+        this.profile = profile;
         this.attachments = attachments;
     }
 
@@ -62,6 +65,10 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
 
     @Override
     public final void addAttachmentPart(AttachmentPart attachmentPart) {
+        if (!profile.supportsAttachments()) {
+            profile = profile.enableAttachments();
+            saveRequired = true;
+        }
         attachments.add(attachmentPart);
     }
 
@@ -82,7 +89,21 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     }
 
     @Override
+    public final boolean saveRequired() {
+        return saveRequired;
+    }
+
+    @Override
+    public final void saveChanges() throws SOAPException {
+        if (saveRequired) {
+            MimeHeaders headers = getMimeHeaders();
+            headers.setHeader("Content-Type", profile.getContentType());
+        }
+    }
+
+    @Override
     public final void writeTo(OutputStream out) throws SOAPException, IOException {
+        // TODO: use MessageProfile here
         Iterator it = getAttachments();
         if (it.hasNext()) {
             // TODO: need to generate proper boundary

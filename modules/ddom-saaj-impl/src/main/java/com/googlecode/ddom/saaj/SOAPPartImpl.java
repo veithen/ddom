@@ -25,6 +25,7 @@ import javax.xml.transform.stream.StreamSource;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDocument;
+import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
 import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;

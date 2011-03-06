@@ -15,26 +15,20 @@
  */
 package com.googlecode.ddom.saaj;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import javax.xml.soap.MessageFactory;
 
-import javax.xml.soap.AttachmentPart;
+import com.google.code.ddom.utils.test.ValidatedTestResource;
+import com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl;
 
-import com.googlecode.ddom.frontend.saaj.impl.AttachmentSet;
-
-public class SimpleAttachmentSet implements AttachmentSet {
-    private final List<AttachmentPartImpl> attachments = new ArrayList<AttachmentPartImpl>();
+public class SOAP11MessageTest extends SOAPMessageTest {
+    @ValidatedTestResource(reference=SOAPMessageFactory1_1Impl.class, actual=SOAP11MessageFactory.class)
+    private MessageFactory factory;
     
-    public void add(AttachmentPart attachmentPart) {
-        attachments.add((AttachmentPartImpl)attachmentPart);
+    public SOAP11MessageTest() {
+        super(MessageSet.SOAP11);
     }
 
-    public int count() {
-        return attachments.size();
-    }
-
-    public Iterator<? extends AttachmentPart> iterator() {
-        return attachments.iterator();
+    protected MessageFactory getFactory() {
+        return factory;
     }
 }

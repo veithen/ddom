@@ -17,6 +17,8 @@ package com.googlecode.ddom.saaj;
 
 import java.io.InputStream;
 
+import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
+
 public abstract class MessageSet {
     public static final MessageSet SOAP11 = new MessageSet("soap11", SOAPVersion.SOAP11) {
         @Override

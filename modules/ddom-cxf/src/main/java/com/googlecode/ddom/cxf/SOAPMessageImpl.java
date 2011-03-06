@@ -32,7 +32,8 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     private SOAPPart soapPart;
     
     public SOAPMessageImpl(Model saajModel, SoapMessage message) {
-        super(new CXFAttachmentSet(message));
+        // TODO: select MessageProfile
+        super(null, new CXFAttachmentSet(message));
         this.saajModel = saajModel;
         this.message = message;
     }
@@ -77,18 +78,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
 
     @Override
     public void removeAttachments(MimeHeaders arg0) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void saveChanges() throws SOAPException {
-        // TODO
-//        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean saveRequired() {
         // TODO
         throw new UnsupportedOperationException();
     }

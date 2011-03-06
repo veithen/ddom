@@ -16,10 +16,12 @@
 package com.googlecode.ddom.frontend.saaj.support;
 
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPEnvelope;
 
 import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.SequenceBuilder;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDetail;
+import com.googlecode.ddom.frontend.saaj.intf.SAAJDocument;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP11Body;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP11Header;
@@ -41,7 +43,8 @@ public abstract class SOAPVersion {
                 .addItem(SAAJSOAPFaultElement.class, "", "faultstring")
                 .addItem(SAAJSOAPFaultElement.class, "", "faultactor")
                 .addItem(SAAJDetail.class, "", "detail").build(),
-            "actor") {
+            "actor",
+            "text/xml") {
         
         @Override
         public Class<? extends SAAJSOAPFault> getSOAPFaultClass() {
@@ -57,6 +60,11 @@ public abstract class SOAPVersion {
         public boolean parseMustUnderstand(String mustUnderstand) {
             return mustUnderstand.equals("1") || mustUnderstand.equalsIgnoreCase("true");
         }
+        
+        @Override
+        public SOAPEnvelope createEnvelope(SAAJDocument document) {
+            return document.createSOAP11Envelope();
+        }
     };
     
     public static final SOAPVersion SOAP12 = new SOAPVersion(
@@ -70,7 +78,8 @@ public abstract class SOAPVersion {
                 .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Reason")
                 .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
                 .addItem(SAAJDetail.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build(),
-            "role") {
+            "role",
+            "application/soap+xml") {
         
         @Override
         public Class<? extends SAAJSOAPFault> getSOAPFaultClass() {
@@ -86,39 +95,52 @@ public abstract class SOAPVersion {
         public boolean parseMustUnderstand(String mustUnderstand) {
             return mustUnderstand.equals("1") || mustUnderstand.equals("true");
         }
+        
+        @Override
+        public SOAPEnvelope createEnvelope(SAAJDocument document) {
+            return document.createSOAP12Envelope();
+        }
     };
     
     private final String envelopeNamespaceURI;
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
     private final String actorAttributeLocalName;
+    private final String contentType;
     
     public SOAPVersion(String envelopeNamespaceURI, Sequence envelopeSequence, Sequence faultSequence,
-            String actorAttributeLocalName) {
+            String actorAttributeLocalName, String contentType) {
         this.envelopeNamespaceURI = envelopeNamespaceURI;
         this.envelopeSequence = envelopeSequence;
         this.faultSequence = faultSequence;
         this.actorAttributeLocalName = actorAttributeLocalName;
+        this.contentType = contentType;
     }
     
-    public String getEnvelopeNamespaceURI() {
+    public final String getEnvelopeNamespaceURI() {
         return envelopeNamespaceURI;
     }
     
-    public Sequence getEnvelopeSequence() {
+    public final Sequence getEnvelopeSequence() {
         return envelopeSequence;
     }
     
     public abstract Class<? extends SAAJSOAPFault> getSOAPFaultClass();
     
-    public Sequence getFaultSequence() {
+    public final Sequence getFaultSequence() {
         return faultSequence;
     }
 
-    public String getActorAttributeLocalName() {
+    public final String getActorAttributeLocalName() {
         return actorAttributeLocalName;
     }
     
     public abstract String formatMustUnderstand(boolean mustUnderstand);
     public abstract boolean parseMustUnderstand(String mustUnderstand);
+    
+    public abstract SOAPEnvelope createEnvelope(SAAJDocument document);
+    
+    public final String getContentType() {
+        return contentType;
+    }
 }

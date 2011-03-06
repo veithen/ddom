@@ -17,6 +17,7 @@ package com.googlecode.ddom.saaj;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.activation.DataHandler;
+import javax.activation.MimeType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import javax.xml.namespace.QName;
@@ -43,18 +45,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.code.ddom.utils.test.Validated;
-import com.google.code.ddom.utils.test.ValidatedTestResource;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
-import com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl;
 
 @RunWith(ValidatedTestRunner.class)
-public class SOAPMessageTest {
-    @ValidatedTestResource(reference=SOAPMessageFactory1_1Impl.class, actual=SOAP11MessageFactory.class)
-    private MessageFactory factory;
+public abstract class SOAPMessageTest {
+    private final MessageSet messageSet;
     
+    public SOAPMessageTest(MessageSet messageSet) {
+        this.messageSet = messageSet;
+    }
+
+    protected abstract MessageFactory getFactory();
+
     @Validated @Test
     public void testCreateAttachmentPart() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         message.createAttachmentPart();
         // The attachment part is not added to the message
         assertEquals(0, message.countAttachments());
@@ -62,18 +67,29 @@ public class SOAPMessageTest {
     
     @Validated @Test
     public void testAddAttachmentPart() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         AttachmentPart attachment = message.createAttachmentPart();
         message.addAttachmentPart(attachment);
         Iterator it = message.getAttachments();
         assertTrue(it.hasNext());
         assertSame(attachment, it.next());
         assertFalse(it.hasNext());
+        // Check that the content type automatically changes to SwA
+        if (message.saveRequired()) {
+            message.saveChanges();
+        }
+        String[] contentTypeArray = message.getMimeHeaders().getHeader("Content-Type");
+        assertNotNull(contentTypeArray);
+        assertEquals(1, contentTypeArray.length);
+        MimeType contentType = new MimeType(contentTypeArray[0]);
+        assertEquals("multipart/related", contentType.getBaseType());
+        assertEquals(messageSet.getVersion().getContentType(), contentType.getParameter("type"));
+        assertNotNull(contentType.getParameter("boundary"));
     }
     
     @Validated @Test
     public void testGetAttachmentsFiltered() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         
         AttachmentPart att1 = message.createAttachmentPart();
         att1.addMimeHeader("Content-Type", "text/plain");
@@ -100,7 +116,7 @@ public class SOAPMessageTest {
     
     @Validated @Test
     public void testGetSetCharacterSetEncoding() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         String encoding = "ISO-8859-15";
         message.setProperty(SOAPMessage.CHARACTER_SET_ENCODING, encoding);
         assertEquals(encoding, message.getProperty(SOAPMessage.CHARACTER_SET_ENCODING));
@@ -116,7 +132,7 @@ public class SOAPMessageTest {
      */
     @Validated @Test
     public void testSetPropertyUnknown() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         message.setProperty("some.unknown.property", "test");
     }
     
@@ -131,10 +147,10 @@ public class SOAPMessageTest {
     @Validated @Test
     public void testWriteTo() throws Exception {
         MimeHeaders headers = new MimeHeaders();
-        headers.addHeader("Content-Type", "text/xml; charset=utf-8");
-        InputStream in = SOAPPartTest.class.getResourceAsStream("soap11/message.xml");
+        headers.addHeader("Content-Type", messageSet.getVersion().getContentType() + "; charset=utf-8");
+        InputStream in = messageSet.getTestMessage("message.xml");
         byte[] orgContent = IOUtils.toByteArray(in);
-        SOAPMessage message = factory.createMessage(headers, new ByteArrayInputStream(orgContent));
+        SOAPMessage message = getFactory().createMessage(headers, new ByteArrayInputStream(orgContent));
         
         // Get the content before accessing the SOAP part
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -158,7 +174,7 @@ public class SOAPMessageTest {
      */
     @Validated @Test
     public void testWriteToNamespaceRepairing() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         SOAPPart part = message.getSOAPPart();
         SOAPBody body = part.getEnvelope().getBody();
         body.appendChild(part.createElementNS("urn:ns", "p:test"));
@@ -170,7 +186,7 @@ public class SOAPMessageTest {
     
     @Validated @Test
     public void testWriteToWithAttachment() throws Exception {
-        SOAPMessage message = factory.createMessage();
+        SOAPMessage message = getFactory().createMessage();
         message.getSOAPPart().getEnvelope().getBody().addBodyElement(new QName("urn:ns", "test", "p"));
         AttachmentPart attachment = message.createAttachmentPart();
         attachment.setDataHandler(new DataHandler("This is a test", "text/plain"));

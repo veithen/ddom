@@ -13,14 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.googlecode.ddom.frontend.saaj.impl;
 
-import javax.xml.soap.SOAPException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
+import javax.xml.soap.AttachmentPart;
 
-public class SOAP11MessageFactory extends MessageFactoryImpl {
-    public SOAP11MessageFactory() throws SOAPException {
-        super(SOAPVersion.SOAP11);
+
+public class SimpleAttachmentSet implements AttachmentSet {
+    private final List<AttachmentPartImpl> attachments = new ArrayList<AttachmentPartImpl>();
+    
+    public void add(AttachmentPart attachmentPart) {
+        attachments.add((AttachmentPartImpl)attachmentPart);
+    }
+
+    public int count() {
+        return attachments.size();
+    }
+
+    public Iterator<? extends AttachmentPart> iterator() {
+        return attachments.iterator();
     }
 }
