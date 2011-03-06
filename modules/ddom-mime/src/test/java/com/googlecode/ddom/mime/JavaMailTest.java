@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.mime;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -22,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -93,7 +93,7 @@ public class JavaMailTest {
         assertEquals(content1, IOUtils.toString(mpr.getContent(), "UTF-8"));
         assertTrue(mpr.nextPart());
         assertEquals(headers2, readHeaders(mpr));
-        assertTrue(Arrays.equals(content2, IOUtils.toByteArray(mpr.getContent())));
+        assertArrayEquals(content2, IOUtils.toByteArray(mpr.getContent()));
         assertFalse(mpr.nextPart());
     }
 
