@@ -17,7 +17,7 @@ package com.sun.xml.messaging.saaj.soap;
 
 import javax.xml.soap.SOAPMessage;
 
-import com.googlecode.ddom.saaj.SOAPMessageWrapper;
+import com.googlecode.ddom.saaj.compat.SOAPMessageWrapper;
 
 public class MessageImpl extends SOAPMessageWrapper {
     public MessageImpl(SOAPMessage parent) {

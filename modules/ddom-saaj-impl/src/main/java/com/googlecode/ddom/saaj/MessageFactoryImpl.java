@@ -34,6 +34,7 @@ import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
 import com.googlecode.ddom.spi.ProviderFinder;
 
 public abstract class MessageFactoryImpl extends MessageFactory {

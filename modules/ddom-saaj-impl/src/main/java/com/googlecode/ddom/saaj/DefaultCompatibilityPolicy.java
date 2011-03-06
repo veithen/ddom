@@ -17,6 +17,8 @@ package com.googlecode.ddom.saaj;
 
 import javax.xml.soap.SOAPMessage;
 
+import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
+
 /**
  * Default {@link CompatibilityPolicy} implementation that strictly adheres to what is required by
  * the SAAJ specification.

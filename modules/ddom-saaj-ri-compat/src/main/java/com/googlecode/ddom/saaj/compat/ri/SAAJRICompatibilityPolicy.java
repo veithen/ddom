@@ -17,7 +17,7 @@ package com.googlecode.ddom.saaj.compat.ri;
 
 import javax.xml.soap.SOAPMessage;
 
-import com.googlecode.ddom.saaj.CompatibilityPolicy;
+import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
 import com.googlecode.ddom.spi.Provider;
 import com.sun.xml.messaging.saaj.soap.MessageImpl;
 
