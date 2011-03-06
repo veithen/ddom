@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,8 +78,15 @@ public class MultipartInputStream extends InputStream {
     private static final int STATE_START = 1;
     
     private static final int STATE_PREAMBLE = 2;
+    
+    /**
+     * Indicates that the stream is positioned in the headers section of a MIME part.
+     */
     private static final int STATE_HEADERS = 3;
+    
     private static final int STATE_CONTENT = 4;
+    
+    private static final int STATE_END = 5;
     
     private final InputStream in;
     private int state = STATE_START;
@@ -126,6 +133,11 @@ public class MultipartInputStream extends InputStream {
      */
     private boolean delimiterFound;
     
+    private final StringBuilder builder = new StringBuilder(256);
+    
+    private String headerName;
+    private String headerValue;
+    
     public MultipartInputStream(InputStream in, String boundary) {
         this.in = in;
         int boundaryLen = boundary.length();
@@ -146,14 +158,13 @@ public class MultipartInputStream extends InputStream {
     
     /**
      * Fill the buffer. This method will read data from the underlying stream until the number of
-     * bytes in the buffer is greater or equal to the length of the delimiter.
+     * bytes in the buffer is greater or equal to the specified minimum.
      * 
      * @throws IOException
      */
-    private void fillBuffer() throws IOException {
-        int delimiterLen = delimiter.length;
+    private void fillBuffer(int minLen) throws IOException {
         int bufferSize = buffer.length;
-        while (bufferLen < delimiterLen) {
+        while (bufferLen < minLen) {
             int off = (bufferPosition + bufferLen) % bufferSize;
             int len = Math.min(bufferSize-off, bufferSize-bufferLen);
             int read = in.read(buffer, off, len);
@@ -162,6 +173,12 @@ public class MultipartInputStream extends InputStream {
             }
             bufferLen += read;
         }
+    }
+    
+    private int lookAhead(int delta) throws IOException {
+        // TODO: check that delta is within bounds (<buffer.length)
+        fillBuffer(delta+1);
+        return buffer[(bufferPosition + delta) % buffer.length] & 0xFF;
     }
     
     private void searchDelimiter() {
@@ -208,10 +225,40 @@ public class MultipartInputStream extends InputStream {
         }
     }
     
+    private String readAscii(int length) {
+        int bufferSize = buffer.length;
+        int bufferPosition = this.bufferPosition;
+        builder.ensureCapacity(length);
+        for (int i=0; i<length; i++) {
+            builder.append((char)buffer[bufferPosition]);
+            bufferPosition++;
+            if (bufferPosition > bufferSize) {
+                bufferPosition = 0;
+            }
+        }
+        this.bufferPosition = bufferPosition;
+        String result = builder.toString();
+        builder.setLength(0);
+        return result;
+    }
+    
+    private void processDelimiter() throws IOException {
+        discard(delimiter.length);
+        if (lookAhead(0) == '-' && lookAhead(1) == '-') {
+            discard(2);
+            state = STATE_END;
+        } else if (lookAhead(0) == '\r' && lookAhead(1) == '\n') {
+            state = STATE_HEADERS;
+            discard(2);
+        } else {
+            throw new IOException("Unexpected characters after delimiter");
+        }
+    }
+    
     public void nextPart() throws IOException {
-        fillBuffer();
+        int delimiterLen = delimiter.length;
+        fillBuffer(delimiterLen);
         if (state == STATE_START) {
-            int delimiterLen = delimiter.length;
             for (int i=0; i<delimiterLen-2; i++) {
                 if (buffer[i] != delimiter[i+2]) {
                     state = STATE_PREAMBLE;
@@ -227,9 +274,49 @@ public class MultipartInputStream extends InputStream {
                 }
             }
             if (state == STATE_PREAMBLE) {
-                searchDelimiter();
+                do {
+                    searchDelimiter();
+                    discard(nonDelimiterBytes);
+                } while (!delimiterFound);
+                processDelimiter();
             }
         }
+    }
+    
+    public boolean nextHeader() throws IOException {
+        if (state != STATE_HEADERS) {
+            throw new IllegalStateException();
+        }
+        if (lookAhead(0) == '\r' && lookAhead(1) == '\n') {
+            headerName = null;
+            headerValue = null;
+            return false;
+        } else {
+            int len = 0;
+            while (lookAhead(len) != ':') {
+                len++;
+            }
+            headerName = readAscii(len);
+            discard(1);
+            while (lookAhead(0) == ' ') {
+                discard(1);
+            }
+            len = 0;
+            while (lookAhead(len) != '\r' || lookAhead(len+1) != '\n') {
+                len++;
+            }
+            headerValue = readAscii(len);
+            discard(2);
+            return true;
+        }
+    }
+    
+    public String getHeaderName() {
+        return headerName;
+    }
+    
+    public String getHeaderValue() {
+        return headerValue;
     }
     
     /* (non-Javadoc)
