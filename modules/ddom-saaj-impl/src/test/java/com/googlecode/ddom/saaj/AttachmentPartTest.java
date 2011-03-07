@@ -57,14 +57,14 @@ public class AttachmentPartTest {
         assertEquals(content, dh.getContent());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testGetSizeOnEmptyAttachment() throws Exception {
         AttachmentPart att = createAttachment();
         assertEquals(0, att.getSize());
     }
     
     // This test can't be validated because of a bug in the RI: SAAJ-58
-    @Test @Ignore // TODO
+    @Test
     public void testGetSizeWithObject() throws Exception {
         AttachmentPart att = createAttachment();
         String content = "This is a test";

@@ -34,6 +34,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <!-- We only depend on this in the corresponding utility package; if
+                 a project uses these utility classes, then it must have a dependency
+                 on activation. Therefore, using optional here is perfectly reasonable. -->
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ddom-xmlts</artifactId>
             <version>${project.version}</version>
@@ -52,6 +60,12 @@
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

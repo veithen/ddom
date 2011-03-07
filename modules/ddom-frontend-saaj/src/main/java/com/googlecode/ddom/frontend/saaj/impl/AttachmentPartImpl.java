@@ -24,6 +24,8 @@ import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 
+import com.googlecode.ddom.util.activation.DataHandlerUtils;
+
 public class AttachmentPartImpl extends AttachmentPart {
     private final MimeHeaders headers;
     private DataHandler dataHandler;
@@ -60,6 +62,20 @@ public class AttachmentPartImpl extends AttachmentPart {
     @Override
     public final void setContent(Object object, String contentType) {
         setDataHandler(new DataHandler(object, contentType));
+    }
+    
+    @Override
+    public final int getSize() throws SOAPException {
+        if (dataHandler == null) {
+            return 0;
+        } else {
+            try {
+                long size = DataHandlerUtils.getSize(dataHandler);
+                return size < Integer.MAX_VALUE ? (int)size : Integer.MAX_VALUE;
+            } catch (IOException ex) {
+                throw new SOAPException("Caught exception while trying to determine the size of the attachment", ex);
+            }
+        }
     }
 
     public final void removeAllMimeHeaders() {
@@ -117,12 +133,6 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     @Override
     public byte[] getRawContentBytes() throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int getSize() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
