@@ -47,6 +47,21 @@ public class AttachmentPartImpl extends AttachmentPart {
         headers.setHeader("Content-Type", dataHandler.getContentType());
     }
 
+    @Override
+    public final Object getContent() throws SOAPException {
+        // TODO: null check?
+        try {
+            return dataHandler.getContent();
+        } catch (IOException ex) {
+            throw new SOAPException("Unable to get the content of the data handler", ex);
+        }
+    }
+
+    @Override
+    public final void setContent(Object object, String contentType) {
+        setDataHandler(new DataHandler(object, contentType));
+    }
+
     public final void removeAllMimeHeaders() {
         headers.removeAllHeaders();
     }
@@ -95,16 +110,6 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     @Override
-    public final Object getContent() throws SOAPException {
-        // TODO: null check?
-        try {
-            return dataHandler.getContent();
-        } catch (IOException ex) {
-            throw new SOAPException("Unable to get the content of the data handler", ex);
-        }
-    }
-
-    @Override
     public InputStream getRawContent() throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
@@ -124,12 +129,6 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     @Override
     public void setBase64Content(InputStream arg0, String arg1) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setContent(Object arg0, String arg1) {
         // TODO
         throw new UnsupportedOperationException();
     }

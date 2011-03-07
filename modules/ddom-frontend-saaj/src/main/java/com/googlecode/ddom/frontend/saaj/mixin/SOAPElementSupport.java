@@ -88,9 +88,12 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPElement addChildElement(String localName, String prefix) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPElement addChildElement(String localName, String prefix) throws SOAPException {
+        String namespaceURI = lookupNamespaceURI(prefix);
+        if (namespaceURI == null) {
+            throw new SOAPException("The prefix " + prefix + " is not bound");
+        }
+        return internalAddChildElement(namespaceURI, localName, prefix);
     }
 
     public final SOAPElement addChildElement(String localName, String prefix, String uri) throws SOAPException {

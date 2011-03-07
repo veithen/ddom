@@ -87,6 +87,11 @@ public class SwAProfile extends MessageProfile {
     }
 
     @Override
+    public MessageProfile disableAttachments() {
+        return new SOAPProfile(getSOAPVersion());
+    }
+
+    @Override
     public String getContentType() {
         MimeType contentType;
         try {

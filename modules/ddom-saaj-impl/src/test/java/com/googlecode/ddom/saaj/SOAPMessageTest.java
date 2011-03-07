@@ -116,6 +116,25 @@ public abstract class SOAPMessageTest {
     }
     
     @Validated @Test
+    public final void testRemoveAllAttachments() throws Exception {
+        SOAPMessage message = getFactory().createMessage();
+        for (int i=0; i<5; i++) {
+            AttachmentPart att = message.createAttachmentPart("test" + i, "text/plain");
+            message.addAttachmentPart(att);
+        }
+        assertEquals(5, message.countAttachments());
+        message.removeAllAttachments();
+        assertEquals(0, message.countAttachments());
+        if (message.saveRequired()) {
+            message.saveChanges();
+        }
+        String[] contentType = message.getMimeHeaders().getHeader("Content-Type");
+        assertNotNull(contentType);
+        assertEquals(1, contentType.length);
+        assertEquals(messageSet.getVersion().getContentType(), new MimeType(contentType[0]).getBaseType());
+    }
+    
+    @Validated @Test
     public void testGetSetCharacterSetEncoding() throws Exception {
         SOAPMessage message = getFactory().createMessage();
         String encoding = "ISO-8859-15";

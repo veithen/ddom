@@ -71,12 +71,6 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     }
 
     @Override
-    public void removeAllAttachments() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void removeAttachments(MimeHeaders arg0) {
         // TODO
         throw new UnsupportedOperationException();

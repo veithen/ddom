@@ -90,6 +90,15 @@ public abstract class AbstractSOAPMessageImpl extends SOAPMessage {
     }
 
     @Override
+    public final void removeAllAttachments() {
+        if (profile.supportsAttachments()) {
+            profile = profile.disableAttachments();
+            saveRequired = true;
+        }
+        attachments.removeAll();
+    }
+
+    @Override
     public final boolean saveRequired() {
         return saveRequired;
     }

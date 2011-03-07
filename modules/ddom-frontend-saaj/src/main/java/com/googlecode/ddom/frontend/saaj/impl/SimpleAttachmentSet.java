@@ -36,4 +36,8 @@ public class SimpleAttachmentSet implements AttachmentSet {
     public Iterator<? extends AttachmentPart> iterator() {
         return attachments.iterator();
     }
+
+    public void removeAll() {
+        attachments.clear();
+    }
 }

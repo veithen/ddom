@@ -44,4 +44,9 @@ public class CXFAttachmentSet implements AttachmentSet {
         // TODO
         throw new UnsupportedOperationException();
     }
+
+    public void removeAll() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

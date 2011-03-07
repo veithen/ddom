@@ -56,6 +56,7 @@ public abstract class MessageProfile {
 
     public abstract MessageDeserializer createDeserializer(InputStream in);
     public abstract MessageProfile enableAttachments();
+    public abstract MessageProfile disableAttachments();
     public abstract String getContentType();
 
     public static MessageProfile fromContentType(String contentTypeString) throws SOAPException {

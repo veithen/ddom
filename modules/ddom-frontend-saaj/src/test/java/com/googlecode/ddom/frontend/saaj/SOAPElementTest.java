@@ -197,6 +197,28 @@ public class SOAPElementTest {
     }
     
     @Validated @Test
+    public void testAddChildElementFromLocalNameAndPrefix() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.addNamespaceDeclaration("p", "urn:test");
+        SOAPElement child = element.addChildElement("child", "p");
+        assertEquals("urn:test", child.getNamespaceURI());
+        assertEquals("p", child.getPrefix());
+        assertEquals("child", child.getLocalName());
+    }
+    
+    /**
+     * Tests the behavior of {@link SOAPElement#addChildElement(String, String)} when the given
+     * prefix is not bound in the context of the parent element.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test(expected=SOAPException.class)
+    public void testAddChildElementFromLocalNameAndPrefixWithUnboundPrefix() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.addChildElement("child", "p");
+    }
+    
+    @Validated @Test
     public void testGetValueSingleTextChild() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addTextNode("test");

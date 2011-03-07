@@ -23,4 +23,5 @@ public interface AttachmentSet {
     void add(AttachmentPart attachmentPart);
     int count();
     Iterator<? extends AttachmentPart> iterator();
+    void removeAll();
 }

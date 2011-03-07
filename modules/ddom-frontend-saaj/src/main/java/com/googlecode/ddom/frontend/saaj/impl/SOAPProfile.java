@@ -52,6 +52,11 @@ public class SOAPProfile extends MessageProfile {
     }
 
     @Override
+    public MessageProfile disableAttachments() {
+        return this;
+    }
+
+    @Override
     public String getContentType() {
         return getSOAPVersion().getContentType();
     }
