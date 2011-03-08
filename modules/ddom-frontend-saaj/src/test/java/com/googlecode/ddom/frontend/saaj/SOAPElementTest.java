@@ -16,6 +16,7 @@
 package com.googlecode.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -217,6 +218,29 @@ public class SOAPElementTest {
     public void testAddChildElementFromLocalNameAndPrefixWithUnboundPrefix() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addChildElement("child", "p");
+    }
+    
+    /**
+     * Tests the behavior of {@link SOAPElement#getChildElements()} when there are text nodes among
+     * the children of the element. In contrast to what the name of the method suggests, they will
+     * also be returned by the iterator.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetChildElementsWithTextNodes() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.addTextNode("foo");
+        element.addChildElement(new QName("child"));
+        element.addTextNode("bar");
+        Iterator it = element.getChildElements();
+        assertTrue(it.hasNext());
+        assertTrue(it.next() instanceof Text);
+        assertTrue(it.hasNext());
+        assertTrue(it.next() instanceof SOAPElement);
+        assertTrue(it.hasNext());
+        assertTrue(it.next() instanceof Text);
+        assertFalse(it.hasNext());
     }
     
     @Validated @Test

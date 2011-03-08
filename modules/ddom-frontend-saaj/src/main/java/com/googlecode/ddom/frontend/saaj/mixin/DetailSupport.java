@@ -51,6 +51,6 @@ public abstract class DetailSupport implements SAAJDetail {
     }
 
     public final Iterator getDetailEntries() {
-        return new ReifyingIterator<SAAJDetailEntry>(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class), SAAJDetailEntry.class);
+        return new ReifyingIterator(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class), SAAJDetailEntry.class);
     }
 }

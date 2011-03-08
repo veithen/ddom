@@ -246,18 +246,18 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         return SAAJSOAPElement.class;
     }
     
-    private Iterator getChildElements(ChildIterator<CoreNSAwareElement> childIterator) {
+    private Iterator getChildElements(ChildIterator<?> childIterator) {
         Class<? extends SAAJSOAPElement> childType = getChildType();
         if (childType.equals(SAAJSOAPElement.class)) {
             // The iterator actually returns SOAPElements
             return childIterator;
         } else {
-            return new ReifyingIterator<SAAJSOAPElement>(childIterator, childType);
+            return new ReifyingIterator(childIterator, childType);
         }
     }
     
     public final Iterator getChildElements() {
-        return getChildElements(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class));
+        return getChildElements(coreGetChildrenByType(Axis.CHILDREN, CoreChildNode.class));
     }
 
     public Iterator getChildElements(Name name) {

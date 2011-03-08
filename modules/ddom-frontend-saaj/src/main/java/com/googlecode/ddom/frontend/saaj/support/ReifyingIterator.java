@@ -18,6 +18,7 @@ package com.googlecode.ddom.frontend.saaj.support;
 import java.util.Iterator;
 
 import com.googlecode.ddom.core.ChildIterator;
+import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
@@ -28,11 +29,11 @@ import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
  * 
  * @author Andreas Veithen
  */
-public class ReifyingIterator<T extends SAAJSOAPElement> implements Iterator<T> {
-    private final ChildIterator<CoreNSAwareElement> parent;
-    private final Class<? extends T> childType;
+public class ReifyingIterator implements Iterator<CoreChildNode> {
+    private final ChildIterator<?> parent;
+    private final Class<? extends SAAJSOAPElement> childType;
 
-    public ReifyingIterator(ChildIterator<CoreNSAwareElement> parent, Class<? extends T> childType) {
+    public ReifyingIterator(ChildIterator<?> parent, Class<? extends SAAJSOAPElement> childType) {
         this.parent = parent;
         this.childType = childType;
     }
@@ -41,14 +42,19 @@ public class ReifyingIterator<T extends SAAJSOAPElement> implements Iterator<T> 
         return parent.hasNext();
     }
 
-    public T next() {
+    public CoreChildNode next() {
         try {
-            CoreNSAwareElement element = parent.next();
-            T reifiedElement = SAAJUtil.reify(element, childType);
-            if (reifiedElement != element) {
-                parent.replace(reifiedElement);
+            CoreChildNode child = parent.next();
+            if (child instanceof CoreNSAwareElement) {
+                CoreNSAwareElement element = (CoreNSAwareElement)child;
+                SAAJSOAPElement reifiedElement = SAAJUtil.reify(element, childType);
+                if (reifiedElement != element) {
+                    parent.replace(reifiedElement);
+                }
+                return reifiedElement;
+            } else {
+                return child;
             }
-            return reifiedElement;
         } catch (CoreModelException ex) {
             throw new RuntimeException(ex); // TODO
         }
