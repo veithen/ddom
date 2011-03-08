@@ -244,6 +244,36 @@ public class SOAPElementTest {
     }
     
     @Validated @Test
+    public void testGetChildElementsByQName() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        SOAPElement a1 = element.addChildElement(new QName("urn:ns1", "a"));
+        element.addChildElement(new QName("urn:ns2", "a"));
+        SOAPElement a2 = element.addChildElement(new QName("urn:ns1", "a", "ns1"));
+        element.addChildElement(new QName("urn:ns1", "b"));
+        Iterator it = element.getChildElements(new QName("urn:ns1", "a"));
+        assertTrue(it.hasNext());
+        assertSame(a1, it.next());
+        assertTrue(it.hasNext());
+        assertSame(a2, it.next());
+        assertFalse(it.hasNext());
+    }
+    
+    @Validated @Test
+    public void testGetChildElementsByName() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        SOAPElement a1 = element.addChildElement(new QName("urn:ns1", "a"));
+        element.addChildElement(new QName("urn:ns2", "a"));
+        SOAPElement a2 = element.addChildElement(new QName("urn:ns1", "a", "ns1"));
+        element.addChildElement(new QName("urn:ns1", "b"));
+        Iterator it = element.getChildElements(a1.getElementName());
+        assertTrue(it.hasNext());
+        assertSame(a1, it.next());
+        assertTrue(it.hasNext());
+        assertSame(a2, it.next());
+        assertFalse(it.hasNext());
+    }
+    
+    @Validated @Test
     public void testGetValueSingleTextChild() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addTextNode("test");
@@ -273,10 +303,20 @@ public class SOAPElementTest {
     }
     
     @Validated @Test
-    public void testGetValueMixedContent() throws Exception {
+    public void testGetValueMixedContent1() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addTextNode("foo");
         element.appendChild(element.getOwnerDocument().createElementNS("urn:ns", "p:child"));
+        element.addTextNode("bar");
+        assertEquals("foo", element.getValue());
+    }
+    
+    @Validated @Test
+    public void testGetValueMixedContent2() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.appendChild(element.getOwnerDocument().createElementNS("urn:ns", "p:child1"));
+        element.addTextNode("foo");
+        element.appendChild(element.getOwnerDocument().createElementNS("urn:ns", "p:child2"));
         element.addTextNode("bar");
         assertEquals("foo", element.getValue());
     }

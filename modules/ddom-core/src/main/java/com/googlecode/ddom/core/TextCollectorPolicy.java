@@ -31,7 +31,7 @@ public interface TextCollectorPolicy {
      * </ul>
      */
     TextCollectorPolicy DEFAULT = new TextCollectorPolicy() {
-        public Action getAction(int nodeType) {
+        public Action getAction(int nodeType, boolean textSeen) {
             return nodeType == CoreNode.CDATA_SECTION_NODE ? Action.RECURSE : Action.FAIL;
         }
     };
@@ -70,7 +70,10 @@ public interface TextCollectorPolicy {
      * 
      * @param nodeType
      *            the type of node
+     * @param textSeen
+     *            <code>true</code> if at least one {@link CoreCharacterData} has already been
+     *            visited, <code>false</code> if no text has been collected yet
      * @return the action to be executed; must never be <code>null</code>
      */
-    Action getAction(int nodeType);
+    Action getAction(int nodeType, boolean textSeen);
 }

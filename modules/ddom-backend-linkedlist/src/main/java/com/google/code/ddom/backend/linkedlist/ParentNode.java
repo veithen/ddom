@@ -163,7 +163,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
                             ((StringBuilder)text).append(data);
                         }
                     } else {
-                        switch (policy.getAction(node.coreGetNodeType())) {
+                        switch (policy.getAction(node.coreGetNodeType(), text != null)) {
                             case RECURSE:
                                 recurse = true;
                                 break;

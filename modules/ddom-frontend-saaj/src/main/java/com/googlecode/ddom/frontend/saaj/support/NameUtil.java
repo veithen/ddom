@@ -18,6 +18,7 @@ package com.googlecode.ddom.frontend.saaj.support;
 import javax.xml.soap.Name;
 
 // TODO: check what the SAAJ spec says about null/empty prefies/URIs
+// TODO: this should no longer be necessary and is even wrong; we use empty string now instead of null!
 public final class NameUtil {
     private NameUtil() {}
     

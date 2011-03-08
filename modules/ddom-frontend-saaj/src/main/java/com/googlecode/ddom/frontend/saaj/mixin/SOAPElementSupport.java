@@ -260,9 +260,8 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         return getChildElements(coreGetChildrenByType(Axis.CHILDREN, CoreChildNode.class));
     }
 
-    public Iterator getChildElements(Name name) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator getChildElements(Name name) {
+        return getChildElements(coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, name.getURI(), name.getLocalName()));
     }
 
     public final Iterator getChildElements(QName qname) {

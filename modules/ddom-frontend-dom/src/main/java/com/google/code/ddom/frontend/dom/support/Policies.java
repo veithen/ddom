@@ -38,7 +38,7 @@ public final class Policies {
      * {@link TextCollectorPolicy} implementation for {@link org.w3c.dom.Node#getTextContent()}.
      */
     public static final TextCollectorPolicy GET_TEXT_CONTENT = new TextCollectorPolicy() {
-        public Action getAction(int nodeType) {
+        public Action getAction(int nodeType, boolean textSeen) {
             // TODO: need to make sure that we have enough unit test coverage for this
             return nodeType == CoreNode.CDATA_SECTION_NODE ? Action.RECURSE : Action.SKIP;
         }

@@ -25,8 +25,14 @@ public final class SAAJPolicies {
      * {@link TextCollectorPolicy} implementation for {@link javax.xml.soap.SOAPElement#getValue()}.
      */
     public static final TextCollectorPolicy GET_VALUE = new TextCollectorPolicy() {
-        public Action getAction(int nodeType) {
-            return nodeType == CoreNode.CDATA_SECTION_NODE ? Action.RECURSE : Action.STOP;
+        public Action getAction(int nodeType, boolean textSeen) {
+            if (nodeType == CoreNode.CDATA_SECTION_NODE) {
+                return Action.RECURSE;
+            } else if (textSeen) {
+                return Action.STOP;
+            } else {
+                return Action.SKIP;
+            }
         }
     };
 }

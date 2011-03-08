@@ -46,4 +46,19 @@ public class NameImpl implements Name {
     public String getQualifiedName() {
         return prefix.length() == 0 ? localName : prefix + ":" + localName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Name) {
+            Name other = (Name)obj;
+            return localName.equals(other.getLocalName()) && uri.equals(other.getURI());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * uri.hashCode() + localName.hashCode();
+    }
 }
