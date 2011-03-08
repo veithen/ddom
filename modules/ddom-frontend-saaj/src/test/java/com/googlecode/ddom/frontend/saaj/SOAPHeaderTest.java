@@ -97,6 +97,30 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
     }
     
     @Validated @Test
+    public final void testExamineHeaderElements() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        
+        SOAPHeaderElement element1 = header.addHeaderElement(new QName("urn:ns", "header1"));
+        element1.setActor("urn:actor1");
+        element1.setMustUnderstand(true);
+        
+        SOAPHeaderElement element2 = header.addHeaderElement(new QName("urn:ns", "header2"));
+        element2.setActor("urn:actor2");
+        element2.setMustUnderstand(true);
+        
+        SOAPHeaderElement element3 = header.addHeaderElement(new QName("urn:ns", "header3"));
+        element3.setActor("urn:actor1");
+        element3.setMustUnderstand(false);
+        
+        Iterator it = header.examineHeaderElements("urn:actor1");
+        assertTrue(it.hasNext());
+        assertSame(element1, it.next());
+        assertTrue(it.hasNext());
+        assertSame(element3, it.next());
+        assertFalse(it.hasNext());
+    }
+    
+    @Validated @Test
     public final void testExamineMustUnderstandHeaderElements() throws Exception {
         SOAPHeader header = createEmptySOAPHeader();
         

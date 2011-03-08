@@ -72,7 +72,7 @@ public class AttachmentPartTest {
         assertEquals(content.length(), att.getSize());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testGetSizeWithRawContent() throws Exception {
         AttachmentPart att = createAttachment();
         String content = "This is a test";

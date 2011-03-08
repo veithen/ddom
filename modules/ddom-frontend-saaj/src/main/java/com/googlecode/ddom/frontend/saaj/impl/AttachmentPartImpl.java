@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 
 import javax.activation.DataHandler;
+import javax.mail.util.ByteArrayDataSource;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
@@ -64,6 +65,35 @@ public class AttachmentPartImpl extends AttachmentPart {
         setDataHandler(new DataHandler(object, contentType));
     }
     
+    @Override
+    public InputStream getRawContent() throws SOAPException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public final void setRawContent(InputStream content, String contentType) throws SOAPException {
+        // TODO: this is suboptimal; we don't need to consume the input stream at this point
+        try {
+            dataHandler = new DataHandler(new ByteArrayDataSource(content, contentType));
+        } catch (IOException ex) {
+            throw new SOAPException(ex);
+        }
+    }
+
+    @Override
+    public byte[] getRawContentBytes() throws SOAPException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setRawContentBytes(byte[] arg0, int arg1, int arg2, String arg3)
+            throws SOAPException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public final int getSize() throws SOAPException {
         if (dataHandler == null) {
@@ -126,32 +156,7 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     @Override
-    public InputStream getRawContent() throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public byte[] getRawContentBytes() throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void setBase64Content(InputStream arg0, String arg1) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setRawContent(InputStream arg0, String arg1) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setRawContentBytes(byte[] arg0, int arg1, int arg2, String arg3)
-            throws SOAPException {
         // TODO
         throw new UnsupportedOperationException();
     }
