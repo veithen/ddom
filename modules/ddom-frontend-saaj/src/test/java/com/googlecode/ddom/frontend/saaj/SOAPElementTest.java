@@ -17,6 +17,7 @@ package com.googlecode.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -35,7 +36,9 @@ import javax.xml.soap.Text;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -56,12 +59,19 @@ public class SOAPElementTest {
      * @throws SOAPException
      */
     @Validated @Test
-    public void testAddNamespaceDeclaration() throws SOAPException {
+    public void testAddNamespaceDeclarationNonDefaultNamespace() throws SOAPException {
         SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
         element.addNamespaceDeclaration("ns", "urn:ns");
         assertEquals("urn:ns", element.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "ns"));
     }
 
+    @Validated @Test
+    public void testAddNamespaceDeclarationDefaultNamespace() throws SOAPException {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
+        element.addNamespaceDeclaration("", "urn:ns");
+        assertEquals("urn:ns", element.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns"));
+    }
+    
     /**
      * Test that a call do {@link SOAPElement#addNamespaceDeclaration(String, String)} for a prefix
      * that is already declared on the same element will replace the existing namespace declaration.
@@ -76,6 +86,143 @@ public class SOAPElementTest {
         assertEquals("urn:ns2", element.lookupNamespaceURI("p"));
         assertNull(element.lookupPrefix("urn:ns1"));
         assertEquals("p", element.lookupPrefix("urn:ns2"));
+    }
+    
+    @Validated @Test
+    public void testRemoveNamespaceDeclaration() throws SOAPException {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p", "urn:ns");
+        assertTrue(element.removeNamespaceDeclaration("p"));
+        assertEquals(0, element.getAttributes().getLength());
+    }
+    
+    @Validated @Test
+    public void testAddAttributeFromQNameWithNamespace() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        SOAPElement retValue = element.addAttribute(new QName("urn:ns", "attr", "p"), "value");
+        assertSame(element, retValue);
+        Attr attr = element.getAttributeNodeNS("urn:ns", "attr");
+        assertEquals("urn:ns", attr.getNamespaceURI());
+        assertEquals("attr", attr.getLocalName());
+        assertEquals("p", attr.getPrefix());
+        assertEquals("value", attr.getValue());
+        Attr nsDecl = element.getAttributeNodeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "p");
+        assertNotNull(nsDecl);
+        assertEquals("urn:ns", nsDecl.getValue());
+    }
+    
+    @Validated @Test
+    public void testAddAttributeFromQNameWithoutNamespace() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        SOAPElement retValue = element.addAttribute(new QName("attr"), "value");
+        assertSame(element, retValue);
+        Attr attr = element.getAttributeNodeNS(null, "attr");
+        assertNull(attr.getNamespaceURI());
+        String localName = attr.getLocalName();
+        // The RI creates a namespace unaware attribute node in this case; we believe
+        // it's better to create a namespace aware node.
+        if (localName != null) {
+            assertEquals("attr", attr.getLocalName());
+        }
+        assertNull(attr.getPrefix());
+        assertEquals("value", attr.getValue());
+    }
+    
+    @Validated @Test
+    public void testAddAttributeFromNameWithNamespace() throws Exception {
+        SOAPEnvelope envelope = saajUtil.createSOAP11Envelope();
+        SOAPBody body = envelope.addBody();
+        SOAPElement element = body.addChildElement(new QName("urn:test", "test"));
+        SOAPElement retValue = element.addAttribute(envelope.createName("attr", "p", "urn:ns"), "value");
+        assertSame(element, retValue);
+        Attr attr = element.getAttributeNodeNS("urn:ns", "attr");
+        assertEquals("urn:ns", attr.getNamespaceURI());
+        assertEquals("attr", attr.getLocalName());
+        assertEquals("p", attr.getPrefix());
+        assertEquals("value", attr.getValue());
+        Attr nsDecl = element.getAttributeNodeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "p");
+        assertNotNull(nsDecl);
+        assertEquals("urn:ns", nsDecl.getValue());
+    }
+    
+    @Validated @Test
+    public void testAddAttributeFromNameWithoutNamespace() throws Exception {
+        SOAPEnvelope envelope = saajUtil.createSOAP11Envelope();
+        SOAPBody body = envelope.addBody();
+        SOAPElement element = body.addChildElement(new QName("urn:test", "test"));
+        SOAPElement retValue = element.addAttribute(envelope.createName("attr"), "value");
+        assertSame(element, retValue);
+        Attr attr = element.getAttributeNodeNS(null, "attr");
+        assertNull(attr.getNamespaceURI());
+        String localName = attr.getLocalName();
+        if (localName != null) {
+            assertEquals("attr", attr.getLocalName());
+        }
+        assertNull(attr.getPrefix());
+        assertEquals("value", attr.getValue());
+    }
+    
+    @Validated @Test
+    public void testRemoveAttributeByQNameWithNamespace() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.setAttributeNS("urn:ns1", "ns1:attr", "value");
+        element.setAttributeNS("urn:ns2", "ns2:attr", "value");
+        assertTrue(element.removeAttribute(new QName("urn:ns1", "attr")));
+        NamedNodeMap attributes = element.getAttributes();
+        assertEquals(1, attributes.getLength());
+    }
+    
+    /**
+     * Tests the behavior of {@link SOAPElement#removeAttribute(QName)} for an attribute created
+     * with {@link Element#setAttributeNS(String, String, String)}, but without namespace.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testRemoveAttributeByQNameWithoutNamespace1() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.setAttributeNS("urn:ns1", "ns1:attr", "value");
+        element.setAttributeNS(null, "attr", "value");
+        assertTrue(element.removeAttribute(new QName("attr")));
+        NamedNodeMap attributes = element.getAttributes();
+        assertEquals(1, attributes.getLength());
+    }
+    
+    /**
+     * Tests the behavior of {@link SOAPElement#removeAttribute(QName)} for an attribute created
+     * with {@link Element#setAttribute(String, String)}.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testRemoveAttributeByQNameWithoutNamespace2() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.setAttributeNS("urn:ns1", "ns1:attr", "value");
+        element.setAttribute("attr", "value");
+        assertTrue(element.removeAttribute(new QName("attr")));
+        NamedNodeMap attributes = element.getAttributes();
+        assertEquals(1, attributes.getLength());
+    }
+    
+    @Validated @Test
+    public void testRemoveAttributeByQNameNonExisting() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.setAttributeNS("urn:ns1", "ns1:attr", "value");
+        assertFalse(element.removeAttribute(new QName("urn:ns2", "test")));
+        NamedNodeMap attributes = element.getAttributes();
+        assertEquals(1, attributes.getLength());
+    }
+    
+    @Validated @Test
+    public void testRemoveAttributeByName() throws Exception {
+        SOAPEnvelope envelope = saajUtil.createSOAP11Envelope();
+        SOAPBody body = envelope.addBody();
+        SOAPElement element = body.addChildElement(new QName("urn:test", "test"));
+        element.setAttributeNS("urn:ns1", "ns1:attr1", "value");
+        element.setAttributeNS("urn:ns1", "ns1:attr2", "value");
+        assertTrue(element.removeAttribute(envelope.createName("attr2", "p", "urn:ns1")));
+        NamedNodeMap attributes = element.getAttributes();
+        assertNull(attributes.getNamedItemNS("urn:ns1", "attr2"));
     }
     
     /**
@@ -121,6 +268,46 @@ public class SOAPElementTest {
         SOAPElement element = body.addChildElement("test", "p", "urn:test");
         element.setAttributeNS("urn:test", "p:attr", "value");
         assertEquals("value", element.getAttributeValue(envelope.createName("attr", "", "urn:test")));
+    }
+    
+    
+    /**
+     * Test that {@link SOAPElement#getAttributeValue(QName)} returns <code>null</code> if the
+     * requested attribute doesn't exist.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetAttributeValueByQNameNonExisting() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
+        assertNull(element.getAttributeValue(new QName("attr")));
+    }
+    
+    /**
+     * Test the behavior of {@link SOAPElement#getAttributeValue(QName)} for an attribute without
+     * namespace.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetAttributeValueByQNameWithoutNamespace() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
+        element.setAttributeNS(null, "attr", "value");
+        assertEquals("value", element.getAttributeValue(new QName("attr")));
+    }
+    
+    /**
+     * Test the behavior of {@link SOAPElement#getAttributeValue(QName)} for an attribute with
+     * namespace. In particular, check that the prefix is not considered when matching attribute
+     * names.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetAttributeValueByQNameWithNamespace() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement("urn:test", "test", "p");
+        element.setAttributeNS("urn:test", "p:attr", "value");
+        assertEquals("value", element.getAttributeValue(new QName("urn:test", "attr", "")));
     }
     
     /**
@@ -190,12 +377,26 @@ public class SOAPElementTest {
     }
     
     @Validated @Test
-    public void testAddChildElement() throws Exception {
+    public void testAddChildElementWithUndeclaredNamespace() throws Exception {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         SOAPElement child = element.addChildElement("test", "p", "urn:ns");
         assertEquals("urn:ns", child.getNamespaceURI());
         assertEquals("p", child.getPrefix());
         assertEquals("test", child.getLocalName());
+        Attr nsDecl = child.getAttributeNodeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "p");
+        assertNotNull(nsDecl);
+        assertEquals("urn:ns", nsDecl.getValue());
+    }
+    
+    @Validated @Test
+    public void testAddChildElementWithDeclaredNamespace() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p", "urn:ns");
+        SOAPElement child = element.addChildElement("test", "p", "urn:ns");
+        assertEquals("urn:ns", child.getNamespaceURI());
+        assertEquals("p", child.getPrefix());
+        assertEquals("test", child.getLocalName());
+        assertEquals(0, child.getAttributes().getLength());
     }
     
     @Validated @Test
@@ -447,5 +648,21 @@ public class SOAPElementTest {
         SOAPElement element = saajUtil.createSOAPElement("urn:ns", "test", null);
         element.addNamespaceDeclaration("", "urn:ns");
         assertEquals("urn:ns", element.getNamespaceURI(""));
+    }
+
+    @Validated @Test(expected=SOAPException.class)
+    public void testCreateQNameWithUnknownPrefix() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement("urn:ns", "test", null);
+        element.createQName("local", "nonexistingprefix");
+    }
+
+    @Validated @Test
+    public void testCreateQNameWithAddNamespaceDeclaration() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement("urn:ns", "test", null);
+        element.addNamespaceDeclaration("p", "urn:test");
+        QName qname = element.createQName("local", "p");
+        assertEquals("p", qname.getPrefix());
+        assertEquals("local", qname.getLocalPart());
+        assertEquals("urn:test", qname.getNamespaceURI());
     }
 }

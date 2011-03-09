@@ -16,9 +16,11 @@
 package com.googlecode.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
 
 import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
 
 public interface SAAJSOAPElement extends SOAPElement, DOMNSAwareElement, SAAJNode {
     Class<? extends SAAJSOAPElement> getChildType();
+    void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws SOAPException;
 }

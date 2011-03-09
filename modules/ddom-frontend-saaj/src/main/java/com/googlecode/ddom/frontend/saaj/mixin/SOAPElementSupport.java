@@ -48,6 +48,17 @@ import com.googlecode.ddom.frontend.saaj.support.SAAJUtil;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class SOAPElementSupport implements SAAJSOAPElement {
+    public final void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws SOAPException {
+        try {
+            String existingNamespaceURI = coreLookupNamespaceURI(prefix, true);
+            if (!namespaceURI.equals(existingNamespaceURI)) {
+                coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+            }
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
+    }
+
     public final String getValue() {
         try {
             String value = coreGetTextContent(SAAJPolicies.GET_VALUE);
@@ -100,18 +111,23 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         return internalAddChildElement(uri == null ? "" : uri, localName, prefix == null ? "" : prefix);
     }
     
-    private SOAPElement internalAddChildElement(String namespaceURI, String localName, String prefix) throws SOAPException {
+    private SAAJSOAPElement internalAddChildElement(String namespaceURI, String localName, String prefix) throws SOAPException {
         try {
             Class<? extends SAAJSOAPElement> childType = getChildType();
             Class<?> extensionInterface = SAAJModelExtension.INSTANCE.mapElement(namespaceURI, localName);
             if (extensionInterface != null && childType.isAssignableFrom(extensionInterface)) {
                 childType = extensionInterface.asSubclass(childType);
             }
+            SAAJSOAPElement element;
             if (childType.equals(SAAJSOAPElement.class)) {
-                return (SOAPElement)coreAppendElement(namespaceURI, localName, prefix);
+                element = (SAAJSOAPElement)coreAppendElement(namespaceURI, localName, prefix);
             } else {
-                return coreAppendElement(childType, namespaceURI, localName, prefix);
+                element = coreAppendElement(childType, namespaceURI, localName, prefix);
             }
+            if (namespaceURI.length() > 0) {
+                element.ensureNamespaceIsDeclared(prefix, namespaceURI);
+            }
+            return element;
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -145,24 +161,27 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
     }
-
-    public final SOAPElement addAttribute(Name name, String value) throws SOAPException {
-        // TODO: this requires some unit tests
-        coreSetAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName(), name.getPrefix(), value);
+    
+    private SOAPElement internalAddAttribute(String namespaceURI, String localName, String prefix, String value) throws SOAPException {
+        coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
+        if (namespaceURI.length() > 0) {
+            ensureNamespaceIsDeclared(prefix, namespaceURI);
+        }
         return this;
     }
-
-    public SOAPElement addAttribute(QName qname, String value) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    
+    public final SOAPElement addAttribute(Name name, String value) throws SOAPException {
+        return internalAddAttribute(name.getURI(), name.getLocalName(), name.getPrefix(), value);
     }
 
-    // TODO: unit tests
+    public final SOAPElement addAttribute(QName qname, String value) throws SOAPException {
+        return internalAddAttribute(qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix(), value);
+    }
+
     public final boolean removeAttribute(Name name) {
         return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName());
     }
 
-    // TODO: unit tests
     public final boolean removeAttribute(QName qname) {
         return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
     }
@@ -172,24 +191,26 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         return this;
     }
 
-    public boolean removeNamespaceDeclaration(String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean removeNamespaceDeclaration(String prefix) {
+        return coreRemoveAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix);
     }
 
-    public final String getAttributeValue(Name name) {
+    private String internalGetAttributeValue(String namespaceURI, String localName) {
         try {
             // TODO: we should really have a coreGetAttributeValue method
-            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName());
+            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
             return attr == null ? null : attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }
     }
     
-    public String getAttributeValue(QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final String getAttributeValue(Name name) {
+        return internalGetAttributeValue(name.getURI(), name.getLocalName());
+    }
+    
+    public final String getAttributeValue(QName qname) {
+        return internalGetAttributeValue(qname.getNamespaceURI(), qname.getLocalPart());
     }
 
     private static final IdentityMapper<SAAJNSAwareAttribute> attributeIdentityMapper = new IdentityMapper<SAAJNSAwareAttribute>();
@@ -223,9 +244,17 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
     
-    public QName createQName(String localName, String prefix) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final QName createQName(String localName, String prefix) throws SOAPException {
+        try {
+            String namespaceURI = coreLookupNamespaceURI(prefix, true);
+            if (namespaceURI == null) {
+                throw new SOAPException("Unable to locate namespace prefix '" + prefix + "'");
+            } else {
+                return new QName(namespaceURI, localName, prefix);
+            }
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
     public final Name getElementName() {
