@@ -150,17 +150,15 @@ public abstract class ElementSupport implements DOMElement {
 
     public final void removeAttribute(String name) throws DOMException {
         // Specs: "If no attribute with this name is found, this method has no effect."
-        Attr attr = getAttributeNode(name);
-        if (attr != null) {
-            removeAttributeNode(attr);
-        }
+        coreRemoveAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
     }
 
     public final void removeAttributeNS(String namespaceURI, String localName) throws DOMException {
         // Specs: "If no attribute with this local name and namespace URI is found, this method has no effect."
-        Attr attr = getAttributeNodeNS(namespaceURI, localName);
-        if (attr != null) {
-            removeAttributeNode(attr);
+        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+            coreRemoveAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
+        } else {
+            coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
         }
     }
 

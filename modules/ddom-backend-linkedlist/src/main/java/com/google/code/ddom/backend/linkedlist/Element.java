@@ -212,6 +212,16 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
+    public final boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) {
+        CoreAttribute att = coreGetAttribute(matcher, namespaceURI, name);
+        if (att != null) {
+            att.coreRemove();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     protected abstract String getImplicitNamespaceURI(String prefix);
     
     public final String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredParsingException {

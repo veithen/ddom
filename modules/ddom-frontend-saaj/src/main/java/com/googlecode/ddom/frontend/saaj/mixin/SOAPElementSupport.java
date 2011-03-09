@@ -157,9 +157,24 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPElement addNamespaceDeclaration(String prefix, String uri) throws SOAPException {
+    // TODO: unit tests
+    public final boolean removeAttribute(Name name) {
+        return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName());
+    }
+
+    // TODO: unit tests
+    public final boolean removeAttribute(QName qname) {
+        return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
+    }
+
+    public final SOAPElement addNamespaceDeclaration(String prefix, String uri) throws SOAPException {
         coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
         return this;
+    }
+
+    public boolean removeNamespaceDeclaration(String prefix) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public final String getAttributeValue(Name name) {
@@ -226,21 +241,6 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         throw new UnsupportedOperationException();
     }
     
-    public boolean removeAttribute(Name name) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean removeAttribute(QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean removeNamespaceDeclaration(String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     // May be overridden by other mixins!
     public Class<? extends SAAJSOAPElement> getChildType() {
         return SAAJSOAPElement.class;
