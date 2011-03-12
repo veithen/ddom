@@ -42,7 +42,6 @@
         <module>ddom-frontend-dom</module>
         <module>ddom-frontend-saaj</module>
         <module>ddom-jaxp</module>
-        <module>ddom-mime</module>
         <module>ddom-model-dom</module>
         <module>ddom-saaj-impl</module>
         <module>ddom-saaj-ri-compat</module>
