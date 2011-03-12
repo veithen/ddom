@@ -18,7 +18,6 @@ package com.googlecode.ddom.backend.linkedlist;
 import com.google.code.ddom.collections.ObjectStack;
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
-import com.googlecode.ddom.backend.linkedlist.intf.LLBuilder;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.DeferredParsingException;
@@ -30,24 +29,25 @@ import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
 
 // TODO: also allow for deferred building of attributes
-public class Builder extends SimpleXmlOutput implements LLBuilder {
-    class Context implements InputContext {
+public class Builder extends SimpleXmlOutput {
+    final class Context implements InputContext {
         private LLParentNode targetNode;
+        
+        /**
+         * The {@link XmlHandler} object to send events to if pass-through is enabled. See
+         * {@link InputContext#setPassThroughHandler(XmlHandler)} for more details.
+         */
         private XmlHandler passThroughHandler;
         
         void init(LLParentNode targetNode) {
             this.targetNode = targetNode;
         }
         
-        public LLBuilder getBuilder() {
-            return Builder.this;
-        }
-        
         public void next() throws DeferredParsingException {
             Builder.this.next();
         }
 
-        public LLParentNode getTargetNode() {
+        LLParentNode getTargetNode() {
             return targetNode;
         }
 
@@ -57,14 +57,22 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             this.targetNode = targetNode;
         }
 
-        public XmlHandler getPassThroughHandler() {
+        XmlHandler getPassThroughHandler() {
             return passThroughHandler;
         }
 
         public void setPassThroughHandler(XmlHandler passThroughHandler) {
+            if (this.passThroughHandler != null) {
+                throw new IllegalStateException("A pass-through handler has already been set for this context");
+            }
             this.passThroughHandler = passThroughHandler;
+            targetNode = null;
         }
         
+        public boolean isPassThroughEnabled() {
+            return passThroughHandler != null;
+        }
+
         void recycle() {
             targetNode = null;
             passThroughHandler = null;
@@ -107,12 +115,6 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     private boolean nodeAppended;
     
     /**
-     * The {@link XmlHandler} object to send events to if pass-through is enabled. See
-     * {@link LLBuilder#setPassThroughHandler(XmlHandler)} for more details.
-     */
-    private XmlHandler passThroughHandler;
-    
-    /**
      * Tracks the nesting depth when pass-through is enabled.
      */
     private int passThroughDepth;
@@ -127,7 +129,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     public final InputContext getInputContext(LLParentNode target) {
         for (int i = 0, s = contextStack.size(); i<s; i++) {
-            InputContext context = contextStack.get(i);
+            Context context = contextStack.get(i);
             if (context.getTargetNode() == target) {
                 return context;
             }
@@ -135,7 +137,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
         return null;
     }
     
-    public final void next() throws DeferredParsingException {
+    final void next() throws DeferredParsingException {
         if (streamException == null) {
             try {
                 nodeAppended = false; 
@@ -151,15 +153,6 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
         }
     }
 
-    public final void setPassThroughHandler(XmlHandler handler) {
-        passThroughHandler = handler;
-        passThroughDepth = 0;
-    }
-
-    public final boolean isPassThroughEnabled() {
-        return passThroughHandler != null;
-    }
-
     @Override
     protected final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
         // TODO: how to handle pass-through here??
@@ -171,6 +164,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void processDocumentType(String rootName, String publicId, String systemId, String data) {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId, data));
         } else {
@@ -180,6 +174,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     
     @Override
     protected final void startElement(String tagName) throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendNode(new NSUnawareElement(document, tagName, false));
         } else {
@@ -190,6 +185,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     
     @Override
     protected final void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
             appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
@@ -206,6 +202,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void startAttribute(String name, String type) throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendAttribute(new NSUnawareAttribute(document, name, type, false));
         } else {
@@ -216,6 +213,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendAttribute(new NSAwareAttribute(document, namespaceURI, localName, prefix, type, false));
         } else {
@@ -226,6 +224,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void startNamespaceDeclaration(String prefix) throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendAttribute(new NamespaceDeclaration(document, prefix, false));
         } else {
@@ -241,6 +240,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void attributesCompleted() throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             nodeAppended = true;
         } else {
@@ -250,6 +250,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void processCharacterData(String data, boolean ignorable) throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             // If the character data is ignorable whitespace, then we know that there will
             // be (very likely) at least one child element in addition to the text node
@@ -265,6 +266,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     
     @Override
     protected final void startProcessingInstruction(String target) throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendNode(new ProcessingInstruction(document, target, false));
         } else {
@@ -280,6 +282,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void startComment() throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendNode(new Comment(document, false));
         } else {
@@ -295,6 +298,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     
     @Override
     protected final void startCDATASection() throws StreamException {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendNode(new CDATASection(document, false));
         } else {
@@ -310,6 +314,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
 
     @Override
     protected final void processEntityReference(String name) {
+        XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
             appendNode(new EntityReference(document, name));
         } else {
@@ -392,7 +397,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     private void nodeCompleted(int nodeType) throws StreamException {
         LLParentNode parent = context.getTargetNode();
         boolean pop;
-        if (passThroughHandler == null) {
+        if (parent != null) {
             if (pendingText != null) {
                 refreshLastSibling();
                 if (lastSibling == null) {
@@ -410,6 +415,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             parent.internalSetComplete(true);
             pop = true;
         } else {
+            XmlHandler passThroughHandler = context.getPassThroughHandler();
             // TODO: do we need to check pendingText???
             switch (nodeType) {
                 case FRAGMENT:
@@ -435,7 +441,6 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             }
             if (passThroughDepth == 0) {
                 pop = true;
-                passThroughHandler = null;
             } else {
                 passThroughDepth--;
                 pop = false;
@@ -453,6 +458,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
                 // parent from the current node, we get it from the stack.
                 context = contextStack.peek();
             }
+            passThroughDepth = 0;
         }
     }
 

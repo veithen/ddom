@@ -15,7 +15,7 @@
  */
 package com.googlecode.ddom.backend.linkedlist.support;
 
-import com.googlecode.ddom.backend.linkedlist.intf.LLBuilder;
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
@@ -67,10 +67,10 @@ public class TreeSerializer extends XmlInput {
     private LLNode node;
     
     /**
-     * The builder for the current node. This is only set if {@link #state} is
+     * The input context for the current node. This is only set if {@link #state} is
      * {@link #STATE_PASS_THROUGH}.
      */
-    private LLBuilder builder;
+    private InputContext inputContext;
     
     private int state;
     private LLDocument document;
@@ -91,9 +91,9 @@ public class TreeSerializer extends XmlInput {
     protected void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         try {
-            if (state == STATE_PASS_THROUGH && !builder.isPassThroughEnabled()) {
+            if (state == STATE_PASS_THROUGH && !inputContext.isPassThroughEnabled()) {
                 state = STATE_VISITED;
-                builder = null;
+                inputContext = null;
             }
             final LLNode previousNode = node;
             final LLNode nextNode;
@@ -132,8 +132,8 @@ public class TreeSerializer extends XmlInput {
                         LLChildNode child = parent.internalGetFirstChildIfMaterialized();
                         if (child == null) {
                             nextNode = parent;
-                            builder = getDocument().internalGetInputContext(parent).getBuilder();
-                            builder.setPassThroughHandler(handler);
+                            inputContext = getDocument().internalGetInputContext(parent);
+                            inputContext.setPassThroughHandler(handler);
                             state = STATE_PASS_THROUGH;
                         } else {
                             nextNode = child;
@@ -159,8 +159,8 @@ public class TreeSerializer extends XmlInput {
                             if (parent.coreIsComplete()) {
                                 state = STATE_VISITED;
                             } else {
-                                builder = getDocument().internalGetInputContext(parent).getBuilder();
-                                builder.setPassThroughHandler(handler);
+                                inputContext = getDocument().internalGetInputContext(parent);
+                                inputContext.setPassThroughHandler(handler);
                                 state = STATE_PASS_THROUGH;
                             }
                         } else {
@@ -199,7 +199,7 @@ public class TreeSerializer extends XmlInput {
                     }
                     break;
                 case STATE_PASS_THROUGH:
-                    builder.next();
+                    inputContext.next();
                     break;
                 default:
                     throw new IllegalStateException();
