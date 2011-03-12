@@ -36,6 +36,7 @@ import com.googlecode.ddom.weaver.ModelWeaverException;
 /**
  * @goal weave
  * @phase compile
+ * @requiresDependencyResolution compile
  */
 public class WeaverMojo extends AbstractMojo {
     /**
