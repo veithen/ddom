@@ -15,5 +15,5 @@
   ~ limitations under the License.
   -->
 <configuration xmlns="http://java.sun.com/xml/ns/jax-rpc/ri/config">
-    <wsdl location="${basedir}/src/test/resources/webapp/WEB-INF/attachments.wsdl" packageName="com.googlecode.ddom.tests.jaxrpc.attachments"/>
+    <wsdl location="${baseurl}/src/test/resources/webapp/WEB-INF/attachments.wsdl" packageName="com.googlecode.ddom.tests.jaxrpc.attachments"/>
 </configuration>
