@@ -38,7 +38,7 @@ public class TestCoreSetAttributeAlreadyOwnedByElement extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, "urn:ns", "test", "ns");
-        CoreAttribute attribute = nodeFactory.createAttribute(document, null, "attr", null, "value", "CDATA");
+        CoreAttribute attribute = nodeFactory.createAttribute(document, "", "attr", "", "value", "CDATA");
         element.coreAppendAttribute(attribute, Policies.REJECT);
         element.coreSetAttribute(NSAwareAttributeMatcher.INSTANCE, attribute, Policies.REJECT, ReturnValue.NONE);
     }

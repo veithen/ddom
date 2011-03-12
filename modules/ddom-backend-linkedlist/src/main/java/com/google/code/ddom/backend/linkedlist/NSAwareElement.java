@@ -150,7 +150,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
                 element = newElement;
             } else {
                 String namespaceURI = item.getNamespaceURI();
-                String prefix = namespaceURI == null ? null : coreLookupPrefix(namespaceURI, false);
+                String prefix = namespaceURI.length() == 0 ? "" : coreLookupPrefix(namespaceURI, false);
                 if (item.isUseExtensionInterface()) {
                     element = coreGetNodeFactory().createElement(document, item.getExtensionInterface(), item.getNamespaceURI(), item.getLocalName(), prefix);
                 } else {

@@ -95,7 +95,7 @@ public class BackendTestSuiteBuilder {
             }
             
             public CoreParentNode createNode(NodeFactory nodeFactory, CoreDocument document) {
-                return nodeFactory.createAttribute(document, null, "attr", null, null, null);
+                return nodeFactory.createAttribute(document, "", "attr", "", null, null);
             }
         });
         addParentNodeTests(suite, config, new ParentNodeFactory() {
