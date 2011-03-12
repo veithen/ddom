@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
@@ -59,13 +60,14 @@ public class Document extends ParentNode implements LLDocument {
         builders.add(builder);
     }
     
-    public final Builder internalGetBuilderFor(LLParentNode target) {
+    public final InputContext internalGetInputContext(LLParentNode target) {
         for (Builder builder : builders) {
-            if (builder.isBuilderFor(target)) {
-                return builder;
+            InputContext context = builder.getInputContext(target);
+            if (context != null) {
+                return context;
             }
         }
-        throw new IllegalArgumentException("No builder found for target");
+        throw new IllegalArgumentException("No input context found for target");
     }
     
     /**

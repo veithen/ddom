@@ -132,7 +132,7 @@ public class TreeSerializer extends XmlInput {
                         LLChildNode child = parent.internalGetFirstChildIfMaterialized();
                         if (child == null) {
                             nextNode = parent;
-                            builder = getDocument().internalGetBuilderFor(parent);
+                            builder = getDocument().internalGetInputContext(parent).getBuilder();
                             builder.setPassThroughHandler(handler);
                             state = STATE_PASS_THROUGH;
                         } else {
@@ -159,7 +159,7 @@ public class TreeSerializer extends XmlInput {
                             if (parent.coreIsComplete()) {
                                 state = STATE_VISITED;
                             } else {
-                                builder = getDocument().internalGetBuilderFor(parent);
+                                builder = getDocument().internalGetInputContext(parent).getBuilder();
                                 builder.setPassThroughHandler(handler);
                                 state = STATE_PASS_THROUGH;
                             }

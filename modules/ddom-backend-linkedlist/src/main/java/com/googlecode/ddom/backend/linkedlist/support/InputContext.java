@@ -17,6 +17,7 @@ package com.googlecode.ddom.backend.linkedlist.support;
 
 import com.googlecode.ddom.backend.linkedlist.intf.LLBuilder;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 /**
@@ -41,6 +42,10 @@ public class InputContext {
         return builder;
     }
     
+    public void next() throws DeferredParsingException {
+        builder.next();
+    }
+
     public LLParentNode getTargetNode() {
         return targetNode;
     }

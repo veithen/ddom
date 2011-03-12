@@ -85,13 +85,14 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
         context.setTargetNode(target);
     }
 
-    public final boolean isBuilderFor(LLParentNode target) {
+    public final InputContext getInputContext(LLParentNode target) {
         for (int i = 0, s = contextStack.size(); i<s; i++) {
-            if (contextStack.get(i).getTargetNode() == target) {
-                return true;
+            InputContext context = contextStack.get(i);
+            if (context.getTargetNode() == target) {
+                return context;
             }
         }
-        return false;
+        return null;
     }
 
     public final boolean migrateBuilder(LLParentNode from, LLParentNode to) {

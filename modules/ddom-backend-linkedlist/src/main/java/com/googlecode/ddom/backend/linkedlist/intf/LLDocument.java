@@ -15,11 +15,12 @@
  */
 package com.googlecode.ddom.backend.linkedlist.intf;
 
+import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.stream.XmlInput;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
     void internalCreateBuilder(XmlInput input, LLParentNode target);
-    LLBuilder internalGetBuilderFor(LLParentNode target);
+    InputContext internalGetInputContext(LLParentNode target);
     void internalMigrateBuilder(LLParentNode from, LLParentNode to);
 }

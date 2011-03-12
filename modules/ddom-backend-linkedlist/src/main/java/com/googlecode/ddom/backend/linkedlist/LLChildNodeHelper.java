@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.googlecode.ddom.backend.linkedlist;
 
-import com.googlecode.ddom.backend.linkedlist.intf.LLBuilder;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
@@ -71,9 +71,9 @@ public final class LLChildNodeHelper {
             return null;
         } else {
             if (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete()) {
-                LLBuilder builder = that.internalGetOwnerDocument().internalGetBuilderFor(parent);
+                InputContext context = that.internalGetOwnerDocument().internalGetInputContext(parent);
                 do {
-                    builder.next();
+                    context.next();
                 } while (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete());
             }
             return that.internalGetNextSiblingIfMaterialized();

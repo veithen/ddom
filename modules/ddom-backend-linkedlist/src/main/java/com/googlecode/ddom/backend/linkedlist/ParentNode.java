@@ -17,11 +17,11 @@ package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.Inject;
-import com.googlecode.ddom.backend.linkedlist.intf.LLBuilder;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.googlecode.ddom.backend.linkedlist.support.ElementsIterator;
+import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.backend.linkedlist.support.TreeSerializer;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
@@ -226,18 +226,18 @@ public abstract class ParentNode extends Node implements LLParentNode {
     
     public final void coreBuild() throws DeferredParsingException {
         if (!coreIsComplete()) {
-            LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
+            InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
             do {
-                builder.next();
+                context.next();
             } while (!coreIsComplete());
         }
     }
     
     public final boolean coreHasValue() throws DeferredParsingException {
         if (content == null && !coreIsComplete()) {
-            LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
+            InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
             do {
-                builder.next();
+                context.next();
             } while (content == null && !coreIsComplete());
         }
         return content instanceof String;
@@ -245,9 +245,9 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final boolean coreIsEmpty() throws DeferredParsingException {
         if (content == null && !coreIsComplete()) {
-            LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
+            InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
             do {
-                builder.next();
+                context.next();
             } while (content == null && !coreIsComplete());
         }
         return content == null;
@@ -262,10 +262,10 @@ public abstract class ParentNode extends Node implements LLParentNode {
             if (coreIsComplete()) {
                 return null;
             } else {
-                LLBuilder builder = internalGetOwnerDocument().internalGetBuilderFor(this);
-                while (content == null && !coreIsComplete()) {
-                    builder.next();
-                }
+                InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
+                do {
+                    context.next();
+                } while (content == null && !coreIsComplete());
                 // After calling the builder, the content may be a String object,
                 // so just continue.
             }
