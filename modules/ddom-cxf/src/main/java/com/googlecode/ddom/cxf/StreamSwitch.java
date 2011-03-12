@@ -24,8 +24,8 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.cxf.staxutils.W3CDOMStreamReader;
 
-import com.google.code.ddom.stream.stax.StAXInput;
 import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.stax.StAXInput;
 
 public class StreamSwitch extends StAXInput implements XMLStreamReader {
     private XMLStreamReader reader;

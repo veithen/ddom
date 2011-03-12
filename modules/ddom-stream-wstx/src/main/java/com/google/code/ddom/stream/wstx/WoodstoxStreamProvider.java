@@ -36,8 +36,6 @@ import com.ctc.wstx.io.StreamBootstrapper;
 import com.ctc.wstx.stax.WstxInputFactory;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import com.ctc.wstx.util.URLUtil;
-import com.google.code.ddom.stream.stax.StAXInput;
-import com.google.code.ddom.stream.stax.StAXOutput;
 import com.googlecode.ddom.spi.Provider;
 import com.googlecode.ddom.stream.OptionsTracker;
 import com.googlecode.ddom.stream.SimpleXmlSource;
@@ -49,6 +47,8 @@ import com.googlecode.ddom.stream.options.EntityReferencePolicy;
 import com.googlecode.ddom.stream.options.NamespaceAwareness;
 import com.googlecode.ddom.stream.options.ValidationPolicy;
 import com.googlecode.ddom.stream.spi.StreamProvider;
+import com.googlecode.ddom.stream.stax.StAXInput;
+import com.googlecode.ddom.stream.stax.StAXOutput;
 
 @Provider(name="woodstox")
 public class WoodstoxStreamProvider implements StreamProvider {
