@@ -17,7 +17,7 @@ package com.googlecode.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.Text;
 
-import com.google.code.ddom.frontend.dom.intf.DOMText;
+import com.googlecode.ddom.frontend.dom.intf.DOMText;
 
 public interface SAAJText extends Text, DOMText, SAAJNode {
 

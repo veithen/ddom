@@ -17,7 +17,7 @@ package com.googlecode.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.Name;
 
-import com.google.code.ddom.frontend.dom.intf.DOMNSAwareAttribute;
+import com.googlecode.ddom.frontend.dom.intf.DOMNSAwareAttribute;
 
 public interface SAAJNSAwareAttribute extends Name, DOMNSAwareAttribute {
 

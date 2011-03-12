@@ -17,7 +17,7 @@ package com.googlecode.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.SOAPEnvelope;
 
-import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.googlecode.ddom.frontend.dom.intf.DOMDocument;
 
 public interface SAAJDocument extends DOMDocument {
     SOAPEnvelope createSOAP11Envelope();

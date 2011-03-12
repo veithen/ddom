@@ -18,7 +18,7 @@ package com.googlecode.ddom.frontend.saaj.intf;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.frontend.dom.intf.DOMNSAwareElement;
+import com.googlecode.ddom.frontend.dom.intf.DOMNSAwareElement;
 
 public interface SAAJSOAPElement extends SOAPElement, DOMNSAwareElement, SAAJNode {
     Class<? extends SAAJSOAPElement> getChildType();

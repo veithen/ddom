@@ -22,8 +22,6 @@ import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
-import com.google.code.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
@@ -37,6 +35,8 @@ import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
+import com.googlecode.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.frontend.saaj.SAAJModelExtension;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;

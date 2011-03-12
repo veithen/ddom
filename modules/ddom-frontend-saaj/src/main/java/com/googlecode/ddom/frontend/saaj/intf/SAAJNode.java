@@ -17,7 +17,7 @@ package com.googlecode.ddom.frontend.saaj.intf;
 
 import javax.xml.soap.Node;
 
-import com.google.code.ddom.frontend.dom.intf.DOMCoreChildNode;
+import com.googlecode.ddom.frontend.dom.intf.DOMCoreChildNode;
 
 public interface SAAJNode extends Node, DOMCoreChildNode {
 

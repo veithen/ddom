@@ -15,10 +15,10 @@
  */
 package com.googlecode.ddom.frontend.saaj.support;
 
-import com.google.code.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
 
 public final class SAAJUtil {

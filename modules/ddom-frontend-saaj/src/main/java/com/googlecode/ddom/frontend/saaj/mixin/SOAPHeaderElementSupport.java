@@ -17,11 +17,11 @@ package com.googlecode.ddom.frontend.saaj.mixin;
 
 import javax.xml.soap.SOAPException;
 
-import com.google.code.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 

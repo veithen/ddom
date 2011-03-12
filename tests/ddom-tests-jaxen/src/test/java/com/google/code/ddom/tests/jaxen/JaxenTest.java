@@ -21,7 +21,7 @@ import org.apache.axiom.test.jaxen.JaxenXPathTestBase;
 import org.jaxen.Navigator;
 import org.jaxen.dom.DocumentNavigator;
 
-import com.google.code.ddom.frontend.dom.intf.DOMDocument;
+import com.googlecode.ddom.frontend.dom.intf.DOMDocument;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.stream.Options;
