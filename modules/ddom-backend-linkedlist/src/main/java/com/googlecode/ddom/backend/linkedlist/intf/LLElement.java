@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.aspect;
+package com.googlecode.ddom.backend.linkedlist.intf;
 
-import junit.framework.AssertionFailedError;
+import com.googlecode.ddom.core.CoreElement;
 
-import org.junit.Test;
+public interface LLElement extends LLChildNode, CoreElement {
 
-import com.googlecode.ddom.backend.linkedlist.DocumentTypeDeclaration;
-
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeDeclaration(null, null, null, null, null);
-    }
 }

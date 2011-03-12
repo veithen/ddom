@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.aspect;
+package com.googlecode.ddom.backend.linkedlist.intf;
 
-import junit.framework.AssertionFailedError;
+import com.googlecode.ddom.core.CoreNode;
+import com.googlecode.ddom.core.WrongDocumentException;
 
-import org.junit.Test;
-
-import com.googlecode.ddom.backend.linkedlist.DocumentTypeDeclaration;
-
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeDeclaration(null, null, null, null, null);
-    }
+public interface LLNode extends CoreNode {
+    // TODO: need to check if we really need interface methods for this
+    boolean internalGetFlag(int flag);
+    void internalSetFlag(int flag, boolean value);
+    
+    LLDocument internalGetOwnerDocument();
+    
+    void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException;
 }

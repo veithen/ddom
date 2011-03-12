@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2010 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.aspect;
+package com.googlecode.ddom.backend.testsuite.parent;
 
-import junit.framework.AssertionFailedError;
+import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.NodeFactory;
 
-import org.junit.Test;
-
-import com.googlecode.ddom.backend.linkedlist.DocumentTypeDeclaration;
-
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeDeclaration(null, null, null, null, null);
-    }
+public interface ParentNodeFactory {
+    Class<? extends CoreParentNode> getNodeClass();
+    CoreParentNode createNode(NodeFactory nodeFactory, CoreDocument document);
 }

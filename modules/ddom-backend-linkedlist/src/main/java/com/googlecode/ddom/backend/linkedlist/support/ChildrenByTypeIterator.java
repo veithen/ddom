@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.aspect;
+package com.googlecode.ddom.backend.linkedlist.support;
 
-import junit.framework.AssertionFailedError;
+import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreParentNode;
 
-import org.junit.Test;
+public class ChildrenByTypeIterator<T extends CoreChildNode> extends AbstractNodeIterator<T> {
+    public ChildrenByTypeIterator(CoreParentNode startNode, Axis axis, Class<T> type) {
+        super(startNode, type, axis);
+    }
 
-import com.googlecode.ddom.backend.linkedlist.DocumentTypeDeclaration;
-
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeDeclaration(null, null, null, null, null);
+    @Override
+    protected final boolean matches(T node) {
+        return true;
     }
 }

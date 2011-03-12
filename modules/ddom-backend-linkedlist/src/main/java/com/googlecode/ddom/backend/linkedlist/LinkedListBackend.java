@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.aspect;
+package com.googlecode.ddom.backend.linkedlist;
 
-import junit.framework.AssertionFailedError;
+import com.google.code.ddom.commons.cl.ClassCollection;
+import com.google.code.ddom.commons.cl.Package;
+import com.googlecode.ddom.backend.Backend;
+import com.googlecode.ddom.spi.Provider;
 
-import org.junit.Test;
+@Provider(name="linkedlist")
+public class LinkedListBackend implements Backend {
+    public String getNodeFactoryClassName() {
+        return NodeFactoryImpl.class.getName();
+    }
 
-import com.googlecode.ddom.backend.linkedlist.DocumentTypeDeclaration;
-
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeDeclaration(null, null, null, null, null);
+    public ClassCollection getWeavableClasses() {
+        return Package.forClass(LinkedListBackend.class);
     }
 }

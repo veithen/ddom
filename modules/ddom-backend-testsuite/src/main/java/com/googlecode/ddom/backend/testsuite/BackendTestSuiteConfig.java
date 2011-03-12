@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.aspect;
+package com.googlecode.ddom.backend.testsuite;
 
-import junit.framework.AssertionFailedError;
+import com.googlecode.ddom.core.NodeFactory;
 
-import org.junit.Test;
+public final class BackendTestSuiteConfig {
+    private final NodeFactory nodeFactory;
+    private final int builderType;
+    
+    public BackendTestSuiteConfig(NodeFactory nodeFactory, int builderType) {
+        this.nodeFactory = nodeFactory;
+        this.builderType = builderType;
+    }
 
-import com.googlecode.ddom.backend.linkedlist.DocumentTypeDeclaration;
+    public NodeFactory getNodeFactory() {
+        return nodeFactory;
+    }
 
-public class NodeFactoryAspectTest {
-    @Test(expected=AssertionFailedError.class)
-    public void testNodeCreatedOutsideFactoryAdvice() {
-        new DocumentTypeDeclaration(null, null, null, null, null);
+    public int getBuilderType() {
+        return builderType;
     }
 }
