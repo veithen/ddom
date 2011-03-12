@@ -44,6 +44,10 @@ public class StringAccumulator {
         }
     }
     
+    public int length() {
+        return content == null ? 0 : ((CharSequence)content).length();
+    }
+    
     public void clear() {
         content = null;
     }
