@@ -17,10 +17,10 @@ package com.googlecode.ddom.backend.linkedlist;
 
 import com.google.code.ddom.collections.ObjectStack;
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLBuilder;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
-import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.core.ext.ModelExtensionMapper;
@@ -31,6 +31,46 @@ import com.googlecode.ddom.stream.XmlInput;
 
 // TODO: also allow for deferred building of attributes
 public class Builder extends SimpleXmlOutput implements LLBuilder {
+    class Context implements InputContext {
+        private LLParentNode targetNode;
+        private XmlHandler passThroughHandler;
+        
+        void init(LLParentNode targetNode) {
+            this.targetNode = targetNode;
+        }
+        
+        public LLBuilder getBuilder() {
+            return Builder.this;
+        }
+        
+        public void next() throws DeferredParsingException {
+            Builder.this.next();
+        }
+
+        public LLParentNode getTargetNode() {
+            return targetNode;
+        }
+
+        public void setTargetNode(LLParentNode targetNode) {
+            this.targetNode.internalSetComplete(true);
+            targetNode.internalSetComplete(false);
+            this.targetNode = targetNode;
+        }
+
+        public XmlHandler getPassThroughHandler() {
+            return passThroughHandler;
+        }
+
+        public void setPassThroughHandler(XmlHandler passThroughHandler) {
+            this.passThroughHandler = passThroughHandler;
+        }
+        
+        void recycle() {
+            targetNode = null;
+            passThroughHandler = null;
+        }
+    }
+    
     private static final int FRAGMENT = 0;
     private static final int ELEMENT = 1;
     private static final int ATTRIBUTE = 2;
@@ -43,15 +83,15 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     private final XmlInput input; // TODO: not sure if we still need this
     private final ModelExtensionMapper modelExtensionMapper;
     private final Document document;
-    private final ObjectStack<InputContext> contextStack = new ObjectStack<InputContext>() {
+    private final ObjectStack<Context> contextStack = new ObjectStack<Context>() {
         @Override
-        protected InputContext createObject() {
-            return new InputContext(Builder.this);
+        protected Context createObject() {
+            return new Context();
         }
 
         @Override
-        protected void recycleObject(InputContext object) {
-            // TODO: set the attributes in the InputContext to null to make the objects eligible for garbage collection
+        protected void recycleObject(Context context) {
+            context.recycle();
         }
     };
     private StreamException streamException;
@@ -59,7 +99,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
     /**
      * The current input context. This is always the top element of {@link #contextStack}.
      */
-    private InputContext context;
+    private Context context;
     
     private LLChildNode lastSibling; // The last child of the current node
     private Attribute lastAttribute;
@@ -82,7 +122,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
         modelExtensionMapper = modelExtension.newMapper();
         this.document = document;
         context = contextStack.allocate();
-        context.setTargetNode(target);
+        context.init(target);
     }
 
     public final InputContext getInputContext(LLParentNode target) {
@@ -93,17 +133,6 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             }
         }
         return null;
-    }
-
-    public final boolean migrateBuilder(LLParentNode from, LLParentNode to) {
-        for (int i = 0, s = contextStack.size(); i<s; i++) {
-            InputContext context = contextStack.get(i);
-            if (context.getTargetNode() == from) {
-                context.setTargetNode(to);
-                return true;
-            }
-        }
-        return false;
     }
     
     public final void next() throws DeferredParsingException {
@@ -335,7 +364,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
         if (node instanceof Container) {
             // TODO: this assumes that elements are always created as incomplete
             context = contextStack.allocate();
-            context.setTargetNode((Container)node);
+            context.init((Container)node);
             lastSibling = null;
         } else {
             nodeAppended = true;
@@ -351,7 +380,7 @@ public class Builder extends SimpleXmlOutput implements LLBuilder {
             lastAttribute.insertAttributeAfter(attr);
         }
         context = contextStack.allocate();
-        context.setTargetNode(attr);
+        context.init(attr);
         lastAttribute = attr;
     }
     

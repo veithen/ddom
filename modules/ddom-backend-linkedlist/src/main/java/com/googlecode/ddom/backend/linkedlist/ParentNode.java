@@ -17,11 +17,11 @@ package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.Inject;
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.googlecode.ddom.backend.linkedlist.support.ElementsIterator;
-import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.backend.linkedlist.support.TreeSerializer;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;

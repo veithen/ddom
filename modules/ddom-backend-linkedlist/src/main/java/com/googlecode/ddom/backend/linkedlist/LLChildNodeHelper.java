@@ -15,11 +15,11 @@
  */
 package com.googlecode.ddom.backend.linkedlist;
 
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
-import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
@@ -128,7 +128,7 @@ public final class LLChildNodeHelper {
                 // This is a special case: we don't need to build the fragment, but only to move
                 // the already materialized children and then to migrate the builder. This is
                 // possible because we have a builder of type 2.
-                that.internalGetOwnerDocument().internalMigrateBuilder(fragment, parent);
+                that.internalGetOwnerDocument().internalGetInputContext(fragment).setTargetNode(parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 that.internalSetNextSibling(node);
                 int nodeCount = 0;
@@ -268,7 +268,7 @@ public final class LLChildNodeHelper {
             int nodeCount = 0;
             if (parent.coreIsComplete() && that.internalGetNextSiblingIfMaterialized() == null && !fragment.coreIsComplete()) {
                 // This is the same case as considered in coreInsertSiblingsAfter
-                that.internalGetOwnerDocument().internalMigrateBuilder(fragment, parent);
+                that.internalGetOwnerDocument().internalGetInputContext(fragment).setTargetNode(parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 if (previousSibling == null) {
                     parent.internalSetFirstChild(node);

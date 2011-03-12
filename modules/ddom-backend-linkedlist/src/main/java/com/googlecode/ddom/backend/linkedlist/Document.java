@@ -18,9 +18,9 @@ package com.googlecode.ddom.backend.linkedlist;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
-import com.googlecode.ddom.backend.linkedlist.support.InputContext;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
@@ -68,24 +68,6 @@ public class Document extends ParentNode implements LLDocument {
             }
         }
         throw new IllegalArgumentException("No input context found for target");
-    }
-    
-    /**
-     * Reassign the builder linked to one node to another node. This is necessary if the content of
-     * a node is moved to another node without building the source node.
-     * 
-     * @param from
-     * @param to
-     */
-    public final void internalMigrateBuilder(LLParentNode from, LLParentNode to) {
-        for (Builder builder : builders) {
-            if (builder.migrateBuilder(from, to)) {
-                from.internalSetComplete(true);
-                to.internalSetComplete(false);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("No builder found for target");
     }
     
     public final Symbols getSymbols() {

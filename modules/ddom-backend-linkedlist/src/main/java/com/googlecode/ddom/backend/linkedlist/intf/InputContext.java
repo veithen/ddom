@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.backend.linkedlist.support;
+package com.googlecode.ddom.backend.linkedlist.intf;
 
-import com.googlecode.ddom.backend.linkedlist.intf.LLBuilder;
-import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -29,36 +27,26 @@ import com.googlecode.ddom.stream.XmlHandler;
  * 
  * @author Andreas Veithen
  */
-public class InputContext {
-    private final LLBuilder builder;
-    private LLParentNode targetNode;
-    private XmlHandler passThroughHandler;
+public interface InputContext {
+    LLBuilder getBuilder();
     
-    public InputContext(LLBuilder builder) {
-        this.builder = builder;
-    }
+    void next() throws DeferredParsingException;
 
-    public LLBuilder getBuilder() {
-        return builder;
-    }
-    
-    public void next() throws DeferredParsingException {
-        builder.next();
-    }
+    LLParentNode getTargetNode();
 
-    public LLParentNode getTargetNode() {
-        return targetNode;
-    }
+    /**
+     * Set a new target node for this context. This method is used if the content of a node needs to
+     * be moved to another node without building the source node.
+     * <p>
+     * Note that as a side effect, this method will also change the completion status of the
+     * involved nodes.
+     * 
+     * @param targetNode
+     *            the new target node
+     */
+    void setTargetNode(LLParentNode targetNode);
 
-    public void setTargetNode(LLParentNode targetNode) {
-        this.targetNode = targetNode;
-    }
+    XmlHandler getPassThroughHandler();
 
-    public XmlHandler getPassThroughHandler() {
-        return passThroughHandler;
-    }
-
-    public void setPassThroughHandler(XmlHandler passThroughHandler) {
-        this.passThroughHandler = passThroughHandler;
-    }
+    void setPassThroughHandler(XmlHandler passThroughHandler);
 }
