@@ -144,11 +144,6 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         }
     }
 
-    public void removeContents() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public final SOAPElement addTextNode(String text) throws SOAPException {
         try {
             if (coreIsEmpty()) {
@@ -162,6 +157,14 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
         }
     }
     
+    public final void removeContents() {
+        try {
+            coreClear();
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
+    }
+
     private SOAPElement internalAddAttribute(String namespaceURI, String localName, String prefix, String value) throws SOAPException {
         coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
         if (namespaceURI.length() > 0) {

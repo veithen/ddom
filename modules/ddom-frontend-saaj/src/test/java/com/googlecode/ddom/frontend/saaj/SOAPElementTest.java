@@ -420,6 +420,15 @@ public class SOAPElementTest {
         SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
         element.addChildElement("child", "p");
     }
+
+    @Validated @Test
+    public void testRemoveContents() throws Exception {
+        SOAPElement element = saajUtil.createSOAPElement(null, "test", null);
+        element.addChildElement(new QName("child1"));
+        element.addChildElement(new QName("child2"));
+        element.removeContents();
+        assertNull(element.getFirstChild());
+    }
     
     /**
      * Tests the behavior of {@link SOAPElement#getChildElements()} when there are text nodes among
