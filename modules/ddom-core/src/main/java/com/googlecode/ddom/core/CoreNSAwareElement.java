@@ -15,6 +15,11 @@
  */
 package com.googlecode.ddom.core;
 
+/**
+ * Represents a namespace aware element information item.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreNSAwareElement extends CoreElement, CoreNSAwareNamedNode {
     /**
      * Get (or optionally create) an child element according to a given sequence.

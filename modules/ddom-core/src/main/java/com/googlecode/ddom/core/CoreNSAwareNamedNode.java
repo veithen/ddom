@@ -17,6 +17,11 @@ package com.googlecode.ddom.core;
 
 import javax.xml.namespace.QName;
 
+/**
+ * Represents a namespace aware named information item.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreNSAwareNamedNode extends CoreNode {
     /**
      * Get the namespace URI of this node.

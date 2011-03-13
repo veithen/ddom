@@ -15,6 +15,13 @@
  */
 package com.googlecode.ddom.core;
 
+/**
+ * Parent interface for all core model objects that contain XML data. With the exception of
+ * {@link CoreDocumentFragment}, an instance of this interface represents an information item in the
+ * Logical Content Model.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreNode {
     /**
      * The node is a {@link CoreDocument}.

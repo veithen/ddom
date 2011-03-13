@@ -17,6 +17,11 @@ package com.googlecode.ddom.core;
 
 import java.util.Iterator;
 
+/**
+ * Represents an element information item.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreElement extends CoreChildNode, CoreParentNode {
     /**
      * Specifies the value that should be returned by

@@ -15,6 +15,11 @@
  */
 package com.googlecode.ddom.core;
 
+/**
+ * Represents a CDATA section information item.
+ * 
+ * @author Andreas Veithen
+ */
 //TODO: document that only CoreText nodes are allowed as children + add unit test
 public interface CoreCDATASection extends CoreChildNode, CoreParentNode {
 

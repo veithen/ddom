@@ -15,6 +15,11 @@
  */
 package com.googlecode.ddom.core;
 
+/**
+ * Represents a processing instruction information item.
+ * 
+ * @author Andreas Veithen
+ */
 //TODO: document that only CoreText nodes are allowed as children + add unit test
 public interface CoreProcessingInstruction extends CoreChildNode, CoreParentNode {
     String coreGetTarget();

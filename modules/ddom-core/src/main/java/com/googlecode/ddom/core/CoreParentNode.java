@@ -18,6 +18,13 @@ package com.googlecode.ddom.core;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
+/**
+ * A node that acts as a container for {@link CoreChildNode} objects. With the exception of
+ * {@link CoreDocumentFragment}, an instance of this interface represents a parent information item
+ * in the Logical Content Model.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreParentNode extends CoreNode {
     /**
      * Determine if this parent node is complete.
@@ -172,8 +179,7 @@ public interface CoreParentNode extends CoreNode {
      * already has a parent node, it is first removed from this parent.
      * 
      * @param newChild
-     *            the new child; this may either be a {@link CoreChildNode} or a
-     *            {@link CoreDocumentFragment}
+     *            the new child
      * @param policy
      *            the policy to apply if the new child already has a parent or belongs to a
      *            different document
@@ -195,8 +201,42 @@ public interface CoreParentNode extends CoreNode {
     
     CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredParsingException;
     
+    /**
+     * Create a namespace unaware element and append it to this parent node. For the precise
+     * semantics of the parameters, please refer to the corresponding method in {@link NodeFactory}.
+     * 
+     * @param tagName
+     *            the name of the element
+     * @return the newly created node
+     * @throws ChildNotAllowedException
+     *             If an attempt is made to insert a child node where it is not allowed.
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing.
+     * 
+     * @see NodeFactory#createElement(CoreDocument, String)
+     * @see #coreAppendChild(CoreChildNode, NodeMigrationPolicy)
+     */
     CoreNSUnawareElement coreAppendElement(String tagName) throws ChildNotAllowedException, DeferredParsingException;
-    
+
+    /**
+     * Create a namespace aware element and append it to this parent node. For the precise semantics
+     * of the parameters, please refer to the corresponding method in {@link NodeFactory}.
+     * 
+     * @param namespaceURI
+     *            the namespace URI of the element
+     * @param localName
+     *            the local part of the element's name
+     * @param prefix
+     *            the prefix of the element
+     * @return the newly created node
+     * @throws ChildNotAllowedException
+     *             If an attempt is made to insert a child node where it is not allowed.
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing.
+     * 
+     * @see NodeFactory#createElement(CoreDocument, String, String, String)
+     * @see #coreAppendChild(CoreChildNode, NodeMigrationPolicy)
+     */
     CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException;
     
     <T extends CoreNSAwareElement> T coreAppendElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException;

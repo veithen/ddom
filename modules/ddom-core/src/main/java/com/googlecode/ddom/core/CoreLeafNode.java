@@ -15,6 +15,12 @@
  */
 package com.googlecode.ddom.core;
 
+/**
+ * Represents a leaf information item. Leaf information items are child information items that are
+ * not parent information items.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreLeafNode extends CoreChildNode {
 
 }

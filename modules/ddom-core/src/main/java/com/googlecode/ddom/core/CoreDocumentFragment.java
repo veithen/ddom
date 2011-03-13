@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,19 @@
  */
 package com.googlecode.ddom.core;
 
+/**
+ * Represents an arbitrary sequence of information items. This type of node doesn't represent any
+ * information item defined by the Logical Content Model. Instances of this interface are used for
+ * two purposes:
+ * <ol>
+ * <li>As an intermediary receptacle when manipulating existing object model trees. A document
+ * fragment can be used to move collections of nodes from one location to another one in the tree.
+ * <li>As a representation of an XML fragment, i.e. a document that is not a well-formed XML
+ * document, but that contains an arbitrary sequence of information items.
+ * </ol>
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreDocumentFragment extends CoreParentNode {
     /**
      * Set a new owner document for this document fragment.

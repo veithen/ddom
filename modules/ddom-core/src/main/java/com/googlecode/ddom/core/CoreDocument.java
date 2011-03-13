@@ -17,6 +17,11 @@ package com.googlecode.ddom.core;
 
 import com.googlecode.ddom.symbols.Symbols;
 
+/**
+ * Represents a document information item.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreDocument extends CoreParentNode {
     /**
      * Get the symbol table used by this document. The symbol table may be used to avoid creation of

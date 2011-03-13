@@ -15,6 +15,11 @@
  */
 package com.googlecode.ddom.core;
 
+/**
+ * Represents an attribute information item that is not a namespace declaration.
+ * 
+ * @author Andreas Veithen
+ */
 public interface CoreTypedAttribute extends CoreAttribute {
     String coreGetType();
     void coreSetType(String type);
