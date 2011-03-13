@@ -51,6 +51,7 @@ import com.googlecode.ddom.core.NodeNotFoundException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.core.ext.ModelExtension;
+import com.googlecode.ddom.stream.NullXmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
@@ -124,14 +125,19 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final void coreClear() throws DeferredParsingException {
+        // TODO: what if the node is incomplete and the first child has not yet been built?
         if (content instanceof LLChildNode) {
             LLChildNode child = (LLChildNode)content;
             do {
-                LLChildNode next = child.internalGetNextSibling();
+                LLChildNode next = child.internalGetNextSiblingIfMaterialized();
                 child.internalSetParent(null);
                 child.internalSetNextSibling(null);
                 child = next;
             } while (child != null);
+            if (!coreIsComplete()) {
+                internalGetOwnerDocument().internalGetInputContext(this).setPassThroughHandler(NullXmlHandler.INSTANCE);
+                internalSetComplete(true);
+            }
         }
         content = null;
         internalNotifyChildrenCleared();

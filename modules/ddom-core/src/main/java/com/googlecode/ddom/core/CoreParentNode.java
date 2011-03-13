@@ -75,9 +75,15 @@ public interface CoreParentNode extends CoreNode {
     void coreSetValue(String value) throws DeferredParsingException;
     
     /**
-     * Remove all children from this node.
+     * Remove all children from this node. Child nodes that have not been materialized yet will be
+     * discarded. This may occur during the execution of the method or at a later time. Note that
+     * this has no visible consequences because there is no way to navigate to these nodes after the
+     * invocation of this method.
      * 
-     * @throws DeferredParsingException 
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing. Note that if the implementation uses
+     *             a builder of type 2, no events will be requested from the underlying parser and
+     *             no exception of this type will ever be thrown.
      */
     void coreClear() throws DeferredParsingException;
     
