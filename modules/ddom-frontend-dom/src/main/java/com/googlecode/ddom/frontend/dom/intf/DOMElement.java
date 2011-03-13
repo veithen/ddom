@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@ package com.googlecode.ddom.frontend.dom.intf;
 import org.w3c.dom.Element;
 
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public interface DOMElement extends CoreElement, Element, DOMParentNode, DOMCoreChildNode {
-    CoreElement shallowCloneWithoutAttributes();
+    CoreElement shallowCloneWithoutAttributes() throws DeferredParsingException;
 }

@@ -21,5 +21,19 @@ package com.googlecode.ddom.core;
  * @author Andreas Veithen
  */
 public interface CoreNSUnawareNamedNode extends CoreNode {
-    String coreGetName();
+    /**
+     * Get the name of this node. If the node is an element whose name was left unspecified during
+     * construction, then the name will be determined by processing the source object set with
+     * {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
+     * 
+     * @return the name of the node
+     * @throws DeferredParsingException
+     *             If an error occurs while processing the source object of this node set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
+     * @throws IllegalStateException
+     *             If the name of the node has not been specified during construction and no source
+     *             object has been set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
+     */
+    String coreGetName() throws DeferredParsingException;
 }

@@ -15,9 +15,11 @@
  */
 package com.googlecode.ddom.frontend.saaj.mixin;
 
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
+import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 /**
  * Mixin that implements the {@link Name} interface on namespace aware attributes. This is used to
@@ -30,12 +32,20 @@ import com.googlecode.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class NSAwareAttributeSupport implements SAAJNSAwareAttribute {
     public final String getQualifiedName() {
-        String prefix = coreGetPrefix();
-        String localName = coreGetLocalName();
-        return prefix.length() == 0 ? localName : prefix + ":" + localName;
+        try {
+            String prefix = coreGetPrefix();
+            String localName = coreGetLocalName();
+            return prefix.length() == 0 ? localName : prefix + ":" + localName;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
     
     public final String getURI() {
-        return coreGetNamespaceURI();
+        try {
+            return coreGetNamespaceURI();
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMNamespace;
 
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamedNode;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 /**
  * 
@@ -38,8 +40,12 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
     }
     
     public final OMNamespace getNamespace() {
-        String namespaceURI = coreGetNamespaceURI();
-        return namespaceURI.length() == 0 ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
+        try {
+            String namespaceURI = coreGetNamespaceURI();
+            return namespaceURI.length() == 0 ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final void setNamespace(OMNamespace namespace) {
@@ -48,6 +54,10 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
     }
     
     public final QName getQName() {
-        return coreGetQName();
+        try {
+            return coreGetQName();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 }

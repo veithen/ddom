@@ -19,6 +19,7 @@ import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
 
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.*;
@@ -28,13 +29,21 @@ import com.googlecode.ddom.frontend.dom.support.NSUtil;
 @Mixin(CoreNSAwareNamedNode.class)
 public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
     public final String getNamespaceURI() {
-        String namespaceURI = coreGetNamespaceURI();
-        return namespaceURI.length() == 0 ? null : namespaceURI;
+        try {
+            String namespaceURI = coreGetNamespaceURI();
+            return namespaceURI.length() == 0 ? null : namespaceURI;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final String getPrefix() {
-        String prefix = coreGetPrefix();
-        return prefix.length() == 0 ? null : prefix;
+        try {
+            String prefix = coreGetPrefix();
+            return prefix.length() == 0 ? null : prefix;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
     
     public final void setPrefix(String prefix) throws DOMException {
@@ -59,7 +68,11 @@ public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
     }
     
     public final String getLocalName() {
-        return coreGetLocalName();
+        try {
+            return coreGetLocalName();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public String internalGetName() {

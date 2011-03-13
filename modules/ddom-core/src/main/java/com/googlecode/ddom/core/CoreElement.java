@@ -17,6 +17,8 @@ package com.googlecode.ddom.core;
 
 import java.util.Iterator;
 
+import com.googlecode.ddom.stream.XmlSource;
+
 /**
  * Represents an element information item.
  * 
@@ -47,6 +49,30 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
     }
     
     /**
+     * Set the source of this element. The effect of this method is similar to
+     * {@link CoreParentNode#coreSetContent(XmlSource)}, except that the provided {@link XmlSource}
+     * object is expected to describe the element itself, not its content. When the source is
+     * expanded, the name (tag name for a namespace unaware element; namespace URI, local name and
+     * prefix for a namespace aware element) of the root element information item are checked for
+     * consistency with the corresponding values set during the construction of this node.
+     * <p>
+     * If during construction of this element, the name (or one or more of its components) was left
+     * unspecified, then it will be determined lazily by expanding the source of the element set
+     * with this method.
+     * 
+     * @param source
+     *            the source for the element
+     * 
+     * @see NodeFactory#createElement(CoreDocument, String)
+     * @see NodeFactory#createElement(CoreDocument, String, String, String)
+     * @see CoreNSUnawareNamedNode#coreGetName()
+     * @see CoreNSAwareNamedNode#coreGetNamespaceURI()
+     * @see CoreNSAwareNamedNode#coreGetLocalName()
+     * @see CoreNSAwareNamedNode#coreGetPrefix()
+     */
+    void coreSetSource(XmlSource source);
+    
+    /**
      * Get the first attribute of this element.
      * 
      * @return the first attribute, or <code>null</code> if this element has no attributes
@@ -73,8 +99,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
      * @return the (first) matching attribute, or <code>null</code> if no matching attribute was
      *         found
+     * @throws DeferredParsingException
+     *             If an error occurs during deferred parsing.
      */
-    CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name);
+    CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException;
     
     /**
      * Create or update an attribute based on a given {@link AttributeMatcher}.
@@ -97,8 +125,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            the <code>value</code> parameter to pass to
      *            {@link AttributeMatcher#createAttribute(NodeFactory, CoreDocument, String, String, String, String)}
      *            and {@link AttributeMatcher#update(CoreAttribute, String, String)}
+     * @throws DeferredParsingException 
+     *             If an error occurs during deferred parsing.
      */
-    void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value);
+    void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) throws DeferredParsingException;
     
     /**
      * Add a new attribute or replace an existing attribute based on a given
@@ -118,8 +148,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            specifies the expected return value of the method
      * @return the attribute as specified by the <code>returnValue</code> parameter
      * @throws NodeMigrationException 
+     * @throws DeferredParsingException 
+     *             If an error occurs during deferred parsing.
      */
-    CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException;
+    CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredParsingException;
     
     /**
      * Append an attribute to this element. The attribute is simply added at the end of the list of
@@ -149,8 +181,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
      * @return <code>true</code> if a matching attribute was found (and has been removed),
      *         <code>false</code> if no matching attribute was found
+     * @throws DeferredParsingException 
+     *             If an error occurs during deferred parsing.
      */
-    boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name);
+    boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException;
     
     /**
      * Look up the namespace URI associated to the given prefix.

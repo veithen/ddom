@@ -48,7 +48,7 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
     
     private DOM2AttributeMatcher() {}
     
-    public boolean matches(CoreAttribute attr, String namespaceURI, String name) {
+    public boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredParsingException {
         if (attr instanceof CoreNSAwareAttribute) {
             CoreNSAwareAttribute nsAwareAttr = (CoreNSAwareAttribute)attr;
             // Optimization: first compare the local names because they are in general
@@ -62,11 +62,11 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
         }
     }
 
-    public String getNamespaceURI(CoreAttribute attr) {
+    public String getNamespaceURI(CoreAttribute attr) throws DeferredParsingException {
         return ((CoreNSAwareAttribute)attr).coreGetNamespaceURI();
     }
 
-    public String getName(CoreAttribute attr) {
+    public String getName(CoreAttribute attr) throws DeferredParsingException {
         return ((CoreNSAwareAttribute)attr).coreGetLocalName();
     }
 

@@ -24,6 +24,7 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementAlreadyExistsException;
 import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.SequenceItem;
@@ -76,7 +77,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.localName = localName;
     }
 
-    public final QName coreGetQName() {
+    public final QName coreGetQName() throws DeferredParsingException {
         return NSAwareNamedNodeHelper.coreGetQName(this);
     }
 
@@ -168,7 +169,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         }
     }
     
-    private boolean matches(CoreNSAwareElement element, Sequence sequence, int index) {
+    private boolean matches(CoreNSAwareElement element, Sequence sequence, int index) throws DeferredParsingException {
         SequenceItem item = sequence.item(index);
         if (sequence.isMatchByInterface()) {
             return item.getExtensionInterface().isInstance(element);

@@ -42,12 +42,18 @@ import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.XmlSource;
 
 public abstract class Element extends Container implements LLElement {
     private Attribute firstAttribute;
 
     public Element(Document document, boolean complete) {
         super(document, complete);
+    }
+
+    public final void coreSetSource(XmlSource source) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     final void setFirstAttribute(Attribute firstAttribute) {
@@ -75,7 +81,7 @@ public abstract class Element extends Container implements LLElement {
         return previousAttribute;
     }
 
-    public final CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) {
+    public final CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException {
         CoreAttribute attr = firstAttribute;
         while (attr != null && !matcher.matches(attr, namespaceURI, name)) {
             attr = attr.coreGetNextAttribute();
@@ -83,7 +89,7 @@ public abstract class Element extends Container implements LLElement {
         return attr;
     }
 
-    public final void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) {
+    public final void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) throws DeferredParsingException {
         Attribute attr = firstAttribute;
         Attribute previousAttr = null;
         while (attr != null && !matcher.matches(attr, namespaceURI, name)) {
@@ -156,7 +162,7 @@ public abstract class Element extends Container implements LLElement {
         }
     }
     
-    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException {
+    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredParsingException {
         if (coreAttr.coreGetOwnerElement() == this) {
             // TODO: document this and add assertion
             // TODO: take returnValue into account
@@ -212,7 +218,7 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
-    public final boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) {
+    public final boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException {
         CoreAttribute att = coreGetAttribute(matcher, namespaceURI, name);
         if (att != null) {
             att.coreRemove();

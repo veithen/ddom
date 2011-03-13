@@ -95,7 +95,11 @@ public class OMFactoryImpl implements OMFactory {
         }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, qname.getLocalPart(), prefix);
         if (prefix.length() != 0) {
-            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+            try {
+                element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         }
         element.setOMFactory(this);
         return element;
@@ -126,7 +130,11 @@ public class OMFactoryImpl implements OMFactory {
         element.setOMFactory(this);
         // TODO: we don't have a test case covering ns == null
         if (ns != null) {
-            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+            try {
+                element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         }
         return element;
     }
@@ -155,7 +163,11 @@ public class OMFactoryImpl implements OMFactory {
         }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
         // TODO: not always necessary
-        element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+        try {
+            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
         element.setOMFactory(this);
         return element;
     }

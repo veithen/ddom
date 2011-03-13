@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
-    Node shallowClone();
+    Node shallowClone() throws DeferredParsingException;
     Node deepClone();
     void normalizeChildren(NormalizationConfig config) throws AbortNormalizationException;
 }

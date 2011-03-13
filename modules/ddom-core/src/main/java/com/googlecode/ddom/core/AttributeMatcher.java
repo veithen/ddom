@@ -90,8 +90,10 @@ public interface AttributeMatcher {
      * @param name
      *            see above
      * @return <code>true</code> if the attribute matches, <code>false</code> otherwise
+     * @throws DeferredParsingException
+     *             If a parsing error occurs while accessing the attribute.
      */
-    boolean matches(CoreAttribute attr, String namespaceURI, String name);
+    boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredParsingException;
 
     /**
      * Get the <tt>namespaceURI</tt> parameter for an existing attribute. This method is used by
@@ -100,8 +102,10 @@ public interface AttributeMatcher {
      * 
      * @param attr the attribute
      * @return the <tt>namespaceURI</tt> parameter to be passed to {@link #matches(CoreAttribute, String, String)}
+     * @throws DeferredParsingException
+     *             If a parsing error occurs while accessing the attribute.
      */
-    String getNamespaceURI(CoreAttribute attr);
+    String getNamespaceURI(CoreAttribute attr) throws DeferredParsingException;
     
     /**
      * Get the <tt>name</tt> parameter for an existing attribute. This method is used by
@@ -110,8 +114,10 @@ public interface AttributeMatcher {
      * 
      * @param attr the attribute
      * @return the <tt>name</tt> parameter to be passed to {@link #matches(CoreAttribute, String, String)}
+     * @throws DeferredParsingException
+     *             If a parsing error occurs while accessing the attribute.
      */
-    String getName(CoreAttribute attr);
+    String getName(CoreAttribute attr) throws DeferredParsingException;
     
     /**
      * Create a new attribute node. The values of the <code>namespaceURI</code>, <code>name</code>,

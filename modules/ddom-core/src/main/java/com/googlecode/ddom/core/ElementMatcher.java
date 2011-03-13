@@ -25,7 +25,7 @@ public interface ElementMatcher<T extends CoreElement> {
      * Matches {@link CoreNSAwareElement} nodes by qualified name, i.e. namespace URI and local name.
      */
     ElementMatcher<CoreNSAwareElement> BY_QNAME = new ElementMatcher<CoreNSAwareElement>() {
-        public boolean matches(CoreNSAwareElement element, String namespaceURI, String name) {
+        public boolean matches(CoreNSAwareElement element, String namespaceURI, String name) throws DeferredParsingException {
             return name.equals(element.coreGetLocalName())
                     && namespaceURI.equals(element.coreGetNamespaceURI());
         }
@@ -35,7 +35,7 @@ public interface ElementMatcher<T extends CoreElement> {
      * Matches {@link CoreNSAwareElement} nodes by namespace URI.
      */
     ElementMatcher<CoreNSAwareElement> BY_NAMESPACE_URI = new ElementMatcher<CoreNSAwareElement>() {
-        public boolean matches(CoreNSAwareElement element, String namespaceURI, String name) {
+        public boolean matches(CoreNSAwareElement element, String namespaceURI, String name) throws DeferredParsingException {
             return namespaceURI.equals(element.coreGetNamespaceURI());
         }
     };
@@ -44,7 +44,7 @@ public interface ElementMatcher<T extends CoreElement> {
      * Matches {@link CoreNSAwareElement} nodes by local name.
      */
     ElementMatcher<CoreNSAwareElement> BY_LOCAL_NAME = new ElementMatcher<CoreNSAwareElement>() {
-        public boolean matches(CoreNSAwareElement element, String namespaceURI, String name) {
+        public boolean matches(CoreNSAwareElement element, String namespaceURI, String name) throws DeferredParsingException {
             return name.equals(element.coreGetLocalName());
         }
     };
@@ -53,7 +53,7 @@ public interface ElementMatcher<T extends CoreElement> {
      * Matches elements (of any kind) by tag name.
      */
     ElementMatcher<CoreElement> BY_NAME = new ElementMatcher<CoreElement>() {
-        public boolean matches(CoreElement element, String namespaceURI, String name) {
+        public boolean matches(CoreElement element, String namespaceURI, String name) throws DeferredParsingException {
             if (element instanceof CoreNSUnawareElement) {
                 return name.equals((CoreNSUnawareElement)element);
             } else {
@@ -100,6 +100,8 @@ public interface ElementMatcher<T extends CoreElement> {
      * @param name
      *            see above
      * @return <code>true</code> if the element matches, <code>false</code> otherwise
+     * @throws DeferredParsingException
+     *             If a parsing error occurs while accessing the element.
      */
-    boolean matches(T element, String namespaceURI, String name);
+    boolean matches(T element, String namespaceURI, String name) throws DeferredParsingException;
 }

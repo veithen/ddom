@@ -32,7 +32,11 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 @Mixin(AxiomSOAPHeaderBlock.class)
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     private void setAttributeValue(QName qname, String value) {
-        coreSetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
+        try {
+            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public final String getRole() {
@@ -64,9 +68,14 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     }
 
     public final void setMustUnderstand(boolean mustUnderstand) {
-        coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
-                SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX,
-                mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE : SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE);
+        try {
+            // TODO: use setAttributeValue here
+            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
+                    SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX,
+                    mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE : SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final void setMustUnderstand(String mustUnderstand) throws SOAPProcessingException {
@@ -74,8 +83,13 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
                 SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE.equals(mustUnderstand) ||
                 SOAPConstants.ATTR_MUSTUNDERSTAND_0.equals(mustUnderstand) ||
                 SOAPConstants.ATTR_MUSTUNDERSTAND_1.equals(mustUnderstand)) {
-            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
-                    SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, mustUnderstand);
+            try {
+                // TODO: use setAttributeValue here
+                coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
+                        SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, mustUnderstand);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         } else {
             throw new SOAPProcessingException("mustUndertand must be one of \"true\", \"false\", \"0\" or \"1\"");
         }

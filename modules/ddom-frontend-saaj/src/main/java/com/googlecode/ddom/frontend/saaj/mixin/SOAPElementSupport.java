@@ -166,7 +166,11 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
 
     private SOAPElement internalAddAttribute(String namespaceURI, String localName, String prefix, String value) throws SOAPException {
-        coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
+        try {
+            coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
         if (namespaceURI.length() > 0) {
             ensureNamespaceIsDeclared(prefix, namespaceURI);
         }
@@ -182,20 +186,36 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
 
     public final boolean removeAttribute(Name name) {
-        return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName());
+        try {
+            return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName());
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public final boolean removeAttribute(QName qname) {
-        return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
+        try {
+            return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public final SOAPElement addNamespaceDeclaration(String prefix, String uri) throws SOAPException {
-        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
+        try {
+            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
         return this;
     }
 
     public final boolean removeNamespaceDeclaration(String prefix) {
-        return coreRemoveAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix);
+        try {
+            return coreRemoveAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix);
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     private String internalGetAttributeValue(String namespaceURI, String localName) {
@@ -261,11 +281,19 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
 
     public final Name getElementName() {
-        return new NameImpl(coreGetLocalName(), coreGetPrefix(), coreGetNamespaceURI());
+        try {
+            return new NameImpl(coreGetLocalName(), coreGetPrefix(), coreGetNamespaceURI());
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
     
     public final QName getElementQName() {
-        return coreGetQName();
+        try {
+            return coreGetQName();
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public SOAPElement setElementQName(QName newName) throws SOAPException {

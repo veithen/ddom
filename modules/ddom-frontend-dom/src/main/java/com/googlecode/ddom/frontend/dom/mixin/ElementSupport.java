@@ -30,6 +30,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.CoreTypedAttribute;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.googlecode.ddom.frontend.dom.intf.DOMAttribute;
@@ -54,14 +55,22 @@ public abstract class ElementSupport implements DOMElement {
     }
     
     public final Attr getAttributeNode(String name) {
-        return (DOMAttribute)coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
+        try {
+            return (DOMAttribute)coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
-        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            return (DOMAttribute)coreGetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
-        } else {
-            return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
+        try {
+            if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+                return (DOMAttribute)coreGetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
+            } else {
+                return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
+            }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
     }
     
@@ -85,7 +94,11 @@ public abstract class ElementSupport implements DOMElement {
 
     public final void setAttribute(String name, String value) throws DOMException {
         NSUtil.validateName(name);
-        coreSetAttribute(DOM1AttributeMatcher.INSTANCE, null, name, null, value);
+        try {
+            coreSetAttribute(DOM1AttributeMatcher.INSTANCE, null, name, null, value);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
@@ -101,12 +114,16 @@ public abstract class ElementSupport implements DOMElement {
             prefix = symbols.getSymbol(qualifiedName, 0, i);
             localName = symbols.getSymbol(qualifiedName, i+1, qualifiedName.length());
         }
-        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getDeclaredPrefix(localName, prefix), null, value);
-        } else {
-            namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
-            NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-            coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
+        try {
+            if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+                coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getDeclaredPrefix(localName, prefix), null, value);
+            } else {
+                namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
+                NSUtil.validateAttributeName(namespaceURI, localName, prefix);
+                coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
+            }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
     }
     
@@ -150,34 +167,50 @@ public abstract class ElementSupport implements DOMElement {
 
     public final void removeAttribute(String name) throws DOMException {
         // Specs: "If no attribute with this name is found, this method has no effect."
-        coreRemoveAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
+        try {
+            coreRemoveAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final void removeAttributeNS(String namespaceURI, String localName) throws DOMException {
         // Specs: "If no attribute with this local name and namespace URI is found, this method has no effect."
-        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-            coreRemoveAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
-        } else {
-            coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
+        try {
+            if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+                coreRemoveAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
+            } else {
+                coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
+            }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
     }
 
     public final void setIdAttribute(String name, boolean isId) throws DOMException {
-        CoreAttribute attr = coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
-        if (attr == null) {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-        } else {
-            ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
+        try {
+            CoreAttribute attr = coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
+            if (attr == null) {
+                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            } else {
+                ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
+            }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
     }
 
     public final void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
-        // Here, we assume that a namespace declaration can never be an ID attribute
-        CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
-        if (attr == null) {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
-        } else {
-            ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
+        try {
+            // Here, we assume that a namespace declaration can never be an ID attribute
+            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
+            if (attr == null) {
+                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            } else {
+                ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
+            }
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
     }
 
@@ -190,11 +223,15 @@ public abstract class ElementSupport implements DOMElement {
     }
 
     public final Node cloneNode(boolean deep) {
-        return deep ? deepClone() : shallowClone();
+        try {
+            return deep ? deepClone() : shallowClone();
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     // TODO: review return type (should be DOMNode)
-    public final Node shallowClone() {
+    public final Node shallowClone() throws DeferredParsingException {
         CoreElement clone = shallowCloneWithoutAttributes();
         CoreAttribute attr = coreGetFirstAttribute();
         while (attr != null) {

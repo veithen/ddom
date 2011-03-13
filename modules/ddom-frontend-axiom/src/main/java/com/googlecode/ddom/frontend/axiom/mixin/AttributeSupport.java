@@ -66,21 +66,29 @@ public abstract class AttributeSupport implements AxiomAttribute {
         if (this == obj) {
             return true;
         } else if (obj instanceof OMAttribute) {
-            OMAttribute other = (OMAttribute)obj;
-            // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
-            return coreGetLocalName().equals(other.getLocalName())
-                    && ObjectUtils.equals(getNamespace(), other.getNamespace())
-                    && getAttributeValue().equals(other.getAttributeValue());
+            try {
+                OMAttribute other = (OMAttribute)obj;
+                // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
+                return coreGetLocalName().equals(other.getLocalName())
+                        && ObjectUtils.equals(getNamespace(), other.getNamespace())
+                        && getAttributeValue().equals(other.getAttributeValue());
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
         } else {
             return false;
         }
     }
 
     public final int hashCode() {
-        String value = getAttributeValue();
-        // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
-        OMNamespace namespace = getNamespace();
-        return coreGetLocalName().hashCode() ^ (value != null ? value.hashCode() : 0) ^
-                (namespace != null ? namespace.hashCode() : 0);
+        try {
+            String value = getAttributeValue();
+            // TODO: using getNamespace is not efficient because it will create a new OMNamespace instance
+            OMNamespace namespace = getNamespace();
+            return coreGetLocalName().hashCode() ^ (value != null ? value.hashCode() : 0) ^
+                    (namespace != null ? namespace.hashCode() : 0);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 }

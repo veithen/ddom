@@ -24,32 +24,61 @@ import javax.xml.namespace.QName;
  */
 public interface CoreNSAwareNamedNode extends CoreNode {
     /**
-     * Get the namespace URI of this node.
+     * Get the namespace URI of this node. If the node is an element whose namespace URI was left
+     * unspecified during construction, then the namespace URI will be determined by processing the
+     * source object set with
+     * {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * 
      * @return The namespace URI of the node, or the empty string if the node has no namespace.
+     * @throws DeferredParsingException
+     *             If an error occurs while processing the source object of this node set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
+     * @throws IllegalStateException
+     *             If the namespace URI of the node has not been specified during construction and
+     *             no source object has been set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      */
-    String coreGetNamespaceURI();
+    String coreGetNamespaceURI() throws DeferredParsingException;
     
     void coreSetNamespaceURI(String namespaceURI);
     
     /**
-     * Get the namespace prefix of this node.
+     * Get the namespace prefix of this node. If the node is an element whose prefix was left
+     * unspecified during construction, then the prefix will be determined by processing the source
+     * object set with {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * 
-     * @return The namespace prefix, or the empty if the node has no prefix, i.e. if the node has no
-     *         namespace or is in the default namespace.
+     * @return The namespace prefix, or the empty string if the node has no prefix, i.e. if the node
+     *         has no namespace or is in the default namespace.
+     * @throws DeferredParsingException
+     *             If an error occurs while processing the source object of this node set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
+     * @throws IllegalStateException
+     *             If the prefix of the node has not been specified during construction and no
+     *             source object has been set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      */
-    String coreGetPrefix();
+    String coreGetPrefix() throws DeferredParsingException;
     
     void coreSetPrefix(String prefix);
 
     /**
-     * Get the local part of the node name.
+     * Get the local part of the node name. If the node is an element whose local name was left
+     * unspecified during construction, then the local name will be determined by processing the
+     * source object set with
+     * {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * 
      * @return The local part of the node name. The return value is never <code>null</code>.
+     * @throws DeferredParsingException
+     *             If an error occurs while processing the source object of this node set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
+     * @throws IllegalStateException
+     *             If the local part of the node name has not been specified during construction and
+     *             no source object has been set with
+     *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      */
-    String coreGetLocalName();
+    String coreGetLocalName() throws DeferredParsingException;
     
     void coreSetLocalName(String localName);
     
-    QName coreGetQName();
+    QName coreGetQName() throws DeferredParsingException;
 }

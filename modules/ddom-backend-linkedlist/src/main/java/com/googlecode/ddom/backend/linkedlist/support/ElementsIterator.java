@@ -18,6 +18,7 @@ package com.googlecode.ddom.backend.linkedlist.support;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementMatcher;
 
 public class ElementsIterator<T extends CoreElement> extends AbstractNodeIterator<T> {
@@ -34,6 +35,11 @@ public class ElementsIterator<T extends CoreElement> extends AbstractNodeIterato
 
     @Override
     protected final boolean matches(T node) {
-        return matcher.matches(node, namespaceURI, name);
+        try {
+            return matcher.matches(node, namespaceURI, name);
+        } catch (DeferredParsingException ex) {
+            // TODO
+            throw new RuntimeException(ex);
+        }
     }
 }

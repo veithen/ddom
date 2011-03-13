@@ -19,6 +19,7 @@ import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -70,7 +71,7 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
         this.localName = localName;
     }
 
-    public final QName coreGetQName() {
+    public final QName coreGetQName() throws DeferredParsingException {
         return NSAwareNamedNodeHelper.coreGetQName(this);
     }
 

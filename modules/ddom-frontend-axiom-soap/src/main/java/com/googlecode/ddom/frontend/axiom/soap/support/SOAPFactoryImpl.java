@@ -81,22 +81,22 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, String namespaceURI, String localName) {
-        String prefix = namespaceURI.length() == 0 ? "" : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;
-        if (parent == null) {
-            T element = nodeFactory.createElement(null, extensionInterface, namespaceURI, localName, prefix);
-            element.setOMFactory(this);
-            if (prefix.length() != 0) {
-                element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
-            }
-            return element;
-        } else {
-            try {
+        try {
+            String prefix = namespaceURI.length() == 0 ? "" : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;
+            if (parent == null) {
+                T element = nodeFactory.createElement(null, extensionInterface, namespaceURI, localName, prefix);
+                element.setOMFactory(this);
+                if (prefix.length() != 0) {
+                    element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
+                }
+                return element;
+            } else {
                 T element = ((AxiomElement)parent).coreAppendElement(extensionInterface, namespaceURI, localName, prefix);
                 element.setOMFactory(this);
                 return element;
-            } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
             }
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
         }
     }
     

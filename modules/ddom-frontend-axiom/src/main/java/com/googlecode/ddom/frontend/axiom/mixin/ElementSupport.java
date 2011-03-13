@@ -78,7 +78,11 @@ public abstract class ElementSupport implements AxiomElement {
     }
     
     public final OMAttribute getAttribute(QName qname) {
-        return (AxiomAttribute)coreGetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
+        try {
+            return (AxiomAttribute)coreGetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
     public final String getAttributeValue(QName qname) {
@@ -200,21 +204,33 @@ public abstract class ElementSupport implements AxiomElement {
     }
     
     public OMNamespace declareNamespace(OMNamespace ns) {
-        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getPrefix(ns), null, NSUtil.getNamespaceURI(ns));
+        try {
+            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getPrefix(ns), null, NSUtil.getNamespaceURI(ns));
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
         // TODO
         return null;
     }
 
     public final OMNamespace declareNamespace(String uri, String prefix) {
         // TODO: need to handle empty strings correctly
-        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
+        try {
+            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
         // TODO
         return null;
     }
     
     public final OMNamespace declareDefaultNamespace(String uri) {
         // TODO: what if uri is null or empty string?
-        coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, null, null, uri);
+        try {
+            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, null, null, uri);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
         // TODO
         return null;
     }

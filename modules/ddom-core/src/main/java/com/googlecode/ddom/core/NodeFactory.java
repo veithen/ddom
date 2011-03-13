@@ -43,26 +43,33 @@ public interface NodeFactory {
     CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId);
     
     /**
-     * Create a namespace unaware element.
+     * Create a namespace unaware element. The name of the element may be left unspecified, in which
+     * case {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)} should be used
+     * to set a source for the element.
      * 
      * @param document
      * @param tagName
-     *            the name of the element
+     *            the name of the element, or <code>null</code> if the name is unspecified
      * @return
      */
     CoreNSUnawareElement createElement(CoreDocument document, String tagName);
     
     /**
-     * Create a namespace aware element.
+     * Create a namespace aware element. The name (or some of its components) of the element may be
+     * left unspecified, in which case
+     * {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)} should be used to set
+     * a source for the element.
      * 
      * @param document
      * @param namespaceURI
-     *            the namespace URI of the element, or the empty string if the element has no
-     *            namespace
+     *            the namespace URI of the element, the empty string if the element has no
+     *            namespace, or <code>null</code> if the namespace URI is unspecified
      * @param localName
-     *            the local part of the element's name
+     *            the local part of the element's name, or <code>null</code> if the local name is
+     *            unspecified
      * @param prefix
-     *            the prefix of the element, or the empty string if the element has no prefix
+     *            the prefix of the element, the empty string if the element has no prefix, or
+     *            <code>null</code> if the prefix is unspecified
      * @return the element
      */
     CoreNSAwareElement createElement(CoreDocument document, String namespaceURI, String localName, String prefix);

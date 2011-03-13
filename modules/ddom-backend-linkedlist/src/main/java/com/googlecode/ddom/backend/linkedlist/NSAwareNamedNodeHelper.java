@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ package com.googlecode.ddom.backend.linkedlist;
 import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 
 public final class NSAwareNamedNodeHelper {
     private NSAwareNamedNodeHelper() {}
     
-    public static QName coreGetQName(CoreNSAwareNamedNode node) {
+    public static QName coreGetQName(CoreNSAwareNamedNode node) throws DeferredParsingException {
         String namespaceURI = node.coreGetNamespaceURI();
         if (namespaceURI == null) {
             return new QName(node.coreGetLocalName());

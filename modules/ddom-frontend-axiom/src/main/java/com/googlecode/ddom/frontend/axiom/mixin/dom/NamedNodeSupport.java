@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,18 @@
 package com.googlecode.ddom.frontend.axiom.mixin.dom;
 
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamedNode;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(CoreNSAwareNamedNode.class)
 public abstract class NamedNodeSupport implements AxiomNamedNode {
     public final String getLocalName() {
-        return coreGetLocalName();
+        try {
+            return coreGetLocalName();
+        } catch (DeferredParsingException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 }

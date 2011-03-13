@@ -29,7 +29,7 @@ public final class AxiomAttributeMatcher implements AttributeMatcher {
     
     private AxiomAttributeMatcher() {}
     
-    public boolean matches(CoreAttribute attr, String namespaceURI, String name) {
+    public boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredParsingException {
         if (attr instanceof CoreNSAwareAttribute) {
             CoreNSAwareAttribute nsAwareAttr = (CoreNSAwareAttribute)attr;
             return namespaceURI.equals(nsAwareAttr.coreGetNamespaceURI())
@@ -42,11 +42,11 @@ public final class AxiomAttributeMatcher implements AttributeMatcher {
         }
     }
 
-    public String getNamespaceURI(CoreAttribute attr) {
+    public String getNamespaceURI(CoreAttribute attr) throws DeferredParsingException {
         return ((CoreNSAwareAttribute)attr).coreGetNamespaceURI();
     }
 
-    public String getName(CoreAttribute attr) {
+    public String getName(CoreAttribute attr) throws DeferredParsingException {
         return ((CoreNSAwareAttribute)attr).coreGetLocalName();
     }
 
