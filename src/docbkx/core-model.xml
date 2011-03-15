@@ -487,6 +487,102 @@
         
     </section>
     <section>
+        <title>State diagram for parent nodes</title>
+        <para>
+            The support for deferred parsing, the concept of compact parent nodes and the possibility
+            to stream XML data without building the object model, means that a parent node can go through
+            different states during its lifetime. The exact state diagram for a parent node depends on the
+            back-end implementation. <xref linkend="fig-parent-node-state-diagram"/> shows a reference
+            state diagram that is also the state diagram used by the linked list back-end.
+        </para>
+        <figure id="fig-parent-node-state-diagram">
+            <title>Reference state diagram for parent nodes</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata format="PNG" fileref="parent_node_state_diagram.png" scale="45" align="center"/>
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>
+            The different states are defined as follows:
+        </para>
+        <variablelist>
+            <varlistentry>
+                <term>Content set</term>
+                <listitem>
+                    <para>
+                        An <classname>XmlSource</classname> object has been set, describing the content
+                        of the node. The <classname>XmlSource</classname> object is interpreted as an XML fragment containing the
+                        information items that will become the children of the node. In this state, none of
+                        the children has been materialized yet and no data has been fetched from the
+                        <classname>XmlSource</classname> object.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Source set</term>
+                <listitem>
+                    <para>
+                        This state only exists for element nodes. It is similar to the previous state, except that
+                        the <classname>XmlSource</classname> object is interpreted differently, namely as an XML document
+                        whose root element information item represents the node itself.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Attributes pending</term>
+                <listitem>
+                    <para>
+                        This state also exists only for element nodes. It indicates that the builder has started to
+                        materialize the information items belonging to the element, but that the builder has not yet
+                        finished materializing the attributes of the element.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Children pending</term>
+                <listitem>
+                    <para>
+                        The builder has started to materialize the information items belonging to the node, but the
+                        process is not yet complete. More precisely, the builder has not yet received the end event
+                        for the information item represented by the node.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Expanded</term>
+                <listitem>
+                    <para>
+                        There is no builder associated with the node (either because a builder previously associated
+                        with the node has finished processing the events for the node, or because the node has been
+                        constructed programmatically without the intervention of a builder) and the content is stored
+                        as a (potentially empty) list of child nodes.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Value set</term>
+                <listitem>
+                    <para>
+                        The node represents a parent information item that has a single text information item as child,
+                        and the character data for that information item is stored in compact form, i.e. no child node
+                        instance has been created for the child information item.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Consumed</term>
+                <listitem>
+                    <para>
+                        Not all information items belonging to the node have been materialized, and some of the
+                        corresponding events have been consumed. In this state, an attempt to access a child node
+                        may result in an exception, because it can no longer be materialized.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+    <section>
         <title>Interface design</title>
         <para>
             The following principles and guidelines have been applied in the design of the
