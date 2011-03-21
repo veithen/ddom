@@ -123,10 +123,14 @@ public class Builder extends SimpleXmlOutput {
         this.input = input;
         modelExtensionMapper = modelExtension.newMapper();
         this.document = document;
+        newContext(target);
+    }
+
+    private void newContext(LLParentNode target) {
         context = contextStack.allocate();
         context.init(target);
     }
-
+    
     public final InputContext getInputContext(LLParentNode target) {
         for (int i = 0, s = contextStack.size(); i<s; i++) {
             Context context = contextStack.get(i);
@@ -369,8 +373,7 @@ public class Builder extends SimpleXmlOutput {
         appendSibling(node);
         if (node instanceof Container) {
             // TODO: this assumes that elements are always created as incomplete
-            context = contextStack.allocate();
-            context.init((Container)node);
+            newContext((Container)node);
             lastSibling = null;
         } else {
             nodeAppended = true;
@@ -385,8 +388,7 @@ public class Builder extends SimpleXmlOutput {
         } else {
             lastAttribute.insertAttributeAfter(attr);
         }
-        context = contextStack.allocate();
-        context.init(attr);
+        newContext(attr);
         lastAttribute = attr;
     }
     
