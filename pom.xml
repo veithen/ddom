@@ -66,7 +66,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <asm.version>3.3</asm.version>
         <cxf.version>2.4.0-SNAPSHOT</cxf.version>
-        <axiom.version>1.2.11-SNAPSHOT</axiom.version>
+        <axiom.version>1.2.12-SNAPSHOT</axiom.version>
         <jetty.version>7.3.0.v20110203</jetty.version>
     </properties>
 
