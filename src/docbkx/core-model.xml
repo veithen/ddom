@@ -581,6 +581,57 @@
                 </listitem>
             </varlistentry>
         </variablelist>
+        <para>
+            The initial state for parent nodes depends on how the node is created:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    In principle, parent nodes created programmatically using the <classname>NodeFactory</classname> interface
+                    are initially in state "Expanded" (with an empty list of child nodes). However, for convenience,
+                    the methods that create attribute nodes also allow to specify the attribute value. These methods behave
+                    as if <methodname>coreSetValue</methodname> was called after creation of the node. Therefore the initial
+                    state for attribute nodes is actually "Value set".
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    New parent nodes created by the builder (as children of another incomplete parent node) are in state
+                    "Attributes pending" (for element nodes) or "Children pending" (for other node types).
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            State transition are triggered either explicitly by invoking some particular methods of the Core Model API
+            (thick lines) or implicitly when the builder requests additional events from the underlying XML source
+            and adds that information to the object model (thin lines). All methods declaring
+            <classname>DeferredParsingException</classname> may cause such implicit state transitions and this is not
+            limited to the node on which they are invoked. <xref linkend="fig-parent-node-state-diagram"/> shows that
+            there are two "stable" states where no more implicit transitions will occur. The first one is "Expanded". In
+            this state, a node instance has been constructed for every information item. The second one is "Consumed". In
+            this state, some events from the underlying source have been consumed without constructing the corresponding
+            nodes and an attempt to access the "missing" nodes will result in an exception.
+        </para>
+        <para>
+            Here is some additional information about the possible state transitions:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Since <methodname>coreClear</methodname>, <methodname>coreSetValue</methodname>,
+                    <methodname>coreSetContent</methodname> and <methodname>coreSetSource</methodname> all reset the
+                    content of the node, they can be invoked from any current state and always result in the same next state.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A parent node leaves the "Children pending" state when the builder receives the end event for the
+                    node. If the builder supports compact parent nodes and determines that the node would have a single
+                    text child node, then it will not create that child node and the parent node will transition to
+                    state "Value set". Otherwise, the next state will be "Expanded".
+                </para>
+            </listitem>
+        </itemizedlist>
     </section>
     <section>
         <title>Interface design</title>
