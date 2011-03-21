@@ -29,7 +29,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     void internalNotifyChildrenCleared();
     LLChildNode internalGetFirstChildIfMaterialized();
     void internalSetFirstChild(CoreChildNode child);
-    void internalSetComplete(boolean complete);
+    void internalSetState(int state);
     void internalPrepareNewChild(CoreChildNode newChild) throws WrongDocumentException, CyclicRelationshipException;
     
     /**

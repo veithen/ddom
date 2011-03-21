@@ -36,6 +36,14 @@ public abstract class Node implements LLNode {
         return other.coreGetOwnerDocument(true) == internalGetOwnerDocument(); // TODO: this is wrong
     }
 
+    public final int internalGetState() {
+        return flags & Flags.STATE_MASK;
+    }
+    
+    public final void internalSetState(int state) {
+        flags = (flags & ~Flags.STATE_MASK) | state;
+    }
+    
     public final boolean internalGetFlag(int flag) {
         return (flags & flag) != 0;
     }

@@ -243,9 +243,7 @@ public class OMFactoryImpl implements OMFactory {
                     node = (AxiomText)((AxiomContainer)parent).coreAppendCharacterData(data);
                     break;
                 case OMNode.CDATA_SECTION_NODE:
-                    AxiomCDATASection cdataSection = (AxiomCDATASection)((AxiomContainer)parent).coreAppendCDATASection();
-                    cdataSection.coreSetValue(data);
-                    node = cdataSection;
+                    node = (AxiomCDATASection)((AxiomContainer)parent).coreAppendCDATASection(data);
                     break;
                 default:
                     // TODO: support the other types

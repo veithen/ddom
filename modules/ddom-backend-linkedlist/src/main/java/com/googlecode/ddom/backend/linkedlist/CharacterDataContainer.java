@@ -21,12 +21,12 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 
 public abstract class CharacterDataContainer extends Container {
-    public CharacterDataContainer(Document document, Object content) {
-        super(document, content);
+    public CharacterDataContainer(Document document, String value) {
+        super(document, value);
     }
     
     public CharacterDataContainer(Document document, boolean complete) {
-        super(document, complete);
+        super(document, complete ? Flags.STATE_EXPANDED : Flags.STATE_CHILDREN_PENDING);
     }
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)

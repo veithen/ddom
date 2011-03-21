@@ -589,9 +589,9 @@
                 <para>
                     In principle, parent nodes created programmatically using the <classname>NodeFactory</classname> interface
                     are initially in state "Expanded" (with an empty list of child nodes). However, for convenience,
-                    the methods that create attribute nodes also allow to specify the attribute value. These methods behave
-                    as if <methodname>coreSetValue</methodname> was called after creation of the node. Therefore the initial
-                    state for attribute nodes is actually "Value set".
+                    some of the methods in <classname>NodeFactory</classname> also allow specifying the content of the parent node
+                    as a string. If the value is not null, then these methods behave as if <methodname>coreSetValue</methodname>
+                    was called after creation of the node, in which case the initial state of the node is actually "Value set".
                 </para>
             </listitem>
             <listitem>

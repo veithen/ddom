@@ -68,13 +68,17 @@ public abstract class ParentNode extends Node implements LLParentNode {
      */
     private Object content;
     
-    public ParentNode(Object content) {
-        this.content = content;
-        internalSetComplete(true);
+    public ParentNode(String value) {
+        if (value == null) {
+            internalSetState(Flags.STATE_EXPANDED);
+        } else {
+            internalSetState(Flags.STATE_VALUE_SET);
+            content = value;
+        }
     }
 
-    public ParentNode(boolean complete) {
-        internalSetComplete(complete);
+    public ParentNode(int state) {
+        internalSetState(state);
     }
 
     public final Object coreGetContent() {
@@ -87,7 +91,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final void coreSetContent(XmlSource source) {
         // TODO: need to clear any existing content!
-        internalSetComplete(false);
+        internalSetState(Flags.STATE_CONTENT_SET);
         // TODO: getting the producer should be deferred!
         internalGetOwnerDocument().internalCreateBuilder(source.getInput(), this);
         // TODO: need to decide how to handle symbol tables in a smart way here
@@ -96,7 +100,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final String coreGetValue() throws DeferredParsingException {
         // TODO: this should also be applicable for other OptimizedParentNodes
-        if (content instanceof String) {
+        if (internalGetState() == Flags.STATE_VALUE_SET) {
             return (String)content;
         } else {
             // TODO: get the getTextContent feature back into the core model
@@ -125,22 +129,29 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final void coreClear() throws DeferredParsingException {
-        // TODO: what if the node is incomplete and the first child has not yet been built?
-        if (content instanceof LLChildNode) {
-            LLChildNode child = (LLChildNode)content;
-            do {
-                LLChildNode next = child.internalGetNextSiblingIfMaterialized();
-                child.internalSetParent(null);
-                child.internalSetNextSibling(null);
-                child = next;
-            } while (child != null);
-            if (!coreIsComplete()) {
+        switch (internalGetState()) {
+            case Flags.STATE_ATTRIBUTES_PENDING:
+                // TODO
+                throw new UnsupportedOperationException();
+            case Flags.STATE_CHILDREN_PENDING:
                 internalGetOwnerDocument().internalGetInputContext(this).setPassThroughHandler(NullXmlHandler.INSTANCE);
-                internalSetComplete(true);
-            }
+                // Fall through
+            case Flags.STATE_EXPANDED:
+                LLChildNode child = (LLChildNode)content;
+                while (child != null) {
+                    LLChildNode next = child.internalGetNextSiblingIfMaterialized();
+                    child.internalSetParent(null);
+                    child.internalSetNextSibling(null);
+                    child = next;
+                };
+                break;
+            case Flags.STATE_CONSUMED:
+                // TODO
+                throw new UnsupportedOperationException();
         }
         content = null;
         internalNotifyChildrenCleared();
+        internalSetState(Flags.STATE_EXPANDED);
     }
 
     public final String coreGetTextContent(TextCollectorPolicy policy) throws DeferredParsingException {
@@ -223,11 +234,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final boolean coreIsComplete() {
-        return internalGetFlag(Flags.COMPLETE);
-    }
-
-    public final void internalSetComplete(boolean complete) {
-        internalSetFlag(Flags.COMPLETE, complete);
+        int state = internalGetState();
+        return state == Flags.STATE_EXPANDED || state == Flags.STATE_VALUE_SET;
     }
     
     public final void coreBuild() throws DeferredParsingException {
@@ -516,8 +524,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return child;
     }
 
-    public final CoreCDATASection coreAppendCDATASection() throws ChildNotAllowedException, DeferredParsingException {
-        CDATASection child = new CDATASection(null, true);
+    public final CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredParsingException {
+        CDATASection child = new CDATASection(null, data);
         appendNewlyCreatedChild(child);
         return child;
     }

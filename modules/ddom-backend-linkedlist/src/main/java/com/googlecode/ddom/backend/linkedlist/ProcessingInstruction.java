@@ -24,13 +24,13 @@ import com.googlecode.ddom.stream.XmlHandler;
 public class ProcessingInstruction extends CharacterDataContainer implements CoreProcessingInstruction {
     private String target;
 
-    public ProcessingInstruction(Document document, String target, boolean complete) {
-        super(document, complete);
+    public ProcessingInstruction(Document document, String target, String data) {
+        super(document, data);
         this.target = target;
     }
 
-    public ProcessingInstruction(Document document, String target, Object content) {
-        super(document, content);
+    public ProcessingInstruction(Document document, String target, boolean complete) {
+        super(document, complete);
         this.target = target;
     }
 

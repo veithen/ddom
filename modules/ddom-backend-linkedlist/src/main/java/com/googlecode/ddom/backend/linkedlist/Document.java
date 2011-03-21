@@ -45,7 +45,7 @@ public class Document extends ParentNode implements LLDocument {
     private String documentURI;
 
     public Document(ModelExtension modelExtension) {
-        super(true);
+        super(Flags.STATE_EXPANDED);
         this.modelExtension = modelExtension;
         symbols = new SymbolHashTable();
     }

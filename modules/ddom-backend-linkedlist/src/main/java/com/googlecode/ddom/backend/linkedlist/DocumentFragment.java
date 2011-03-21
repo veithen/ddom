@@ -26,7 +26,7 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
     private int children;
     
     public DocumentFragment(Document document) {
-        super(true);
+        super(Flags.STATE_EXPANDED);
         this.document = document;
     }
 

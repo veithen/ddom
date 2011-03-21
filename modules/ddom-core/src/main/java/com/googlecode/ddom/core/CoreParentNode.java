@@ -247,7 +247,7 @@ public interface CoreParentNode extends CoreNode {
 
     CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredParsingException;
 
-    CoreCDATASection coreAppendCDATASection() throws ChildNotAllowedException, DeferredParsingException;
+    CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredParsingException;
 
     CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredParsingException;
     

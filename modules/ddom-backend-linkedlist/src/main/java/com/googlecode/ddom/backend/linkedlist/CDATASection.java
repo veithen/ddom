@@ -22,8 +22,8 @@ import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
 public class CDATASection extends CharacterDataContainer implements CoreCDATASection {
-    public CDATASection(Document document, Object content) {
-        super(document, content);
+    public CDATASection(Document document, String value) {
+        super(document, value);
     }
     
     public CDATASection(Document document, boolean complete) {

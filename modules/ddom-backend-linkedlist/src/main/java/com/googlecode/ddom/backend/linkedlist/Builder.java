@@ -52,8 +52,8 @@ public class Builder extends SimpleXmlOutput {
         }
 
         public void setTargetNode(LLParentNode targetNode) {
-            this.targetNode.internalSetComplete(true);
-            targetNode.internalSetComplete(false);
+            this.targetNode.internalSetState(Flags.STATE_EXPANDED);
+            targetNode.internalSetState(Flags.STATE_CHILDREN_PENDING);
             this.targetNode = targetNode;
         }
 
@@ -242,6 +242,7 @@ public class Builder extends SimpleXmlOutput {
     protected final void attributesCompleted() throws StreamException {
         XmlHandler passThroughHandler = context.getPassThroughHandler();
         if (passThroughHandler == null) {
+            context.getTargetNode().internalSetState(Flags.STATE_CHILDREN_PENDING);
             nodeAppended = true;
         } else {
             passThroughHandler.attributesCompleted();
@@ -403,16 +404,19 @@ public class Builder extends SimpleXmlOutput {
                 if (lastSibling == null) {
                     parent.internalSetValue(pendingText);
                     parent.internalNotifyChildrenModified(1);
+                    parent.internalSetState(Flags.STATE_VALUE_SET);
                     pendingText = null;
                 } else {
                     flushPendingText();
+                    parent.internalSetState(Flags.STATE_EXPANDED);
                 }
+            } else {
+                parent.internalSetState(Flags.STATE_EXPANDED);
             }
             // TODO: this only applies to namespace aware elements!
             if (nodeType == ELEMENT) {
                 modelExtensionMapper.endElement();
             }
-            parent.internalSetComplete(true);
             pop = true;
         } else {
             XmlHandler passThroughHandler = context.getPassThroughHandler();

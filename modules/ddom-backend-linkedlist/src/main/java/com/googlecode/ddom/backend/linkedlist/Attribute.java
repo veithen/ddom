@@ -42,7 +42,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
     
     public Attribute(Document document, boolean complete) {
-        super(complete);
+        super(complete ? Flags.STATE_EXPANDED : Flags.STATE_CHILDREN_PENDING);
         owner = document;
     }
     

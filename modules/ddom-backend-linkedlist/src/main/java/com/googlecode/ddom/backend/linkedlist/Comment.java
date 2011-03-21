@@ -22,12 +22,12 @@ import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
 public class Comment extends CharacterDataContainer implements CoreComment {
-    public Comment(Document document, boolean complete) {
-        super(document, complete);
+    public Comment(Document document, String value) {
+        super(document, value);
     }
 
-    public Comment(Document document, Object content) {
-        super(document, content);
+    public Comment(Document document, boolean complete) {
+        super(document, complete);
     }
 
     public final int coreGetNodeType() {

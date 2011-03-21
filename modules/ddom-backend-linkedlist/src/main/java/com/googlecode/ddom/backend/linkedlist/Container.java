@@ -33,13 +33,13 @@ public abstract class Container extends ParentNode implements LLChildNode {
     private LLChildNode nextSibling;
     private int children;
 
-    public Container(Document document, Object content) {
-        super(content);
+    public Container(Document document, String value) {
+        super(value);
         owner = document;
     }
 
-    public Container(Document document, boolean complete) {
-        super(complete);
+    public Container(Document document, int state) {
+        super(state);
         owner = document;
     }
     
