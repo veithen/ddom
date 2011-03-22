@@ -43,6 +43,15 @@ public interface CoreParentNode extends CoreNode {
      */
     Object coreGetContent();
     
+    /**
+     * Set the content of this node. The provided {@link XmlSource} object is expected to be an XML
+     * fragment, the information items of which will be translated into children of this node. The
+     * content is expanded on demand. In particular, this method does not call
+     * {@link XmlSource#getInput()} immediately.
+     * 
+     * @param source
+     *            the content of the node
+     */
     void coreSetContent(XmlSource source);
     
     /**

@@ -29,19 +29,27 @@ import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NoParentException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.SelfRelationshipException;
+import com.googlecode.ddom.core.ext.ModelExtension;
 
 public final class LLChildNodeHelper {
     private LLChildNodeHelper() {}
     
-    public static LLDocument internalGetOwnerDocument(LLChildNode that) {
+    public static LLDocument internalGetOwnerDocument(LLChildNode that, boolean create) {
         LLNode root = that;
         while (root.internalGetFlag(Flags.HAS_PARENT)) {
             root = ((LLChildNode)root).internalGetOwner();
         }
         if (root instanceof LLChildNode) {
-            return (LLDocument)((LLChildNode)root).internalGetOwner();
+            LLChildNode rootChildNode = (LLChildNode)root;
+            LLDocument document = (LLDocument)rootChildNode.internalGetOwner();
+            if (document == null && create) {
+                document = new Document(ModelExtension.NULL); // TODO: model extension???
+                rootChildNode.internalSetOwner(document);
+            }
+            return document;
         } else {
-            return ((LLNode)root).internalGetOwnerDocument();
+            // We get here if the root node is a document or document fragment
+            return ((LLNode)root).internalGetOwnerDocument(create);
         }
     }
     
@@ -52,7 +60,7 @@ public final class LLChildNodeHelper {
     public static void internalSetParent(LLChildNode that, LLParentNode parent) {
         if (parent == null) {
             // TODO: this case should be covered by internalUnsetParent
-            that.internalSetOwner(internalGetOwnerDocument(that));
+            that.internalSetOwner(internalGetOwnerDocument(that, false));
             that.internalSetFlag(Flags.HAS_PARENT, false);
         } else {
             that.internalSetOwner(parent);
@@ -71,7 +79,7 @@ public final class LLChildNodeHelper {
             return null;
         } else {
             if (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete()) {
-                InputContext context = that.internalGetOwnerDocument().internalGetInputContext(parent);
+                InputContext context = that.internalGetOwnerDocument(false).internalGetInputContext(parent);
                 do {
                     context.next();
                 } while (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete());
@@ -128,7 +136,7 @@ public final class LLChildNodeHelper {
                 // This is a special case: we don't need to build the fragment, but only to move
                 // the already materialized children and then to migrate the builder. This is
                 // possible because we have a builder of type 2.
-                that.internalGetOwnerDocument().internalGetInputContext(fragment).setTargetNode(parent);
+                fragment.internalGetOrCreateInputContext().setTargetNode(parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 that.internalSetNextSibling(node);
                 int nodeCount = 0;
@@ -209,7 +217,7 @@ public final class LLChildNodeHelper {
     
     public static void coreDetach(LLChildNode that) throws DeferredParsingException {
         that.internalDetach();
-        that.internalUnsetParent(internalGetOwnerDocument(that));
+        that.internalUnsetParent(internalGetOwnerDocument(that, false));
     }
     
     public static void coreDetach(LLChildNode that, CoreDocument document) throws DeferredParsingException {
@@ -268,7 +276,7 @@ public final class LLChildNodeHelper {
             int nodeCount = 0;
             if (parent.coreIsComplete() && that.internalGetNextSiblingIfMaterialized() == null && !fragment.coreIsComplete()) {
                 // This is the same case as considered in coreInsertSiblingsAfter
-                that.internalGetOwnerDocument().internalGetInputContext(fragment).setTargetNode(parent);
+                that.internalGetOwnerDocument(false).internalGetInputContext(fragment).setTargetNode(parent);
                 LLChildNode node = fragment.internalGetFirstChildIfMaterialized();
                 if (previousSibling == null) {
                     parent.internalSetFirstChild(node);

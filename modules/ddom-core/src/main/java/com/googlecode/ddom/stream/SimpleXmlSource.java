@@ -15,15 +15,25 @@
  */
 package com.googlecode.ddom.stream;
 
-public class SimpleXmlSource implements XmlSource {
+public final class SimpleXmlSource implements XmlSource {
     private final XmlInput input;
+    private boolean accessed;
 
     public SimpleXmlSource(XmlInput input) {
         this.input = input;
     }
 
     public XmlInput getInput() {
-        return input;
+        if (accessed) {
+            throw new IllegalStateException("The source has already been accessed");
+        } else {
+            accessed = true;
+            return input;
+        }
+    }
+
+    public boolean isAccessed() {
+        return accessed;
     }
 
     public boolean isDestructive() {

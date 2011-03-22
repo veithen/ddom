@@ -93,8 +93,8 @@ public abstract class Container extends ParentNode implements LLChildNode {
         return internalGetPreviousSibling();
     }
     
-    public final LLDocument internalGetOwnerDocument() {
-        return LLChildNodeHelper.internalGetOwnerDocument(this);
+    public final LLDocument internalGetOwnerDocument(boolean create) {
+        return LLChildNodeHelper.internalGetOwnerDocument(this, create);
     }
 
     public final LLParentNode internalGetParent() {

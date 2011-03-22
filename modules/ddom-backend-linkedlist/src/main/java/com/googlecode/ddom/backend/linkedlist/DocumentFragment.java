@@ -50,7 +50,8 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
         return children;
     }
 
-    public final LLDocument internalGetOwnerDocument() {
+    public final LLDocument internalGetOwnerDocument(boolean create) {
+        // TODO: create?
         return document;
     }
 

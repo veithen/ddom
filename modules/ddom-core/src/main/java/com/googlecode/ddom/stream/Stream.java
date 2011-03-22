@@ -37,6 +37,10 @@ public final class Stream {
         }
     }
     
+    public boolean isComplete() {
+        return input.isComplete();
+    }
+
     public void flush() throws StreamException {
         if (proceeding) {
             throw new IllegalStateException("Already proceeding");

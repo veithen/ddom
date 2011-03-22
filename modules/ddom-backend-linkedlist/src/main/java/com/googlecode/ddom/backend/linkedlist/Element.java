@@ -98,7 +98,7 @@ public abstract class Element extends Container implements LLElement {
             attr = (Attribute)attr.coreGetNextAttribute();
         }
         if (attr == null) {
-            CoreDocument document = internalGetOwnerDocument();
+            CoreDocument document = internalGetOwnerDocument(false);
             Attribute newAttr = (Attribute)matcher.createAttribute(coreGetNodeFactory(), document, namespaceURI, name, prefix, value);
             if (previousAttr == null) {
                 internalAppendAttribute(newAttr);
@@ -286,7 +286,7 @@ public abstract class Element extends Container implements LLElement {
 
     public final void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException {
         // TODO: clean up local variable names (text --> characterData)
-        CoreDocument document = internalGetOwnerDocument();
+        CoreDocument document = internalGetOwnerDocument(false);
         // TODO: using a collection here is very bad!!
         List<CoreCharacterData> textNodes = new ArrayList<CoreCharacterData>();
         CoreChildNode child = coreGetFirstChild();

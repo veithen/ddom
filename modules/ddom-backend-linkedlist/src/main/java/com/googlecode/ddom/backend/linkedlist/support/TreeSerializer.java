@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.backend.linkedlist.support;
 
+import com.googlecode.ddom.backend.linkedlist.Flags;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
@@ -24,9 +25,12 @@ import com.googlecode.ddom.backend.linkedlist.intf.LLNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.stream.IncludeXmlOutput;
+import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlSource;
 
 public class TreeSerializer extends XmlInput {
     private static final int STATE_NONE = 0;
@@ -62,6 +66,12 @@ public class TreeSerializer extends XmlInput {
      */
     private static final int STATE_PASS_THROUGH = 5;
     
+    /**
+     * Indicates that the serializer is streaming the content from a parent element as provided by
+     * the {@link XmlSource} set on the node.
+     */
+    private static final int STATE_STREAMING_CONTENT = 6;
+    
     private final LLParentNode root;
     private final boolean preserve;
     private LLNode node;
@@ -71,6 +81,12 @@ public class TreeSerializer extends XmlInput {
      * {@link #STATE_PASS_THROUGH}.
      */
     private InputContext inputContext;
+    
+    /**
+     * The stream from which events are included. This is only set if {@link #state} is
+     * {@link #STATE_STREAMING_CONTENT}.
+     */
+    private Stream stream;
     
     private int state;
     private LLDocument document;
@@ -82,7 +98,7 @@ public class TreeSerializer extends XmlInput {
     
     private LLDocument getDocument() {
         if (document == null) {
-            document = root.internalGetOwnerDocument();
+            document = root.internalGetOwnerDocument(false);
         }
         return document;
     }
@@ -99,86 +115,98 @@ public class TreeSerializer extends XmlInput {
             final LLNode nextNode;
             if (state == STATE_PASS_THROUGH) {
                 nextNode = previousNode;
-            } else {
-                if (previousNode == null) {
-                    nextNode = root;
+            } else if (state == STATE_STREAMING_CONTENT) {
+                nextNode = previousNode;
+                if (stream.isComplete()) {
+                    state = STATE_VISITED;
+                    stream = null;
+                }
+            } else if (previousNode == null) {
+                nextNode = root;
+                state = STATE_NOT_VISITED;
+            } else if (state == STATE_VISITED && previousNode == root) {
+                nextNode = null;
+            } else if (state == STATE_NOT_VISITED && previousNode instanceof LLElement) {
+                final LLElement element = (LLElement)previousNode;
+                // TODO: handle case with preserve == false
+                CoreAttribute firstAttribute = element.coreGetFirstAttribute();
+                if (firstAttribute == null) {
+                    nextNode = element;
+                    state = STATE_ATTRIBUTES_VISITED;
+                } else {
+                    nextNode = (LLNode)firstAttribute;
                     state = STATE_NOT_VISITED;
-                } else if (state == STATE_VISITED && previousNode == root) {
-                    nextNode = null;
-                } else if (state == STATE_NOT_VISITED && previousNode instanceof LLElement) {
-                    final LLElement element = (LLElement)previousNode;
-                    // TODO: handle case with preserve == false
-                    CoreAttribute firstAttribute = element.coreGetFirstAttribute();
-                    if (firstAttribute == null) {
-                        nextNode = element;
-                        state = STATE_ATTRIBUTES_VISITED;
+                }
+            } else if (state == STATE_NOT_VISITED || state == STATE_ATTRIBUTES_VISITED) {
+                final LLParentNode parent = (LLParentNode)previousNode;
+                int nodeState = parent.internalGetState();
+                if (preserve || nodeState == Flags.STATE_EXPANDED || nodeState == Flags.STATE_VALUE_SET) {
+                    // TODO: bad because it will expand the node if the state is "Value set"
+                    LLChildNode child = parent.internalGetFirstChild();
+                    if (child == null) {
+                        nextNode = parent;
+                        state = STATE_VISITED;
                     } else {
-                        nextNode = (LLNode)firstAttribute;
-                        state = STATE_NOT_VISITED;
+                        nextNode = child;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
                     }
-                } else if (state == STATE_NOT_VISITED || state == STATE_ATTRIBUTES_VISITED) {
-                    final LLParentNode parent = (LLParentNode)previousNode;
-                    if (preserve || parent.coreIsComplete()) {
-                        // TODO: bad because it will expand the node
-                        LLChildNode child = parent.internalGetFirstChild();
-                        if (child == null) {
-                            nextNode = parent;
+                } else if (nodeState == Flags.STATE_CONTENT_SET) {
+                    // TODO: this also applies if preserve is true and the XmlSource is non destructive
+                    XmlSource source = (XmlSource)parent.coreGetContent(); // TODO: should be an internal method
+                    stream = new Stream(source.getInput(), new IncludeXmlOutput(handler));
+                    state = STATE_STREAMING_CONTENT;
+                    // TODO: update node state
+                    nextNode = parent;
+                } else {
+                    LLChildNode child = parent.internalGetFirstChildIfMaterialized();
+                    if (child == null) {
+                        nextNode = parent;
+                        inputContext = getDocument().internalGetInputContext(parent);
+                        inputContext.setPassThroughHandler(handler);
+                        state = STATE_PASS_THROUGH;
+                    } else {
+                        nextNode = child;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                    }
+                }
+            } else if (previousNode instanceof LLChildNode) {
+                final LLChildNode previousChildNode = (LLChildNode)previousNode;
+                if (preserve) {
+                    LLChildNode sibling = previousChildNode.internalGetNextSibling();
+                    if (sibling == null) {
+                        nextNode = previousChildNode.internalGetParent();
+                        state = STATE_VISITED;
+                    } else {
+                        nextNode = sibling;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                    }
+                } else {
+                    LLChildNode sibling = previousChildNode.internalGetNextSiblingIfMaterialized();
+                    if (sibling == null) {
+                        LLParentNode parent = previousChildNode.internalGetParent();
+                        nextNode = parent;
+                        if (parent.coreIsComplete()) {
                             state = STATE_VISITED;
                         } else {
-                            nextNode = child;
-                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
-                        }
-                    } else {
-                        LLChildNode child = parent.internalGetFirstChildIfMaterialized();
-                        if (child == null) {
-                            nextNode = parent;
                             inputContext = getDocument().internalGetInputContext(parent);
                             inputContext.setPassThroughHandler(handler);
                             state = STATE_PASS_THROUGH;
-                        } else {
-                            nextNode = child;
-                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
-                        }
-                    }
-                } else if (previousNode instanceof LLChildNode) {
-                    final LLChildNode previousChildNode = (LLChildNode)previousNode;
-                    if (preserve) {
-                        LLChildNode sibling = previousChildNode.internalGetNextSibling();
-                        if (sibling == null) {
-                            nextNode = previousChildNode.internalGetParent();
-                            state = STATE_VISITED;
-                        } else {
-                            nextNode = sibling;
-                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
                         }
                     } else {
-                        LLChildNode sibling = previousChildNode.internalGetNextSiblingIfMaterialized();
-                        if (sibling == null) {
-                            LLParentNode parent = previousChildNode.internalGetParent();
-                            nextNode = parent;
-                            if (parent.coreIsComplete()) {
-                                state = STATE_VISITED;
-                            } else {
-                                inputContext = getDocument().internalGetInputContext(parent);
-                                inputContext.setPassThroughHandler(handler);
-                                state = STATE_PASS_THROUGH;
-                            }
-                        } else {
-                            nextNode = sibling;
-                            state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
-                        }
+                        nextNode = sibling;
+                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
                     }
+                }
+            } else {
+                final CoreAttribute attribute = (CoreAttribute)previousNode;
+                // TODO: handle case with preserve == false
+                CoreAttribute nextAttribute = attribute.coreGetNextAttribute();
+                if (nextAttribute == null) {
+                    nextNode = (LLNode)attribute.coreGetOwnerElement();
+                    state = STATE_ATTRIBUTES_VISITED;
                 } else {
-                    final CoreAttribute attribute = (CoreAttribute)previousNode;
-                    // TODO: handle case with preserve == false
-                    CoreAttribute nextAttribute = attribute.coreGetNextAttribute();
-                    if (nextAttribute == null) {
-                        nextNode = (LLNode)attribute.coreGetOwnerElement();
-                        state = STATE_ATTRIBUTES_VISITED;
-                    } else {
-                        nextNode = (LLNode)nextAttribute;
-                        state = STATE_NOT_VISITED;
-                    }
+                    nextNode = (LLNode)nextAttribute;
+                    state = STATE_NOT_VISITED;
                 }
             }
             switch (state) {
@@ -200,6 +228,9 @@ public class TreeSerializer extends XmlInput {
                     break;
                 case STATE_PASS_THROUGH:
                     inputContext.next();
+                    break;
+                case STATE_STREAMING_CONTENT:
+                    stream.proceed();
                     break;
                 default:
                     throw new IllegalStateException();

@@ -29,11 +29,11 @@ public abstract class Node implements LLNode {
     }
 
     public final CoreDocument coreGetOwnerDocument(boolean create) {
-        return internalGetOwnerDocument();
+        return internalGetOwnerDocument(create);
     }
 
     public final boolean coreIsSameOwnerDocument(CoreNode other) {
-        return other.coreGetOwnerDocument(true) == internalGetOwnerDocument(); // TODO: this is wrong
+        return other.coreGetOwnerDocument(false) == internalGetOwnerDocument(false); // TODO: this is wrong
     }
 
     public final int internalGetState() {
@@ -57,8 +57,8 @@ public abstract class Node implements LLNode {
     }
 
     public final void internalValidateOwnerDocument(CoreNode node) throws WrongDocumentException {
-        CoreDocument document1 = ((Node)node).internalGetOwnerDocument(); // TODO: get rid of cast
-        CoreDocument document2 = internalGetOwnerDocument();
+        CoreDocument document1 = ((Node)node).internalGetOwnerDocument(false); // TODO: get rid of cast
+        CoreDocument document2 = internalGetOwnerDocument(false);
         if (document1 != null && document2 != null && document1 != document2) {
             throw new WrongDocumentException();
         }

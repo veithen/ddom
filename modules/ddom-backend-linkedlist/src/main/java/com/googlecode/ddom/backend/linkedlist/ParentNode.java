@@ -19,6 +19,7 @@ import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.Inject;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
+import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.googlecode.ddom.backend.linkedlist.support.ElementsIterator;
@@ -92,8 +93,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
     public final void coreSetContent(XmlSource source) {
         // TODO: need to clear any existing content!
         internalSetState(Flags.STATE_CONTENT_SET);
-        // TODO: getting the producer should be deferred!
-        internalGetOwnerDocument().internalCreateBuilder(source.getInput(), this);
+        content = source;
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
     }
@@ -117,10 +117,9 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final void coreSetValue(String value) throws DeferredParsingException {
         // TODO: what if arg is null?
-        if (content != null) {
-            coreClear();
-        }
+        coreClear();
         content = value;
+        internalSetState(Flags.STATE_VALUE_SET);
         internalNotifyChildrenModified(1);
     }
     
@@ -134,7 +133,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
                 // TODO
                 throw new UnsupportedOperationException();
             case Flags.STATE_CHILDREN_PENDING:
-                internalGetOwnerDocument().internalGetInputContext(this).setPassThroughHandler(NullXmlHandler.INSTANCE);
+                internalGetOwnerDocument(false).internalGetInputContext(this).setPassThroughHandler(NullXmlHandler.INSTANCE);
                 // Fall through
             case Flags.STATE_EXPANDED:
                 LLChildNode child = (LLChildNode)content;
@@ -240,7 +239,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
     
     public final void coreBuild() throws DeferredParsingException {
         if (!coreIsComplete()) {
-            InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
+            InputContext context = internalGetOrCreateInputContext();
             do {
                 context.next();
             } while (!coreIsComplete());
@@ -249,7 +248,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
     
     public final boolean coreHasValue() throws DeferredParsingException {
         if (content == null && !coreIsComplete()) {
-            InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
+            // TODO: should use internalGetOrCreateInputContext here
+            InputContext context = internalGetOwnerDocument(false).internalGetInputContext(this);
             do {
                 context.next();
             } while (content == null && !coreIsComplete());
@@ -259,7 +259,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final boolean coreIsEmpty() throws DeferredParsingException {
         if (content == null && !coreIsComplete()) {
-            InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
+            InputContext context = internalGetOwnerDocument(false).internalGetInputContext(this);
             do {
                 context.next();
             } while (content == null && !coreIsComplete());
@@ -271,27 +271,60 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return internalGetFirstChild();
     }
     
-    public final LLChildNode internalGetFirstChild() throws DeferredParsingException {
-        if (content == null) {
-            if (coreIsComplete()) {
-                return null;
-            } else {
-                InputContext context = internalGetOwnerDocument().internalGetInputContext(this);
-                do {
-                    context.next();
-                } while (content == null && !coreIsComplete());
-                // After calling the builder, the content may be a String object,
-                // so just continue.
-            }
-        }
-        if (content instanceof String) {
-            // TODO: no cast here
-            LLChildNode firstChild = new CharacterData((Document)internalGetOwnerDocument(), (String)content, false);
-            firstChild.internalSetParent(this);
-            content = firstChild;
-            return firstChild;
+    public final InputContext internalGetOrCreateInputContext() {
+        if (internalGetState() == Flags.STATE_CONTENT_SET) {
+            XmlSource source = (XmlSource)content;
+            content = null;
+            LLDocument document = internalGetOwnerDocument(true);
+            document.internalCreateBuilder(source.getInput(), this);
+            // TODO: we could already get the InputContext here
+            internalSetState(Flags.STATE_CHILDREN_PENDING);
+            return document.internalGetInputContext(this);
         } else {
-            return (LLChildNode)content;
+            LLDocument document = internalGetOwnerDocument(false);
+            if (document == null) {
+                // We should never get here
+                throw new IllegalStateException();
+            }
+            return document.internalGetInputContext(this);
+        }
+    }
+    
+    public final LLChildNode internalGetFirstChild() throws DeferredParsingException {
+        InputContext context = null;
+        while (true) {
+            switch (internalGetState()) {
+                case Flags.STATE_CONTENT_SET:
+                    context = internalGetOrCreateInputContext();
+                    // Fall through
+                case Flags.STATE_ATTRIBUTES_PENDING:
+                case Flags.STATE_CHILDREN_PENDING:
+                    if (content == null) {
+                        if (context == null) {
+                            context = internalGetOrCreateInputContext();
+                        }
+                        do {
+                            // TODO: we could inform the builder that we don't want compact parent nodes here
+                            context.next();
+                        } while (content == null && !coreIsComplete());
+                        // After calling the builder, the node may be in state "Value set".
+                        // Just loop to dispatch to the correct case.
+                        break;
+                    } else {
+                        return (LLChildNode)content;
+                    }
+                case Flags.STATE_EXPANDED:
+                    return (LLChildNode)content;
+                case Flags.STATE_VALUE_SET:
+                    // TODO: no cast here
+                    LLChildNode firstChild = new CharacterData((Document)internalGetOwnerDocument(false), (String)content, false);
+                    firstChild.internalSetParent(this);
+                    content = firstChild;
+                    internalSetState(Flags.STATE_EXPANDED);
+                    return firstChild;
+                default:
+                    throw new IllegalStateException(); // TODO: consumed??
+            }
         }
     }
     

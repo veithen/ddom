@@ -53,7 +53,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     final void setOwnerElement(CoreElement newOwner) {
         if (newOwner == null) {
             // TODO: owner could already be a document!
-            owner = ((Element)owner).internalGetOwnerDocument();
+            owner = ((Element)owner).internalGetOwnerDocument(false);
         } else {
             owner = newOwner;
         }
@@ -114,13 +114,13 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         return owner instanceof CoreElement;
     }
 
-    public final LLDocument internalGetOwnerDocument() {
+    public final LLDocument internalGetOwnerDocument(boolean create) {
         if (owner == null) {
             return null;
         } else if (owner instanceof Document) {
             return (Document)owner;
         } else {
-            return ((Element)owner).internalGetOwnerDocument();
+            return ((Element)owner).internalGetOwnerDocument(create);
         }
     }
 
@@ -145,7 +145,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         if (owner instanceof Element) {
             Element ownerElement = (Element)owner;
             Attribute previousAttr = (Attribute)coreGetPreviousAttribute();
-            owner = newOwnerDocument ? ownerDocument : internalGetOwnerDocument();
+            owner = newOwnerDocument ? ownerDocument : internalGetOwnerDocument(false); // TODO: create?
             if (previousAttr == null) {
                 ownerElement.setFirstAttribute((Attribute)nextAttribute);
             } else {

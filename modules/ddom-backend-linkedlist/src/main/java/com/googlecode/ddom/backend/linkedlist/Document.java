@@ -74,7 +74,7 @@ public class Document extends ParentNode implements LLDocument {
         return symbols;
     }
 
-    public final LLDocument internalGetOwnerDocument() {
+    public final LLDocument internalGetOwnerDocument(boolean create) {
         return this;
     }
 

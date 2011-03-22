@@ -29,6 +29,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     void internalNotifyChildrenCleared();
     LLChildNode internalGetFirstChildIfMaterialized();
     void internalSetFirstChild(CoreChildNode child);
+    int internalGetState();
     void internalSetState(int state);
     void internalPrepareNewChild(CoreChildNode newChild) throws WrongDocumentException, CyclicRelationshipException;
     
@@ -51,6 +52,8 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     
     void internalSetValue(String value);
 
+    InputContext internalGetOrCreateInputContext();
+    
     // Type safe variant of core model method
     LLChildNode internalGetFirstChild() throws DeferredParsingException;
 

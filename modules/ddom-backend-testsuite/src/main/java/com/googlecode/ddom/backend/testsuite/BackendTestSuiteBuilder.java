@@ -69,11 +69,14 @@ public class BackendTestSuiteBuilder {
         // TODO
 //        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeAndRemove(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnEmptyElement(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnIncompleteElement(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetAttributeAlreadyOwnedByElement(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetContentLaziness(config));
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareElement.class;
