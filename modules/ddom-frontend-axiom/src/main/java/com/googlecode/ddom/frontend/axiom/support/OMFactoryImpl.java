@@ -46,6 +46,7 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomDocument;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
+import com.googlecode.ddom.frontend.axiom.intf.AxiomSourcedElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomText;
 
 public class OMFactoryImpl implements OMFactory {
@@ -172,14 +173,20 @@ public class OMFactoryImpl implements OMFactory {
         return element;
     }
 
+    private OMSourcedElement createOMElement(OMDataSource dataSource, String namespaceURI, String localName, String prefix) {
+        AxiomSourcedElement element = nodeFactory.createElement(null, AxiomSourcedElement.class, namespaceURI, localName, prefix);
+        element.setOMFactory(this);
+        element.setDataSource(dataSource);
+        return element;
+        
+    }
+    
     public final OMSourcedElement createOMElement(OMDataSource source, QName qname) {
-        // TODO
-        throw new UnsupportedOperationException();
+        return createOMElement(source, qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
     }
 
     public final OMSourcedElement createOMElement(OMDataSource source, String localName, OMNamespace ns) {
-        // TODO
-        throw new UnsupportedOperationException();
+        return createOMElement(source, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
     }
 
     public final OMNamespace createOMNamespace(String uri, String prefix) {
