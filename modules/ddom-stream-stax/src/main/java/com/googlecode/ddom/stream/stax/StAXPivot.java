@@ -563,12 +563,8 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#hasNext()
-     */
     public boolean hasNext() throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        return eventType != END_DOCUMENT;
     }
 
     public int next() throws XMLStreamException {
