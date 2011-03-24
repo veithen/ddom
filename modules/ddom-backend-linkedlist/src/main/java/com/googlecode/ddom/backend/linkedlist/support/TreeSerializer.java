@@ -24,7 +24,9 @@ import com.googlecode.ddom.backend.linkedlist.intf.LLLeafNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.stream.IncludeXmlOutput;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
@@ -67,10 +69,16 @@ public class TreeSerializer extends XmlInput {
     private static final int STATE_PASS_THROUGH = 5;
     
     /**
-     * Indicates that the serializer is streaming the content from a parent element as provided by
-     * the {@link XmlSource} set on the node.
+     * Indicates that the serializer is streaming the content from a parent node as set using
+     * {@link CoreParentNode#coreSetContent(XmlSource)}.
      */
     private static final int STATE_STREAMING_CONTENT = 6;
+    
+    /**
+     * Indicates that the serializer is streaming the source of an element as set using
+     * {@link CoreElement#coreSetSource(XmlSource)}.
+     */
+    private static final int STATE_STREAMING_SOURCE = 7;
     
     private final LLParentNode root;
     private final boolean preserve;
@@ -84,7 +92,7 @@ public class TreeSerializer extends XmlInput {
     
     /**
      * The stream from which events are included. This is only set if {@link #state} is
-     * {@link #STATE_STREAMING_CONTENT}.
+     * {@link #STATE_STREAMING_CONTENT} or {@link #STATE_STREAMING_SOURCE}.
      */
     private Stream stream;
     
@@ -107,13 +115,11 @@ public class TreeSerializer extends XmlInput {
     protected void proceed() throws StreamException {
         XmlHandler handler = getHandler();
         try {
-            if (state == STATE_PASS_THROUGH && !inputContext.isPassThroughEnabled()) {
-                state = STATE_VISITED;
-                inputContext = null;
-            }
+            // Determine the next node (i.e. the node for which the next event is generated) and
+            // update the state
             final LLNode previousNode = node;
             final LLNode nextNode;
-            if (state == STATE_PASS_THROUGH) {
+            if (state == STATE_PASS_THROUGH || state == STATE_STREAMING_SOURCE) {
                 nextNode = previousNode;
             } else if (state == STATE_STREAMING_CONTENT) {
                 nextNode = previousNode;
@@ -148,7 +154,7 @@ public class TreeSerializer extends XmlInput {
                         state = STATE_VISITED;
                     } else {
                         nextNode = child;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        state = STATE_NOT_VISITED;
                     }
                 } else if (nodeState == Flags.STATE_CONTENT_SET) {
                     // TODO: this also applies if preserve is true and the XmlSource is non destructive
@@ -166,7 +172,7 @@ public class TreeSerializer extends XmlInput {
                         state = STATE_PASS_THROUGH;
                     } else {
                         nextNode = child;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        state = STATE_NOT_VISITED;
                     }
                 }
             } else if (previousNode instanceof LLChildNode) {
@@ -178,7 +184,7 @@ public class TreeSerializer extends XmlInput {
                         state = STATE_VISITED;
                     } else {
                         nextNode = sibling;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        state = STATE_NOT_VISITED;
                     }
                 } else {
                     LLChildNode sibling = previousChildNode.internalGetNextSiblingIfMaterialized();
@@ -194,7 +200,7 @@ public class TreeSerializer extends XmlInput {
                         }
                     } else {
                         nextNode = sibling;
-                        state = nextNode instanceof LLParentNode ? STATE_NOT_VISITED : STATE_LEAF;
+                        state = STATE_NOT_VISITED;
                     }
                 }
             } else {
@@ -209,6 +215,25 @@ public class TreeSerializer extends XmlInput {
                     state = STATE_NOT_VISITED;
                 }
             }
+            
+            // More closely examine the case where we move to a node that has not
+            // been visited yet. It may be a sourced element or a leaf node
+            if (state == STATE_NOT_VISITED) {
+                // TODO: also consider the case of non destructive sources
+                if (!preserve && nextNode instanceof LLElement) {
+                    LLElement element = (LLElement)nextNode;
+                    if (element.internalGetState() == Flags.STATE_SOURCE_SET) {
+                        XmlSource source = (XmlSource)element.coreGetContent();
+                        // TODO: this may give an unexpected result if the source contains other information items than the element
+                        // TODO: should we also compare the name of the element from the source with what is specified in the CoreElement node?
+                        stream = new Stream(source.getInput(), new IncludeXmlOutput(handler));
+                        state = STATE_STREAMING_SOURCE;
+                    }
+                } else if (!(nextNode instanceof LLParentNode)) {
+                    state = STATE_LEAF;
+                }
+            }
+            
             switch (state) {
                 case STATE_LEAF:
                     ((LLLeafNode)nextNode).internalGenerateEvents(handler);
@@ -228,9 +253,20 @@ public class TreeSerializer extends XmlInput {
                     break;
                 case STATE_PASS_THROUGH:
                     inputContext.next();
+                    if (!inputContext.isPassThroughEnabled()) {
+                        state = STATE_VISITED;
+                        inputContext = null;
+                    }
                     break;
                 case STATE_STREAMING_CONTENT:
                     stream.proceed();
+                    break;
+                case STATE_STREAMING_SOURCE:
+                    stream.proceed();
+                    if (stream.isComplete()) {
+                        state = STATE_VISITED;
+                        stream = null;
+                    }
                     break;
                 default:
                     throw new IllegalStateException();

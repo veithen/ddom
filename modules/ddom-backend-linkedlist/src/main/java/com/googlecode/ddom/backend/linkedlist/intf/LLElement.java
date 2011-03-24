@@ -17,6 +17,6 @@ package com.googlecode.ddom.backend.linkedlist.intf;
 
 import com.googlecode.ddom.core.CoreElement;
 
-public interface LLElement extends LLChildNode, CoreElement {
+public interface LLElement extends LLParentNode, LLChildNode, CoreElement {
 
 }

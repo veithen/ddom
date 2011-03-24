@@ -71,6 +71,8 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeAndRemove(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, false));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, true));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnEmptyElement(config));

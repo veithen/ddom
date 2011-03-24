@@ -302,6 +302,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         while (true) {
             switch (internalGetState()) {
                 case Flags.STATE_CONTENT_SET:
+                case Flags.STATE_SOURCE_SET:
                     context = internalGetOrCreateInputContext();
                     // Fall through
                 case Flags.STATE_ATTRIBUTES_PENDING:
