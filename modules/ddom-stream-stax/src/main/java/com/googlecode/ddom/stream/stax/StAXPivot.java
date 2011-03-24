@@ -23,6 +23,7 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -558,9 +559,13 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         }
     }
 
-    public Object getProperty(String arg0) throws IllegalArgumentException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public Object getProperty(String name) throws IllegalArgumentException {
+        // TODO: support other standard properties
+        if (name.equals(XMLInputFactory.IS_NAMESPACE_AWARE)) {
+            return Boolean.TRUE;
+        } else {
+            throw new IllegalArgumentException(); // TODO: or return null??
+        }
     }
 
     public boolean hasNext() throws XMLStreamException {

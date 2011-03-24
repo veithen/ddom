@@ -28,14 +28,12 @@ import com.googlecode.ddom.symbols.Symbols;
 
 public class StAXInput extends XmlInput {
     private final XMLStreamReader reader;
-    private final DTDInfo dtdInfo;
     private final boolean parserIsNamespaceAware;
     private final Symbols symbols;
     private boolean callNext;
 
     public StAXInput(XMLStreamReader reader, Symbols symbols) {
         this.reader = reader;
-        dtdInfo = (DTDInfo)reader;
         parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
         this.symbols = symbols;
     }
@@ -69,7 +67,12 @@ public class StAXInput extends XmlInput {
                     handler.completed();
                     break;
                 case XMLStreamReader.DTD:
-                    handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId(), reader.getText());
+                    if (reader instanceof DTDInfo) {
+                        DTDInfo dtdInfo = (DTDInfo)reader;
+                        handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId(), reader.getText());
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
                     break;
                 case XMLStreamReader.START_ELEMENT:
                     if (parserIsNamespaceAware) {
