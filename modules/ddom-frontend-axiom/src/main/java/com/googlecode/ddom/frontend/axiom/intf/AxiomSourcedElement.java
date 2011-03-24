@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.axiom.soap.intf;
+package com.googlecode.ddom.frontend.axiom.intf;
 
-import org.apache.axiom.soap.SOAPHeaderBlock;
+import org.apache.axiom.om.OMSourcedElement;
 
+import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ext.ModelExtensionInterface;
-import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
-import com.googlecode.ddom.frontend.axiom.intf.AxiomSourcedElement;
 
-@ModelExtensionInterface(isAbstract=true, parent=AxiomSourcedElement.class)
-public interface AxiomSOAPHeaderBlock extends AxiomElement, SOAPHeaderBlock, HasSOAPVersion {
+@ModelExtensionInterface(isAbstract=false, parent=CoreNSAwareElement.class)
+public interface AxiomSourcedElement extends AxiomElement, OMSourcedElement {
 
 }
