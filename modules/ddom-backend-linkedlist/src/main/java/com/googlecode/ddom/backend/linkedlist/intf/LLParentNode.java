@@ -52,7 +52,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     
     void internalSetValue(String value);
 
-    InputContext internalGetOrCreateInputContext();
+    InputContext internalGetOrCreateInputContext() throws DeferredParsingException;
     
     // Type safe variant of core model method
     LLChildNode internalGetFirstChild() throws DeferredParsingException;

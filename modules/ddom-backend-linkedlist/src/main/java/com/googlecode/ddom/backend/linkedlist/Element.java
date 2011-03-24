@@ -51,11 +51,6 @@ public abstract class Element extends Container implements LLElement {
         super(document, complete ? Flags.STATE_EXPANDED : Flags.STATE_ATTRIBUTES_PENDING);
     }
 
-    public final void coreSetSource(XmlSource source) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     final void setFirstAttribute(Attribute firstAttribute) {
         this.firstAttribute = firstAttribute;
     }

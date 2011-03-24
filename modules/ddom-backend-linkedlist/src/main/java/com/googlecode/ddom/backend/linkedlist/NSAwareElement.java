@@ -49,11 +49,38 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.prefix = prefix;
     }
 
+    void initName(String namespaceURI, String localName, String prefix) throws StreamException {
+        if (this.namespaceURI != null) {
+            if (!this.namespaceURI.equals(namespaceURI)) {
+                throw new StreamException("Unexpected namespace URI");
+            }
+        } else {
+            this.namespaceURI = namespaceURI;
+        }
+        if (this.localName != null) {
+            if (!this.localName.equals(localName)) {
+                throw new StreamException("Unexpected local name");
+            }
+        } else {
+            this.localName = localName;
+        }
+        if (this.prefix != null) {
+            if (!this.prefix.equals(prefix)) {
+                throw new StreamException("Unexpected prefix");
+            }
+        } else {
+            this.prefix = prefix;
+        }
+    }
+    
     public final int coreGetNodeType() {
         return NS_AWARE_ELEMENT_NODE;
     }
 
-    public final String coreGetNamespaceURI() {
+    public final String coreGetNamespaceURI() throws DeferredParsingException {
+        if (namespaceURI == null && internalGetState() == Flags.STATE_SOURCE_SET) {
+            internalGetOrCreateInputContext();
+        }
         return namespaceURI;
     }
 
@@ -61,7 +88,10 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.namespaceURI = namespaceURI;
     }
     
-    public final String coreGetPrefix() {
+    public final String coreGetPrefix() throws DeferredParsingException {
+        if (prefix == null && internalGetState() == Flags.STATE_SOURCE_SET) {
+            internalGetOrCreateInputContext();
+        }
         return prefix;
     }
 
@@ -69,7 +99,10 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.prefix = prefix;
     }
     
-    public final String coreGetLocalName() {
+    public final String coreGetLocalName() throws DeferredParsingException {
+        if (localName == null && internalGetState() == Flags.STATE_SOURCE_SET) {
+            internalGetOrCreateInputContext();
+        }
         return localName;
     }
     

@@ -98,6 +98,12 @@ public abstract class ParentNode extends Node implements LLParentNode {
 //        symbols = producer.getSymbols();
     }
 
+    public final void coreSetSource(XmlSource source) {
+        // TODO: need to clear any existing content!
+        internalSetState(Flags.STATE_SOURCE_SET);
+        content = source;
+    }
+
     public final String coreGetValue() throws DeferredParsingException {
         // TODO: this should also be applicable for other OptimizedParentNodes
         if (internalGetState() == Flags.STATE_VALUE_SET) {
@@ -271,23 +277,24 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return internalGetFirstChild();
     }
     
-    public final InputContext internalGetOrCreateInputContext() {
-        if (internalGetState() == Flags.STATE_CONTENT_SET) {
+    public final InputContext internalGetOrCreateInputContext() throws DeferredParsingException {
+        InputContext inputContext;
+        int state = internalGetState();
+        if (state == Flags.STATE_CONTENT_SET || state == Flags.STATE_SOURCE_SET) {
             XmlSource source = (XmlSource)content;
             content = null;
             LLDocument document = internalGetOwnerDocument(true);
-            document.internalCreateBuilder(source.getInput(), this);
-            // TODO: we could already get the InputContext here
+            inputContext = document.internalCreateInputContext(source.getInput(), this, state == Flags.STATE_SOURCE_SET);
             internalSetState(Flags.STATE_CHILDREN_PENDING);
-            return document.internalGetInputContext(this);
         } else {
             LLDocument document = internalGetOwnerDocument(false);
             if (document == null) {
                 // We should never get here
                 throw new IllegalStateException();
             }
-            return document.internalGetInputContext(this);
+            inputContext = document.internalGetInputContext(this);
         }
+        return inputContext;
     }
     
     public final LLChildNode internalGetFirstChild() throws DeferredParsingException {

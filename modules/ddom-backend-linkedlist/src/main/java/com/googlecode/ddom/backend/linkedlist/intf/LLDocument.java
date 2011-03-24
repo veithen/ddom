@@ -16,9 +16,10 @@
 package com.googlecode.ddom.backend.linkedlist.intf;
 
 import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.XmlInput;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
-    void internalCreateBuilder(XmlInput input, LLParentNode target);
+    InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredParsingException;
     InputContext internalGetInputContext(LLParentNode target);
 }

@@ -91,6 +91,7 @@ public class Builder extends SimpleXmlOutput {
     private final XmlInput input; // TODO: not sure if we still need this
     private final ModelExtensionMapper modelExtensionMapper;
     private final Document document;
+    private final LLParentNode sourcedNode;
     private final ObjectStack<Context> contextStack = new ObjectStack<Context>() {
         @Override
         protected Context createObject() {
@@ -119,11 +120,16 @@ public class Builder extends SimpleXmlOutput {
      */
     private int passThroughDepth;
 
-    public Builder(XmlInput input, ModelExtension modelExtension, Document document, LLParentNode target) {
+    public Builder(XmlInput input, ModelExtension modelExtension, Document document, LLParentNode target, boolean unwrap) {
         this.input = input;
         modelExtensionMapper = modelExtension.newMapper();
         this.document = document;
-        newContext(target);
+        if (unwrap) {
+            sourcedNode = target;
+        } else {
+            sourcedNode = null;
+            newContext(target);
+        }
     }
 
     private void newContext(LLParentNode target) {
@@ -139,6 +145,15 @@ public class Builder extends SimpleXmlOutput {
             }
         }
         return null;
+    }
+    
+    public final InputContext getRootInputContext() throws DeferredParsingException {
+        // The context stack will be empty if unwrap == true
+        // TODO: if the source is a push source, then the loop will probably never terminate
+        while (contextStack.isEmpty()) {
+            next();
+        }
+        return contextStack.get(0);
     }
     
     final void next() throws DeferredParsingException {
@@ -189,13 +204,20 @@ public class Builder extends SimpleXmlOutput {
     
     @Override
     protected final void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        XmlHandler passThroughHandler = context.getPassThroughHandler();
-        if (passThroughHandler == null) {
-            Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
-            appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
+        // TODO: also implement the context == null case for the other XmlOutput methods
+        if (context == null) {
+            // TODO: probably we should check the node type here
+            ((NSAwareElement)sourcedNode).initName(namespaceURI, localName, prefix);
+            newContext(sourcedNode);
         } else {
-            passThroughDepth++;
-            passThroughHandler.startElement(namespaceURI, localName, prefix);
+            XmlHandler passThroughHandler = context.getPassThroughHandler();
+            if (passThroughHandler == null) {
+                Class<?> extensionInterface = modelExtensionMapper.startElement(namespaceURI, localName);
+                appendNode(nsAwareElementFactory.create(extensionInterface, document, namespaceURI, localName, prefix, false));
+            } else {
+                passThroughDepth++;
+                passThroughHandler.startElement(namespaceURI, localName, prefix);
+            }
         }
     }
     

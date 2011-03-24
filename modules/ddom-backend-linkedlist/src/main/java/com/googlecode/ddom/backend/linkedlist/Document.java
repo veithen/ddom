@@ -54,10 +54,11 @@ public class Document extends ParentNode implements LLDocument {
         return DOCUMENT_NODE;
     }
 
-    public final void internalCreateBuilder(XmlInput input, LLParentNode target) {
-        Builder builder = new Builder(input, modelExtension, this, target);
+    public final InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredParsingException {
+        Builder builder = new Builder(input, modelExtension, this, target, unwrap);
         new Stream(input, builder);
         builders.add(builder);
+        return builder.getRootInputContext();
     }
     
     public final InputContext internalGetInputContext(LLParentNode target) {
