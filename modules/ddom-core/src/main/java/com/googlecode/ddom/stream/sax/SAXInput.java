@@ -39,7 +39,7 @@ public class SAXInput extends XmlInput {
     }
 
     @Override
-    protected void proceed() throws StreamException {
+    protected void proceed(boolean flush) throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
         ContentHandlerAdapter handler = new ContentHandlerAdapter(getHandler());
         xmlReader.setContentHandler(handler);

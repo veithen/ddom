@@ -39,7 +39,8 @@ public class XercesInput extends XmlInput {
         return null;
     }
 
-    protected void proceed() throws StreamException {
+    protected void proceed(boolean flush) throws StreamException {
+        // TODO: use the hint provided by the flush parameter
         try {
             config.parse(false);
         } catch (XNIException ex) {

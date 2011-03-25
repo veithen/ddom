@@ -47,7 +47,7 @@ public class StAXInput extends XmlInput {
     }
     
     @Override
-    protected void proceed() throws StreamException {
+    protected void proceed(boolean flush) throws StreamException {
         if (callNext) {
             try {
                 reader.next();

@@ -112,7 +112,7 @@ public class TreeSerializer extends XmlInput {
     }
     
     @Override
-    protected void proceed() throws StreamException {
+    protected void proceed(boolean flush) throws StreamException {
         XmlHandler handler = getHandler();
         try {
             // Determine the next node (i.e. the node for which the next event is generated) and

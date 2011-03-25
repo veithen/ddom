@@ -31,7 +31,7 @@ public final class Stream {
         }
         try {
             proceeding = true;
-            input.proceed();
+            input.proceed(false);
         } finally {
             proceeding = false;
         }
@@ -48,7 +48,7 @@ public final class Stream {
         try {
             proceeding = true;
             do {
-                input.proceed();
+                input.proceed(true);
             } while (!input.isComplete());
         } finally {
             proceeding = false;

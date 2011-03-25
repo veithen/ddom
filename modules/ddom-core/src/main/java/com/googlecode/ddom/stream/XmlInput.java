@@ -64,9 +64,22 @@ public abstract class XmlInput extends XmlValve {
      * requirement, but the pass-through logic in the current builder implementation assumes that
      * this method behaves like this.
      * 
+     * @param flush
+     *            The value of this parameter is set to <code>true</code> if the invocation is
+     *            triggered by {@link Stream#flush()}. In this case, the implementation MAY choose
+     *            to push all remaining events to the {@link XmlHandler} instead of producing
+     *            individual events. The parameter is set to <code>false</code> if the invocation is
+     *            triggered by {@link Stream#proceed()}. In this case, the implementation SHOULD
+     *            attempt to limit the number of events produced.
+     *            <p>
+     *            The information provided by this parameter is only a hint and the implementation
+     *            MAY choose to completely ignore it. It is useful if the implementation needs to
+     *            integrate with a library that define different APIs for pull and push mode
+     *            streaming and there is a potential performance benefit when using the push API.
+     * 
      * @throws StreamException
      */
-    protected abstract void proceed() throws StreamException;
+    protected abstract void proceed(boolean flush) throws StreamException;
     
     /**
      * 
