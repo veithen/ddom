@@ -37,7 +37,7 @@ public class TestCoreSetContentLaziness extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         XmlSource orgSource = toXmlSource("<test/>");
-        SimpleXmlSource simpleSource = new SimpleXmlSource(orgSource.getInput());
+        SimpleXmlSource simpleSource = new SimpleXmlSource(orgSource.getInput(XmlSource.Hints.DEFAULTS));
         CoreElement parent = nodeFactory.createElement(null, "parent");
         parent.coreSetContent(simpleSource);
         assertFalse(simpleSource.isAccessed());

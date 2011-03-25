@@ -120,8 +120,8 @@ public class DocumentBuilderImpl extends DocumentBuilder {
         }
         CoreDocument document = model.getNodeFactory().createDocument();
         document.coreSetContent(new XmlSource() {
-            public XmlInput getInput() {
-                XmlInput input = source.getInput();
+            public XmlInput getInput(Hints hints) {
+                XmlInput input = source.getInput(hints);
                 applyFilters(input);
                 return input;
             }

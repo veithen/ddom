@@ -23,7 +23,7 @@ public final class SimpleXmlSource implements XmlSource {
         this.input = input;
     }
 
-    public XmlInput getInput() {
+    public XmlInput getInput(Hints hints) {
         if (accessed) {
             throw new IllegalStateException("The source has already been accessed");
         } else {

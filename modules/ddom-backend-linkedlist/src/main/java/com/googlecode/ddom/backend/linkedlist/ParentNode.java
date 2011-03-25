@@ -284,7 +284,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
             XmlSource source = (XmlSource)content;
             content = null;
             LLDocument document = internalGetOwnerDocument(true);
-            inputContext = document.internalCreateInputContext(source.getInput(), this, state == Flags.STATE_SOURCE_SET);
+            inputContext = document.internalCreateInputContext(source.getInput(XmlSource.Hints.DEFAULTS), this, state == Flags.STATE_SOURCE_SET);
             internalSetState(Flags.STATE_CHILDREN_PENDING);
         } else {
             LLDocument document = internalGetOwnerDocument(false);

@@ -158,8 +158,7 @@ public class TreeSerializer extends XmlInput {
                     }
                 } else if (nodeState == Flags.STATE_CONTENT_SET) {
                     // TODO: this also applies if preserve is true and the XmlSource is non destructive
-                    XmlSource source = (XmlSource)parent.coreGetContent(); // TODO: should be an internal method
-                    stream = new Stream(source.getInput(), new IncludeXmlOutput(handler));
+                    stream = createStream(parent, flush, handler);
                     state = STATE_STREAMING_CONTENT;
                     // TODO: update node state
                     nextNode = parent;
@@ -223,10 +222,9 @@ public class TreeSerializer extends XmlInput {
                 if (!preserve && nextNode instanceof LLElement) {
                     LLElement element = (LLElement)nextNode;
                     if (element.internalGetState() == Flags.STATE_SOURCE_SET) {
-                        XmlSource source = (XmlSource)element.coreGetContent();
                         // TODO: this may give an unexpected result if the source contains other information items than the element
                         // TODO: should we also compare the name of the element from the source with what is specified in the CoreElement node?
-                        stream = new Stream(source.getInput(), new IncludeXmlOutput(handler));
+                        stream = createStream(element, flush, handler);
                         state = STATE_STREAMING_SOURCE;
                     }
                 } else if (!(nextNode instanceof LLParentNode)) {
@@ -278,6 +276,16 @@ public class TreeSerializer extends XmlInput {
         }
     }
 
+    private Stream createStream(CoreParentNode node, final boolean flush, XmlHandler handler) {
+        XmlSource source = (XmlSource)node.coreGetContent(); // TODO: should be an internal method
+        XmlSource.Hints hints = new XmlSource.Hints() {
+            public boolean isPreferPush() {
+                return flush;
+            }
+        };
+        return new Stream(source.getInput(hints), new IncludeXmlOutput(handler));
+    }
+    
     @Override
     public void dispose() {
         // TODO

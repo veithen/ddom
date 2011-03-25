@@ -27,7 +27,7 @@ public final class DOMSource implements XmlSource {
         this.node = node;
     }
 
-    public XmlInput getInput() {
+    public XmlInput getInput(Hints hints) {
         return new DOMInput(node);
     }
 

@@ -16,6 +16,17 @@
 package com.googlecode.ddom.stream;
 
 public interface XmlSource {
-    XmlInput getInput();
+    interface Hints {
+        Hints DEFAULTS = new Hints() {
+            public boolean isPreferPush() {
+                return false;
+            }
+        };
+        
+        boolean isPreferPush();
+        // TODO: add a method that provides a namespace context
+    }
+    
+    XmlInput getInput(Hints hints);
     boolean isDestructive();
 }
