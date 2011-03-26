@@ -39,12 +39,8 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#getNamespaceContext()
-     */
     public NamespaceContext getNamespaceContext() {
-        // TODO
-        throw new UnsupportedOperationException();
+        return context;
     }
 
     /* (non-Javadoc)
@@ -152,13 +148,14 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeAttribute(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void writeAttribute(String arg0, String arg1, String arg2, String arg3)
-            throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
+        try {
+            handler.startAttribute(namespaceURI, localName, prefix, "CDATA");
+            handler.processCharacterData(value, false);
+            handler.endAttribute();
+        } catch (StreamException ex) {
+            throw new XMLStreamException(ex);
+        }
     }
 
     public void writeNamespace(String prefix, String namespaceURI) throws XMLStreamException {
