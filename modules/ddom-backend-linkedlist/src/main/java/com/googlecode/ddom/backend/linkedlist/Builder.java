@@ -91,7 +91,7 @@ public class Builder extends SimpleXmlOutput {
     private final XmlInput input; // TODO: not sure if we still need this
     private final ModelExtensionMapper modelExtensionMapper;
     private final Document document;
-    private final LLParentNode sourcedNode;
+    private LLParentNode sourcedNode;
     private final ObjectStack<Context> contextStack = new ObjectStack<Context>() {
         @Override
         protected Context createObject() {
@@ -127,7 +127,6 @@ public class Builder extends SimpleXmlOutput {
         if (unwrap) {
             sourcedNode = target;
         } else {
-            sourcedNode = null;
             newContext(target);
         }
     }
@@ -149,9 +148,10 @@ public class Builder extends SimpleXmlOutput {
     
     public final InputContext getRootInputContext() throws DeferredParsingException {
         // The context stack will be empty if unwrap == true
-        // TODO: if the source is a push source, then the loop will probably never terminate
-        while (contextStack.isEmpty()) {
-            next();
+        if (sourcedNode != null) {
+            while (sourcedNode != null && contextStack.isEmpty()) {
+                next();
+            }
         }
         return contextStack.get(0);
     }
@@ -209,6 +209,7 @@ public class Builder extends SimpleXmlOutput {
             // TODO: probably we should check the node type here
             ((NSAwareElement)sourcedNode).initName(namespaceURI, localName, prefix);
             newContext(sourcedNode);
+            sourcedNode = null;
         } else {
             XmlHandler passThroughHandler = context.getPassThroughHandler();
             if (passThroughHandler == null) {
@@ -420,6 +421,9 @@ public class Builder extends SimpleXmlOutput {
     }
     
     private void nodeCompleted(int nodeType) throws StreamException {
+        if (context == null) {
+            return;
+        }
         LLParentNode parent = context.getTargetNode();
         boolean pop;
         if (parent != null) {

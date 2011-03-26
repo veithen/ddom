@@ -16,6 +16,7 @@
 package com.googlecode.ddom.frontend.axiom.support;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMDataSource;
 import org.apache.axiom.om.OMDataSourceExt;
@@ -23,12 +24,16 @@ import org.apache.axiom.om.OMDataSourceExt;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.stax.StAXInput;
+import com.googlecode.ddom.stream.stax.StAXPushInput;
+import com.googlecode.ddom.util.lang.ClassUtils;
 
 public class OMDataSourceAdapter implements XmlSource {
     private final OMDataSource ds;
+    private final boolean forcePush;
 
     public OMDataSourceAdapter(OMDataSource ds) {
         this.ds = ds;
+        forcePush = ClassUtils.isSubclass(ds.getClass(), "org.apache.axis2.databinding.ADBDataSource");
     }
 
     public boolean isDestructive() {
@@ -40,13 +45,27 @@ public class OMDataSourceAdapter implements XmlSource {
     }
 
     public XmlInput getInput(Hints hints) {
-        try {
-            // TODO: we could cheat here if the returned XMLStreamReader is actually a StAXPivot;
-            //       alternatively we could emit a warning because this is an indication of the OM-inside-OMDataSource anti-pattern
-            return new StAXInput(ds.getReader(), null);
-        } catch (XMLStreamException ex) {
-            // TODO
-            throw new RuntimeException(ex);
+        if (forcePush || hints.isPreferPush()) {
+            return new StAXPushInput() {
+                @Override
+                protected void serialize(XMLStreamWriter out) throws XMLStreamException {
+                    ds.serialize(out);
+                }
+                
+                @Override
+                public void dispose() {
+                    // TODO
+                }
+            };
+        } else {
+            try {
+                // TODO: we could cheat here if the returned XMLStreamReader is actually a StAXPivot;
+                //       alternatively we could emit a warning because this is an indication of the OM-inside-OMDataSource anti-pattern
+                return new StAXInput(ds.getReader(), null);
+            } catch (XMLStreamException ex) {
+                // TODO
+                throw new RuntimeException(ex);
+            }
         }
     }
 }

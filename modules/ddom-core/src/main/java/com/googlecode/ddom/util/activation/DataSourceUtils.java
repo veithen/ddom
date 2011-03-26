@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 
+import com.googlecode.ddom.util.lang.ClassUtils;
+
 public final class DataSourceUtils {
     private DataSourceUtils() {}
 
@@ -46,7 +48,7 @@ public final class DataSourceUtils {
             // different package (and even a different JAR), which means that the class is not
             // necessarily visible to the class loader that loaded DataSourceUtils.
             Class<?> clazz = ds.getClass();
-            if (isSubclass(clazz, "javax.mail.util.ByteArrayDataSource")) {
+            if (ClassUtils.isSubclass(clazz, "javax.mail.util.ByteArrayDataSource")) {
                 // We know that JavaMail's ByteArrayDataSource#getInputStream() always returns a
                 // ByteArrayInputStream. We also know that ByteArrayInputStream#available()
                 // directly returns the size of the byte array.
@@ -61,15 +63,5 @@ public final class DataSourceUtils {
                 return -1;
             }
         }
-    }
-    
-    private static boolean isSubclass(Class<?> clazz, String superClassName) {
-        do {
-            if (clazz.getName().equals(superClassName)) {
-                return true;
-            }
-            clazz = clazz.getSuperclass();
-        } while (clazz != null);
-        return false;
     }
 }

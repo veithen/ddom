@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://ddom.googlecode.com/frontend/axiom/bookshop/search"
+                  xmlns:common="http://ddom.googlecode.com/frontend/axiom/bookshop/common"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  name="booksearch"
+                  targetNamespace="http://ddom.googlecode.com/frontend/axiom/bookshop/search">
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://ddom.googlecode.com/frontend/axiom/bookshop/common" elementFormDefault="qualified">
+            <xsd:element name="shortInfo">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="author" type="xsd:string"/>
+                        <xsd:element name="title" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+        <xsd:schema targetNamespace="http://ddom.googlecode.com/frontend/axiom/bookshop/search" elementFormDefault="qualified">
+            <xsd:import namespace="http://ddom.googlecode.com/frontend/axiom/bookshop/common"/>
+            <xsd:element name="query">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="author" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="title" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="queryResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element ref="common:shortInfo" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="queryRequest">
+        <wsdl:part element="tns:query" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="queryResponse">
+        <wsdl:part element="tns:queryResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="BookSearch">
+        <wsdl:operation name="query">
+            <wsdl:input message="tns:queryRequest"/>
+            <wsdl:output message="tns:queryResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BookSearchSOAP" type="tns:BookSearch">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="query">
+            <soap:operation soapAction="urn:query"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="BookSearch">
+        <wsdl:port binding="tns:BookSearchSOAP" name="BookSearchSOAP">
+            <soap:address location="REPLACE_WITH_ACTUAL_URI"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
