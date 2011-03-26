@@ -15,11 +15,8 @@
  */
 package com.googlecode.ddom.stream.stax;
 
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -27,50 +24,30 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.pivot.XmlPivot;
+import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 
 public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private static final int INITIAL_ELEMENT_STACK_SIZE = 8;
-    private static final int INITIAL_NAMESPACE_STACK_SIZE = 16;
     private static final int INITIAL_ATTRIBUTE_STACK_SIZE = 8;
     
     private int eventType = START_DOCUMENT;
     private int elementStackSize = INITIAL_ELEMENT_STACK_SIZE;
     private int depth;
     private String[] elementStack = new String[INITIAL_ELEMENT_STACK_SIZE*3];
-    private int[] scopeStack = new int[INITIAL_ELEMENT_STACK_SIZE];
-    private int namespaceStackSize = INITIAL_NAMESPACE_STACK_SIZE;
-    private String[] namespaceStack = new String[INITIAL_NAMESPACE_STACK_SIZE*2];
+    private final ScopedNamespaceContext namespaceContext = new ScopedNamespaceContext();
     private int attributeStackSize = INITIAL_ATTRIBUTE_STACK_SIZE;
     private String[] attributeStack = new String[INITIAL_ATTRIBUTE_STACK_SIZE*5];
-    private int bindings;
     private String namespaceURI;
     private String localName;
     private String prefix;
     private int attributeCount;
-    private boolean isNamespaceDeclaration;
+    private String declaredPrefix;
     private boolean coalesce;
     private final StringAccumulator accumulator = new StringAccumulator();
     private String data;
-    
-    private final NamespaceContext namespaceContext = new NamespaceContext() {
-        public Iterator<String> getPrefixes(String namespaceURI) {
-            return StAXPivot.this.getPrefixes(namespaceURI);
-        }
-        
-        public String getPrefix(String namespaceURI) {
-            return StAXPivot.this.getPrefix(namespaceURI);
-        }
-        
-        public String getNamespaceURI(String prefix) {
-            String uri = StAXPivot.this.getNamespaceURI(prefix);
-            return uri == null ? XMLConstants.NULL_NS_URI : uri;
-        }
-    };
     
     private String stopCoalescing() {
         String data = accumulator.toString();
@@ -116,14 +93,11 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
             String[] newElementStack = new String[elementStackSize*3];
             System.arraycopy(elementStack, 0, newElementStack, 0, depth*3);
             elementStack = newElementStack;
-            int[] newScopeStack = new int[elementStackSize];
-            System.arraycopy(scopeStack, 0, newScopeStack, 0, depth);
-            scopeStack = newScopeStack;
         }
         elementStack[depth*3] = namespaceURI;
         elementStack[depth*3+1] = localName;
         elementStack[depth*3+2] = prefix;
-        scopeStack[depth] = bindings;
+        namespaceContext.startScope();
         return true;
     }
 
@@ -144,7 +118,6 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean startAttribute(String namespaceURI, String localName, String prefix, String type) {
-        isNamespaceDeclaration = false;
         coalesce = true;
         if (attributeCount == attributeStackSize) {
             attributeStackSize *= 2;
@@ -161,24 +134,16 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean startNamespaceDeclaration(String prefix) {
-        isNamespaceDeclaration = true;
+        declaredPrefix = prefix;
         coalesce = true;
-        if (bindings == namespaceStackSize) {
-            namespaceStackSize *= 2;
-            String[] newStack = new String[namespaceStackSize*5];
-            System.arraycopy(namespaceStack, 0, newStack, 0, attributeStackSize*5);
-            namespaceStack = newStack;
-        }
-        namespaceStack[bindings*2] = prefix.length() == 0 ? null : prefix;
         return true;
     }
 
     @Override
     protected boolean endAttribute() {
-        if (isNamespaceDeclaration) {
-            String namespaceURI = stopCoalescing();
-            namespaceStack[bindings*2+1] = namespaceURI.length() == 0 ? null : namespaceURI;
-            bindings++;
+        if (declaredPrefix != null) {
+            namespaceContext.setPrefix(declaredPrefix, stopCoalescing());
+            declaredPrefix = null;
         } else {
             attributeStack[attributeCount*5+4] = stopCoalescing();
             attributeCount++;
@@ -431,7 +396,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     public int getNamespaceCount() {
         if (eventType == START_ELEMENT || eventType == END_ELEMENT) {
-            return bindings-scopeStack[depth];
+            return namespaceContext.getBindingsCount()-namespaceContext.getFirstBindingInCurrentScope();
         } else {
             throw new IllegalStateException();
         }
@@ -439,7 +404,8 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     public String getNamespacePrefix(int index) {
         if (eventType == START_ELEMENT || eventType == END_ELEMENT) {
-            return namespaceStack[(scopeStack[depth]+index)*2];
+            String prefix = namespaceContext.getPrefix(namespaceContext.getFirstBindingInCurrentScope() + index);
+            return prefix.length() == 0 ? null : prefix;
         } else {
             throw new IllegalStateException();
         }
@@ -447,7 +413,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     public String getNamespaceURI(int index) {
         if (eventType == START_ELEMENT || eventType == END_ELEMENT) {
-            return namespaceStack[(scopeStack[depth]+index)*2+1];
+            return namespaceContext.getNamespaceURI(namespaceContext.getFirstBindingInCurrentScope() + index);
         } else {
             throw new IllegalStateException();
         }
@@ -578,8 +544,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
                 depth++;
                 break;
             case END_ELEMENT:
-                // Remove namespace bindings that go out of scope
-                bindings = scopeStack[depth];
+                namespaceContext.endScope();
                 break;
             case END_DOCUMENT:
                 throw new NoSuchElementException();
@@ -614,97 +579,10 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
     
     public String getNamespaceURI(String prefix) {
-        if (prefix == null) {
-            throw new IllegalArgumentException("prefix can't be null");
-        } else if (prefix.equals(XMLConstants.XML_NS_PREFIX)) {
-            return XMLConstants.XML_NS_URI;
-        } else if (prefix.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
-            return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-        } else {
-            if (prefix.length() == 0) {
-                prefix = null;
-            }
-            for (int i=(bindings-1)*2; i>=0; i-=2) {
-                if (ObjectUtils.equals(prefix, namespaceStack[i])) {
-                    return namespaceStack[i+1];
-                }
-            }
-            return null;
-        }
+        String namespaceURI = namespaceContext.getNamespaceURI(prefix);
+        return namespaceURI.length() == 0 ? null : namespaceURI;
     }
 
-    String getPrefix(String namespaceURI) {
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("namespaceURI can't be null");
-        } else if (namespaceURI.equals(XMLConstants.XML_NS_URI)) {
-            return XMLConstants.XML_NS_PREFIX;
-        } else if (namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-            return XMLConstants.XMLNS_ATTRIBUTE;
-        } else {
-            outer: for (int i=(bindings-1)*2; i>=0; i-=2) {
-                if (namespaceURI.equals(namespaceStack[i+1])) {
-                    String prefix = namespaceStack[i];
-                    // Now check that the prefix is not masked
-                    for (int j=i+2; j<bindings*2; j+=2) {
-                        if (ObjectUtils.equals(prefix, namespaceStack[j])) {
-                            continue outer;
-                        }
-                    }
-                    return prefix == null ? "" : prefix;
-                }
-            }
-            return null;
-        }
-    }
-
-    Iterator<String> getPrefixes(final String namespaceURI) {
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("namespaceURI can't be null");
-        } else if (namespaceURI.equals(XMLConstants.XML_NS_URI)) {
-            return Collections.singleton(XMLConstants.XML_NS_PREFIX).iterator();
-        } else if (namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-            return Collections.singleton(XMLConstants.XMLNS_ATTRIBUTE).iterator();
-        } else {
-            return new Iterator<String>() {
-                private int binding = bindings;
-                private String next;
-    
-                public boolean hasNext() {
-                    if (next == null) {
-                        outer: while (--binding >= 0) {
-                            if (namespaceURI.equals(namespaceStack[binding*2+1])) {
-                                String prefix = namespaceStack[binding*2];
-                                // Now check that the prefix is not masked
-                                for (int j=binding+1; j<bindings; j++) {
-                                    if (ObjectUtils.equals(prefix, namespaceStack[j*2])) {
-                                        continue outer;
-                                    }
-                                }
-                                next = prefix == null ? "" : prefix;
-                                break;
-                            }
-                        }
-                    }
-                    return next != null;
-                }
-    
-                public String next() {
-                    if (hasNext()) {
-                        String result = next;
-                        next = null;
-                        return result;
-                    } else {
-                        throw new NoSuchElementException();
-                    }
-                }
-    
-                public void remove() {
-                    throw new UnsupportedOperationException();
-                }
-            };
-        }
-    }
-    
     /* (non-Javadoc)
      * @see javax.xml.stream.XMLStreamReader#close()
      */
