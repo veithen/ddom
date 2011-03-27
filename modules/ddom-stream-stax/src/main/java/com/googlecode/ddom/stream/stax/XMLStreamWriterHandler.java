@@ -61,16 +61,19 @@ public class XMLStreamWriterHandler implements XmlHandler {
         throw new UnsupportedOperationException();
     }
 
-    public void startElement(String tagName) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void startElement(String tagName) throws StreamException {
+        try {
+            writer.writeStartElement(tagName);
+        } catch (XMLStreamException ex) {
+            throw StAXExceptionUtil.toStreamException(ex);
+        }
     }
 
     public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
         try {
             writer.writeStartElement(prefix, localName, namespaceURI);
         } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
+            throw StAXExceptionUtil.toStreamException(ex);
         }
     }
 
@@ -78,7 +81,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
         try {
             writer.writeEndElement();
         } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
+            throw StAXExceptionUtil.toStreamException(ex);
         }
     }
 
@@ -112,7 +115,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
                     break;
             }
         } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
+            throw StAXExceptionUtil.toStreamException(ex);
         }
         attNamespaceURI = null;
         attName = null;
@@ -130,7 +133,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
             try {
                 writer.writeCharacters(data);
             } catch (XMLStreamException ex) {
-                throw new StreamException(ex);
+                throw StAXExceptionUtil.toStreamException(ex);
             }
         }
     }
@@ -144,7 +147,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
         try {
             writer.writeProcessingInstruction(piTarget, endCoalescing());
         } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
+            throw StAXExceptionUtil.toStreamException(ex);
         }
     }
 
@@ -156,7 +159,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
         try {
             writer.writeComment(endCoalescing());
         } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
+            throw StAXExceptionUtil.toStreamException(ex);
         }
     }
 
@@ -168,7 +171,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
         try {
             writer.writeCData(endCoalescing());
         } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
+            throw StAXExceptionUtil.toStreamException(ex);
         }
     }
 
@@ -181,7 +184,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
         try {
             writer.writeEndDocument();
         } catch (XMLStreamException ex) {
-            throw new StreamException(ex);
+            throw StAXExceptionUtil.toStreamException(ex);
         }
     }
 }

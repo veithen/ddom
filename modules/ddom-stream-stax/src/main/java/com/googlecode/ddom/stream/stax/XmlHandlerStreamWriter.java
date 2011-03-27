@@ -26,11 +26,19 @@ import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 public final class XmlHandlerStreamWriter implements XMLStreamWriter {
     private final XmlHandler handler;
     private final ScopedNamespaceContext context = new ScopedNamespaceContext();
+    private boolean attributesPending;
 
     public XmlHandlerStreamWriter(XmlHandler handler) {
         this.handler = handler;
     }
 
+    private void flushAttributes() throws StreamException {
+        if (attributesPending) {
+            handler.attributesCompleted();
+            attributesPending = false;
+        }
+    }
+    
     /* (non-Javadoc)
      * @see javax.xml.stream.XMLStreamWriter#getProperty(java.lang.String)
      */
@@ -91,20 +99,18 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeEndDocument()
-     */
     public void writeEndDocument() throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: should we call XmlHandler#completed() here or in StAXPushInput?
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeStartElement(java.lang.String)
-     */
-    public void writeStartElement(String arg0) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void writeStartElement(String localName) throws XMLStreamException {
+        try {
+            flushAttributes();
+            handler.startElement(localName);
+            attributesPending = true;
+        } catch (StreamException ex) {
+            throw StAXExceptionUtil.toXMLStreamException(ex);
+        }
     }
 
     public void writeStartElement(String namespaceURI, String localName) throws XMLStreamException {
@@ -118,17 +124,20 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
 
     public void writeStartElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
         try {
+            flushAttributes();
             handler.startElement(namespaceURI, localName, prefix);
+            attributesPending = true;
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw StAXExceptionUtil.toXMLStreamException(ex);
         }
     }
 
     public void writeEndElement() throws XMLStreamException {
         try {
+            flushAttributes();
             handler.endElement();
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw StAXExceptionUtil.toXMLStreamException(ex);
         }
     }
 
@@ -140,12 +149,13 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeAttribute(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void writeAttribute(String arg0, String arg1, String arg2) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
+        String prefix = context.getPrefix(namespaceURI);
+        if (prefix == null) {
+            throw new XMLStreamException("Unbound namespace URI '" + namespaceURI + "'");
+        } else {
+            writeAttribute(prefix, namespaceURI, localName, value);
+        }
     }
 
     public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
@@ -154,7 +164,7 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
             handler.processCharacterData(value, false);
             handler.endAttribute();
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw StAXExceptionUtil.toXMLStreamException(ex);
         }
     }
 
@@ -167,7 +177,7 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
             handler.processCharacterData(namespaceURI, false);
             handler.endAttribute();
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw StAXExceptionUtil.toXMLStreamException(ex);
         }
     }
 
@@ -177,9 +187,10 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
 
     public void writeCharacters(String text) throws XMLStreamException {
         try {
+            flushAttributes();
             handler.processCharacterData(text, false);
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw StAXExceptionUtil.toXMLStreamException(ex);
         }
     }
 

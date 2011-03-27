@@ -17,19 +17,25 @@ package com.googlecode.ddom.stream.stax;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import junit.framework.AssertionFailedError;
 
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLAssert;
-import org.custommonkey.xmlunit.XMLTestCase;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -67,9 +73,21 @@ public class StAXPushInputTest {
         Document actual = documentBuilder.newDocument();
         new Stream(input, new DOMOutput(actual)).flush();
         
-        Document expected = documentBuilder.newDocument();
-        source.serialize(outputFactory.createXMLStreamWriter(new DOMResult(expected)));
-        XMLAssert.assertXMLIdentical(new Diff(expected, actual), true);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        source.serialize(outputFactory.createXMLStreamWriter(baos));
+        Document expected = documentBuilder.parse(new ByteArrayInputStream(baos.toByteArray()));
+        try {
+            XMLAssert.assertXMLIdentical(new Diff(expected, actual), true);
+        } catch (AssertionFailedError ex) {
+            System.out.println("Expected");
+            source.serialize(outputFactory.createXMLStreamWriter(System.out));
+            System.out.println();
+            System.out.println("Actual:");
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.transform(new DOMSource(actual), new StreamResult(System.out));
+            System.out.println();
+            throw ex;
+        }
     }
     
     @Test
@@ -81,6 +99,7 @@ public class StAXPushInputTest {
                 writer.writeNamespace("p", "urn:ns1");
                 writer.writeCharacters("test");
                 writer.writeEndElement();
+                writer.writeEndDocument();
             }
         });
     }
@@ -96,9 +115,10 @@ public class StAXPushInputTest {
                 assertEquals("ns2", namespaceContext.getPrefix("urn:ns2"));
                 assertEquals("urn:ns2", namespaceContext.getNamespaceURI("ns2"));
                 writer.writeStartElement("urn:ns2", "child");
-                writer.writeAttribute("attr", "value");
+                writer.writeAttribute("urn:ns2", "attr", "value");
                 writer.writeEndElement();
                 writer.writeEndElement();
+                writer.writeEndDocument();
             }
         });
     }

@@ -52,7 +52,7 @@ public class StAXInput extends XmlInput {
             try {
                 reader.next();
             } catch (XMLStreamException ex) {
-                throw new StAXException(ex);
+                throw StAXExceptionUtil.toStreamException(ex);
             }
         } else {
             callNext = true;

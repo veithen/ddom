@@ -553,7 +553,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         try {
             nextEvent();
         } catch (StreamException ex) {
-            throw new XMLStreamException(ex);
+            throw StAXExceptionUtil.toXMLStreamException(ex);
         }
         return eventType;
     }
