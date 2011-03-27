@@ -32,6 +32,11 @@ import com.googlecode.ddom.stream.pivot.XmlPivot;
 import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 
 public class StAXPivot extends XmlPivot implements XMLStreamReader {
+    private static final int STATE_DEFAULT = 0;
+    private static final int STATE_COALESCE = 1;
+    private static final int STATE_COLLECT_TEXT = 2;
+    private static final int STATE_SKIP_COMMENT = 3;
+    
     private static final int INITIAL_ELEMENT_STACK_SIZE = 8;
     private static final int INITIAL_ATTRIBUTE_STACK_SIZE = 8;
     
@@ -47,14 +52,14 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private String prefix;
     private int attributeCount;
     private String declaredPrefix;
-    private boolean coalesce;
+    private int state = STATE_DEFAULT;
     private final StringAccumulator accumulator = new StringAccumulator();
     private String data;
     
     private String stopCoalescing() {
         String data = accumulator.toString();
         accumulator.clear();
-        coalesce = false;
+        state = STATE_DEFAULT;
         return data;
     }
     
@@ -120,7 +125,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean startAttribute(String namespaceURI, String localName, String prefix, String type) {
-        coalesce = true;
+        state = STATE_COALESCE;
         if (attributeCount == attributeStackSize) {
             attributeStackSize *= 2;
             String[] newStack = new String[attributeStackSize*5];
@@ -137,7 +142,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     @Override
     protected boolean startNamespaceDeclaration(String prefix) {
         declaredPrefix = prefix;
-        coalesce = true;
+        state = STATE_COALESCE;
         return true;
     }
 
@@ -160,13 +165,19 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean processCharacterData(String data, boolean ignorable) {
-        if (coalesce) {
-            accumulator.append(data);
-            return true;
-        } else {
-            eventType = ignorable ? SPACE : CHARACTERS;
-            this.data = data;
-            return false;
+        switch (state) {
+            case STATE_DEFAULT:
+                eventType = ignorable ? SPACE : CHARACTERS;
+                this.data = data;
+                return false;
+            case STATE_COALESCE:
+            case STATE_COLLECT_TEXT:
+                accumulator.append(data);
+                return true;
+            case STATE_SKIP_COMMENT:
+                return true;
+            default:
+                throw new IllegalStateException();
         }
     }
 
@@ -174,7 +185,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     protected boolean startProcessingInstruction(String target) {
         eventType = PROCESSING_INSTRUCTION;
         localName = target;
-        coalesce = true;
+        state = STATE_COALESCE;
         return true;
     }
 
@@ -186,15 +197,24 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean startComment() {
-        eventType = COMMENT;
-        coalesce = true;
+        if (state == STATE_COLLECT_TEXT) {
+            state = STATE_SKIP_COMMENT;
+        } else {
+            eventType = COMMENT;
+            state = STATE_COALESCE;
+        }
         return true;
     }
 
     @Override
     protected boolean endComment() {
-        data = stopCoalescing();
-        return false;
+        if (state == STATE_SKIP_COMMENT) {
+            state = STATE_COLLECT_TEXT;
+            return true;
+        } else {
+            data = stopCoalescing();
+            return false;
+        }
     }
 
     @Override
@@ -433,14 +453,6 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#getElementText()
-     */
-    public String getElementText() throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
      * @see javax.xml.stream.XMLStreamReader#getEncoding()
      */
     public String getEncoding() {
@@ -585,6 +597,14 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     public void require(int arg0, String arg1, String arg2) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public String getElementText() throws XMLStreamException {
+        // TODO: check correct state
+        // TODO: need to make sure that in this state, other events will cause an exception
+        state = STATE_COLLECT_TEXT;
+        next();
+        return stopCoalescing();
     }
 
     public NamespaceContext getNamespaceContext() {

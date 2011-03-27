@@ -20,6 +20,9 @@ import junit.framework.TestSuite;
 
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.ts.OMTestSuiteBuilder;
+import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCDATAEventFromElement;
+import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
+import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
@@ -46,6 +49,9 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(TestCreateOMTextFromDataHandlerProvider.class);
+        builder.exclude(TestGetXMLStreamReaderCDATAEventFromElement.class);
+        builder.exclude(TestGetXMLStreamReaderCommentEvent.class);
+        builder.exclude(TestGetXMLStreamReaderNextTag.class);
         return builder.build();
     }
 }
