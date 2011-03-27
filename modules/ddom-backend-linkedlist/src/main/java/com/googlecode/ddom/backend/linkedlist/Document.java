@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
+import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -56,6 +57,7 @@ public class Document extends ParentNode implements LLDocument {
 
     public final InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredParsingException {
         Builder builder = new Builder(input, modelExtension, this, target, unwrap);
+        target.internalSetState(target instanceof LLElement ? Flags.STATE_ATTRIBUTES_PENDING : Flags.STATE_CHILDREN_PENDING);
         new Stream(input, builder);
         builders.add(builder);
         return builder.getRootInputContext();

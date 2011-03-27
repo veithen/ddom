@@ -80,6 +80,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetAttributeAlreadyOwnedByElement(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetContentLaziness(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSource(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceWithPushInput(config));
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareElement.class;

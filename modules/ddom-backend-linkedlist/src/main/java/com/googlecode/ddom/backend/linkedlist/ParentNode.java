@@ -285,7 +285,6 @@ public abstract class ParentNode extends Node implements LLParentNode {
             content = null;
             LLDocument document = internalGetOwnerDocument(true);
             inputContext = document.internalCreateInputContext(source.getInput(XmlSource.Hints.DEFAULTS), this, state == Flags.STATE_SOURCE_SET);
-            internalSetState(Flags.STATE_CHILDREN_PENDING);
         } else {
             LLDocument document = internalGetOwnerDocument(false);
             if (document == null) {
@@ -304,7 +303,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
                 case Flags.STATE_CONTENT_SET:
                 case Flags.STATE_SOURCE_SET:
                     context = internalGetOrCreateInputContext();
-                    // Fall through
+                    break;
                 case Flags.STATE_ATTRIBUTES_PENDING:
                 case Flags.STATE_CHILDREN_PENDING:
                     if (content == null) {
