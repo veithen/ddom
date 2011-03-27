@@ -57,7 +57,9 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                     }
                     break;
                 case 3:
-                    if (state == STATE_BODY) {
+                    if (state == STATE_HEADER) {
+                        return version.getSOAPHeaderBlockClass();
+                    } else if (state == STATE_BODY) {
                         if (localName.equals(SOAPConstants.BODY_FAULT_LOCAL_NAME)) {
                             state = STATE_FAULT;
                             return version.getSOAPFaultClass();
@@ -86,7 +88,7 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
             if (depth == 3) {
                 state = STATE_BODY;
             }
-        } else {
+        } else if (depth == 2) {
             state = 0;
         }
         depth--;

@@ -112,6 +112,16 @@ public abstract class SOAPVersionEx {
         public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
             return AxiomSOAP11FaultDetail.class;
         }
+
+        @Override
+        public boolean isUltimateReceiverRole(String role) {
+            return role == null || role.length() == 0;
+        }
+
+        @Override
+        public boolean isNoneRole(String role) {
+            return false;
+        }
     };
 
     public static final SOAPVersionEx SOAP12 = new SOAPVersionEx(
@@ -171,6 +181,16 @@ public abstract class SOAPVersionEx {
         public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
             return AxiomSOAP12FaultDetail.class;
         }
+
+        @Override
+        public boolean isUltimateReceiverRole(String role) {
+            return role == null || role.length() == 0 || role.equals(SOAP12Constants.SOAP_ROLE_ULTIMATE_RECEIVER);
+        }
+
+        @Override
+        public boolean isNoneRole(String role) {
+            return role.equals(SOAP12Constants.SOAP_ROLE_NONE);
+        }
     };
     
     private final SOAPVersion soapVersion;
@@ -224,4 +244,7 @@ public abstract class SOAPVersionEx {
     public abstract Class<? extends AxiomSOAPFaultReason> getSOAPFaultReasonClass();
     public abstract Class<? extends AxiomSOAPFaultRole> getSOAPFaultRoleClass();
     public abstract Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass();
+    
+    public abstract boolean isUltimateReceiverRole(String role);
+    public abstract boolean isNoneRole(String role);
 }

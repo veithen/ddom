@@ -31,6 +31,8 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(AxiomSOAPHeaderBlock.class)
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
+    private boolean processed;
+    
     private void setAttributeValue(QName qname, String value) {
         try {
             coreSetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
@@ -105,18 +107,16 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isProcessed() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setProcessed() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public void setRelay(boolean relay) {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final boolean isProcessed() {
+        return processed;
+    }
+
+    public final void setProcessed() {
+        processed = true;
     }
 }

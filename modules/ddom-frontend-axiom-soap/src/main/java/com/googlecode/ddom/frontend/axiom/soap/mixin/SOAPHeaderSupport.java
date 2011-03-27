@@ -30,6 +30,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.googlecode.ddom.frontend.axiom.soap.support.RoleFilter;
+import com.googlecode.ddom.frontend.axiom.soap.support.RolePlayerFilter;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.frontend.axiom.support.NSUtil;
 
@@ -79,22 +80,21 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
         }
     }
 
+    public final Iterator getHeadersToProcess(RolePlayer rolePlayer) {
+        return getHeadersToProcess(rolePlayer, null);
+    }
+
+    public final Iterator getHeadersToProcess(RolePlayer rolePlayer, String namespace) {
+        return new FilteredIterator<AxiomSOAPHeaderBlock>(
+                coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class), new RolePlayerFilter(rolePlayer, namespace));
+    }
+
     public Iterator extractAllHeaderBlocks() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
     public Iterator extractHeaderBlocks(String role) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public Iterator getHeadersToProcess(RolePlayer rolePlayer, String namespace) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public Iterator getHeadersToProcess(RolePlayer rolePlayer) {
         // TODO
         throw new UnsupportedOperationException();
     }
