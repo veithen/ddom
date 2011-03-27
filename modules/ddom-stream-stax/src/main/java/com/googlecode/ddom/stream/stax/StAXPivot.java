@@ -24,6 +24,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.pivot.XmlPivot;
@@ -389,9 +391,20 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         }
     }
 
-    public String getAttributeValue(String arg0, String arg1) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public String getAttributeValue(String namespaceURI, String localName) {
+        if (eventType == START_ELEMENT) {
+            if (namespaceURI != null && namespaceURI.length() == 0) {
+                namespaceURI = null;
+            }
+            for (int i=0; i<attributeCount; i++) {
+                if (localName.equals(attributeStack[i*5+1]) && ObjectUtils.equals(namespaceURI, attributeStack[i*5])) {
+                    return attributeStack[i*5+4];
+                }
+            }
+            return null;
+        } else {
+            throw new IllegalStateException();
+        }
     }
 
     public int getNamespaceCount() {
