@@ -17,7 +17,6 @@ package com.googlecode.ddom.frontend.axiom.soap.support;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axiom.soap.SOAP11Constants;
 import org.apache.axiom.soap.SOAP11Version;
 import org.apache.axiom.soap.SOAP12Constants;
 import org.apache.axiom.soap.SOAP12Version;
@@ -49,6 +48,7 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
@@ -57,10 +57,6 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 public abstract class SOAPVersionEx {
     public static final SOAPVersionEx SOAP11 = new SOAPVersionEx(
             SOAP11Version.getSingleton(),
-            new SequenceBuilder()
-                .addItem(AxiomSOAP11Header.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
-                .addItem(AxiomSOAP11Body.class, SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
-                .enableMatchByInterface().build(),
             new SequenceBuilder()
                 .addItem(AxiomSOAPFaultCode.class, "", "faultcode")
                 .addItem(AxiomSOAPFaultReason.class, "", "faultstring")
@@ -122,17 +118,39 @@ public abstract class SOAPVersionEx {
         public boolean isNoneRole(String role) {
             return false;
         }
+        
+        @Override
+        public int getFaultCodeIndex() {
+            return 0;
+        }
+        
+        @Override
+        public int getFaultReasonIndex(){
+            return 1;
+        }
+        
+        @Override
+        public int getFaultNodeIndex(){
+            return -1;
+        }
+        
+        @Override
+        public int getFaultRoleIndex(){
+            return 2;
+        }
+        
+        @Override
+        public int getFaultDetailIndex(){
+            return 3;
+        }
     };
 
     public static final SOAPVersionEx SOAP12 = new SOAPVersionEx(
             SOAP12Version.getSingleton(),
             new SequenceBuilder()
-                .addItem(AxiomSOAP12Header.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.HEADER_LOCAL_NAME)
-                .addItem(AxiomSOAP12Body.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, SOAPConstants.BODY_LOCAL_NAME)
-                .enableMatchByInterface().build(),
-            new SequenceBuilder()
                 .addItem(AxiomSOAPFaultCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Code")
                 .addItem(AxiomSOAPFaultReason.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Reason")
+                .addItem(AxiomSOAPFaultNode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Node")
                 .addItem(AxiomSOAPFaultRole.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Role")
                 .addItem(AxiomSOAPFaultDetail.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Detail")
                 .enableMatchByInterface().build()) {
@@ -191,15 +209,43 @@ public abstract class SOAPVersionEx {
         public boolean isNoneRole(String role) {
             return role.equals(SOAP12Constants.SOAP_ROLE_NONE);
         }
+        
+        @Override
+        public int getFaultCodeIndex() {
+            return 0;
+        }
+        
+        @Override
+        public int getFaultReasonIndex(){
+            return 1;
+        }
+        
+        @Override
+        public int getFaultNodeIndex(){
+            return 2;
+        }
+        
+        @Override
+        public int getFaultRoleIndex(){
+            return 3;
+        }
+        
+        @Override
+        public int getFaultDetailIndex(){
+            return 4;
+        }
     };
     
     private final SOAPVersion soapVersion;
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
     
-    public SOAPVersionEx(SOAPVersion soapVersion, Sequence envelopeSequence, Sequence faultSequence) {
+    public SOAPVersionEx(SOAPVersion soapVersion, Sequence faultSequence) {
         this.soapVersion = soapVersion;
-        this.envelopeSequence = envelopeSequence;
+        envelopeSequence = new SequenceBuilder()
+                .addItem(getSOAPHeaderClass(), getEnvelopeURI(), SOAPConstants.HEADER_LOCAL_NAME)
+                .addItem(getSOAPBodyClass(), getEnvelopeURI(), SOAPConstants.BODY_LOCAL_NAME)
+                .enableMatchByInterface().build();
         this.faultSequence = faultSequence;
     }
 
@@ -247,4 +293,10 @@ public abstract class SOAPVersionEx {
     
     public abstract boolean isUltimateReceiverRole(String role);
     public abstract boolean isNoneRole(String role);
+
+    public abstract int getFaultCodeIndex();
+    public abstract int getFaultReasonIndex();
+    public abstract int getFaultNodeIndex();
+    public abstract int getFaultRoleIndex();
+    public abstract int getFaultDetailIndex();
 }

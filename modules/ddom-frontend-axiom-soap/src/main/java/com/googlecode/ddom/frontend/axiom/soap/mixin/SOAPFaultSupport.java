@@ -28,15 +28,18 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
+import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(AxiomSOAPFault.class)
 public abstract class SOAPFaultSupport implements AxiomSOAPFault {
     public final SOAPFaultCode getCode() {
         try {
-            return (AxiomSOAPFaultCode)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 0, false);
+            SOAPVersionEx version = getSOAPVersionEx();
+            return (AxiomSOAPFaultCode)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultCodeIndex(), false);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -44,7 +47,8 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
 
     public final void setCode(SOAPFaultCode soapFaultCode) throws SOAPProcessingException {
         try {
-            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 0, (AxiomSOAPFaultCode)soapFaultCode);
+            SOAPVersionEx version = getSOAPVersionEx();
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultCodeIndex(), (AxiomSOAPFaultCode)soapFaultCode);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -52,7 +56,8 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
 
     public final SOAPFaultReason getReason() {
         try {
-            return (AxiomSOAPFaultReason)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 1, false);
+            SOAPVersionEx version = getSOAPVersionEx();
+            return (AxiomSOAPFaultReason)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultReasonIndex(), false);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -60,7 +65,26 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
 
     public final void setReason(SOAPFaultReason reason) throws SOAPProcessingException {
         try {
-            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 1, (AxiomSOAPFaultReason)reason);
+            SOAPVersionEx version = getSOAPVersionEx();
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultReasonIndex(), (AxiomSOAPFaultReason)reason);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final SOAPFaultNode getNode() {
+        try {
+            SOAPVersionEx version = getSOAPVersionEx();
+            return (AxiomSOAPFaultNode)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultNodeIndex(), false);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final void setNode(SOAPFaultNode node) throws SOAPProcessingException {
+        try {
+            SOAPVersionEx version = getSOAPVersionEx();
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultNodeIndex(), (AxiomSOAPFaultNode)node);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -68,7 +92,8 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
 
     public final SOAPFaultRole getRole() {
         try {
-            return (AxiomSOAPFaultRole)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 2, false);
+            SOAPVersionEx version = getSOAPVersionEx();
+            return (AxiomSOAPFaultRole)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultRoleIndex(), false);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -76,7 +101,8 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
 
     public final void setRole(SOAPFaultRole role) throws SOAPProcessingException {
         try {
-            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 2, (AxiomSOAPFaultRole)role);
+            SOAPVersionEx version = getSOAPVersionEx();
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultRoleIndex(), (AxiomSOAPFaultRole)role);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -84,7 +110,8 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
 
     public final SOAPFaultDetail getDetail() {
         try {
-            return (AxiomSOAPFaultDetail)coreGetElementFromSequence(getSOAPVersionEx().getFaultSequence(), 3, false);
+            SOAPVersionEx version = getSOAPVersionEx();
+            return (AxiomSOAPFaultDetail)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultDetailIndex(), false);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -92,7 +119,8 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
 
     public final void setDetail(SOAPFaultDetail detail) throws SOAPProcessingException {
         try {
-            coreInsertElementInSequence(getSOAPVersionEx().getFaultSequence(), 3, (AxiomSOAPFaultDetail)detail);
+            SOAPVersionEx version = getSOAPVersionEx();
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultDetailIndex(), (AxiomSOAPFaultDetail)detail);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -103,17 +131,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
         throw new UnsupportedOperationException();
     }
 
-    public SOAPFaultNode getNode() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public void setException(Exception e) throws OMException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setNode(SOAPFaultNode node) throws SOAPProcessingException {
         // TODO
         throw new UnsupportedOperationException();
     }
