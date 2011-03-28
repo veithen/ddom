@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,5 +67,17 @@ public class SOAP11FaultTest extends SOAPFaultTest {
     public void testSetFaultRole() throws Exception {
         SOAPFault fault = createEmptySOAPFault();
         fault.setFaultRole("urn:myrole");
+    }
+    
+    @Validated @Test(expected=UnsupportedOperationException.class)
+    public void testGetFaultNode() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        fault.getFaultNode();
+    }
+    
+    @Validated @Test(expected=UnsupportedOperationException.class)
+    public void testSetFaultNode() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        fault.setFaultNode("mynode");
     }
 }
