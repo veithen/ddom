@@ -44,7 +44,9 @@ import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.NSUtil;
 import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
 
 public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
@@ -80,7 +82,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return defaultEnvelope;
     }
 
-    private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, String namespaceURI, String localName) {
+    private <T extends AxiomElement> T createSOAPElement(OMElement parent, Class<T> extensionInterface, String namespaceURI, String localName) {
         try {
             String prefix = namespaceURI.length() == 0 ? "" : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;
             if (parent == null) {
@@ -100,16 +102,16 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         }
     }
     
-    private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, String localName) {
-        return createElement(parent, extensionInterface, soapVersion.getEnvelopeURI(), localName);
+    private <T extends AxiomElement> T createSOAPElement(OMElement parent, Class<T> extensionInterface, String localName) {
+        return createSOAPElement(parent, extensionInterface, soapVersion.getEnvelopeURI(), localName);
     }
     
-    private <T extends AxiomElement> T createElement(OMElement parent, Class<T> extensionInterface, QName qname) {
-        return createElement(parent, extensionInterface, qname.getNamespaceURI(), qname.getLocalPart());
+    private <T extends AxiomElement> T createSOAPElement(OMElement parent, Class<T> extensionInterface, QName qname) {
+        return createSOAPElement(parent, extensionInterface, qname.getNamespaceURI(), qname.getLocalPart());
     }
     
     public final SOAPEnvelope createSOAPEnvelope() throws SOAPProcessingException {
-        return createElement(null, soapVersion.getSOAPEnvelopeClass(), SOAPConstants.SOAPENVELOPE_LOCAL_NAME);
+        return createSOAPElement(null, soapVersion.getSOAPEnvelopeClass(), SOAPConstants.SOAPENVELOPE_LOCAL_NAME);
     }
 
     public SOAPEnvelope createSOAPEnvelope(OMNamespace ns) {
@@ -122,7 +124,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPHeader createSOAPHeader(SOAPEnvelope envelope) throws SOAPProcessingException {
-        return createElement(envelope, soapVersion.getSOAPHeaderClass(), SOAPConstants.HEADER_LOCAL_NAME);
+        return createSOAPElement(envelope, soapVersion.getSOAPHeaderClass(), SOAPConstants.HEADER_LOCAL_NAME);
     }
 
     public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns) throws SOAPProcessingException {
@@ -134,10 +136,11 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return parent.addHeaderBlock(localName, ns);
     }
 
-    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, OMDataSource ds)
-            throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, OMDataSource ds) throws SOAPProcessingException {
+        AxiomSOAPHeaderBlock element = nodeFactory.createElement(null, soapVersion.getSOAPHeaderBlockClass(), NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
+        element.setOMFactory(this);
+        element.setDataSource(ds);
+        return element;
     }
 
     public final SOAPBody createSOAPBody() throws SOAPProcessingException {
@@ -145,7 +148,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPBody createSOAPBody(SOAPEnvelope envelope) throws SOAPProcessingException {
-        return createElement(envelope, soapVersion.getSOAPBodyClass(), SOAPConstants.BODY_LOCAL_NAME);
+        return createSOAPElement(envelope, soapVersion.getSOAPBodyClass(), SOAPConstants.BODY_LOCAL_NAME);
     }
 
     public final SOAPFault createSOAPFault() throws SOAPProcessingException {
@@ -153,7 +156,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFault createSOAPFault(SOAPBody body) throws SOAPProcessingException {
-        return createElement(body, soapVersion.getSOAPFaultClass(), SOAPConstants.BODY_FAULT_LOCAL_NAME);
+        return createSOAPElement(body, soapVersion.getSOAPFaultClass(), SOAPConstants.BODY_FAULT_LOCAL_NAME);
     }
 
     /* (non-Javadoc)
@@ -169,7 +172,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFaultCode createSOAPFaultCode(SOAPFault fault) throws SOAPProcessingException {
-        return createElement(fault, soapVersion.getSOAPFaultCodeClass(), soapVersion.getFaultCodeQName());
+        return createSOAPElement(fault, soapVersion.getSOAPFaultCodeClass(), soapVersion.getFaultCodeQName());
     }
 
     public final SOAPFaultReason createSOAPFaultReason() throws SOAPProcessingException {
@@ -177,7 +180,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFaultReason createSOAPFaultReason(SOAPFault fault) throws SOAPProcessingException {
-        return createElement(fault, soapVersion.getSOAPFaultReasonClass(), soapVersion.getFaultReasonQName());
+        return createSOAPElement(fault, soapVersion.getSOAPFaultReasonClass(), soapVersion.getFaultReasonQName());
     }
 
     public final SOAPFaultRole createSOAPFaultRole() throws SOAPProcessingException {
@@ -185,7 +188,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFaultRole createSOAPFaultRole(SOAPFault fault) throws SOAPProcessingException {
-        return createElement(fault, soapVersion.getSOAPFaultRoleClass(), soapVersion.getFaultRoleQName());
+        return createSOAPElement(fault, soapVersion.getSOAPFaultRoleClass(), soapVersion.getFaultRoleQName());
     }
 
     public final SOAPFaultDetail createSOAPFaultDetail() throws SOAPProcessingException {
@@ -193,7 +196,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFaultDetail createSOAPFaultDetail(SOAPFault fault) throws SOAPProcessingException {
-        return createElement(fault, soapVersion.getSOAPFaultDetailClass(), soapVersion.getFaultDetailQName());
+        return createSOAPElement(fault, soapVersion.getSOAPFaultDetailClass(), soapVersion.getFaultDetailQName());
     }
 
     /* (non-Javadoc)
