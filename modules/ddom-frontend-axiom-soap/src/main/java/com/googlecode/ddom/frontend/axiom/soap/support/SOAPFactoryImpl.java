@@ -127,9 +127,10 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return createSOAPElement(envelope, soapVersion.getSOAPHeaderClass(), SOAPConstants.HEADER_LOCAL_NAME);
     }
 
-    public SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns) throws SOAPProcessingException {
+        AxiomSOAPHeaderBlock element = nodeFactory.createElement(null, soapVersion.getSOAPHeaderBlockClass(), NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
+        element.setOMFactory(this);
+        return element;
     }
 
     public final SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, SOAPHeader parent) throws SOAPProcessingException {
@@ -137,8 +138,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPHeaderBlock createSOAPHeaderBlock(String localName, OMNamespace ns, OMDataSource ds) throws SOAPProcessingException {
-        AxiomSOAPHeaderBlock element = nodeFactory.createElement(null, soapVersion.getSOAPHeaderBlockClass(), NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
-        element.setOMFactory(this);
+        SOAPHeaderBlock element = createSOAPHeaderBlock(localName, ns);
         element.setDataSource(ds);
         return element;
     }
