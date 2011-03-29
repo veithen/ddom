@@ -220,8 +220,7 @@ public abstract class ElementSupport implements AxiomElement {
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
-        // TODO
-        return null;
+        return new OMNamespaceImpl(uri, prefix);
     }
     
     public final OMNamespace declareDefaultNamespace(String uri) {
