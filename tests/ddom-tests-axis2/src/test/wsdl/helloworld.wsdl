@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009-2011 Andreas Veithen
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://ddom.googlecode.com/tests/axis2/helloworld"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  name="helloworld"
+                  targetNamespace="http://ddom.googlecode.com/tests/axis2/helloworld">
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://ddom.googlecode.com/tests/axis2/helloworld">
+            <xsd:element name="sayHello">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="in" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sayHelloResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="out" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="sayHelloRequest">
+        <wsdl:part element="tns:sayHello" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="sayHelloResponse">
+        <wsdl:part element="tns:sayHelloResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="helloworld">
+        <wsdl:operation name="sayHello">
+            <wsdl:input message="tns:sayHelloRequest"/>
+            <wsdl:output message="tns:sayHelloResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="helloworldSOAP" type="tns:helloworld">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="sayHello">
+            <soap:operation soapAction="http://www.example.org/helloworld/sayHello"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="helloworld">
+        <wsdl:port binding="tns:helloworldSOAP" name="helloworldSOAP">
+            <soap:address location="REPLACE_WITH_ACTUAL_URI"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

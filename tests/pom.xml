@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Andreas Veithen
+  ~ Copyright 2009-2011 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@
     <modules>
         <!-- TODO -->
         <!-- module>ddom-tests-dom-axiom</module -->
+        <module>ddom-tests-axis2</module>
         <module>ddom-tests-jaxen</module>
         <module>ddom-tests-jaxrpc-ri</module>
         <module>ddom-tests-wss4j</module>
