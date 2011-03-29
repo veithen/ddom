@@ -26,6 +26,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
+import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
@@ -72,9 +73,9 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     public final void setMustUnderstand(boolean mustUnderstand) {
         try {
             // TODO: use setAttributeValue here
-            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
-                    SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX,
-                    mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE : SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE);
+            SOAPVersionEx version = getSOAPVersionEx();
+            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, version.getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
+                    SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, version.formatMustUnderstand(mustUnderstand));
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

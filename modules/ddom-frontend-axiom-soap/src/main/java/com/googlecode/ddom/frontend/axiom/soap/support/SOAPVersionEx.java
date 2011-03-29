@@ -120,6 +120,11 @@ public abstract class SOAPVersionEx {
         }
         
         @Override
+        public String formatMustUnderstand(boolean mustUnderstand) {
+            return mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_1 : SOAPConstants.ATTR_MUSTUNDERSTAND_0;
+        }
+
+        @Override
         public int getFaultCodeIndex() {
             return 0;
         }
@@ -211,6 +216,11 @@ public abstract class SOAPVersionEx {
         }
         
         @Override
+        public String formatMustUnderstand(boolean mustUnderstand) {
+            return mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE : SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE;
+        }
+
+        @Override
         public int getFaultCodeIndex() {
             return 0;
         }
@@ -294,6 +304,9 @@ public abstract class SOAPVersionEx {
     public abstract boolean isUltimateReceiverRole(String role);
     public abstract boolean isNoneRole(String role);
 
+    public abstract String formatMustUnderstand(boolean mustUnderstand);
+    // TODO: in the SAAJ front-end we also have a SOAP version specific parseMustUnderstand method; should we have that for Axiom too?
+    
     public abstract int getFaultCodeIndex();
     public abstract int getFaultReasonIndex();
     public abstract int getFaultNodeIndex();
