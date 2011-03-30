@@ -15,7 +15,11 @@
  */
 package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
+import org.apache.axiom.soap.SOAPConstants;
 import org.apache.axiom.soap.SOAPFaultCode;
 import org.apache.axiom.soap.SOAPFaultDetail;
 import org.apache.axiom.soap.SOAPFaultNode;
@@ -126,9 +130,19 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
         }
     }
 
-    public Exception getException() throws OMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Exception getException() throws OMException {
+        SOAPFaultDetail detail = getDetail();
+        if (detail == null) {
+            return null;
+        } else {
+            OMElement exceptionElement = detail.getFirstChildWithName(
+                    new QName(SOAPConstants.SOAP_FAULT_DETAIL_EXCEPTION_ENTRY));
+            if (exceptionElement != null) {
+                return new Exception(exceptionElement.getText());
+            } else {
+                return null;
+            }
+        }
     }
 
     public void setException(Exception e) throws OMException {
