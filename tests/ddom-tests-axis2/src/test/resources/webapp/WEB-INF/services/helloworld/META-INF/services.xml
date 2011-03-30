@@ -19,7 +19,7 @@
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.googlecode.ddom.tests.axis2.helloworld.HelloworldMessageReceiverInOut"/>
         </messageReceivers>
-        <parameter name="ServiceClass">com.googlecode.ddom.tests.axis2.helloworld.HelloworldSkeleton</parameter>
+        <parameter name="ServiceClass">com.googlecode.ddom.tests.axis2.helloworld.HelloworldImpl</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
         <operation name="sayHello" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://ddom.googlecode.com/tests/axis2/helloworld">

@@ -15,7 +15,7 @@
  */
 package com.googlecode.ddom.tests.axis2.helloworld;
 
-public class HelloworldImpl {
+public class HelloworldImpl extends HelloworldSkeleton {
     public String sayHello(String in) {
         return "Hello " + in + "!";
     }

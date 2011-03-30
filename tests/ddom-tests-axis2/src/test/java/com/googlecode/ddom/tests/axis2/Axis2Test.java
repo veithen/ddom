@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.tests.axis2;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 import org.eclipse.jetty.server.Connector;
@@ -67,7 +69,7 @@ public class Axis2Test {
     @Test
     public void test() throws Exception {
         HelloworldStub stub = new HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld");
-        System.out.println(stub.sayHello("world"));
+        assertEquals("Hello world!", stub.sayHello("world"));
     }
     
     @AfterClass
