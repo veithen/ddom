@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.tests.axis2;
 
+import org.apache.axis2.context.ConfigurationContext;
+import org.apache.axis2.context.ConfigurationContextFactory;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -26,10 +28,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.googlecode.ddom.tests.axis2.helloworld.HelloworldStub;
+
 public class Axis2Test {
     private static final int PORT = 9999;
     
     private static Server server;
+    private static ConfigurationContext clientConfigurationContext;
     
     @BeforeClass
     public static void startServer() throws Exception {
@@ -54,9 +59,15 @@ public class Axis2Test {
         server.start();
     }
     
+    @BeforeClass
+    public static void createClientConfigurationContext() throws Exception {
+        clientConfigurationContext = ConfigurationContextFactory.createConfigurationContextFromURIs(Axis2Test.class.getResource("axis2_client.xml"), null);
+    }
+    
     @Test
-    public void test() {
-        
+    public void test() throws Exception {
+        HelloworldStub stub = new HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld");
+        System.out.println(stub.sayHello("world"));
     }
     
     @AfterClass

@@ -44,6 +44,11 @@
     <transportReceiver name="http"
                        class="org.apache.axis2.transport.http.AxisServletListener"/>
 
+    <transportSender name="http" class="org.apache.axis2.transport.http.CommonsHTTPTransportSender">
+        <parameter name="PROTOCOL">HTTP/1.1</parameter>
+        <parameter name="Transfer-Encoding">chunked</parameter>
+    </transportSender>
+    
     <!-- module ref="addressing"/ -->
 
     <phaseOrder type="InFlow">
