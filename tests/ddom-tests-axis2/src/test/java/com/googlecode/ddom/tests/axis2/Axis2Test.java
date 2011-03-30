@@ -17,6 +17,9 @@ package com.googlecode.ddom.tests.axis2;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.concurrent.CountDownLatch;
+
+import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 import org.eclipse.jetty.server.Connector;
@@ -30,6 +33,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.googlecode.ddom.tests.axis2.helloworld.HelloworldCallbackHandler;
 import com.googlecode.ddom.tests.axis2.helloworld.HelloworldStub;
 
 public class Axis2Test {
@@ -67,9 +71,36 @@ public class Axis2Test {
     }
     
     @Test
-    public void test() throws Exception {
+    public void testHelloworld() throws Exception {
         HelloworldStub stub = new HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld");
-        assertEquals("Hello world!", stub.sayHello("world"));
+        try {
+            assertEquals("Hello world!", stub.sayHello("world"));
+        } finally {
+            stub.cleanup();
+        }
+    }
+    
+    @Test
+    public void testHelloworldWithWSA() throws Exception {
+        HelloworldStub stub = new HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld");
+        try {
+            ServiceClient serviceClient = stub._getServiceClient();
+            serviceClient.engageModule("addressing");
+            serviceClient.getOptions().setUseSeparateListener(true);
+            final String[] resultHolder = new String[1];
+            final CountDownLatch latch = new CountDownLatch(1);
+            stub.startsayHello("world", new HelloworldCallbackHandler() {
+                @Override
+                public void receiveResultsayHello(String result) {
+                    resultHolder[0] = result;
+                    latch.countDown();
+                }
+            });
+            latch.await();
+            assertEquals("Hello world!", resultHolder[0]);
+        } finally {
+            stub.cleanup();
+        }
     }
     
     @AfterClass

@@ -49,7 +49,7 @@
         <parameter name="Transfer-Encoding">chunked</parameter>
     </transportSender>
     
-    <!-- module ref="addressing"/ -->
+    <module ref="addressing"/>
 
     <phaseOrder type="InFlow">
         <!--  System predefined phases       -->
