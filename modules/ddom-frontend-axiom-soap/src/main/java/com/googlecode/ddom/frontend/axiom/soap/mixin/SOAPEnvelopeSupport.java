@@ -57,8 +57,8 @@ public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
         return getSOAPVersionEx().getSOAPVersion();
     }
 
-    public boolean hasFault() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final boolean hasFault() {
+        SOAPBody body = getBody();
+        return body == null ? false : body.hasFault();
     }
 }
