@@ -89,13 +89,23 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMElement createOMElement(QName qname) {
-        String namespaceURI = qname.getNamespaceURI();
         String prefix = qname.getPrefix();
-        if (prefix.length() == 0 && namespaceURI.length() != 0) {
-            prefix = OMSerializerUtil.getNextNSPrefix();
+        return createOMElement(qname.getLocalPart(), qname.getNamespaceURI(), prefix.length() == 0 ? null : prefix);
+    }
+
+    public final OMElement createOMElement(String localName, OMNamespace ns) {
+        return createOMElement(localName, NSUtil.getNamespaceURI(ns), NSUtil.getPrefix(ns));
+    }
+
+    public final OMElement createOMElement(String localName, String namespaceURI, String prefix) {
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("Namespace URI must not be null");
         }
-        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, qname.getLocalPart(), prefix);
-        if (prefix.length() != 0) {
+        if (prefix == null) {
+            prefix = namespaceURI.length() == 0 ? "" : OMSerializerUtil.getNextNSPrefix();
+        }
+        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
+        if (namespaceURI.length() != 0) {
             try {
                 element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
             } catch (CoreModelException ex) {
@@ -124,22 +134,6 @@ public class OMFactoryImpl implements OMFactory {
         }
     }
 
-    public final OMElement createOMElement(String localName, OMNamespace ns) {
-        String namespaceURI = NSUtil.getNamespaceURI(ns);
-        String prefix = NSUtil.getPrefix(ns);
-        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
-        element.setOMFactory(this);
-        // TODO: we don't have a test case covering ns == null
-        if (ns != null) {
-            try {
-                element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
-            } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
-            }
-        }
-        return element;
-    }
-
     public final OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent) {
         if (parent == null) {
             return createOMElement(localName, ns);
@@ -153,24 +147,6 @@ public class OMFactoryImpl implements OMFactory {
                 throw AxiomExceptionUtil.translate(ex);
             }
         }
-    }
-
-    public final OMElement createOMElement(String localName, String namespaceURI, String prefix) {
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("Namespace URI must not be null");
-        }
-        if (namespaceURI.length() == 0) {
-            namespaceURI = null;
-        }
-        AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
-        // TODO: not always necessary
-        try {
-            element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-        element.setOMFactory(this);
-        return element;
     }
 
     private OMSourcedElement createOMElement(OMDataSource dataSource, String namespaceURI, String localName, String prefix) {

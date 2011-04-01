@@ -20,6 +20,7 @@ import junit.framework.TestSuite;
 
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.ts.OMTestSuiteBuilder;
+import org.apache.axiom.ts.om.builder.TestInvalidXML;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCDATAEventFromElement;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
@@ -52,6 +53,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetXMLStreamReaderCDATAEventFromElement.class);
         builder.exclude(TestGetXMLStreamReaderCommentEvent.class);
         builder.exclude(TestGetXMLStreamReaderNextTag.class);
+        builder.exclude(TestInvalidXML.class);
         return builder.build();
     }
 }

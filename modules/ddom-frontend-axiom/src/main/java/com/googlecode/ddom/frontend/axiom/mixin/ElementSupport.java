@@ -181,9 +181,10 @@ public abstract class ElementSupport implements AxiomElement {
                 prefix = qname.substring(0, colonIndex);
                 localName = qname.substring(colonIndex+1);
             }
-            // TODO: we don't cover the case where prefix is not bound
             String namespaceURI = coreLookupNamespaceURI(prefix, true);
-            if (namespaceURI.length() == 0) {
+            if (namespaceURI == null) {
+                return null;
+            } else if (namespaceURI.length() == 0) {
                 return new QName(localName);
             } else if (prefix.length() == 0) {
                 return new QName(namespaceURI, localName);

@@ -21,20 +21,10 @@ public class NSUtil {
     private NSUtil() {}
     
     public static String getNamespaceURI(OMNamespace ns) {
-        if (ns == null) {
-            return "";
-        } else {
-            String uri = ns.getNamespaceURI();
-            return uri == null ? "" : uri;
-        }
+        return ns == null ? "" : ns.getNamespaceURI();
     }
     
     public static String getPrefix(OMNamespace ns) {
-        if (ns == null) {
-            return "";
-        } else {
-            String prefix = ns.getPrefix();
-            return prefix == null ? "" : prefix;
-        }
+        return ns == null ? "" : ns.getPrefix();
     }
 }
