@@ -22,6 +22,7 @@ import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
+import org.apache.axiom.soap.SOAPModelBuilder;
 import org.xml.sax.InputSource;
 
 import com.googlecode.ddom.model.Model;
@@ -61,11 +62,11 @@ public final class OMMetaFactoryImpl implements OMMetaFactory {
         return metaFactory.createStAXOMBuilder(omFactory, parser);
     }
 
-    public OMXMLParserWrapper createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {
+    public SOAPModelBuilder createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {
         return metaFactory.createSOAPModelBuilder(configuration, is);
     }
 
-    public OMXMLParserWrapper createStAXSOAPModelBuilder(XMLStreamReader reader) {
+    public SOAPModelBuilder createStAXSOAPModelBuilder(XMLStreamReader reader) {
         return metaFactory.createStAXSOAPModelBuilder(reader);
     }
 }
