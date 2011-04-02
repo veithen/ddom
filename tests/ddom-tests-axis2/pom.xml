@@ -134,7 +134,6 @@
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/etc/logging.properties</java.util.logging.config.file>
-                        <org.apache.axiom.om.OMMetaFactory>com.googlecode.ddom.axiom.OMMetaFactoryImpl</org.apache.axiom.om.OMMetaFactory>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
