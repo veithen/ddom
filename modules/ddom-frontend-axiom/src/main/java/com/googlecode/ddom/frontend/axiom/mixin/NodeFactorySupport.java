@@ -16,6 +16,7 @@
 package com.googlecode.ddom.frontend.axiom.mixin;
 
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -70,5 +71,10 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
         // TODO: we have currently no way to set the OMFactory!
         return createBuilder(parser);
+    }
+
+    public OMXMLParserWrapper createSAXOMBuilder(OMFactory omFactory, SAXSource source) {
+        // TODO: we have currently no way to set the OMFactory!
+        return createBuilder(source);
     }
 }

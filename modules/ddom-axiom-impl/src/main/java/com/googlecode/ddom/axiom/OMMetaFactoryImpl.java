@@ -16,6 +16,7 @@
 package com.googlecode.ddom.axiom;
 
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMMetaFactory;
@@ -60,6 +61,10 @@ public final class OMMetaFactoryImpl implements OMMetaFactory {
 
     public OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
         return metaFactory.createStAXOMBuilder(omFactory, parser);
+    }
+
+    public OMXMLParserWrapper createSAXOMBuilder(OMFactory omFactory, SAXSource source) {
+        return metaFactory.createSAXOMBuilder(omFactory, source);
     }
 
     public SOAPModelBuilder createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {

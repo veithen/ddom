@@ -63,7 +63,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {
         // TODO
-        throw new UnsupportedOperationException();
+//        throw new UnsupportedOperationException();
     }
 
     public void startElement(String tagName) throws StreamException {

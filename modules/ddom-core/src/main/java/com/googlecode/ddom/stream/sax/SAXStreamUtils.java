@@ -16,6 +16,7 @@
 package com.googlecode.ddom.stream.sax;
 
 public class SAXStreamUtils {
+    // TODO: do we still need this?
     public static String normalizeNamespaceURI(String uri) {
         return uri == null ? "" : uri;
     }

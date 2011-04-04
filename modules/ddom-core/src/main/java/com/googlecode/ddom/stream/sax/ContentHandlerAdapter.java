@@ -15,8 +15,6 @@
  */
 package com.googlecode.ddom.stream.sax;
 
-import javax.xml.XMLConstants;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -31,6 +29,8 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     private final XmlHandler handler;
     private Locator locator;
     private boolean documentInfoProcessed;
+    private String[] prefixMappings = new String[8];
+    private int prefixCount;
 
     public ContentHandlerAdapter(XmlHandler handler) {
         this.handler = handler;
@@ -73,6 +73,14 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
     }
 
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
+        if (prefixMappings.length == prefixCount*2) {
+            String[] newPrefixMappings = new String[prefixMappings.length*2];
+            System.arraycopy(prefixMappings, 0, newPrefixMappings, 0, prefixMappings.length);
+            prefixMappings = newPrefixMappings;
+        }
+        prefixMappings[prefixCount*2] = prefix;
+        prefixMappings[prefixCount*2+1] = uri;
+        prefixCount++;
     }
 
     public void endPrefixMapping(String prefix) throws SAXException {
@@ -90,27 +98,30 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
             int length = atts.getLength();
             for (int i=0; i<length; i++) {
                 String attQName = atts.getQName(i);
-                String attLocalName = atts.getLocalName(i);
-                if (attLocalName.length() == 0) {
-                    handler.startAttribute(attQName, atts.getType(i));
-                } else {
-                    String attUri = atts.getURI(i);
-                    if (attUri.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                        handler.startNamespaceDeclaration(SAXStreamUtils.getDeclaredPrefixFromQName(attQName));
+                if (!attQName.startsWith("xmlns")) {
+                    String attLocalName = atts.getLocalName(i);
+                    if (attLocalName.length() == 0) {
+                        handler.startAttribute(attQName, atts.getType(i));
                     } else {
                         handler.startAttribute(
-                                SAXStreamUtils.normalizeNamespaceURI(attUri),
+                                SAXStreamUtils.normalizeNamespaceURI(atts.getURI(i)),
                                 atts.getLocalName(i),
                                 SAXStreamUtils.getPrefixFromQName(attQName),
                                 atts.getType(i));
                     }
+                    String value = atts.getValue(i);
+                    if (value.length() > 0) {
+                        handler.processCharacterData(value, false);
+                    }
+                    handler.endAttribute();
                 }
-                String value = atts.getValue(i);
-                if (value.length() > 0) {
-                    handler.processCharacterData(value, false);
-                }
+            }
+            for (int i=0; i<prefixCount; i++) {
+                handler.startNamespaceDeclaration(prefixMappings[i*2]);
+                handler.processCharacterData(prefixMappings[i*2+1], false);
                 handler.endAttribute();
             }
+            prefixCount = 0;
             handler.attributesCompleted();
         } catch (StreamException ex) {
             throw new SAXException(ex);

@@ -29,12 +29,16 @@ public final class ScopedNamespaceContext implements NamespaceContext {
     private int scopes;
 
     public boolean isBound(String prefix, String namespaceURI) {
-        for (int i=(bindings-1)*2; i>=0; i-=2) {
-            if (prefix.equals(namespaceStack[i])) {
-                return namespaceURI.equals(namespaceStack[i+1]);
+        if (prefix.equals(XMLConstants.XML_NS_PREFIX) && namespaceURI.equals(XMLConstants.XML_NS_URI)) {
+            return true;
+        } else {
+            for (int i=(bindings-1)*2; i>=0; i-=2) {
+                if (prefix.equals(namespaceStack[i])) {
+                    return namespaceURI.equals(namespaceStack[i+1]);
+                }
             }
+            return prefix.length() == 0 && namespaceURI.length() == 0;
         }
-        return prefix.length() == 0 && namespaceURI.length() == 0;
     }
     
     public void setPrefix(String prefix, String namespaceURI) {
