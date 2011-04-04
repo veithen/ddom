@@ -51,8 +51,13 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
 
     // TODO: is remove supposed to work?
     public final Iterator examineHeaderBlocks(String role) {
-        return new FilteredIterator<AxiomSOAPHeaderBlock>(
-                coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class), new RoleFilter(role));
+        if (role == null) {
+            // TODO: test case + update SOAPHeader documentation
+            return examineAllHeaderBlocks();
+        } else {
+            return new FilteredIterator<AxiomSOAPHeaderBlock>(
+                    coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class), new RoleFilter(role));
+        }
     }
 
     // TODO: is remove supposed to work?
