@@ -260,6 +260,10 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         eventType = END_DOCUMENT;
     }
 
+    public Location getLocation() {
+        return DummyLocation.INSTANCE;
+    }
+
     public int getEventType() {
         if (eventType == -1) {
             try {
@@ -312,8 +316,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     public boolean isStandalone() {
         ensureStartDocument();
-        // TODO: null check here
-        return standalone;
+        return standalone != null && standalone.booleanValue();
     }
 
     public boolean standaloneSet() {
@@ -480,14 +483,6 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         } else {
             throw new IllegalStateException();
         }
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#getLocation()
-     */
-    public Location getLocation() {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 
     public boolean hasText() {
