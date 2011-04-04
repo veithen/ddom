@@ -22,23 +22,26 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.pivot.XmlPivot;
 
 public class StreamAssert extends XmlPivot {
-    private static final int DOCUMENT_TYPE = 1;
-    private static final int START_NS_UNAWARE_ELEMENT = 2;
-    private static final int START_NS_AWARE_ELEMENT = 3;
-    private static final int END_ELEMENT = 4;
-    private static final int START_NS_UNAWARE_ATTRIBUTE = 5;
-    private static final int START_NS_AWARE_ATTRIBUTE = 6;
-    private static final int START_NAMESPACE_DECLARATION = 7;
-    private static final int END_ATTRIBUTE = 8;
-    private static final int CHARACTER_DATA = 9;
-    private static final int START_PROCESSING_INSTRUCTION = 10;
-    private static final int END_PROCESSING_INSTRUCTION = 11;
-    private static final int START_COMMENT = 12;
-    private static final int END_COMMENT = 13;
-    private static final int START_CDATA_SECTION = 14;
-    private static final int END_CDATA_SECTION = 15;
-    private static final int ENTITY_REFERENCE = 16;
-    private static final int COMPLETED = 17;
+    private static final int START_DOCUMENT = 1;
+    private static final int START_FRAGMENT = 2;
+    private static final int XML_DECLARATION = 3;
+    private static final int DOCUMENT_TYPE = 4;
+    private static final int START_NS_UNAWARE_ELEMENT = 5;
+    private static final int START_NS_AWARE_ELEMENT = 6;
+    private static final int END_ELEMENT = 7;
+    private static final int START_NS_UNAWARE_ATTRIBUTE = 8;
+    private static final int START_NS_AWARE_ATTRIBUTE = 9;
+    private static final int START_NAMESPACE_DECLARATION = 10;
+    private static final int END_ATTRIBUTE = 11;
+    private static final int CHARACTER_DATA = 12;
+    private static final int START_PROCESSING_INSTRUCTION = 13;
+    private static final int END_PROCESSING_INSTRUCTION = 14;
+    private static final int START_COMMENT = 15;
+    private static final int END_COMMENT = 16;
+    private static final int START_CDATA_SECTION = 17;
+    private static final int END_CDATA_SECTION = 18;
+    private static final int ENTITY_REFERENCE = 19;
+    private static final int COMPLETED = 20;
     
     private final StringAccumulator buffer = new StringAccumulator();
     private int expectedEvent;
@@ -47,9 +50,18 @@ public class StreamAssert extends XmlPivot {
     private String expectedPrefix;
     private String expectedData;
     
-    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    protected boolean startEntity(boolean fragment, String inputEncoding) {
+        assertEquals(expectedEvent, fragment ? START_FRAGMENT : START_DOCUMENT);
+        return false;
     }
     
+    @Override
+    protected boolean processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        assertEquals(expectedEvent, XML_DECLARATION);
+        // TODO: check XML declaration info
+        return false;
+    }
+
     protected boolean processDocumentType(String rootName, String publicId, String systemId, String data) {
         assertEquals(expectedEvent, DOCUMENT_TYPE);
         return false;
@@ -146,6 +158,16 @@ public class StreamAssert extends XmlPivot {
     
     protected void completed() {
         assertEquals(expectedEvent, COMPLETED);
+    }
+    
+    public void assertStartEntity(boolean fragment) throws StreamException {
+        expectedEvent = fragment ? START_FRAGMENT : START_DOCUMENT;
+        nextEvent();
+    }
+    
+    public void assertXmlDeclaration() throws StreamException {
+        expectedEvent = XML_DECLARATION;
+        nextEvent();
     }
     
     public void assertStartElement(String namespaceURI, String localName, String prefix) throws StreamException {

@@ -61,7 +61,13 @@ public class StAXInput extends XmlInput {
         try {
             switch (reader.getEventType()) {
                 case XMLStreamReader.START_DOCUMENT:
-                    handler.setDocumentInfo(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.getEncoding(), reader.isStandalone());
+                    // TODO: quick and dirty hack for a failure in the Axiom test suite
+                    String encoding = reader.getEncoding();
+                    if (encoding == null) {
+                        encoding = "UTF-8";
+                    }
+                    handler.startEntity(false, encoding);
+                    handler.processXmlDeclaration(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.standaloneSet() ? reader.isStandalone() : null);
                     break;
                 case XMLStreamReader.END_DOCUMENT:
                     handler.completed();

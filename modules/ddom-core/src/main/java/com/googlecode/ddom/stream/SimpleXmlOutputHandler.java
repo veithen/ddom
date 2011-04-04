@@ -22,8 +22,12 @@ final class SimpleXmlOutputHandler implements XmlHandler{
         this.output = delegate;
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
-        output.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
+    public void startEntity(boolean fragment, String inputEncoding) {
+        output.startEntity(fragment, inputEncoding);
+    }
+
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        output.processXmlDeclaration(version, encoding, standalone);
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {

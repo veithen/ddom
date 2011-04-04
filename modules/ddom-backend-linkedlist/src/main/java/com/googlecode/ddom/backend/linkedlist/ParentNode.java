@@ -96,12 +96,18 @@ public abstract class ParentNode extends Node implements LLParentNode {
         content = source;
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
+        contentReset();
     }
 
     public final void coreSetSource(XmlSource source) {
         // TODO: need to clear any existing content!
         internalSetState(Flags.STATE_SOURCE_SET);
         content = source;
+        contentReset();
+    }
+
+    // May be overridden by subclasses
+    protected void contentReset() {
     }
 
     public final String coreGetValue() throws DeferredParsingException {

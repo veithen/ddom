@@ -29,7 +29,12 @@ public class IncludeXmlOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    protected void startEntity(boolean fragment, String inputEncoding) {
+        // Do nothing.
+    }
+
+    @Override
+    protected void processXmlDeclaration(String version, String encoding, Boolean standalone) {
         // Do nothing.
     }
 

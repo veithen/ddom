@@ -16,7 +16,23 @@
 package com.googlecode.ddom.stream;
 
 public interface XmlHandler {
-    void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
+    /**
+     * Notify the handler of the beginning of a document or fragment. This must be the first method
+     * called on a given handler instance.
+     * 
+     * @param fragment
+     *            <code>true</code> if the entity is a fragment, <code>false</code> if the entity is
+     *            a document. The next call to the handler must be an invocation of the
+     *            {@link #processXmlDeclaration(String, String, Boolean)} method if and only if this
+     *            parameter is set to <code>false</code>
+     * @param inputEncoding
+     *            the charset encoding used by the entity, or <code>null</code> if the encoding is
+     *            is not know, such as when the entity was constructor in memory or from a character
+     *            stream
+     */
+    void startEntity(boolean fragment, String inputEncoding);
+    
+    void processXmlDeclaration(String version, String encoding, Boolean standalone);
     
     void processDocumentType(String rootName, String publicId, String systemId, String data);
 

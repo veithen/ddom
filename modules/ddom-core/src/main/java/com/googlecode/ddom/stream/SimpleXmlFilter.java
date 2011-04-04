@@ -24,8 +24,12 @@ public class SimpleXmlFilter extends XmlFilter {
         return new SimpleXmlFilterHandler(this);
     }
 
-    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
-        target.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
+    protected void startEntity(boolean fragment, String inputEncoding) {
+        target.startEntity(fragment, inputEncoding);
+    }
+
+    protected void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        target.processXmlDeclaration(version, encoding, standalone);
     }
 
     protected void processDocumentType(String rootName, String publicId, String systemId, String data) {

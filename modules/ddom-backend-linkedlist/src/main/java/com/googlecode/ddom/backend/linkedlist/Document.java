@@ -29,6 +29,7 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.symbols.SymbolHashTable;
@@ -40,9 +41,12 @@ public class Document extends ParentNode implements LLDocument {
     private List<Builder> builders = new LinkedList<Builder>();
     private int children;
     private String inputEncoding;
+    private boolean xmlVersionSet;
     private String xmlVersion;
+    private boolean xmlEncodingSet;
     private String xmlEncoding;
-    private boolean standalone;
+    private boolean standaloneSet;
+    private Boolean standalone;
     private String documentURI;
 
     public Document(ModelExtension modelExtension) {
@@ -134,33 +138,65 @@ public class Document extends ParentNode implements LLDocument {
         this.inputEncoding = inputEncoding;
     }
 
+    // TODO: maybe this should be linked to coreClear()??
+    @Override
+    protected void contentReset() {
+        xmlVersionSet = false;
+        xmlVersion = null;
+        xmlEncodingSet = false;
+        xmlEncoding = null;
+        standaloneSet = false;
+        standalone = null;
+    }
+    
+    void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        if (!xmlVersionSet) {
+            xmlVersionSet = true;
+            this.xmlVersion = version;
+        }
+        if (!xmlEncodingSet) {
+            xmlEncodingSet = true;
+            this.xmlEncoding = encoding;
+        }
+        if (!standaloneSet) {
+            standaloneSet = true;
+            this.standalone = standalone;
+        }
+    }
+    
     public final String coreGetXmlVersion() throws DeferredParsingException {
-        ensureDocumentInfoReceived();
+        if (!xmlVersionSet && internalGetState() == Flags.STATE_CONTENT_SET) {
+            coreGetFirstChild();
+        }
         return xmlVersion;
     }
 
     public final void coreSetXmlVersion(String xmlVersion) {
-//        ensureDocumentInfoReceived();
+        xmlVersionSet = true;
         this.xmlVersion = xmlVersion;
     }
 
     public final String coreGetXmlEncoding() throws DeferredParsingException {
-        ensureDocumentInfoReceived();
+        if (!xmlEncodingSet && internalGetState() == Flags.STATE_CONTENT_SET) {
+            coreGetFirstChild();
+        }
         return xmlEncoding;
     }
 
     public final void coreSetXmlEncoding(String xmlEncoding) {
-//        ensureDocumentInfoReceived();
+        xmlEncodingSet = true;
         this.xmlEncoding = xmlEncoding;
     }
 
-    public final boolean coreGetStandalone() throws DeferredParsingException {
-        ensureDocumentInfoReceived();
+    public final Boolean coreGetStandalone() throws DeferredParsingException {
+        if (!standaloneSet && internalGetState() == Flags.STATE_CONTENT_SET) {
+            coreGetFirstChild();
+        }
         return standalone;
     }
 
-    public final void coreSetStandalone(boolean standalone) {
-//        ensureDocumentInfoReceived();
+    public final void coreSetStandalone(Boolean standalone) {
+        standaloneSet = true;
         this.standalone = standalone;
     }
 
@@ -192,8 +228,13 @@ public class Document extends ParentNode implements LLDocument {
         return (CoreDocumentTypeDeclaration)child;
     }
 
-    public final void internalGenerateStartEvent(XmlHandler handler) {
-        // TODO
+    public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
+        try {
+            handler.startEntity(false, coreGetInputEncoding());
+            handler.processXmlDeclaration(coreGetXmlVersion(), coreGetXmlEncoding(), coreGetStandalone());
+        } catch (DeferredParsingException ex) {
+            throw ex.getStreamException();
+        }
     }
 
     public final void internalGenerateEndEvent(XmlHandler handler) {

@@ -35,6 +35,7 @@ public class TestCoreGetInputWithDetachedChild extends BackendTestCase {
         element.coreGetFirstChild().coreGetNextSibling().coreDetach();
         StreamAssert output = new StreamAssert();
         new Stream(element.coreGetInput(preserve), output);
+        output.assertStartEntity(true);
         output.assertStartElement("", "parent", "");
         output.assertStartElement("", "a", "");
         output.assertCharacterData("a");

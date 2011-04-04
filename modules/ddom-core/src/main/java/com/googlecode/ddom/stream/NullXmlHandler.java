@@ -20,9 +20,12 @@ public final class NullXmlHandler implements XmlHandler {
     
     private NullXmlHandler() {}
     
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    public void startEntity(boolean fragment, String inputEncoding) {
     }
-    
+
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+    }
+
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {
     }
 

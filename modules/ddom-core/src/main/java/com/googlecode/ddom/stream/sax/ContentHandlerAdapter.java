@@ -41,7 +41,7 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
             if (locator instanceof Locator2) {
                 Locator2 locator2 = (Locator2)locator;
                 // TODO: extract remaining info and build minimal info if locator doesn't implement Locator2
-                handler.setDocumentInfo(locator2.getXMLVersion(), null, null, true);
+                handler.processXmlDeclaration(locator2.getXMLVersion(), null, null);
             }
             documentInfoProcessed = true;
         }

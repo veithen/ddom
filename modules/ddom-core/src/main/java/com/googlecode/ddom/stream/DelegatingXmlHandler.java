@@ -34,8 +34,12 @@ final class DelegatingXmlHandler implements XmlHandler{
         return complete;
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
-        getDelegate().setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
+    public void startEntity(boolean fragment, String inputEncoding) {
+        getDelegate().startEntity(fragment, inputEncoding);
+    }
+
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        getDelegate().processXmlDeclaration(version, encoding, standalone);
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {

@@ -45,6 +45,7 @@ public class TestCoreGetInputWithChildInStateContentSet extends BackendTestCase 
         child.coreSetContent(toXmlSource("<content>text</content>"));
         StreamAssert output = new StreamAssert();
         new Stream(parent.coreGetInput(preserve), output);
+        output.assertStartEntity(true);
         output.assertStartElement("", "parent", "");
         output.assertStartElement("", "child", "");
         output.assertStartElement("", "content", "");

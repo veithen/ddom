@@ -91,11 +91,12 @@ public class XmlHandlerAdapter implements XmlHandler {
         throw new UnsupportedOperationException();
     }
 
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#setDocumentInfo(java.lang.String, java.lang.String, java.lang.String, boolean)
-     */
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
-            boolean standalone) {
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public void startEntity(boolean fragment, String inputEncoding) {
         // TODO
         throw new UnsupportedOperationException();
     }

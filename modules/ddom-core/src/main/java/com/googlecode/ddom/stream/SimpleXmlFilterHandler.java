@@ -22,8 +22,12 @@ final class SimpleXmlFilterHandler implements XmlHandler {
         this.filter = filter;
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
-        filter.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
+    public void startEntity(boolean fragment, String inputEncoding) {
+        filter.startEntity(fragment, inputEncoding);
+    }
+
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        filter.processXmlDeclaration(version, encoding, standalone);
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {

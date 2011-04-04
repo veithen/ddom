@@ -39,7 +39,9 @@ public abstract class XmlPivot extends XmlOutput {
         handler.next();
     }
 
-    protected abstract void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
+    protected abstract boolean startEntity(boolean fragment, String inputEncoding);
+    
+    protected abstract boolean processXmlDeclaration(String version, String encoding, Boolean standalone);
     
     protected abstract boolean processDocumentType(String rootName, String publicId, String systemId, String data);
 

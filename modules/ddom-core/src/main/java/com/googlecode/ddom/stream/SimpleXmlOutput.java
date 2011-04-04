@@ -25,7 +25,9 @@ public abstract class SimpleXmlOutput extends XmlOutput {
         return new SimpleXmlOutputHandler(this);
     }
 
-    protected abstract void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone);
+    protected abstract void startEntity(boolean fragment, String inputEncoding);
+    
+    protected abstract void processXmlDeclaration(String version, String encoding, Boolean standalone);
     
     protected abstract void processDocumentType(String rootName, String publicId, String systemId, String data);
     

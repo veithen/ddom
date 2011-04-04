@@ -40,9 +40,13 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private static final int INITIAL_ELEMENT_STACK_SIZE = 8;
     private static final int INITIAL_ATTRIBUTE_STACK_SIZE = 8;
     
-    private int eventType = START_DOCUMENT;
+    private int eventType = -1;
     private int elementStackSize = INITIAL_ELEMENT_STACK_SIZE;
     private int depth;
+    private String inputEncoding;
+    private String xmlVersion;
+    private String xmlEncoding;
+    private Boolean standalone;
     private String[] elementStack = new String[INITIAL_ELEMENT_STACK_SIZE*3];
     private final ScopedNamespaceContext namespaceContext = new ScopedNamespaceContext();
     private int attributeStackSize = INITIAL_ATTRIBUTE_STACK_SIZE;
@@ -64,10 +68,23 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
     
     @Override
-    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
-            boolean standalone) {
-        // TODO
-        throw new UnsupportedOperationException();
+    protected boolean startEntity(boolean fragment, String inputEncoding) {
+        this.inputEncoding = inputEncoding;
+        if (fragment) {
+            eventType = START_DOCUMENT;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    protected boolean processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        this.xmlVersion = version;
+        this.xmlEncoding = encoding;
+        this.standalone = standalone;
+        eventType = START_DOCUMENT;
+        return false;
     }
 
     @Override
@@ -244,6 +261,13 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public int getEventType() {
+        if (eventType == -1) {
+            try {
+                nextEvent();
+            } catch (StreamException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
         return eventType;
     }
 
@@ -259,36 +283,42 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         return eventType == END_ELEMENT;
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#getVersion()
-     */
+    private void ensureStartDocument() {
+        if (eventType == -1) {
+            try {
+                nextEvent();
+            } catch (StreamException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (eventType != START_DOCUMENT) {
+            throw new IllegalStateException();
+        }
+    }
+    
+    public String getEncoding() {
+        ensureStartDocument();
+        return inputEncoding;
+    }
+
     public String getVersion() {
-        // TODO
-        throw new UnsupportedOperationException();
+        ensureStartDocument();
+        return xmlVersion;
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#getCharacterEncodingScheme()
-     */
     public String getCharacterEncodingScheme() {
-        // TODO
-        throw new UnsupportedOperationException();
+        ensureStartDocument();
+        return xmlEncoding;
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#isStandalone()
-     */
     public boolean isStandalone() {
-        // TODO
-        throw new UnsupportedOperationException();
+        ensureStartDocument();
+        // TODO: null check here
+        return standalone;
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#standaloneSet()
-     */
     public boolean standaloneSet() {
-        // TODO
-        throw new UnsupportedOperationException();
+        ensureStartDocument();
+        return standalone != null;
     }
 
     public boolean hasName() {
@@ -453,14 +483,6 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#getEncoding()
-     */
-    public String getEncoding() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
      * @see javax.xml.stream.XMLStreamReader#getLocation()
      */
     public Location getLocation() {
@@ -564,18 +586,23 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public int next() throws XMLStreamException {
-        switch (eventType) {
-            case START_ELEMENT:
-                depth++;
-                break;
-            case END_ELEMENT:
-                namespaceContext.endScope();
-                break;
-            case END_DOCUMENT:
-                throw new NoSuchElementException();
-        }
-        eventType = -1;
         try {
+            // Make sure that we process the START_DOCUMENT event, even if no other
+            // method is called in this state
+            if (eventType == -1) {
+                nextEvent();
+            }
+            switch (eventType) {
+                case START_ELEMENT:
+                    depth++;
+                    break;
+                case END_ELEMENT:
+                    namespaceContext.endScope();
+                    break;
+                case END_DOCUMENT:
+                    throw new NoSuchElementException();
+            }
+            eventType = -1;
             nextEvent();
         } catch (StreamException ex) {
             throw StAXExceptionUtil.toXMLStreamException(ex);

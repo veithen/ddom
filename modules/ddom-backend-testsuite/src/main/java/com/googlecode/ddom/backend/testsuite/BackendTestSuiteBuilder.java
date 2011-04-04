@@ -65,6 +65,9 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreReplaceWith2FromWrongDocument(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreReplaceWith2OnOrphan(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestCoreGetDocumentElement(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration1(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration2(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration3(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreClearIncomplete(config));
         // TODO
 //        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));

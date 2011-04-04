@@ -114,7 +114,8 @@ public abstract class DocumentSupport implements DOMDocument {
 
     public final boolean getXmlStandalone() {
         try {
-            return coreGetStandalone();
+            Boolean standalone = coreGetStandalone();
+            return standalone != null && standalone.booleanValue();
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }

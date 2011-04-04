@@ -38,27 +38,33 @@ public class TreeSerializer extends XmlInput {
     private static final int STATE_NONE = 0;
     
     /**
+     * Indicates that the serializer is synthesizing a start fragment event. This state can only be
+     * reached if the root node is not a document.
+     */
+    private static final int STATE_START_FRAGMENT = 1;
+    
+    /**
      * Indicates that the current node is a leaf node.
      */
-    private static final int STATE_LEAF = 1;
+    private static final int STATE_LEAF = 2;
     
     /**
      * Indicates that the current node is a parent node and that events for child nodes have not yet
      * been generated.
      */
-    private static final int STATE_NOT_VISITED = 2;
+    private static final int STATE_NOT_VISITED = 3;
     
     /**
      * Indicates that the current node is an element and that events for its attribute nodes have
      * already been generated.
      */
-    private static final int STATE_ATTRIBUTES_VISITED = 3;
+    private static final int STATE_ATTRIBUTES_VISITED = 4;
     
     /**
      * Indicates that the current node is a parent node and that events for child nodes have already
      * been generated.
      */
-    private static final int STATE_VISITED = 4;
+    private static final int STATE_VISITED = 5;
     
     /**
      * Indicates that the current node is a parent node for which the builder has been
@@ -66,19 +72,19 @@ public class TreeSerializer extends XmlInput {
      * object model but passed through from the underlying XML source used to build the
      * tree. This state is only reachable if {@link #preserve} is <code>true</code>.
      */
-    private static final int STATE_PASS_THROUGH = 5;
+    private static final int STATE_PASS_THROUGH = 6;
     
     /**
      * Indicates that the serializer is streaming the content from a parent node as set using
      * {@link CoreParentNode#coreSetContent(XmlSource)}.
      */
-    private static final int STATE_STREAMING_CONTENT = 6;
+    private static final int STATE_STREAMING_CONTENT = 7;
     
     /**
      * Indicates that the serializer is streaming the source of an element as set using
      * {@link CoreElement#coreSetSource(XmlSource)}.
      */
-    private static final int STATE_STREAMING_SOURCE = 7;
+    private static final int STATE_STREAMING_SOURCE = 8;
     
     private final LLParentNode root;
     private final boolean preserve;
@@ -96,7 +102,7 @@ public class TreeSerializer extends XmlInput {
      */
     private Stream stream;
     
-    private int state;
+    private int state = STATE_NONE;
     private LLDocument document;
     
     public TreeSerializer(LLParentNode root, boolean preserve) {
@@ -128,8 +134,13 @@ public class TreeSerializer extends XmlInput {
                     stream = null;
                 }
             } else if (previousNode == null) {
-                nextNode = root;
-                state = STATE_NOT_VISITED;
+                if (state == STATE_NONE && !(root instanceof LLDocument)) {
+                    nextNode = null;
+                    state = STATE_START_FRAGMENT;
+                } else {
+                    nextNode = root;
+                    state = STATE_NOT_VISITED;
+                }
             } else if (state == STATE_VISITED && previousNode == root) {
                 nextNode = null;
             } else if (state == STATE_NOT_VISITED && previousNode instanceof LLElement) {
@@ -233,6 +244,9 @@ public class TreeSerializer extends XmlInput {
             }
             
             switch (state) {
+                case STATE_START_FRAGMENT:
+                    handler.startEntity(true, null);
+                    break;
                 case STATE_LEAF:
                     ((LLLeafNode)nextNode).internalGenerateEvents(handler);
                     break;

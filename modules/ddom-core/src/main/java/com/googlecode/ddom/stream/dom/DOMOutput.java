@@ -56,10 +56,15 @@ public class DOMOutput extends SimpleXmlOutput {
     }
 
     @Override
-    protected void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    protected void startEntity(boolean fragment, String inputEncoding) {
+        // TODO
+    }
+
+    @Override
+    protected void processXmlDeclaration(String version, String encoding, Boolean standalone) {
         // TODO: process the remaining information
-        if (xmlVersion != null) {
-            document.setXmlVersion(xmlVersion);
+        if (version != null) {
+            document.setXmlVersion(version);
         }
     }
 

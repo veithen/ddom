@@ -29,9 +29,12 @@ public class XmlHandlerWrapper implements XmlHandler {
         return parent;
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding,
-            boolean standalone) {
-        parent.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
+    public void startEntity(boolean fragment, String inputEncoding) {
+        parent.startEntity(fragment, inputEncoding);
+    }
+
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        parent.processXmlDeclaration(version, encoding, standalone);
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {

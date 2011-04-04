@@ -159,10 +159,11 @@ public class Builder extends SimpleXmlOutput {
     final void next() throws DeferredParsingException {
         if (streamException == null) {
             try {
-                nodeAppended = false; 
-                do {
+                // TODO: review the node appended stuff
+//                nodeAppended = false; 
+//                do {
                     getStream().proceed();
-                } while (context != null && !nodeAppended);
+//                } while (context != null && !nodeAppended);
             } catch (StreamException ex) {
                 streamException = ex;
             }
@@ -173,12 +174,17 @@ public class Builder extends SimpleXmlOutput {
     }
 
     @Override
-    protected final void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
+    protected final void startEntity(boolean fragment, String inputEncoding) {
         // TODO: how to handle pass-through here??
-        document.coreSetXmlVersion(xmlVersion);
-        document.coreSetXmlEncoding(xmlEncoding);
         document.coreSetInputEncoding(inputEncoding);
-        document.coreSetStandalone(standalone);
+    }
+
+    @Override
+    protected void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        // TODO: how to handle pass-through here??
+        // TODO: this may actually set the information on the wrong node;
+        //       e.g. if coreSetContent is used on a CoreElement, the owner document should not be updated
+        document.processXmlDeclaration(version, encoding, standalone);
     }
 
     @Override

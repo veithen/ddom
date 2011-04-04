@@ -98,7 +98,8 @@ public class DOMInput extends XmlInput {
                     case Node.DOCUMENT_NODE:
                         if (currentNode != null) {
                             Document document = (Document)currentNode;
-                            handler.setDocumentInfo(document.getXmlVersion(), document.getXmlEncoding(), document.getInputEncoding(), document.getXmlStandalone());
+                            handler.startEntity(false, document.getInputEncoding());
+                            handler.processXmlDeclaration(document.getXmlVersion(), document.getXmlEncoding(), document.getXmlStandalone());
                         }
                         break;
                     case Node.DOCUMENT_TYPE_NODE:

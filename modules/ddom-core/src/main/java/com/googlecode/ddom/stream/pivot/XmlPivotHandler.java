@@ -20,25 +20,26 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 final class XmlPivotHandler implements XmlHandler {
-    private static final int DOCUMENT_TYPE = 1;
-    private static final int START_NS_UNAWARE_ELEMENT = 2;
-    private static final int START_NS_AWARE_ELEMENT = 3;
-    private static final int END_ELEMENT = 4;
-    private static final int START_NS_UNAWARE_ATTRIBUTE = 5;
-    private static final int START_NS_AWARE_ATTRIBUTE = 6;
-    private static final int START_NAMESPACE_DECLARATION = 7;
-    private static final int END_ATTRIBUTE = 8;
-    private static final int ATTRIBUTES_COMPLETED = 9;
-    private static final int TEXT = 10;
-    private static final int IGNORABLE_TEXT = 11;
-    private static final int START_PROCESSING_INSTRUCTION = 12;
-    private static final int END_PROCESSING_INSTRUCTION = 13;
-    private static final int START_COMMENT = 14;
-    private static final int END_COMMENT = 15;
-    private static final int START_CDATA_SECTION = 16;
-    private static final int END_CDATA_SECTION = 17;
-    private static final int ENTITY_REFERENCE = 18;
-    private static final int COMPLETED = 19;
+    private static final int XML_DECLARATION = 1;
+    private static final int DOCUMENT_TYPE = 2;
+    private static final int START_NS_UNAWARE_ELEMENT = 3;
+    private static final int START_NS_AWARE_ELEMENT = 4;
+    private static final int END_ELEMENT = 5;
+    private static final int START_NS_UNAWARE_ATTRIBUTE = 6;
+    private static final int START_NS_AWARE_ATTRIBUTE = 7;
+    private static final int START_NAMESPACE_DECLARATION = 8;
+    private static final int END_ATTRIBUTE = 9;
+    private static final int ATTRIBUTES_COMPLETED = 10;
+    private static final int TEXT = 11;
+    private static final int IGNORABLE_TEXT = 12;
+    private static final int START_PROCESSING_INSTRUCTION = 13;
+    private static final int END_PROCESSING_INSTRUCTION = 14;
+    private static final int START_COMMENT = 15;
+    private static final int END_COMMENT = 16;
+    private static final int START_CDATA_SECTION = 17;
+    private static final int END_CDATA_SECTION = 18;
+    private static final int ENTITY_REFERENCE = 19;
+    private static final int COMPLETED = 20;
     
     private final XmlPivot pivot;
     private final Stream stream;
@@ -109,8 +110,23 @@ final class XmlPivotHandler implements XmlHandler {
         return token;
     }
 
-    public void setDocumentInfo(String xmlVersion, String xmlEncoding, String inputEncoding, boolean standalone) {
-        pivot.setDocumentInfo(xmlVersion, xmlEncoding, inputEncoding, standalone);
+    public void startEntity(boolean fragment, String inputEncoding) {
+        if (!passThrough) {
+            // Since this must always be the first call, passThrough must always be true
+            throw new IllegalStateException();
+        }
+        passThrough = pivot.startEntity(fragment, inputEncoding);
+    }
+
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        if (passThrough) {
+            passThrough = pivot.processXmlDeclaration(version, encoding, standalone);
+        } else {
+            addEvent(XML_DECLARATION);
+            addToken(version);
+            addToken(encoding);
+            addToken(standalone == null ? null : standalone.toString());
+        }
     }
 
     public void processDocumentType(String rootName, String publicId, String systemId, String data) {
@@ -280,6 +296,12 @@ final class XmlPivotHandler implements XmlHandler {
         while (hasEvents()) {
             boolean result;
             switch (getEvent()) {
+                case XML_DECLARATION:
+                    String version = getToken();
+                    String encoding = getToken();
+                    String standalone = getToken();
+                    result = pivot.processXmlDeclaration(version, encoding, standalone == null ? null : Boolean.valueOf(standalone));
+                    break;
                 case DOCUMENT_TYPE:
                     result = pivot.processDocumentType(getToken(), getToken(), getToken(), getToken());
                     break;
