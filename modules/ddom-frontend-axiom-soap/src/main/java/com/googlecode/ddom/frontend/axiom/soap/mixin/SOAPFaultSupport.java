@@ -15,6 +15,9 @@
  */
 package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.xml.namespace.QName;
 
 import org.apache.axiom.om.OMElement;
@@ -28,6 +31,7 @@ import org.apache.axiom.soap.SOAPFaultRole;
 import org.apache.axiom.soap.SOAPProcessingException;
 
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
@@ -145,8 +149,18 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
         }
     }
 
-    public void setException(Exception e) throws OMException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setException(Exception exception) throws OMException {
+        try {
+            StringWriter sw = new StringWriter();
+            PrintWriter out = new PrintWriter(sw, false);
+            exception.printStackTrace(out);
+            out.flush();
+            SOAPVersionEx version = getSOAPVersionEx();
+            AxiomSOAPFaultDetail detail = (AxiomSOAPFaultDetail)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultDetailIndex(), true);
+            CoreNSAwareElement entry = detail.coreAppendElement("", SOAPConstants.SOAP_FAULT_DETAIL_EXCEPTION_ENTRY, "");
+            entry.coreAppendCharacterData(sw.toString());
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 }

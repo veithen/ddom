@@ -39,6 +39,7 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12Envelope;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12Fault;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultCode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultDetail;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultRole;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
@@ -48,7 +49,6 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
-import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
@@ -58,10 +58,10 @@ public abstract class SOAPVersionEx {
     public static final SOAPVersionEx SOAP11 = new SOAPVersionEx(
             SOAP11Version.getSingleton(),
             new SequenceBuilder()
-                .addItem(AxiomSOAPFaultCode.class, "", "faultcode")
-                .addItem(AxiomSOAPFaultReason.class, "", "faultstring")
-                .addItem(AxiomSOAPFaultRole.class, "", "faultactor")
-                .addItem(AxiomSOAPFaultDetail.class, "", "detail")
+                .addItem(AxiomSOAP11FaultCode.class, "", "faultcode")
+                .addItem(AxiomSOAP11FaultReason.class, "", "faultstring")
+                .addItem(AxiomSOAP11FaultRole.class, "", "faultactor")
+                .addItem(AxiomSOAP11FaultDetail.class, "", "detail")
                 .enableMatchByInterface().build()) {
         
         @Override
@@ -153,11 +153,11 @@ public abstract class SOAPVersionEx {
     public static final SOAPVersionEx SOAP12 = new SOAPVersionEx(
             SOAP12Version.getSingleton(),
             new SequenceBuilder()
-                .addItem(AxiomSOAPFaultCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Code")
-                .addItem(AxiomSOAPFaultReason.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Reason")
-                .addItem(AxiomSOAPFaultNode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Node")
-                .addItem(AxiomSOAPFaultRole.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Role")
-                .addItem(AxiomSOAPFaultDetail.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Detail")
+                .addItem(AxiomSOAP12FaultCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Code")
+                .addItem(AxiomSOAP12FaultReason.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Reason")
+                .addItem(AxiomSOAP12FaultNode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Node")
+                .addItem(AxiomSOAP12FaultRole.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Role")
+                .addItem(AxiomSOAP12FaultDetail.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Detail")
                 .enableMatchByInterface().build()) {
         
         @Override
