@@ -40,6 +40,8 @@ public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
     }
 
     public OMElement getDocumentElement(boolean discardDocument) {
+        // TODO: we can do another optimization here: if the document is in state "Content set"
+        //       then we can extract the XmlSource and create the element with coreSetSource
         try {
             AxiomElement element = (AxiomElement)document.coreGetDocumentElement();
             if (discardDocument) {
