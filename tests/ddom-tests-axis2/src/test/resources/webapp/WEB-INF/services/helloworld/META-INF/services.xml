@@ -15,11 +15,23 @@
   ~ limitations under the License.
   -->
 <serviceGroup>
-    <service name="helloworld">
+    <service name="helloworld-adb">
         <messageReceivers>
-            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.googlecode.ddom.tests.axis2.helloworld.HelloworldMessageReceiverInOut"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.googlecode.ddom.tests.axis2.helloworld.adb.HelloworldMessageReceiverInOut"/>
         </messageReceivers>
-        <parameter name="ServiceClass">com.googlecode.ddom.tests.axis2.helloworld.HelloworldImpl</parameter>
+        <parameter name="ServiceClass">com.googlecode.ddom.tests.axis2.helloworld.adb.HelloworldImpl</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="sayHello" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://ddom.googlecode.com/tests/axis2/helloworld">
+            <actionMapping>http://www.example.org/helloworld/sayHello</actionMapping>
+            <outputActionMapping>http://ddom.googlecode.com/tests/axis2/helloworld/helloworld/sayHelloResponse</outputActionMapping>
+        </operation>
+    </service>
+    <service name="helloworld-xmlbeans">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.googlecode.ddom.tests.axis2.helloworld.xmlbeans.HelloworldMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">com.googlecode.ddom.tests.axis2.helloworld.xmlbeans.HelloworldImpl</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
         <operation name="sayHello" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://ddom.googlecode.com/tests/axis2/helloworld">

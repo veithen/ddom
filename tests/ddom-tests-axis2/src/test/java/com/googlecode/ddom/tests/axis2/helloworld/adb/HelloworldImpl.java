@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.tests.axis2.helloworld;
+package com.googlecode.ddom.tests.axis2.helloworld.adb;
 
 public class HelloworldImpl extends HelloworldSkeleton {
     public String sayHello(String in) {

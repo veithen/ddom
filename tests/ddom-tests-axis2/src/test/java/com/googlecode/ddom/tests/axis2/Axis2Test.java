@@ -33,8 +33,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.googlecode.ddom.tests.axis2.helloworld.HelloworldCallbackHandler;
-import com.googlecode.ddom.tests.axis2.helloworld.HelloworldStub;
+import com.googlecode.ddom.tests.axis2.helloworld.xmlbeans.SayHelloDocument;
 
 public class Axis2Test {
     private static final int PORT = 9999;
@@ -71,8 +70,9 @@ public class Axis2Test {
     }
     
     @Test
-    public void testHelloworld() throws Exception {
-        HelloworldStub stub = new HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld");
+    public void testADBHelloworld() throws Exception {
+        com.googlecode.ddom.tests.axis2.helloworld.adb.HelloworldStub stub =
+                new com.googlecode.ddom.tests.axis2.helloworld.adb.HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld-adb");
         try {
             assertEquals("Hello world!", stub.sayHello("world"));
         } finally {
@@ -81,15 +81,16 @@ public class Axis2Test {
     }
     
     @Test
-    public void testHelloworldWithWSA() throws Exception {
-        HelloworldStub stub = new HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld");
+    public void testADBHelloworldWithWSA() throws Exception {
+        com.googlecode.ddom.tests.axis2.helloworld.adb.HelloworldStub stub =
+                new com.googlecode.ddom.tests.axis2.helloworld.adb.HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld-adb");
         try {
             ServiceClient serviceClient = stub._getServiceClient();
             serviceClient.engageModule("addressing");
             serviceClient.getOptions().setUseSeparateListener(true);
             final String[] resultHolder = new String[1];
             final CountDownLatch latch = new CountDownLatch(1);
-            stub.startsayHello("world", new HelloworldCallbackHandler() {
+            stub.startsayHello("world", new com.googlecode.ddom.tests.axis2.helloworld.adb.HelloworldCallbackHandler() {
                 @Override
                 public void receiveResultsayHello(String result) {
                     resultHolder[0] = result;
@@ -98,6 +99,19 @@ public class Axis2Test {
             });
             latch.await();
             assertEquals("Hello world!", resultHolder[0]);
+        } finally {
+            stub.cleanup();
+        }
+    }
+    
+    @Test
+    public void testXmlBeansHelloworld() throws Exception {
+        com.googlecode.ddom.tests.axis2.helloworld.xmlbeans.HelloworldStub stub =
+                new com.googlecode.ddom.tests.axis2.helloworld.xmlbeans.HelloworldStub(clientConfigurationContext, "http://localhost:" + PORT + "/axis2/services/helloworld-xmlbeans");
+        try {
+            SayHelloDocument requestDoc = SayHelloDocument.Factory.newInstance();
+            requestDoc.addNewSayHello().setIn("world");
+            assertEquals("Hello world!", stub.sayHello(requestDoc).getSayHelloResponse().getOut());
         } finally {
             stub.cleanup();
         }
