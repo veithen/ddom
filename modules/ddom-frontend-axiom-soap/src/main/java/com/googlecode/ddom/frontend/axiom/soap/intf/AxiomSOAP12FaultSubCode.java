@@ -15,11 +15,9 @@
  */
 package com.googlecode.ddom.frontend.axiom.soap.intf;
 
-import org.apache.axiom.soap.SOAPFaultCode;
-
 import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
-@ModelExtensionInterface(isAbstract=true, parent=AxiomSOAPFaultClassifier.class)
-public interface AxiomSOAPFaultCode extends AxiomSOAPFaultClassifier, SOAPFaultCode {
+@ModelExtensionInterface(parent=AxiomSOAPFaultSubCode.class)
+public interface AxiomSOAP12FaultSubCode extends AxiomSOAPFaultSubCode {
 
 }

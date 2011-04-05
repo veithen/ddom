@@ -15,11 +15,13 @@
  */
 package com.googlecode.ddom.frontend.axiom.soap.intf;
 
-import org.apache.axiom.soap.SOAPFaultCode;
+import org.apache.axiom.soap.SOAPFaultValue;
 
+import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ext.ModelExtensionInterface;
+import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 
-@ModelExtensionInterface(isAbstract=true, parent=AxiomSOAPFaultClassifier.class)
-public interface AxiomSOAPFaultCode extends AxiomSOAPFaultClassifier, SOAPFaultCode {
+@ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
+public interface AxiomSOAPFaultValue extends AxiomElement, SOAPFaultValue {
 
 }

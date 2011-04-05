@@ -19,16 +19,29 @@ import org.apache.axiom.soap.SOAPFaultSubCode;
 import org.apache.axiom.soap.SOAPFaultValue;
 import org.apache.axiom.soap.SOAPProcessingException;
 
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.frontend.Mixin;
-import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultCode;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultClassifier;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
-@Mixin(AxiomSOAP11FaultCode.class)
-public abstract class SOAP11FaultCodeSupport implements AxiomSOAP11FaultCode {
+@Mixin(AxiomSOAPFaultClassifier.class)
+public abstract class SOAPFaultClassifierSupport implements AxiomSOAPFaultClassifier {
     public final SOAPFaultValue getValue() {
-        return null;
+        Sequence seq = getSOAPVersionEx().getFaultClassifierSequence();
+        if (seq == null) {
+            return null;
+        } else {
+            try {
+                return (SOAPFaultValue)coreGetElementFromSequence(seq, 0, false);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
+        }
     }
 
     public final void setValue(SOAPFaultValue value) throws SOAPProcessingException {
+        // TODO
         throw new SOAPProcessingException("Not supported");
     }
 

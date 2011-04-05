@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.axiom.soap.intf;
+package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
-import org.apache.axiom.soap.SOAPFaultCode;
+import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 
-import com.googlecode.ddom.core.ext.ModelExtensionInterface;
+@Mixin(AxiomSOAPFaultNode.class)
+public abstract class SOAPFaultNodeSupport implements AxiomSOAPFaultNode {
+    public String getNodeValue() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 
-@ModelExtensionInterface(isAbstract=true, parent=AxiomSOAPFaultClassifier.class)
-public interface AxiomSOAPFaultCode extends AxiomSOAPFaultClassifier, SOAPFaultCode {
-
+    public void setNodeValue(String uri) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

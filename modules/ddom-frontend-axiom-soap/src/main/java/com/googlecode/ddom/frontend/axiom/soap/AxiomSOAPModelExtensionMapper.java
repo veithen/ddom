@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.frontend.axiom.soap;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.soap.SOAPConstants;
 
 import com.googlecode.ddom.core.ext.ModelExtensionMapper;
@@ -27,6 +29,7 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
     private static final int STATE_HEADER = 1;
     private static final int STATE_BODY = 2;
     private static final int STATE_FAULT = 3;
+    private static final int STATE_FAULT_CODE = 4;
     
     private int depth;
     private SOAPVersionEx version;
@@ -60,7 +63,8 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                     if (state == STATE_HEADER) {
                         return version.getSOAPHeaderBlockClass();
                     } else if (state == STATE_BODY) {
-                        if (localName.equals(SOAPConstants.BODY_FAULT_LOCAL_NAME)) {
+                        if (version.getEnvelopeURI().equals(namespaceURI)
+                                && localName.equals(SOAPConstants.BODY_FAULT_LOCAL_NAME)) {
                             state = STATE_FAULT;
                             return version.getSOAPFaultClass();
                         }
@@ -68,14 +72,26 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                     break;
                 case 4:
                     if (state == STATE_FAULT) {
-                        if (localName.equals(version.getFaultCodeQName().getLocalPart())) {
+                        if (testQName(version.getFaultCodeQName(), namespaceURI, localName)) {
+                            state = STATE_FAULT_CODE;
                             return version.getSOAPFaultCodeClass();
-                        } else if (localName.equals(version.getFaultReasonQName().getLocalPart())) {
+                        } else if (testQName(version.getFaultReasonQName(), namespaceURI, localName)) {
                             return version.getSOAPFaultReasonClass();
-                        } else if (localName.equals(version.getFaultRoleQName().getLocalPart())) {
+                        } else if (testQName(version.getFaultNodeQName(), namespaceURI, localName)) {
+                            return version.getSOAPFaultNodeClass();
+                        } else if (testQName(version.getFaultRoleQName(), namespaceURI, localName)) {
                             return version.getSOAPFaultRoleClass();
-                        } else if (localName.equals(version.getFaultDetailQName().getLocalPart())) {
+                        } else if (testQName(version.getFaultDetailQName(), namespaceURI, localName)) {
                             return version.getSOAPFaultDetailClass();
+                        }
+                    }
+                    break;
+                case 5: // TODO: this should actually be depth >= 5
+                    if (state == STATE_FAULT_CODE) {
+                        if (testQName(version.getFaultValueQName(), namespaceURI, localName)) {
+                            return version.getSOAPFaultValueClass();
+                        } else if (testQName(version.getFaultSubCodeQName(), namespaceURI, localName)) {
+                            return version.getSOAPFaultSubCodeClass();
                         }
                     }
             }
@@ -83,13 +99,30 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
         return null;
     }
 
+    private boolean testQName(QName qname, String namespaceURI, String localName) {
+        if (qname == null) {
+            return false;
+        } else {
+            return qname.getLocalPart().equals(localName) && qname.getNamespaceURI().equals(namespaceURI);
+        }
+    }
+    
     public void endElement() {
-        if (state == STATE_FAULT) {
-            if (depth == 3) {
-                state = STATE_BODY;
-            }
-        } else if (depth == 2) {
-            state = 0;
+        switch (state) {
+            case STATE_FAULT:
+                if (depth == 3) {
+                    state = STATE_BODY;
+                }
+                break;
+            case STATE_FAULT_CODE:
+                if (depth == 4) {
+                    state = STATE_FAULT;
+                }
+                break;
+            default:
+                if (depth == 2) {
+                    state = 0;
+                }
         }
         depth--;
     }

@@ -24,8 +24,6 @@ import org.apache.axiom.ts.soap.envelope.TestAddHeaderToIncompleteEnvelope;
 import org.apache.axiom.ts.soap.envelope.TestBodyHeaderOrder;
 import org.apache.axiom.ts.soap.envelope.TestDiscardHeader;
 import org.apache.axiom.ts.soap.factory.TestGetDefaultFaultEnvelope;
-import org.apache.axiom.ts.soap.fault.TestGetDetailWithParser;
-import org.apache.axiom.ts.soap.fault.TestGetRoleWithParser;
 import org.apache.axiom.ts.soap.fault.TestSetCode;
 import org.apache.axiom.ts.soap.fault.TestSetDetail;
 import org.apache.axiom.ts.soap.fault.TestSetReason;
@@ -33,7 +31,6 @@ import org.apache.axiom.ts.soap.fault.TestSetRole;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
 import org.apache.axiom.ts.soap12.envelope.TestAddElementAfterBody;
 import org.apache.axiom.ts.soap12.fault.TestGetNode;
-import org.apache.axiom.ts.soap12.fault.TestGetNodeWithParser;
 import org.apache.axiom.ts.soap12.fault.TestMoreChildrenAddition;
 import org.apache.axiom.ts.soap12.fault.TestSetNode;
 
@@ -51,9 +48,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestAddHeaderToIncompleteEnvelope.class);
         builder.exclude(TestDiscardHeader.class);
         builder.exclude(TestGetAllDetailEntriesWithParser.class);
-        builder.exclude(TestGetDetailWithParser.class);
-        builder.exclude(TestGetRoleWithParser.class);
-        builder.exclude(TestGetNodeWithParser.class);
         
         // TODO: this requires some more thinking
         builder.exclude(TestBodyHeaderOrder.class);

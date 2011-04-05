@@ -42,6 +42,8 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultDetail;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultRole;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultSubCode;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultValue;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12HeaderBlock;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
@@ -49,8 +51,11 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultCode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultSubCode;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultValue;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 
@@ -62,8 +67,24 @@ public abstract class SOAPVersionEx {
                 .addItem(AxiomSOAP11FaultReason.class, "", "faultstring")
                 .addItem(AxiomSOAP11FaultRole.class, "", "faultactor")
                 .addItem(AxiomSOAP11FaultDetail.class, "", "detail")
-                .enableMatchByInterface().build()) {
+                .enableMatchByInterface().build(),
+            null) {
         
+        @Override
+        public QName getFaultNodeQName() {
+            return null;
+        }
+
+        @Override
+        public QName getFaultValueQName() {
+            return null;
+        }
+
+        @Override
+        public QName getFaultSubCodeQName() {
+            return null;
+        }
+
         @Override
         public Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass() {
             return AxiomSOAP11Envelope.class;
@@ -100,6 +121,11 @@ public abstract class SOAPVersionEx {
         }
 
         @Override
+        public Class<? extends AxiomSOAPFaultNode> getSOAPFaultNodeClass() {
+            return null;
+        }
+
+        @Override
         public Class<? extends AxiomSOAPFaultRole> getSOAPFaultRoleClass() {
             return AxiomSOAP11FaultRole.class;
         }
@@ -107,6 +133,16 @@ public abstract class SOAPVersionEx {
         @Override
         public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
             return AxiomSOAP11FaultDetail.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultValue> getSOAPFaultValueClass() {
+            return null;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultSubCode> getSOAPFaultSubCodeClass() {
+            return null;
         }
 
         @Override
@@ -158,8 +194,27 @@ public abstract class SOAPVersionEx {
                 .addItem(AxiomSOAP12FaultNode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Node")
                 .addItem(AxiomSOAP12FaultRole.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Role")
                 .addItem(AxiomSOAP12FaultDetail.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Detail")
+                .enableMatchByInterface().build(),
+            new SequenceBuilder()
+                .addItem(AxiomSOAP12FaultValue.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Value")
+                .addItem(AxiomSOAP12FaultSubCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "SubCode")
                 .enableMatchByInterface().build()) {
         
+        @Override
+        public QName getFaultNodeQName() {
+            return SOAP12Constants.QNAME_FAULT_NODE;
+        }
+
+        @Override
+        public QName getFaultValueQName() {
+            return SOAP12Constants.QNAME_FAULT_VALUE;
+        }
+
+        @Override
+        public QName getFaultSubCodeQName() {
+            return SOAP12Constants.QNAME_FAULT_SUBCODE;
+        }
+
         @Override
         public Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass() {
             return AxiomSOAP12Envelope.class;
@@ -196,6 +251,11 @@ public abstract class SOAPVersionEx {
         }
 
         @Override
+        public Class<? extends AxiomSOAPFaultNode> getSOAPFaultNodeClass() {
+            return AxiomSOAP12FaultNode.class;
+        }
+
+        @Override
         public Class<? extends AxiomSOAPFaultRole> getSOAPFaultRoleClass() {
             return AxiomSOAP12FaultRole.class;
         }
@@ -203,6 +263,16 @@ public abstract class SOAPVersionEx {
         @Override
         public Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass() {
             return AxiomSOAP12FaultDetail.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultValue> getSOAPFaultValueClass() {
+            return AxiomSOAP12FaultValue.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultSubCode> getSOAPFaultSubCodeClass() {
+            return AxiomSOAP12FaultSubCode.class;
         }
 
         @Override
@@ -249,17 +319,19 @@ public abstract class SOAPVersionEx {
     private final SOAPVersion soapVersion;
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
+    private final Sequence faultClassifierSequence;
     
-    public SOAPVersionEx(SOAPVersion soapVersion, Sequence faultSequence) {
+    public SOAPVersionEx(SOAPVersion soapVersion, Sequence faultSequence, Sequence faultClassifierSequence) {
         this.soapVersion = soapVersion;
         envelopeSequence = new SequenceBuilder()
                 .addItem(getSOAPHeaderClass(), getEnvelopeURI(), SOAPConstants.HEADER_LOCAL_NAME)
                 .addItem(getSOAPBodyClass(), getEnvelopeURI(), SOAPConstants.BODY_LOCAL_NAME)
                 .enableMatchByInterface().build();
         this.faultSequence = faultSequence;
+        this.faultClassifierSequence = faultClassifierSequence;
     }
 
-    public SOAPVersion getSOAPVersion() {
+    public final SOAPVersion getSOAPVersion() {
         return soapVersion;
     }
 
@@ -274,6 +346,8 @@ public abstract class SOAPVersionEx {
     public final QName getFaultReasonQName() {
         return soapVersion.getFaultReasonQName();
     }
+    
+    public abstract QName getFaultNodeQName();
 
     public final QName getFaultRoleQName() {
         return soapVersion.getFaultRoleQName();
@@ -282,6 +356,9 @@ public abstract class SOAPVersionEx {
     public final QName getFaultDetailQName() {
         return soapVersion.getFaultDetailQName();
     }
+    
+    public abstract QName getFaultValueQName();
+    public abstract QName getFaultSubCodeQName();
 
     public final Sequence getEnvelopeSequence() {
         return envelopeSequence;
@@ -291,6 +368,10 @@ public abstract class SOAPVersionEx {
         return faultSequence;
     }
 
+    public final Sequence getFaultClassifierSequence() {
+        return faultClassifierSequence;
+    }
+
     public abstract Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass();
     public abstract Class<? extends AxiomSOAPHeader> getSOAPHeaderClass();
     public abstract Class<? extends AxiomSOAPHeaderBlock> getSOAPHeaderBlockClass();
@@ -298,8 +379,11 @@ public abstract class SOAPVersionEx {
     public abstract Class<? extends AxiomSOAPFault> getSOAPFaultClass();
     public abstract Class<? extends AxiomSOAPFaultCode> getSOAPFaultCodeClass();
     public abstract Class<? extends AxiomSOAPFaultReason> getSOAPFaultReasonClass();
+    public abstract Class<? extends AxiomSOAPFaultNode> getSOAPFaultNodeClass();
     public abstract Class<? extends AxiomSOAPFaultRole> getSOAPFaultRoleClass();
     public abstract Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass();
+    public abstract Class<? extends AxiomSOAPFaultValue> getSOAPFaultValueClass();
+    public abstract Class<? extends AxiomSOAPFaultSubCode> getSOAPFaultSubCodeClass();
     
     public abstract boolean isUltimateReceiverRole(String role);
     public abstract boolean isNoneRole(String role);
