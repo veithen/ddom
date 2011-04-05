@@ -76,6 +76,7 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                             state = STATE_FAULT_CODE;
                             return version.getSOAPFaultCodeClass();
                         } else if (testQName(version.getFaultReasonQName(), namespaceURI, localName)) {
+                            // TODO: handle fault text here
                             return version.getSOAPFaultReasonClass();
                         } else if (testQName(version.getFaultNodeQName(), namespaceURI, localName)) {
                             return version.getSOAPFaultNodeClass();

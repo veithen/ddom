@@ -43,6 +43,7 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultRole;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultSubCode;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultText;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultValue;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12Header;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12HeaderBlock;
@@ -55,6 +56,7 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultSubCode;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultText;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultValue;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
@@ -83,6 +85,11 @@ public abstract class SOAPVersionEx {
         @Override
         public QName getFaultSubCodeQName() {
             return null;
+        }
+
+        @Override
+        public QName getFaultTextQName() {
+            throw null;
         }
 
         @Override
@@ -142,6 +149,11 @@ public abstract class SOAPVersionEx {
 
         @Override
         public Class<? extends AxiomSOAPFaultSubCode> getSOAPFaultSubCodeClass() {
+            return null;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultText> getSOAPFaultTextClass() {
             return null;
         }
 
@@ -216,6 +228,11 @@ public abstract class SOAPVersionEx {
         }
 
         @Override
+        public QName getFaultTextQName() {
+            return SOAP12Constants.QNAME_FAULT_TEXT;
+        }
+
+        @Override
         public Class<? extends AxiomSOAPEnvelope> getSOAPEnvelopeClass() {
             return AxiomSOAP12Envelope.class;
         }
@@ -273,6 +290,11 @@ public abstract class SOAPVersionEx {
         @Override
         public Class<? extends AxiomSOAPFaultSubCode> getSOAPFaultSubCodeClass() {
             return AxiomSOAP12FaultSubCode.class;
+        }
+
+        @Override
+        public Class<? extends AxiomSOAPFaultText> getSOAPFaultTextClass() {
+            return AxiomSOAP12FaultText.class;
         }
 
         @Override
@@ -359,6 +381,8 @@ public abstract class SOAPVersionEx {
     
     public abstract QName getFaultValueQName();
     public abstract QName getFaultSubCodeQName();
+    
+    public abstract QName getFaultTextQName();
 
     public final Sequence getEnvelopeSequence() {
         return envelopeSequence;
@@ -384,6 +408,7 @@ public abstract class SOAPVersionEx {
     public abstract Class<? extends AxiomSOAPFaultDetail> getSOAPFaultDetailClass();
     public abstract Class<? extends AxiomSOAPFaultValue> getSOAPFaultValueClass();
     public abstract Class<? extends AxiomSOAPFaultSubCode> getSOAPFaultSubCodeClass();
+    public abstract Class<? extends AxiomSOAPFaultText> getSOAPFaultTextClass();
     
     public abstract boolean isUltimateReceiverRole(String role);
     public abstract boolean isNoneRole(String role);
