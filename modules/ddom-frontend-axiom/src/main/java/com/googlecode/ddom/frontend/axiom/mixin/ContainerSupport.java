@@ -155,6 +155,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             internalSerialize(writer, true);
         } finally {
+            writer.flush();
             writer.close();
         }
     }
