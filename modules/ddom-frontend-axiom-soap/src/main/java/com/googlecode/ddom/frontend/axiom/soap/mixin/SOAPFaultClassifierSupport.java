@@ -46,7 +46,16 @@ public abstract class SOAPFaultClassifierSupport implements AxiomSOAPFaultClassi
     }
 
     public final SOAPFaultSubCode getSubCode() {
-        return null;
+        Sequence seq = getSOAPVersionEx().getFaultClassifierSequence();
+        if (seq == null) {
+            return null;
+        } else {
+            try {
+                return (SOAPFaultSubCode)coreGetElementFromSequence(seq, 1, false);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
+        }
     }
 
     public final void setSubCode(SOAPFaultSubCode subCode) throws SOAPProcessingException {

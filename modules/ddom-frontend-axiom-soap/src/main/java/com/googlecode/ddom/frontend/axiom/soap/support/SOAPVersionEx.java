@@ -209,7 +209,7 @@ public abstract class SOAPVersionEx {
                 .enableMatchByInterface().build(),
             new SequenceBuilder()
                 .addItem(AxiomSOAP12FaultValue.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Value")
-                .addItem(AxiomSOAP12FaultSubCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "SubCode")
+                .addItem(AxiomSOAP12FaultSubCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Subcode")
                 .enableMatchByInterface().build()) {
         
         @Override

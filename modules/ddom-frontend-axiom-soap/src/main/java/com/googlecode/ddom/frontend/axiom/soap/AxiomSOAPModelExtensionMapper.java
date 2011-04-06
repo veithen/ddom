@@ -87,8 +87,8 @@ public class AxiomSOAPModelExtensionMapper implements ModelExtensionMapper {
                         }
                     }
                     break;
-                case 5: // TODO: this should actually be depth >= 5
-                    if (state == STATE_FAULT_CODE) {
+                default:
+                    if (state == STATE_FAULT_CODE && depth >= 5) {
                         if (testQName(version.getFaultValueQName(), namespaceURI, localName)) {
                             return version.getSOAPFaultValueClass();
                         } else if (testQName(version.getFaultSubCodeQName(), namespaceURI, localName)) {
