@@ -160,7 +160,8 @@ public abstract class ElementSupport implements AxiomElement {
         }
     }
 
-    public final QName getTextAsQName() {
+    // This method is overridden by the SOAPFaultCode implementation for SOAP 1.2.
+    public QName getTextAsQName() {
         try {
             // TODO: need unit tests to determine expected behavior if the node has children with unexpected types
             return resolveQName(coreGetTextContent(TextCollectorPolicy.DEFAULT));
