@@ -31,10 +31,13 @@
     <modules>
         <!-- module>ddom-perftests-seismic</module>
         <module>ddom-perftests-seismic-axis2</module -->
+        <module>ddom-perftests-axis2-common</module>
+        <module>ddom-perftests-axis2-service-impl</module>
         <module>ddom-perftests-cxf-client</module>
         <module>ddom-perftests-cxf-common</module>
         <module>ddom-perftests-cxf-server</module>
         <module>ddom-perftests-cxf-service-impl</module>
+        <module>ddom-perftests-server-data</module>
     </modules>
 
     <properties>
