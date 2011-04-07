@@ -28,6 +28,7 @@ import org.apache.axiom.ts.soap.fault.TestSetDetail;
 import org.apache.axiom.ts.soap.fault.TestSetReason;
 import org.apache.axiom.ts.soap.fault.TestSetRole;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
+import org.apache.axiom.ts.soap.faulttext.TestSetLang;
 import org.apache.axiom.ts.soap12.envelope.TestAddElementAfterBody;
 import org.apache.axiom.ts.soap12.fault.TestGetNode;
 import org.apache.axiom.ts.soap12.fault.TestMoreChildrenAddition;
@@ -66,6 +67,7 @@ public class ImplementationTest extends TestCase {
         // TODO: fault text is a SOAP 1.2 concept
         builder.exclude(org.apache.axiom.ts.soap11.faultreason.TestAddSOAPText.class);
         builder.exclude(org.apache.axiom.ts.soap11.faultreason.TestGetFirstSOAPText.class);
+        builder.exclude(TestSetLang.class, "(spec=soap11)");
         
         // TODO
         builder.exclude(org.apache.axiom.ts.soap11.header.TestExamineMustUnderstandHeaderBlocksWithParser.class);
