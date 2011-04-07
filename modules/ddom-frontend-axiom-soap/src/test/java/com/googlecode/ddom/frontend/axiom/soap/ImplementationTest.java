@@ -63,6 +63,15 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestSetReason.class);
         builder.exclude(TestSetRole.class);
         
+        // TODO: fault text is a SOAP 1.2 concept
+        builder.exclude(org.apache.axiom.ts.soap11.faultreason.TestAddSOAPText.class);
+        builder.exclude(org.apache.axiom.ts.soap11.faultreason.TestGetFirstSOAPText.class);
+        
+        // TODO
+        builder.exclude(org.apache.axiom.ts.soap11.header.TestExamineMustUnderstandHeaderBlocksWithParser.class);
+        builder.exclude(org.apache.axiom.ts.soap12.header.TestExamineMustUnderstandHeaderBlocks.class);
+        builder.exclude(org.apache.axiom.ts.soap12.header.TestExamineMustUnderstandHeaderBlocksWithParser.class);
+        
         return builder.build();
     }
 }

@@ -28,10 +28,8 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(AxiomSOAPFaultReason.class)
 public abstract class SOAPFaultReasonSupport implements AxiomSOAPFaultReason {
-
-    public void addSOAPText(SOAPFaultText soapFaultText) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void addSOAPText(SOAPFaultText soapFaultText) throws SOAPProcessingException {
+        addChild(soapFaultText);
     }
 
     public List getAllSoapTexts() {
