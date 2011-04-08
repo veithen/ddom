@@ -42,21 +42,6 @@
       <sp:SignedParts xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
         <sp:Body/>
       </sp:SignedParts>
-
-      <ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy"> 
-        <ramp:user>serverkey</ramp:user>
-        <ramp:passwordCallbackClass>com.sosnoski.ws.seismic.adb.PWCBHandler</ramp:passwordCallbackClass>
-        
-        <ramp:signatureCrypto>
-          <ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin">
-            <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type">JKS</ramp:property>
-            <ramp:property name="org.apache.ws.security.crypto.merlin.file">server.keystore</ramp:property>
-            <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.password">nosecret</ramp:property>
-          </ramp:crypto>
-        </ramp:signatureCrypto>
-        
-      </ramp:RampartConfig>
-
     </wsp:All>
   </wsp:ExactlyOne>
 </wsp:Policy>
@@ -168,7 +153,7 @@
   <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
  </wsdl:binding>
 
- <wsdl:service name="SeismicAdb">
+ <wsdl:service name="sign">
   <wsdl:port name="SeismicAdb" binding="wns:SeismicBinding">
    <soap:address location="http://localhost:8080/axis2/XXX"/>
   </wsdl:port>

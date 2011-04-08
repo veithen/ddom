@@ -8,6 +8,26 @@
    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
    
+<!-- Server policy for Username Token with plaintext password, sent from client
+ to server only. This differs from the client version only in that it includes
+ Rampart extensions for the the password callback class which are not needed for
+ the client. -->
+<wsp:Policy wsu:Id="UsernameToken" xmlns:wsu=
+    "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+  <wsp:ExactlyOne>
+    <wsp:All>
+      <sp:SupportingTokens
+          xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+        <wsp:Policy>
+          <sp:UsernameToken sp:IncludeToken=
+              "http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToRecipient"/>
+        </wsp:Policy>
+      </sp:SupportingTokens>
+    </wsp:All>
+  </wsp:ExactlyOne>
+</wsp:Policy>
+
  <wsdl:types>
   <schema xmlns="http://www.w3.org/2001/XMLSchema"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -101,6 +121,8 @@
  </wsdl:portType>
  
  <wsdl:binding name="SeismicBinding" type="wns:SeismicInterface">
+  <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    URI="#UsernameToken"/> 
   <wsdl:operation name="matchQuakes">
    <wsdl:input>
     <soap:body use="literal"/>
@@ -113,7 +135,7 @@
   <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
  </wsdl:binding>
 
- <wsdl:service name="SeismicAdb">
+ <wsdl:service name="username">
   <wsdl:port name="SeismicAdb" binding="wns:SeismicBinding">
    <soap:address location="http://localhost:8080/axis2/XXX"/>
   </wsdl:port>

@@ -23,5 +23,29 @@
             <actionMapping>http://ws.sosnoski.com/seismic/wsdl/SeismicInterface/matchQuakesRequest</actionMapping>
             <outputActionMapping>http://ws.sosnoski.com/seismic/wsdl/SeismicInterface/matchQuakesResponse</outputActionMapping>
         </operation>
+        <module ref="rampart"/>
+        <ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy"> 
+            <ramp:user>serverkey</ramp:user>
+            <ramp:passwordCallbackClass>com.sosnoski.ws.seismic.adb.PWCBHandler</ramp:passwordCallbackClass>
+            <ramp:signatureCrypto>
+                <ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin">
+                    <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type">JKS</ramp:property>
+                    <ramp:property name="org.apache.ws.security.crypto.merlin.file">server.keystore</ramp:property>
+                    <ramp:property name="org.apache.ws.security.crypto.merlin.keystore.password">nosecret</ramp:property>
+                </ramp:crypto>
+            </ramp:signatureCrypto>
+        </ramp:RampartConfig>
+    </service>
+    <service name="username">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.sosnoski.ws.seismic.adb.SeismicAdbMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">com.sosnoski.ws.seismic.adb.SeismicAdbImpl</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <module ref="rampart"/>
+        <ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy">
+            <ramp:passwordCallbackClass>com.sosnoski.ws.seismic.adb.PWCBHandler</ramp:passwordCallbackClass>
+        </ramp:RampartConfig>
     </service>
 </serviceGroup>
