@@ -50,4 +50,43 @@
             <version>1.2.14</version>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>ddom</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.axis2</groupId>
+                    <artifactId>axis2-kernel</artifactId>
+                    <version>${axis2.version}</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.ws.commons.axiom</groupId>
+                            <artifactId>axiom-impl</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ddom-axiom-impl</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ddom-stream-wstx</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.rampart</groupId>
+                    <artifactId>rampart-core</artifactId>
+                    <version>1.7.0-SNAPSHOT</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.codehaus.woodstox</groupId>
+                            <artifactId>wstx-asl</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
