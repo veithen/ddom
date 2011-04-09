@@ -141,12 +141,14 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         }
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeAttribute(java.lang.String, java.lang.String)
-     */
-    public void writeAttribute(String arg0, String arg1) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void writeAttribute(String localName, String value) throws XMLStreamException {
+        try {
+            handler.startAttribute(localName, "CDATA");
+            handler.processCharacterData(value, false);
+            handler.endAttribute();
+        } catch (StreamException ex) {
+            throw StAXExceptionUtil.toXMLStreamException(ex);
+        }
     }
 
     public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {

@@ -137,7 +137,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean startAttribute(String name, String type) {
-        return startAttribute(null, name, null, type);
+        return startAttribute("", name, "", type);
     }
 
     @Override

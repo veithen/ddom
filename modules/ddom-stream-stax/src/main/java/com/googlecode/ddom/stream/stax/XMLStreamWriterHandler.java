@@ -91,8 +91,9 @@ public class XMLStreamWriterHandler implements XmlHandler {
     }
 
     public void startAttribute(String name, String type) throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        attType = ATT_NS_UNAWARE;
+        attName = name;
+        startCoalescing();
     }
 
     public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
@@ -114,6 +115,9 @@ public class XMLStreamWriterHandler implements XmlHandler {
             switch (attType) {
                 case ATT_NS_AWARE:
                     writer.writeAttribute(attPrefix, attNamespaceURI, attName, endCoalescing());
+                    break;
+                case ATT_NS_UNAWARE:
+                    writer.writeAttribute(attName, endCoalescing());
                     break;
                 case ATT_NAMESPACE_DECLARATION:
                     writer.writeNamespace(attPrefix, endCoalescing());
