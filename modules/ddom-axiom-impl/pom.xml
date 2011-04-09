@@ -35,6 +35,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-frontend-dom</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ddom-backend-linkedlist</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>

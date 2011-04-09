@@ -20,6 +20,8 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 
 @Mixin(AxiomSOAPFaultNode.class)
 public abstract class SOAPFaultNodeSupport implements AxiomSOAPFaultNode {
+    // TODO: these methods conflict with DOM methods!
+/*
     public String getNodeValue() {
         // TODO
         throw new UnsupportedOperationException();
@@ -29,4 +31,5 @@ public abstract class SOAPFaultNodeSupport implements AxiomSOAPFaultNode {
         // TODO
         throw new UnsupportedOperationException();
     }
+*/
 }

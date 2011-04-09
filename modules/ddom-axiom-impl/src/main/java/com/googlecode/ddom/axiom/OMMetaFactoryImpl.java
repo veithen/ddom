@@ -33,7 +33,14 @@ import com.googlecode.ddom.model.ModelRegistry;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 
 public final class OMMetaFactoryImpl implements OMMetaFactory {
-    private static final ModelDefinition modelDefinition = ModelDefinitionBuilder.buildModelDefinition("axiom-soap");
+    private static final ModelDefinition modelDefinition;
+    
+    static {
+        ModelDefinitionBuilder mdb = new ModelDefinitionBuilder();
+        mdb.addFrontend("axiom-soap");
+        mdb.addFrontend("dom");
+        modelDefinition = mdb.buildModelDefinition();
+    }
     
     private final OMMetaFactory metaFactory;
     
