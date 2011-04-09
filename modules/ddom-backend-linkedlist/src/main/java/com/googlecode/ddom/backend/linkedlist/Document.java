@@ -18,6 +18,9 @@ package com.googlecode.ddom.backend.linkedlist;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
@@ -36,6 +39,8 @@ import com.googlecode.ddom.symbols.SymbolHashTable;
 import com.googlecode.ddom.symbols.Symbols;
 
 public class Document extends ParentNode implements LLDocument {
+    private static final Log log = LogFactory.getLog(Document.class);
+    
     private final ModelExtension modelExtension;
     private final Symbols symbols;
     private List<Builder> builders = new LinkedList<Builder>();
@@ -60,6 +65,9 @@ public class Document extends ParentNode implements LLDocument {
     }
 
     public final InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredParsingException {
+        if (log.isDebugEnabled()) {
+            log.debug("Creating builder for " + input);
+        }
         Builder builder = new Builder(input, modelExtension, this, target, unwrap);
         target.internalSetState(target instanceof LLElement ? Flags.STATE_ATTRIBUTES_PENDING : Flags.STATE_CHILDREN_PENDING);
         new Stream(input, builder);

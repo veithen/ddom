@@ -15,6 +15,9 @@
  */
 package com.googlecode.ddom.backend.linkedlist.support;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.googlecode.ddom.backend.linkedlist.Flags;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
@@ -35,6 +38,8 @@ import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
 public class TreeSerializer extends XmlInput {
+    private static final Log log = LogFactory.getLog(TreeSerializer.class);
+    
     private static final int STATE_NONE = 0;
     
     /**
@@ -292,6 +297,9 @@ public class TreeSerializer extends XmlInput {
 
     private Stream createStream(CoreParentNode node, final boolean flush, XmlHandler handler) {
         XmlSource source = (XmlSource)node.coreGetContent(); // TODO: should be an internal method
+        if (log.isDebugEnabled()) {
+            log.debug("Starting to stream content from " + source);
+        }
         XmlSource.Hints hints = new XmlSource.Hints() {
             public boolean isPreferPush() {
                 return flush;
