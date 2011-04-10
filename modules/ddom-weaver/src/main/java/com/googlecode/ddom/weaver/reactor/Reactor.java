@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -44,7 +44,7 @@ import com.googlecode.ddom.weaver.realm.ClassInfo;
 import com.googlecode.ddom.weaver.realm.ClassRealm;
 
 public class Reactor implements ClassRealm, WeavableClassInjector {
-    private static final Logger log = Logger.getLogger(Reactor.class.getName());
+    private static final Log log = LogFactory.getLog(Reactor.class);
     
     private static final EdgeRelation<ClassInfo> inheritanceRelation = new EdgeRelation<ClassInfo>() {
         public boolean isEdge(ClassInfo from, ClassInfo to) {
@@ -224,13 +224,13 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
             out = plugin.prepareForOutput(out, generated, woven);
         }
         if (out == cw && !woven) {
-            if (log.isLoggable(Level.FINE)) {
-                log.fine("Copying unmodified class " + weavableClass);
+            if (log.isDebugEnabled()) {
+                log.debug("Copying unmodified class " + weavableClass);
             }
             processor.processClassDefinition(weavableClass.getName(), classDefinitionSource.getClassDefinition(this));
         } else {
-            if (log.isLoggable(Level.FINE)) {
-                log.fine("Weaving " + weavableClass + "; mixins: " + mixins);
+            if (log.isDebugEnabled()) {
+                log.debug("Weaving " + weavableClass + "; mixins: " + mixins);
             }
             SourceMapper sourceMapper = new SourceMapper();
             sourceMapper.addSourceInfo(weavableClass.get(SourceInfo.class));

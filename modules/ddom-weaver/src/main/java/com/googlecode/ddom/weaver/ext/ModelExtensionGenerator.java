@@ -21,8 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.ddom.weaver.reactor.ReactorException;
 import com.googlecode.ddom.weaver.reactor.WeavableClassInfo;
@@ -30,7 +31,7 @@ import com.googlecode.ddom.weaver.reactor.WeavableClassInjector;
 import com.googlecode.ddom.weaver.realm.ClassInfo;
 
 class ModelExtensionGenerator {
-    private static final Logger log = Logger.getLogger(ModelExtensionGenerator.class.getName());
+    private static final Log log = LogFactory.getLog(ModelExtensionGenerator.class);
     
     private final List<ClassInfo> requiredImplementations;
     private final List<ModelExtensionInterfaceInfo> modelExtensionInterfaces = new ArrayList<ModelExtensionInterfaceInfo>();
@@ -69,8 +70,8 @@ class ModelExtensionGenerator {
             missingImplementations.removeAll(implementationMap.keySet());
             throw new ReactorException("The implementations for the following interfaces have not been found: " + missingImplementations);
         }
-        if (log.isLoggable(Level.FINE)) {
-            log.fine("Implementation map: " + implementationMap);
+        if (log.isDebugEnabled()) {
+            log.debug("Implementation map: " + implementationMap);
         }
     }
 
@@ -113,9 +114,9 @@ class ModelExtensionGenerator {
             }
             modelExtensionInfo.addExtensionInterface(iface);
         }
-        if (log.isLoggable(Level.FINE)) {
+        if (log.isDebugEnabled()) {
             for (ModelExtensionInfo modelExtensionInfo : modelExtensionMap.values()) {
-                log.fine("Resolved model extension:\n  Root interface: " + modelExtensionInfo.getRootInterface()
+                log.debug("Resolved model extension:\n  Root interface: " + modelExtensionInfo.getRootInterface()
                         + "\n  Extension interfaces: " + modelExtensionInfo.getExtensionInterfaces()
                         + "\n  Implementations: " + modelExtensionInfo.getImplementations());
             }

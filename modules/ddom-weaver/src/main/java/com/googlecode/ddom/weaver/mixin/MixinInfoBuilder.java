@@ -21,8 +21,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -41,7 +42,7 @@ import com.googlecode.ddom.weaver.realm.ClassInfo;
 import com.googlecode.ddom.weaver.realm.ClassRealm;
 
 public class MixinInfoBuilder extends AbstractClassVisitor {
-    private static final Logger log = Logger.getLogger(MixinInfo.class.getName());
+    private static final Log log = LogFactory.getLog(MixinInfo.class);
     
     private final ErrorHandler errorHandler;
     private final List<MixinInfoBuilderCollaborator> collaborators;
@@ -98,7 +99,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
                 initMethod = new MethodNode(Opcodes.ACC_PRIVATE, "init$$" + mixinName.replace('/', '$'), desc, signature, exceptions);
                 return new ConstructorToMethodConverter(initMethod);
             } else {
-                log.warning("Encountered non default constructor");
+                log.warn("Encountered non default constructor");
                 return null;
             }
         } else {

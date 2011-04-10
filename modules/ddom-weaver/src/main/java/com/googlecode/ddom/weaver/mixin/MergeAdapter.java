@@ -22,9 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -51,7 +51,7 @@ import com.googlecode.ddom.weaver.jsr45.SourceMapper;
  * </ul>
  */
 public class MergeAdapter extends ClassAdapter {
-    private static final Logger log = Logger.getLogger(MergeAdapter.class.getName());
+    private static final Log log = LogFactory.getLog(MergeAdapter.class);
     
     final List<MixinInfo> mixins;
     private final SourceMapper sourceMapper;
@@ -96,8 +96,8 @@ public class MergeAdapter extends ClassAdapter {
     
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        if (log.isLoggable(Level.FINER)) {
-            log.finer("Visiting method " + name + desc + " from base class");
+        if (log.isTraceEnabled()) {
+            log.trace("Visiting method " + name + desc + " from base class");
         }
         seenMethods.add(name + desc);
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
@@ -121,8 +121,8 @@ public class MergeAdapter extends ClassAdapter {
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        if (log.isLoggable(Level.FINER)) {
-            log.finer("Visiting field " + name + " from base class");
+        if (log.isTraceEnabled()) {
+            log.trace("Visiting field " + name + " from base class");
         }
         seenFields.add(name);
         return super.visitField(access, name, desc, signature, value);
@@ -144,8 +144,8 @@ public class MergeAdapter extends ClassAdapter {
     public void visitEnd() {
         for (MixinInfo mixin : mixins) {
             for (FieldNode field : mixin.getFields()) {
-                if (log.isLoggable(Level.FINER)) {
-                    log.finer("Merging field " + field.name + " from mixin " + mixin.getName());
+                if (log.isTraceEnabled()) {
+                    log.trace("Merging field " + field.name + " from mixin " + mixin.getName());
                 }
                 if (!seenFields.add(field.name)) {
                     errorHandler.handleError("Duplicate field " + field.name);
@@ -154,14 +154,14 @@ public class MergeAdapter extends ClassAdapter {
             }
             MethodNode initMethod = mixin.getInitMethod();
             if (initMethod != null) {
-                if (log.isLoggable(Level.FINER)) {
-                    log.finer("Merging constructor code from mixin " + mixin.getName());
+                if (log.isTraceEnabled()) {
+                    log.trace("Merging constructor code from mixin " + mixin.getName());
                 }
                 mergeMixinMethod(mixin, mixin.getInitMethod());
             }
             for (MethodNode mn : mixin.getMethods()) {
-                if (log.isLoggable(Level.FINER)) {
-                    log.finer("Merging method " + mn.name + mn.desc + " from mixin " + mixin.getName());
+                if (log.isTraceEnabled()) {
+                    log.trace("Merging method " + mn.name + mn.desc + " from mixin " + mixin.getName());
                 }
                 if (!seenMethods.add(mn.name + mn.desc)) {
                     errorHandler.handleError("Method " + mn.name + mn.desc + " of mixin " + mixin.getName() + " collides with a method declared in the base class or another mixin");

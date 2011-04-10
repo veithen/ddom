@@ -34,6 +34,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
             <groupId>asm</groupId>
             <artifactId>asm</artifactId>
         </dependency>
