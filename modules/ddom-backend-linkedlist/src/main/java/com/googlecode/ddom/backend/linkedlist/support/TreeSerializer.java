@@ -162,7 +162,8 @@ public class TreeSerializer extends XmlInput {
             } else if (state == STATE_NOT_VISITED || state == STATE_ATTRIBUTES_VISITED) {
                 final LLParentNode parent = (LLParentNode)previousNode;
                 int nodeState = parent.internalGetState();
-                if (preserve || nodeState == Flags.STATE_EXPANDED || nodeState == Flags.STATE_VALUE_SET) {
+                if (preserve && !(nodeState == Flags.STATE_CONTENT_SET && !((XmlSource)parent.coreGetContent()).isDestructive())
+                        || nodeState == Flags.STATE_EXPANDED || nodeState == Flags.STATE_VALUE_SET) {
                     // TODO: bad because it will expand the node if the state is "Value set"
                     LLChildNode child = parent.internalGetFirstChild();
                     if (child == null) {
@@ -173,7 +174,6 @@ public class TreeSerializer extends XmlInput {
                         state = STATE_NOT_VISITED;
                     }
                 } else if (nodeState == Flags.STATE_CONTENT_SET) {
-                    // TODO: this also applies if preserve is true and the XmlSource is non destructive
                     stream = createStream(parent, flush, handler);
                     state = STATE_STREAMING_CONTENT;
                     // TODO: update node state
@@ -234,10 +234,10 @@ public class TreeSerializer extends XmlInput {
             // More closely examine the case where we move to a node that has not
             // been visited yet. It may be a sourced element or a leaf node
             if (state == STATE_NOT_VISITED) {
-                // TODO: also consider the case of non destructive sources
-                if (!preserve && nextNode instanceof LLElement) {
+                if (nextNode instanceof LLElement) {
                     LLElement element = (LLElement)nextNode;
-                    if (element.internalGetState() == Flags.STATE_SOURCE_SET) {
+                    if (element.internalGetState() == Flags.STATE_SOURCE_SET
+                            && !(preserve && ((XmlSource)element.coreGetContent()).isDestructive())) {
                         // TODO: this may give an unexpected result if the source contains other information items than the element
                         // TODO: should we also compare the name of the element from the source with what is specified in the CoreElement node?
                         stream = createStream(element, flush, handler);

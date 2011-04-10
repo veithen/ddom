@@ -15,11 +15,19 @@
  */
 package com.googlecode.ddom.backend.testsuite;
 
+import java.io.IOException;
 import java.io.StringReader;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
 import org.junit.Assert;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
@@ -28,6 +36,7 @@ import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.dom.DOMSource;
 
 public class BackendTestCase extends TestCase {
     // We define constants for this so that we can easily locate tests that depend on the builder type
@@ -52,7 +61,27 @@ public class BackendTestCase extends TestCase {
     }
     
     protected final XmlSource toXmlSource(String xml) throws StreamException {
-        return streamFactory.getSource(new StringReader(xml), new Options(), true);
+        return toXmlSource(xml, true);
+    }
+    
+    protected final XmlSource toXmlSource(String xml, boolean destructive) throws StreamException {
+        if (destructive) {
+            return streamFactory.getSource(new StringReader(xml), new Options(), true);
+        } else {
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+                Document document = documentBuilder.parse(new InputSource(new StringReader(xml)));
+                return new DOMSource(document);
+            } catch (IOException ex) {
+                throw new StreamException(ex);
+            } catch (SAXException ex) {
+                throw new StreamException(ex);
+            } catch (ParserConfigurationException ex) {
+                throw new StreamException(ex);
+            }
+        }
     }
     
     protected final CoreDocument parse(String xml) {

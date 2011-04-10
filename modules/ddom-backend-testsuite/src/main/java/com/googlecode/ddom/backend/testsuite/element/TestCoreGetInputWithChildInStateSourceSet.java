@@ -32,17 +32,19 @@ import com.googlecode.ddom.stream.Stream;
  */
 public class TestCoreGetInputWithChildInStateSourceSet extends BackendTestCase {
     private final boolean preserve;
+    private final boolean destructive;
     
-    public TestCoreGetInputWithChildInStateSourceSet(BackendTestSuiteConfig config, boolean preserve) {
-        super(config, "preserve=" + preserve);
+    public TestCoreGetInputWithChildInStateSourceSet(BackendTestSuiteConfig config, boolean preserve, boolean destructive) {
+        super(config, "preserve=" + preserve + ", destructive=" + destructive);
         this.preserve = preserve;
+        this.destructive = destructive;
     }
 
     @Override
     protected void runTest() throws Throwable {
         CoreElement parent = nodeFactory.createElement(null, "", "parent", "");
         CoreElement child = parent.coreAppendElement("", "child", "");
-        child.coreSetSource(toXmlSource("<child>text</child>"));
+        child.coreSetSource(toXmlSource("<child>text</child>", destructive));
         StreamAssert output = new StreamAssert();
         new Stream(parent.coreGetInput(preserve), output);
         output.assertStartEntity(true);
@@ -51,5 +53,10 @@ public class TestCoreGetInputWithChildInStateSourceSet extends BackendTestCase {
         output.assertCharacterData("text");
         output.assertEndElement();
         output.assertEndElement();
+        if (preserve && destructive) {
+            assertTrue(child.coreIsComplete());
+        } else {
+            assertFalse(child.coreIsComplete());
+        }
     }
 }

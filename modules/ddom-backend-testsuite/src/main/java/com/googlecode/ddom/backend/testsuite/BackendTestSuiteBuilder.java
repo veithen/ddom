@@ -72,10 +72,14 @@ public class BackendTestSuiteBuilder {
         // TODO
 //        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeAndRemove(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, false));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, true));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, false));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true, true));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, false, true));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true, false));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, false, false));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, true, true));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, false, true));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, true, false));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, false, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnEmptyElement(config));
