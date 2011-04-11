@@ -23,7 +23,7 @@ import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.backend.linkedlist.support.ChildrenByTypeIterator;
 import com.googlecode.ddom.backend.linkedlist.support.ElementsIterator;
-import com.googlecode.ddom.backend.linkedlist.support.TreeSerializer;
+import com.googlecode.ddom.backend.linkedlist.support.TreeWalker;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.ChildNotAllowedException;
@@ -603,6 +603,6 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final XmlInput coreGetInput(boolean preserve) {
-        return new TreeSerializer(this, preserve);
+        return new TreeWalker(this, preserve);
     }
 }

@@ -37,8 +37,8 @@ import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
-public class TreeSerializer extends XmlInput {
-    private static final Log log = LogFactory.getLog(TreeSerializer.class);
+public class TreeWalker extends XmlInput {
+    private static final Log log = LogFactory.getLog(TreeWalker.class);
     
     private static final int STATE_NONE = 0;
     
@@ -110,7 +110,7 @@ public class TreeSerializer extends XmlInput {
     private int state = STATE_NONE;
     private LLDocument document;
     
-    public TreeSerializer(LLParentNode root, boolean preserve) {
+    public TreeWalker(LLParentNode root, boolean preserve) {
         this.root = root;
         this.preserve = preserve;
     }
