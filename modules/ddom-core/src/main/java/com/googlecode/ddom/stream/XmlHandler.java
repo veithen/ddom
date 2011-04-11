@@ -32,7 +32,7 @@ public interface XmlHandler {
      */
     void startEntity(boolean fragment, String inputEncoding);
     
-    void processXmlDeclaration(String version, String encoding, Boolean standalone);
+    void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException;
     
     void processDocumentType(String rootName, String publicId, String systemId, String data);
 

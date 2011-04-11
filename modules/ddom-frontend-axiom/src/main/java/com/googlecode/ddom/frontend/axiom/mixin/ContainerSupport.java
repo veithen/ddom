@@ -16,6 +16,8 @@
 package com.googlecode.ddom.frontend.axiom.mixin;
 
 import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Iterator;
 
@@ -38,15 +40,14 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomContainer;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
-import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
-import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlOutput;
 import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
+import com.googlecode.ddom.stream.serializer.Serializer;
 import com.googlecode.ddom.stream.stax.StAXPivot;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
@@ -107,67 +108,79 @@ public abstract class ContainerSupport implements AxiomContainer {
         throw new UnsupportedOperationException();
     }
     
-    public final void internalSerialize(Object out, boolean preserve) throws StreamException {
+    private final void serialize(XmlOutput output, boolean preserve) throws StreamException {
         XmlInput input = coreGetInput(preserve);
-        XmlOutput output = ((AxiomNodeFactory)coreGetNodeFactory()).getStreamFactory().getOutput(out, new Options());
         input.addFilter(new NamespaceRepairingFilter());
         new Stream(input, output).flush();
     }
     
-    public final void serialize(OutputStream output) throws XMLStreamException {
+    public String toString(boolean preserve) throws StreamException {
+        StringWriter sw = new StringWriter();
+        serialize(new Serializer(sw), preserve);
+        return sw.toString();
+    }
+    
+    private void serialize(OutputStream output, boolean preserve) throws XMLStreamException {
         // TODO: close output?
         try {
-            internalSerialize(output, true);
+            // TODO: correct choice of encoding?
+            serialize(new Serializer(output, "UTF-8"), preserve);
         } catch (StreamException ex) {
             throw AxiomExceptionUtil.translate(ex);
+        } catch (UnsupportedEncodingException ex) {
+            throw new XMLStreamException(ex);
         }
     }
 
-    public void serialize(Writer writer) throws XMLStreamException {
+    private void serialize(Writer writer, boolean preserve) throws XMLStreamException {
         // TODO: close output?
         try {
-            internalSerialize(writer, true);
+            serialize(new Serializer(writer), preserve);
         } catch (StreamException ex) {
             throw AxiomExceptionUtil.translate(ex);
-        }
-    }
-
-    public void serializeAndConsume(OutputStream output) throws XMLStreamException {
-        // TODO: close output?
-        try {
-            internalSerialize(output, false);
-        } catch (StreamException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-    }
-
-    public void serializeAndConsume(Writer writer) throws XMLStreamException {
-        // TODO: close output?
-        try {
-            internalSerialize(writer, false);
-        } catch (StreamException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-    }
-
-    public final void serialize(OutputStream output, OMOutputFormat format) throws XMLStreamException {
-        MTOMXMLStreamWriter writer = new MTOMXMLStreamWriter(output, format);
-        try {
-            internalSerialize(writer, true);
-        } finally {
-            writer.flush();
-            writer.close();
         }
     }
     
+    private void serialize(OutputStream output, OMOutputFormat format, boolean preserve) throws XMLStreamException {
+        // TODO: close output?
+        // TODO: MTOM
+        // TODO: XML declaration
+        try {
+            serialize(new Serializer(output, format.getCharSetEncoding()), preserve);
+        } catch (StreamException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        } catch (UnsupportedEncodingException ex) {
+            throw new XMLStreamException(ex);
+        }
+    }
+
+    public final void serialize(OutputStream output) throws XMLStreamException {
+        serialize(output, true);
+    }
+    
+    public final void serializeAndConsume(OutputStream output) throws XMLStreamException {
+        serialize(output, false);
+    }
+
+    public final void serialize(Writer writer) throws XMLStreamException {
+        serialize(writer, true);
+    }
+    
+    public final void serializeAndConsume(Writer writer) throws XMLStreamException {
+        serialize(writer, false);
+    }
+
+    public final void serialize(OutputStream output, OMOutputFormat format) throws XMLStreamException {
+        serialize(output, format, true);
+    }
+    
+    public final void serializeAndConsume(OutputStream output, OMOutputFormat format) throws XMLStreamException {
+        serialize(output, format, false);
+    }
+
     public void serialize(Writer writer, OMOutputFormat format) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
-    }
-
-    public void serializeAndConsume(OutputStream output, OMOutputFormat format) throws XMLStreamException {
-        // TODO
-        serialize(output, format);
     }
 
     public void serializeAndConsume(Writer writer, OMOutputFormat format) throws XMLStreamException {

@@ -27,7 +27,7 @@ public abstract class SimpleXmlOutput extends XmlOutput {
 
     protected abstract void startEntity(boolean fragment, String inputEncoding);
     
-    protected abstract void processXmlDeclaration(String version, String encoding, Boolean standalone);
+    protected abstract void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException;
     
     protected abstract void processDocumentType(String rootName, String publicId, String systemId, String data);
     

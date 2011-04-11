@@ -33,7 +33,7 @@ public class XmlHandlerWrapper implements XmlHandler {
         parent.startEntity(fragment, inputEncoding);
     }
 
-    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException {
         parent.processXmlDeclaration(version, encoding, standalone);
     }
 

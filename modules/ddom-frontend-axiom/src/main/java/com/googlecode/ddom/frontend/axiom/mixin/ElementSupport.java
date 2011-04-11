@@ -15,7 +15,6 @@
  */
 package com.googlecode.ddom.frontend.axiom.mixin;
 
-import java.io.StringWriter;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -266,12 +265,6 @@ public abstract class ElementSupport implements AxiomElement {
     
     public final int getType() {
         return OMNode.ELEMENT_NODE;
-    }
-    
-    private String toString(boolean preserve) throws StreamException {
-        StringWriter sw = new StringWriter();
-        internalSerialize(sw, preserve);
-        return sw.toString();
     }
     
     public final String toStringWithConsume() throws XMLStreamException {

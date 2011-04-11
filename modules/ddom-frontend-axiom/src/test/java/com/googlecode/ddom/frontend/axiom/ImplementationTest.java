@@ -56,6 +56,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetXMLStreamReaderNextTag.class);
         builder.exclude(TestInvalidXML.class);
         builder.exclude(TestSerialize.class, "(&(file=spaces.xml)(container=document))");
+        builder.exclude(TestSerialize.class, "(&(file=iso-8859-1.xml)(container=document))");
         return builder.build();
     }
 }

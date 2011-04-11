@@ -28,7 +28,7 @@ public class SimpleXmlFilter extends XmlFilter {
         target.startEntity(fragment, inputEncoding);
     }
 
-    protected void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+    protected void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException {
         target.processXmlDeclaration(version, encoding, standalone);
     }
 

@@ -26,7 +26,7 @@ final class SimpleXmlFilterHandler implements XmlHandler {
         filter.startEntity(fragment, inputEncoding);
     }
 
-    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException {
         filter.processXmlDeclaration(version, encoding, standalone);
     }
 

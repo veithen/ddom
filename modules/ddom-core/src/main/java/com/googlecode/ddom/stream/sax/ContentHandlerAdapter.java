@@ -36,12 +36,16 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
         this.handler = handler;
     }
 
-    private void processDocumentInfo() {
+    private void processDocumentInfo() throws SAXException {
         if (!documentInfoProcessed) {
             if (locator instanceof Locator2) {
                 Locator2 locator2 = (Locator2)locator;
                 // TODO: extract remaining info and build minimal info if locator doesn't implement Locator2
-                handler.processXmlDeclaration(locator2.getXMLVersion(), null, null);
+                try {
+                    handler.processXmlDeclaration(locator2.getXMLVersion(), null, null);
+                } catch (StreamException ex) {
+                    throw new SAXException(ex);
+                }
             }
             documentInfoProcessed = true;
         }

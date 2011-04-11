@@ -26,7 +26,7 @@ final class SimpleXmlOutputHandler implements XmlHandler{
         output.startEntity(fragment, inputEncoding);
     }
 
-    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException {
         output.processXmlDeclaration(version, encoding, standalone);
     }
 

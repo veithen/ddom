@@ -13,13 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.axiom.intf;
+package com.googlecode.ddom.stream.serializer;
 
-import org.apache.axiom.om.OMContainer;
+import java.io.IOException;
 
-import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.stream.StreamException;
-
-public interface AxiomContainer extends CoreParentNode, OMContainer, AxiomNode {
-    String toString(boolean preserve) throws StreamException;
+public abstract class AbstractUnicodeWriter implements UnicodeWriter {
+    public void write(String data) throws IOException {
+        int len = data.length();
+        int pos = 0;
+        while (pos < len) {
+            char c = data.charAt(pos);
+            if (Character.isHighSurrogate(c)) {
+                write(Character.toCodePoint(c, data.charAt(pos+1)));
+                pos += 2;
+            } else {
+                write(c);
+                pos++;
+            }
+        }
+    }
 }

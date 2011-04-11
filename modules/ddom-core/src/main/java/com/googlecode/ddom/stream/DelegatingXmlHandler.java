@@ -38,7 +38,7 @@ final class DelegatingXmlHandler implements XmlHandler{
         getDelegate().startEntity(fragment, inputEncoding);
     }
 
-    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException {
         getDelegate().processXmlDeclaration(version, encoding, standalone);
     }
 
