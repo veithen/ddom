@@ -18,6 +18,7 @@ package com.googlecode.ddom.saaj;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -37,6 +38,7 @@ import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
@@ -44,6 +46,8 @@ import javax.xml.soap.SOAPPart;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
@@ -58,6 +62,29 @@ public abstract class SOAPMessageTest {
 
     protected abstract MessageFactory getFactory();
 
+    /**
+     * Tests the behavior of {@link SOAPMessage#getSOAPHeader()} after removing the header from the
+     * message. Note that the SAAJ specification requires the implementation to throw an exception
+     * in this case. However, the reference implementation simply returns <code>null</code>. We
+     * stick to the behavior of the reference implementation.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testGetSOAPHeaderWithNoHeader() throws Exception {
+        SOAPMessage message = getFactory().createMessage();
+        SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+        // Remove the SOAP header (created by default by MessageFactory) using plain DOM methods
+        Node child = envelope.getFirstChild();
+        while (child != null) {
+            if (child instanceof Element && ((Element)child).getLocalName().equals("Header")) {
+                envelope.removeChild(child);
+                break;
+            }
+        }
+        assertNull(message.getSOAPHeader());
+    }
+    
     @Validated @Test
     public void testCreateAttachmentPart() throws Exception {
         SOAPMessage message = getFactory().createMessage();
