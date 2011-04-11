@@ -21,4 +21,5 @@ public interface UnicodeWriter {
     boolean canEncode(int codePoint);
     void write(int codePoint) throws IOException;
     void write(String data) throws IOException;
+    void flushBuffer() throws IOException;
 }

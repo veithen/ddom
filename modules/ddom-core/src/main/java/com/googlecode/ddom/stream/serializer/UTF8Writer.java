@@ -19,10 +19,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class UTF8Writer extends AbstractUnicodeWriter {
-    private final OutputStream out;
-    
     public UTF8Writer(OutputStream out) {
-        this.out = out;
+        super(out);
     }
 
     public boolean canEncode(int codePoint) {
@@ -31,19 +29,19 @@ public class UTF8Writer extends AbstractUnicodeWriter {
 
     public void write(int codePoint) throws IOException {
         if (codePoint < 0x80) {
-            out.write((byte)codePoint);
+            writeByte((byte)codePoint);
         } else if (codePoint < 0x800) {
-            out.write((byte)(0xc0 + (codePoint >> 6)));
-            out.write((byte)(0x80 + (codePoint & 0x3f)));
+            writeByte((byte)(0xc0 + (codePoint >> 6)));
+            writeByte((byte)(0x80 + (codePoint & 0x3f)));
         } else if (codePoint < 0x10000) {
-            out.write((byte)(0xe0 + (codePoint >> 12)));
-            out.write((byte)(0x80 + ((codePoint >> 6) & 0x3f)));
-            out.write((byte)(0x80 + (codePoint & 0x3f)));
+            writeByte((byte)(0xe0 + (codePoint >> 12)));
+            writeByte((byte)(0x80 + ((codePoint >> 6) & 0x3f)));
+            writeByte((byte)(0x80 + (codePoint & 0x3f)));
         } else {
-            out.write((byte)(0xf0 + (codePoint >> 18)));
-            out.write((byte)(0x80 + ((codePoint >> 12) & 0x3f)));
-            out.write((byte)(0x80 + ((codePoint >> 6) & 0x3f)));
-            out.write((byte)(0x80 + (codePoint & 0x3f)));
+            writeByte((byte)(0xf0 + (codePoint >> 18)));
+            writeByte((byte)(0x80 + ((codePoint >> 12) & 0x3f)));
+            writeByte((byte)(0x80 + ((codePoint >> 6) & 0x3f)));
+            writeByte((byte)(0x80 + (codePoint & 0x3f)));
         }
     }
 }

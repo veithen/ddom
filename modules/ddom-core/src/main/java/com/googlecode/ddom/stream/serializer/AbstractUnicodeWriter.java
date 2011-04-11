@@ -16,9 +16,30 @@
 package com.googlecode.ddom.stream.serializer;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 public abstract class AbstractUnicodeWriter implements UnicodeWriter {
-    public void write(String data) throws IOException {
+    private final OutputStream out;
+    private final byte[] buffer = new byte[4096];
+    private int len;
+    
+    public AbstractUnicodeWriter(OutputStream out) {
+        this.out = out;
+    }
+
+    protected final void writeByte(byte b) throws IOException {
+        if (len == buffer.length) {
+            flushBuffer();
+        }
+        buffer[len++] = b;
+    }
+    
+    public final void flushBuffer() throws IOException {
+        out.write(buffer, 0, len);
+        len = 0;
+    }
+
+    public final void write(String data) throws IOException {
         int len = data.length();
         int pos = 0;
         while (pos < len) {

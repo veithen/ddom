@@ -303,5 +303,10 @@ public class Serializer extends SimpleXmlOutput {
 
     @Override
     protected void completed() throws StreamException {
+        try {
+            writer.flushBuffer();
+        } catch (IOException ex) {
+            throw new StreamException(ex);
+        }
     }
 }

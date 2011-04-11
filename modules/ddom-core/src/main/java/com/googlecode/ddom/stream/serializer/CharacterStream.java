@@ -18,6 +18,7 @@ package com.googlecode.ddom.stream.serializer;
 import java.io.IOException;
 import java.io.Writer;
 
+// TODO: we should use a buffer here as well
 public class CharacterStream implements UnicodeWriter {
     private Writer writer;
     
@@ -36,5 +37,8 @@ public class CharacterStream implements UnicodeWriter {
 
     public void write(String data) throws IOException {
         writer.write(data);
+    }
+
+    public void flushBuffer() throws IOException {
     }
 }
