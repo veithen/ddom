@@ -65,8 +65,9 @@ public abstract class SOAPMessageTest {
     /**
      * Tests the behavior of {@link SOAPMessage#getSOAPHeader()} after removing the header from the
      * message. Note that the SAAJ specification requires the implementation to throw an exception
-     * in this case. However, the reference implementation simply returns <code>null</code>. We
-     * stick to the behavior of the reference implementation.
+     * in this case. However, the reference implementation simply returns <code>null</code> (see
+     * also <a href="http://java.net/jira/browse/SAAJ-15">SAAJ-15</a>). We stick to the behavior of
+     * the reference implementation.
      * 
      * @throws Exception
      */
