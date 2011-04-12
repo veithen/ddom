@@ -21,21 +21,71 @@ import com.googlecode.ddom.symbols.SymbolHashTable;
 import com.googlecode.ddom.symbols.Symbols;
 
 public class Parser {
-    private final int STATE_NONE = 1;
+    private final int STATE_CONTENT = 1;
+    
+    /**
+     * The last character was a '&lt;'.
+     */
+    private final int STATE_MARKUP_START = 2;
     
     private final Symbols symbols = new SymbolHashTable();
     private final UnicodeReader reader;
     
+    private int state;
     private char[] nameBuffer = new char[32];
+    private int nameLength;
     
     public Parser(UnicodeReader reader) {
         this.reader = reader;
     }
 
     public void parse() throws IOException {
-        while (true) {
-            int c = reader.read();
-            
+        outer: while (true) {
+            switch (state) {
+                case STATE_CONTENT:
+                    int len = 0;
+                    loop: while (true) {
+                        int c = reader.read();
+                        switch (c) {
+                            case '<':
+                                state = STATE_MARKUP_START;
+                                break loop;
+                            case '&':
+                                
+                        }
+                    }
+                    if (len > 0) {
+                        // TODO: generate event
+                        break outer;
+                    } else {
+                        break;
+                    }
+                case STATE_MARKUP_START:
+                    int c = reader.read();
+                    if (c == '!') {
+                        // TODO
+                    } else if (isNameStartChar(c)) {
+                        do {
+                            appendNameChar(c);
+                            c = reader.read();
+                        } while (isNameChar(c));
+                        
+                    }
+            }
         }
+    }
+    
+    private void appendNameChar(int c) {
+        
+    }
+    
+    private static boolean isNameStartChar(int c) {
+        // TODO
+        return true;
+    }
+    
+    private static boolean isNameChar(int c) {
+        // TODO
+        return true;
     }
 }
