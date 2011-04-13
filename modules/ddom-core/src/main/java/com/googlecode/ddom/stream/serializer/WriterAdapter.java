@@ -19,10 +19,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 // TODO: we should use a buffer here as well
-public class CharacterStream implements UnicodeWriter {
-    private Writer writer;
+public class WriterAdapter implements UnicodeWriter {
+    private final Writer writer;
     
-    public CharacterStream(Writer writer) {
+    public WriterAdapter(Writer writer) {
         this.writer = writer;
     }
 

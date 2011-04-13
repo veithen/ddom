@@ -16,11 +16,19 @@
 package com.googlecode.ddom.stream.parser;
 
 import java.io.IOException;
+import java.io.StringReader;
 
+import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.serializer.Serializer;
 import com.googlecode.ddom.symbols.SymbolHashTable;
 import com.googlecode.ddom.symbols.Symbols;
 
-public class Parser {
+public class Parser extends XmlInput {
+    private final int STATE_START_DOCUMENT = 0;
+    
     private final int STATE_CONTENT = 1;
     
     /**
@@ -30,19 +38,26 @@ public class Parser {
     
     private final Symbols symbols = new SymbolHashTable();
     private final UnicodeReader reader;
+    private final boolean namespaceAware;
+    private ElementHandler elementHandler;
     
-    private int state;
+    private int state = STATE_START_DOCUMENT;
     private int nextChar = -2;
     private char[] nameBuffer = new char[32];
     private int nameLength;
     
-    public Parser(UnicodeReader reader) {
+    public Parser(UnicodeReader reader, boolean namespaceAware) {
         this.reader = reader;
+        this.namespaceAware = namespaceAware;
     }
 
-    private int peek() throws IOException {
+    private int peek() throws StreamException {
         if (nextChar == -2) {
-            nextChar = reader.read();
+            try {
+                nextChar = reader.read();
+            } catch (IOException ex) {
+                throw new StreamException(ex);
+            }
         }
         return nextChar;
     }
@@ -51,43 +66,48 @@ public class Parser {
         nextChar = -2;
     }
     
-    public void parse() throws IOException {
-        outer: while (true) {
-            switch (state) {
-                case STATE_CONTENT:
-                    int len = 0;
-                    loop: while (true) {
-                        int c = reader.read();
-                        switch (c) {
-                            case '<':
-                                state = STATE_MARKUP_START;
-                                break loop;
-                            case '&':
-                                
-                        }
-                    }
-                    if (len > 0) {
-                        // TODO: generate event
-                        break outer;
-                    } else {
-                        break;
-                    }
-                case STATE_MARKUP_START:
-                    int c = reader.read();
-                    if (c == '!') {
-                        // TODO
-                    } else if (isNameStartChar(c)) {
-                        do {
-                            appendNameChar(c);
-                            c = reader.read();
-                        } while (isNameChar(c));
-                        
-                    }
+    private int read() throws StreamException {
+        if (nextChar != -2) {
+            int c = nextChar;
+            nextChar = -2;
+            return c;
+        } else {
+            try {
+                return reader.read();
+            } catch (IOException ex) {
+                throw new StreamException(ex);
             }
         }
     }
     
-    private void parseMarkup() throws IOException {
+    @Override
+    protected void proceed(boolean flush) throws StreamException {
+        switch (state) {
+            case STATE_START_DOCUMENT:
+                XmlHandler handler = getHandler();
+                elementHandler = namespaceAware ? new NSAwareElementHandler(symbols, handler) : new NSUnawareElementHandler(symbols, handler);
+                handler.startEntity(false, null); // TODO
+                state = STATE_CONTENT;
+                break;
+            case STATE_CONTENT:
+                parseContent();
+                
+            case STATE_MARKUP_START:
+        }
+    }
+    
+    private void parseContent() throws StreamException {
+        while (true) {
+            int c = peek();
+            switch (c) {
+                case '<':
+                    consume();
+                    parseMarkup();
+            }
+        }
+    }
+    
+    private void parseMarkup() throws StreamException {
         int c = peek();
         switch (c) {
             case '!':
@@ -97,7 +117,16 @@ public class Parser {
             case '?':
                 consume();
                 parsePI();
+                break;
+            default:
+                parseStartElement();
         }
+    }
+    
+    private void parseStartElement() throws StreamException {
+        parseName();
+        // TODO: consume spaces
+        elementHandler.handleStartElement(nameBuffer, nameLength);
     }
     
     private void parseCDATASection() {
@@ -108,8 +137,28 @@ public class Parser {
         
     }
     
+    private void parseName() throws StreamException {
+        int c = peek();
+        if (isNameStartChar(c)) {
+            do {
+                consume();
+                appendNameChar(c);
+                c = peek();
+            } while (isNameChar(c));
+        } else {
+            throw new StreamException("Expected NameStartChar");
+        }
+    }
+    
     private void appendNameChar(int c) {
-        
+        // TODO: incorrect for supplemental characters
+        if (nameLength == nameBuffer.length) {
+            char[] newCharBuffer = new char[nameBuffer.length*2];
+            System.arraycopy(nameBuffer, 0, newCharBuffer, 0, nameBuffer.length);
+            nameBuffer = newCharBuffer;
+        }
+        // TODO: handle supplemental characters here
+        nameBuffer[nameLength++] = (char)c;
     }
     
     /**
@@ -238,5 +287,14 @@ public class Parser {
         } else {
             return false;
         }
+    }
+    
+    @Override
+    public void dispose() {
+        // TODO
+    }
+
+    public static void main(String[] args) throws Exception {
+        new Stream(new Parser(new ReaderAdapter(new StringReader("<root>text</root>")), false), new Serializer(System.out, "UTF-8")).flush();
     }
 }

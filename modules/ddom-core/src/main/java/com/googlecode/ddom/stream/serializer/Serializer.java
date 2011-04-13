@@ -35,7 +35,7 @@ public class Serializer extends SimpleXmlOutput {
     private int state = STATE_CONTENT;
     
     public Serializer(Writer writer) {
-        this.writer = new CharacterStream(writer);
+        this.writer = new WriterAdapter(writer);
     }
 
     public Serializer(OutputStream out, String encoding) throws UnsupportedEncodingException {
