@@ -87,7 +87,24 @@ public class Parser {
         }
     }
     
-    private void parseMarkup() {
+    private void parseMarkup() throws IOException {
+        int c = peek();
+        switch (c) {
+            case '!':
+                consume();
+                parseCDATASection();
+                break;
+            case '?':
+                consume();
+                parsePI();
+        }
+    }
+    
+    private void parseCDATASection() {
+        
+    }
+    
+    private void parsePI() {
         
     }
     
