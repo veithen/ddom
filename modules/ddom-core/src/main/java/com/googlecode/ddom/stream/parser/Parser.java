@@ -32,9 +32,9 @@ public class Parser extends XmlInput {
     private final int STATE_CONTENT = 1;
     
     /**
-     * The last character was a '&lt;'.
+     * Parsing the attributes of a start tag.
      */
-    private final int STATE_MARKUP_START = 2;
+    private final int STATE_START_ELEMENT = 2;
     
     private final Symbols symbols = new SymbolHashTable();
     private final UnicodeReader reader;
@@ -45,6 +45,10 @@ public class Parser extends XmlInput {
     private int nextChar = -2;
     private char[] nameBuffer = new char[32];
     private int nameLength;
+    
+    // TODO: replace by something more sophisticated
+    private char[] textBuffer = new char[4096];
+    private int textLength;
     
     public Parser(UnicodeReader reader, boolean namespaceAware) {
         this.reader = reader;
@@ -80,6 +84,12 @@ public class Parser extends XmlInput {
         }
     }
     
+    private void skipWhitespace() throws StreamException {
+        while (isWhitespace(peek())) {
+            consume();
+        }
+    }
+    
     @Override
     protected void proceed(boolean flush) throws StreamException {
         switch (state) {
@@ -91,8 +101,10 @@ public class Parser extends XmlInput {
                 break;
             case STATE_CONTENT:
                 parseContent();
-                
-            case STATE_MARKUP_START:
+                break;
+            case STATE_START_ELEMENT:
+                parseAttribute();
+                break;
         }
     }
     
@@ -101,9 +113,37 @@ public class Parser extends XmlInput {
             int c = peek();
             switch (c) {
                 case '<':
+                    if (flushText()) {
+                        return;
+                    } else {
+                        consume();
+                        parseMarkup();
+                        return;
+                    }
+                case -1:
+                    // TODO: check depth!
+                    if (flushText()) {
+                        return;
+                    } else {
+                        getHandler().completed();
+                        return;
+                    }
+                default:
                     consume();
-                    parseMarkup();
+                    // TODO: check buffer overflow
+                    // TODO: handle supplemental characters
+                    textBuffer[textLength++] = (char)c;
             }
+        }
+    }
+    
+    private boolean flushText() throws StreamException {
+        if (textLength > 0) {
+            getHandler().processCharacterData(new String(textBuffer, 0, textLength), false);
+            textLength = 0;
+            return true;
+        } else {
+            return false;
         }
     }
     
@@ -118,6 +158,10 @@ public class Parser extends XmlInput {
                 consume();
                 parsePI();
                 break;
+            case '/':
+                consume();
+                parseEndElement();
+                break;
             default:
                 parseStartElement();
         }
@@ -125,8 +169,35 @@ public class Parser extends XmlInput {
     
     private void parseStartElement() throws StreamException {
         parseName();
-        // TODO: consume spaces
         elementHandler.handleStartElement(nameBuffer, nameLength);
+        nameLength = 0;
+        state = STATE_START_ELEMENT;
+    }
+    
+    private void parseAttribute() throws StreamException {
+        skipWhitespace();
+        int c = peek();
+        if (c == '>') {
+            consume();
+            elementHandler.attributesCompleted();
+            state = STATE_CONTENT;
+        } else if (isNameStartChar(c)) {
+            // TODO
+        } else {
+            throw new StreamException("Expected attribute");
+        }
+    }
+    
+    private void parseEndElement() throws StreamException {
+        parseName();
+        // There may be whitespace after the name:  ETag ::= '</' Name S? '>
+        skipWhitespace();
+        if (read() != '>') {
+            throw new StreamException("Expected '>'");
+        }
+        elementHandler.handleEndElement(nameBuffer, nameLength);
+        nameLength = 0;
+        state = STATE_CONTENT;
     }
     
     private void parseCDATASection() {
@@ -287,6 +358,18 @@ public class Parser extends XmlInput {
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Check whether the given character is whitespace as defined by the <tt>S</tt> production in
+     * the XML spec.
+     * 
+     * @param c
+     *            the character to check
+     * @return <code>true</code> if the character is whitespace, <code>false</code> otherwise
+     */
+    private boolean isWhitespace(int c) {
+        return c == 0x20 || c == 0x9 || c == 0xD || c == 0xA;
     }
     
     @Override

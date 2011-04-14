@@ -24,20 +24,29 @@ class NSUnawareElementHandler extends ElementHandler {
         super(symbols, handler);
     }
 
+    @Override
     void handleStartElement(char[] name, int len) throws StreamException {
         handler.startElement(symbols.getSymbol(name, 0, len));
     }
 
+    @Override
     void handleStartAttribute(char[] name, int len) throws StreamException {
         handler.startElement(symbols.getSymbol(name, 0, len));
     }
     
+    @Override
     void handleEndAttribute() throws StreamException {
         handler.endElement();
     }
 
-    void handleEndElement(char[] name, int len) {
-        // TODO
-        throw new UnsupportedOperationException();
+    @Override
+    void attributesCompleted() throws StreamException {
+        handler.attributesCompleted();
+    }
+
+    @Override
+    void handleEndElement(char[] name, int len) throws StreamException {
+        // TODO: check that element name matches
+        handler.endElement();
     }
 }

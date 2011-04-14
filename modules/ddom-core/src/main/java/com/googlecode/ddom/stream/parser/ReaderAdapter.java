@@ -35,6 +35,8 @@ public class ReaderAdapter implements UnicodeReader {
             if (count == -1) {
                 len = 0;
                 return -1;
+            } else {
+                len = count;
             }
         }
         return buffer[pos++];

@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.stream.parser;
 
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.symbols.Symbols;
 
@@ -51,6 +52,15 @@ class NSAwareElementHandler extends ElementHandler {
      * @see com.googlecode.ddom.stream.parser.ElementHandler#handleStartElement(char[], int)
      */
     void handleStartElement(char[] name, int len) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /* (non-Javadoc)
+     * @see com.googlecode.ddom.stream.parser.ElementHandler#attributesCompleted()
+     */
+    @Override
+    void attributesCompleted() throws StreamException {
         // TODO
         throw new UnsupportedOperationException();
     }
