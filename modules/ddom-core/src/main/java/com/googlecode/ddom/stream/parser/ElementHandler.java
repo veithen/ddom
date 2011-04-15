@@ -30,7 +30,7 @@ abstract class ElementHandler {
     
     abstract void handleStartElement(char[] name, int len) throws StreamException;
     abstract void handleStartAttribute(char[] name, int len) throws StreamException;
-//    void handleCharacterData();
+    abstract void handleCharacterData(String data) throws StreamException;
     abstract void handleEndAttribute() throws StreamException;
     abstract void attributesCompleted() throws StreamException;
     abstract void handleEndElement(char[] name, int len) throws StreamException;

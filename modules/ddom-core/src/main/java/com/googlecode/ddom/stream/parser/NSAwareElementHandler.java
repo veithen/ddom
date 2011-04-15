@@ -18,51 +18,132 @@ package com.googlecode.ddom.stream.parser;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.symbols.Symbols;
+import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 
-class NSAwareElementHandler extends ElementHandler {
+final class NSAwareElementHandler extends ElementHandler {
+    static class Attribute {
+        boolean isNamespaceDeclaration;
+        String prefix;
+        String localName;
+        String value;
+    }
+    
+    private final ScopedNamespaceContext context = new ScopedNamespaceContext();
+    private final String xmlnsSymbol;
+    private String prefix;
+    private String localName;
+    private Attribute[] attributes = new Attribute[16];
+    private int attributeCount;
+    
     NSAwareElementHandler(Symbols symbols, XmlHandler handler) {
         super(symbols, handler);
+        xmlnsSymbol = symbols.getSymbol("xmlns");
     }
 
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.parser.ElementHandler#handleEndAttribute()
-     */
-    void handleEndAttribute() {
-        // TODO
-        throw new UnsupportedOperationException();
+    private int searchColon(char[] name, int len) {
+        for (int i=0; i<len; i++) {
+            if (name[i] == ':') {
+                return i;
+            }
+        }
+        return -1;
     }
-
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.parser.ElementHandler#handleEndElement(char[], int)
-     */
-    void handleEndElement(char[] name, int len) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.parser.ElementHandler#handleStartAttribute(char[], int)
-     */
-    void handleStartAttribute(char[] name, int len) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.parser.ElementHandler#handleStartElement(char[], int)
-     */
+    
+    @Override
     void handleStartElement(char[] name, int len) {
-        // TODO
-        throw new UnsupportedOperationException();
+        int idx = searchColon(name, len);
+        if (idx == -1) {
+            prefix = "";
+            localName = symbols.getSymbol(name, 0, len);
+        } else {
+            prefix = symbols.getSymbol(name, 0, idx);
+            localName = symbols.getSymbol(name, idx+1, len-idx-1);
+        }
+        attributeCount = 0;
+        context.startScope();
     }
 
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.parser.ElementHandler#attributesCompleted()
-     */
+    @Override
+    void handleStartAttribute(char[] name, int len) {
+        if (attributes.length == attributeCount) {
+            Attribute[] newAttributes = new Attribute[attributeCount*2];
+            System.arraycopy(attributes, 0, newAttributes, 0, attributeCount);
+            attributes = newAttributes;
+        }
+        Attribute att = attributes[attributeCount];
+        if (att == null) {
+            att = new Attribute();
+            attributes[attributeCount] = att;
+        }
+        int idx = searchColon(name, len);
+        if (idx == -1) {
+            att.prefix = "";
+            String localName = symbols.getSymbol(name, 0, len);
+            if (localName == xmlnsSymbol) {
+                att.isNamespaceDeclaration = true;
+            } else {
+                att.isNamespaceDeclaration = false;
+                att.localName = localName;
+            }
+        } else {
+            String prefix = symbols.getSymbol(name, 0, idx);
+            String localName = symbols.getSymbol(name, idx+1, len-idx-1);
+            if (prefix == xmlnsSymbol) {
+                att.isNamespaceDeclaration = true;
+                att.prefix = localName;
+            } else {
+                att.isNamespaceDeclaration = false;
+                att.prefix = prefix;
+                att.localName = localName;
+            }
+        }
+    }
+
+    @Override
+    void handleCharacterData(String data) throws StreamException {
+        // TODO
+        attributes[attributeCount].value = data;
+    }
+
+    @Override
+    void handleEndAttribute() {
+        attributeCount++;
+    }
+
+    private String resolvePrefix(String prefix) throws StreamException {
+        String namespaceURI = context.getNamespaceURI(prefix);
+        if (prefix.length() > 0 && namespaceURI.length() == 0) {
+            throw new StreamException("Unbound prefix '" + prefix + "'");
+        }
+        return namespaceURI;
+    }
+    
     @Override
     void attributesCompleted() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        for (int i=0; i<attributeCount; i++) {
+            Attribute att = attributes[i];
+            if (att.isNamespaceDeclaration) {
+                context.setPrefix(att.prefix, att.value);
+            }
+        }
+        handler.startElement(resolvePrefix(prefix), localName, prefix);
+        for (int i=0; i<attributeCount; i++) {
+            Attribute att = attributes[i];
+            if (att.isNamespaceDeclaration) {
+                handler.startNamespaceDeclaration(att.prefix);
+            } else {
+                handler.startAttribute(resolvePrefix(att.prefix), att.localName, att.prefix, "CDATA");
+            }
+            handler.processCharacterData(att.value, false);
+            handler.endAttribute();
+        }
+        handler.attributesCompleted();
     }
 
+    @Override
+    void handleEndElement(char[] name, int len) throws StreamException {
+        // TODO: check that element name matches
+        handler.endElement();
+        context.endScope();
+    }
 }

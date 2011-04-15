@@ -16,6 +16,8 @@
 package com.googlecode.ddom.stream.parser;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
 
 import com.googlecode.ddom.stream.Stream;
@@ -27,17 +29,28 @@ import com.googlecode.ddom.symbols.SymbolHashTable;
 import com.googlecode.ddom.symbols.Symbols;
 
 public class Parser extends XmlInput {
-    private final int STATE_START_DOCUMENT = 0;
+    private static final int STATE_START_DOCUMENT = 0;
     
-    private final int STATE_CONTENT = 1;
+    private static final int STATE_DOCUMENT_CONTENT = 1;
+    
+    /**
+     * Parsing the content of an element.
+     */
+    private static final int STATE_ELEMENT_CONTENT = 2;
     
     /**
      * Parsing the attributes of a start tag.
      */
-    private final int STATE_START_ELEMENT = 2;
+    private static final int STATE_START_ELEMENT = 3;
+    
+    /**
+     * Parsing the content of an attribute.
+     */
+    private static final int STATE_ATTRIBUTE_CONTENT = 4;
     
     private final Symbols symbols = new SymbolHashTable();
     private final UnicodeReader reader;
+    private String inputEncoding;
     private final boolean namespaceAware;
     private ElementHandler elementHandler;
     
@@ -45,13 +58,27 @@ public class Parser extends XmlInput {
     private int nextChar = -2;
     private char[] nameBuffer = new char[32];
     private int nameLength;
+    private int quoteChar;
     
     // TODO: replace by something more sophisticated
     private char[] textBuffer = new char[4096];
     private int textLength;
     
-    public Parser(UnicodeReader reader, boolean namespaceAware) {
-        this.reader = reader;
+    public Parser(Reader reader, boolean namespaceAware) {
+        this.reader = new ReaderAdapter(reader);
+        this.namespaceAware = namespaceAware;
+    }
+    
+    public Parser(InputStream in, String inputEncoding, boolean namespaceAware) {
+        this.inputEncoding = inputEncoding;
+        if (inputEncoding == null || inputEncoding.equalsIgnoreCase("utf-8")) {
+            reader = new UTF8Reader(in);
+        } else if (inputEncoding.equalsIgnoreCase("ascii")) {
+            reader = new ASCIIReader(in);
+        } else {
+            // TODO
+            throw new UnsupportedOperationException();
+        }
         this.namespaceAware = namespaceAware;
     }
 
@@ -94,26 +121,34 @@ public class Parser extends XmlInput {
     protected void proceed(boolean flush) throws StreamException {
         switch (state) {
             case STATE_START_DOCUMENT:
+                // TODO: need to implement encoding detection here
                 XmlHandler handler = getHandler();
                 elementHandler = namespaceAware ? new NSAwareElementHandler(symbols, handler) : new NSUnawareElementHandler(symbols, handler);
                 handler.startEntity(false, null); // TODO
-                state = STATE_CONTENT;
+                state = STATE_DOCUMENT_CONTENT;
                 break;
-            case STATE_CONTENT:
-                parseContent();
+            case STATE_ELEMENT_CONTENT:
+                parseElementContent();
                 break;
             case STATE_START_ELEMENT:
                 parseAttribute();
                 break;
+            case STATE_ATTRIBUTE_CONTENT:
+                parseAttributeContent();
+                break;
         }
     }
     
-    private void parseContent() throws StreamException {
+    private void parseDocumentContent() throws StreamException {
+        
+    }
+    
+    private void parseElementContent() throws StreamException {
         while (true) {
             int c = peek();
             switch (c) {
                 case '<':
-                    if (flushText()) {
+                    if (flushText(false)) {
                         return;
                     } else {
                         consume();
@@ -122,7 +157,7 @@ public class Parser extends XmlInput {
                     }
                 case -1:
                     // TODO: check depth!
-                    if (flushText()) {
+                    if (flushText(false)) {
                         return;
                     } else {
                         getHandler().completed();
@@ -130,16 +165,56 @@ public class Parser extends XmlInput {
                     }
                 default:
                     consume();
-                    // TODO: check buffer overflow
-                    // TODO: handle supplemental characters
-                    textBuffer[textLength++] = (char)c;
+                    processCharacterData(c);
             }
         }
     }
     
-    private boolean flushText() throws StreamException {
+    private void parseAttributeContent() throws StreamException {
+        while (true) {
+            int c = peek();
+            switch (c) {
+                case '<':
+                    throw new StreamException("'<' not allowed in attribute value");
+                case -1:
+                    throw new StreamException("Unexpected end of stream in attribute value");
+                case 0xD:
+                case 0xA:
+                case 0x9:
+                    consume();
+                    processCharacterData(0x20);
+                    break;
+                default:
+                    if (c == quoteChar) {
+                        if (flushText(true)) {
+                            return;
+                        } else {
+                            consume();
+                            elementHandler.handleEndAttribute();
+                            state = STATE_START_ELEMENT;
+                            return;
+                        }
+                    } else {
+                        consume();
+                        processCharacterData(c);
+                    }
+            }
+        }
+    }
+    
+    private void processCharacterData(int c) {
+        // TODO: check buffer overflow
+        // TODO: handle supplemental characters
+        textBuffer[textLength++] = (char)c;
+    }
+    
+    private boolean flushText(boolean attributeContent) throws StreamException {
         if (textLength > 0) {
-            getHandler().processCharacterData(new String(textBuffer, 0, textLength), false);
+            if (attributeContent) {
+                elementHandler.handleCharacterData(new String(textBuffer, 0, textLength));
+            } else {
+                getHandler().processCharacterData(new String(textBuffer, 0, textLength), false);
+            }
             textLength = 0;
             return true;
         } else {
@@ -180,9 +255,24 @@ public class Parser extends XmlInput {
         if (c == '>') {
             consume();
             elementHandler.attributesCompleted();
-            state = STATE_CONTENT;
+            state = STATE_ELEMENT_CONTENT;
         } else if (isNameStartChar(c)) {
-            // TODO
+            parseName();
+            // Whitespace is allowed here:
+            //  Attribute ::= Name Eq AttValue
+            //  Eq ::= S? '=' S?
+            skipWhitespace();
+            if (read() != '=') {
+                throw new StreamException("Expected '='");
+            }
+            skipWhitespace();
+            quoteChar = read();
+            if (quoteChar != '\'' && quoteChar != '\"') {
+                throw new StreamException("Expected quote");
+            }
+            elementHandler.handleStartAttribute(nameBuffer, nameLength);
+            nameLength = 0;
+            state = STATE_ATTRIBUTE_CONTENT;
         } else {
             throw new StreamException("Expected attribute");
         }
@@ -197,7 +287,7 @@ public class Parser extends XmlInput {
         }
         elementHandler.handleEndElement(nameBuffer, nameLength);
         nameLength = 0;
-        state = STATE_CONTENT;
+        state = STATE_ELEMENT_CONTENT;
     }
     
     private void parseCDATASection() {
@@ -378,6 +468,6 @@ public class Parser extends XmlInput {
     }
 
     public static void main(String[] args) throws Exception {
-        new Stream(new Parser(new ReaderAdapter(new StringReader("<root>text</root>")), false), new Serializer(System.out, "UTF-8")).flush();
+        new Stream(new Parser(new StringReader("<root attr=\"value\">text</root>"), true), new Serializer(System.out, "UTF-8")).flush();
     }
 }

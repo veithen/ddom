@@ -19,7 +19,7 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.symbols.Symbols;
 
-class NSUnawareElementHandler extends ElementHandler {
+final class NSUnawareElementHandler extends ElementHandler {
     public NSUnawareElementHandler(Symbols symbols, XmlHandler handler) {
         super(symbols, handler);
     }
@@ -31,12 +31,17 @@ class NSUnawareElementHandler extends ElementHandler {
 
     @Override
     void handleStartAttribute(char[] name, int len) throws StreamException {
-        handler.startElement(symbols.getSymbol(name, 0, len));
+        handler.startAttribute(symbols.getSymbol(name, 0, len), "CDATA");
     }
     
     @Override
+    void handleCharacterData(String data) throws StreamException {
+        handler.processCharacterData(data, false);
+    }
+
+    @Override
     void handleEndAttribute() throws StreamException {
-        handler.endElement();
+        handler.endAttribute();
     }
 
     @Override
