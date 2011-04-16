@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serviceGroup>
-    <service name="plain">
+    <service name="plain" scope="application">
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.sosnoski.ws.seismic.adb.SeismicAdbMessageReceiverInOut"/>
         </messageReceivers>
@@ -12,7 +12,7 @@
             <outputActionMapping>http://ws.sosnoski.com/seismic/wsdl/SeismicInterface/matchQuakesResponse</outputActionMapping>
         </operation>
     </service>
-    <service name="sign">
+    <service name="sign" scope="application">
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.sosnoski.ws.seismic.adb.SeismicAdbMessageReceiverInOut"/>
         </messageReceivers>
@@ -36,7 +36,7 @@
             </ramp:signatureCrypto>
         </ramp:RampartConfig>
     </service>
-    <service name="username">
+    <service name="username" scope="application">
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.sosnoski.ws.seismic.adb.SeismicAdbMessageReceiverInOut"/>
         </messageReceivers>
