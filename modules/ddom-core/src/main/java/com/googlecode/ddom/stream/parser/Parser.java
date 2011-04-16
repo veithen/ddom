@@ -15,10 +15,10 @@
  */
 package com.googlecode.ddom.stream.parser;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.StringReader;
 
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
@@ -34,22 +34,48 @@ public class Parser extends XmlInput {
     private static final int STATE_DOCUMENT_CONTENT = 1;
     
     /**
+     * The last character was a '&lt;'.
+     */
+    private static final int STATE_MARKUP = 2;
+    
+    /**
      * Parsing the content of an element.
      */
-    private static final int STATE_ELEMENT_CONTENT = 2;
+    private static final int STATE_ELEMENT_CONTENT = 3;
     
     /**
      * Parsing the attributes of a start tag.
      */
-    private static final int STATE_START_ELEMENT = 3;
+    private static final int STATE_START_ELEMENT = 4;
+    
+    /**
+     * An empty element was encountered, but {@link XmlHandler#endElement()} has not been invoked
+     * yet.
+     */
+    private static final int STATE_EMPTY_ELEMENT = 5;
     
     /**
      * Parsing the content of an attribute.
      */
-    private static final int STATE_ATTRIBUTE_CONTENT = 4;
+    private static final int STATE_ATTRIBUTE_CONTENT = 6;
+    
+    /**
+     * Parsing the content of a comment.
+     */
+    private static final int STATE_COMMENT_CONTENT = 7;
+    
+    /**
+     * Parsing the content of a processing instruction.
+     */
+    private static final int STATE_PI_CONTENT = 8;
+    
+    /**
+     * Parsing the content of a CDATA section.
+     */
+    private static final int STATE_CDATA_SECTION_CONTENT = 9;
     
     private final Symbols symbols = new SymbolHashTable();
-    private final UnicodeReader reader;
+    private UnicodeReader reader;
     private String inputEncoding;
     private final boolean namespaceAware;
     private ElementHandler elementHandler;
@@ -71,10 +97,13 @@ public class Parser extends XmlInput {
     
     public Parser(InputStream in, String inputEncoding, boolean namespaceAware) {
         this.inputEncoding = inputEncoding;
+        // TODO: extract the encoding detection logic because it also appears in parseXmlDeclaration
         if (inputEncoding == null || inputEncoding.equalsIgnoreCase("utf-8")) {
             reader = new UTF8Reader(in);
         } else if (inputEncoding.equalsIgnoreCase("ascii")) {
             reader = new ASCIIReader(in);
+        } else if (inputEncoding.equalsIgnoreCase("iso-8859-1")) {
+            reader = new Latin1Reader(in);
         } else {
             // TODO
             throw new UnsupportedOperationException();
@@ -124,19 +153,150 @@ public class Parser extends XmlInput {
                 // TODO: need to implement encoding detection here
                 XmlHandler handler = getHandler();
                 elementHandler = namespaceAware ? new NSAwareElementHandler(symbols, handler) : new NSUnawareElementHandler(symbols, handler);
-                handler.startEntity(false, null); // TODO
-                state = STATE_DOCUMENT_CONTENT;
+                parseStartDocument();
                 break;
+            case STATE_MARKUP:
+                parseMarkup();
+                break;
+            case STATE_DOCUMENT_CONTENT: // TODO
             case STATE_ELEMENT_CONTENT:
                 parseElementContent();
                 break;
             case STATE_START_ELEMENT:
                 parseAttribute();
                 break;
+            case STATE_EMPTY_ELEMENT:
+                elementHandler.handleEndElement(null, 0); // TODO
+                state = STATE_ELEMENT_CONTENT; // TODO: not always correct
+                break;
             case STATE_ATTRIBUTE_CONTENT:
                 parseAttributeContent();
                 break;
+            case STATE_COMMENT_CONTENT:
+                parseDelimitedContent("-->", 2);
+                break;
+            case STATE_PI_CONTENT:
+                parseDelimitedContent("?>", -1);
+                break;
+            case STATE_CDATA_SECTION_CONTENT:
+                parseDelimitedContent("]]>", -1);
+                break;
         }
+    }
+    
+    private void parseStartDocument() throws StreamException {
+        int c = peek();
+        if (c == '<') {
+            consume();
+            c = peek();
+            if (c == '?') {
+                consume();
+                // TODO: the document may also start with a processing instruction that is not an XML declaration
+                parseXmlDeclaration();
+                state = STATE_DOCUMENT_CONTENT;
+            } else {
+                getHandler().startEntity(false, inputEncoding);
+                state = STATE_MARKUP;
+            }
+        } else {
+            getHandler().startEntity(false, inputEncoding);
+            state = STATE_DOCUMENT_CONTENT;
+        }
+    }
+    
+    private void parseXmlDeclaration() throws StreamException {
+        // XMLDecl      ::= '<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
+        // VersionInfo  ::= S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
+        // Eq           ::= S? '=' S?
+        // VersionNum   ::= '1.' [0-9]+
+        // EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
+        // SDDecl       ::= S 'standalone' Eq (("'" ('yes' | 'no') "'") | ('"' ('yes' | 'no') '"'))
+        parseName();
+        if (checkName("xml")) {
+            skipWhitespace();
+            parseName();
+            if (!checkName("version")) {
+                throw new StreamException("Expected 'version' pseudo-attribute");
+            }
+            String version = parsePseudoAttribute();
+            String encoding;
+            String standalone;
+            skipWhitespace();
+            if (peek() == '?') {
+                consume();
+                encoding = null;
+                standalone = null;
+            } else {
+                parseName();
+                if (checkName("encoding")) {
+                    encoding = parsePseudoAttribute();
+                    skipWhitespace();
+                    if (peek() == '?') {
+                        standalone = null;
+                    } else {
+                        parseName();
+                        if (!checkName("standalone")) {
+                            throw new StreamException("Unexpected pseudo attribute");
+                        }
+                        standalone = parsePseudoAttribute();
+                    }
+                } else if (checkName("standalone")) {
+                    encoding = null;
+                    standalone = parsePseudoAttribute();
+                } else {
+                    throw new StreamException("Unexpected pseudo attribute");
+                }
+                skipWhitespace();
+                if (read() != '?') {
+                    throw new StreamException("Expected '?'");
+                }
+            }
+            if (read() != '>') {
+                throw new StreamException("Expected '>'");
+            }
+            if (inputEncoding == null && reader instanceof ByteStreamUnicodeReader) {
+                if (encoding == null) {
+                    inputEncoding = "UTF-8";
+                } else {
+                    inputEncoding = encoding.toUpperCase(); // TODO: quick & dirty hack for compatibility with Woodstox
+                    if (encoding.equalsIgnoreCase("utf-8")) {
+                        // Do nothing: we use an UTF8Reader by default
+                    } else if (encoding.equalsIgnoreCase("ascii")) {
+                        reader = new ASCIIReader((ByteStreamUnicodeReader)reader);
+                    } else if (encoding.equalsIgnoreCase("iso-8859-1")) {
+                        reader = new Latin1Reader((ByteStreamUnicodeReader)reader);
+                    } else {
+                        // TODO
+                        throw new UnsupportedOperationException();
+                    }
+                }
+            }
+            getHandler().startEntity(false, inputEncoding);
+            getHandler().processXmlDeclaration(version, encoding, standalone == null ? null : Boolean.valueOf(standalone.equals("yes")));
+        } else {
+            throw new StreamException("Expected XML declaration");
+        }
+    }
+    
+    private String parsePseudoAttribute() throws StreamException {
+        StringBuilder buffer = new StringBuilder();
+        skipWhitespace();
+        if (read() != '=') {
+            throw new StreamException("Expected '='");
+        }
+        skipWhitespace();
+        int quoteChar = read();
+        if (quoteChar != '\'' && quoteChar != '"') {
+            throw new StreamException("Expected quote");
+        }
+        int c;
+        while ((c = read()) != quoteChar) {
+            if (c < 32 || c >= 128) {
+                throw new StreamException("Illegal character in XML declaration pseudo attribute");
+            }
+            buffer.append((char)c);
+        }
+        return buffer.toString();
     }
     
     private void parseDocumentContent() throws StreamException {
@@ -163,8 +323,18 @@ public class Parser extends XmlInput {
                         getHandler().completed();
                         return;
                     }
+                case 0xD:
+                    // TODO: also implement this case for other types of content
+                    consume();
+                    if (peek() == 0xA) {
+                        consume();
+                    }
+                    processCharacterData(0xA); // TODO: actually code unit;
+                    break;
                 default:
                     consume();
+                    // TODO: The character sequence "]]>" must not appear in content unless used to mark the end of a CDATA section.
+                    // CharData ::= [^<&]* - ([^<&]* ']]>' [^<&]*)
                     processCharacterData(c);
             }
         }
@@ -227,7 +397,7 @@ public class Parser extends XmlInput {
         switch (c) {
             case '!':
                 consume();
-                parseCDATASection();
+                parseCommentOrCDATASection();
                 break;
             case '?':
                 consume();
@@ -245,7 +415,6 @@ public class Parser extends XmlInput {
     private void parseStartElement() throws StreamException {
         parseName();
         elementHandler.handleStartElement(nameBuffer, nameLength);
-        nameLength = 0;
         state = STATE_START_ELEMENT;
     }
     
@@ -256,6 +425,13 @@ public class Parser extends XmlInput {
             consume();
             elementHandler.attributesCompleted();
             state = STATE_ELEMENT_CONTENT;
+        } else if (c == '/') {
+            consume();
+            if (read() != '>') {
+                throw new StreamException("Expected '>'");
+            }
+            elementHandler.attributesCompleted();
+            state = STATE_EMPTY_ELEMENT;
         } else if (isNameStartChar(c)) {
             parseName();
             // Whitespace is allowed here:
@@ -271,10 +447,9 @@ public class Parser extends XmlInput {
                 throw new StreamException("Expected quote");
             }
             elementHandler.handleStartAttribute(nameBuffer, nameLength);
-            nameLength = 0;
             state = STATE_ATTRIBUTE_CONTENT;
         } else {
-            throw new StreamException("Expected attribute");
+            throw new StreamException("Expected start of attribute, but found '" + (char)c + "'");
         }
     }
     
@@ -286,24 +461,119 @@ public class Parser extends XmlInput {
             throw new StreamException("Expected '>'");
         }
         elementHandler.handleEndElement(nameBuffer, nameLength);
-        nameLength = 0;
         state = STATE_ELEMENT_CONTENT;
     }
     
-    private void parseCDATASection() {
-        
+    private void parseCommentOrCDATASection() throws StreamException {
+        if (peek() == '-') {
+            parseComment();
+        } else {
+            parseCDATASection();
+        }
     }
     
-    private void parsePI() {
-        
+    private void parseComment() throws StreamException {
+        for (int i=0; i<2; i++) {
+            if (read() != '-') {
+                throw new StreamException("Expected '-'");
+            }
+        }
+        getHandler().startComment();
+        state = STATE_COMMENT_CONTENT;
+    }
+    
+    private void parseCDATASection() throws StreamException {
+        if (read() != '[') {
+            throw new StreamException("Invalid start of CDATA section");
+        }
+        parseName();
+        if (!checkName("CDATA")) {
+            throw new StreamException("Expected CDATA, but got '" + new String(nameBuffer, 0, nameLength) + "'");
+        }
+        if (read() != '[') {
+            throw new StreamException("Invalid start of CDATA section");
+        }
+        getHandler().startCDATASection();
+        state = STATE_CDATA_SECTION_CONTENT;
+    }
+    
+    private void parsePI() throws StreamException {
+        parseName();
+        if (!isWhitespace(read())) {
+            throw new StreamException("Illegal start of processing instruction");
+        }
+        // TODO: should we preserve additional whitespace? (StAX does not)
+        skipWhitespace();
+        // TODO: check for invalid PI target (xml)
+        getHandler().startProcessingInstruction(symbols.getSymbol(nameBuffer, 0, nameLength));
+        state = STATE_PI_CONTENT;
+    }
+    
+    private void parseDelimitedContent(String delimiter, int matchThreshold) throws StreamException {
+        int matchLength = 0;
+        while (true) {
+            int c = read();
+            if (c == delimiter.charAt(matchLength)) {
+                matchLength++;
+                if (matchThreshold > 0) {
+                    if (matchLength == matchThreshold) {
+                        for (; matchLength < delimiter.length(); matchLength++) {
+                            if (read() != delimiter.charAt(matchLength)) {
+                                throw new StreamException("Illegal character sequence \"" + delimiter.substring(0, matchThreshold) + " found in content");
+                            }
+                        }
+                        // TODO: this may produce two events...
+                        flushText(false);
+                        // TODO: this should be handled by the caller
+                        getHandler().endComment();
+                        // TODO: may also be STATE_DOCUMENT_CONTENT
+                        state = STATE_ELEMENT_CONTENT;
+                        return;
+                    }
+                } else if (matchLength == delimiter.length()) {
+                    // TODO: this may produce two events...
+                    flushText(false);
+                    // TODO: this should be handled by the caller
+                    switch (state) {
+                        case STATE_PI_CONTENT:
+                            getHandler().endProcessingInstruction();
+                            break;
+                        case STATE_CDATA_SECTION_CONTENT:
+                            getHandler().endCDATASection();
+                            break;
+                    }
+                    // TODO: may also be STATE_DOCUMENT_CONTENT
+                    state = STATE_ELEMENT_CONTENT;
+                    return;
+                }
+            } else {
+                // TODO: we need to exit the loop here if processCharacterData produces an event
+                if (matchLength > 0) {
+                    for (int i=0; i<matchLength; i++) {
+                        // TODO: optimize: don't need to handle supplementary code points here
+                        processCharacterData(delimiter.charAt(matchLength));
+                    }
+                    matchLength = 0;
+                }
+                processCharacterData(c);
+            }
+        }
     }
     
     private void parseName() throws StreamException {
+        nameLength = 0;
         int c = peek();
         if (isNameStartChar(c)) {
             do {
                 consume();
-                appendNameChar(c);
+                // TODO: incorrect for supplemental characters
+                if (nameLength == nameBuffer.length) {
+                    char[] newCharBuffer = new char[nameBuffer.length*2];
+                    System.arraycopy(nameBuffer, 0, newCharBuffer, 0, nameBuffer.length);
+                    nameBuffer = newCharBuffer;
+                }
+                // TODO: handle supplemental characters here
+                nameBuffer[nameLength++] = (char)c;
                 c = peek();
             } while (isNameChar(c));
         } else {
@@ -311,15 +581,17 @@ public class Parser extends XmlInput {
         }
     }
     
-    private void appendNameChar(int c) {
-        // TODO: incorrect for supplemental characters
-        if (nameLength == nameBuffer.length) {
-            char[] newCharBuffer = new char[nameBuffer.length*2];
-            System.arraycopy(nameBuffer, 0, newCharBuffer, 0, nameBuffer.length);
-            nameBuffer = newCharBuffer;
+    private boolean checkName(String name) {
+        if (name.length() == nameLength) {
+            for (int i=0; i<nameLength; i++) {
+                if (name.charAt(i) != nameBuffer[i]) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
         }
-        // TODO: handle supplemental characters here
-        nameBuffer[nameLength++] = (char)c;
     }
     
     /**
@@ -468,6 +740,6 @@ public class Parser extends XmlInput {
     }
 
     public static void main(String[] args) throws Exception {
-        new Stream(new Parser(new StringReader("<root attr=\"value\">text</root>"), true), new Serializer(System.out, "UTF-8")).flush();
+        new Stream(new Parser(new ByteArrayInputStream("<?xml version='1.0' encoding='utf-8'?><root attr=\"value\">text</root>".getBytes("utf-8")), null, true), new Serializer(System.out, "UTF-8")).flush();
     }
 }

@@ -18,7 +18,6 @@ package com.googlecode.ddom.frontend.axiom.mixin;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.sax.SAXSource;
 
-import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
@@ -30,14 +29,17 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomDocument;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.googlecode.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
-import com.googlecode.ddom.stream.Options;
-import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamFactory;
+import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.parser.ParserSource;
+import com.googlecode.ddom.stream.sax.SAXInput;
+import com.googlecode.ddom.stream.stax.StAXInput;
 
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomNodeFactory {
     private final OMFactory omFactory;
-    private final StreamFactory streamFactory;
+    private final StreamFactory streamFactory; // TODO: probably no longer needed
     
     public NodeFactorySupport() {
         omFactory = new OMFactoryImpl(this);
@@ -52,29 +54,25 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
         return omFactory;
     }
 
-    private OMXMLParserWrapper createBuilder(Object source) {
-        try {
-            AxiomDocument document = (AxiomDocument)createDocument();
-            document.coreSetContent(streamFactory.getSource(source, new Options(), false));
-            return new OMXMLParserWrapperImpl(document);
-        } catch (StreamException ex) {
-            throw new OMException(ex);
-        }
+    private OMXMLParserWrapper createBuilder(XmlSource source) {
+        AxiomDocument document = (AxiomDocument)createDocument();
+        document.coreSetContent(source);
+        return new OMXMLParserWrapperImpl(document);
     }
     
     public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, StAXParserConfiguration configuration, InputSource is) {
         // TODO: we have currently no way to set the OMFactory!
         // TODO: translate configuration
-        return createBuilder(is);
+        return createBuilder(new ParserSource(is));
     }
 
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
         // TODO: we have currently no way to set the OMFactory!
-        return createBuilder(parser);
+        return createBuilder(new SimpleXmlSource(new StAXInput(parser, null)));
     }
 
     public OMXMLParserWrapper createSAXOMBuilder(OMFactory omFactory, SAXSource source) {
         // TODO: we have currently no way to set the OMFactory!
-        return createBuilder(source);
+        return createBuilder(new SimpleXmlSource(new SAXInput(source)));
     }
 }

@@ -57,6 +57,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestInvalidXML.class);
         builder.exclude(TestSerialize.class, "(&(file=spaces.xml)(container=document))");
         builder.exclude(TestSerialize.class, "(&(file=iso-8859-1.xml)(container=document))");
+        builder.exclude("(&(file=spaces.xml))"); // No support for DTDs yet
         return builder.build();
     }
 }

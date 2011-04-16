@@ -75,6 +75,7 @@ final class NSAwareElementHandler extends ElementHandler {
             att = new Attribute();
             attributes[attributeCount] = att;
         }
+        att.value = "";
         int idx = searchColon(name, len);
         if (idx == -1) {
             att.prefix = "";
@@ -131,6 +132,8 @@ final class NSAwareElementHandler extends ElementHandler {
             Attribute att = attributes[i];
             if (att.isNamespaceDeclaration) {
                 handler.startNamespaceDeclaration(att.prefix);
+            } else if (att.prefix.length() == 0) {
+                handler.startAttribute("", att.localName, "", "CDATA");
             } else {
                 handler.startAttribute(resolvePrefix(att.prefix), att.localName, att.prefix, "CDATA");
             }
