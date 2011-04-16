@@ -16,6 +16,7 @@
 package com.googlecode.ddom.frontend.axiom.mixin;
 
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.apache.axiom.om.OMFactory;
@@ -31,6 +32,7 @@ import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.googlecode.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.dom.DOMSource;
 import com.googlecode.ddom.stream.parser.ParserSource;
 import com.googlecode.ddom.stream.sax.SAXInput;
 import com.googlecode.ddom.stream.stax.StAXInput;
@@ -64,8 +66,15 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
         return createBuilder(new SimpleXmlSource(new StAXInput(parser, null)));
     }
 
-    public OMXMLParserWrapper createSAXOMBuilder(OMFactory omFactory, SAXSource source) {
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Source source) {
         // TODO: we have currently no way to set the OMFactory!
-        return createBuilder(new SimpleXmlSource(new SAXInput(source)));
+        if (source instanceof SAXSource) {
+            return createBuilder(new SimpleXmlSource(new SAXInput((SAXSource)source)));
+        } else if (source instanceof javax.xml.transform.dom.DOMSource) {
+            return createBuilder(new DOMSource(((javax.xml.transform.dom.DOMSource)source).getNode()));
+        } else {
+            // TODO: should support StreamSource as well
+            throw new UnsupportedOperationException();
+        }
     }
 }
