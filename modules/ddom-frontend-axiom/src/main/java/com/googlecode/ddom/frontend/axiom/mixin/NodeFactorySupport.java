@@ -30,7 +30,6 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.googlecode.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
 import com.googlecode.ddom.stream.SimpleXmlSource;
-import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.parser.ParserSource;
 import com.googlecode.ddom.stream.sax.SAXInput;
@@ -39,17 +38,11 @@ import com.googlecode.ddom.stream.stax.StAXInput;
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomNodeFactory {
     private final OMFactory omFactory;
-    private final StreamFactory streamFactory; // TODO: probably no longer needed
     
     public NodeFactorySupport() {
         omFactory = new OMFactoryImpl(this);
-        streamFactory = StreamFactory.getInstance(getClass().getClassLoader());
     }
     
-    public final StreamFactory getStreamFactory() {
-        return streamFactory;
-    }
-
     public final OMFactory getOMFactory() {
         return omFactory;
     }

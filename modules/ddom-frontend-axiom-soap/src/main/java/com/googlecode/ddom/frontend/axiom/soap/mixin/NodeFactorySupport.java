@@ -17,7 +17,6 @@ package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
 import org.apache.axiom.soap.SOAPModelBuilder;
@@ -30,8 +29,10 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPNodeFactory;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPFactoryImpl;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPModelBuilderImpl;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
-import com.googlecode.ddom.stream.Options;
-import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.SimpleXmlSource;
+import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.parser.ParserSource;
+import com.googlecode.ddom.stream.stax.StAXInput;
 
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {
@@ -46,24 +47,20 @@ public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {
         return soap12Factory;
     }
 
-    private SOAPModelBuilder createBuilder(Object source) {
-        try {
-            AxiomDocument document = (AxiomDocument)createDocument();
-            document.coreSetContent(getStreamFactory().getSource(source, new Options(), false));
-            return new SOAPModelBuilderImpl(document);
-        } catch (StreamException ex) {
-            throw new OMException(ex);
-        }
+    private SOAPModelBuilder createBuilder(XmlSource source) {
+        AxiomDocument document = (AxiomDocument)createDocument();
+        document.coreSetContent(source);
+        return new SOAPModelBuilderImpl(document);
     }
     
     public final SOAPModelBuilder createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {
         // TODO: we have currently no way to set the SOAPFactory!
         // TODO: translate configuration
-        return createBuilder(is);
+        return createBuilder(new ParserSource(is));
     }
 
     public final SOAPModelBuilder createStAXSOAPModelBuilder(XMLStreamReader reader) {
         // TODO: we have currently no way to set the SOAPFactory!
-        return createBuilder(reader);
+        return createBuilder(new SimpleXmlSource(new StAXInput(reader, null)));
     }
 }

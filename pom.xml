@@ -166,6 +166,11 @@
                 <artifactId>activation</artifactId>
                 <version>1.1</version>
             </dependency>
+            <dependency>
+                <groupId>org.codehaus.woodstox</groupId>
+                <artifactId>wstx-asl</artifactId>
+                <version>3.2.9</version>
+            </dependency>
             
             <dependency>
                 <groupId>asm</groupId>

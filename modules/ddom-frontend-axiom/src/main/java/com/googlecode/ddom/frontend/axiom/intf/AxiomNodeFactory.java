@@ -18,8 +18,7 @@ package com.googlecode.ddom.frontend.axiom.intf;
 import org.apache.axiom.om.OMMetaFactory;
 
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.stream.StreamFactory;
 
 public interface AxiomNodeFactory extends NodeFactory, OMMetaFactory {
-    StreamFactory getStreamFactory();
+
 }

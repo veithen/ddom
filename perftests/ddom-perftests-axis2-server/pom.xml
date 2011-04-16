@@ -71,9 +71,9 @@
                     <version>${project.version}</version>
                 </dependency>
                 <dependency>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>ddom-stream-wstx</artifactId>
-                    <version>${project.version}</version>
+                    <!-- TODO: this should eventually no longer be necessary, but the DOMToOMConverter uses StAX directly -->
+                    <groupId>org.codehaus.woodstox</groupId>
+                    <artifactId>wstx-asl</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.rampart</groupId>
