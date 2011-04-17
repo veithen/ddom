@@ -31,7 +31,7 @@ public class StAXStreamProvider implements StreamProvider {
         if (object instanceof XMLStreamReader) {
             XMLStreamReader reader = (XMLStreamReader)object;
             // TODO: implement canonicalization!
-            return new SimpleXmlSource(new StAXInput(reader, null));
+            return new SimpleXmlSource(new StAXPullInput(reader, null));
         } else {
             return null;
         }

@@ -26,13 +26,13 @@ import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.symbols.Symbols;
 
-public class StAXInput extends XmlInput {
+public class StAXPullInput extends XmlInput {
     private final XMLStreamReader reader;
     private final boolean parserIsNamespaceAware;
     private final Symbols symbols;
     private boolean callNext;
 
-    public StAXInput(XMLStreamReader reader, Symbols symbols) {
+    public StAXPullInput(XMLStreamReader reader, Symbols symbols) {
         this.reader = reader;
         parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
         this.symbols = symbols;

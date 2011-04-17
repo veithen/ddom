@@ -35,7 +35,7 @@ import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.dom.DOMSource;
 import com.googlecode.ddom.stream.parser.ParserSource;
 import com.googlecode.ddom.stream.sax.SAXInput;
-import com.googlecode.ddom.stream.stax.StAXInput;
+import com.googlecode.ddom.stream.stax.StAXPullInput;
 
 @Mixin(NodeFactory.class)
 public abstract class NodeFactorySupport implements AxiomNodeFactory {
@@ -63,7 +63,7 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
 
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
         // TODO: we have currently no way to set the OMFactory!
-        return createBuilder(new SimpleXmlSource(new StAXInput(parser, null)));
+        return createBuilder(new SimpleXmlSource(new StAXPullInput(parser, null)));
     }
 
     public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Source source) {

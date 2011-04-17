@@ -47,7 +47,7 @@ import com.googlecode.ddom.stream.options.EntityReferencePolicy;
 import com.googlecode.ddom.stream.options.NamespaceAwareness;
 import com.googlecode.ddom.stream.options.ValidationPolicy;
 import com.googlecode.ddom.stream.spi.StreamProvider;
-import com.googlecode.ddom.stream.stax.StAXInput;
+import com.googlecode.ddom.stream.stax.StAXPullInput;
 import com.googlecode.ddom.stream.stax.StAXOutput;
 
 @Provider(name="woodstox")
@@ -152,7 +152,7 @@ public class WoodstoxStreamProvider implements StreamProvider {
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
         }
-        return new SimpleXmlSource(new StAXInput(reader, config.getSymbols()));
+        return new SimpleXmlSource(new StAXPullInput(reader, config.getSymbols()));
     }
     
     public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {
