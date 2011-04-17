@@ -24,10 +24,11 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.cxf.staxutils.W3CDOMStreamReader;
 
-import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.stax.StAXPullInput;
 
-public class StreamSwitch extends StAXPullInput implements XMLStreamReader {
+public class StreamSwitch implements XmlSource, XMLStreamReader {
     private XMLStreamReader reader;
     private final SOAPBody body;
     private boolean inputAccessed;
@@ -35,28 +36,31 @@ public class StreamSwitch extends StAXPullInput implements XMLStreamReader {
     private boolean isOriginalReader;
 
     public StreamSwitch(XMLStreamReader reader, SOAPBody body) {
-        super(reader, null);
         this.reader = reader;
         this.body = body;
         isOriginalReader = true;
     }
 
-    @Override
-    protected void proceed(boolean flush) throws StreamException {
+    public XmlInput getInput(Hints hints) {
         if (readerAccessed && isOriginalReader) {
             throw new IllegalStateException("The original XMLStreamReader has already been accessed; " +
             		"it is no longer available to build the SOAP body");
         }
         inputAccessed = true;
-        super.proceed(flush);
+        return new StAXPullInput(reader, null);
     }
     
+    public boolean isDestructive() {
+        return true;
+    }
+
     private void accessReader() {
         if (!readerAccessed) {
             // Data has already been pulled from the original reader through the Input interface.
             // Create a new XMLStreamReader to generate the events from the SAAJ representation
             // of the SOAP body.
             if (inputAccessed) {
+                // TODO: should use DDOM features to create the XMLStreamReader from the body
                 reader = new W3CDOMStreamReader(body);
                 // Move the reader to the right position
                 try {

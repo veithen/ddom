@@ -68,7 +68,7 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             // TODO: need a better name for this thing
             StreamSwitch streamSwitch = new StreamSwitch(message.getContent(XMLStreamReader.class), body);
             
-            body.coreSetContent(new SimpleXmlSource(streamSwitch));
+            body.coreSetContent(streamSwitch);
             
             message.setContent(XMLStreamReader.class, streamSwitch);
 
