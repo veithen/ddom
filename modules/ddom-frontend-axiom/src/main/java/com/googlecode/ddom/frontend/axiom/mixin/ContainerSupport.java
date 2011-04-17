@@ -146,7 +146,11 @@ public abstract class ContainerSupport implements AxiomContainer {
         // TODO: MTOM
         // TODO: XML declaration
         try {
-            serialize(new Serializer(output, format.getCharSetEncoding()), preserve);
+            String encoding = format.getCharSetEncoding();
+            if (encoding == null) {
+                encoding = "UTF-8";
+            }
+            serialize(new Serializer(output, encoding), preserve);
         } catch (StreamException ex) {
             throw AxiomExceptionUtil.translate(ex);
         } catch (UnsupportedEncodingException ex) {
