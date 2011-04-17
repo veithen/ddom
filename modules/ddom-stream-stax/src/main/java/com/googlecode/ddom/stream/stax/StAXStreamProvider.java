@@ -30,8 +30,7 @@ public class StAXStreamProvider implements StreamProvider {
     public XmlSource getSource(Object object, OptionsTracker options, boolean preserve) throws StreamException {
         if (object instanceof XMLStreamReader) {
             XMLStreamReader reader = (XMLStreamReader)object;
-            // TODO: implement canonicalization!
-            return new SimpleXmlSource(new StAXPullInput(reader, null));
+            return new SimpleXmlSource(new StAXPullInput(reader));
         } else {
             return null;
         }

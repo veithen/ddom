@@ -15,16 +15,11 @@
  */
 package com.googlecode.ddom.stream.sax;
 
-import java.io.IOException;
-
 import javax.xml.transform.sax.SAXSource;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-
-import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
-import com.googlecode.ddom.symbols.Symbols;
+import com.googlecode.ddom.stream.XmlReader;
 
 public class SAXInput extends XmlInput {
     private final SAXSource source;
@@ -33,29 +28,9 @@ public class SAXInput extends XmlInput {
         this.source = source;
     }
 
-    public Symbols getSymbols() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     @Override
-    protected void proceed(boolean flush) throws StreamException {
-        XMLReader xmlReader = source.getXMLReader();
-        ContentHandlerAdapter handler = new ContentHandlerAdapter(getHandler());
-        xmlReader.setContentHandler(handler);
-        try {
-            xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", handler);
-        } catch (SAXException ex) {
-            // TODO: decide if we should fail here or if it is better to ignore this
-            throw new StreamException(ex);
-        }
-        try {
-            xmlReader.parse(source.getInputSource());
-        } catch (IOException ex) {
-            throw new StreamException(ex);
-        } catch (SAXException ex) {
-            throw new StreamException(ex);
-        }
+    protected XmlReader createReader(XmlHandler handler) {
+        return new SAXReader(handler, source);
     }
 
     public void dispose() {

@@ -63,7 +63,7 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
 
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
         // TODO: we have currently no way to set the OMFactory!
-        return createBuilder(new SimpleXmlSource(new StAXPullInput(parser, null)));
+        return createBuilder(new SimpleXmlSource(new StAXPullInput(parser)));
     }
 
     public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Source source) {

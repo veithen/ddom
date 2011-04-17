@@ -21,6 +21,7 @@ import junit.framework.TestSuite;
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.ts.OMTestSuiteBuilder;
 import org.apache.axiom.ts.om.builder.TestCreateOMBuilderFromDOMSource;
+import org.apache.axiom.ts.om.builder.TestIOExceptionInGetText;
 import org.apache.axiom.ts.om.builder.TestInvalidXML;
 import org.apache.axiom.ts.om.container.TestSerialize;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCDATAEventFromElement;
@@ -60,6 +61,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestSerialize.class, "(&(file=iso-8859-1.xml)(container=document))");
         builder.exclude("(&(file=spaces.xml))"); // No support for DTDs yet
         builder.exclude(TestCreateOMBuilderFromDOMSource.class, "(file=iso-8859-1.xml)");
+        builder.exclude(TestIOExceptionInGetText.class);
         return builder.build();
     }
 }

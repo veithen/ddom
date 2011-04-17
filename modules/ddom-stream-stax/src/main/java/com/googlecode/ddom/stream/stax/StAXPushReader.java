@@ -16,17 +16,26 @@
 package com.googlecode.ddom.stream.stax;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
-import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlReader;
 
-public abstract class StAXPushInput extends XmlInput {
-    @Override
-    protected final XmlReader createReader(XmlHandler handler) {
-        return new StAXPushReader(handler, this);
-    }
+final class StAXPushReader implements XmlReader {
+    private final XmlHandler handler;
+    private final StAXPushInput input;
     
-    protected abstract void serialize(XMLStreamWriter out) throws XMLStreamException;
+    public StAXPushReader(XmlHandler handler, StAXPushInput input) {
+        this.handler = handler;
+        this.input = input;
+    }
+
+    public void proceed(boolean flush) throws StreamException {
+        try {
+            input.serialize(new XmlHandlerStreamWriter(handler));
+        } catch (XMLStreamException ex) {
+            throw StAXExceptionUtil.toStreamException(ex);
+        }
+        handler.completed();
+    }
 }

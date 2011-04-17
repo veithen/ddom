@@ -47,7 +47,7 @@ public class StreamSwitch implements XmlSource, XMLStreamReader {
             		"it is no longer available to build the SOAP body");
         }
         inputAccessed = true;
-        return new StAXPullInput(reader, null);
+        return new StAXPullInput(reader);
     }
     
     public boolean isDestructive() {

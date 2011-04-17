@@ -23,13 +23,18 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlInput;
+import com.googlecode.ddom.stream.XmlReader;
 import com.googlecode.ddom.stream.XmlSource;
 
 public class TestCoreSetSourceWithPushInput extends BackendTestCase {
-    static class PushInput extends XmlInput {
-        @Override
-        protected void proceed(boolean flush) throws StreamException {
-            XmlHandler handler = getHandler();
+    static class PushReader implements XmlReader {
+        private final XmlHandler handler;
+        
+        PushReader(XmlHandler handler) {
+            this.handler = handler;
+        }
+
+        public void proceed(boolean flush) throws StreamException {
             handler.startElement("urn:ns", "root", "p");
             handler.startAttribute("", "attr", "", "CDATA");
             handler.processCharacterData("value", false);
@@ -38,6 +43,13 @@ public class TestCoreSetSourceWithPushInput extends BackendTestCase {
             handler.processCharacterData("content", false);
             handler.endElement();
             handler.completed();
+        }
+    }
+    
+    static class PushInput extends XmlInput {
+        @Override
+        protected XmlReader createReader(XmlHandler handler) {
+            return new PushReader(handler);
         }
 
         @Override

@@ -61,6 +61,6 @@ public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {
 
     public final SOAPModelBuilder createStAXSOAPModelBuilder(XMLStreamReader reader) {
         // TODO: we have currently no way to set the SOAPFactory!
-        return createBuilder(new SimpleXmlSource(new StAXPullInput(reader, null)));
+        return createBuilder(new SimpleXmlSource(new StAXPullInput(reader)));
     }
 }

@@ -61,7 +61,7 @@ public class OMDataSourceAdapter implements XmlSource {
             try {
                 // TODO: we could cheat here if the returned XMLStreamReader is actually a StAXPivot;
                 //       alternatively we could emit a warning because this is an indication of the OM-inside-OMDataSource anti-pattern
-                return new StAXPullInput(ds.getReader(), null);
+                return new StAXPullInput(ds.getReader());
             } catch (XMLStreamException ex) {
                 // TODO
                 throw new RuntimeException(ex);

@@ -15,9 +15,12 @@
  */
 package com.googlecode.ddom.stream;
 
+import com.googlecode.ddom.stream.filter.util.XmlHandlerWrapper;
+
 public abstract class XmlInput extends XmlValve {
-    private final DelegatingXmlHandler handler = new DelegatingXmlHandler();
     private XmlValve nextValve;
+    private XmlReader reader;
+    boolean complete;
     
     @Override
     final void doAppend(XmlValve valve) {
@@ -33,7 +36,13 @@ public abstract class XmlInput extends XmlValve {
         if (nextValve == null) {
             throw new IllegalStateException("Pipeline is not terminated by an XmlOutput");
         }
-        handler.setDelegate(nextValve.connect(stream));
+        reader = createReader(new XmlHandlerWrapper(nextValve.connect(stream)) {
+            @Override
+            public void completed() throws StreamException {
+                super.completed();
+                complete = true;
+            }
+        });
         return null;
     }
     
@@ -41,53 +50,19 @@ public abstract class XmlInput extends XmlValve {
         append(filter);
     }
     
-    /**
-     * Get the {@link XmlHandler} object that the implementation must use to produce
-     * events. This method completes successfully even if the {@link XmlInput} has
-     * not yet been connected to an {@link XmlOutput}. The implementation also guarantees
-     * that the same object is returned over the whole lifecycle of the {@link XmlInput}
-     * object.
-     * 
-     * @return the {@link XmlHandler} object
-     */
-    protected final XmlHandler getHandler() {
-        return handler;
+    protected abstract XmlReader createReader(XmlHandler handler);
+    
+    void proceed(boolean flush) throws StreamException {
+        reader.proceed(flush);
     }
-    
-    /**
-     * Instructs the implementation to produce more XML events. An invocation of this method must
-     * result in one or more method calls to the {@link XmlHandler} instance returned by
-     * {@link #getHandler()}.
-     * <p>
-     * If the implementation produced more than one event, then it should make sure that the last
-     * event corresponds to the same information item as the first one. This is not a strict
-     * requirement, but the pass-through logic in the current builder implementation assumes that
-     * this method behaves like this.
-     * 
-     * @param flush
-     *            The value of this parameter is set to <code>true</code> if the invocation is
-     *            triggered by {@link Stream#flush()}. In this case, the implementation MAY choose
-     *            to push all remaining events to the {@link XmlHandler} instead of producing
-     *            individual events. The parameter is set to <code>false</code> if the invocation is
-     *            triggered by {@link Stream#proceed()}. In this case, the implementation SHOULD
-     *            attempt to limit the number of events produced.
-     *            <p>
-     *            The information provided by this parameter is only a hint and the implementation
-     *            MAY choose to completely ignore it. It is useful if the implementation needs to
-     *            integrate with a library that define different APIs for pull and push mode
-     *            streaming and there is a potential performance benefit when using the push API.
-     * 
-     * @throws StreamException
-     */
-    protected abstract void proceed(boolean flush) throws StreamException;
-    
+
     /**
      * 
      * @return <code>false</code> if there are more events to consume; <code>true</code> if the end
      *         of the document has been reached
      */
     public final boolean isComplete() {
-        return handler.isComplete();
+        return complete;
     }
     
     public abstract void dispose();

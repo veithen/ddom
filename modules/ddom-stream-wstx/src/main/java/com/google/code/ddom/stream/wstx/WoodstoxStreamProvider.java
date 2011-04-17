@@ -152,7 +152,7 @@ public class WoodstoxStreamProvider implements StreamProvider {
         } catch (XMLStreamException ex) {
             throw new StreamException(ex);
         }
-        return new SimpleXmlSource(new StAXPullInput(reader, config.getSymbols()));
+        return new SimpleXmlSource(new StAXPullInput(reader /*, config.getSymbols()*/));
     }
     
     public XmlOutput getOutput(Object destination, OptionsTracker options) throws StreamException {
