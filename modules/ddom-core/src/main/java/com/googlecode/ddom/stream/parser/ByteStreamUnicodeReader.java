@@ -25,6 +25,11 @@ import java.io.InputStream;
  * @author Andreas Veithen
  */
 public abstract class ByteStreamUnicodeReader implements UnicodeReader {
+    public interface Factory {
+        ByteStreamUnicodeReader create(InputStream in);
+        ByteStreamUnicodeReader create(ByteStreamUnicodeReader other);
+    }
+    
     private final InputStream in;
     private final byte[] buffer;
     private int pos;
@@ -54,5 +59,18 @@ public abstract class ByteStreamUnicodeReader implements UnicodeReader {
             }
         }
         return (int)buffer[pos++] & 0xFF;
+    }
+    
+    public static Factory getFactory(String encoding) {
+        if (encoding.equalsIgnoreCase("utf-8")) {
+            return UTF8Reader.FACTORY;
+        } else if (encoding.equalsIgnoreCase("ascii")) {
+            return ASCIIReader.FACTORY;
+        } else if (encoding.equalsIgnoreCase("iso-8859-1")) {
+            return Latin1Reader.FACTORY;
+        } else {
+            // TODO
+            throw new UnsupportedOperationException();
+        }
     }
 }

@@ -19,6 +19,16 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ASCIIReader extends ByteStreamUnicodeReader {
+    public static final Factory FACTORY = new Factory() {
+        public ByteStreamUnicodeReader create(InputStream in) {
+            return new ASCIIReader(in);
+        }
+
+        public ByteStreamUnicodeReader create(ByteStreamUnicodeReader other) {
+            return new ASCIIReader(other);
+        }
+    };
+    
     public ASCIIReader(InputStream in) {
         super(in);
     }

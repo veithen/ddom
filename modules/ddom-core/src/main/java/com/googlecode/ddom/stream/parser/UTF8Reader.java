@@ -20,6 +20,16 @@ import java.io.InputStream;
 
 // TODO: we don't cover all cases of invalid byte sequences, but the specs require us to do so
 public class UTF8Reader extends ByteStreamUnicodeReader {
+    public static final Factory FACTORY = new Factory() {
+        public ByteStreamUnicodeReader create(InputStream in) {
+            return new UTF8Reader(in);
+        }
+
+        public ByteStreamUnicodeReader create(ByteStreamUnicodeReader other) {
+            return new UTF8Reader(other);
+        }
+    };
+    
     public UTF8Reader(InputStream in) {
         super(in);
     }

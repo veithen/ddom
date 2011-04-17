@@ -38,16 +38,10 @@ public class Parser extends XmlInput {
     
     public Parser(InputStream in, String inputEncoding, boolean namespaceAware) {
         this.inputEncoding = inputEncoding;
-        // TODO: extract the encoding detection logic because it also appears in parseXmlDeclaration
-        if (inputEncoding == null || inputEncoding.equalsIgnoreCase("utf-8")) {
+        if (inputEncoding == null) {
             reader = new UTF8Reader(in);
-        } else if (inputEncoding.equalsIgnoreCase("ascii")) {
-            reader = new ASCIIReader(in);
-        } else if (inputEncoding.equalsIgnoreCase("iso-8859-1")) {
-            reader = new Latin1Reader(in);
         } else {
-            // TODO
-            throw new UnsupportedOperationException();
+            reader = ByteStreamUnicodeReader.getFactory(inputEncoding).create(in);
         }
         this.namespaceAware = namespaceAware;
     }

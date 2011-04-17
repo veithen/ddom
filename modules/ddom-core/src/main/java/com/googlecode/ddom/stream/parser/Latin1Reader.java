@@ -19,6 +19,16 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Latin1Reader extends ByteStreamUnicodeReader {
+    public static final Factory FACTORY = new Factory() {
+        public ByteStreamUnicodeReader create(InputStream in) {
+            return new Latin1Reader(in);
+        }
+
+        public ByteStreamUnicodeReader create(ByteStreamUnicodeReader other) {
+            return new Latin1Reader(other);
+        }
+    };
+    
     public Latin1Reader(InputStream in) {
         super(in);
     }

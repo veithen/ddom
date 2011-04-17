@@ -242,13 +242,8 @@ final class ParserImpl implements XmlReader {
                     inputEncoding = encoding.toUpperCase(); // TODO: quick & dirty hack for compatibility with Woodstox
                     if (encoding.equalsIgnoreCase("utf-8")) {
                         // Do nothing: we use an UTF8Reader by default
-                    } else if (encoding.equalsIgnoreCase("ascii")) {
-                        reader = new ASCIIReader((ByteStreamUnicodeReader)reader);
-                    } else if (encoding.equalsIgnoreCase("iso-8859-1")) {
-                        reader = new Latin1Reader((ByteStreamUnicodeReader)reader);
                     } else {
-                        // TODO
-                        throw new UnsupportedOperationException();
+                        reader = ByteStreamUnicodeReader.getFactory(encoding).create((ByteStreamUnicodeReader)reader);
                     }
                 }
             }
