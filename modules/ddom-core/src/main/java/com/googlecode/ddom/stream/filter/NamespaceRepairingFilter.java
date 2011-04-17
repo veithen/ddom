@@ -15,83 +15,12 @@
  */
 package com.googlecode.ddom.stream.filter;
 
-import com.google.code.ddom.commons.lang.StringAccumulator;
-import com.googlecode.ddom.stream.SimpleXmlFilter;
-import com.googlecode.ddom.stream.StreamException;
-import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
+import com.googlecode.ddom.stream.XmlFilter;
+import com.googlecode.ddom.stream.XmlHandler;
 
-public class NamespaceRepairingFilter extends SimpleXmlFilter {
-    private final ScopedNamespaceContext context = new ScopedNamespaceContext();
-    private boolean inNamespaceDeclaration;
-    private String prefix;
-    private final StringAccumulator namespaceURI = new StringAccumulator();
-    
+public class NamespaceRepairingFilter extends XmlFilter {
     @Override
-    protected void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        super.startElement(namespaceURI, localName, prefix);
-        context.startScope();
-        if (!context.isBound(prefix, namespaceURI)) {
-            context.setPrefix(prefix, namespaceURI);
-        }
-    }
-
-    @Override
-    protected void startElement(String tagName) throws StreamException {
-        super.startElement(tagName);
-        context.startScope();
-    }
-
-    @Override
-    protected void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
-        super.startAttribute(namespaceURI, localName, prefix, type);
-        if (namespaceURI.length() != 0 && !context.isBound(prefix, namespaceURI)) {
-            context.setPrefix(prefix, namespaceURI);
-        }
-    }
-
-    @Override
-    protected void startNamespaceDeclaration(String prefix) throws StreamException {
-        inNamespaceDeclaration = true;
-        this.prefix = prefix;
-    }
-
-    @Override
-    protected void endAttribute() throws StreamException {
-        if (inNamespaceDeclaration) {
-            String namespaceURI = this.namespaceURI.toString();
-            if (!context.isBound(prefix, namespaceURI)) {
-                context.setPrefix(prefix, namespaceURI);
-            }
-            prefix = null;
-            this.namespaceURI.clear();
-            inNamespaceDeclaration = false;
-        } else {
-            super.endAttribute();
-        }
-    }
-
-    @Override
-    protected void attributesCompleted() throws StreamException {
-        for (int i=context.getFirstBindingInCurrentScope(), l=context.getBindingsCount(); i<l; i++) {
-            super.startNamespaceDeclaration(context.getPrefix(i));
-            super.processCharacterData(context.getNamespaceURI(i), false);
-            super.endAttribute();
-        }
-        super.attributesCompleted();
-    }
-
-    @Override
-    protected void endElement() throws StreamException {
-        super.endElement();
-        context.endScope();
-    }
-
-    @Override
-    protected void processCharacterData(String data, boolean ignorable) throws StreamException {
-        if (inNamespaceDeclaration) {
-            namespaceURI.append(data);
-        } else {
-            super.processCharacterData(data, ignorable);
-        }
+    protected XmlHandler createXmlHandler(XmlHandler target) {
+        return new NamespaceRepairingFilterHandler(target);
     }
 }

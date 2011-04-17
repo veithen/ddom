@@ -26,6 +26,7 @@ import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 public final class XmlHandlerStreamWriter implements XMLStreamWriter {
     private final XmlHandler handler;
     private final ScopedNamespaceContext context = new ScopedNamespaceContext();
+    private boolean isNamespaceAwareElement;
     private boolean attributesPending;
 
     public XmlHandlerStreamWriter(XmlHandler handler) {
@@ -107,6 +108,7 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         try {
             flushAttributes();
             handler.startElement(localName);
+            isNamespaceAwareElement = false;
             attributesPending = true;
         } catch (StreamException ex) {
             throw StAXExceptionUtil.toXMLStreamException(ex);
@@ -126,6 +128,7 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         try {
             flushAttributes();
             handler.startElement(namespaceURI, localName, prefix);
+            isNamespaceAwareElement = true;
             attributesPending = true;
         } catch (StreamException ex) {
             throw StAXExceptionUtil.toXMLStreamException(ex);
@@ -143,7 +146,14 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
 
     public void writeAttribute(String localName, String value) throws XMLStreamException {
         try {
-            handler.startAttribute(localName, "CDATA");
+            // Since unprefixed attributes have no namespace it is common to use the
+            // namespace unaware variant of the writeAttribute method even when the document
+            // uses namespaces. We transform these events into namespace aware events
+            if (isNamespaceAwareElement) {
+                handler.startAttribute("", localName, "", "CDATA");
+            } else {
+                handler.startAttribute(localName, "CDATA");
+            }
             handler.processCharacterData(value, false);
             handler.endAttribute();
         } catch (StreamException ex) {

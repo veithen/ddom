@@ -15,12 +15,31 @@
  */
 package com.googlecode.ddom.jaxp;
 
-import com.googlecode.ddom.stream.XmlFilter;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.filter.util.XmlHandlerWrapper;
 
-public class CommentFilter extends XmlFilter {
+final class CommentFilterHandler extends XmlHandlerWrapper {
+    private boolean skip;
+
+    CommentFilterHandler(XmlHandler parent) {
+        super(parent);
+    }
+
     @Override
-    protected XmlHandler createXmlHandler(XmlHandler target) {
-        return new CommentFilterHandler(target);
+    public void startComment() throws StreamException {
+        skip = true;
+    }
+
+    @Override
+    public void endComment() throws StreamException {
+        skip = false;
+    }
+
+    @Override
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
+        if (!skip) {
+            super.processCharacterData(data, ignorable);
+        }
     }
 }

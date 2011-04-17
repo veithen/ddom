@@ -24,11 +24,11 @@ import com.googlecode.ddom.stream.filter.util.Attribute;
 import com.googlecode.ddom.stream.filter.util.AttributeBuffer;
 import com.googlecode.ddom.stream.filter.util.XmlHandlerWrapper;
 
-class AttributeReorderingFilterHandler extends XmlHandlerWrapper {
+final class AttributeReorderingFilterHandler extends XmlHandlerWrapper {
     private final AttributeBuffer attributes = new AttributeBuffer();
     private final SortedMap<String,Attribute> sortedAttributes = new TreeMap<String,Attribute>();
     
-    public AttributeReorderingFilterHandler(XmlHandler parent) {
+    AttributeReorderingFilterHandler(XmlHandler parent) {
         super(parent);
     }
 
