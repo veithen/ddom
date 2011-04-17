@@ -19,6 +19,7 @@ package com.googlecode.ddom.stream;
  * Base class for {@link XmlOutput} implementations that have no need for a separate
  * {@link XmlHandler} implementation.
  */
+@Deprecated
 public abstract class SimpleXmlOutput extends XmlOutput {
     @Override
     protected final XmlHandler createXmlHandler() {

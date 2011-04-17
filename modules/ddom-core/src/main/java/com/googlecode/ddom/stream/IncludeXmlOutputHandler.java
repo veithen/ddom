@@ -15,21 +15,25 @@
  */
 package com.googlecode.ddom.stream;
 
-/**
- * {@link XmlOutput} implementation that allows to include the events produced by one {@link XmlInput}
- * into the sequence of events produced by another {@link XmlInput}.
- * 
- * @author Andreas Veithen
- */
-public class IncludeXmlOutput extends XmlOutput {
-    private final XmlHandler handler;
+import com.googlecode.ddom.stream.filter.util.XmlHandlerWrapper;
 
-    public IncludeXmlOutput(XmlHandler handler) {
-        this.handler = handler;
+final class IncludeXmlOutputHandler extends XmlHandlerWrapper {
+    IncludeXmlOutputHandler(XmlHandler parent) {
+        super(parent);
     }
 
     @Override
-    protected XmlHandler createXmlHandler() {
-        return new IncludeXmlOutputHandler(handler);
+    public void startEntity(boolean fragment, String inputEncoding) {
+        // Do nothing.
+    }
+
+    @Override
+    public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
+        // Do nothing.
+    }
+
+    @Override
+    public void completed() throws StreamException {
+        // Do nothing.
     }
 }
