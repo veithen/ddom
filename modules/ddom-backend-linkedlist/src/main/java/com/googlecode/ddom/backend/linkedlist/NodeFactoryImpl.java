@@ -48,7 +48,7 @@ public class NodeFactoryImpl implements NodeFactory {
     }
 
     public final CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId) {
-        return new DocumentTypeDeclaration((Document)document, rootName, publicId, systemId, null);
+        return new DocumentTypeDeclaration((Document)document, rootName, publicId, systemId);
     }
 
     public final CoreNSUnawareElement createElement(CoreDocument document, String tagName) {

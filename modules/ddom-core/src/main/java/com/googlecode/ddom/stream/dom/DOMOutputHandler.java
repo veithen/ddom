@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // TODO: what about ID attributes???
@@ -56,8 +57,12 @@ final class DOMOutputHandler implements XmlHandler {
         }
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
+    public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
         node.appendChild(document.getImplementation().createDocumentType(rootName, publicId, systemId));
+    }
+
+    public void endDocumentTypeDeclaration() throws StreamException {
+        // Do nothing
     }
 
     private static String getQualifiedName(String localName, String prefix) {

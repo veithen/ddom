@@ -70,10 +70,19 @@ public class ContentHandlerAdapter implements ContentHandler, LexicalHandler {
 
     public void startDTD(String name, String publicId, String systemId) throws SAXException {
         processDocumentInfo();
-        handler.processDocumentType(name, publicId, systemId, null);
+        try {
+            handler.startDocumentTypeDeclaration(name, publicId, systemId);
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void endDTD() throws SAXException {
+        try {
+            handler.endDocumentTypeDeclaration();
+        } catch (StreamException ex) {
+            throw new SAXException(ex);
+        }
     }
 
     public void startPrefixMapping(String prefix, String uri) throws SAXException {

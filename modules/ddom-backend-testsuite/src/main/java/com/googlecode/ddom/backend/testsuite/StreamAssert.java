@@ -22,10 +22,12 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.pivot.XmlPivot;
 
 public class StreamAssert extends XmlPivot {
+    // TODO: renumber constants
     private static final int START_DOCUMENT = 1;
     private static final int START_FRAGMENT = 2;
     private static final int XML_DECLARATION = 3;
-    private static final int DOCUMENT_TYPE = 4;
+    private static final int START_DOCUMENT_TYPE_DECLARATION = 4;
+    private static final int END_DOCUMENT_TYPE_DECLARATION = 21;
     private static final int START_NS_UNAWARE_ELEMENT = 5;
     private static final int START_NS_AWARE_ELEMENT = 6;
     private static final int END_ELEMENT = 7;
@@ -62,8 +64,13 @@ public class StreamAssert extends XmlPivot {
         return false;
     }
 
-    protected boolean processDocumentType(String rootName, String publicId, String systemId, String data) {
-        assertEquals(expectedEvent, DOCUMENT_TYPE);
+    protected boolean startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
+        assertEquals(expectedEvent, START_DOCUMENT_TYPE_DECLARATION);
+        return false;
+    }
+
+    protected boolean endDocumentTypeDeclaration() {
+        assertEquals(expectedEvent, END_DOCUMENT_TYPE_DECLARATION);
         return false;
     }
 

@@ -99,7 +99,8 @@ final class DOMReader implements XmlReader {
                         break;
                     case Node.DOCUMENT_TYPE_NODE:
                         DocumentType docType = (DocumentType)currentNode;
-                        handler.processDocumentType(docType.getName(), docType.getPublicId(), docType.getSystemId(), null);
+                        handler.startDocumentTypeDeclaration(docType.getName(), docType.getPublicId(), docType.getSystemId());
+                        handler.endDocumentTypeDeclaration();
                         break loop;
                     case Node.ELEMENT_NODE:
                         Element element = (Element)currentNode;

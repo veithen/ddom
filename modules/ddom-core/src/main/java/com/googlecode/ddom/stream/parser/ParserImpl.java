@@ -564,7 +564,7 @@ final class ParserImpl implements XmlReader {
         String rootName = symbols.getSymbol(nameBuffer, 0, nameLength);
         skipWhitespace();
         // TODO: handle ExternalID here
-        handler.processDocumentType(rootName, null, null, null); // TODO
+        handler.startDocumentTypeDeclaration(rootName, null, null); // TODO
         if (peek() == '[') {
             consume();
             state = STATE_INTERNAL_SUBSET_CONTENT;
@@ -581,6 +581,7 @@ final class ParserImpl implements XmlReader {
         if (read() != '>') {
             throw new StreamException("Expected '>' after internal subset");
         }
+        handler.endDocumentTypeDeclaration();
         state = STATE_DOCUMENT_CONTENT;
     }
     

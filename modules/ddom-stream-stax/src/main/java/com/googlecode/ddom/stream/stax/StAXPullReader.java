@@ -68,7 +68,9 @@ final class StAXPullReader implements XmlReader {
                 case XMLStreamReader.DTD:
                     if (reader instanceof DTDInfo) {
                         DTDInfo dtdInfo = (DTDInfo)reader;
-                        handler.processDocumentType(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId(), reader.getText());
+                        handler.startDocumentTypeDeclaration(dtdInfo.getDTDRootName(), dtdInfo.getDTDPublicId(), dtdInfo.getDTDSystemId());
+                        // TODO: do something with reader.getText(), i.e. the internal subset
+                        handler.endDocumentTypeDeclaration();
                     } else {
                         throw new UnsupportedOperationException();
                     }

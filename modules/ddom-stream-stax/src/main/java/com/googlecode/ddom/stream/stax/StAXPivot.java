@@ -88,9 +88,15 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     @Override
-    protected boolean processDocumentType(String rootName, String publicId, String systemId, String data) {
+    protected boolean startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
         eventType = DTD;
-        this.data = data;
+        // TODO
+//        this.data = data;
+        return true;
+    }
+
+    @Override
+    protected boolean endDocumentTypeDeclaration() {
         return false;
     }
 

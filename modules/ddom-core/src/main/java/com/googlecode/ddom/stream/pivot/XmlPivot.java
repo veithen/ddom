@@ -43,8 +43,10 @@ public abstract class XmlPivot extends XmlOutput {
     
     protected abstract boolean processXmlDeclaration(String version, String encoding, Boolean standalone);
     
-    protected abstract boolean processDocumentType(String rootName, String publicId, String systemId, String data);
+    protected abstract boolean startDocumentTypeDeclaration(String rootName, String publicId, String systemId);
 
+    protected abstract boolean endDocumentTypeDeclaration();
+    
     protected abstract boolean startElement(String tagName);
     
     protected abstract boolean startElement(String namespaceURI, String localName, String prefix);

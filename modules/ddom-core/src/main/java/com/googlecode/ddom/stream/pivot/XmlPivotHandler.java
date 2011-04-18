@@ -20,8 +20,10 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 final class XmlPivotHandler implements XmlHandler {
+    // TODO: renumber the constants once we are done with adding new ones...
     private static final int XML_DECLARATION = 1;
-    private static final int DOCUMENT_TYPE = 2;
+    private static final int START_DOCUMENT_TYPE_DECLARATION = 2;
+    private static final int END_DOCUMENT_TYPE_DECLARATION = 21;
     private static final int START_NS_UNAWARE_ELEMENT = 3;
     private static final int START_NS_AWARE_ELEMENT = 4;
     private static final int END_ELEMENT = 5;
@@ -129,15 +131,22 @@ final class XmlPivotHandler implements XmlHandler {
         }
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
+    public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
         if (passThrough) {
-            passThrough = pivot.processDocumentType(rootName, publicId, systemId, data);
+            passThrough = pivot.startDocumentTypeDeclaration(rootName, publicId, systemId);
         } else {
-            addEvent(DOCUMENT_TYPE);
+            addEvent(START_DOCUMENT_TYPE_DECLARATION);
             addToken(rootName);
             addToken(publicId);
             addToken(systemId);
-            addToken(data);
+        }
+    }
+    
+    public void endDocumentTypeDeclaration() {
+        if (passThrough) {
+            passThrough = pivot.endDocumentTypeDeclaration();
+        } else {
+            addEvent(END_DOCUMENT_TYPE_DECLARATION);
         }
     }
     
@@ -302,8 +311,11 @@ final class XmlPivotHandler implements XmlHandler {
                     String standalone = getToken();
                     result = pivot.processXmlDeclaration(version, encoding, standalone == null ? null : Boolean.valueOf(standalone));
                     break;
-                case DOCUMENT_TYPE:
-                    result = pivot.processDocumentType(getToken(), getToken(), getToken(), getToken());
+                case START_DOCUMENT_TYPE_DECLARATION:
+                    result = pivot.startDocumentTypeDeclaration(getToken(), getToken(), getToken());
+                    break;
+                case END_DOCUMENT_TYPE_DECLARATION:
+                    result = pivot.endDocumentTypeDeclaration();
                     break;
                 case START_NS_UNAWARE_ELEMENT:
                     result = pivot.startElement(getToken());

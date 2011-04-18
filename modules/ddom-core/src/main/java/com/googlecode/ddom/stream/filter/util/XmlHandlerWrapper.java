@@ -37,8 +37,12 @@ public class XmlHandlerWrapper implements XmlHandler {
         parent.processXmlDeclaration(version, encoding, standalone);
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
-        parent.processDocumentType(rootName, publicId, systemId, data);
+    public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws StreamException {
+        parent.startDocumentTypeDeclaration(rootName, publicId, systemId);
+    }
+
+    public void endDocumentTypeDeclaration() throws StreamException {
+        parent.endDocumentTypeDeclaration();
     }
 
     public void startElement(String tagName) throws StreamException {

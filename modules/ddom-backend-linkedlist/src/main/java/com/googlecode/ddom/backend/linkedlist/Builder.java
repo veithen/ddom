@@ -95,15 +95,24 @@ public class Builder extends XmlOutput {
             document.processXmlDeclaration(version, encoding, standalone);
         }
 
-        public void processDocumentType(String rootName, String publicId, String systemId, String data) {
+        public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws StreamException {
             XmlHandler passThroughHandler = context.getPassThroughHandler();
             if (passThroughHandler == null) {
-                appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId, data));
+                appendNode(new DocumentTypeDeclaration(document, rootName, publicId, systemId));
             } else {
-                passThroughHandler.processDocumentType(rootName, publicId, systemId, data);
+                passThroughHandler.startDocumentTypeDeclaration(rootName, publicId, systemId);
             }
         }
         
+        public void endDocumentTypeDeclaration() throws StreamException {
+            XmlHandler passThroughHandler = context.getPassThroughHandler();
+            if (passThroughHandler == null) {
+                // TODO: CoreDocumentTypeDeclaration is not a parent node yet
+            } else {
+                passThroughHandler.endDocumentTypeDeclaration();
+            }
+        }
+
         public void startElement(String tagName) throws StreamException {
             XmlHandler passThroughHandler = context.getPassThroughHandler();
             if (passThroughHandler == null) {

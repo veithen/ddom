@@ -26,57 +26,60 @@ public final class NullXmlHandler implements XmlHandler {
     public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
     }
 
-    public void processDocumentType(String rootName, String publicId, String systemId, String data) {
+    public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
     }
 
-    public void startElement(String tagName) throws StreamException {
+    public void endDocumentTypeDeclaration() {
+    }
+
+    public void startElement(String tagName) {
     }
     
-    public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
+    public void startElement(String namespaceURI, String localName, String prefix) {
     }
     
-    public void endElement() throws StreamException {
+    public void endElement() {
     }
     
-    public void startAttribute(String name, String type) throws StreamException {
+    public void startAttribute(String name, String type) {
     }
     
-    public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
+    public void startAttribute(String namespaceURI, String localName, String prefix, String type) {
     }
     
-    public void startNamespaceDeclaration(String prefix) throws StreamException {
+    public void startNamespaceDeclaration(String prefix) {
     }
     
-    public void endAttribute() throws StreamException {
+    public void endAttribute() {
     }
     
-    public void attributesCompleted() throws StreamException {
+    public void attributesCompleted() {
     }
     
-    public void processCharacterData(String data, boolean ignorable) throws StreamException {
+    public void processCharacterData(String data, boolean ignorable) {
     }
     
-    public void startProcessingInstruction(String target) throws StreamException {
+    public void startProcessingInstruction(String target) {
     }
     
-    public void endProcessingInstruction() throws StreamException {
+    public void endProcessingInstruction() {
     }
     
-    public void startComment() throws StreamException {
+    public void startComment() {
     }
     
-    public void endComment() throws StreamException {
+    public void endComment() {
     }
     
-    public void startCDATASection() throws StreamException {
+    public void startCDATASection() {
     }
     
-    public void endCDATASection() throws StreamException {
+    public void endCDATASection() {
     }
     
     public void processEntityReference(String name) {
     }
     
-    public void completed() throws StreamException {
+    public void completed() {
     }
 }

@@ -33,9 +33,28 @@ public interface XmlHandler {
     void startEntity(boolean fragment, String inputEncoding);
     
     void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException;
-    
-    void processDocumentType(String rootName, String publicId, String systemId, String data);
 
+    /**
+     * Notify the handler of the beginning of a document type declaration. If the declaration has no
+     * internal subset, then the next event will be an invocation of
+     * {@link #endDocumentTypeDeclaration()}.
+     * 
+     * @param rootName
+     * @param publicId
+     * @param systemId
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws StreamException;
+
+    /**
+     * Notify the handler of the end of a document type declaration.
+     * 
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void endDocumentTypeDeclaration() throws StreamException;
+    
     /**
      * Notify the handler of the beginning of an element in non namespace aware mode.
      * 

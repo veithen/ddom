@@ -17,6 +17,7 @@ package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
@@ -24,14 +25,12 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
     private final String rootName;
     private final String publicId;
     private final String systemId;
-    private final String data; // TODO: has no accessors!
     
-    public DocumentTypeDeclaration(Document document, String rootName, String publicId, String systemId, String data) {
+    public DocumentTypeDeclaration(Document document, String rootName, String publicId, String systemId) {
         super(document);
         this.rootName = rootName;
         this.publicId = publicId;
         this.systemId = systemId;
-        this.data = data;
     }
 
     public final int coreGetNodeType() {
@@ -50,7 +49,7 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
         return systemId;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
-        handler.processDocumentType(rootName, publicId, systemId, data);
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.startDocumentTypeDeclaration(rootName, publicId, systemId);
     }
 }
