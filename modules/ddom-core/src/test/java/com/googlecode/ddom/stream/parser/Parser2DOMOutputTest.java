@@ -35,10 +35,13 @@ import com.googlecode.ddom.stream.dom.DOMOutput;
 
 public class Parser2DOMOutputTest extends TestCase {
     private final XMLConformanceTest test;
+    private final boolean flush;
 
-    public Parser2DOMOutputTest(XMLConformanceTest test) {
+    public Parser2DOMOutputTest(XMLConformanceTest test, boolean flush) {
         super(test.getName());
         this.test = test;
+        this.flush = flush;
+        setName(getName() + " [flush=" + flush + "]");
     }
 
     @Override
@@ -48,14 +51,27 @@ public class Parser2DOMOutputTest extends TestCase {
         DocumentBuilder domBuilder = domFactory.newDocumentBuilder();
         Document expected = domBuilder.parse(test.getSystemId());
         Document actual = domBuilder.newDocument();
-        new Stream(new Parser(test.getInputStream(), null, test.isUsingNamespaces()), new DOMOutput(actual)).flush();
+        Parser parser = new Parser(test.getInputStream(), null, test.isUsingNamespaces());
+        DOMOutput output = new DOMOutput(actual);
+        if (flush) {
+            new Stream(parser, output).flush();
+        } else {
+            EventCountingFilter filter = new EventCountingFilter();
+            parser.addFilter(filter);
+            Stream stream = new Stream(parser, output);
+            while (!stream.isComplete()) {
+                stream.proceed();
+                filter.reset();
+            }
+        }
         XMLAssert.assertXMLIdentical(XMLUnit.compareXML(expected, actual), true);
     }
     
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
         for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests(new AndFilter<XMLConformanceTest>(Filters.DEFAULT, Filters.XERCES_2_9_1_FILTER))) {
-            suite.addTest(new Parser2DOMOutputTest(test));
+            suite.addTest(new Parser2DOMOutputTest(test, false));
+            suite.addTest(new Parser2DOMOutputTest(test, true));
         }
         return suite;
     }
