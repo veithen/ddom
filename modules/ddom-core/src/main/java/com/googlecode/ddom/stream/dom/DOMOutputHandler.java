@@ -129,7 +129,7 @@ final class DOMOutputHandler implements XmlHandler {
     public void processCharacterData(String data, boolean ignorable) {
         if (coalescing) {
             buffer.append(data);
-        } else {
+        } else if (node != document) { // DOM doesn't allow Text nodes in a Document
             // TODO: process ignorable?
             node.appendChild(document.createTextNode(data));
         }

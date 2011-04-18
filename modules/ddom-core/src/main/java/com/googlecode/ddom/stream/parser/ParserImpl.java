@@ -33,41 +33,43 @@ final class ParserImpl implements XmlReader {
      */
     private static final int STATE_MARKUP = 2;
     
+    private static final int STATE_INTERNAL_SUBSET_CONTENT = 3;
+    
     /**
      * Parsing the content of an element.
      */
-    private static final int STATE_ELEMENT_CONTENT = 3;
+    private static final int STATE_ELEMENT_CONTENT = 4;
     
     /**
      * Parsing the attributes of a start tag.
      */
-    private static final int STATE_START_ELEMENT = 4;
+    private static final int STATE_START_ELEMENT = 5;
     
     /**
      * An empty element was encountered, but {@link XmlHandler#endElement()} has not been invoked
      * yet.
      */
-    private static final int STATE_EMPTY_ELEMENT = 5;
+    private static final int STATE_EMPTY_ELEMENT = 6;
     
     /**
      * Parsing the content of an attribute.
      */
-    private static final int STATE_ATTRIBUTE_CONTENT = 6;
+    private static final int STATE_ATTRIBUTE_CONTENT = 7;
     
     /**
      * Parsing the content of a comment.
      */
-    private static final int STATE_COMMENT_CONTENT = 7;
+    private static final int STATE_COMMENT_CONTENT = 8;
     
     /**
      * Parsing the content of a processing instruction.
      */
-    private static final int STATE_PI_CONTENT = 8;
+    private static final int STATE_PI_CONTENT = 9;
     
     /**
      * Parsing the content of a CDATA section.
      */
-    private static final int STATE_CDATA_SECTION_CONTENT = 9;
+    private static final int STATE_CDATA_SECTION_CONTENT = 10;
     
     private final XmlHandler handler;
     private final Symbols symbols = new SymbolHashTable();
@@ -138,6 +140,9 @@ final class ParserImpl implements XmlReader {
                 break;
             case STATE_MARKUP:
                 parseMarkup();
+                break;
+            case STATE_INTERNAL_SUBSET_CONTENT:
+                parseInternalSubset();
                 break;
             case STATE_DOCUMENT_CONTENT: // TODO
             case STATE_ELEMENT_CONTENT:
@@ -373,7 +378,17 @@ final class ParserImpl implements XmlReader {
         switch (c) {
             case '!':
                 consume();
-                parseCommentOrCDATASection();
+                c = peek();
+                switch (c) {
+                    case '-':
+                        parseComment();
+                        break;
+                    case '[':
+                        parseCDATASection();
+                        break;
+                    default:
+                        parseDeclaration();
+                }
                 break;
             case '?':
                 consume();
@@ -440,14 +455,6 @@ final class ParserImpl implements XmlReader {
         state = STATE_ELEMENT_CONTENT;
     }
     
-    private void parseCommentOrCDATASection() throws StreamException {
-        if (peek() == '-') {
-            parseComment();
-        } else {
-            parseCDATASection();
-        }
-    }
-    
     private void parseComment() throws StreamException {
         for (int i=0; i<2; i++) {
             if (read() != '-') {
@@ -459,6 +466,7 @@ final class ParserImpl implements XmlReader {
     }
     
     private void parseCDATASection() throws StreamException {
+        // TODO: test already done in parseMarkup
         if (read() != '[') {
             throw new StreamException("Invalid start of CDATA section");
         }
@@ -483,6 +491,36 @@ final class ParserImpl implements XmlReader {
         // TODO: check for invalid PI target (xml)
         handler.startProcessingInstruction(symbols.getSymbol(nameBuffer, 0, nameLength));
         state = STATE_PI_CONTENT;
+    }
+    
+    private void parseDeclaration() throws StreamException {
+        parseName();
+        if (!checkName("DOCTYPE")) {
+            throw new StreamException("Expected DOCTYPE");
+        }
+        skipWhitespace();
+        parseName();
+        String rootName = symbols.getSymbol(nameBuffer, 0, nameLength);
+        skipWhitespace();
+        // TODO: handle ExternalID here
+        handler.processDocumentType(rootName, null, null, null); // TODO
+        if (peek() == '[') {
+            consume();
+            state = STATE_INTERNAL_SUBSET_CONTENT;
+        }
+    }
+    
+    private void parseInternalSubset() throws StreamException {
+        // TODO
+        int c;
+        while ((c = read()) != ']') {
+            // Loop
+        }
+        skipWhitespace();
+        if (read() != '>') {
+            throw new StreamException("Expected '>' after internal subset");
+        }
+        state = STATE_DOCUMENT_CONTENT;
     }
     
     private void parseDelimitedContent(String delimiter, int matchThreshold) throws StreamException {
