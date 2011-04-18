@@ -312,6 +312,10 @@ final class ParserImpl implements XmlReader {
                     }
                     processCharacterData(0xA); // TODO: actually code unit;
                     break;
+                case '&':
+                    consume();
+                    parseEntityRef();
+                    break;
                 default:
                     consume();
                     // TODO: The character sequence "]]>" must not appear in content unless used to mark the end of a CDATA section.
@@ -335,6 +339,10 @@ final class ParserImpl implements XmlReader {
                     consume();
                     processCharacterData(0x20);
                     break;
+                case '&':
+                    consume();
+                    parseEntityRef();
+                    break;
                 default:
                     if (c == quoteChar) {
                         if (flushText(true)) {
@@ -357,6 +365,55 @@ final class ParserImpl implements XmlReader {
         // TODO: check buffer overflow
         // TODO: handle supplemental characters
         textBuffer[textLength++] = (char)c;
+    }
+    
+    private void parseEntityRef() throws StreamException {
+        if (peek() == '#') {
+            consume();
+            if (peek() == 'x') {
+                consume();
+                int ref = 0;
+                int c;
+                while ((c = read()) != ';') {
+                    if ('0' <= c && c <= '9') {
+                        ref = (ref << 4) + c - '0';
+                    } else if ('a' <= c && c <= 'f') {
+                        ref = (ref << 4) + c - 'a' + 10;
+                    } else if ('A' <= c && c <= 'F') {
+                        ref = (ref << 4) + c - 'A' + 10;
+                    }
+                }
+                processCharacterData(ref);
+            } else {
+                int ref = 0;
+                int c;
+                while ((c = read()) != ';') {
+                    if (c < '0' || c > '9') {
+                        throw new StreamException("Illegal character in character reference");
+                    }
+                    ref = ref*10 + c - '0';
+                }
+                processCharacterData(ref);
+            }
+        } else {
+            parseName();
+            if (read() != ';') {
+                throw new StreamException("Expected ';'");
+            }
+            if (checkName("lt")) {
+                processCharacterData('<');
+            } else if (checkName("gt")) {
+                processCharacterData('>');
+            } else if (checkName("amp")) {
+                processCharacterData('&');
+            } else if (checkName("apos")) {
+                processCharacterData('\'');
+            } else if (checkName("quot")) {
+                processCharacterData('"');
+            } else {
+                throw new UnsupportedOperationException(); // TODO
+            }
+        }
     }
     
     private boolean flushText(boolean attributeContent) throws StreamException {
@@ -482,12 +539,16 @@ final class ParserImpl implements XmlReader {
     }
     
     private void parsePI() throws StreamException {
+        // PI ::= '<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
         parseName();
-        if (!isWhitespace(read())) {
-            throw new StreamException("Illegal start of processing instruction");
+        // A processing instruction may be empty
+        if (peek() != '?') {
+            if (!isWhitespace(read())) {
+                throw new StreamException("Illegal start of processing instruction");
+            }
+            // TODO: should we preserve additional whitespace? (StAX does not)
+            skipWhitespace();
         }
-        // TODO: should we preserve additional whitespace? (StAX does not)
-        skipWhitespace();
         // TODO: check for invalid PI target (xml)
         handler.startProcessingInstruction(symbols.getSymbol(nameBuffer, 0, nameLength));
         state = STATE_PI_CONTENT;
@@ -526,8 +587,11 @@ final class ParserImpl implements XmlReader {
     private void parseDelimitedContent(String delimiter, int matchThreshold) throws StreamException {
         int matchLength = 0;
         while (true) {
-            int c = read();
-            if (c == delimiter.charAt(matchLength)) {
+            int c = peek();
+            if (c == -1) {
+                throw new StreamException("Unexpected end of stream");
+            } else if (c == delimiter.charAt(matchLength)) {
+                consume();
                 matchLength++;
                 if (matchThreshold > 0) {
                     if (matchLength == matchThreshold) {
@@ -560,15 +624,18 @@ final class ParserImpl implements XmlReader {
                     state = STATE_ELEMENT_CONTENT;
                     return;
                 }
-            } else {
+            } else if (matchLength > 0) {
                 // TODO: we need to exit the loop here if processCharacterData produces an event
-                if (matchLength > 0) {
-                    for (int i=0; i<matchLength; i++) {
-                        // TODO: optimize: don't need to handle supplementary code points here
-                        processCharacterData(delimiter.charAt(matchLength));
-                    }
-                    matchLength = 0;
+                for (int i=0; i<matchLength; i++) {
+                    // TODO: optimize: don't need to handle supplementary code points here
+                    processCharacterData(delimiter.charAt(i));
                 }
+                matchLength = 0;
+                // The current character may be part of the delimiter, so loop again. This occurs
+                // e.g. when a PI is terminated by "??>".
+                // TODO: what about a CDATA section terminated by "]]]>" or "]]]]>"?
+            } else {
+                consume();
                 processCharacterData(c);
             }
         }
