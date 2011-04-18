@@ -159,13 +159,13 @@ final class ParserImpl implements XmlReader {
                 parseAttributeContent();
                 break;
             case STATE_COMMENT_CONTENT:
-                parseDelimitedContent("-->", 2);
+                parseDelimitedContent("-->", 2, 0);
                 break;
             case STATE_PI_CONTENT:
-                parseDelimitedContent("?>", -1);
+                parseDelimitedContent("?>", -1, 0);
                 break;
             case STATE_CDATA_SECTION_CONTENT:
-                parseDelimitedContent("]]>", -1);
+                parseDelimitedContent("]]>", -1, 2);
                 break;
         }
     }
@@ -584,7 +584,7 @@ final class ParserImpl implements XmlReader {
         state = STATE_DOCUMENT_CONTENT;
     }
     
-    private void parseDelimitedContent(String delimiter, int matchThreshold) throws StreamException {
+    private void parseDelimitedContent(String delimiter, int matchThreshold, int fuzziness) throws StreamException {
         int matchLength = 0;
         while (true) {
             int c = peek();
@@ -626,14 +626,19 @@ final class ParserImpl implements XmlReader {
                 }
             } else if (matchLength > 0) {
                 // TODO: we need to exit the loop here if processCharacterData produces an event
-                for (int i=0; i<matchLength; i++) {
-                    // TODO: optimize: don't need to handle supplementary code points here
-                    processCharacterData(delimiter.charAt(i));
+                if (matchLength == fuzziness) {
+                    // This takes care of CDATA sections terminated by "]]]>" or "]]]]>"?
+                    processCharacterData(delimiter.charAt(0));
+                    matchLength--;
+                } else {
+                    for (int i=0; i<matchLength; i++) {
+                        // TODO: optimize: don't need to handle supplementary code points here
+                        processCharacterData(delimiter.charAt(i));
+                    }
+                    matchLength = 0;
+                    // The current character may be part of the delimiter, so loop again. This occurs
+                    // e.g. when a PI is terminated by "??>".
                 }
-                matchLength = 0;
-                // The current character may be part of the delimiter, so loop again. This occurs
-                // e.g. when a PI is terminated by "??>".
-                // TODO: what about a CDATA section terminated by "]]]>" or "]]]]>"?
             } else {
                 consume();
                 processCharacterData(c);
