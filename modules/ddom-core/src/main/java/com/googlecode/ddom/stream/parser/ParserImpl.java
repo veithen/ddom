@@ -26,62 +26,68 @@ import com.googlecode.ddom.symbols.Symbols;
 final class ParserImpl implements XmlReader {
     private static final int STATE_START_DOCUMENT = 0;
     
-    private static final int STATE_DOCUMENT_CONTENT = 1;
+    /**
+     * The XML declaration of the document has been parsed but the corresponding event has not been
+     * sent to the handler yet.
+     */
+    private static final int STATE_XML_DECLARATION_PENDING = 1;
+    
+    private static final int STATE_DOCUMENT_CONTENT = 2;
     
     /**
      * The last character was a '&lt;'.
      */
-    private static final int STATE_MARKUP = 2;
+    private static final int STATE_MARKUP = 3;
     
-    private static final int STATE_INTERNAL_SUBSET_CONTENT = 3;
+    private static final int STATE_INTERNAL_SUBSET_CONTENT = 4;
     
     /**
      * Parsing the content of an element.
      */
-    private static final int STATE_ELEMENT_CONTENT = 4;
+    private static final int STATE_ELEMENT_CONTENT = 5;
     
     /**
      * Parsing the attributes of a start tag.
      */
-    private static final int STATE_START_ELEMENT = 5;
+    private static final int STATE_START_ELEMENT = 6;
     
     /**
      * An empty element was encountered, but {@link XmlHandler#endElement()} has not been invoked
      * yet.
      */
-    private static final int STATE_EMPTY_ELEMENT = 6;
+    private static final int STATE_EMPTY_ELEMENT = 7;
     
     /**
      * Parsing the content of an attribute.
      */
-    private static final int STATE_ATTRIBUTE_CONTENT = 7;
+    private static final int STATE_ATTRIBUTE_CONTENT = 8;
     
     /**
      * Parsing the content of a comment.
      */
-    private static final int STATE_COMMENT_CONTENT = 8;
+    private static final int STATE_COMMENT_CONTENT = 9;
     
-    private static final int STATE_END_COMMENT = 9;
+    private static final int STATE_END_COMMENT = 10;
     
     /**
      * Parsing the content of a processing instruction.
      */
-    private static final int STATE_PI_CONTENT = 10;
+    private static final int STATE_PI_CONTENT = 11;
     
-    private static final int STATE_END_PI = 11;
+    private static final int STATE_END_PI = 12;
     
     /**
      * Parsing the content of a CDATA section.
      */
-    private static final int STATE_CDATA_SECTION_CONTENT = 12;
+    private static final int STATE_CDATA_SECTION_CONTENT = 13;
     
-    private static final int STATE_END_CDATA_SECTION = 13;
+    private static final int STATE_END_CDATA_SECTION = 14;
     
     /**
-     * An entity reference has been parsed but the corresponding even has not been sent to the
+     * An entity reference has been parsed but the corresponding event has not been sent to the
      * handler yet.
      */
-    private static final int STATE_ENTITY_REF_PENDING = 14;
+    private static final int STATE_ENTITY_REF_PENDING = 15;
     
     private final XmlHandler handler;
     private final Symbols symbols = new SymbolHashTable();
@@ -90,6 +96,9 @@ final class ParserImpl implements XmlReader {
     private final ElementHandler elementHandler;
     
     private int state = STATE_START_DOCUMENT;
+    private String version;
+    private String xmlEncoding;
+    private Boolean standalone;
     private int nextChar = -2;
     private char[] nameBuffer = new char[32];
     private int nameLength;
@@ -151,7 +160,12 @@ final class ParserImpl implements XmlReader {
             switch (state) {
                 case STATE_START_DOCUMENT:
                     // TODO: need to implement encoding detection here
-                    parseStartDocument();
+                    parseStartDocument(flush);
+                    break;
+                case STATE_XML_DECLARATION_PENDING:
+                    handler.processXmlDeclaration(version, xmlEncoding, standalone);
+                    state = STATE_DOCUMENT_CONTENT;
+                    eventProduced = true;
                     break;
                 case STATE_MARKUP:
                     parseMarkup();
@@ -218,7 +232,7 @@ final class ParserImpl implements XmlReader {
         } while (!eventProduced);
     }
     
-    private void parseStartDocument() throws StreamException {
+    private void parseStartDocument(boolean flush) throws StreamException {
         int c = peek();
         if (c == '<') {
             consume();
@@ -226,8 +240,7 @@ final class ParserImpl implements XmlReader {
             if (c == '?') {
                 consume();
                 // TODO: the document may also start with a processing instruction that is not an XML declaration
-                parseXmlDeclaration();
-                state = STATE_DOCUMENT_CONTENT;
+                parseXmlDeclaration(flush);
             } else {
                 handler.startEntity(false, inputEncoding);
                 state = STATE_MARKUP;
@@ -238,7 +251,7 @@ final class ParserImpl implements XmlReader {
         }
     }
     
-    private void parseXmlDeclaration() throws StreamException {
+    private void parseXmlDeclaration(boolean flush) throws StreamException {
         // XMLDecl      ::= '<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
         // VersionInfo  ::= S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
         // Eq           ::= S? '=' S?
@@ -254,29 +267,29 @@ final class ParserImpl implements XmlReader {
             }
             String version = parsePseudoAttribute();
             String encoding;
-            String standalone;
+            String standaloneString;
             skipWhitespace();
             if (peek() == '?') {
                 consume();
                 encoding = null;
-                standalone = null;
+                standaloneString = null;
             } else {
                 parseName();
                 if (checkName("encoding")) {
                     encoding = parsePseudoAttribute();
                     skipWhitespace();
                     if (peek() == '?') {
-                        standalone = null;
+                        standaloneString = null;
                     } else {
                         parseName();
                         if (!checkName("standalone")) {
                             throw new StreamException("Unexpected pseudo attribute");
                         }
-                        standalone = parsePseudoAttribute();
+                        standaloneString = parsePseudoAttribute();
                     }
                 } else if (checkName("standalone")) {
                     encoding = null;
-                    standalone = parsePseudoAttribute();
+                    standaloneString = parsePseudoAttribute();
                 } else {
                     throw new StreamException("Unexpected pseudo attribute");
                 }
@@ -301,7 +314,16 @@ final class ParserImpl implements XmlReader {
                 }
             }
             handler.startEntity(false, inputEncoding);
-            handler.processXmlDeclaration(version, encoding, standalone == null ? null : Boolean.valueOf(standalone.equals("yes")));
+            Boolean standalone = standaloneString == null ? null : Boolean.valueOf(standaloneString.equals("yes"));
+            if (flush) {
+                handler.processXmlDeclaration(version, encoding, standalone);
+                state = STATE_DOCUMENT_CONTENT;
+            } else {
+                this.version = version;
+                this.xmlEncoding = encoding;
+                this.standalone = standalone;
+                state = STATE_XML_DECLARATION_PENDING;
+            }
         } else {
             throw new StreamException("Expected XML declaration");
         }
@@ -383,6 +405,12 @@ final class ParserImpl implements XmlReader {
                 case -1:
                     throw new StreamException("Unexpected end of stream in attribute value");
                 case 0xD:
+                    consume();
+                    if (peek() == 0xA) {
+                        consume();
+                    }
+                    processCharacterData(0x20); // TODO: actually code unit;
+                    break;
                 case 0xA:
                 case 0x9:
                     consume();
