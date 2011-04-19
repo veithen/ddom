@@ -63,9 +63,13 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
+    private boolean attributesBuilt() {
+        int state = internalGetState();
+        return state != Flags.STATE_SOURCE_SET && state != Flags.STATE_ATTRIBUTES_PENDING;
+    }
+    
     public final CoreAttribute coreGetFirstAttribute() throws DeferredParsingException {
-        // TODO: we also need to do something if state is "source set"
-        if (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
+        if (firstAttribute == null && !attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
             do {
                 context.next();
@@ -79,11 +83,17 @@ public abstract class Element extends Container implements LLElement {
     }
     
     public final CoreAttribute coreGetLastAttribute() throws DeferredParsingException {
-        CoreAttribute previousAttribute = null;
-        CoreAttribute attribute = firstAttribute;
+        if (!attributesBuilt()) {
+            InputContext context = internalGetOrCreateInputContext();
+            do {
+                context.next();
+            } while (internalGetState() == Flags.STATE_ATTRIBUTES_PENDING);
+        }
+        Attribute previousAttribute = null;
+        Attribute attribute = firstAttribute;
         while (attribute != null) {
             previousAttribute = attribute;
-            attribute = attribute.coreGetNextAttribute();
+            attribute = attribute.internalGetNextAttributeIfMaterialized();
         }
         return previousAttribute;
     }
