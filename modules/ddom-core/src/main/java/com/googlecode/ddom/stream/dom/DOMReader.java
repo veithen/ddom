@@ -32,12 +32,14 @@ import com.googlecode.ddom.stream.XmlReader;
 final class DOMReader implements XmlReader {
     private final XmlHandler handler;
     private final Node rootNode;
+    private final boolean expandEntityReferences;
     private Node currentNode;
     private boolean visited;
     
-    DOMReader(XmlHandler handler, Node rootNode) {
+    DOMReader(XmlHandler handler, Node rootNode, boolean expandEntityReferences) {
         this.handler = handler;
         this.rootNode = rootNode;
+        this.expandEntityReferences = expandEntityReferences;
     }
 
     private static String nullToEmptyString(String s) {
@@ -150,6 +152,15 @@ final class DOMReader implements XmlReader {
                         handler.processCharacterData(pi.getData(), false);
                         handler.endProcessingInstruction();
                         break loop;
+                    case Node.ENTITY_REFERENCE_NODE:
+                        if (!expandEntityReferences) {
+                            handler.processEntityReference(currentNode.getNodeName());
+                            visited = true;
+                            break loop;
+                        } else {
+                            // No event has been generated, so loop again
+                            break;
+                        }
                     default:
                         // TODO
                         throw new UnsupportedOperationException("Unsupported node type " + nodeType);

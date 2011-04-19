@@ -77,6 +77,12 @@ final class ParserImpl implements XmlReader {
     
     private static final int STATE_END_CDATA_SECTION = 13;
     
+    /**
+     * An entity reference has been parsed but the corresponding even has not been sent to the
+     * handler yet.
+     */
+    private static final int STATE_ENTITY_REF_PENDING = 14;
+    
     private final XmlHandler handler;
     private final Symbols symbols = new SymbolHashTable();
     private UnicodeReader reader;
@@ -155,7 +161,7 @@ final class ParserImpl implements XmlReader {
                     break;
                 case STATE_DOCUMENT_CONTENT: // TODO
                 case STATE_ELEMENT_CONTENT:
-                    eventProduced = parseElementContent();
+                    eventProduced = parseElementContent(flush);
                     break;
                 case STATE_START_ELEMENT:
                     eventProduced = parseAttribute();
@@ -165,7 +171,7 @@ final class ParserImpl implements XmlReader {
                     state = STATE_ELEMENT_CONTENT; // TODO: not always correct
                     break;
                 case STATE_ATTRIBUTE_CONTENT:
-                    eventProduced = parseAttributeContent();
+                    eventProduced = parseAttributeContent(flush);
                     break;
                 case STATE_COMMENT_CONTENT: {
                     int result = parseDelimitedContent("-->", 2, 0);
@@ -201,6 +207,11 @@ final class ParserImpl implements XmlReader {
                 }
                 case STATE_END_CDATA_SECTION:
                     handler.endCDATASection();
+                    state = STATE_ELEMENT_CONTENT;
+                    break;
+                case STATE_ENTITY_REF_PENDING:
+                    handler.processEntityReference(getName());
+                    eventProduced = true;
                     state = STATE_ELEMENT_CONTENT;
                     break;
             }
@@ -321,7 +332,7 @@ final class ParserImpl implements XmlReader {
         
     }
     
-    private boolean parseElementContent() throws StreamException {
+    private boolean parseElementContent(boolean flush) throws StreamException {
         while (true) {
             int c = peek();
             switch (c) {
@@ -350,7 +361,9 @@ final class ParserImpl implements XmlReader {
                     break;
                 case '&':
                     consume();
-                    parseEntityRef();
+                    if (parseEntityRef(false, flush) && !flush) {
+                        return true;
+                    }
                     break;
                 default:
                     consume();
@@ -361,7 +374,7 @@ final class ParserImpl implements XmlReader {
         }
     }
     
-    private boolean parseAttributeContent() throws StreamException {
+    private boolean parseAttributeContent(boolean flush) throws StreamException {
         while (true) {
             int c = peek();
             switch (c) {
@@ -377,7 +390,9 @@ final class ParserImpl implements XmlReader {
                     break;
                 case '&':
                     consume();
-                    parseEntityRef();
+                    if (parseEntityRef(true, flush) && !flush) {
+                        return true;
+                    }
                     break;
                 default:
                     if (c == quoteChar) {
@@ -402,7 +417,7 @@ final class ParserImpl implements XmlReader {
         textBuffer[textLength++] = (char)c;
     }
     
-    private void parseEntityRef() throws StreamException {
+    private boolean parseEntityRef(boolean attributeContent, boolean flush) throws StreamException {
         if (peek() == '#') {
             consume();
             if (peek() == 'x') {
@@ -419,6 +434,7 @@ final class ParserImpl implements XmlReader {
                     }
                 }
                 processCharacterData(ref);
+                return false; // TODO
             } else {
                 int ref = 0;
                 int c;
@@ -429,6 +445,7 @@ final class ParserImpl implements XmlReader {
                     ref = ref*10 + c - '0';
                 }
                 processCharacterData(ref);
+                return false; // TODO
             }
         } else {
             parseName();
@@ -437,16 +454,26 @@ final class ParserImpl implements XmlReader {
             }
             if (checkName("lt")) {
                 processCharacterData('<');
+                return false; // TODO
             } else if (checkName("gt")) {
                 processCharacterData('>');
+                return false; // TODO
             } else if (checkName("amp")) {
                 processCharacterData('&');
+                return false; // TODO
             } else if (checkName("apos")) {
                 processCharacterData('\'');
+                return false; // TODO
             } else if (checkName("quot")) {
                 processCharacterData('"');
+                return false; // TODO
             } else {
-                throw new UnsupportedOperationException(); // TODO
+                if (flushText(attributeContent) && !flush) {
+                    state = STATE_ENTITY_REF_PENDING;
+                } else {
+                    handler.processEntityReference(getName());
+                }
+                return true;
             }
         }
     }
@@ -590,7 +617,7 @@ final class ParserImpl implements XmlReader {
             skipWhitespace();
         }
         // TODO: check for invalid PI target (xml)
-        handler.startProcessingInstruction(symbols.getSymbol(nameBuffer, 0, nameLength));
+        handler.startProcessingInstruction(getName());
         state = STATE_PI_CONTENT;
     }
     
@@ -601,7 +628,7 @@ final class ParserImpl implements XmlReader {
         }
         skipWhitespace();
         parseName();
-        String rootName = symbols.getSymbol(nameBuffer, 0, nameLength);
+        String rootName = getName();
         skipWhitespace();
         // TODO: handle ExternalID here
         handler.startDocumentTypeDeclaration(rootName, null, null); // TODO
@@ -690,6 +717,10 @@ final class ParserImpl implements XmlReader {
         } else {
             throw new StreamException("Expected NameStartChar");
         }
+    }
+    
+    private String getName() {
+        return symbols.getSymbol(nameBuffer, 0, nameLength);
     }
     
     private boolean checkName(String name) {

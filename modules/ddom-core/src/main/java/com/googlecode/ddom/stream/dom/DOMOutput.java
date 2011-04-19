@@ -16,6 +16,9 @@
 package com.googlecode.ddom.stream.dom;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.Entity;
+import org.w3c.dom.EntityReference;
 
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlOutput;
@@ -25,7 +28,13 @@ import com.googlecode.ddom.stream.XmlOutput;
  * 
  * Limitations:
  * <ul>
- *   <li>Information about attribute types is lost.
+ * <li>Although a {@link DocumentType} instance is created and added to the output document, events
+ * related to the internal subset are not processed. The reason is that in the DOM API all DTD
+ * information is read-only. E.g. {@link Entity} objects are read-only, and there is also no factory
+ * method to create them.
+ * <li>Because the DTD information is not added to the document, {@link EntityReference} objects
+ * created by this class will all appear as references to unknown entities.
+ * <li>Information about attribute types is lost.
  * </ul>
  * 
  * @author Andreas Veithen

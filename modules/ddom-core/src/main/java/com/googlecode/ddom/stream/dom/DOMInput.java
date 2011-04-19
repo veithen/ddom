@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.stream.dom;
 
+import org.w3c.dom.EntityReference;
 import org.w3c.dom.Node;
 
 import com.googlecode.ddom.stream.XmlHandler;
@@ -23,14 +24,34 @@ import com.googlecode.ddom.stream.XmlReader;
 
 public class DOMInput extends XmlInput {
     private final Node rootNode;
+    private final boolean expandEntityReferences;
     
     public DOMInput(Node rootNode) {
+        this(rootNode, false);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param rootNode
+     *            The root node of the tree from which events will be generated.
+     * @param expandEntityReferences
+     *            Determines how {@link EntityReference} nodes are handled by this instance. When
+     *            set to <code>false</code>, a single
+     *            {@link XmlHandler#processEntityReference(String)} event will be emitted for each
+     *            {@link EntityReference}. When set to <code>true</code>, no
+     *            {@link XmlHandler#processEntityReference(String)} events are generated. Instead,
+     *            the implementation will traverse the descendants of the {@link EntityReference}
+     *            nodes (which effectively expands these entity references).
+     */
+    public DOMInput(Node rootNode, boolean expandEntityReferences) {
         this.rootNode = rootNode;
+        this.expandEntityReferences = expandEntityReferences;
     }
 
     @Override
     protected XmlReader createReader(XmlHandler handler) {
-        return new DOMReader(handler, rootNode);
+        return new DOMReader(handler, rootNode, expandEntityReferences);
     }
 
     public void dispose() {

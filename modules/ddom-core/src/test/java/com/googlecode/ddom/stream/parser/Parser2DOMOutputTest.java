@@ -31,6 +31,7 @@ import com.google.code.ddom.xmlts.Filters;
 import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
 import com.googlecode.ddom.stream.Stream;
+import com.googlecode.ddom.stream.dom.DOMInput;
 import com.googlecode.ddom.stream.dom.DOMOutput;
 
 public class Parser2DOMOutputTest extends TestCase {
@@ -48,8 +49,13 @@ public class Parser2DOMOutputTest extends TestCase {
     protected void runTest() throws Throwable {
         DocumentBuilderFactory domFactory = new DocumentBuilderFactoryImpl();
         domFactory.setNamespaceAware(test.isUsingNamespaces());
+        domFactory.setExpandEntityReferences(false);
         DocumentBuilder domBuilder = domFactory.newDocumentBuilder();
-        Document expected = domBuilder.parse(test.getSystemId());
+        Document original = domBuilder.parse(test.getSystemId());
+        Document expected = domBuilder.newDocument();
+        // DOMOutput has some intrinsic limitations. To get comparable documents,
+        // we need to pass the original/expected document through DOMOutput as well:
+        new Stream(new DOMInput(original), new DOMOutput(expected)).flush();
         Document actual = domBuilder.newDocument();
         Parser parser = new Parser(test.getInputStream(), null, test.isUsingNamespaces());
         DOMOutput output = new DOMOutput(actual);
