@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
 import com.googlecode.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 import com.googlecode.ddom.core.AttributeMatcher;
@@ -62,7 +63,14 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
-    public final CoreAttribute coreGetFirstAttribute() {
+    public final CoreAttribute coreGetFirstAttribute() throws DeferredParsingException {
+        // TODO: we also need to do something if state is "source set"
+        if (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
+            InputContext context = internalGetOrCreateInputContext();
+            do {
+                context.next();
+            } while (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING);
+        }
         return firstAttribute;
     }
     

@@ -28,10 +28,11 @@ abstract class ElementHandler {
         this.handler = handler;
     }
     
-    abstract void handleStartElement(char[] name, int len) throws StreamException;
-    abstract void handleStartAttribute(char[] name, int len) throws StreamException;
-    abstract void handleCharacterData(String data) throws StreamException;
-    abstract void handleEndAttribute() throws StreamException;
+    abstract boolean pushPendingEvent() throws StreamException;
+    abstract boolean handleStartElement(char[] name, int len) throws StreamException;
+    abstract boolean handleStartAttribute(char[] name, int len) throws StreamException;
+    abstract boolean handleCharacterData(String data) throws StreamException;
+    abstract boolean handleEndAttribute() throws StreamException;
     abstract void attributesCompleted() throws StreamException;
     abstract void handleEndElement(char[] name, int len) throws StreamException;
 }

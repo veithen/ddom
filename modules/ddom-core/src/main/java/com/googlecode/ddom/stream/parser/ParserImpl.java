@@ -61,22 +61,27 @@ final class ParserImpl implements XmlReader {
      */
     private static final int STATE_COMMENT_CONTENT = 8;
     
+    private static final int STATE_END_COMMENT = 9;
+    
     /**
      * Parsing the content of a processing instruction.
      */
-    private static final int STATE_PI_CONTENT = 9;
+    private static final int STATE_PI_CONTENT = 10;
+    
+    private static final int STATE_END_PI = 11;
     
     /**
      * Parsing the content of a CDATA section.
      */
-    private static final int STATE_CDATA_SECTION_CONTENT = 10;
+    private static final int STATE_CDATA_SECTION_CONTENT = 12;
+    
+    private static final int STATE_END_CDATA_SECTION = 13;
     
     private final XmlHandler handler;
     private final Symbols symbols = new SymbolHashTable();
     private UnicodeReader reader;
     private String inputEncoding;
-    private final boolean namespaceAware;
-    private ElementHandler elementHandler;
+    private final ElementHandler elementHandler;
     
     private int state = STATE_START_DOCUMENT;
     private int nextChar = -2;
@@ -92,7 +97,7 @@ final class ParserImpl implements XmlReader {
         this.handler = handler;
         this.reader = reader;
         this.inputEncoding = inputEncoding;
-        this.namespaceAware = namespaceAware;
+        elementHandler = namespaceAware ? new NSAwareElementHandler(symbols, handler) : new NSUnawareElementHandler(symbols, handler);
     }
 
     private int peek() throws StreamException {
@@ -131,43 +136,75 @@ final class ParserImpl implements XmlReader {
     }
     
     public void proceed(boolean flush) throws StreamException {
-        switch (state) {
-            case STATE_START_DOCUMENT:
-                // TODO: need to implement encoding detection here
-                // TODO: move to constructor
-                elementHandler = namespaceAware ? new NSAwareElementHandler(symbols, handler) : new NSUnawareElementHandler(symbols, handler);
-                parseStartDocument();
-                break;
-            case STATE_MARKUP:
-                parseMarkup();
-                break;
-            case STATE_INTERNAL_SUBSET_CONTENT:
-                parseInternalSubset();
-                break;
-            case STATE_DOCUMENT_CONTENT: // TODO
-            case STATE_ELEMENT_CONTENT:
-                parseElementContent();
-                break;
-            case STATE_START_ELEMENT:
-                parseAttribute();
-                break;
-            case STATE_EMPTY_ELEMENT:
-                elementHandler.handleEndElement(null, 0); // TODO
-                state = STATE_ELEMENT_CONTENT; // TODO: not always correct
-                break;
-            case STATE_ATTRIBUTE_CONTENT:
-                parseAttributeContent();
-                break;
-            case STATE_COMMENT_CONTENT:
-                parseDelimitedContent("-->", 2, 0);
-                break;
-            case STATE_PI_CONTENT:
-                parseDelimitedContent("?>", -1, 0);
-                break;
-            case STATE_CDATA_SECTION_CONTENT:
-                parseDelimitedContent("]]>", -1, 2);
-                break;
+        if (elementHandler.pushPendingEvent()) {
+            return;
         }
+        boolean eventProduced;
+        do {
+            eventProduced = true; // TODO
+            switch (state) {
+                case STATE_START_DOCUMENT:
+                    // TODO: need to implement encoding detection here
+                    parseStartDocument();
+                    break;
+                case STATE_MARKUP:
+                    parseMarkup();
+                    break;
+                case STATE_INTERNAL_SUBSET_CONTENT:
+                    parseInternalSubset();
+                    break;
+                case STATE_DOCUMENT_CONTENT: // TODO
+                case STATE_ELEMENT_CONTENT:
+                    eventProduced = parseElementContent();
+                    break;
+                case STATE_START_ELEMENT:
+                    eventProduced = parseAttribute();
+                    break;
+                case STATE_EMPTY_ELEMENT:
+                    elementHandler.handleEndElement(null, 0); // TODO
+                    state = STATE_ELEMENT_CONTENT; // TODO: not always correct
+                    break;
+                case STATE_ATTRIBUTE_CONTENT:
+                    eventProduced = parseAttributeContent();
+                    break;
+                case STATE_COMMENT_CONTENT: {
+                    int result = parseDelimitedContent("-->", 2, 0);
+                    eventProduced = (result & 1) != 0;
+                    if ((result & 2) != 0) {
+                        state = STATE_END_COMMENT;
+                    }
+                    break;
+                }
+                case STATE_END_COMMENT:
+                    handler.endComment();
+                    state = STATE_ELEMENT_CONTENT;
+                    break;
+                case STATE_PI_CONTENT: {
+                    int result = parseDelimitedContent("?>", -1, 0);
+                    eventProduced = (result & 1) != 0;
+                    if ((result & 2) != 0) {
+                        state = STATE_END_PI;
+                    }
+                    break;
+                }
+                case STATE_END_PI:
+                    handler.endProcessingInstruction();
+                    state = STATE_ELEMENT_CONTENT;
+                    break;
+                case STATE_CDATA_SECTION_CONTENT: {
+                    int result = parseDelimitedContent("]]>", -1, 2);
+                    eventProduced = (result & 1) != 0;
+                    if ((result & 2) != 0) {
+                        state = STATE_END_CDATA_SECTION;
+                    }
+                    break;
+                }
+                case STATE_END_CDATA_SECTION:
+                    handler.endCDATASection();
+                    state = STATE_ELEMENT_CONTENT;
+                    break;
+            }
+        } while (!eventProduced);
     }
     
     private void parseStartDocument() throws StreamException {
@@ -284,25 +321,24 @@ final class ParserImpl implements XmlReader {
         
     }
     
-    private void parseElementContent() throws StreamException {
+    private boolean parseElementContent() throws StreamException {
         while (true) {
             int c = peek();
             switch (c) {
                 case '<':
                     if (flushText(false)) {
-                        return;
+                        return true;
                     } else {
                         consume();
-                        parseMarkup();
-                        return;
+                        return parseMarkup();
                     }
                 case -1:
                     // TODO: check depth!
                     if (flushText(false)) {
-                        return;
+                        return true;
                     } else {
                         handler.completed();
-                        return;
+                        return true;
                     }
                 case 0xD:
                     // TODO: also implement this case for other types of content
@@ -325,7 +361,7 @@ final class ParserImpl implements XmlReader {
         }
     }
     
-    private void parseAttributeContent() throws StreamException {
+    private boolean parseAttributeContent() throws StreamException {
         while (true) {
             int c = peek();
             switch (c) {
@@ -346,12 +382,11 @@ final class ParserImpl implements XmlReader {
                 default:
                     if (c == quoteChar) {
                         if (flushText(true)) {
-                            return;
+                            return true;
                         } else {
                             consume();
-                            elementHandler.handleEndAttribute();
                             state = STATE_START_ELEMENT;
-                            return;
+                            return elementHandler.handleEndAttribute();
                         }
                     } else {
                         consume();
@@ -418,19 +453,21 @@ final class ParserImpl implements XmlReader {
     
     private boolean flushText(boolean attributeContent) throws StreamException {
         if (textLength > 0) {
+            boolean eventProduced;
             if (attributeContent) {
-                elementHandler.handleCharacterData(new String(textBuffer, 0, textLength));
+                eventProduced = elementHandler.handleCharacterData(new String(textBuffer, 0, textLength));
             } else {
                 handler.processCharacterData(new String(textBuffer, 0, textLength), false);
+                eventProduced = true;
             }
             textLength = 0;
-            return true;
+            return eventProduced;
         } else {
             return false;
         }
     }
     
-    private void parseMarkup() throws StreamException {
+    private boolean parseMarkup() throws StreamException {
         int c = peek();
         switch (c) {
             case '!':
@@ -456,23 +493,25 @@ final class ParserImpl implements XmlReader {
                 parseEndElement();
                 break;
             default:
-                parseStartElement();
+                return parseStartElement();
         }
+        return true; // TODO
     }
     
-    private void parseStartElement() throws StreamException {
+    private boolean parseStartElement() throws StreamException {
         parseName();
-        elementHandler.handleStartElement(nameBuffer, nameLength);
         state = STATE_START_ELEMENT;
+        return elementHandler.handleStartElement(nameBuffer, nameLength);
     }
     
-    private void parseAttribute() throws StreamException {
+    private boolean parseAttribute() throws StreamException {
         skipWhitespace();
         int c = peek();
         if (c == '>') {
             consume();
             elementHandler.attributesCompleted();
             state = STATE_ELEMENT_CONTENT;
+            return true;
         } else if (c == '/') {
             consume();
             if (read() != '>') {
@@ -480,6 +519,7 @@ final class ParserImpl implements XmlReader {
             }
             elementHandler.attributesCompleted();
             state = STATE_EMPTY_ELEMENT;
+            return true;
         } else if (isNameStartChar(c)) {
             parseName();
             // Whitespace is allowed here:
@@ -494,8 +534,8 @@ final class ParserImpl implements XmlReader {
             if (quoteChar != '\'' && quoteChar != '\"') {
                 throw new StreamException("Expected quote");
             }
-            elementHandler.handleStartAttribute(nameBuffer, nameLength);
             state = STATE_ATTRIBUTE_CONTENT;
+            return elementHandler.handleStartAttribute(nameBuffer, nameLength);
         } else {
             throw new StreamException("Expected start of attribute, but found '" + (char)c + "'");
         }
@@ -585,7 +625,10 @@ final class ParserImpl implements XmlReader {
         state = STATE_DOCUMENT_CONTENT;
     }
     
-    private void parseDelimitedContent(String delimiter, int matchThreshold, int fuzziness) throws StreamException {
+    // 1 = An even has been produced, but the end has not been reached
+    // 2 = The end has been reached without producing any event
+    // 3 = The end has been reached and an event has been produced
+    private int parseDelimitedContent(String delimiter, int matchThreshold, int fuzziness) throws StreamException {
         int matchLength = 0;
         while (true) {
             int c = peek();
@@ -601,29 +644,10 @@ final class ParserImpl implements XmlReader {
                                 throw new StreamException("Illegal character sequence \"" + delimiter.substring(0, matchThreshold) + " found in content");
                             }
                         }
-                        // TODO: this may produce two events...
-                        flushText(false);
-                        // TODO: this should be handled by the caller
-                        handler.endComment();
-                        // TODO: may also be STATE_DOCUMENT_CONTENT
-                        state = STATE_ELEMENT_CONTENT;
-                        return;
+                        return flushText(false) ? 3 : 2;
                     }
                 } else if (matchLength == delimiter.length()) {
-                    // TODO: this may produce two events...
-                    flushText(false);
-                    // TODO: this should be handled by the caller
-                    switch (state) {
-                        case STATE_PI_CONTENT:
-                            handler.endProcessingInstruction();
-                            break;
-                        case STATE_CDATA_SECTION_CONTENT:
-                            handler.endCDATASection();
-                            break;
-                    }
-                    // TODO: may also be STATE_DOCUMENT_CONTENT
-                    state = STATE_ELEMENT_CONTENT;
-                    return;
+                    return flushText(false) ? 3 : 2;
                 }
             } else if (matchLength > 0) {
                 // TODO: we need to exit the loop here if processCharacterData produces an event

@@ -25,23 +25,32 @@ final class NSUnawareElementHandler extends ElementHandler {
     }
 
     @Override
-    void handleStartElement(char[] name, int len) throws StreamException {
-        handler.startElement(symbols.getSymbol(name, 0, len));
+    boolean pushPendingEvent() throws StreamException {
+        return false;
     }
 
     @Override
-    void handleStartAttribute(char[] name, int len) throws StreamException {
+    boolean handleStartElement(char[] name, int len) throws StreamException {
+        handler.startElement(symbols.getSymbol(name, 0, len));
+        return true;
+    }
+
+    @Override
+    boolean handleStartAttribute(char[] name, int len) throws StreamException {
         handler.startAttribute(symbols.getSymbol(name, 0, len), "CDATA");
+        return true;
     }
     
     @Override
-    void handleCharacterData(String data) throws StreamException {
+    boolean handleCharacterData(String data) throws StreamException {
         handler.processCharacterData(data, false);
+        return true;
     }
 
     @Override
-    void handleEndAttribute() throws StreamException {
+    boolean handleEndAttribute() throws StreamException {
         handler.endAttribute();
+        return true;
     }
 
     @Override

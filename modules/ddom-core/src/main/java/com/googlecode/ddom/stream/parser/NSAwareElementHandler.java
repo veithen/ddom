@@ -21,6 +21,12 @@ import com.googlecode.ddom.symbols.Symbols;
 import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 
 final class NSAwareElementHandler extends ElementHandler {
+    private static final int STATE_NONE = 0;
+    private static final int STATE_START = 1;
+    private static final int STATE_CONTENT = 2;
+    private static final int STATE_END = 3;
+    private static final int STATE_COMPLETED = 4;
+    
     static class Attribute {
         boolean isNamespaceDeclaration;
         String prefix;
@@ -34,10 +40,47 @@ final class NSAwareElementHandler extends ElementHandler {
     private String localName;
     private Attribute[] attributes = new Attribute[16];
     private int attributeCount;
+    private int attribute;
+    private int state = STATE_NONE;
     
     NSAwareElementHandler(Symbols symbols, XmlHandler handler) {
         super(symbols, handler);
         xmlnsSymbol = symbols.getSymbol("xmlns");
+    }
+
+    @Override
+    boolean pushPendingEvent() throws StreamException {
+        switch (state) {
+            case STATE_START:
+                Attribute att = attributes[attribute];
+                if (att.isNamespaceDeclaration) {
+                    handler.startNamespaceDeclaration(att.prefix);
+                } else if (att.prefix.length() == 0) {
+                    handler.startAttribute("", att.localName, "", "CDATA");
+                } else {
+                    handler.startAttribute(resolvePrefix(att.prefix), att.localName, att.prefix, "CDATA");
+                }
+                state = STATE_CONTENT;
+                return true;
+            case STATE_CONTENT:
+                handler.processCharacterData(attributes[attribute].value, false);
+                state = STATE_END;
+                return true;
+            case STATE_END:
+                handler.endAttribute();
+                if (++attribute == attributeCount) {
+                    state = STATE_COMPLETED;
+                } else {
+                    state = STATE_START;
+                }
+                return true;
+            case STATE_COMPLETED:
+                handler.attributesCompleted();
+                state = STATE_NONE;
+                return true;
+            default:
+                return false;
+        }
     }
 
     private int searchColon(char[] name, int len) {
@@ -50,7 +93,7 @@ final class NSAwareElementHandler extends ElementHandler {
     }
     
     @Override
-    void handleStartElement(char[] name, int len) {
+    boolean handleStartElement(char[] name, int len) {
         int idx = searchColon(name, len);
         if (idx == -1) {
             prefix = "";
@@ -61,10 +104,11 @@ final class NSAwareElementHandler extends ElementHandler {
         }
         attributeCount = 0;
         context.startScope();
+        return false;
     }
 
     @Override
-    void handleStartAttribute(char[] name, int len) {
+    boolean handleStartAttribute(char[] name, int len) {
         if (attributes.length == attributeCount) {
             Attribute[] newAttributes = new Attribute[attributeCount*2];
             System.arraycopy(attributes, 0, newAttributes, 0, attributeCount);
@@ -98,17 +142,20 @@ final class NSAwareElementHandler extends ElementHandler {
                 att.localName = localName;
             }
         }
+        return false;
     }
 
     @Override
-    void handleCharacterData(String data) throws StreamException {
+    boolean handleCharacterData(String data) throws StreamException {
         // TODO
         attributes[attributeCount].value = data;
+        return false;
     }
 
     @Override
-    void handleEndAttribute() {
+    boolean handleEndAttribute() {
         attributeCount++;
+        return false;
     }
 
     private String resolvePrefix(String prefix) throws StreamException {
@@ -128,19 +175,12 @@ final class NSAwareElementHandler extends ElementHandler {
             }
         }
         handler.startElement(resolvePrefix(prefix), localName, prefix);
-        for (int i=0; i<attributeCount; i++) {
-            Attribute att = attributes[i];
-            if (att.isNamespaceDeclaration) {
-                handler.startNamespaceDeclaration(att.prefix);
-            } else if (att.prefix.length() == 0) {
-                handler.startAttribute("", att.localName, "", "CDATA");
-            } else {
-                handler.startAttribute(resolvePrefix(att.prefix), att.localName, att.prefix, "CDATA");
-            }
-            handler.processCharacterData(att.value, false);
-            handler.endAttribute();
+        if (attributeCount > 0) {
+            attribute = 0;
+            state = STATE_START;
+        } else {
+            state = STATE_COMPLETED;
         }
-        handler.attributesCompleted();
     }
 
     @Override

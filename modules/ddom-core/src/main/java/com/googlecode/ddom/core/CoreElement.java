@@ -76,8 +76,9 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * Get the first attribute of this element.
      * 
      * @return the first attribute, or <code>null</code> if this element has no attributes
+     * @throws DeferredParsingException 
      */
-    CoreAttribute coreGetFirstAttribute();
+    CoreAttribute coreGetFirstAttribute() throws DeferredParsingException;
     
     /**
      * Get the last attribute of this element.
