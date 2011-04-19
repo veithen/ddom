@@ -21,6 +21,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import com.googlecode.ddom.core.CoreAttribute;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreTypedAttribute;
 import com.googlecode.ddom.frontend.dom.intf.DOMElement;
 
@@ -32,22 +33,30 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
     }
 
     public int getLength() {
-        int length = 0;
-        CoreAttribute attr = element.coreGetFirstAttribute();
-        while (attr != null) {
-            attr = attr.coreGetNextAttribute();
-            length++;
+        try {
+            int length = 0;
+            CoreAttribute attr = element.coreGetFirstAttribute();
+            while (attr != null) {
+                attr = attr.coreGetNextAttribute();
+                length++;
+            }
+            return length;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return length;
     }
     
     public Node item(int index) {
-        // TODO: wrong result for negavite indexes
-        CoreAttribute attr = element.coreGetFirstAttribute();
-        for (int i=0; i<index && attr != null; i++) {
-            attr = attr.coreGetNextAttribute();
+        try {
+            // TODO: wrong result for negavite indexes
+            CoreAttribute attr = element.coreGetFirstAttribute();
+            for (int i=0; i<index && attr != null; i++) {
+                attr = attr.coreGetNextAttribute();
+            }
+            return (Node)attr;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
         }
-        return (Node)attr;
     }
 
     public Node getNamedItem(String name) {

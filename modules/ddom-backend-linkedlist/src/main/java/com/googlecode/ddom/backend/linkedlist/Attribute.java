@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.backend.linkedlist;
 
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreAttribute;
@@ -34,7 +35,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
      */
     private Object owner;
     
-    private CoreAttribute nextAttribute;
+    private Attribute nextAttribute;
 
     public Attribute(Document document, String value) {
         super(value);
@@ -46,7 +47,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         owner = document;
     }
     
-    final void setNextAttribute(CoreAttribute attr) {
+    final void setNextAttribute(Attribute attr) {
         nextAttribute = attr;
     }
     
@@ -59,16 +60,33 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
     
-    public final CoreAttribute coreGetNextAttribute() {
+    public final CoreAttribute coreGetNextAttribute() throws DeferredParsingException {
+        if (nextAttribute != null) {
+            return nextAttribute;
+        } else if (owner instanceof Element) {
+            Element ownerElement = (Element)owner;
+            if (ownerElement.internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
+                InputContext context = ownerElement.internalGetOrCreateInputContext();
+                do {
+                    context.next();
+                } while (nextAttribute == null && ownerElement.internalGetState() == Flags.STATE_ATTRIBUTES_PENDING);
+            }
+            return nextAttribute;
+        } else {
+            return null;
+        }
+    }
+
+    final Attribute internalGetNextAttributeIfMaterialized() {
         return nextAttribute;
     }
 
     public final CoreAttribute coreGetPreviousAttribute() {
         if (owner instanceof Element) {
             Element ownerElement = (Element)owner;
-            CoreAttribute previousAttr = ownerElement.coreGetFirstAttribute();
+            Attribute previousAttr = ownerElement.internalGetFirstAttributeIfMaterialized();
             while (previousAttr != null) {
-                CoreAttribute nextAttr = previousAttr.coreGetNextAttribute();
+                Attribute nextAttr = previousAttr.internalGetNextAttributeIfMaterialized();
                 if (nextAttr == this) {
                     break;
                 }
@@ -149,7 +167,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
             if (previousAttr == null) {
                 ownerElement.setFirstAttribute((Attribute)nextAttribute);
             } else {
-                previousAttr.setNextAttribute(coreGetNextAttribute());
+                previousAttr.setNextAttribute(internalGetNextAttributeIfMaterialized());
             }
             return true;
         } else {

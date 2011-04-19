@@ -84,8 +84,9 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * Get the last attribute of this element.
      * 
      * @return the last attribute, or <code>null</code> if this element has no attributes
+     * @throws DeferredParsingException 
      */
-    CoreAttribute coreGetLastAttribute();
+    CoreAttribute coreGetLastAttribute() throws DeferredParsingException;
     
     /**
      * Get the first attribute selected by a given {@link AttributeMatcher}.
@@ -166,8 +167,9 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            different document
      * @throws NodeMigrationException
      *             if appending the attribute was rejected by the policy
+     * @throws DeferredParsingException 
      */
-    void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException;
+    void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException, DeferredParsingException;
     
     /**
      * Remove an attribute based on a given {@link AttributeMatcher}.

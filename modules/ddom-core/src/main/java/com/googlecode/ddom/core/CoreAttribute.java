@@ -59,8 +59,9 @@ public interface CoreAttribute extends CoreParentNode {
      * 
      * @return the next attribute, or <code>null</code> if the attribute is the last attribute of
      *         its owner element or if the attribute has no owner element
+     * @throws DeferredParsingException 
      */
-    CoreAttribute coreGetNextAttribute();
+    CoreAttribute coreGetNextAttribute() throws DeferredParsingException;
     
     /**
      * Get the attribute immediately preceding the current attribute.

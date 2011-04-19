@@ -417,7 +417,11 @@ public class Builder extends XmlOutput {
     private void appendAttribute(Attribute attr) {
         Element element = (Element)context.getTargetNode();
         if (lastAttribute == null) {
-            element.internalAppendAttribute(attr);
+            try {
+                element.internalAppendAttribute(attr);
+            } catch (DeferredParsingException ex) {
+                throw new RuntimeException(ex); // TODO
+            }
         } else {
             lastAttribute.insertAttributeAfter(attr);
         }

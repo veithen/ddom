@@ -47,7 +47,11 @@ import com.googlecode.ddom.symbols.Symbols;
 @Mixin(CoreElement.class)
 public abstract class ElementSupport implements DOMElement {
     public final boolean hasAttributes() {
-        return coreGetFirstAttribute() != null;
+        try {
+            return coreGetFirstAttribute() != null;
+        } catch (CoreModelException ex) {
+            throw DOMExceptionUtil.translate(ex);
+        }
     }
 
     public final NamedNodeMap getAttributes() {

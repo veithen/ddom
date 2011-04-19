@@ -74,7 +74,11 @@ public abstract class Element extends Container implements LLElement {
         return firstAttribute;
     }
     
-    public final CoreAttribute coreGetLastAttribute() {
+    final Attribute internalGetFirstAttributeIfMaterialized() {
+        return firstAttribute;
+    }
+    
+    public final CoreAttribute coreGetLastAttribute() throws DeferredParsingException {
         CoreAttribute previousAttribute = null;
         CoreAttribute attribute = firstAttribute;
         while (attribute != null) {
@@ -85,7 +89,8 @@ public abstract class Element extends Container implements LLElement {
     }
 
     public final CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException {
-        CoreAttribute attr = firstAttribute;
+        // TODO: can optimize this when attribute creation is deferred (get InputContext only once)
+        CoreAttribute attr = coreGetFirstAttribute();
         while (attr != null && !matcher.matches(attr, namespaceURI, name)) {
             attr = attr.coreGetNextAttribute();
         }
@@ -93,7 +98,7 @@ public abstract class Element extends Container implements LLElement {
     }
 
     public final void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) throws DeferredParsingException {
-        Attribute attr = firstAttribute;
+        Attribute attr = firstAttribute; // TODO: coreGetFirstAttribute() ??
         Attribute previousAttr = null;
         while (attr != null && !matcher.matches(attr, namespaceURI, name)) {
             previousAttr = attr;
@@ -195,7 +200,8 @@ public abstract class Element extends Container implements LLElement {
                 previousAttr.setNextAttribute(attr);
             }
             existingAttr.setOwnerElement(null);
-            attr.setNextAttribute(existingAttr.coreGetNextAttribute());
+            // TODO: get rid of cast here!
+            attr.setNextAttribute((Attribute)existingAttr.coreGetNextAttribute());
             existingAttr.setNextAttribute(null);
         }
         switch (returnValue) {
@@ -205,12 +211,12 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
-    public final void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException {
+    public final void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException, DeferredParsingException {
         // TODO: we should probably check if the attribute is already owned by the element
         internalAppendAttribute(accept(attr, policy));
     }
 
-    final void internalAppendAttribute(Attribute attr) {
+    final void internalAppendAttribute(Attribute attr) throws DeferredParsingException {
         // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
         attr.setOwnerElement(this);
         if (firstAttribute == null) {

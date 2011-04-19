@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.Mapper;
 
 public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> implements Iterator<S> {
@@ -41,10 +42,14 @@ public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> imple
         if (!hasNext) {
             CoreAttribute attribute = this.attribute;
             do {
-                if (attribute == null) {
-                    attribute = element.coreGetFirstAttribute();
-                } else {
-                    attribute = attribute.coreGetNextAttribute();
+                try {
+                    if (attribute == null) {
+                        attribute = element.coreGetFirstAttribute();
+                    } else {
+                        attribute = attribute.coreGetNextAttribute();
+                    }
+                } catch (DeferredParsingException ex) {
+                    throw new RuntimeException(ex); // TODO
                 }
             } while (attribute != null && (!type.isInstance(attribute) || !matches(type.cast(attribute))));
             this.attribute = attribute;
