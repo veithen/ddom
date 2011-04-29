@@ -17,7 +17,6 @@ package com.googlecode.ddom.frontend.dom.mixin;
 
 import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,6 +31,7 @@ import com.googlecode.ddom.frontend.dom.intf.DOMNode;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
 import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
 import com.googlecode.ddom.frontend.dom.support.UserData;
+import com.googlecode.ddom.util.lang.ObjectUtils;
 
 @Mixin(CoreNode.class)
 public abstract class NodeSupport implements DOMNode {

@@ -24,11 +24,10 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.pivot.XmlPivot;
+import com.googlecode.ddom.util.lang.ObjectUtils;
 import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 
 public class StAXPivot extends XmlPivot implements XMLStreamReader {

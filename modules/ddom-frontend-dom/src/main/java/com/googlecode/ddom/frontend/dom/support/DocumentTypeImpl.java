@@ -18,7 +18,6 @@ package com.googlecode.ddom.frontend.dom.support;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -34,6 +33,7 @@ import com.googlecode.ddom.frontend.dom.intf.DOMDocument;
 import com.googlecode.ddom.frontend.dom.intf.DOMDocumentType;
 import com.googlecode.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
+import com.googlecode.ddom.util.lang.ObjectUtils;
 
 public class DocumentTypeImpl implements DOMDocumentType {
     private DOMDocumentTypeDeclaration declaration;

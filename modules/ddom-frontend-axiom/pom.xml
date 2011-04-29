@@ -56,10 +56,6 @@
             <version>${axiom.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ddom-test-utils</artifactId>
             <version>${project.version}</version>

@@ -17,8 +17,6 @@ package com.googlecode.ddom.backend.linkedlist;
 
 import javax.xml.namespace.QName;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
@@ -207,8 +205,8 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         if (sequence.isMatchByInterface()) {
             return item.getExtensionInterface().isInstance(element);
         } else {
-            return ObjectUtils.equals(item.getLocalName(), element.coreGetLocalName())
-                    && ObjectUtils.equals(item.getNamespaceURI(), element.coreGetNamespaceURI());
+            return item.getLocalName().equals(element.coreGetLocalName())
+                    && item.getNamespaceURI().equals(element.coreGetNamespaceURI());
         }
     }
 

@@ -16,7 +16,8 @@
 package com.googlecode.ddom.frontend.axiom.support;
 
 import org.apache.axiom.om.OMNamespace;
-import org.apache.commons.lang.ObjectUtils;
+
+import com.googlecode.ddom.util.lang.ObjectUtils;
 
 public class OMNamespaceImpl implements OMNamespace {
     private final String namespaceURI;
