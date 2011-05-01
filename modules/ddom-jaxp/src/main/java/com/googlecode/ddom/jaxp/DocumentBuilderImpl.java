@@ -58,6 +58,11 @@ public class DocumentBuilderImpl extends DocumentBuilder {
     }
     
     @Override
+    public void reset() {
+        errorHandler = null;
+    }
+
+    @Override
     public DOMImplementation getDOMImplementation() {
         return (DOMImplementation)model.getAPIObjectFactory().getAPIObject(DOMImplementation.class);
     }

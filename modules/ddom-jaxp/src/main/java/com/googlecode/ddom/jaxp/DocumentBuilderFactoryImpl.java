@@ -131,4 +131,17 @@ public class DocumentBuilderFactoryImpl extends DocumentBuilderFactory {
 // TODO        props.put(XMLInputFactory.IS_COALESCING, isCoalescing());
         return new DocumentBuilderImpl(model, options, isIgnoringComments(), sortAttributes, schema);
     }
+
+    @Override
+    public boolean isXIncludeAware() {
+        return false;
+    }
+
+    @Override
+    public void setXIncludeAware(boolean state) {
+        if (state) {
+            // TODO
+            throw new UnsupportedOperationException();
+        }
+    }
 }
