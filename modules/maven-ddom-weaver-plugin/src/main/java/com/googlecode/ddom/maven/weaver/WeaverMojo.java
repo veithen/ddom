@@ -80,17 +80,21 @@ public class WeaverMojo extends AbstractMojo {
     }
     
     public void execute() throws MojoExecutionException, MojoFailureException {
+        ModelWeaver weaver = new ModelWeaver();
+        
         ClassLoader cl;
         try {
             cl = createClassLoader(getClass().getClassLoader(), classpathElements);
         } catch (IOException ex) {
             throw new MojoExecutionException("Failed to create class loader", ex);
         }
+        weaver.setClassLoader(cl);
         
         Backend backendImpl = ProviderFinder.find(cl, Backend.class).get(backend);
         if (backendImpl == null) {
             throw new MojoFailureException("Backend '" + backend + "' not found");
         }
+        weaver.setBackend(backendImpl);
         
         Map<String,Frontend> frontendMap = ProviderFinder.find(cl, Frontend.class);
         Map<String,Frontend> frontendImpls = new LinkedHashMap<String,Frontend>();
@@ -101,14 +105,15 @@ public class WeaverMojo extends AbstractMojo {
             }
             frontendImpls.put(frontend, frontendImpl);
         }
+        weaver.setFrontends(frontendImpls);
         
         if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoFailureException("Unable to create directory " + outputDirectory);
         }
+        weaver.setProcessor(new ClassWriter(outputDirectory));
         
         try {
-            ModelWeaver weaver = new ModelWeaver(cl, new ClassWriter(outputDirectory), backendImpl);
-            weaver.weave(frontendImpls);
+            weaver.weave();
         } catch (ModelWeaverException ex) {
             throw new MojoExecutionException("Weaving failed", ex);
         }

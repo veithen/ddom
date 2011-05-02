@@ -35,18 +35,67 @@ import com.googlecode.ddom.weaver.reactor.ReactorException;
 import com.googlecode.ddom.weaver.verifier.VerifierPlugin;
 
 public class ModelWeaver {
-    private final ClassDefinitionProcessor processor;
-    private final Backend backend;
-    private final Reactor reactor;
-    private final ModelExtensionPlugin modelExtensionPlugin;
-    private final InjectionPlugin injectionPlugin;
+    private ClassLoader classLoader;
+    private ClassDefinitionProcessor processor;
+    private Backend backend;
+    private Map<String,Frontend> frontends;
     
-    public ModelWeaver(ClassLoader classLoader, ClassDefinitionProcessor processor, Backend backend) throws ModelWeaverException {
+    /**
+     * Set the class loader from which the weaver will load classes.
+     * 
+     * @param classLoader
+     *            the class loader
+     */
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+    
+    /**
+     * Set the class definition processor to which the woven classes will be submitted.
+     * 
+     * @param processor
+     *            the class definition processor
+     */
+    public void setProcessor(ClassDefinitionProcessor processor) {
         this.processor = processor;
+    }
+    
+    /**
+     * Set the back-end implementation to be used.
+     * 
+     * @param backend
+     *            the back-end implementation
+     */
+    public void setBackend(Backend backend) {
         this.backend = backend;
-        reactor = new Reactor(classLoader);
+    }
+    
+    /**
+     * Set the front-end implementations to be used.
+     * 
+     * @param backend
+     *            the back-end implementation
+     */
+    public void setFrontends(Map<String, Frontend> frontends) {
+        this.frontends = frontends;
+    }
+
+    public void weave() throws ModelWeaverException {
+        if (classLoader == null) {
+            throw new IllegalStateException("classLoader property not set");
+        }
+        if (processor == null) {
+            throw new IllegalStateException("processor property not set");
+        }
+        if (backend == null) {
+            throw new IllegalStateException("backend property not set");
+        }
+        if (frontends == null) {
+            throw new IllegalStateException("frontends property not set");
+        }
+        Reactor reactor = new Reactor(classLoader);
         reactor.addPlugin(new JSR45Plugin());
-        modelExtensionPlugin = new ModelExtensionPlugin();
+        ModelExtensionPlugin modelExtensionPlugin = new ModelExtensionPlugin();
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreComment.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
@@ -60,11 +109,8 @@ public class ModelWeaver {
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
 //        reactor.addPlugin(DumpPlugin.INSTANCE);
         reactor.addPlugin(VerifierPlugin.INSTANCE);
-        injectionPlugin = new InjectionPlugin();
-    }
-
-    public void weave(Map<String,Frontend> frontends) throws ModelWeaverException {
         reactor.addPlugin(modelExtensionPlugin);
+        InjectionPlugin injectionPlugin = new InjectionPlugin();
         // TODO: clean this up
         ModelExtension modelExtension = frontends.values().iterator().next().getModelExtension();
         if (modelExtension == null) {

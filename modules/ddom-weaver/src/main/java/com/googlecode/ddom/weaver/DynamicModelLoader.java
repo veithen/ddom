@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,10 @@ public class DynamicModelLoader implements ModelLoader {
         NodeFactory nodeFactory;
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         try {
-            ModelWeaver weaver = new ModelWeaver(parentClassLoader, classLoader, backend);
+            ModelWeaver weaver = new ModelWeaver();
+            weaver.setClassLoader(parentClassLoader);
+            weaver.setProcessor(classLoader);
+            weaver.setBackend(backend);
             // Aspects must be loaded into the child class loader. Otherwise the code in these aspects
             // will not see the woven backend classes. 
 //            for (Frontend frontend : frontends) {
@@ -78,7 +81,8 @@ public class DynamicModelLoader implements ModelLoader {
 //                    classLoader.processClassDefinition(className, ClassLoaderUtils.getClassDefinition(parentClassLoader, className));
 //                }
 //            }
-            weaver.weave(frontends);
+            weaver.setFrontends(frontends);
+            weaver.weave();
             Class<? extends NodeFactory> nodeFactoryClass = classLoader.loadClass(backend.getNodeFactoryClassName()).asSubclass(NodeFactory.class);
             nodeFactory = (NodeFactory)nodeFactoryClass.getField("INSTANCE").get(null);
         } catch (Exception ex) {
