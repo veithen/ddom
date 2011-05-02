@@ -58,6 +58,14 @@ public class WeaverMojo extends AbstractMojo {
     private String[] frontends;
 
     /**
+     * The Java package name for the classes produced by the weaver.
+     * 
+     * @parameter
+     * @required
+     */
+    private String outputPackage;
+    
+    /**
      * @parameter expression="${project.compileClasspathElements}"
      * @required
      * @readonly
@@ -111,6 +119,8 @@ public class WeaverMojo extends AbstractMojo {
             throw new MojoFailureException("Unable to create directory " + outputDirectory);
         }
         weaver.setProcessor(new ClassWriter(outputDirectory));
+        
+        weaver.setOutputPackage(outputPackage);
         
         try {
             weaver.weave();

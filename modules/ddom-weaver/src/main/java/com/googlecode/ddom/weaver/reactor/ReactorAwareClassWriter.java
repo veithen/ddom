@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.googlecode.ddom.weaver.realm.ClassInfo;
 
 public class ReactorAwareClassWriter extends ClassWriter {
     private final Reactor reactor;
+    private String className;
     
     public ReactorAwareClassWriter(Reactor reactor, ClassReader classReader, int flags) {
         super(classReader, flags);
@@ -32,6 +33,16 @@ public class ReactorAwareClassWriter extends ClassWriter {
     public ReactorAwareClassWriter(Reactor reactor, int flags) {
         super(flags);
         this.reactor = reactor;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        super.visit(version, access, name, signature, superName, interfaces);
+        className = name;
     }
 
     @Override

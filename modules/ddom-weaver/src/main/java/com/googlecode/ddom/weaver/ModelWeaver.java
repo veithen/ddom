@@ -32,6 +32,7 @@ import com.googlecode.ddom.weaver.output.ClassDefinitionProcessor;
 import com.googlecode.ddom.weaver.output.ClassDefinitionProcessorException;
 import com.googlecode.ddom.weaver.reactor.Reactor;
 import com.googlecode.ddom.weaver.reactor.ReactorException;
+import com.googlecode.ddom.weaver.remapper.RemapperPlugin;
 import com.googlecode.ddom.weaver.verifier.VerifierPlugin;
 
 public class ModelWeaver {
@@ -39,6 +40,7 @@ public class ModelWeaver {
     private ClassDefinitionProcessor processor;
     private Backend backend;
     private Map<String,Frontend> frontends;
+    private String outputPackage;
     
     /**
      * Set the class loader from which the weaver will load classes.
@@ -80,6 +82,20 @@ public class ModelWeaver {
         this.frontends = frontends;
     }
 
+    /**
+     * Set the Java package for classes produced by the weaver. If no output package is set, then
+     * woven classes will preserve their original name. Note that this only works if the
+     * {@link ClassDefinitionProcessor} set with {@link #setProcessor(ClassDefinitionProcessor)}
+     * loads the woven classes into a class loader other than the one specified with
+     * {@link #setClassLoader(ClassLoader)}.
+     * 
+     * @param outputPackage
+     *            the name of the output package
+     */
+    public void setOutputPackage(String outputPackage) {
+        this.outputPackage = outputPackage;
+    }
+
     public void weave() throws ModelWeaverException {
         if (classLoader == null) {
             throw new IllegalStateException("classLoader property not set");
@@ -107,6 +123,7 @@ public class ModelWeaver {
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreNSUnawareElement.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreProcessingInstruction.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreText.class));
+        // TODO: shouldn't these plugins be registered last??
 //        reactor.addPlugin(DumpPlugin.INSTANCE);
         reactor.addPlugin(VerifierPlugin.INSTANCE);
         reactor.addPlugin(modelExtensionPlugin);
@@ -120,6 +137,9 @@ public class ModelWeaver {
             injectionPlugin.addBinding(ModelExtension.class.getName(), new PrototypeInjector(modelExtensionClass));
         }
         reactor.addPlugin(injectionPlugin);
+        if (outputPackage != null) {
+            reactor.addPlugin(new RemapperPlugin(backend.getWeavableClasses().getRootPackageName(), outputPackage));
+        }
         try {
             for (ClassRef classRef : backend.getWeavableClasses().getClassRefs()) {
                 reactor.loadWeavableClass(classRef);

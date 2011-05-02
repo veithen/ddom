@@ -25,12 +25,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
 
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.commons.dag.EdgeRelation;
 import com.google.code.ddom.commons.dag.TopologicalSort;
 import com.googlecode.ddom.weaver.asm.ClassVisitorTee;
+import com.googlecode.ddom.weaver.asm.Util;
 import com.googlecode.ddom.weaver.jsr45.SourceInfo;
 import com.googlecode.ddom.weaver.jsr45.SourceMapper;
 import com.googlecode.ddom.weaver.mixin.MergeAdapter;
@@ -182,11 +182,10 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
         // We need to sort the weavable classes so that we can satisfy the ClassDefinitionProcessor
         // contract.
         for (WeavableClassInfo weavableClass : TopologicalSort.sort(weavableClasses, inheritanceRelation)) {
-            if (weavableClass.isInterface()) {
-                processor.processClassDefinition(weavableClass.getName(), weavableClass.getClassDefinitionSource().getClassDefinition(this));
-            } else {
-                // Select the mixins that apply to weavableClass
-                List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
+            // Select the mixins that apply to weavableClass
+            List<MixinInfo> selectedMixins = new ArrayList<MixinInfo>();
+            // Mixins never apply to interfaces
+            if (!weavableClass.isInterface()) {
                 for (MixinInfo mixin : mixins) {
                     for (ClassInfo target : mixin.getTargets()) {
                         if (target.isAssignableFrom(weavableClass) && !target.isAssignableFrom(weavableClass.getSuperclass())) {
@@ -195,14 +194,14 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
                         }
                     }
                 }
-                // Weave the class. Note that the weave method will take care of the case where no mixins apply.
-                weave(processor, weavableClass, selectedMixins);
             }
+            // Weave the class. Note that the weave method will take care of the case where no mixins apply.
+            weave(processor, weavableClass, selectedMixins);
         }
     }
     
     private void weave(ClassDefinitionProcessor processor, WeavableClassInfo weavableClass, List<MixinInfo> mixins) throws ClassDefinitionProcessorException {
-        ClassWriter cw = new ReactorAwareClassWriter(this, 0);
+        ReactorAwareClassWriter cw = new ReactorAwareClassWriter(this, 0);
         ClassDefinitionSource classDefinitionSource = weavableClass.getClassDefinitionSource();
         List<ClassTransformation> preTransforms = new ArrayList<ClassTransformation>();
         List<ClassTransformation> postTransforms = new ArrayList<ClassTransformation>();
@@ -245,7 +244,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
                 out = t.adapt(out);
             }
             weavableClass.getClassDefinitionSource().accept(out);
-            processor.processClassDefinition(weavableClass.getName(), cw.toByteArray());
+            processor.processClassDefinition(Util.internalNameToClassName(cw.getClassName()), cw.toByteArray());
         }
     }
 }
