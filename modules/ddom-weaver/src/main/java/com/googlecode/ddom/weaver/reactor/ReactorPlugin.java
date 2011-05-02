@@ -68,7 +68,7 @@ public abstract class ReactorPlugin {
     /**
      * Prepare classes for output. Implementations may override this method to add a
      * {@link org.objectweb.asm.ClassAdapter} in front of the {@link ClassVisitor} that outputs the
-     * code to the {@link com.googlecode.ddom.weaver.ClassDefinitionProcessor}.
+     * code to the {@link com.googlecode.ddom.weaver.output.ClassDefinitionProcessor}.
      * 
      * @param outputClassVisitor
      *            the class visitor that outputs the classes

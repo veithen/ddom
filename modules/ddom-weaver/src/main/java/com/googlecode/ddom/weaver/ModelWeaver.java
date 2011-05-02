@@ -28,6 +28,8 @@ import com.googlecode.ddom.weaver.ext.ModelExtensionPlugin;
 import com.googlecode.ddom.weaver.inject.InjectionPlugin;
 import com.googlecode.ddom.weaver.inject.PrototypeInjector;
 import com.googlecode.ddom.weaver.jsr45.JSR45Plugin;
+import com.googlecode.ddom.weaver.output.ClassDefinitionProcessor;
+import com.googlecode.ddom.weaver.output.ClassDefinitionProcessorException;
 import com.googlecode.ddom.weaver.reactor.Reactor;
 import com.googlecode.ddom.weaver.reactor.ReactorException;
 import com.googlecode.ddom.weaver.verifier.VerifierPlugin;

@@ -26,6 +26,7 @@ import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelDefinition;
 import com.googlecode.ddom.model.spi.ModelLoader;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.weaver.output.DynamicClassLoader;
 
 /**
  * {@link ModelLoader} implementation that creates models using load time weaving.

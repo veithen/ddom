@@ -20,8 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.googlecode.ddom.weaver.ClassDefinitionProcessor;
-import com.googlecode.ddom.weaver.ClassDefinitionProcessorException;
+import com.googlecode.ddom.weaver.output.ClassDefinitionProcessor;
+import com.googlecode.ddom.weaver.output.ClassDefinitionProcessorException;
 
 public class ClassWriter implements ClassDefinitionProcessor {
     private final File outputDirectory;

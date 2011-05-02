@@ -22,7 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.googlecode.ddom.weaver.DynamicClassLoader;
+import com.googlecode.ddom.weaver.output.DynamicClassLoader;
 
 public class CompoundClassTest {
     @Test

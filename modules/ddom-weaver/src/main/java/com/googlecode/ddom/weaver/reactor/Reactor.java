@@ -30,9 +30,6 @@ import org.objectweb.asm.ClassWriter;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.google.code.ddom.commons.dag.EdgeRelation;
 import com.google.code.ddom.commons.dag.TopologicalSort;
-import com.googlecode.ddom.weaver.ClassDefinitionProcessor;
-import com.googlecode.ddom.weaver.ClassDefinitionProcessorException;
-import com.googlecode.ddom.weaver.ModelWeaverException;
 import com.googlecode.ddom.weaver.asm.ClassVisitorTee;
 import com.googlecode.ddom.weaver.jsr45.SourceInfo;
 import com.googlecode.ddom.weaver.jsr45.SourceMapper;
@@ -40,6 +37,8 @@ import com.googlecode.ddom.weaver.mixin.MergeAdapter;
 import com.googlecode.ddom.weaver.mixin.MixinInfo;
 import com.googlecode.ddom.weaver.mixin.MixinInfoBuilder;
 import com.googlecode.ddom.weaver.mixin.MixinInfoBuilderCollaborator;
+import com.googlecode.ddom.weaver.output.ClassDefinitionProcessor;
+import com.googlecode.ddom.weaver.output.ClassDefinitionProcessorException;
 import com.googlecode.ddom.weaver.realm.ClassInfo;
 import com.googlecode.ddom.weaver.realm.ClassRealm;
 
@@ -101,7 +100,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
         weavableClassInfoBuilders.put(builder.getName(), builder);
     }
     
-    public void loadMixin(ClassRef classRef) throws ClassNotFoundException, ModelWeaverException {
+    public void loadMixin(ClassRef classRef) throws ClassNotFoundException {
         List<MixinInfoBuilderCollaborator> collaborators = new ArrayList<MixinInfoBuilderCollaborator>(plugins.size());
         for (ReactorPlugin plugin : plugins) {
             MixinInfoBuilderCollaborator collaborator = plugin.newMixinInfoBuilderCollaborator();
@@ -160,7 +159,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
     }
     
     // TODO: rename this
-    public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException, ModelWeaverException {
+    public void generateModel(ClassDefinitionProcessor processor) throws ClassNotFoundException, ClassDefinitionProcessorException {
         resolveWeavableClasses();
         for (ReactorPlugin plugin : plugins) {
             plugin.resolve(this);
@@ -172,7 +171,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
         weave(processor);
     }
     
-    private void resolveWeavableClasses() throws ClassNotFoundException, ModelWeaverException {
+    private void resolveWeavableClasses() throws ClassNotFoundException {
         Collection<String> classes = weavableClassInfoBuilders.keySet();
         while (!classes.isEmpty()) {
             getClassInfo(classes.iterator().next());

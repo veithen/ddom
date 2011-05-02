@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import com.googlecode.ddom.weaver.ModelWeaverException;
 import com.googlecode.ddom.weaver.asm.AbstractAnnotationVisitor;
 import com.googlecode.ddom.weaver.asm.AbstractClassVisitor;
 import com.googlecode.ddom.weaver.asm.ErrorHandler;
@@ -119,7 +118,7 @@ public class MixinInfoBuilder extends AbstractClassVisitor {
         }
     }
 
-    public MixinInfo build(ClassRealm realm) throws ClassNotFoundException, ModelWeaverException {
+    public MixinInfo build(ClassRealm realm) {
         // TODO: do we still need this?
 //        if (!contributedInterfaces.remove(target.getInternalName())) {
 //            log.warning("Mixin class doesn't implement target interface");

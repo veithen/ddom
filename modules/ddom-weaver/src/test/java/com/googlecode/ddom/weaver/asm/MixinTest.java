@@ -18,8 +18,8 @@ package com.googlecode.ddom.weaver.asm;
 import org.junit.Test;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.googlecode.ddom.weaver.DynamicClassLoader;
 import com.googlecode.ddom.weaver.jsr45.JSR45Plugin;
+import com.googlecode.ddom.weaver.output.DynamicClassLoader;
 import com.googlecode.ddom.weaver.reactor.Reactor;
 
 public class MixinTest {
