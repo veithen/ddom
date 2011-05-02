@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.ddom.maven.weaver;
+package com.googlecode.ddom.maven.weaver;
 
 import java.io.File;
 import java.io.FileOutputStream;
