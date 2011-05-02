@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.google.code.ddom.commons.cl;
 import java.util.Collection;
 import java.util.Collections;
 
-public class EmptyClassCollection implements ClassCollection {
+public final class EmptyClassCollection implements ClassCollection {
     public static final EmptyClassCollection INSTANCE = new EmptyClassCollection();
     
     private EmptyClassCollection() {}
@@ -29,5 +29,13 @@ public class EmptyClassCollection implements ClassCollection {
 
     public Collection<Class<?>> getClasses() {
         return Collections.emptySet();
+    }
+
+    public boolean isInPackage(String pkg) {
+        return true;
+    }
+
+    public String getRootPackageName() {
+        return null;
     }
 }

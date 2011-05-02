@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,5 +45,32 @@ public final class ClassCollectionAggregate implements ClassCollection {
             result.addAll(collection.getClasses());
         }
         return result;
+    }
+
+    public boolean isInPackage(String pkg) {
+        for (ClassCollection collection : collections) {
+            if (!collection.isInPackage(pkg)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String getRootPackageName() {
+        String pkg = null;
+        for (ClassCollection collection : collections) {
+            if (pkg == null) {
+                pkg = collection.getRootPackageName();
+            } else {
+                while (!collection.isInPackage(pkg)) {
+                    int idx = pkg.lastIndexOf('.');
+                    if (idx == -1) {
+                        return "";
+                    }
+                    pkg = pkg.substring(0, idx);
+                }
+            }
+        }
+        return pkg;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 
-public abstract class AbstractClassRefCollection implements ClassCollection {
+public abstract class AbstractClassRefCollection extends AbstractClassCollection {
     private static class ClassLoadingIterator implements Iterator<Class<?>> {
         private final Iterator<ClassRef> parent;
 

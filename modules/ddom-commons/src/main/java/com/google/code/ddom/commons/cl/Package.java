@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,12 @@ import java.util.List;
 
 import com.google.code.ddom.commons.io.URLUtils;
 
+/**
+ * Class collection representing the classes in a given Java package within a {@link Module}. Only
+ * classes of that particular package are included, but not classes from subpackages.
+ * 
+ * @author Andreas Veithen
+ */
 public final class Package extends AbstractClassRefCollection {
     private final ClassLoader classLoader;
     private final URL url;
@@ -84,5 +90,19 @@ public final class Package extends AbstractClassRefCollection {
             // except if something goes badly wrong. Thus throw an unchecked exception.
             throw new ClassCollectionException(ex);
         }
+    }
+
+    public boolean isInPackage(String pkg) {
+        if (pkg.length() == 0) {
+            return true;
+        } else if (name.startsWith(pkg)) {
+            return name.length() == pkg.length() || name.charAt(pkg.length()) == '.';
+        } else {
+            return false;
+        }
+    }
+
+    public String getRootPackageName() {
+        return name;
     }
 }
