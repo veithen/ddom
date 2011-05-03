@@ -20,8 +20,8 @@ import java.security.PrivilegedAction;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassLoaderLocal;
-import com.googlecode.ddom.spi.ProviderFinder;
-import com.googlecode.ddom.spi.ProviderFinderException;
+import com.googlecode.ddom.spi.Finder;
+import com.googlecode.ddom.spi.FinderException;
 import com.googlecode.ddom.stream.spi.StreamProvider;
 
 public final class StreamFactory {
@@ -39,13 +39,13 @@ public final class StreamFactory {
      * @param classLoader
      *            the class loader from which to load the providers
      * @return the {@link StreamFactory} instance
-     * @throws ProviderFinderException
+     * @throws FinderException
      *             if there was an issue loading the providers from the class loader
      */
-    public static StreamFactory getInstance(ClassLoader classLoader) throws ProviderFinderException {
+    public static StreamFactory getInstance(ClassLoader classLoader) throws FinderException {
         StreamFactory factory = factories.get(classLoader);
         if (factory == null) {
-            factory = new StreamFactory(ProviderFinder.find(classLoader, StreamProvider.class));
+            factory = new StreamFactory(Finder.findNamedProviders(classLoader, StreamProvider.class));
             factories.put(classLoader, factory);
         }
         return factory;
@@ -55,10 +55,10 @@ public final class StreamFactory {
      * Get the {@link StreamFactory} instance for the current thread context class loader.
      * 
      * @return the {@link StreamFactory} instance for the current thread context class loader
-     * @throws ProviderFinderException
+     * @throws FinderException
      *             if there was an issue loading the providers from the class loader
      */
-    public static StreamFactory getInstance() throws ProviderFinderException {
+    public static StreamFactory getInstance() throws FinderException {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
                 return Thread.currentThread().getContextClassLoader();

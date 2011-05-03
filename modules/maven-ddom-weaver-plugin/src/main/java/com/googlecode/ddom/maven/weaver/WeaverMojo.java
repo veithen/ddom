@@ -29,7 +29,7 @@ import org.apache.maven.plugin.MojoFailureException;
 
 import com.googlecode.ddom.backend.Backend;
 import com.googlecode.ddom.frontend.Frontend;
-import com.googlecode.ddom.spi.ProviderFinder;
+import com.googlecode.ddom.spi.Finder;
 import com.googlecode.ddom.weaver.ModelWeaver;
 import com.googlecode.ddom.weaver.ModelWeaverException;
 
@@ -98,13 +98,13 @@ public class WeaverMojo extends AbstractMojo {
         }
         weaver.setClassLoader(cl);
         
-        Backend backendImpl = ProviderFinder.find(cl, Backend.class).get(backend);
+        Backend backendImpl = Finder.findNamedProviders(cl, Backend.class).get(backend);
         if (backendImpl == null) {
             throw new MojoFailureException("Backend '" + backend + "' not found");
         }
         weaver.setBackend(backendImpl);
         
-        Map<String,Frontend> frontendMap = ProviderFinder.find(cl, Frontend.class);
+        Map<String,Frontend> frontendMap = Finder.findNamedProviders(cl, Frontend.class);
         Map<String,Frontend> frontendImpls = new LinkedHashMap<String,Frontend>();
         for (String frontend : frontends) {
             Frontend frontendImpl = frontendMap.get(frontend);

@@ -27,13 +27,13 @@ import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 import com.googlecode.ddom.saaj.compat.CompatibilityPolicy;
 import com.googlecode.ddom.saaj.compat.DefaultCompatibilityPolicy;
-import com.googlecode.ddom.spi.ProviderFinder;
+import com.googlecode.ddom.spi.Finder;
 
 public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
     private final CompatibilityPolicy compatibilityPolicy;
     
     public SAAJMetaFactoryImpl() throws SOAPException {
-        Map<String,CompatibilityPolicy> policies = ProviderFinder.find(MessageFactoryImpl.class.getClassLoader(), CompatibilityPolicy.class);
+        Map<String,CompatibilityPolicy> policies = Finder.findNamedProviders(MessageFactoryImpl.class.getClassLoader(), CompatibilityPolicy.class);
         if (policies.isEmpty()) {
             compatibilityPolicy = DefaultCompatibilityPolicy.INSTANCE;
         } else if (policies.size() == 1) {

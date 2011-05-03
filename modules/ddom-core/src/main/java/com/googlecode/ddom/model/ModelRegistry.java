@@ -25,8 +25,8 @@ import com.google.code.ddom.commons.cl.ClassLoaderLocal;
 import com.googlecode.ddom.model.spi.ModelLoader;
 import com.googlecode.ddom.model.spi.ModelLoaderException;
 import com.googlecode.ddom.model.spi.ModelLoaderFactory;
-import com.googlecode.ddom.spi.ProviderFinder;
-import com.googlecode.ddom.spi.ProviderFinderException;
+import com.googlecode.ddom.spi.Finder;
+import com.googlecode.ddom.spi.FinderException;
 
 /**
  * Maps {@link ModelDefinition} instances to {@link Model} instances.
@@ -47,7 +47,7 @@ public class ModelRegistry {
         ModelRegistry registry = registries.get(classLoader);
         if (registry == null) {
             Map<String,ModelLoader> loaders = new HashMap<String,ModelLoader>();
-            for (Map.Entry<String,ModelLoaderFactory> entry : ProviderFinder.find(classLoader, ModelLoaderFactory.class).entrySet()) {
+            for (Map.Entry<String,ModelLoaderFactory> entry : Finder.findNamedProviders(classLoader, ModelLoaderFactory.class).entrySet()) {
                 loaders.put(entry.getKey(), entry.getValue().createModelLoader(classLoader));
             }
             registry = new ModelRegistry(loaders);
@@ -56,7 +56,7 @@ public class ModelRegistry {
         return registry;
     }
 
-    public static ModelRegistry getInstance() throws ProviderFinderException {
+    public static ModelRegistry getInstance() throws FinderException {
         return getInstance(AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
             public ClassLoader run() {
                 return Thread.currentThread().getContextClassLoader();

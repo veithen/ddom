@@ -15,21 +15,21 @@
  */
 package com.googlecode.ddom.spi;
 
-public class ProviderFinderException extends RuntimeException {
+public class FinderException extends RuntimeException {
     private static final long serialVersionUID = 326752730372173628L;
 
-    public ProviderFinderException() {
+    public FinderException() {
     }
 
-    public ProviderFinderException(String message, Throwable cause) {
+    public FinderException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ProviderFinderException(String message) {
+    public FinderException(String message) {
         super(message);
     }
 
-    public ProviderFinderException(Throwable cause) {
+    public FinderException(Throwable cause) {
         super(cause);
     }
 }

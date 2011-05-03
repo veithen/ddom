@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.weaver;
+package com.googlecode.ddom.model.spi;
 
-import com.googlecode.ddom.backend.Backend;
-import com.googlecode.ddom.frontend.Frontend;
-import com.googlecode.ddom.model.spi.ModelLoader;
-import com.googlecode.ddom.model.spi.ModelLoaderFactory;
-import com.googlecode.ddom.spi.Provider;
 import com.googlecode.ddom.spi.Finder;
+import com.googlecode.ddom.spi.Provider;
 
-@Provider(name="dynamic")
-public class DynamicModelLoaderFactory implements ModelLoaderFactory {
+@Provider(name="static")
+public class StaticModelLoaderFactory implements ModelLoaderFactory {
     public ModelLoader createModelLoader(ClassLoader classLoader) {
-        return new DynamicModelLoader(classLoader, Finder.findNamedProviders(classLoader, Backend.class), Finder.findNamedProviders(classLoader, Frontend.class));
+        return new StaticModelLoader(Finder.findSerializedInstances(classLoader, StaticModel.class));
     }
 }
