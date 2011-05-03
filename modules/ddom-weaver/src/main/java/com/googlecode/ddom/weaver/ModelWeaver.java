@@ -21,6 +21,7 @@ import java.util.Map;
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.googlecode.ddom.backend.Backend;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.frontend.Frontend;
 import com.googlecode.ddom.weaver.dump.DumpPlugin;
@@ -41,6 +42,7 @@ public class ModelWeaver {
     private Backend backend;
     private Map<String,Frontend> frontends;
     private String outputPackage;
+    private String rootPackage;
     
     /**
      * Set the class loader from which the weaver will load classes.
@@ -70,6 +72,7 @@ public class ModelWeaver {
      */
     public void setBackend(Backend backend) {
         this.backend = backend;
+        rootPackage = null;
     }
     
     /**
@@ -96,6 +99,34 @@ public class ModelWeaver {
         this.outputPackage = outputPackage;
     }
 
+    private String getRootPackage() {
+        if (rootPackage == null) {
+            rootPackage = backend.getWeavableClasses().getRootPackageName();
+        }
+        return rootPackage;
+    }
+    
+    /**
+     * Get the name of the {@link NodeFactory} implementation for the woven model. This method takes
+     * into account the output package set with {@link #setOutputPackage(String)}, i.e. it does not
+     * just return {@link Backend#getNodeFactoryClassName()}.
+     * 
+     * @return the name of the (woven) node factory
+     */
+    public String getNodeFactoryClassName() {
+        if (backend == null) {
+            throw new IllegalStateException("backend property not set");
+        }
+        String nodeFactoryClassName = backend.getNodeFactoryClassName();
+        if (outputPackage != null) {
+            String rootPackage = getRootPackage();
+            if (nodeFactoryClassName.startsWith(rootPackage + ".")) {
+                nodeFactoryClassName = outputPackage + nodeFactoryClassName.substring(rootPackage.length());
+            }
+        }
+        return nodeFactoryClassName;
+    }
+    
     public void weave() throws ModelWeaverException {
         if (classLoader == null) {
             throw new IllegalStateException("classLoader property not set");

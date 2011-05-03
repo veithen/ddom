@@ -16,7 +16,9 @@
 package com.googlecode.ddom.maven.weaver;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.LinkedHashMap;
@@ -28,7 +30,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import com.googlecode.ddom.backend.Backend;
+import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.Frontend;
+import com.googlecode.ddom.model.ModelDefinitionBuilder;
+import com.googlecode.ddom.model.spi.StaticModel;
 import com.googlecode.ddom.spi.Finder;
 import com.googlecode.ddom.weaver.ModelWeaver;
 import com.googlecode.ddom.weaver.ModelWeaverException;
@@ -126,6 +131,36 @@ public class WeaverMojo extends AbstractMojo {
             weaver.weave();
         } catch (ModelWeaverException ex) {
             throw new MojoExecutionException("Weaving failed", ex);
+        }
+        
+        Class<? extends NodeFactory> nodeFactoryClass;
+        try {
+            nodeFactoryClass = cl.loadClass(weaver.getNodeFactoryClassName()).asSubclass(NodeFactory.class);
+        } catch (ClassNotFoundException ex) {
+            throw new MojoExecutionException("Failed to load the node factory class after weaving", ex);
+        }
+        
+        ModelDefinitionBuilder modelDefinitionBuilder = new ModelDefinitionBuilder();
+        modelDefinitionBuilder.setBackend(backend);
+        for (String frontend : frontends) {
+            modelDefinitionBuilder.addFrontend(frontend);
+        }
+        StaticModel model = new StaticModel(modelDefinitionBuilder.buildModelDefinition(), nodeFactoryClass);
+        
+        File servicesDir = new File(outputDirectory, "META-INF/services");
+        if (!servicesDir.exists() && !servicesDir.mkdirs()) {
+            throw new MojoFailureException("Unable to create directory " + servicesDir);
+        }
+        
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(servicesDir, StaticModel.class.getName() + ".ser")));
+            try {
+                out.writeObject(model);
+            } finally {
+                out.close();
+            }
+        } catch (IOException ex) {
+            throw new MojoExecutionException("Unable to serialize model", ex);
         }
     }
 }
