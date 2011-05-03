@@ -30,6 +30,7 @@ import org.xml.sax.SAXParseException;
 
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.frontend.dom.intf.DOMNodeFactory;
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.stream.LocationAwareStreamException;
 import com.googlecode.ddom.stream.Options;
@@ -64,7 +65,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 
     @Override
     public DOMImplementation getDOMImplementation() {
-        return (DOMImplementation)model.getAPIObjectFactory().getAPIObject(DOMImplementation.class);
+        return ((DOMNodeFactory)model.getNodeFactory()).getDOMImplementation();
     }
 
     @Override

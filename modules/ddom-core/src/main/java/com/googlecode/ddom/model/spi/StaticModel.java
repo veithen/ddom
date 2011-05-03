@@ -18,7 +18,6 @@ package com.googlecode.ddom.model.spi;
 import java.io.Serializable;
 
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.frontend.APIObjectFactory;
 import com.googlecode.ddom.model.ModelDefinition;
 
 /**
@@ -31,13 +30,10 @@ public class StaticModel implements Serializable {
 
     private final ModelDefinition definition;
     private final Class<? extends NodeFactory> nodeFactoryClass;
-    private final Class<? extends APIObjectFactory> apiObjectFactoryClass;
     
-    public StaticModel(ModelDefinition definition, Class<? extends NodeFactory> nodeFactoryClass,
-            Class<? extends APIObjectFactory> apiObjectFactoryClass) {
+    public StaticModel(ModelDefinition definition, Class<? extends NodeFactory> nodeFactoryClass) {
         this.definition = definition;
         this.nodeFactoryClass = nodeFactoryClass;
-        this.apiObjectFactoryClass = apiObjectFactoryClass;
     }
 
     public ModelDefinition getModelDefinition() {
@@ -46,9 +42,5 @@ public class StaticModel implements Serializable {
 
     public Class<? extends NodeFactory> getNodeFactoryClass() {
         return nodeFactoryClass;
-    }
-
-    public Class<? extends APIObjectFactory> getAPIObjectFactoryClass() {
-        return apiObjectFactoryClass;
     }
 }

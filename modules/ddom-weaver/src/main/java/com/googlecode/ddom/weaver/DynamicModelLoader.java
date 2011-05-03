@@ -20,7 +20,6 @@ import java.util.Map;
 
 import com.googlecode.ddom.backend.Backend;
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.frontend.APIObjectFactory;
 import com.googlecode.ddom.frontend.Frontend;
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelDefinition;
@@ -88,14 +87,6 @@ public class DynamicModelLoader implements ModelLoader {
         } catch (Exception ex) {
             throw new ModelLoaderException("Failed to weave model", ex);
         }
-        APIObjectFactory apiObjectFactory = null;
-        for (Frontend frontend : frontends.values()) {
-            apiObjectFactory = frontend.getAPIObjectFactory(nodeFactory);
-            // TODO: we should obviously not just take the first one...
-            if (apiObjectFactory != null) {
-                break;
-            }
-        }
-        return new Model(nodeFactory, apiObjectFactory);
+        return new Model(nodeFactory);
     }
 }

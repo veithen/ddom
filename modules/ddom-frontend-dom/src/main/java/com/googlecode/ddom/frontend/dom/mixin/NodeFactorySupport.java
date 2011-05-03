@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.support;
+package com.googlecode.ddom.frontend.dom.mixin;
 
 import org.w3c.dom.DOMImplementation;
 
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.frontend.APIObjectFactory;
+import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.dom.intf.DOMNodeFactory;
+import com.googlecode.ddom.frontend.dom.support.DOMImplementationImpl;
 
-public class APIObjectFactoryImpl implements APIObjectFactory {
+@Mixin(NodeFactory.class)
+public abstract class NodeFactorySupport implements DOMNodeFactory {
     private final DOMImplementation domImplementation;
     
-    public APIObjectFactoryImpl(NodeFactory nodeFactory) {
-        domImplementation = new DOMImplementationImpl(nodeFactory);
+    public NodeFactorySupport() {
+        domImplementation = new DOMImplementationImpl(this);
     }
-
-    public Object getAPIObject(Class<?> clazz) {
-        if (clazz.equals(DOMImplementation.class)) {
-            return domImplementation;
-        } else {
-            return null;
-        }
+    
+    public final DOMImplementation getDOMImplementation() {
+        return domImplementation;
     }
 }

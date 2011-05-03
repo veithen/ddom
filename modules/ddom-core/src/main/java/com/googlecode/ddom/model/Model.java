@@ -16,7 +16,6 @@
 package com.googlecode.ddom.model;
 
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.frontend.APIObjectFactory;
 
 /**
  * Represents a (woven) model corresponding to a given
@@ -24,20 +23,15 @@ import com.googlecode.ddom.frontend.APIObjectFactory;
  * 
  * @author Andreas Veithen
  */
+// TODO: to we still need this (now that we have eliminated APIObjectFactory)?
 public class Model {
     private final NodeFactory nodeFactory;
-    private final APIObjectFactory apiObjectFactory;
     
-    public Model(NodeFactory nodeFactory, APIObjectFactory apiObjectFactory) {
+    public Model(NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
-        this.apiObjectFactory = apiObjectFactory;
     }
 
     public NodeFactory getNodeFactory() {
         return nodeFactory;
-    }
-
-    public APIObjectFactory getAPIObjectFactory() {
-        return apiObjectFactory;
     }
 }

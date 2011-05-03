@@ -18,7 +18,6 @@ package com.googlecode.ddom.frontend;
 import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassCollection;
-import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.core.ext.ModelExtension;
 
 // TODO: this API is a bit simplistic; we need at least to support the following features:
@@ -29,6 +28,4 @@ public interface Frontend {
     ClassCollection getMixins(Map<String,Frontend> frontends);
     
     ModelExtension getModelExtension();
-    
-    APIObjectFactory getAPIObjectFactory(NodeFactory nodeFactory);
 }

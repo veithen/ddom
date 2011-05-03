@@ -27,6 +27,7 @@ import org.w3c.domts.DOMTestLoadException;
 import org.w3c.domts.DocumentBuilderSetting;
 
 import com.googlecode.ddom.frontend.dom.intf.DOMDocument;
+import com.googlecode.ddom.frontend.dom.intf.DOMNodeFactory;
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.ModelRegistry;
@@ -116,7 +117,7 @@ public class DOMTestDocumentBuilderFactoryImpl extends DOMTestDocumentBuilderFac
 
     @Override
     public DOMImplementation getDOMImplementation() {
-        return (DOMImplementation)model.getAPIObjectFactory().getAPIObject(DOMImplementation.class);
+        return ((DOMNodeFactory)model.getNodeFactory()).getDOMImplementation();
     }
 
     @Override

@@ -37,8 +37,7 @@ public class StaticModelLoader implements ModelLoader {
             return null;
         } else {
             try {
-                return new Model(staticModel.getNodeFactoryClass().newInstance(),
-                        staticModel.getAPIObjectFactoryClass().newInstance());
+                return new Model(staticModel.getNodeFactoryClass().newInstance());
             } catch (InstantiationException ex) {
                 throw new ModelLoaderException(ex);
             } catch (IllegalAccessException ex) {
