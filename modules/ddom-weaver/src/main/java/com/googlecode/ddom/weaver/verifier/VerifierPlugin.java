@@ -19,6 +19,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.util.CheckClassAdapter;
 
 import com.googlecode.ddom.weaver.reactor.ReactorPlugin;
+import com.googlecode.ddom.weaver.realm.ClassRealm;
 
 public class VerifierPlugin extends ReactorPlugin {
     public static final VerifierPlugin INSTANCE = new VerifierPlugin();
@@ -26,7 +27,7 @@ public class VerifierPlugin extends ReactorPlugin {
     private VerifierPlugin() {}
     
     @Override
-    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
+    public ClassVisitor prepareForOutput(ClassRealm realm, ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
         if (generated || enhanced) {
             return new CheckClassAdapter(outputClassVisitor);
         } else {

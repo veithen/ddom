@@ -21,6 +21,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 import com.googlecode.ddom.weaver.reactor.ReactorPlugin;
+import com.googlecode.ddom.weaver.realm.ClassRealm;
 
 public class DumpPlugin extends ReactorPlugin {
     public static final DumpPlugin INSTANCE = new DumpPlugin();
@@ -28,7 +29,7 @@ public class DumpPlugin extends ReactorPlugin {
     private DumpPlugin() {}
     
     @Override
-    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
+    public ClassVisitor prepareForOutput(ClassRealm realm, ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
         if (generated || enhanced) {
             return new TraceClassVisitor(outputClassVisitor, new PrintWriter(System.out));
         } else {

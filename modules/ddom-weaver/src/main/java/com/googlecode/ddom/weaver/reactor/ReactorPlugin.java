@@ -70,6 +70,8 @@ public abstract class ReactorPlugin {
      * {@link org.objectweb.asm.ClassAdapter} in front of the {@link ClassVisitor} that outputs the
      * code to the {@link com.googlecode.ddom.weaver.output.ClassDefinitionProcessor}.
      * 
+     * @param realm
+     *            TODO
      * @param outputClassVisitor
      *            the class visitor that outputs the classes
      * @param generated
@@ -79,7 +81,7 @@ public abstract class ReactorPlugin {
      *            class
      * @return a class visitor that wraps the class visitor passed as parameter
      */
-    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
+    public ClassVisitor prepareForOutput(ClassRealm realm, ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
         return outputClassVisitor;
     }
 }

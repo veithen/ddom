@@ -18,22 +18,37 @@ package com.googlecode.ddom.weaver.remapper;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.commons.RemappingClassAdapter;
 
+import com.googlecode.ddom.weaver.reactor.Extensions;
 import com.googlecode.ddom.weaver.reactor.ReactorPlugin;
+import com.googlecode.ddom.weaver.reactor.WeavableClassInfoBuilderCollaborator;
+import com.googlecode.ddom.weaver.realm.ClassRealm;
 
 /**
- * Reactor plugin that allows to remap Java packages.
+ * Reactor plugin that allows to remap woven classes to an alternate Java package.
  * 
  * @author Andreas Veithen
  */
 public class RemapperPlugin extends ReactorPlugin {
-    private final PackageRemapper remapper;
+    private final String fromPrefix;
+    private final String toPrefix;
     
     public RemapperPlugin(String fromPackage, String toPackage) {
-        remapper = new PackageRemapper(fromPackage.replace('.', '/') + "/", toPackage.replace('.', '/') + '/');
+        fromPrefix = fromPackage.replace('.', '/') + '/';
+        toPrefix = toPackage.replace('.', '/') + '/';
     }
 
     @Override
-    public ClassVisitor prepareForOutput(ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
-        return new RemappingClassAdapter(outputClassVisitor, remapper);
+    public void init(ClassRealm realm, Extensions extensions) {
+        extensions.set(new Mappings());
+    }
+
+    @Override
+    public WeavableClassInfoBuilderCollaborator newWeavableClassInfoBuilderCollaborator() {
+        return new MappingBuilder(fromPrefix, toPrefix);
+    }
+
+    @Override
+    public ClassVisitor prepareForOutput(ClassRealm realm, ClassVisitor outputClassVisitor, boolean generated, boolean enhanced) {
+        return new RemappingClassAdapter(outputClassVisitor, realm.get(Mappings.class));
     }
 }

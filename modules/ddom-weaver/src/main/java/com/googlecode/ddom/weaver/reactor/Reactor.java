@@ -219,7 +219,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
         boolean generated = classDefinitionSource instanceof GeneratedClass;
         ClassVisitor out = cw;
         for (ReactorPlugin plugin : plugins) {
-            out = plugin.prepareForOutput(out, generated, woven);
+            out = plugin.prepareForOutput(this, out, generated, woven);
         }
         if (out == cw && !woven) {
             if (log.isDebugEnabled()) {

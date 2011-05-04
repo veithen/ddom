@@ -15,23 +15,21 @@
  */
 package com.googlecode.ddom.weaver.remapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectweb.asm.commons.Remapper;
 
-class PackageRemapper extends Remapper {
-    private final String fromPrefix;
-    private final String toPrefix;
-
-    PackageRemapper(String fromPrefix, String toPrefix) {
-        this.fromPrefix = fromPrefix;
-        this.toPrefix = toPrefix;
+class Mappings extends Remapper {
+    private final Map<String,String> map = new HashMap<String,String>();
+    
+    void addMapping(String from, String to) {
+        map.put(from, to);
     }
-
+    
     @Override
     public String map(String typeName) {
-        if (typeName.startsWith(fromPrefix)) {
-            return toPrefix + typeName.substring(fromPrefix.length());
-        } else {
-            return typeName;
-        }
+        String mappedName = map.get(typeName);
+        return mappedName == null ? typeName : mappedName;
     }
 }
