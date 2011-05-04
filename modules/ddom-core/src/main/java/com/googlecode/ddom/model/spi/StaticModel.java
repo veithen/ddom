@@ -17,7 +17,6 @@ package com.googlecode.ddom.model.spi;
 
 import java.io.Serializable;
 
-import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.model.ModelDefinition;
 
 /**
@@ -29,18 +28,18 @@ public class StaticModel implements Serializable {
     private static final long serialVersionUID = 7608492816426921776L;
 
     private final ModelDefinition definition;
-    private final Class<? extends NodeFactory> nodeFactoryClass;
+    private final String nodeFactoryClassName;
     
-    public StaticModel(ModelDefinition definition, Class<? extends NodeFactory> nodeFactoryClass) {
+    public StaticModel(ModelDefinition definition, String nodeFactoryClassName) {
         this.definition = definition;
-        this.nodeFactoryClass = nodeFactoryClass;
+        this.nodeFactoryClassName = nodeFactoryClassName;
     }
 
     public ModelDefinition getModelDefinition() {
         return definition;
     }
 
-    public Class<? extends NodeFactory> getNodeFactoryClass() {
-        return nodeFactoryClass;
+    public String getNodeFactoryClassName() {
+        return nodeFactoryClassName;
     }
 }

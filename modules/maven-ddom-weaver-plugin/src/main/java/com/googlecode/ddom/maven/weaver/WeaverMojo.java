@@ -30,7 +30,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import com.googlecode.ddom.backend.Backend;
-import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.Frontend;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;
 import com.googlecode.ddom.model.spi.StaticModel;
@@ -133,9 +132,9 @@ public class WeaverMojo extends AbstractMojo {
             throw new MojoExecutionException("Weaving failed", ex);
         }
         
-        Class<? extends NodeFactory> nodeFactoryClass;
         try {
-            nodeFactoryClass = cl.loadClass(weaver.getNodeFactoryClassName()).asSubclass(NodeFactory.class);
+            // Attempt to load and initialize the node factory to detect issues early
+            Class.forName(weaver.getNodeFactoryClassName(), true, cl);
         } catch (ClassNotFoundException ex) {
             throw new MojoExecutionException("Failed to load the node factory class after weaving", ex);
         }
@@ -145,7 +144,7 @@ public class WeaverMojo extends AbstractMojo {
         for (String frontend : frontends) {
             modelDefinitionBuilder.addFrontend(frontend);
         }
-        StaticModel model = new StaticModel(modelDefinitionBuilder.buildModelDefinition(), nodeFactoryClass);
+        StaticModel model = new StaticModel(modelDefinitionBuilder.buildModelDefinition(), weaver.getNodeFactoryClassName());
         
         File servicesDir = new File(outputDirectory, "META-INF/services");
         if (!servicesDir.exists() && !servicesDir.mkdirs()) {

@@ -19,16 +19,19 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelDefinition;
 
 public class StaticModelLoader implements ModelLoader {
     private final Map<ModelDefinition,StaticModel> modelMap = new HashMap<ModelDefinition,StaticModel>();
+    private final ClassLoader classLoader;
 
-    StaticModelLoader(Collection<StaticModel> models) {
+    StaticModelLoader(Collection<StaticModel> models, ClassLoader classLoader) {
         for (StaticModel model : models) {
             modelMap.put(model.getModelDefinition(), model);
         }
+        this.classLoader = classLoader;
     }
 
     public Model loadModel(ModelDefinition definition) throws ModelLoaderException {
@@ -36,9 +39,15 @@ public class StaticModelLoader implements ModelLoader {
         if (staticModel == null) {
             return null;
         } else {
+            Class<?> nodeFactoryClass;
             try {
-                return new Model(staticModel.getNodeFactoryClass().newInstance());
-            } catch (InstantiationException ex) {
+                nodeFactoryClass = classLoader.loadClass(staticModel.getNodeFactoryClassName());
+            } catch (ClassNotFoundException ex) {
+                throw new ModelLoaderException("Node factory class " + staticModel.getNodeFactoryClassName() + " not found");
+            }
+            try {
+                return new Model((NodeFactory)nodeFactoryClass.getField("INSTANCE").get(null));
+            } catch (NoSuchFieldException ex) {
                 throw new ModelLoaderException(ex);
             } catch (IllegalAccessException ex) {
                 throw new ModelLoaderException(ex);

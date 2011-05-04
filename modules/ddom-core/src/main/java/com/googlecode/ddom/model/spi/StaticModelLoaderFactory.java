@@ -21,6 +21,6 @@ import com.googlecode.ddom.spi.Provider;
 @Provider(name="static")
 public class StaticModelLoaderFactory implements ModelLoaderFactory {
     public ModelLoader createModelLoader(ClassLoader classLoader) {
-        return new StaticModelLoader(Finder.findSerializedInstances(classLoader, StaticModel.class));
+        return new StaticModelLoader(Finder.findSerializedInstances(classLoader, StaticModel.class), classLoader);
     }
 }
