@@ -16,9 +16,11 @@
 package com.googlecode.ddom.frontend.axiom;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMMetaFactory;
@@ -41,12 +43,23 @@ public class ADBTest {
     }
     
     @Test
-    public void testQuery() throws Exception {
+    public void testGetFirstElement() throws Exception {
         Query query = new Query();
         query.setAuthor("Jules Vernes");
         OMElement element = query.getOMElement(Query.MY_QNAME, factory);
         assertEquals(Query.MY_QNAME, element.getQName());
         OMElement child = element.getFirstElement();
         assertEquals(new QName(Query.MY_QNAME.getNamespaceURI(), "author"), child.getQName());
+    }
+    
+    @Test
+    public void testGetAttribute() throws Exception {
+        Query query = new Query();
+        query.setMaxResults(20);
+        query.setAuthor("Karl Marx");
+        OMElement element = query.getOMElement(Query.MY_QNAME, factory);
+        OMAttribute attr = element.getAttribute(new QName("maxResults"));
+        assertNotNull(attr);
+        assertEquals("20", attr.getAttributeValue());
     }
 }

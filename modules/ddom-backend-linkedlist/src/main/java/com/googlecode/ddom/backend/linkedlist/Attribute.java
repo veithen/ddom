@@ -67,9 +67,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
             Element ownerElement = (Element)owner;
             if (ownerElement.internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
                 InputContext context = ownerElement.internalGetOrCreateInputContext();
-                do {
+                while (nextAttribute == null && ownerElement.internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
                     context.next();
-                } while (nextAttribute == null && ownerElement.internalGetState() == Flags.STATE_ATTRIBUTES_PENDING);
+                }
             }
             return nextAttribute;
         } else {

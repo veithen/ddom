@@ -25,6 +25,7 @@
                         <xsd:element name="author" type="xsd:string" minOccurs="0"/>
                         <xsd:element name="title" type="xsd:string" minOccurs="0"/>
                     </xsd:sequence>
+                    <xsd:attribute name="maxResults" type="xsd:int" use="optional"/>
                 </xsd:complexType>
             </xsd:element>
             <xsd:element name="queryResponse">

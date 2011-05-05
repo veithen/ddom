@@ -71,9 +71,9 @@ public abstract class Element extends Container implements LLElement {
     public final CoreAttribute coreGetFirstAttribute() throws DeferredParsingException {
         if (firstAttribute == null && !attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
-            do {
+            while (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
                 context.next();
-            } while (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING);
+            }
         }
         return firstAttribute;
     }
@@ -85,9 +85,9 @@ public abstract class Element extends Container implements LLElement {
     public final CoreAttribute coreGetLastAttribute() throws DeferredParsingException {
         if (!attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
-            do {
+            while (internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
                 context.next();
-            } while (internalGetState() == Flags.STATE_ATTRIBUTES_PENDING);
+            }
         }
         Attribute previousAttribute = null;
         Attribute attribute = firstAttribute;
