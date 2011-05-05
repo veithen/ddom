@@ -184,23 +184,33 @@ final class SerializerHandler implements XmlHandler {
                     codePoint = c;
                     pos++;
                 }
-                if (state == STATE_ATTRIBUTE && codePoint == '"'
-                        || state == STATE_CONTENT && codePoint == '<') {
-                    switch (codePoint) {
-                        case '"':
+                switch (codePoint) {
+                    case '"':
+                        if (state == STATE_ATTRIBUTE) {
                             writer.write("&quot;");
-                            break;
-                        case '<':
+                        } else {
+                            writer.write(codePoint);
+                        }
+                        break;
+                    case '<':
+                        if (state == STATE_CONTENT) {
                             writer.write("&lt;");
-                            break;
-                        default:
+                        } else {
+                            writer.write(codePoint);
+                        }
+                        break;
+                    case '&':
+                        writer.write("&amp;");
+                        break;
+                    default:
+                        if (writer.canEncode(codePoint)) {
+                            writer.write(codePoint);
+                        } else {
                             writer.write("&#");
                             // TODO: optimize; we don't need to create a String object here
                             writer.write(Integer.toString(codePoint));
                             writer.write(';');
-                    }
-                } else {
-                    writer.write(codePoint);
+                        }
                 }
             }
         } catch (IOException ex) {
