@@ -28,8 +28,8 @@ import com.googlecode.ddom.backend.linkedlist.intf.LLNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.IncludeXmlOutput;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
@@ -289,9 +289,8 @@ final class TreeWalkerImpl implements XmlReader {
                     throw new IllegalStateException();
             }
             node = nextNode;
-        } catch (CoreModelException ex) {
-            // TODO: if it's a DeferredParsingException, maybe we can unwrap the exception?
-            throw new StreamException(ex);
+        } catch (DeferredParsingException ex) {
+            throw ex.getStreamException();
         }
     }
 
