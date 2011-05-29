@@ -30,7 +30,6 @@ import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
 import org.apache.axiom.ts.om.element.TestSetTextQName;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
-import org.apache.axiom.ts.om.node.TestInsertSiblingAfterLastChild;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 
 import com.googlecode.ddom.model.Model;
@@ -44,7 +43,6 @@ public class ImplementationTest extends TestCase {
         OMTestSuiteBuilder builder = new OMTestSuiteBuilder((OMMetaFactory)model.getNodeFactory());
         // TODO
         builder.exclude(TestSetTextQName.class);
-        builder.exclude(TestInsertSiblingAfterLastChild.class);
         builder.exclude(TestBase64Streaming.class);
 //        builder.exclude(TestSerialization.class);
         builder.exclude(org.apache.axiom.ts.om.document.TestSerializeAndConsumeWithIncompleteDescendant.class);
