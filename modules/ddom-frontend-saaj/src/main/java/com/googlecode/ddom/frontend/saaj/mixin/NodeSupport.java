@@ -27,7 +27,6 @@ import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 @Mixin(CoreChildNode.class)
 public abstract class NodeSupport implements SAAJNode {
     public final SOAPElement getParentElement() {
-        // TODO: need unit test coverage for cases where the parent is not an element
         return (SOAPElement)coreGetParentElement();
     }
 

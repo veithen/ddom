@@ -40,7 +40,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestResource;
@@ -611,19 +610,6 @@ public class SOAPElementTest {
         SOAPElement parent = saajUtil.createSOAPElement(null, "parent", null);
         SOAPElement child = parent.addChildElement(new QName("child"));
         assertSame(parent, child.getParentElement());
-    }
-    
-    // TODO: also test behavior when the node already has a parent
-    @Validated @Test
-    public void testSetParentElement() throws Exception {
-        SOAPElement parent = saajUtil.createSOAPElement(null, "parent", null);
-        SOAPElement child1 = parent.addChildElement(new QName("child1"));
-        SOAPElement child2 = (SOAPElement)parent.getOwnerDocument().createElementNS(null, "child2");
-        child2.setParentElement(parent);
-        NodeList children = parent.getChildNodes();
-        assertEquals(2, children.getLength());
-        assertSame(child1, children.item(0));
-        assertSame(child2, children.item(1));
     }
     
     @Validated @Test

@@ -47,6 +47,7 @@ public class RISAAJUtil extends SAAJUtil {
         try {
             SOAPEnvelope envelope = MessageFactory.newInstance(protocol).createMessage().getSOAPPart().getEnvelope();
             envelope.removeContents();
+            envelope.detachNode();
             return envelope;
         } catch (SOAPException ex) {
             Assert.fail(ex.getMessage());
