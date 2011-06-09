@@ -17,7 +17,10 @@ package com.googlecode.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertTrue;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 
@@ -30,6 +33,11 @@ import com.google.code.ddom.utils.test.Validated;
 public class SOAP11FaultTest extends SOAPFaultTest {
     public SOAP11FaultTest() {
         super(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE);
+    }
+
+    @Override
+    protected SOAPElement appendFaultCodeElement(SOAPFault fault) throws SOAPException {
+        return fault.addChildElement(new QName("faultcode"));
     }
 
     @Override

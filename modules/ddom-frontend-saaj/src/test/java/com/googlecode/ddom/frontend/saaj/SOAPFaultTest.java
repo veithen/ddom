@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 import javax.xml.soap.Detail;
 import javax.xml.soap.DetailEntry;
+import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
@@ -46,9 +47,32 @@ public abstract class SOAPFaultTest extends AbstractTestCase {
         super(soapVersion);
     }
     
+    protected abstract SOAPElement appendFaultCodeElement(SOAPFault fault) throws SOAPException;
     protected abstract void checkFaultCodeElement(SOAPFaultElement element);
     protected abstract void checkFaultStringElement(SOAPFaultElement element);
     
+    @Validated @Test
+    public final void testGetFaultCode() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        String code = fault.getPrefix() + ":Server";
+        appendFaultCodeElement(fault).setTextContent(code);
+        assertEquals(code, fault.getFaultCode());
+    }
+
+    /**
+     * Test the behavior of {@link SOAPFault#getFaultCode()} if no fault code is present. Note that
+     * the reference implementation throws a {@link NullPointerException} in this case and that the
+     * SAAJ specification is not clear about the expected behavior. Our implementation returns
+     * <code>null</code>.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public final void testGetFaultCodeOnEmptyFault() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        assertNull(fault.getFaultCode());
+    }
+
     @Validated @Test(expected=SOAPException.class)
     public final void testSetFaultCodeAsStringWithUnboundPrefix() throws Exception {
         SOAPFault fault = createEmptySOAPFault();

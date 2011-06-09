@@ -25,6 +25,7 @@ import javax.xml.soap.SOAPException;
 
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPFault;
@@ -33,10 +34,24 @@ import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
 
 @Mixin(SAAJSOAPFault.class)
 public abstract class SOAPFaultSupport implements SAAJSOAPFault {
+    private CoreNSAwareElement getFaultCodeElement() throws CoreModelException {
+        SOAPVersion version = getSOAPVersion();
+        CoreNSAwareElement faultCodeElement = coreGetElementFromSequence(version.getFaultSequence(), version.getFaultCodeIndex(), false);
+        if (faultCodeElement == null) {
+            return null;
+        } else {
+            Sequence faultCodeSequence = version.getFaultCodeSequence();
+            if (faultCodeSequence == null) {
+                return faultCodeElement;
+            } else {
+                return faultCodeElement.coreGetElementFromSequence(faultCodeSequence, 0, false);
+            }
+        }
+    }
+    
     public String getFaultCode() {
         try {
-            SOAPVersion version = getSOAPVersion();
-            CoreNSAwareElement faultCodeElement = coreGetElementFromSequence(version.getFaultSequence(), version.getFaultCodeIndex(), false);
+            CoreNSAwareElement faultCodeElement = getFaultCodeElement();
             return faultCodeElement == null ? null : faultCodeElement.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);

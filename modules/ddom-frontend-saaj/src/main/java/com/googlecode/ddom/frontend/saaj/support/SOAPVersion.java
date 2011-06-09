@@ -29,6 +29,7 @@ import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP12Body;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP12Header;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPBody;
+import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPFault;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPFaultElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeader;
@@ -39,7 +40,8 @@ public abstract class SOAPVersion {
                 .addItem(SAAJSOAPFaultElement.class, "", "faultcode")
                 .addItem(SAAJSOAPFaultElement.class, "", "faultstring")
                 .addItem(SAAJSOAPFaultElement.class, "", "faultactor")
-                .addItem(SAAJDetail.class, "", "detail").build()) {
+                .addItem(SAAJDetail.class, "", "detail").build(),
+            null) {
         
         @Override
         public String getEnvelopeNamespaceURI() {
@@ -118,7 +120,11 @@ public abstract class SOAPVersion {
                 .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Reason")
                 .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Node")
                 .addItem(SAAJSOAPFaultElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Role")
-                .addItem(SAAJDetail.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build()) {
+                .addItem(SAAJDetail.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Detail").build(),
+            new SequenceBuilder()
+                .addItem(SAAJSOAPElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Value")
+                .addItem(SAAJSOAPElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Subcode")
+                .enableMatchByInterface().build()) {
         
         @Override
         public String getEnvelopeNamespaceURI() {
@@ -193,13 +199,15 @@ public abstract class SOAPVersion {
     
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
+    private final Sequence faultCodeSequence;
     
-    public SOAPVersion(Sequence faultSequence) {
-        this.faultSequence = faultSequence;
+    public SOAPVersion(Sequence faultSequence, Sequence faultCodeSequence) {
         envelopeSequence = new SequenceBuilder()
                 .addItem(getSOAPHeaderClass(), getEnvelopeNamespaceURI(), "Header")
                 .addItem(getSOAPBodyClass(), getEnvelopeNamespaceURI(), "Body")
                 .enableMatchByInterface().build();
+        this.faultSequence = faultSequence;
+        this.faultCodeSequence = faultCodeSequence;
     }
     
     public abstract String getEnvelopeNamespaceURI();
@@ -227,6 +235,10 @@ public abstract class SOAPVersion {
     public abstract int getFaultRoleIndex();
     public abstract int getFaultDetailIndex();
     
+    public final Sequence getFaultCodeSequence() {
+        return faultCodeSequence;
+    }
+
     public abstract SOAPEnvelope createEnvelope(SAAJDocument document);
     
     public abstract String getContentType();

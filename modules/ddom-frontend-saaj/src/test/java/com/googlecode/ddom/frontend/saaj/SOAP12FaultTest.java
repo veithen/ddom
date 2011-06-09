@@ -18,11 +18,13 @@ package com.googlecode.ddom.frontend.saaj;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
@@ -31,6 +33,12 @@ import com.google.code.ddom.utils.test.Validated;
 public class SOAP12FaultTest extends SOAPFaultTest {
     public SOAP12FaultTest() {
         super(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE);
+    }
+
+    @Override
+    protected SOAPElement appendFaultCodeElement(SOAPFault fault) throws SOAPException {
+        SOAPElement code = fault.addChildElement(new QName(fault.getNamespaceURI(), "Code", fault.getPrefix()));
+        return code.addChildElement(new QName(fault.getNamespaceURI(), "Value", fault.getPrefix()));
     }
 
     @Override
