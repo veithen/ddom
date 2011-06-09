@@ -80,7 +80,7 @@
         <dependency>
         	<groupId>com.sun.xml.messaging.saaj</groupId>
         	<artifactId>saaj-impl</artifactId>
-        	<version>1.3.4</version>
+        	<version>1.3.10</version>
         	<scope>test</scope>
         </dependency>
         <!-- This is required on IBM JDKs (and potentially others) because saaj-impl depends
@@ -106,18 +106,6 @@
         <repository>
             <id>java.net</id>
             <url>http://download.java.net/maven/2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>java.net-legacy</id>
-            <url>http://download.java.net/maven/1</url>
-            <!-- Only the Maven 1 repository has the source JARs -->
-            <layout>legacy</layout>
             <releases>
                 <enabled>true</enabled>
             </releases>
