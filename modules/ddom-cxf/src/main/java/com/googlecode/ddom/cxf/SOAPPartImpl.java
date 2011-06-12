@@ -26,20 +26,20 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDocument;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPEnvelope;
-import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.dom.DOMInput;
 
 public class SOAPPartImpl extends AbstractSOAPPartImpl {
-    private final Model saajModel;
+    private final NodeFactory nodeFactory;
     private final SoapMessage message;
 
-    public SOAPPartImpl(Model saajModel, SoapMessage message) {
-        this.saajModel = saajModel;
+    public SOAPPartImpl(NodeFactory nodeFactory, SoapMessage message) {
+        this.nodeFactory = nodeFactory;
         this.message = message;
     }
 
@@ -49,7 +49,7 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             // This will give the SOAP message with an empty body
             Document domDocument = (Document)message.getContent(Node.class);
             
-            SAAJDocument saajDocument = (SAAJDocument)saajModel.getNodeFactory().createDocument();
+            SAAJDocument saajDocument = (SAAJDocument)nodeFactory.createDocument();
             saajDocument.coreSetContent(new SimpleXmlSource(new DOMInput(domDocument)));
             
             // We build the document at this point because we need to access the (empty) body anyway

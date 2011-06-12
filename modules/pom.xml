@@ -29,6 +29,7 @@
     <packaging>pom</packaging>
     
     <modules>
+        <module>ddom-asyncws</module>
         <module>ddom-axiom-impl</module>
         <module>ddom-axis2</module>
         <module>ddom-backend-linkedlist</module>

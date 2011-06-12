@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.xml.soap.AttachmentPart;
 
-
 public class SimpleAttachmentSet implements AttachmentSet {
     private final List<AttachmentPartImpl> attachments = new ArrayList<AttachmentPartImpl>();
     
