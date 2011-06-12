@@ -25,6 +25,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 import javax.xml.soap.Detail;
 import javax.xml.soap.DetailEntry;
+import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -71,6 +72,48 @@ public abstract class SOAPFaultTest extends AbstractTestCase {
     public final void testGetFaultCodeOnEmptyFault() throws Exception {
         SOAPFault fault = createEmptySOAPFault();
         assertNull(fault.getFaultCode());
+    }
+    
+    @Test
+    public final void testGetFaultCodeAsQNameQualified() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        String code = fault.getPrefix() + ":Server";
+        appendFaultCodeElement(fault).setTextContent(code);
+        QName qname = fault.getFaultCodeAsQName();
+        assertEquals(fault.getPrefix(), qname.getPrefix());
+        assertEquals(fault.getNamespaceURI(), qname.getNamespaceURI());
+        assertEquals("Server", qname.getLocalPart());
+    }
+
+    @Test
+    public final void testGetFaultCodeAsNameQualified() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        String code = fault.getPrefix() + ":Server";
+        appendFaultCodeElement(fault).setTextContent(code);
+        Name name = fault.getFaultCodeAsName();
+        assertEquals(fault.getPrefix(), name.getPrefix());
+        assertEquals(fault.getNamespaceURI(), name.getURI());
+        assertEquals("Server", name.getLocalName());
+    }
+
+    @Test
+    public final void testGetFaultCodeAsQNameUnqualified() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        appendFaultCodeElement(fault).setTextContent("Test");
+        QName qname = fault.getFaultCodeAsQName();
+        assertEquals("", qname.getPrefix());
+        assertEquals("", qname.getNamespaceURI());
+        assertEquals("Test", qname.getLocalPart());
+    }
+
+    @Test
+    public final void testGetFaultCodeAsNameUnqualified() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        appendFaultCodeElement(fault).setTextContent("Test");
+        Name name = fault.getFaultCodeAsName();
+        assertEquals("", name.getPrefix());
+        assertEquals("", name.getURI());
+        assertEquals("Test", name.getLocalName());
     }
 
     @Validated @Test(expected=SOAPException.class)

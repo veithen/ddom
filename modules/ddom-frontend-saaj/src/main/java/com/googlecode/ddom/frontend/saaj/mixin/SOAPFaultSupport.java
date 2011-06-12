@@ -29,6 +29,7 @@ import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPFault;
+import com.googlecode.ddom.frontend.saaj.support.NameFactory;
 import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
 
@@ -49,7 +50,7 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         }
     }
     
-    public String getFaultCode() {
+    public final String getFaultCode() {
         try {
             CoreNSAwareElement faultCodeElement = getFaultCodeElement();
             return faultCodeElement == null ? null : faultCodeElement.coreGetTextContent(TextCollectorPolicy.DEFAULT);
@@ -58,14 +59,45 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         }
     }
 
-    public Name getFaultCodeAsName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Name getFaultCodeAsName() {
+        return getFaultCode(NameFactory.NAME);
     }
 
-    public QName getFaultCodeAsQName() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final QName getFaultCodeAsQName() {
+        return getFaultCode(NameFactory.QNAME);
+    }
+    
+    private <T> T getFaultCode(NameFactory<T> nameFactory) {
+        try {
+            CoreNSAwareElement faultCodeElement = getFaultCodeElement();
+            if (faultCodeElement == null) {
+                return null;
+            } else {
+                String qname = faultCodeElement.coreGetTextContent(TextCollectorPolicy.DEFAULT);
+                String prefix;
+                String localName;
+                int colonIndex = qname.indexOf(':');
+                if (colonIndex == -1) {
+                    prefix = "";
+                    localName = qname;
+                } else {
+                    prefix = qname.substring(0, colonIndex);
+                    localName = qname.substring(colonIndex+1);
+                }
+                String namespaceURI = faultCodeElement.coreLookupNamespaceURI(prefix, false);
+                if (namespaceURI == null) {
+                    return null;
+                } else if (namespaceURI.length() == 0) {
+                    return nameFactory.createName(localName);
+                } else if (prefix.length() == 0) {
+                    return nameFactory.createName(namespaceURI, localName);
+                } else {
+                    return nameFactory.createName(namespaceURI, localName, prefix);
+                }
+            }
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public void setFaultCode(Name arg0) throws SOAPException {
