@@ -100,19 +100,26 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
         }
     }
 
-    public void setFaultCode(Name arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setFaultCode(Name faultCode) throws SOAPException {
+        setFaultCode(faultCode.getURI(), faultCode.getLocalName(), faultCode.getPrefix());
     }
 
     public final void setFaultCode(QName faultCode) throws SOAPException {
-        try {
-            SOAPVersion version = getSOAPVersion();
-            CoreNSAwareElement faultCodeElement = coreGetElementFromSequence(version.getFaultSequence(), version.getFaultCodeIndex(), true);
-            // TODO: incorrect; generate namespace declaration
-            faultCodeElement.coreSetValue(faultCode.getPrefix() + ":" + faultCode.getLocalPart());
-        } catch (CoreModelException ex) {
-            throw SAAJExceptionUtil.toSOAPException(ex);
+        setFaultCode(faultCode.getNamespaceURI(), faultCode.getLocalPart(), faultCode.getPrefix());
+    }
+    
+    private void setFaultCode(String namespaceURI, String localName, String prefix) throws SOAPException {
+        SOAPVersion version = getSOAPVersion();
+        if (version.isValidFaultCodeValue(namespaceURI, localName)) {
+            try {
+                CoreNSAwareElement faultCodeElement = coreGetElementFromSequence(version.getFaultSequence(), version.getFaultCodeIndex(), true);
+                // TODO: incorrect; generate namespace declaration
+                faultCodeElement.coreSetValue(prefix + ":" + localName);
+            } catch (CoreModelException ex) {
+                throw SAAJExceptionUtil.toSOAPException(ex);
+            }
+        } else {
+            throw new SOAPException("{" + namespaceURI + "}" + localName + " is not a standard fault code value");
         }
     }
 
@@ -125,7 +132,11 @@ public abstract class SOAPFaultSupport implements SAAJSOAPFault {
             if (namespaceURI == null) {
                 throw new SOAPException("No NamespaceURI, SOAP requires faultcode content to be a QName");
             }
+            String localName = faultCode.substring(idx+1);
             SOAPVersion version = getSOAPVersion();
+            if (!version.isValidFaultCodeValue(namespaceURI, localName)) {
+                throw new SOAPException("{" + namespaceURI + "}" + localName + " is not a standard fault code value");
+            }
             CoreNSAwareElement faultCodeElement = coreGetElementFromSequence(version.getFaultSequence(), version.getFaultCodeIndex(), true);
             faultCodeElement.coreSetValue(faultCode);
         } catch (CoreModelException ex) {

@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.frontend.saaj;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import javax.xml.namespace.QName;
@@ -24,7 +25,6 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPFaultElement;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -41,17 +41,18 @@ public class SOAP11FaultTest extends SOAPFaultTest {
     }
 
     @Override
-    protected void checkFaultCodeElement(SOAPFaultElement element) {
+    protected SOAPElement checkFaultCodeElement(SOAPFaultElement element) {
         // TODO
 //        Assert.assertNull(element.getNamespaceURI());
-        Assert.assertEquals("faultcode", element.getLocalName());
+        assertEquals("faultcode", element.getLocalName());
+        return element;
     }
 
     @Override
     protected void checkFaultStringElement(SOAPFaultElement element) {
         // TODO
 //        Assert.assertNull(element.getNamespaceURI());
-        Assert.assertEquals("faultstring", element.getLocalName());
+        assertEquals("faultstring", element.getLocalName());
     }
 
     // Custom fault codes are only allowed in SOAP 1.1
@@ -62,7 +63,7 @@ public class SOAP11FaultTest extends SOAPFaultTest {
         fault.setFaultCode("p:MyFaultCode");
         Node child = fault.getFirstChild();
         assertTrue(child instanceof SOAPFaultElement);
-        checkFaultCodeElement((SOAPFaultElement)child);
+        assertEquals("p:MyFaultCode", checkFaultCodeElement((SOAPFaultElement)child).getValue());
     }
     
     @Validated @Test(expected=UnsupportedOperationException.class)

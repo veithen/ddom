@@ -17,6 +17,7 @@ package com.googlecode.ddom.frontend.saaj;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPConstants;
@@ -27,6 +28,7 @@ import javax.xml.soap.SOAPFaultElement;
 
 import org.junit.Test;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.utils.test.Validated;
 
@@ -42,15 +44,24 @@ public class SOAP12FaultTest extends SOAPFaultTest {
     }
 
     @Override
-    protected void checkFaultCodeElement(SOAPFaultElement element) {
+    protected SOAPElement checkFaultCodeElement(SOAPFaultElement element) {
         assertEquals(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, element.getNamespaceURI());
         assertEquals("Code", element.getLocalName());
+        // TODO: we should do some additional tests
+        return (SOAPElement)element.getChildElements().next();
     }
 
     @Override
     protected void checkFaultStringElement(SOAPFaultElement element) {
         assertEquals(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, element.getNamespaceURI());
         assertEquals("Reason", element.getLocalName());
+    }
+    
+    @Validated @Test(expected=SOAPException.class)
+    public void testSetFaultCodeAsStringCustom() throws Exception {
+        SOAPFault fault = createEmptySOAPFault();
+        fault.addNamespaceDeclaration("p", "urn:ns1");
+        fault.setFaultCode("p:MyFaultCode");
     }
     
     @Validated @Test

@@ -49,7 +49,16 @@ public abstract class SOAPFaultTest extends AbstractTestCase {
     }
     
     protected abstract SOAPElement appendFaultCodeElement(SOAPFault fault) throws SOAPException;
-    protected abstract void checkFaultCodeElement(SOAPFaultElement element);
+    
+    /**
+     * Check that the given element is a valid fault code element and return the element that
+     * contains the actual fault code value.
+     * 
+     * @param element the fault code element to be checked
+     * @return the element that contains the actual fault code value
+     */
+    protected abstract SOAPElement checkFaultCodeElement(SOAPFaultElement element);
+    
     protected abstract void checkFaultStringElement(SOAPFaultElement element);
     
     @Validated @Test

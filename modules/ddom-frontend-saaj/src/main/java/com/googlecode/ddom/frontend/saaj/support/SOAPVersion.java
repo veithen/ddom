@@ -15,6 +15,9 @@
  */
 package com.googlecode.ddom.frontend.saaj.support;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPEnvelope;
 
@@ -104,6 +107,11 @@ public abstract class SOAPVersion {
         }
         
         @Override
+        public boolean isValidFaultCodeValue(String namespaceURI, String localName) {
+            return true;
+        }
+
+        @Override
         public SOAPEnvelope createEnvelope(SAAJDocument document) {
             return document.createSOAP11Envelope();
         }
@@ -125,6 +133,16 @@ public abstract class SOAPVersion {
                 .addItem(SAAJSOAPElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Value")
                 .addItem(SAAJSOAPElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Subcode")
                 .enableMatchByInterface().build()) {
+        
+        private final Set<String> validFaultCodeValues = new HashSet<String>();
+        
+        {
+            validFaultCodeValues.add(SOAPConstants.SOAP_DATAENCODINGUNKNOWN_FAULT.getLocalPart());
+            validFaultCodeValues.add(SOAPConstants.SOAP_MUSTUNDERSTAND_FAULT.getLocalPart());
+            validFaultCodeValues.add(SOAPConstants.SOAP_RECEIVER_FAULT.getLocalPart());
+            validFaultCodeValues.add(SOAPConstants.SOAP_SENDER_FAULT.getLocalPart());
+            validFaultCodeValues.add(SOAPConstants.SOAP_VERSIONMISMATCH_FAULT.getLocalPart());
+        }
         
         @Override
         public String getEnvelopeNamespaceURI() {
@@ -187,6 +205,11 @@ public abstract class SOAPVersion {
         }
         
         @Override
+        public boolean isValidFaultCodeValue(String namespaceURI, String localName) {
+            return SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(namespaceURI) && validFaultCodeValues.contains(localName);
+        }
+
+        @Override
         public SOAPEnvelope createEnvelope(SAAJDocument document) {
             return document.createSOAP12Envelope();
         }
@@ -238,7 +261,9 @@ public abstract class SOAPVersion {
     public final Sequence getFaultCodeSequence() {
         return faultCodeSequence;
     }
-
+    
+    public abstract boolean isValidFaultCodeValue(String namespaceURI, String localName);
+    
     public abstract SOAPEnvelope createEnvelope(SAAJDocument document);
     
     public abstract String getContentType();
