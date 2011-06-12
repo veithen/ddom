@@ -20,17 +20,21 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 /**
- * 
- * From RFC 2046:
+ * Reads MIME multipart bodies and gives access to the raw content of the parts. This class
+ * contains the logic to split the message into parts, read the MIME headers and
+ * access the raw content of each part. Use {@link MultipartReader} to get access to the
+ * decoded content.
+ * <p>
+ * The structure of a multipart body is defined by the following production from RFC 2046:
  * <pre>
- * dash-boundary := "--" boundary
- *
  * multipart-body := [preamble CRLF]
  *                   dash-boundary transport-padding CRLF
  *                   body-part *encapsulation
  *                   close-delimiter transport-padding
  *                   [CRLF epilogue]
  * 
+ * dash-boundary := "--" boundary
+ *
  * transport-padding := *LWSP-char
  * 
  * encapsulation := delimiter transport-padding
@@ -64,11 +68,19 @@ import java.util.Arrays;
  * 
  * body-part := MIME-part-headers [CRLF *OCTET]
  * </pre>
- * 
- * 
  * The implementation uses the <a href="http://www-igm.univ-mlv.fr/~lecroq/string/node19.html#SECTION00190">Quick Search</a>
  * algorithm to locate the <tt>delimiter</tt> tokens.
+ * <p>
+ * To read a MIME part, use the following sequence of calls:
+ * <ol>
+ * <li>Call {@link #nextPart()} to position the stream at the beginning of the next unread part.
+ * <li>Repeatedly call {@link #nextHeader()} until it returns false. After each call to that method,
+ * the header name and value can be retrieved using {@link #getHeaderName()} and {@link #getHeaderValue()}.
+ * <li>Use one of the <code>read</code> methods to read the raw content of the part. A return value of
+ * <code>-1</code> indicates that the end of the part has been reached.
+ * </ol>
  */
+// TODO: specify the behavior of the close() method
 public class MultipartInputStream extends InputStream {
     /**
      * Indicates that we are at the start of the stream. It has not yet been determined whether the
