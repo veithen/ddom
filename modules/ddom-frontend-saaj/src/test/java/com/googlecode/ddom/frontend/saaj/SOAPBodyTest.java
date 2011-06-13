@@ -20,9 +20,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.io.StringReader;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
@@ -31,7 +34,9 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 
 import org.junit.Test;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 import com.google.code.ddom.utils.test.Validated;
 
@@ -136,5 +141,40 @@ public abstract class SOAPBodyTest extends AbstractTestCase {
         SOAPBody body = createEmptySOAPBody();
         SOAPElement child = body.addChildElement((SOAPElement)body.getOwnerDocument().createElementNS("urn:test", "p:test"));
         assertTrue(child instanceof SOAPBodyElement);
+    }
+    
+    @Validated @Test
+    public final void testAddDocumentOnEmptySOAPBody() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder builder = dbf.newDocumentBuilder();
+        Document doc = builder.parse(new InputSource(new StringReader("<p:test xmlns:p='urn:ns'>content</p:test>")));
+        body.addDocument(doc);
+        Iterator childElements = body.getChildElements();
+        assertTrue(childElements.hasNext());
+        SOAPElement firstChildElement = (SOAPElement)childElements.next();
+        assertTrue(firstChildElement instanceof SOAPBodyElement);
+        assertEquals(new QName("urn:ns", "test", "p"), firstChildElement.getElementQName());
+        assertEquals("content", firstChildElement.getValue());
+        assertFalse(childElements.hasNext());
+    }
+    
+    @Validated @Test
+    public final void testAddDocumentOnSOAPBodyWithExistingChild() throws Exception {
+        SOAPBody body = createEmptySOAPBody();
+        SOAPBodyElement child1 = body.addBodyElement(new QName("urn:ns1", "child1", "p1"));
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder builder = dbf.newDocumentBuilder();
+        Document doc = builder.parse(new InputSource(new StringReader("<p2:child2 xmlns:p2='urn:ns2'>content</p2:child2>")));
+        body.addDocument(doc);
+        Iterator childElements = body.getChildElements();
+        assertTrue(childElements.hasNext());
+        assertSame(child1, childElements.next());
+        SOAPElement child2 = (SOAPElement)childElements.next();
+        assertTrue(child2 instanceof SOAPBodyElement);
+        assertEquals(new QName("urn:ns2", "child2", "p2"), child2.getElementQName());
+        assertFalse(childElements.hasNext());
     }
 }

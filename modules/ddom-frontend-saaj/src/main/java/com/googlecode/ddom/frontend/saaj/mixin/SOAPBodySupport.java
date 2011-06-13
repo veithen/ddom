@@ -32,6 +32,7 @@ import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPBody;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPBodyElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
+import com.googlecode.ddom.stream.dom.DOMSource;
 
 @Mixin(SAAJSOAPBody.class)
 public abstract class SOAPBodySupport implements SAAJSOAPBody {
@@ -47,9 +48,20 @@ public abstract class SOAPBodySupport implements SAAJSOAPBody {
         return (SOAPBodyElement)addChildElement(qname);
     }
 
-    public SOAPBodyElement addDocument(Document arg0) throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPBodyElement addDocument(Document document) throws SOAPException {
+        // TODO: if the document was created using a DDOM model, we can optimize things a bit
+        try {
+            // From the Javadoc of SOAPBody#addDocument: "Calling this method invalidates the
+            // document parameter. The client application should discard all references to this
+            // Document and its contents upon calling addDocument. The behavior of an application
+            // that continues to use such references is undefined."
+            // This means that we can safely use a DOMSource here and defer creation of the nodes:
+            SAAJSOAPBodyElement child = coreAppendElement(SAAJSOAPBodyElement.class, null, null, null);
+            child.coreSetSource(new DOMSource(document.getDocumentElement()));
+            return child;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toRuntimeException(ex);
+        }
     }
 
     public final SOAPFault getFault() {
