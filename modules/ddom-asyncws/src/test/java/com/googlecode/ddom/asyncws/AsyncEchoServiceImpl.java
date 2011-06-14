@@ -16,6 +16,10 @@
 package com.googlecode.ddom.asyncws;
 
 @AsyncWebService
-public interface AsyncEchoService {
-    void echo(EchoRequest request, Callback<EchoResponse> callback);
+public class AsyncEchoServiceImpl implements AsyncEchoService {
+    public void echo(EchoRequest request, Callback<EchoResponse> callback) {
+        EchoResponse response = new EchoResponse();
+        response.setOut("Hi " + request.getIn() + "!");
+        callback.complete(response);
+    }
 }

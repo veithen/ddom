@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ddom-frontend-saaj</artifactId>
+            <artifactId>ddom-saaj-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -15,7 +15,13 @@
  */
 package com.googlecode.ddom.asyncws;
 
-@AsyncWebService
-public interface AsyncEchoService {
-    void echo(EchoRequest request, Callback<EchoResponse> callback);
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface AsyncWebService {
+
 }

@@ -16,35 +16,41 @@
 package com.googlecode.ddom.asyncws;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
 
-import com.googlecode.ddom.model.Model;
-import com.googlecode.ddom.model.ModelDefinitionBuilder;
-import com.googlecode.ddom.model.ModelRegistry;
-import com.googlecode.ddom.model.spi.ModelLoaderException;
+import com.googlecode.ddom.saaj.MessageFactoryImpl;
+import com.googlecode.ddom.saaj.compat.DefaultCompatibilityPolicy;
 
 public class AsyncWSServlet extends HttpServlet {
-    private Model saajModel;
+    private MessageFactoryImpl messageFactory;
     
     @Override
     public void init() throws ServletException {
         try {
-            saajModel = ModelRegistry.getInstance(AsyncWSServlet.class.getClassLoader()).getModel(ModelDefinitionBuilder.buildModelDefinition("saaj"));
-        } catch (ModelLoaderException ex) {
-            throw new ServletException("Failed to load the SAAJ model", ex);
+            messageFactory = new MessageFactoryImpl(null, DefaultCompatibilityPolicy.INSTANCE);
+        } catch (SOAPException ex) {
+            throw new ServletException("Failed to create SAAJ message factory", ex);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
-        InputStream in = req.getInputStream();
+        MimeHeaders headers = new MimeHeaders();
+        headers.addHeader("Content-Type", req.getContentType());
+        SOAPMessage message;
+        try {
+            message = messageFactory.createMessage(headers, req.getInputStream());
+        } catch (SOAPException ex) {
+            throw new ServletException(ex);
+        }
         AsyncContext asyncContext = req.startAsync();
         
     }

@@ -15,7 +15,14 @@
  */
 package com.googlecode.ddom.asyncws;
 
-@AsyncWebService
-public interface AsyncEchoService {
-    void echo(EchoRequest request, Callback<EchoResponse> callback);
+public class ServiceDescriptionException extends Exception {
+    private static final long serialVersionUID = 5749128438516035224L;
+
+    public ServiceDescriptionException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ServiceDescriptionException(String message) {
+        super(message);
+    }
 }
