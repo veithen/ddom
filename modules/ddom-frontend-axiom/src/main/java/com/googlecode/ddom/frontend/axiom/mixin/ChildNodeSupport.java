@@ -65,7 +65,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
     public OMNode detach() {
         try {
             coreDetach();
-            return null; // TODO
+            return this;
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

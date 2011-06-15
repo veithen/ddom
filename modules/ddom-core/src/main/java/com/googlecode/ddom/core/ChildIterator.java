@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,26 @@
  */
 package com.googlecode.ddom.core;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 /**
  * Extended iterator interface used by various methods in {@link CoreParentNode}. It defines an
  * additional method that allows to replace the child node returned by the last call to
- * {@link #next()}. Implementations of this interface MUST properly implement the {@link #remove()}
- * method, i.e. they are not allowed to throw {@link UnsupportedOperationException}.
+ * {@link #next()}.
+ * <p>
+ * All implementations of this interface must satisfy the following requirements:
+ * <ol>
+ * <li>The implementation MUST properly implement the {@link #remove()} method, i.e. it is not
+ * allowed to throw {@link UnsupportedOperationException}.
+ * <li>A {@link ConcurrentModificationException} MUST be thrown when the iterator is used after the
+ * last node returned by {@link Iterator#next()} has been removed using a method other than
+ * {@link Iterator#remove()} (e.g. {@link CoreChildNode#coreDetach()}).
+ * </ol>
  * 
  * @author Andreas Veithen
  */
+// TODO: specify what exception is thrown if a deferred parsing error occurs
 public interface ChildIterator<T extends CoreChildNode> extends Iterator<T> {
     void replace(CoreChildNode newNode) throws CoreModelException;
 }

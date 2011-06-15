@@ -73,6 +73,7 @@ public class BackendTestSuiteBuilder {
 //        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetAttributeInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeAndRemove(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeWithConcurrentModification(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstAttributeInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstAttributeInStateSourceSetWithPushInput(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstChildInStateSourceSetWithPushInput(config));

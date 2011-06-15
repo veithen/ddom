@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.backend.linkedlist.support;
 
+import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
 import com.googlecode.ddom.core.Axis;
@@ -30,6 +31,12 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
     private final Class<T> type;
     private final Axis axis;
     private CoreChildNode currentNode;
+    
+    /**
+     * The parent of the current node. This is used to detect concurrent modifications.
+     */
+    private CoreParentNode currentParent;
+    
     private CoreChildNode nextNode;
     private boolean hasNext;
     private int depth;
@@ -45,6 +52,9 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
     public final boolean hasNext() {
         if (!hasNext) {
             CoreChildNode node = currentNode;
+            if (node != null && node.coreGetParent() != currentParent) {
+                throw new ConcurrentModificationException("The current node has been removed using a method other than Iterator#remove()");
+            }
             do {
                 try {
                     // Get to the next node
@@ -100,6 +110,7 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
     public final T next() {
         if (hasNext()) {
             currentNode = nextNode;
+            currentParent = currentNode.coreGetParent();
             hasNext = false;
             return type.cast(currentNode);
         } else {
