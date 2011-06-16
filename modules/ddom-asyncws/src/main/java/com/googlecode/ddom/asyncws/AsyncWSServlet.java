@@ -16,6 +16,8 @@
 package com.googlecode.ddom.asyncws;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
@@ -31,6 +33,7 @@ import com.googlecode.ddom.saaj.compat.DefaultCompatibilityPolicy;
 
 public class AsyncWSServlet extends HttpServlet {
     private MessageFactoryImpl messageFactory;
+    private Map<String,ServiceDescription> services;
     
     @Override
     public void init() throws ServletException {
@@ -39,6 +42,13 @@ public class AsyncWSServlet extends HttpServlet {
         } catch (SOAPException ex) {
             throw new ServletException("Failed to create SAAJ message factory", ex);
         }
+        services = new HashMap<String,ServiceDescription>();
+    }
+
+    @Override
+    public void destroy() {
+        messageFactory = null;
+        services = null;
     }
 
     @Override
