@@ -137,6 +137,12 @@ public abstract class AbstractSOAPPartImpl extends SOAPPart {
             source = new StreamSource(new ByteArrayInputStream(content));
             out.write(content);
         } else {
+            // Make sure that the document is initialized and has an envelope
+            try {
+                getEnvelope();
+            } catch (SOAPException ex) {
+                throw new RuntimeException(ex); // TODO
+            }
             try {
                 XmlInput input = document.coreGetInput(true);
                 input.addFilter(new NamespaceRepairingFilter());

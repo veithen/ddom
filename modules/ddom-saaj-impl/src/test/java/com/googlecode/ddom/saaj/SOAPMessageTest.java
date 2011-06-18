@@ -34,6 +34,7 @@ import javax.mail.BodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -46,8 +47,10 @@ import javax.xml.soap.SOAPPart;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
@@ -250,5 +253,27 @@ public abstract class SOAPMessageTest {
         BodyPart part2 = mp.getBodyPart(1);
         // Note: text/plain is the default content type, so we need to include the parameters in the assertion
         assertEquals("text/plain; charset=iso-8859-15", part2.getContentType());
+    }
+    
+    /**
+     * Tests the behavior of {@link SOAPMessage#writeTo(java.io.OutputStream)} on a message for
+     * which no content has been specified.
+     * 
+     * @throws Exception
+     */
+    @Validated @Test
+    public void testWriteToEmpty() throws Exception {
+        SOAPMessage message = getFactory().createMessage();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        message.writeTo(baos);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        Document doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(baos.toByteArray()));
+        Element envelope = doc.getDocumentElement();
+        assertEquals("Envelope", envelope.getLocalName());
+        NodeList children = envelope.getElementsByTagNameNS("*", "*");
+        assertEquals(2, children.getLength());
+        assertEquals("Header", children.item(0).getLocalName());
+        assertEquals("Body", children.item(1).getLocalName());
     }
 }
