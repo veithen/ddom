@@ -41,7 +41,7 @@ public class SOAPMessageImpl extends AbstractSOAPMessageImpl {
     @Override
     public SOAPPart getSOAPPart() {
         if (soapPart == null) {
-            soapPart = new SOAPPartImpl(saajModel, message);
+            soapPart = new SOAPPartImpl(saajModel.getNodeFactory(), message);
         }
         return soapPart;
     }
