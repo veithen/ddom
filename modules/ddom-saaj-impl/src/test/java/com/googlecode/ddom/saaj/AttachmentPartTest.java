@@ -63,8 +63,7 @@ public class AttachmentPartTest {
         assertEquals(0, att.getSize());
     }
     
-    // This test can't be validated because of a bug in the RI: SAAJ-58
-    @Test
+    @Validated @Test
     public void testGetSizeWithObject() throws Exception {
         AttachmentPart att = createAttachment();
         String content = "This is a test";
