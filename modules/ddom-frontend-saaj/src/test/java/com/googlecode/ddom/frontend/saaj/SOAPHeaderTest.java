@@ -151,6 +151,21 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
     }
     
     @Validated @Test @Ignore // TODO
+    public void testExtractAllHeaderElements() throws Exception {
+        SOAPEnvelope env = createSOAPEnvelope();
+        SOAPHeader header = env.addHeader();
+        SOAPHeaderElement headerElement1 = header.addHeaderElement(new QName("urn:ns1", "test1", "p1"));
+        SOAPHeaderElement headerElement2 = header.addHeaderElement(new QName("urn:ns2", "test2", "p2"));
+        Iterator it = header.extractAllHeaderElements();
+        assertTrue(it.hasNext());
+        assertSame(headerElement1, it.next());
+        assertTrue(it.hasNext());
+        assertSame(headerElement2, it.next());
+        assertFalse(it.hasNext());
+        assertEquals(0, header.getChildNodes().getLength());
+    }
+    
+    @Validated @Test @Ignore // TODO
     public final void testExtractHeaderElementsPartialConsumption() throws Exception {
         SOAPEnvelope env = createSOAPEnvelope();
         SOAPHeader header = env.addHeader();
