@@ -15,16 +15,17 @@
  */
 package com.googlecode.ddom.asyncws;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.io.File;
 
-import javax.inject.Qualifier;
+import org.apache.catalina.Context;
+import org.apache.catalina.startup.Tomcat;
+import org.apache.webbeans.web.tomcat.ContextLifecycleListener;
 
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE})
-public @interface AsyncWebService {
-
+public class Runner {
+    public static void main(String[] args) throws Exception {
+        Tomcat container = new Tomcat();
+        Context context = container.addWebapp("/", new File("src/test/webapp").getAbsolutePath());
+        context.addLifecycleListener(new ContextLifecycleListener());
+        container.start();
+    }
 }

@@ -15,17 +15,8 @@
  */
 package com.googlecode.ddom.asyncws;
 
-import java.io.File;
+import javax.xml.soap.SOAPMessage;
 
-import org.apache.catalina.Context;
-import org.apache.catalina.startup.Tomcat;
-import org.apache.webbeans.web.tomcat.ContextLifecycleListener;
-
-public class Test {
-    public static void main(String[] args) throws Exception {
-        Tomcat container = new Tomcat();
-        Context context = container.addWebapp("/", new File("src/test/webapp").getAbsolutePath());
-        context.addLifecycleListener(new ContextLifecycleListener());
-        container.start();
-    }
+public interface AsyncProvider {
+    void invoke(SOAPMessage request, Callback<SOAPMessage> callback);
 }
