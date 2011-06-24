@@ -73,6 +73,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.soap11.header.TestExamineMustUnderstandHeaderBlocksWithParser.class);
         builder.exclude(org.apache.axiom.ts.soap12.header.TestExamineMustUnderstandHeaderBlocks.class);
         builder.exclude(org.apache.axiom.ts.soap12.header.TestExamineMustUnderstandHeaderBlocksWithParser.class);
+        builder.exclude(org.apache.axiom.ts.soap.header.TestExtractAllHeaderBlocks.class);
         
         return builder.build();
     }
