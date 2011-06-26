@@ -15,7 +15,9 @@
  */
 package com.googlecode.ddom.frontend.saaj.mixin;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
@@ -64,9 +66,8 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
         throw new UnsupportedOperationException();
     }
 
-    public Iterator examineAllHeaderElements() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator examineAllHeaderElements() {
+        return getChildElements();
     }
 
     public final Iterator examineHeaderElements(String actor) {
@@ -82,13 +83,20 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
         return coreGetElements(Axis.CHILDREN, SAAJSOAPHeaderElement.class, matcher, null, param);
     }
 
-    public Iterator extractAllHeaderElements() {
-        // TODO
-        throw new UnsupportedOperationException();
+    private <T> Iterator<T> extract(Iterator<T> elements) {
+        List<T> list = new ArrayList<T>();
+        while (elements.hasNext()) {
+            list.add(elements.next());
+            elements.remove();
+        }
+        return list.iterator();
+    }
+    
+    public final Iterator extractAllHeaderElements() {
+        return extract(examineAllHeaderElements());
     }
 
-    public Iterator extractHeaderElements(String actor) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator extractHeaderElements(String actor) {
+        return extract(examineHeaderElements(actor));
     }
 }

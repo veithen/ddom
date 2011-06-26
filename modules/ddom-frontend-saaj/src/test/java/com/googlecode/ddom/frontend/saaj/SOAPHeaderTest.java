@@ -32,6 +32,8 @@ import javax.xml.soap.SOAPHeaderElement;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.google.code.ddom.utils.test.Validated;
 
@@ -97,6 +99,31 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
     }
     
     @Validated @Test
+    public final void testExamineAllHeaderElementsReification() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        Document document = header.getOwnerDocument();
+        header.appendChild(document.createElementNS("urn:ns", "p:header1"));
+        header.appendChild(document.createElementNS("urn:ns", "p:header2"));
+        Iterator it = header.examineAllHeaderElements();
+        
+        assertTrue(it.hasNext());
+        Element headerElement = (Element)it.next();
+        assertTrue(headerElement instanceof SOAPHeaderElement);
+        assertEquals("urn:ns", headerElement.getNamespaceURI());
+        assertEquals("header1", headerElement.getLocalName());
+        assertEquals("p", headerElement.getPrefix());
+        
+        assertTrue(it.hasNext());
+        headerElement = (Element)it.next();
+        assertTrue(headerElement instanceof SOAPHeaderElement);
+        assertEquals("urn:ns", headerElement.getNamespaceURI());
+        assertEquals("header2", headerElement.getLocalName());
+        assertEquals("p", headerElement.getPrefix());
+        
+        assertFalse(it.hasNext());
+    }
+    
+    @Validated @Test
     public final void testExamineHeaderElements() throws Exception {
         SOAPHeader header = createEmptySOAPHeader();
         
@@ -150,7 +177,7 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         assertFalse(it.hasNext());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
     public void testExtractAllHeaderElements() throws Exception {
         SOAPEnvelope env = createSOAPEnvelope();
         SOAPHeader header = env.addHeader();
@@ -165,7 +192,19 @@ public abstract class SOAPHeaderTest extends AbstractTestCase {
         assertEquals(0, header.getChildNodes().getLength());
     }
     
-    @Validated @Test @Ignore // TODO
+    @Validated @Test
+    public void testExtractAllHeaderElementsPartialConsumption() throws Exception {
+        SOAPEnvelope env = createSOAPEnvelope();
+        SOAPHeader header = env.addHeader();
+        header.addHeaderElement(new QName("urn:ns1", "test1", "p1"));
+        header.addHeaderElement(new QName("urn:ns2", "test2", "p2"));
+        header.addHeaderElement(new QName("urn:ns3", "test3", "p3"));
+        Iterator it = header.extractAllHeaderElements();
+        it.next();
+        assertEquals(0, header.getChildNodes().getLength());
+    }
+    
+    @Validated @Test
     public final void testExtractHeaderElementsPartialConsumption() throws Exception {
         SOAPEnvelope env = createSOAPEnvelope();
         SOAPHeader header = env.addHeader();
