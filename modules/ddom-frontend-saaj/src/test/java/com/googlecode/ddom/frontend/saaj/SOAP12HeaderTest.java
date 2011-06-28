@@ -15,10 +15,57 @@
  */
 package com.googlecode.ddom.frontend.saaj;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPHeader;
+
+import org.junit.Test;
+
+import com.google.code.ddom.utils.test.Validated;
 
 public class SOAP12HeaderTest extends SOAPHeaderTest {
     public SOAP12HeaderTest() {
         super(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE);
+    }
+    
+    @Validated @Test(expected=SOAPException.class)
+    public void testAddNotUnderstoodHeaderElementWithoutNamespace() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        header.addNotUnderstoodHeaderElement(new QName("header"));
+    }
+    
+    @Validated @Test(expected=SOAPException.class)
+    public void testAddNotUnderstoodHeaderElementWithNullArgument() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        header.addNotUnderstoodHeaderElement(null);
+    }
+    
+    @Validated @Test
+    public void testAddNotUnderstoodHeaderElement() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        header.addNotUnderstoodHeaderElement(new QName("urn:ns", "header", "p"));
+        SOAPElement element = (SOAPElement)header.getChildElements(new QName(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "NotUnderstood")).next();
+        assertEquals("p:header", element.getAttributeNS(null, "qname"));
+        assertEquals("urn:ns", element.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "p"));
+    }
+
+    @Validated @Test
+    public void testAddNotUnderstoodHeaderElementWithoutPrefix() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        header.addNotUnderstoodHeaderElement(new QName("urn:ns", "header"));
+        SOAPElement element = (SOAPElement)header.getChildElements(new QName(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "NotUnderstood")).next();
+        String qname = element.getAttributeNS(null, "qname");
+        int idx = qname.indexOf(':');
+        assertTrue(idx != -1);
+        String prefix = qname.substring(0, idx);
+        String localName = qname.substring(idx+1);
+        assertEquals("header", localName);
+        assertEquals("urn:ns", element.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, prefix));
     }
 }

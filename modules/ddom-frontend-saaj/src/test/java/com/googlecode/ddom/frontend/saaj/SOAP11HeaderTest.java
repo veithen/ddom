@@ -15,10 +15,22 @@
  */
 package com.googlecode.ddom.frontend.saaj;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPHeader;
+
+import org.junit.Test;
+
+import com.google.code.ddom.utils.test.Validated;
 
 public class SOAP11HeaderTest extends SOAPHeaderTest {
     public SOAP11HeaderTest() {
         super(SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE);
+    }
+    
+    @Validated @Test(expected=UnsupportedOperationException.class)
+    public void testAddNotUnderstoodHeaderElement() throws Exception {
+        SOAPHeader header = createEmptySOAPHeader();
+        header.addNotUnderstoodHeaderElement(new QName("urn:ns", "header"));
     }
 }
