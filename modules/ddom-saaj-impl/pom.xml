@@ -83,6 +83,21 @@
             <!-- scope>test</scope -->
         </dependency>
     </dependencies>
+    <repositories>
+        <!-- This is necessary to get the latest version of the SAAJ reference implementation.
+             We only add this here so that we don't pollute other modules with broken things
+             from the java.net repository. -->
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
