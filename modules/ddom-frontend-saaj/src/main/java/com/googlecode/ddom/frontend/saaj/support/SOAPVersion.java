@@ -18,6 +18,7 @@ package com.googlecode.ddom.frontend.saaj.support;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPEnvelope;
 
@@ -44,6 +45,7 @@ public abstract class SOAPVersion {
                 .addItem(SAAJSOAPFaultElement.class, "", "faultstring")
                 .addItem(SAAJSOAPFaultElement.class, "", "faultactor")
                 .addItem(SAAJDetail.class, "", "detail").build(),
+            null,
             null) {
         
         @Override
@@ -132,7 +134,8 @@ public abstract class SOAPVersion {
             new SequenceBuilder()
                 .addItem(SAAJSOAPElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Value")
                 .addItem(SAAJSOAPElement.class, SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "Subcode")
-                .enableMatchByInterface().build()) {
+                .enableMatchByInterface().build(),
+            new QName(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "NotUnderstood", "SOAP-ENV")) {
         
         private final Set<String> validFaultCodeValues = new HashSet<String>();
         
@@ -223,14 +226,16 @@ public abstract class SOAPVersion {
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
     private final Sequence faultCodeSequence;
+    private final QName notUnderstoodHeaderElementQName;
     
-    public SOAPVersion(Sequence faultSequence, Sequence faultCodeSequence) {
+    public SOAPVersion(Sequence faultSequence, Sequence faultCodeSequence, QName notUnderstoodHeaderElementQName) {
         envelopeSequence = new SequenceBuilder()
                 .addItem(getSOAPHeaderClass(), getEnvelopeNamespaceURI(), "Header")
                 .addItem(getSOAPBodyClass(), getEnvelopeNamespaceURI(), "Body")
                 .enableMatchByInterface().build();
         this.faultSequence = faultSequence;
         this.faultCodeSequence = faultCodeSequence;
+        this.notUnderstoodHeaderElementQName = notUnderstoodHeaderElementQName;
     }
     
     public abstract String getEnvelopeNamespaceURI();
@@ -267,4 +272,8 @@ public abstract class SOAPVersion {
     public abstract SOAPEnvelope createEnvelope(SAAJDocument document);
     
     public abstract String getContentType();
+
+    public final QName getNotUnderstoodHeaderElementQName() {
+        return notUnderstoodHeaderElementQName;
+    }
 }

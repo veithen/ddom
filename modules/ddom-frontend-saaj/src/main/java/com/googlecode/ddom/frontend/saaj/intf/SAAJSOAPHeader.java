@@ -21,6 +21,6 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
 @ModelExtensionInterface(isAbstract=true, parent=CoreNSAwareElement.class)
-public interface SAAJSOAPHeader extends SOAPHeader, SAAJSOAPElement {
+public interface SAAJSOAPHeader extends SOAPHeader, SAAJSOAPElement, HasSOAPVersion {
 
 }

@@ -25,12 +25,16 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeaderElement;
 
 import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
+import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.googlecode.ddom.frontend.saaj.support.HeaderElementMatcher;
 import com.googlecode.ddom.frontend.saaj.support.MustUnderstandHeaderElementMatcher;
+import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
 @Mixin(SAAJSOAPHeader.class)
 public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
@@ -42,10 +46,35 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
         return (SOAPHeaderElement)addChildElement(qname);
     }
 
-    public SOAPHeaderElement addNotUnderstoodHeaderElement(QName arg0)
-            throws SOAPException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPHeaderElement addNotUnderstoodHeaderElement(QName name) throws SOAPException {
+        if (name == null) {
+            throw new SOAPException("Cannot pass null to addNotUnderstoodHeaderElement");
+        }
+        String namespaceURI = name.getNamespaceURI();
+        if (namespaceURI.length() == 0) {
+            throw new SOAPException("The qname passed to addNotUnderstoodHeaderElement must be namespace-qualified");
+        }
+        try {
+            QName elementName = getSOAPVersion().getNotUnderstoodHeaderElementQName();
+            if (elementName == null) {
+                throw new UnsupportedOperationException("Not supported with this SOAP version");
+            }
+            String elementNamespaceURI = elementName.getNamespaceURI();
+            String elementPrefix = coreLookupPrefix(elementNamespaceURI, false);
+            if (elementPrefix == null) {
+                elementPrefix = elementName.getPrefix();
+            }
+            SAAJSOAPHeaderElement element = (SAAJSOAPHeaderElement)coreAppendElement(getChildType(), elementNamespaceURI, elementName.getLocalPart(), elementPrefix);
+            String prefix = name.getPrefix();
+            if (prefix.length() == 0) {
+                prefix = "ns1";
+            }
+            element.ensureNamespaceIsDeclared(prefix, namespaceURI);
+            element.coreSetAttribute(DOM2AttributeMatcher.INSTANCE, "", "qname", "", prefix + ":" + name.getLocalPart());
+            return element;
+        } catch (CoreModelException ex) {
+            throw SAAJExceptionUtil.toSOAPException(ex);
+        }
     }
 
     public SOAPHeaderElement addUpgradeHeaderElement(Iterator arg0)
