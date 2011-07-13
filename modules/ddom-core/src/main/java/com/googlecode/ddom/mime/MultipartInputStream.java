@@ -197,12 +197,12 @@ public class MultipartInputStream extends InputStream {
         final byte[] delimiter = this.delimiter;
         final byte[] buffer = this.buffer;
         final int delimiterLength = delimiter.length;
-        fillBuffer(delimiterLength);
+        fillBuffer(delimiterLength+1);
         final int bufferPosition = this.bufferPosition;
         final int bufferLen = this.bufferLen;
         final int bufferSize = buffer.length;
         int nonDelimiterBytes = this.nonDelimiterBytes;
-        while (bufferLen >= nonDelimiterBytes + delimiterLength) {
+        while (bufferLen > nonDelimiterBytes + delimiterLength) {
             boolean found = true;
             int pos = bufferPosition + nonDelimiterBytes;
             for (int i=0; i<delimiterLength; i++) {
