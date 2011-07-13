@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import org.apache.axiom.om.OMNamespace;
 
 import com.googlecode.ddom.util.lang.ObjectUtils;
 
-public class OMNamespaceImpl implements OMNamespace {
+public final class OMNamespaceImpl implements OMNamespace {
     private final String namespaceURI;
     private final String prefix;
     
@@ -28,9 +28,8 @@ public class OMNamespaceImpl implements OMNamespace {
         this.prefix = prefix;
     }
 
-    public boolean equals(String uri, String prefix) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public boolean equals(String namespaceURI, String prefix) {
+        return this.namespaceURI.equals(namespaceURI) && ObjectUtils.equals(this.prefix, prefix);
     }
 
     public String getName() {
@@ -51,7 +50,6 @@ public class OMNamespaceImpl implements OMNamespace {
             return true;
         } else if (obj instanceof OMNamespace) {
             OMNamespace other = (OMNamespace)obj;
-            // TODO: can prefix be null?
             return ObjectUtils.equals(prefix, other.getPrefix()) && namespaceURI.equals(other.getNamespaceURI());
         } else {
             return false;
