@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.backend.linkedlist;
 
+import java.util.List;
+
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.Inject;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
@@ -389,6 +391,25 @@ public abstract class ParentNode extends Node implements LLParentNode {
                 case MOVE:
                     if (isForeignModel) {
                         throw new UnsupportedOperationException();
+                    } else if (isForeignDocument && newChild instanceof CoreParentNode) {
+                        // If we are moving the node from another document, then we need to register
+                        // the relevant builders in the target node's document. Otherwise deferred
+                        // parsing will be broken
+                        Document foreignDocument = (Document)newChild.coreGetOwnerDocument(false);
+                        if (foreignDocument != null) {
+                            List<Builder> builders = null;
+                            for (Builder builder : foreignDocument.getBuilders()) {
+                                // TODO: this test only covers the case where newChild is incomplete,
+                                //       but not the case where newChild is complete but has a descendant that is incomplete
+                                if (builder.getInputContext((LLParentNode)newChild) != null) {
+                                    if (builders == null) {
+                                        builders = ((Document)internalGetOwnerDocument(true)).getBuilders();
+                                    }
+                                    builders.add(builder);
+                                }
+                            }
+                        }
+                        break;
                     } else {
                         break;
                     }

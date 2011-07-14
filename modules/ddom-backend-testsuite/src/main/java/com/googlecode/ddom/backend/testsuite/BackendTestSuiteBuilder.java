@@ -68,6 +68,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration1(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration2(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration3(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreAppendChildIncompleteImport(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreClearIncomplete(config));
         // TODO
 //        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));

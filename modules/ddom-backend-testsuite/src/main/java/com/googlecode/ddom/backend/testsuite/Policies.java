@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,12 @@ public final class Policies {
     public static final NodeMigrationPolicy REJECT = new NodeMigrationPolicy() {
         public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
             return Action.REJECT;
+        }
+    };
+    
+    public static final NodeMigrationPolicy MOVE = new NodeMigrationPolicy() {
+        public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
+            return Action.MOVE;
         }
     };
 }

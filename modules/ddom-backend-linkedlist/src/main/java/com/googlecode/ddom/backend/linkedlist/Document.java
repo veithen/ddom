@@ -64,6 +64,10 @@ public class Document extends ParentNode implements LLDocument {
         return DOCUMENT_NODE;
     }
 
+    final List<Builder> getBuilders() {
+        return builders;
+    }
+
     public final InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredParsingException {
         if (log.isDebugEnabled()) {
             log.debug("Creating builder for " + input);
