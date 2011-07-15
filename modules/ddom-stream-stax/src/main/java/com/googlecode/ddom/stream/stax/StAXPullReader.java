@@ -34,7 +34,14 @@ final class StAXPullReader implements XmlReader {
     StAXPullReader(XmlHandler handler, XMLStreamReader reader) {
         this.handler = handler;
         this.reader = reader;
-        parserIsNamespaceAware = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
+        boolean parserIsNamespaceAware;
+        try {
+            Boolean prop = (Boolean)reader.getProperty(XMLInputFactory.IS_NAMESPACE_AWARE);
+            parserIsNamespaceAware = prop == null ? true : prop;
+        } catch (IllegalArgumentException ex) {
+            parserIsNamespaceAware = true;
+        }
+        this.parserIsNamespaceAware = parserIsNamespaceAware;
     }
 
     private String nullToEmptyString(String value) {
