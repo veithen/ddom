@@ -32,7 +32,7 @@ public class Serializer extends XmlOutput {
     public Serializer(OutputStream out, String encoding) throws UnsupportedEncodingException {
         if (encoding.equalsIgnoreCase("UTF-8")) {
             writer = new UTF8Writer(out);
-        } else if (encoding.equalsIgnoreCase("US-ASCII")) {
+        } else if (encoding.equalsIgnoreCase("US-ASCII") || encoding.equalsIgnoreCase("ASCII")) {
             writer = new ASCIIWriter(out);
         } else if (encoding.equalsIgnoreCase("ISO-8859-1")) {
             writer = new Latin1Writer(out);

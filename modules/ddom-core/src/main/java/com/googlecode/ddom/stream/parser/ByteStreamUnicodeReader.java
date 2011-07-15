@@ -62,11 +62,11 @@ public abstract class ByteStreamUnicodeReader implements UnicodeReader {
     }
     
     public static Factory getFactory(String encoding) {
-        if (encoding.equalsIgnoreCase("utf-8")) {
+        if (encoding.equalsIgnoreCase("UTF-8")) {
             return UTF8Reader.FACTORY;
-        } else if (encoding.equalsIgnoreCase("ascii")) {
+        } else if (encoding.equalsIgnoreCase("US-ASCII") || encoding.equalsIgnoreCase("ASCII")) {
             return ASCIIReader.FACTORY;
-        } else if (encoding.equalsIgnoreCase("iso-8859-1")) {
+        } else if (encoding.equalsIgnoreCase("ISO-8859-1")) {
             return Latin1Reader.FACTORY;
         } else {
             // TODO
