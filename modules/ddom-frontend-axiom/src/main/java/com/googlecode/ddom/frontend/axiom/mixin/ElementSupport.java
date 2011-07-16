@@ -231,7 +231,7 @@ public abstract class ElementSupport implements AxiomElement {
     public final OMNamespace declareDefaultNamespace(String uri) {
         // TODO: what if uri is null or empty string?
         try {
-            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, null, null, uri);
+            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, "", null, uri);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
