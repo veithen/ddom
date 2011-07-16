@@ -29,9 +29,9 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPNodeFactory;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPFactoryImpl;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPModelBuilderImpl;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
+import com.googlecode.ddom.frontend.axiom.support.AxiomParserSource;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.XmlSource;
-import com.googlecode.ddom.stream.parser.ParserSource;
 import com.googlecode.ddom.stream.stax.StAXPullInput;
 
 @Mixin(NodeFactory.class)
@@ -55,8 +55,7 @@ public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {
     
     public final SOAPModelBuilder createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {
         // TODO: we have currently no way to set the SOAPFactory!
-        // TODO: translate configuration
-        return createBuilder(new ParserSource(is));
+        return createBuilder(new AxiomParserSource(is, configuration));
     }
 
     public final SOAPModelBuilder createStAXSOAPModelBuilder(XMLStreamReader reader) {

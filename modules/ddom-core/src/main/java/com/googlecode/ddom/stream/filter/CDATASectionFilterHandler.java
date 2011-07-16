@@ -13,14 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.jaxp;
+package com.googlecode.ddom.stream.filter;
 
-import com.googlecode.ddom.stream.XmlFilter;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.stream.filter.util.XmlHandlerWrapper;
 
-public class CommentFilter extends XmlFilter {
+final class CDATASectionFilterHandler extends XmlHandlerWrapper {
+    CDATASectionFilterHandler(XmlHandler parent) {
+        super(parent);
+    }
+
     @Override
-    protected XmlHandler createXmlHandler(XmlHandler target) {
-        return new CommentFilterHandler(target);
+    public void startCDATASection() throws StreamException {
+    }
+
+    @Override
+    public void endCDATASection() throws StreamException {
     }
 }

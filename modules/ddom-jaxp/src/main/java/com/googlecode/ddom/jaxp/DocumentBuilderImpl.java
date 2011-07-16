@@ -38,6 +38,7 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
+import com.googlecode.ddom.stream.filter.CommentFilter;
 import com.googlecode.ddom.stream.filter.ValidationFilter;
 
 public class DocumentBuilderImpl extends DocumentBuilder {

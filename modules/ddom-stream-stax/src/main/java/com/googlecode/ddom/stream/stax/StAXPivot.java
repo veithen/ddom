@@ -241,17 +241,30 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean startCDATASection() {
-//        eventType = CDATA;
-//        coalesce = true;
-//        return true;
-        return true;
+        switch (state) {
+            case STATE_DEFAULT:
+                eventType = CDATA;
+                state = STATE_COALESCE;
+                return true;
+            case STATE_COLLECT_TEXT:
+                accumulator.append(data);
+                return true;
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     @Override
     protected boolean endCDATASection() {
-//        text = stopCoalescing();
-//        return false;
-        return true;
+        switch (state) {
+            case STATE_COALESCE:
+                data = stopCoalescing();
+                return false;
+            case STATE_COLLECT_TEXT:
+                return true;
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     @Override
@@ -491,7 +504,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public boolean hasText() {
-        return eventType == CHARACTERS || eventType == COMMENT || eventType == DTD || eventType == SPACE;
+        return eventType == CHARACTERS || eventType == CDATA || eventType == COMMENT || eventType == DTD || eventType == SPACE;
     }
 
     public String getText() {

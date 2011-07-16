@@ -25,7 +25,6 @@ import org.apache.axiom.ts.om.builder.TestIOExceptionInGetText;
 import org.apache.axiom.ts.om.builder.TestInvalidXML;
 import org.apache.axiom.ts.om.container.TestSerialize;
 import org.apache.axiom.ts.om.element.TestGetChildrenWithName4;
-import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCDATAEventFromElement;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
 import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
@@ -52,7 +51,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(TestCreateOMTextFromDataHandlerProvider.class);
-        builder.exclude(TestGetXMLStreamReaderCDATAEventFromElement.class);
         builder.exclude(TestGetXMLStreamReaderCommentEvent.class);
         builder.exclude(TestGetXMLStreamReaderNextTag.class);
         builder.exclude(TestInvalidXML.class);

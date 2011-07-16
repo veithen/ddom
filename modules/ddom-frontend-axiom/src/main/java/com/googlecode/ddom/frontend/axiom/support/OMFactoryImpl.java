@@ -208,14 +208,26 @@ public class OMFactoryImpl implements OMFactory {
         throw new UnsupportedOperationException();
     }
 
-    public final OMText createOMText(String s, int type) {
+    public final OMText createOMText(Object dataHandler, boolean optimize) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
-    public final OMText createOMText(Object dataHandler, boolean optimize) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMText createOMText(String data, int type) {
+        AxiomText node;
+        switch (type) {
+            case OMNode.TEXT_NODE:
+                node = (AxiomText)nodeFactory.createCharacterData(null, data);
+                break;
+            case OMNode.CDATA_SECTION_NODE:
+                node = (AxiomCDATASection)nodeFactory.createCDATASection(null, data);
+                break;
+            default:
+                // TODO: support the other types
+                throw new UnsupportedOperationException();
+        }
+        node.setOMFactory(this);
+        return node;
     }
 
     public final OMText createOMText(OMContainer parent, String data, int type) {
