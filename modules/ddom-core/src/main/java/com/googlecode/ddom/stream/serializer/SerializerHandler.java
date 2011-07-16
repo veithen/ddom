@@ -24,7 +24,17 @@ final class SerializerHandler implements XmlHandler {
     private static final int STATE_CONTENT = 0;
     private static final int STATE_EMPTY_ELEMENT = 1;
     private static final int STATE_ATTRIBUTE = 2;
+    
+    /**
+     * The serializer is writing the content of a CDATA section, comment or processing instruction.
+     */
     private static final int STATE_UNESCAPED = 3;
+    
+    /**
+     * The serializer is writing an namespace declaration with a prefix and for which no content has
+     * been written yet.
+     */
+    private static final int STATE_EMPTY_PREFIXED_NS_DECL = 4;
     
     private final UnicodeWriter writer;
     private int depth;
@@ -126,7 +136,7 @@ final class SerializerHandler implements XmlHandler {
         }
     }
 
-    private void doStartAttribute(String prefix, String localName) throws StreamException {
+    private void writeAttribute(String prefix, String localName) throws StreamException {
         try {
             writer.write(' ');
             if (prefix.length() > 0) {
@@ -135,29 +145,36 @@ final class SerializerHandler implements XmlHandler {
             }
             writer.write(localName);
             writer.write("=\"");
-            state = STATE_ATTRIBUTE;
         } catch (IOException ex) {
             throw new StreamException(ex);
         }
     }
     
     public void startAttribute(String name, String type) throws StreamException {
-        doStartAttribute("", name);
+        writeAttribute("", name);
+        state = STATE_ATTRIBUTE;
     }
 
     public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
-        doStartAttribute(prefix, localName);
+        writeAttribute(prefix, localName);
+        state = STATE_ATTRIBUTE;
     }
 
     public void startNamespaceDeclaration(String prefix) throws StreamException {
         if (prefix.length() == 0) {
-            doStartAttribute("", "xmlns");
+            writeAttribute("", "xmlns");
+            state = STATE_ATTRIBUTE;
         } else {
-            doStartAttribute("xmlns", prefix);
+            writeAttribute("xmlns", prefix);
+            // TODO: actually this only applies to XML 1.0
+            state = STATE_EMPTY_PREFIXED_NS_DECL;
         }
     }
 
     public void endAttribute() throws StreamException {
+        if (state == STATE_EMPTY_PREFIXED_NS_DECL) {
+            throw new StreamException("Invalid namespace declaration: Prefixed namespace bindings may not be empty.");
+        }
         try {
             writer.write('"');
         } catch (IOException ex) {
@@ -173,44 +190,49 @@ final class SerializerHandler implements XmlHandler {
         try {
             finishStartElement();
             int len = data.length();
-            int pos = 0;
-            while (pos < len) {
-                char c = data.charAt(pos);
-                int codePoint;
-                if (Character.isHighSurrogate(c)) {
-                    codePoint = Character.toCodePoint(c, data.charAt(pos+1));
-                    pos += 2;
-                } else {
-                    codePoint = c;
-                    pos++;
+            if (len > 0) {
+                if (state == STATE_EMPTY_PREFIXED_NS_DECL) {
+                    state = STATE_ATTRIBUTE;
                 }
-                switch (codePoint) {
-                    case '"':
-                        if (state == STATE_ATTRIBUTE) {
-                            writer.write("&quot;");
-                        } else {
-                            writer.write(codePoint);
-                        }
-                        break;
-                    case '<':
-                        if (state == STATE_CONTENT) {
-                            writer.write("&lt;");
-                        } else {
-                            writer.write(codePoint);
-                        }
-                        break;
-                    case '&':
-                        writer.write("&amp;");
-                        break;
-                    default:
-                        if (writer.canEncode(codePoint)) {
-                            writer.write(codePoint);
-                        } else {
-                            writer.write("&#");
-                            // TODO: optimize; we don't need to create a String object here
-                            writer.write(Integer.toString(codePoint));
-                            writer.write(';');
-                        }
+                int pos = 0;
+                while (pos < len) {
+                    char c = data.charAt(pos);
+                    int codePoint;
+                    if (Character.isHighSurrogate(c)) {
+                        codePoint = Character.toCodePoint(c, data.charAt(pos+1));
+                        pos += 2;
+                    } else {
+                        codePoint = c;
+                        pos++;
+                    }
+                    switch (codePoint) {
+                        case '"':
+                            if (state == STATE_ATTRIBUTE) {
+                                writer.write("&quot;");
+                            } else {
+                                writer.write(codePoint);
+                            }
+                            break;
+                        case '<':
+                            if (state == STATE_CONTENT) {
+                                writer.write("&lt;");
+                            } else {
+                                writer.write(codePoint);
+                            }
+                            break;
+                        case '&':
+                            writer.write("&amp;");
+                            break;
+                        default:
+                            if (writer.canEncode(codePoint)) {
+                                writer.write(codePoint);
+                            } else {
+                                writer.write("&#");
+                                // TODO: optimize; we don't need to create a String object here
+                                writer.write(Integer.toString(codePoint));
+                                writer.write(';');
+                            }
+                    }
                 }
             }
         } catch (IOException ex) {

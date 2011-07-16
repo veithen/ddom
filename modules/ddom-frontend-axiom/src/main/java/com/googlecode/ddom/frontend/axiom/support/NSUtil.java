@@ -17,6 +17,7 @@ package com.googlecode.ddom.frontend.axiom.support;
 
 import org.apache.axiom.om.OMNamespace;
 
+// TODO: do we really need this?
 public class NSUtil {
     private NSUtil() {}
     

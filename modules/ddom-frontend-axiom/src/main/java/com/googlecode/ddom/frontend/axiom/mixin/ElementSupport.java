@@ -208,23 +208,29 @@ public abstract class ElementSupport implements AxiomElement {
         return lineNumber;
     }
     
-    public OMNamespace declareNamespace(OMNamespace ns) {
-        try {
-            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, NSUtil.getPrefix(ns), null, NSUtil.getNamespaceURI(ns));
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-        // TODO
-        return null;
-    }
-
-    public final OMNamespace declareNamespace(String uri, String prefix) {
-        // TODO: need to handle empty strings correctly
+    private void doDeclareNamespace(String uri, String prefix) {
         try {
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
+    }
+    
+    public final OMNamespace declareNamespace(OMNamespace ns) {
+        String prefix = ns.getPrefix();
+        if (prefix == null) {
+            return declareNamespace(ns.getNamespaceURI(), null);
+        } else {
+            doDeclareNamespace(ns.getNamespaceURI(), prefix);
+            return ns;
+        }
+    }
+
+    public final OMNamespace declareNamespace(String uri, String prefix) {
+        if (prefix == null || prefix.length() == 0) {
+            prefix = OMSerializerUtil.getNextNSPrefix();
+        }
+        doDeclareNamespace(uri, prefix);
         return new OMNamespaceImpl(uri, prefix);
     }
     
