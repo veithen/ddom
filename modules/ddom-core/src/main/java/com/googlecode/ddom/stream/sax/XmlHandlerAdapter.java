@@ -15,180 +15,291 @@
  */
 package com.googlecode.ddom.stream.sax;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 
+import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 
-public class XmlHandlerAdapter implements XmlHandler {
+public class XmlHandlerAdapter implements XmlHandler, Attributes {
+    private static final int STATE_DEFAULT = 0;
+    private static final int STATE_COALESCE = 1;
+    private static final int STATE_IGNORE_CDATA = 2;
+    
+    private static final int INITIAL_ELEMENT_STACK_SIZE = 8;
+    private static final int INITIAL_ATTRIBUTE_STACK_SIZE = 8;
+    
     private final ContentHandler contentHandler;
     private final LexicalHandler lexicalHandler;
 
+    private int depth;
+    private int elementStackSize = INITIAL_ELEMENT_STACK_SIZE;
+    private String[] elementStack = new String[INITIAL_ELEMENT_STACK_SIZE*3];
+    private final ScopedNamespaceContext namespaceContext = new ScopedNamespaceContext();
+    private int attributeStackSize = INITIAL_ATTRIBUTE_STACK_SIZE;
+    private String[] attributeStack = new String[INITIAL_ATTRIBUTE_STACK_SIZE*5];
+    private int attributeCount;
+    private String declaredPrefix;
+    private String piTarget;
+    private int state = STATE_DEFAULT;
+    private final StringAccumulator accumulator = new StringAccumulator();
+    
     public XmlHandlerAdapter(ContentHandler contentHandler, LexicalHandler lexicalHandler) {
         this.contentHandler = contentHandler;
         this.lexicalHandler = lexicalHandler;
     }
 
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#attributesCompleted()
-     */
-    public void attributesCompleted() {
-        // TODO
-        throw new UnsupportedOperationException();
+    private String stopCoalescing() {
+        String data = accumulator.toString();
+        accumulator.clear();
+        state = STATE_DEFAULT;
+        return data;
     }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#completed()
-     */
-    public void completed() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#endAttribute()
-     */
-    public void endAttribute() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#endCDATASection()
-     */
-    public void endCDATASection() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#endElement()
-     */
-    public void endElement() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#processDocumentType(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void endDocumentTypeDeclaration() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#processEntityReference(java.lang.String)
-     */
-    public void processEntityReference(String name) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#processText(java.lang.String)
-     */
-    public void processCharacterData(String data, boolean ignorable) throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    
+    public void startEntity(boolean fragment, String inputEncoding) throws StreamException {
+        try {
+            contentHandler.startDocument();
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
     }
 
     public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
-        // TODO
-        throw new UnsupportedOperationException();
     }
 
-    public void startEntity(boolean fragment, String inputEncoding) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
     }
 
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#startAttribute(java.lang.String, java.lang.String)
-     */
-    public void startAttribute(String name, String type) throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void endDocumentTypeDeclaration() throws StreamException {
     }
 
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#startAttribute(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void startAttribute(String namespaceURI, String localName, String prefix, String type)
-            throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#startCDATASection()
-     */
-    public void startCDATASection() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#startElement(java.lang.String)
-     */
     public void startElement(String tagName) throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        startElement("", "", tagName);
     }
 
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#startElement(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void startElement(String namespaceURI, String localName, String prefix)
-            throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
+        internalStartElement(namespaceURI, localName, prefix.length() == 0 ? localName : (prefix + ":" + localName));
+    }
+    
+    private void internalStartElement(String uri, String localName, String qName) {
+        attributeCount = 0;
+        if (depth == elementStackSize) {
+            elementStackSize *= 2;
+            String[] newElementStack = new String[elementStackSize*3];
+            System.arraycopy(elementStack, 0, newElementStack, 0, depth*3);
+            elementStack = newElementStack;
+        }
+        elementStack[depth*3] = uri;
+        elementStack[depth*3+1] = localName;
+        elementStack[depth*3+2] = qName;
+        namespaceContext.startScope();
     }
 
-    /* (non-Javadoc)
-     * @see com.google.code.ddom.stream.spi.XmlHandler#startNamespaceDeclaration(java.lang.String)
-     */
+    public void endElement() throws StreamException {
+        try {
+            depth--;
+            contentHandler.endElement(elementStack[depth*3], elementStack[depth*3+1], elementStack[depth*3+2]);
+            for (int i=namespaceContext.getBindingsCount(); i<namespaceContext.getBindingsCount(); i++) {
+                contentHandler.endPrefixMapping(namespaceContext.getPrefix(i));
+            }
+            namespaceContext.endScope();
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public void startAttribute(String name, String type) throws StreamException {
+        internalStartAttribute("", "", name, type);
+    }
+
+    public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
+        internalStartAttribute(namespaceURI, localName, prefix.length() == 0 ? localName : (prefix + ":" + localName), type);
+    }
+    
     public void startNamespaceDeclaration(String prefix) throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        declaredPrefix = prefix;
+        // TODO: we need to generate an attribute in this case too (if the namespacePrefixes property is true)
+        state = STATE_COALESCE;
     }
 
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.XmlHandler#endComment()
-     */
-    public void endComment() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void internalStartAttribute(String uri, String localName, String qName, String type) {
+        state = STATE_COALESCE;
+        if (attributeCount == attributeStackSize) {
+            attributeStackSize *= 2;
+            String[] newStack = new String[attributeStackSize*5];
+            System.arraycopy(attributeStack, 0, newStack, 0, attributeCount*5);
+            attributeStack = newStack;
+        }
+        attributeStack[attributeCount*5] = uri;
+        attributeStack[attributeCount*5+1] = localName;
+        attributeStack[attributeCount*5+2] = qName;
+        attributeStack[attributeCount*5+3] = type;
     }
 
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.XmlHandler#endProcessingInstruction()
-     */
-    public void endProcessingInstruction() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void endAttribute() throws StreamException {
+        try {
+            if (declaredPrefix != null) {
+                String namespaceURI = stopCoalescing();
+                namespaceContext.setPrefix(declaredPrefix, namespaceURI);
+                contentHandler.startPrefixMapping(declaredPrefix, namespaceURI);
+                declaredPrefix = null;
+            } else {
+                attributeStack[attributeCount*5+4] = stopCoalescing();
+                attributeCount++;
+            }
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
     }
 
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.XmlHandler#startComment()
-     */
-    public void startComment() throws StreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void attributesCompleted() throws StreamException {
+        try {
+            contentHandler.startElement(elementStack[depth*3], elementStack[depth*3+1], elementStack[depth*3+2], this);
+            depth++;
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
     }
 
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.XmlHandler#startProcessingInstruction(java.lang.String)
-     */
+    public void processCharacterData(String data, boolean ignorable) throws StreamException {
+        try {
+            switch (state) {
+                case STATE_COALESCE:
+                    accumulator.append(data);
+                    break;
+                case STATE_DEFAULT:
+                    char[] ch = data.toCharArray();
+                    if (ignorable) {
+                        contentHandler.ignorableWhitespace(ch, 0, ch.length);
+                    } else {
+                        contentHandler.characters(ch, 0, ch.length);
+                    }
+            }
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
     public void startProcessingInstruction(String target) throws StreamException {
+        piTarget = target;
+        state = STATE_COALESCE;
+    }
+
+    public void endProcessingInstruction() throws StreamException {
+        try {
+            contentHandler.processingInstruction(piTarget, stopCoalescing());
+            piTarget = null;
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public void startComment() throws StreamException {
+        state = lexicalHandler != null ? STATE_COALESCE : STATE_IGNORE_CDATA;
+    }
+
+    public void endComment() throws StreamException {
+        try {
+            if (lexicalHandler != null) {
+                char[] ch = stopCoalescing().toCharArray();
+                lexicalHandler.comment(ch, 0, ch.length);
+            }
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public void startCDATASection() throws StreamException {
+        try {
+            if (lexicalHandler != null) {
+                lexicalHandler.startCDATA();
+            }
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public void endCDATASection() throws StreamException {
+        try {
+            if (lexicalHandler != null) {
+                lexicalHandler.endCDATA();
+            }
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public void processEntityReference(String name) throws StreamException {
+        try {
+            contentHandler.skippedEntity(name);
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public void completed() throws StreamException {
+        try {
+            contentHandler.endDocument();
+        } catch (SAXException ex) {
+            throw new StreamException(ex);
+        }
+    }
+
+    public int getLength() {
+        return attributeCount;
+    }
+
+    public int getIndex(String uri, String localName) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
+    public int getIndex(String qName) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public String getURI(int index) {
+        return attributeStack[index*5];
+    }
+
+    public String getLocalName(int index) {
+        return attributeStack[index*5+1];
+    }
+
+    public String getQName(int index) {
+        return attributeStack[index*5+2];
+    }
+
+    public String getType(int index) {
+        return attributeStack[index*5+3];
+    }
+
+    public String getValue(int index) {
+        return attributeStack[index*5+4];
+    }
+
+    public String getType(String uri, String localName) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public String getType(String qName) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public String getValue(String uri, String localName) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public String getValue(String qName) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

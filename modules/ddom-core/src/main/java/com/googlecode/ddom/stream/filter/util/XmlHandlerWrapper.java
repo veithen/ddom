@@ -29,7 +29,7 @@ public class XmlHandlerWrapper implements XmlHandler {
         return parent;
     }
 
-    public void startEntity(boolean fragment, String inputEncoding) {
+    public void startEntity(boolean fragment, String inputEncoding) throws StreamException {
         parent.startEntity(fragment, inputEncoding);
     }
 
@@ -107,13 +107,11 @@ public class XmlHandlerWrapper implements XmlHandler {
         parent.endCDATASection();
     }
 
-    public void processEntityReference(String name) {
+    public void processEntityReference(String name) throws StreamException {
         parent.processEntityReference(name);
     }
 
     public void completed() throws StreamException {
         parent.completed();
     }
-    
-    
 }

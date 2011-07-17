@@ -247,7 +247,7 @@ public class Builder extends XmlOutput {
             nodeCompleted(CDATA_SECTION);
         }
 
-        public void processEntityReference(String name) {
+        public void processEntityReference(String name) throws StreamException {
             XmlHandler passThroughHandler = context.getPassThroughHandler();
             if (passThroughHandler == null) {
                 appendNode(new EntityReference(document, name));

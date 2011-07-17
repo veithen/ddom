@@ -27,7 +27,7 @@ final class EventCountingFilterHandler implements XmlHandler {
         this.parent = parent;
     }
 
-    public void startEntity(boolean fragment, String inputEncoding) {
+    public void startEntity(boolean fragment, String inputEncoding) throws StreamException {
         filter.increment("startEntity");
         parent.startEntity(fragment, inputEncoding);
     }
@@ -122,7 +122,7 @@ final class EventCountingFilterHandler implements XmlHandler {
         parent.endCDATASection();
     }
 
-    public void processEntityReference(String name) {
+    public void processEntityReference(String name) throws StreamException {
         filter.increment("processEntityReference");
         parent.processEntityReference(name);
     }

@@ -29,8 +29,10 @@ public interface XmlHandler {
      *            the charset encoding used by the entity, or <code>null</code> if the encoding is
      *            is not know, such as when the entity was constructor in memory or from a character
      *            stream
+     * @throws StreamException 
+     *             if an error occurs when processing the event
      */
-    void startEntity(boolean fragment, String inputEncoding);
+    void startEntity(boolean fragment, String inputEncoding) throws StreamException;
     
     void processXmlDeclaration(String version, String encoding, Boolean standalone) throws StreamException;
 
@@ -194,7 +196,7 @@ public interface XmlHandler {
      */
     void endCDATASection() throws StreamException;
     
-    void processEntityReference(String name);
+    void processEntityReference(String name) throws StreamException;
     
     /**
      * Notify the handler that the document or fragment is complete.
