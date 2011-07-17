@@ -33,9 +33,9 @@ public class TestCoreInsertSiblingBeforeOnSelf extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement parent = nodeFactory.createElement(document, "test");
         CoreCharacterData text = nodeFactory.createCharacterData(document, "text");
-        parent.coreAppendChild(text, Policies.REJECT);
+        parent.coreAppendChild(text, Policies.REQUIRE_SAME_DOCUMENT);
         try {
-            text.coreInsertSiblingBefore(text);
+            text.coreInsertSiblingBefore(text, Policies.REQUIRE_SAME_DOCUMENT);
             fail("Expected SelfRelationshipException");
         } catch (SelfRelationshipException ex) {
             // Expected

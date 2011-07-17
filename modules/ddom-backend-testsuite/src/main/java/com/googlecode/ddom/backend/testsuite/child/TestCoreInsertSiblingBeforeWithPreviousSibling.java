@@ -34,10 +34,10 @@ public class TestCoreInsertSiblingBeforeWithPreviousSibling extends BackendTestC
         CoreElement parent = nodeFactory.createElement(document, "test");
         CoreCharacterData text1 = nodeFactory.createCharacterData(document, "text1");
         CoreCharacterData text2 = nodeFactory.createCharacterData(document, "text2");
-        parent.coreAppendChild(text1, Policies.REJECT);
-        parent.coreAppendChild(text2, Policies.REJECT);
+        parent.coreAppendChild(text1, Policies.REQUIRE_SAME_DOCUMENT);
+        parent.coreAppendChild(text2, Policies.REQUIRE_SAME_DOCUMENT);
         CoreCharacterData newSibling = nodeFactory.createCharacterData(document, "sibling");
-        text2.coreInsertSiblingBefore(newSibling);
+        text2.coreInsertSiblingBefore(newSibling, Policies.REQUIRE_SAME_DOCUMENT);
         assertEquals(3, parent.coreGetChildCount());
         assertSame(parent, newSibling.coreGetParent());
         CoreAssert.assertSiblings(text1, newSibling);

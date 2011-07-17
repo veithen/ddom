@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(CoreChildNode.class)
 public abstract class ChildNodeSupport implements AxiomChildNode {
@@ -48,7 +49,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
     
     public void insertSiblingBefore(OMNode sibling) {
         try {
-            coreInsertSiblingBefore((CoreChildNode)sibling);
+            coreInsertSiblingBefore((CoreChildNode)sibling, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -56,7 +57,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
     
     public void insertSiblingAfter(OMNode sibling) {
         try {
-            coreInsertSiblingAfter((CoreChildNode)sibling);
+            coreInsertSiblingAfter((CoreChildNode)sibling, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

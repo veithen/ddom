@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.CyclicRelationshipException;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.NodeMigrationException;
+import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
@@ -31,7 +33,9 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     void internalSetFirstChild(CoreChildNode child);
     int internalGetState();
     void internalSetState(int state);
+    @Deprecated // TODO: should be replaced by the variant taking a NodeMigrationPolicy argument
     void internalPrepareNewChild(CoreChildNode newChild) throws WrongDocumentException, CyclicRelationshipException;
+    LLChildNode internalPrepareNewChild(CoreChildNode newChild, NodeMigrationPolicy policy) throws NodeMigrationException, CyclicRelationshipException;
     
     /**
      * Check if the given node is allowed as a child.

@@ -235,7 +235,7 @@ public abstract class DocumentSupport implements DOMDocument {
             } else {
                 // Inserting a new child after the last child is more efficient than
                 // appending it to the parent (at least in the default linkedlist back-end).
-                previousImportedChild.coreInsertSiblingAfter(importedChild);
+                previousImportedChild.coreInsertSiblingAfter(importedChild, Policies.NODE_MIGRATION_POLICY);
             }
             previousImportedChild = importedChild;
         }

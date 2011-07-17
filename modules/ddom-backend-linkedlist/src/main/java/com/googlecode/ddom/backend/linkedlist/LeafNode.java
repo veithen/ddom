@@ -28,6 +28,7 @@ import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NodeMigrationException;
+import com.googlecode.ddom.core.NodeMigrationPolicy;
 
 public abstract class LeafNode extends Node implements LLLeafNode {
     private LLParentNode owner;
@@ -98,16 +99,16 @@ public abstract class LeafNode extends Node implements LLLeafNode {
         return LLChildNodeHelper.internalGetPreviousSibling(this);
     }
 
-    public final void coreInsertSiblingAfter(CoreChildNode sibling) throws HierarchyException, NodeMigrationException, DeferredParsingException {
-        LLChildNodeHelper.coreInsertSiblingAfter(this, sibling);
+    public final void coreInsertSiblingAfter(CoreChildNode sibling, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+        LLChildNodeHelper.coreInsertSiblingAfter(this, sibling, policy);
     }
 
     public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
         LLChildNodeHelper.coreInsertSiblingsAfter(this, fragment);
     }
 
-    public final void coreInsertSiblingBefore(CoreChildNode sibling) throws HierarchyException, NodeMigrationException, DeferredParsingException {
-        LLChildNodeHelper.coreInsertSiblingBefore(this, sibling);
+    public final void coreInsertSiblingBefore(CoreChildNode sibling, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+        LLChildNodeHelper.coreInsertSiblingBefore(this, sibling, policy);
     }
 
     public final void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {

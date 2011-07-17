@@ -17,6 +17,7 @@ package com.googlecode.ddom.backend.testsuite.child;
 
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.googlecode.ddom.backend.testsuite.Policies;
 import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.NoParentException;
@@ -32,7 +33,7 @@ public class TestCoreInsertSiblingBeforeOnOrphan extends BackendTestCase {
         CoreCharacterData text1 = nodeFactory.createCharacterData(document, "text1");
         CoreCharacterData text2 = nodeFactory.createCharacterData(document, "text2");
         try {
-            text1.coreInsertSiblingBefore(text2);
+            text1.coreInsertSiblingBefore(text2, Policies.REQUIRE_SAME_DOCUMENT);
             fail("Expected NoParentException");
         } catch (NoParentException ex) {
             // Expected

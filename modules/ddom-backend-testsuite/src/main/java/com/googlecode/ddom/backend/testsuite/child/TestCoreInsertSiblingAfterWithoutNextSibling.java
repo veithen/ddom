@@ -33,8 +33,8 @@ public class TestCoreInsertSiblingAfterWithoutNextSibling extends BackendTestCas
         CoreElement parent = nodeFactory.createElement(document, "test");
         CoreCharacterData text1 = nodeFactory.createCharacterData(document, "text1");
         CoreCharacterData text2 = nodeFactory.createCharacterData(document, "text2");
-        parent.coreAppendChild(text1, Policies.REJECT);
-        text1.coreInsertSiblingAfter(text2);
+        parent.coreAppendChild(text1, Policies.REQUIRE_SAME_DOCUMENT);
+        text1.coreInsertSiblingAfter(text2, Policies.REQUIRE_SAME_DOCUMENT);
         assertEquals(2, parent.coreGetChildCount());
         assertSame(parent, text2.coreGetParent());
         assertSame(text2, parent.coreGetLastChild());

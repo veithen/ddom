@@ -190,9 +190,9 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
                 }
             }
             if (previousElement != null) {
-                previousElement.coreInsertSiblingAfter(element);
+                previousElement.coreInsertSiblingAfter(element, null); // TODO: don't use null here
             } else if (nextElement != null) {
-                nextElement.coreInsertSiblingBefore(element);
+                nextElement.coreInsertSiblingBefore(element, null); // TODO: don't use null here
             } else {
                 coreAppendChild(element, null); // TODO: don't use null here
             }

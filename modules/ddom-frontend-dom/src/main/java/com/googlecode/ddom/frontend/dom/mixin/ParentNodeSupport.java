@@ -136,7 +136,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
             } else if (refChild.getParentNode() != this) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
             } else if (newChild instanceof CoreChildNode) {
-                ((CoreChildNode)toCore(refChild)).coreInsertSiblingBefore((CoreChildNode)toCore(newChild));
+                ((CoreChildNode)toCore(refChild)).coreInsertSiblingBefore((CoreChildNode)toCore(newChild), Policies.NODE_MIGRATION_POLICY);
             } else if (newChild instanceof CoreDocumentFragment) {
                 ((CoreChildNode)toCore(refChild)).coreInsertSiblingsBefore((CoreDocumentFragment)newChild);
             } else {

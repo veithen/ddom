@@ -346,7 +346,7 @@ public abstract class Element extends Container implements LLElement {
                     CoreCharacterData first = textNodes.get(0);
                     CoreCharacterData newTextNode = coreGetNodeFactory().createCharacterData(document, buffer.toString());
                     try {
-                        first.coreInsertSiblingBefore(newTextNode);
+                        first.coreInsertSiblingBefore(newTextNode, null); // TODO: don't use null here
                     } catch (CoreModelException ex) {
                         throw new Error(ex); // TODO: we should never get here
                     }

@@ -28,6 +28,7 @@ import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NoParentException;
 import com.googlecode.ddom.core.NodeMigrationException;
+import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.SelfRelationshipException;
 import com.googlecode.ddom.core.ext.ModelExtension;
 
@@ -103,18 +104,16 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingAfter(LLChildNode that, CoreChildNode coreSibling) throws HierarchyException, NodeMigrationException, DeferredParsingException {
-        LLChildNode sibling = (LLChildNode)coreSibling;
-        if (sibling == that) {
+    public static void coreInsertSiblingAfter(LLChildNode that, CoreChildNode coreSibling, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+        if (coreSibling == that) {
             throw new SelfRelationshipException();
         }
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
-            parent.internalValidateChildType(sibling, null);
-            parent.internalPrepareNewChild(sibling);
-            sibling.coreDetach();
+            parent.internalValidateChildType(coreSibling, null);
+            LLChildNode sibling = parent.internalPrepareNewChild(coreSibling, policy);
             // Note: since we have a builder of type 2, we don't need to materialize the next sibling
             // and we can use nextSibling instead of coreGetNextSibling()
             sibling.internalSetNextSibling(that.internalGetNextSiblingIfMaterialized());
@@ -154,18 +153,16 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingBefore(LLChildNode that, CoreChildNode coreSibling) throws HierarchyException, NodeMigrationException, DeferredParsingException {
-        LLChildNode sibling = (LLChildNode)coreSibling;
-        if (sibling == that) {
+    public static void coreInsertSiblingBefore(LLChildNode that, CoreChildNode coreSibling, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+        if (coreSibling == that) {
             throw new SelfRelationshipException();
         }
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             throw new NoParentException();
         } else {
-            parent.internalValidateChildType(sibling, null);
-            parent.internalPrepareNewChild(sibling);
-            sibling.coreDetach();
+            parent.internalValidateChildType(coreSibling, null);
+            LLChildNode sibling = parent.internalPrepareNewChild(coreSibling, policy);
             LLChildNode previousSibling = null;
             LLChildNode node = parent.internalGetFirstChildIfMaterialized();
             while (node != that) {

@@ -17,6 +17,7 @@ package com.googlecode.ddom.backend.testsuite.child;
 
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
+import com.googlecode.ddom.backend.testsuite.Policies;
 import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreNSAwareElement;
@@ -31,7 +32,7 @@ public class TestCoreInsertSiblingAfterWithIncompleteParent extends BackendTestC
         CoreDocument document = parse("<root><a>test</a><b>test</b></root>");
         CoreCharacterData text = nodeFactory.createCharacterData(document, "text1");
         CoreNSAwareElement a = (CoreNSAwareElement)document.coreGetDocumentElement().coreGetFirstChild();
-        a.coreInsertSiblingAfter(text);
+        a.coreInsertSiblingAfter(text, Policies.REQUIRE_SAME_DOCUMENT);
         if (builderType >= BUILDER_TYPE_2) {
             assertFalse(a.coreIsComplete());
         }

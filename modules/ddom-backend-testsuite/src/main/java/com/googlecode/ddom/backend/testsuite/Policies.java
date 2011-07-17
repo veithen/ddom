@@ -20,6 +20,12 @@ import com.googlecode.ddom.core.NodeMigrationPolicy;
 public final class Policies {
     private Policies() {}
     
+    public static final NodeMigrationPolicy REQUIRE_SAME_DOCUMENT = new NodeMigrationPolicy() {
+        public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
+            return isForeignDocument ? Action.REJECT : Action.MOVE;
+        }
+    };
+    
     public static final NodeMigrationPolicy REJECT = new NodeMigrationPolicy() {
         public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
             return Action.REJECT;

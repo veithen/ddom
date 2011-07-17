@@ -33,9 +33,9 @@ public class TestCoreInsertSiblingBeforeOnChild extends BackendTestCase {
         CoreDocument document = nodeFactory.createDocument();
         CoreElement element = nodeFactory.createElement(document, "", "test", "");
         CoreCharacterData text = nodeFactory.createCharacterData(document, "test");
-        element.coreAppendChild(text, Policies.REJECT);
+        element.coreAppendChild(text, Policies.REQUIRE_SAME_DOCUMENT);
         try {
-            text.coreInsertSiblingBefore(element);
+            text.coreInsertSiblingBefore(element, Policies.REQUIRE_SAME_DOCUMENT);
             fail("Expected CyclicRelationshipException");
         } catch (CyclicRelationshipException ex) {
             // Expected

@@ -35,9 +35,9 @@ public class TestCoreInsertSiblingBeforeFromWrongDocument extends BackendTestCas
         CoreElement parent = nodeFactory.createElement(document1, "test");
         CoreCharacterData text1 = nodeFactory.createCharacterData(document1, "text1");
         CoreCharacterData text2 = nodeFactory.createCharacterData(document2, "text2");
-        parent.coreAppendChild(text1, Policies.REJECT);
+        parent.coreAppendChild(text1, Policies.REQUIRE_SAME_DOCUMENT);
         try {
-            text1.coreInsertSiblingAfter(text2);
+            text1.coreInsertSiblingAfter(text2, Policies.REQUIRE_SAME_DOCUMENT);
             fail("Expected WrongDocumentException");
         } catch (WrongDocumentException ex) {
             // Expected

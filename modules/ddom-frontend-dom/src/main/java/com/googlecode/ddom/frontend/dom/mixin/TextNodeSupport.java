@@ -27,6 +27,7 @@ import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMTextNode;
 import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.Policies;
 
 @Mixin({CoreCharacterData.class, CoreCDATASection.class})
 public abstract class TextNodeSupport implements DOMTextNode {
@@ -40,7 +41,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
         CoreParentNode parent = coreGetParent();
         if (parent != null) {
             try {
-                coreInsertSiblingAfter(newNode);
+                coreInsertSiblingAfter(newNode, Policies.NODE_MIGRATION_POLICY);
             } catch (CoreModelException ex) {
                 throw DOMExceptionUtil.translate(ex);
             }
@@ -118,7 +119,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
                 DOMTextNode first = getWholeTextStartNode();
                 DOMTextNode last = getWholeTextEndNode();
                 if (newText != null) {
-                    first.coreInsertSiblingBefore(newText);
+                    first.coreInsertSiblingBefore(newText, Policies.NODE_MIGRATION_POLICY);
                 }
                 DOMTextNode current = first;
                 DOMTextNode next;

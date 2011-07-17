@@ -49,6 +49,9 @@ public interface CoreChildNode extends CoreNode {
     /**
      * 
      * @param sibling
+     * @param policy
+     *            the policy to apply if the new sibling already has a parent or belongs to a
+     *            different document
      * @throws NoParentException
      *             if this node has no parent
      * @throws SelfRelationshipException
@@ -59,13 +62,16 @@ public interface CoreChildNode extends CoreNode {
      *             if the new sibling is of a type that is not allowed in this position in the
      *             document
      */
-    void coreInsertSiblingAfter(CoreChildNode sibling) throws HierarchyException, NodeMigrationException, DeferredParsingException;
+    void coreInsertSiblingAfter(CoreChildNode sibling, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     /**
      * 
      * @param sibling
+     * @param policy
+     *            the policy to apply if the new sibling already has a parent or belongs to a
+     *            different document
      * @throws NoParentException
      *             if this node has no parent
      * @throws SelfRelationshipException
@@ -76,7 +82,7 @@ public interface CoreChildNode extends CoreNode {
      *             if the new sibling is of a type that is not allowed in this position in the
      *             document
      */
-    void coreInsertSiblingBefore(CoreChildNode sibling) throws HierarchyException, NodeMigrationException, DeferredParsingException;
+    void coreInsertSiblingBefore(CoreChildNode sibling, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
     void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     

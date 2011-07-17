@@ -35,9 +35,9 @@ public class TestCoreInsertSiblingBeforeWithInvalidChildType extends BackendTest
         CoreElement parent = nodeFactory.createElement(document, "test");
         CoreCharacterData text = nodeFactory.createCharacterData(document, "text1");
         CoreDocumentTypeDeclaration dtd = nodeFactory.createDocumentTypeDeclaration(document, "root", null, null);
-        parent.coreAppendChild(text, Policies.REJECT);
+        parent.coreAppendChild(text, Policies.REQUIRE_SAME_DOCUMENT);
         try {
-            text.coreInsertSiblingBefore(dtd);
+            text.coreInsertSiblingBefore(dtd, Policies.REQUIRE_SAME_DOCUMENT);
             fail("Expected ChildTypeNotAllowedException");
         } catch (ChildNotAllowedException ex) {
             // Expected
