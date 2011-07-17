@@ -45,6 +45,6 @@ public class ValidationFilter extends XmlFilter {
         if (errorHandler != null) {
             vh.setErrorHandler(errorHandler);
         }
-        return new XmlHandlerAdapter(vh);
+        return new XmlHandlerAdapter(vh, null);
     }
 }

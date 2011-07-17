@@ -16,15 +16,18 @@
 package com.googlecode.ddom.stream.sax;
 
 import org.xml.sax.ContentHandler;
+import org.xml.sax.ext.LexicalHandler;
 
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 public class XmlHandlerAdapter implements XmlHandler {
-    private final ContentHandler handler;
+    private final ContentHandler contentHandler;
+    private final LexicalHandler lexicalHandler;
 
-    public XmlHandlerAdapter(ContentHandler handler) {
-        this.handler = handler;
+    public XmlHandlerAdapter(ContentHandler contentHandler, LexicalHandler lexicalHandler) {
+        this.contentHandler = contentHandler;
+        this.lexicalHandler = lexicalHandler;
     }
 
     /* (non-Javadoc)

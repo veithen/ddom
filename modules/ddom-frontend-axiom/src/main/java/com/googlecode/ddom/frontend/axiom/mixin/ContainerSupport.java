@@ -24,6 +24,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
@@ -42,11 +43,13 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomContainer;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
+import com.googlecode.ddom.frontend.axiom.support.XmlSourceImpl;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlOutput;
 import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
+import com.googlecode.ddom.stream.sax.SAXSourceAdapter;
 import com.googlecode.ddom.stream.serializer.Serializer;
 import com.googlecode.ddom.stream.stax.StAXPivot;
 
@@ -204,5 +207,9 @@ public abstract class ContainerSupport implements AxiomContainer {
         StAXPivot pivot = new StAXPivot();
         new Stream(coreGetInput(cache), pivot);
         return pivot;
+    }
+
+    public final SAXSource getSAXSource(boolean cache) {
+        return new SAXSourceAdapter(new XmlSourceImpl(this, cache));
     }
 }

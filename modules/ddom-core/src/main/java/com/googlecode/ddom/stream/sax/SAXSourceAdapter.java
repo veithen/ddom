@@ -15,23 +15,14 @@
  */
 package com.googlecode.ddom.stream.sax;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.ext.LexicalHandler;
+import javax.xml.transform.sax.SAXSource;
 
-import com.googlecode.ddom.stream.XmlHandler;
-import com.googlecode.ddom.stream.XmlOutput;
+import org.xml.sax.InputSource;
 
-public class SAXOutput extends XmlOutput {
-    private final ContentHandler contentHandler;
-    private final LexicalHandler lexicalHandler;
+import com.googlecode.ddom.stream.XmlSource;
 
-    public SAXOutput(ContentHandler contentHandler, LexicalHandler lexicalHandler) {
-        this.contentHandler = contentHandler;
-        this.lexicalHandler = lexicalHandler;
-    }
-
-    @Override
-    protected XmlHandler createXmlHandler() {
-        return new XmlHandlerAdapter(contentHandler, lexicalHandler);
+public class SAXSourceAdapter extends SAXSource {
+    public SAXSourceAdapter(XmlSource source) {
+        super(new XMLReaderImpl(source), new InputSource());
     }
 }
