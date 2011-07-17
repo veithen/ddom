@@ -40,12 +40,8 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         }
     }
     
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#getProperty(java.lang.String)
-     */
-    public Object getProperty(String arg0) throws IllegalArgumentException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public Object getProperty(String name) throws IllegalArgumentException {
+        throw new IllegalArgumentException("Property '" + name + "' not supported");
     }
 
     public NamespaceContext getNamespaceContext() {
@@ -68,12 +64,8 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         context.setPrefix(prefix, uri);
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#setDefaultNamespace(java.lang.String)
-     */
-    public void setDefaultNamespace(String arg0) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void setDefaultNamespace(String uri) throws XMLStreamException {
+        context.setPrefix("", uri);
     }
 
     /* (non-Javadoc)
