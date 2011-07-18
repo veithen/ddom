@@ -48,11 +48,6 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
         }
     }
 
-    public final void setNamespace(OMNamespace namespace) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
     public final QName getQName() {
         try {
             return coreGetQName();

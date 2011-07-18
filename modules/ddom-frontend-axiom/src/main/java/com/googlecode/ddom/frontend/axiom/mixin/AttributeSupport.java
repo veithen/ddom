@@ -55,7 +55,8 @@ public abstract class AttributeSupport implements AxiomAttribute {
     }
 
     public void setOMNamespace(OMNamespace omNamespace) {
-        setNamespace(omNamespace);
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     public final OMElement getOwner() {

@@ -47,12 +47,6 @@ public interface AxiomNamedNode extends CoreNSAwareNamedNode, AxiomInformationIt
     OMNamespace getNamespace();
 
     /**
-     * @see org.apache.axiom.om.OMElement#setNamespace(OMNamespace)
-     * @see org.apache.axiom.om.OMAttribute#setOMNamespace(OMNamespace)
-     */
-    void setNamespace(OMNamespace omNamespace);
-
-    /**
      * @see org.apache.axiom.om.OMElement#getQName()
      * @see org.apache.axiom.om.OMAttribute#getQName()
      */

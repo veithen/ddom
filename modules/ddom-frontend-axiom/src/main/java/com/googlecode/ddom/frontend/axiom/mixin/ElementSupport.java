@@ -61,6 +61,19 @@ public abstract class ElementSupport implements AxiomElement {
         }
     }
 
+    public final void setNamespace(OMNamespace namespace) {
+        try {
+            String namespaceURI = NSUtil.getNamespaceURI(namespace);
+            // TODO: what if the prefix is actually null
+            String prefix = NSUtil.getPrefix(namespace);
+            coreSetNamespaceURI(namespaceURI);
+            coreSetPrefix(prefix);
+            ensureNamespaceIsDeclared(prefix, namespaceURI);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
     public void setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
         // TODO
         throw new UnsupportedOperationException();
