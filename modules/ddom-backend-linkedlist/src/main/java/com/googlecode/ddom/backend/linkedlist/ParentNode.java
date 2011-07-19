@@ -628,10 +628,14 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return new TreeWalker(this, preserve);
     }
 
-    public final CoreNode coreClone(ClonePolicy policy) {
+    public final CoreNode coreClone(ClonePolicy policy) throws DeferredParsingException {
         LLParentNode clone = shallowClone(policy);
         if (policy.cloneChildren(coreGetNodeType())) {
-            
+            if (content instanceof String) {
+                clone.coreSetValue((String)content);
+            } else {
+                // TODO
+            }
         }
         return clone;
     }

@@ -18,7 +18,7 @@ package com.googlecode.ddom.backend.linkedlist;
 import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.backend.Implementation;
-import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
 import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
@@ -217,7 +217,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     @Override
-    final LLParentNode shallowClone(ClonePolicy policy) {
+    final LLElement shallowCloneWithoutAttributes(ClonePolicy policy) {
         return new NSAwareElement(null, namespaceURI, localName, prefix, true);
     }
 }

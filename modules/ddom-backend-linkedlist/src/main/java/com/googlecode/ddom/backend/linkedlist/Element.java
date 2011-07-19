@@ -21,9 +21,11 @@ import java.util.List;
 
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
+import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.backend.linkedlist.support.AttributesByTypeIterator;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreCDATASection;
 import com.googlecode.ddom.core.CoreCharacterData;
@@ -371,4 +373,13 @@ public abstract class Element extends Container implements LLElement {
     public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
         handler.endElement();
     }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        LLElement clone = shallowCloneWithoutAttributes(policy);
+        // TODO: copy attributes
+        return clone;
+    }
+    
+    abstract LLElement shallowCloneWithoutAttributes(ClonePolicy policy);
 }

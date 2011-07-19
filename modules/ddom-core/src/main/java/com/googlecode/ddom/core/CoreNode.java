@@ -134,6 +134,7 @@ public interface CoreNode {
      * @param policy
      *            the policy to use when cloning this node (and its children)
      * @return the clone of this node
+     * @throws DeferredParsingException 
      */
-    CoreNode coreClone(ClonePolicy policy);
+    CoreNode coreClone(ClonePolicy policy) throws DeferredParsingException;
 }
