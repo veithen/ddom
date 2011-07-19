@@ -34,6 +34,7 @@ public class BackendTestSuiteBuilder {
     public static TestSuite suite(NodeFactory nodeFactory, int builderType) {
         BackendTestSuiteConfig config = new BackendTestSuiteConfig(nodeFactory, builderType);
         TestSuite suite = new TestSuite();
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.cdata.TestCoreClone(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetach(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetachIncomplete(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterFromWrongDocument(config));

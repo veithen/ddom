@@ -16,7 +16,9 @@
 package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
+import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -51,5 +53,9 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
 
     public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
         handler.startDocumentTypeDeclaration(rootName, publicId, systemId);
+    }
+
+    public final CoreNode coreClone(ClonePolicy policy) {
+        return new DocumentTypeDeclaration(null, rootName, publicId, systemId);
     }
 }

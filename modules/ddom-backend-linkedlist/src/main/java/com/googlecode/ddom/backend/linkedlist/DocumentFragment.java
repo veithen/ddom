@@ -16,6 +16,8 @@
 package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
+import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
@@ -66,5 +68,10 @@ public class DocumentFragment extends ParentNode implements CoreDocumentFragment
     public final void coreSetOwnerDocument(CoreDocument document) {
         // TODO: there is probably something more to do here if the node is not complete
         this.document = (Document)document;
+    }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        return new DocumentFragment(null);
     }
 }

@@ -29,6 +29,7 @@ import com.googlecode.ddom.backend.linkedlist.support.TreeWalker;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreCDATASection;
 import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -626,4 +627,14 @@ public abstract class ParentNode extends Node implements LLParentNode {
     public final XmlInput coreGetInput(boolean preserve) {
         return new TreeWalker(this, preserve);
     }
+
+    public final CoreNode coreClone(ClonePolicy policy) {
+        LLParentNode clone = shallowClone(policy);
+        if (policy.cloneChildren(coreGetNodeType())) {
+            
+        }
+        return clone;
+    }
+    
+    abstract LLParentNode shallowClone(ClonePolicy policy);
 }

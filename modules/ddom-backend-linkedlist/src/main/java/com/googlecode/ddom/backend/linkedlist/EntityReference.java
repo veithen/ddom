@@ -16,7 +16,9 @@
 package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreEntityReference;
+import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
@@ -38,5 +40,9 @@ public class EntityReference extends LeafNode implements CoreEntityReference {
 
     public final void internalGenerateEvents(XmlHandler handler) {
         // TODO
+    }
+
+    public final CoreNode coreClone(ClonePolicy policy) {
+        return new EntityReference(null, name);
     }
 }

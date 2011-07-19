@@ -18,6 +18,8 @@ package com.googlecode.ddom.backend.linkedlist;
 import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
@@ -212,5 +214,10 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startElement(namespaceURI, localName, prefix);
+    }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        return new NSAwareElement(null, namespaceURI, localName, prefix, true);
     }
 }

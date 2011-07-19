@@ -18,6 +18,8 @@ package com.googlecode.ddom.backend.linkedlist;
 import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.StreamException;
@@ -77,5 +79,10 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startAttribute(namespaceURI, localName, prefix, coreGetType());
+    }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        return new NSAwareAttribute(null, namespaceURI, localName, prefix, coreGetType(), true);
     }
 }

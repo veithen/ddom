@@ -16,6 +16,8 @@
 package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreNSUnawareElement;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
@@ -49,5 +51,10 @@ public class NSUnawareElement extends Element implements CoreNSUnawareElement {
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startElement(tagName);
+    }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        return new NSUnawareElement(null, tagName, true);
     }
 }

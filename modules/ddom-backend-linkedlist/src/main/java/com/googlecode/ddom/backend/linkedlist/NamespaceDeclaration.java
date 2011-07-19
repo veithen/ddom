@@ -16,6 +16,8 @@
 package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
@@ -50,5 +52,10 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
         handler.startNamespaceDeclaration(coreGetDeclaredPrefix());
+    }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        return new NamespaceDeclaration(null, declaredPrefix, true);
     }
 }

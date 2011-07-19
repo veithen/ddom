@@ -16,6 +16,8 @@
 package com.googlecode.ddom.backend.linkedlist;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
@@ -52,5 +54,10 @@ public class ProcessingInstruction extends CharacterDataContainer implements Cor
 
     public final void internalGenerateEndEvent(XmlHandler handler) throws StreamException {
         handler.endProcessingInstruction();
+    }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        return new ProcessingInstruction(null, target, true);
     }
 }

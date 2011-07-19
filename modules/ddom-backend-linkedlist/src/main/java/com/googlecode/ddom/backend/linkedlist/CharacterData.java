@@ -15,7 +15,9 @@
  */
 package com.googlecode.ddom.backend.linkedlist;
 
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -46,5 +48,9 @@ public class CharacterData extends LeafNode implements CoreCharacterData {
 
     public final boolean coreIsIgnorable() {
         return internalGetFlag(Flags.IGNORABLE);
+    }
+
+    public final CoreNode coreClone(ClonePolicy policy) {
+        return new CharacterData(null, data, coreIsIgnorable());
     }
 }

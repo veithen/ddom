@@ -26,6 +26,7 @@ import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.ChildNotAllowedException;
+import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
 import com.googlecode.ddom.core.CoreElement;
@@ -251,5 +252,10 @@ public class Document extends ParentNode implements LLDocument {
 
     public final void internalGenerateEndEvent(XmlHandler handler) {
         // TODO
+    }
+
+    @Override
+    final LLParentNode shallowClone(ClonePolicy policy) {
+        return new Document(modelExtension);
     }
 }

@@ -127,4 +127,13 @@ public interface CoreNode {
      *         otherwise
      */
     boolean coreIsSameOwnerDocument(CoreNode other);
+
+    /**
+     * Clone this node according to the provided policy.
+     * 
+     * @param policy
+     *            the policy to use when cloning this node (and its children)
+     * @return the clone of this node
+     */
+    CoreNode coreClone(ClonePolicy policy);
 }
