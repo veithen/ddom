@@ -157,10 +157,6 @@ public abstract class ElementSupport implements AxiomElement {
         return null;
     }
     
-    public void setFirstChild(OMNode node) {
-        throw new UnsupportedOperationException();
-    }
-
     public final String getText() {
         try {
             return coreGetTextContent(Policies.GET_TEXT_POLICY);
