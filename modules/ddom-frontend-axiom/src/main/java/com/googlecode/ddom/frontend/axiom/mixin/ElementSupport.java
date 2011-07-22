@@ -157,7 +157,7 @@ public abstract class ElementSupport implements AxiomElement {
         return null;
     }
     
-    public void setFirstChild(@SuppressWarnings("unused") OMNode node) {
+    public void setFirstChild(OMNode node) {
         throw new UnsupportedOperationException();
     }
 
