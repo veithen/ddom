@@ -24,6 +24,7 @@ import org.apache.axiom.ts.om.builder.TestCreateOMBuilderFromDOMSource;
 import org.apache.axiom.ts.om.builder.TestIOExceptionInGetText;
 import org.apache.axiom.ts.om.builder.TestInvalidXML;
 import org.apache.axiom.ts.om.container.TestSerialize;
+import org.apache.axiom.ts.om.element.TestFindNamespaceURIWithPrefixUndeclaring;
 import org.apache.axiom.ts.om.element.TestGetChildrenWithName4;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
@@ -60,6 +61,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestCreateOMBuilderFromDOMSource.class, "(file=iso-8859-1.xml)");
         builder.exclude(TestIOExceptionInGetText.class);
         builder.exclude(TestGetChildrenWithName4.class);
+        builder.exclude(TestFindNamespaceURIWithPrefixUndeclaring.class);
         return builder.build();
     }
 }
