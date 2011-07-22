@@ -71,12 +71,12 @@ public interface XmlHandler {
      * Notify the handler of the beginning of an element in namespace aware mode.
      * 
      * @param namespaceURI
-     *            the namespace URI of the element, or <code>null</code> if the element has no
+     *            the namespace URI of the element, or the empty string if the element has no
      *            namespace
      * @param localName
      *            the local part of the element's name
      * @param prefix
-     *            the prefix of the element, or <code>null</code> if the element has no prefix
+     *            the prefix of the element, or the empty string if the element has no prefix
      * @throws StreamException
      *             if an error occurs when processing the event
      */
@@ -116,8 +116,8 @@ public interface XmlHandler {
      * Notify the handler of the beginning of a namespace declaration.
      * 
      * @param prefix
-     *            the prefix being declared, or <code>null</code> if the declaration sets the
-     *            default namespace
+     *            the prefix being declared, or the empty string if the declaration sets the default
+     *            namespace
      * @throws StreamException
      *             if an error occurs when processing the event
      */
