@@ -104,6 +104,9 @@ public class OMFactoryImpl implements OMFactory {
         if (prefix == null) {
             prefix = namespaceURI.length() == 0 ? "" : OMSerializerUtil.getNextNSPrefix();
         }
+        if (prefix.length() > 0 && namespaceURI.length() == 0) {
+            throw new IllegalArgumentException("Cannot create a prefixed element with an empty namespace name");
+        }
         AxiomElement element = (AxiomElement)nodeFactory.createElement(null, namespaceURI, localName, prefix);
         if (namespaceURI.length() != 0) {
             try {
@@ -124,6 +127,9 @@ public class OMFactoryImpl implements OMFactory {
                 // TODO
                 String namespaceURI = qname.getNamespaceURI();
                 String prefix = qname.getPrefix();
+                if (prefix.length() > 0 && namespaceURI.length() == 0) {
+                    throw new IllegalArgumentException("Cannot create a prefixed element with an empty namespace name");
+                }
                 AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(namespaceURI, qname.getLocalPart(), prefix);
                 element.ensureNamespaceIsDeclared(prefix, namespaceURI);
                 element.setOMFactory(this);

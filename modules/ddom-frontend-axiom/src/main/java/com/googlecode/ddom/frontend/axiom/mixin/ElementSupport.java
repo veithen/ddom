@@ -44,7 +44,6 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNode;
 import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
-import com.googlecode.ddom.frontend.axiom.support.NSUtil;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.googlecode.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
@@ -63,9 +62,21 @@ public abstract class ElementSupport implements AxiomElement {
 
     public final void setNamespace(OMNamespace namespace) {
         try {
-            String namespaceURI = NSUtil.getNamespaceURI(namespace);
-            // TODO: what if the prefix is actually null
-            String prefix = NSUtil.getPrefix(namespace);
+            String namespaceURI;
+            String prefix;
+            if (namespace == null) {
+                namespaceURI = "";
+                prefix = "";
+            } else {
+                namespaceURI = namespace.getNamespaceURI();
+                prefix = namespace.getPrefix();
+                if (prefix == null) {
+                    prefix = OMSerializerUtil.getNextNSPrefix();
+                }
+                if (prefix.length() > 0 && namespaceURI.length() == 0) {
+                    throw new IllegalArgumentException("Cannot bind a prefix to the empty namespace name");
+                }
+            }
             coreSetNamespaceURI(namespaceURI);
             coreSetPrefix(prefix);
             ensureNamespaceIsDeclared(prefix, namespaceURI);
@@ -168,9 +179,13 @@ public abstract class ElementSupport implements AxiomElement {
 
     public void setText(QName qname) {
         try {
-            ensureNamespaceIsDeclared(qname.getPrefix(), qname.getNamespaceURI());
-            // TODO
-            coreSetValue(qname.getPrefix() + ":" + qname.getLocalPart());
+            String namespaceURI = qname.getNamespaceURI();
+            String prefix = qname.getPrefix();
+            if (prefix.length() == 0 && namespaceURI.length() > 0) {
+                prefix = OMSerializerUtil.getNextNSPrefix();
+            }
+            ensureNamespaceIsDeclared(prefix, namespaceURI);
+            coreSetValue(prefix.length() > 0 ? prefix + ":" + qname.getLocalPart() : qname.getLocalPart());
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
@@ -221,7 +236,7 @@ public abstract class ElementSupport implements AxiomElement {
         return lineNumber;
     }
     
-    private void doDeclareNamespace(String uri, String prefix) {
+    private void addNamespaceDeclaration(String uri, String prefix) {
         try {
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
         } catch (CoreModelException ex) {
@@ -234,7 +249,11 @@ public abstract class ElementSupport implements AxiomElement {
         if (prefix == null) {
             return declareNamespace(ns.getNamespaceURI(), null);
         } else {
-            doDeclareNamespace(ns.getNamespaceURI(), prefix);
+            String uri = ns.getNamespaceURI();
+            if (prefix.length() > 0 && uri.length() == 0) {
+                throw new IllegalArgumentException("Cannot bind a prefix to the empty namespace name");
+            }
+            addNamespaceDeclaration(ns.getNamespaceURI(), prefix);
             return ns;
         }
     }
@@ -243,21 +262,24 @@ public abstract class ElementSupport implements AxiomElement {
         if (prefix == null || prefix.length() == 0) {
             prefix = OMSerializerUtil.getNextNSPrefix();
         }
-        doDeclareNamespace(uri, prefix);
+        if (prefix.length() > 0 && uri.length() == 0) {
+            throw new IllegalArgumentException("Cannot bind a prefix to the empty namespace name");
+        }
+        addNamespaceDeclaration(uri, prefix);
         return new OMNamespaceImpl(uri, prefix);
     }
     
     public final OMNamespace declareDefaultNamespace(String uri) {
         // TODO: what if uri is null or empty string?
-        try {
-            coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, "", null, uri);
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
+        addNamespaceDeclaration(uri, "");
         // TODO
         return null;
     }
     
+    public final void undeclarePrefix(String prefix) {
+        addNamespaceDeclaration("", prefix);
+    }
+
     public OMNamespace getDefaultNamespace() {
         // TODO
         throw new UnsupportedOperationException();
