@@ -28,8 +28,6 @@ import org.apache.axiom.ts.om.element.TestFindNamespaceURIWithPrefixUndeclaring;
 import org.apache.axiom.ts.om.element.TestGetChildrenWithName4;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
-import org.apache.axiom.ts.om.element.TestSerializationWithTwoNonBuiltOMElements;
-import org.apache.axiom.ts.om.element.TestSetTextQName;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 
@@ -43,12 +41,7 @@ public class ImplementationTest extends TestCase {
         Model model = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("axiom"));
         OMTestSuiteBuilder builder = new OMTestSuiteBuilder((OMMetaFactory)model.getNodeFactory());
         // TODO
-        builder.exclude(TestSetTextQName.class);
         builder.exclude(TestBase64Streaming.class);
-//        builder.exclude(TestSerialization.class);
-        builder.exclude(org.apache.axiom.ts.om.document.TestSerializeAndConsumeWithIncompleteDescendant.class);
-        builder.exclude(org.apache.axiom.ts.om.element.TestSerializeAndConsumeWithIncompleteDescendant.class);
-        builder.exclude(TestSerializationWithTwoNonBuiltOMElements.class);
         builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(TestCreateOMTextFromDataHandlerProvider.class);
