@@ -374,12 +374,11 @@ final class ParserImpl implements XmlReader {
                         return true;
                     }
                 case 0xD:
-                    // TODO: also implement this case for other types of content
                     consume();
                     if (peek() == 0xA) {
                         consume();
                     }
-                    processCharacterData(0xA); // TODO: actually code unit;
+                    processCharacterData(0xA);
                     break;
                 case '&':
                     consume();
@@ -721,7 +720,14 @@ final class ParserImpl implements XmlReader {
                 }
             } else {
                 consume();
-                processCharacterData(c);
+                if (c == 0xD) {
+                    if (peek() == 0xA) {
+                        consume();
+                    }
+                    processCharacterData(0xA);
+                } else {
+                    processCharacterData(c);
+                }
             }
         }
     }
