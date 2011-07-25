@@ -47,6 +47,7 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.googlecode.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
+import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 
 @Mixin(CoreNSAwareElement.class)
@@ -144,9 +145,17 @@ public abstract class ElementSupport implements AxiomElement {
         }
     }
     
-    public OMElement cloneOMElement() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMElement cloneOMElement() {
+        // TODO: naive implementation; use the cloning mechanism of the core model
+        // TODO: no unit test coverage
+        try {
+            AxiomElement clone = (AxiomElement)coreGetNodeFactory().createElement(null, coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
+            clone.coreSetSource(new SimpleXmlSource(coreGetInput(true)));
+            clone.coreBuild();
+            return clone;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public void setBuilder(OMXMLParserWrapper wrapper) {

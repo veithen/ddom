@@ -23,8 +23,10 @@ import org.apache.axiom.ts.OMTestSuiteBuilder;
 import org.apache.axiom.ts.om.builder.TestCreateOMBuilderFromDOMSource;
 import org.apache.axiom.ts.om.builder.TestIOExceptionInGetText;
 import org.apache.axiom.ts.om.builder.TestInvalidXML;
+import org.apache.axiom.ts.om.builder.TestStandaloneConfiguration;
 import org.apache.axiom.ts.om.container.TestSerialize;
 import org.apache.axiom.ts.om.element.TestFindNamespaceURIWithPrefixUndeclaring;
+import org.apache.axiom.ts.om.element.TestGetAllDeclaredNamespacesRemove;
 import org.apache.axiom.ts.om.element.TestGetChildrenWithName4;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
@@ -55,6 +57,8 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestIOExceptionInGetText.class);
         builder.exclude(TestGetChildrenWithName4.class);
         builder.exclude(TestFindNamespaceURIWithPrefixUndeclaring.class);
+        builder.exclude(TestStandaloneConfiguration.class);
+        builder.exclude(TestGetAllDeclaredNamespacesRemove.class);
         return builder.build();
     }
 }
