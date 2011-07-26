@@ -333,6 +333,35 @@ public class Builder extends XmlOutput {
         return null;
     }
     
+    /**
+     * Determine if this instance is a builder for any of the nodes in the object model tree
+     * specified by a given root node.
+     * 
+     * @param root
+     *            the root node of the tree
+     * @return <code>true</code> if there is at least one node in the tree for which this instance
+     *         is a builder, <code>false</code> otherwise
+     */
+    public final boolean isBuilderForTree(LLParentNode root) {
+        // TODO: we can optimize this because in most cases the target of a context is a child node
+        //       of the target of the previous context
+        for (int i = 0, s = contextStack.size(); i<s; i++) {
+            Context context = contextStack.get(i);
+            LLParentNode node = context.getTargetNode();
+            while (true) {
+                if (node == root) {
+                    return true;
+                }
+                if (node instanceof LLChildNode) {
+                    node = ((LLChildNode)node).internalGetParent();
+                } else {
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+    
     public final InputContext getRootInputContext() throws DeferredParsingException {
         // The context stack will be empty if unwrap == true
         if (sourcedNode != null) {

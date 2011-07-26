@@ -400,9 +400,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
                         if (foreignDocument != null) {
                             List<Builder> builders = null;
                             for (Builder builder : foreignDocument.getBuilders()) {
-                                // TODO: this test only covers the case where newChild is incomplete,
-                                //       but not the case where newChild is complete but has a descendant that is incomplete
-                                if (builder.getInputContext((LLParentNode)newChild) != null) {
+                                if (builder.isBuilderForTree((LLParentNode)newChild)) {
                                     if (builders == null) {
                                         builders = ((Document)internalGetOwnerDocument(true)).getBuilders();
                                     }

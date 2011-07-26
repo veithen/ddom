@@ -32,8 +32,8 @@ import com.googlecode.ddom.core.NodeMigrationPolicy;
  * 
  * @author Andreas Veithen
  */
-public class TestCoreAppendChildIncompleteImport extends BackendTestCase {
-    public TestCoreAppendChildIncompleteImport(BackendTestSuiteConfig config) {
+public class TestCoreAppendChildForeignDocumentIncomplete extends BackendTestCase {
+    public TestCoreAppendChildForeignDocumentIncomplete(BackendTestSuiteConfig config) {
         super(config);
     }
 

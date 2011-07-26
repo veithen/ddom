@@ -69,7 +69,8 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration1(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration2(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration3(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreAppendChildIncompleteImport(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreAppendChildForeignDocumentIncomplete(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreAppendChildForeignDocumentIncompleteDescendant(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreClearIncomplete(config));
 //        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreClone(config));
         // TODO
