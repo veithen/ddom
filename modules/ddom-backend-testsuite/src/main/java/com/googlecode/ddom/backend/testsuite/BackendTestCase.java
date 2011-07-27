@@ -32,11 +32,12 @@ import org.xml.sax.SAXException;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.stream.Options;
+import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
 import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.dom.DOMSource;
+import com.googlecode.ddom.stream.parser.Parser;
 
 public class BackendTestCase extends TestCase {
     // We define constants for this so that we can easily locate tests that depend on the builder type
@@ -66,7 +67,7 @@ public class BackendTestCase extends TestCase {
     
     protected final XmlSource toXmlSource(String xml, boolean destructive) throws StreamException {
         if (destructive) {
-            return streamFactory.getSource(new StringReader(xml), new Options(), true);
+            return new SimpleXmlSource(new Parser(new StringReader(xml), true));
         } else {
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -97,12 +98,7 @@ public class BackendTestCase extends TestCase {
     
     protected final CoreDocumentFragment parse(CoreDocument document, String xml) {
         CoreDocumentFragment fragment = document.coreGetNodeFactory().createDocumentFragment(document);
-        try {
-            fragment.coreSetContent(streamFactory.getSource(new StringReader(xml), new Options(), true));
-        } catch (StreamException ex) {
-            Assert.fail(ex.getMessage());
-            return null;
-        }
+        fragment.coreSetContent(new SimpleXmlSource(new Parser(new StringReader(xml), true)));
         return fragment;
     }
 }
