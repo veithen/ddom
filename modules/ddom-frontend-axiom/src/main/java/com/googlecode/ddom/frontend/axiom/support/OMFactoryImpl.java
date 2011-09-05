@@ -66,16 +66,6 @@ public class OMFactoryImpl implements OMFactory {
         return attr;
     }
 
-    public final OMComment createOMComment(OMContainer parent, String content) {
-        try {
-            AxiomComment comment = (AxiomComment)((AxiomContainer)parent).coreAppendComment(content);
-            comment.setOMFactory(this);
-            return comment;
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
-        }
-    }
-
     public final OMDocType createOMDocType(OMContainer parent, String content) {
         // TODO
         throw new UnsupportedOperationException();
@@ -119,39 +109,52 @@ public class OMFactoryImpl implements OMFactory {
         return element;
     }
 
+    private OMElement createOMElement(String localName, String namespaceURI, String prefix, AxiomContainer parent) {
+        try {
+            if (prefix == null) {
+                if (namespaceURI.length() == 0) {
+                    prefix = "";
+                } else {
+                    if (parent instanceof AxiomElement) {
+                        prefix = ((AxiomElement)parent).coreLookupPrefix(namespaceURI, true);
+                    }
+                    if (prefix == null) {
+                        prefix = OMSerializerUtil.getNextNSPrefix();
+                    }
+                }
+            } else if (prefix.length() > 0 && namespaceURI.length() == 0) {
+                throw new IllegalArgumentException("Cannot create a prefixed element with an empty namespace name");
+            }
+            AxiomElement element = (AxiomElement)parent.coreAppendElement(namespaceURI, localName, prefix);
+            // TODO: optimization: if we got the prefix from coreLookupPrefix, then there is no need for this
+            element.ensureNamespaceIsDeclared(prefix, namespaceURI);
+            element.setOMFactory(this);
+            return element;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+    
     public final OMElement createOMElement(QName qname, OMContainer parent) {
         if (parent == null) {
             return createOMElement(qname);
         } else {
-            try {
-                // TODO
-                String namespaceURI = qname.getNamespaceURI();
-                String prefix = qname.getPrefix();
-                if (prefix.length() > 0 && namespaceURI.length() == 0) {
-                    throw new IllegalArgumentException("Cannot create a prefixed element with an empty namespace name");
-                }
-                AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(namespaceURI, qname.getLocalPart(), prefix);
-                element.ensureNamespaceIsDeclared(prefix, namespaceURI);
-                element.setOMFactory(this);
-                return element;
-            } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+            String prefix = qname.getPrefix();
+            // Empty prefix means generate a prefix
+            if (prefix.length() == 0) {
+                prefix = null;
             }
+            return createOMElement(qname.getLocalPart(), qname.getNamespaceURI(), prefix, (AxiomContainer)parent);
         }
     }
 
     public final OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent) {
         if (parent == null) {
             return createOMElement(localName, ns);
+        } else if (ns == null) {
+            return createOMElement(localName, "", "", (AxiomContainer)parent);
         } else {
-            // TODO: namespace declaration?
-            try {
-                AxiomElement element = (AxiomElement)((AxiomContainer)parent).coreAppendElement(NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
-                element.setOMFactory(this);
-                return element;
-            } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
-            }
+            return createOMElement(localName, ns.getNamespaceURI(), ns.getPrefix(), (AxiomContainer)parent);
         }
     }
 
@@ -160,7 +163,6 @@ public class OMFactoryImpl implements OMFactory {
         element.setOMFactory(this);
         element.setDataSource(dataSource);
         return element;
-        
     }
     
     public final OMSourcedElement createOMElement(OMDataSource source, QName qname) {
@@ -178,9 +180,29 @@ public class OMFactoryImpl implements OMFactory {
         return new OMNamespaceImpl(uri, prefix);
     }
 
+    public final OMComment createOMComment(OMContainer parent, String content) {
+        try {
+            AxiomComment comment;
+            if (parent == null) {
+                comment = (AxiomComment)nodeFactory.createComment(null, content);
+            } else {
+                comment = (AxiomComment)((AxiomContainer)parent).coreAppendComment(content);
+            }
+            comment.setOMFactory(this);
+            return comment;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
     public final OMProcessingInstruction createOMProcessingInstruction(OMContainer parent, String piTarget, String piData) {
         try {
-            AxiomProcessingInstruction pi = (AxiomProcessingInstruction)((AxiomContainer)parent).coreAppendProcessingInstruction(piTarget, piData);
+            AxiomProcessingInstruction pi;
+            if (parent == null) {
+                pi = (AxiomProcessingInstruction)nodeFactory.createProcessingInstruction(null, piTarget, piData);
+            } else {
+                pi = (AxiomProcessingInstruction)((AxiomContainer)parent).coreAppendProcessingInstruction(piTarget, piData);
+            }
             pi.setOMFactory(this);
             return pi;
         } catch (CoreModelException ex) {

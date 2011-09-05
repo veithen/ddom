@@ -25,6 +25,7 @@ import org.apache.axiom.ts.om.builder.TestIOExceptionInGetText;
 import org.apache.axiom.ts.om.builder.TestInvalidXML;
 import org.apache.axiom.ts.om.builder.TestStandaloneConfiguration;
 import org.apache.axiom.ts.om.container.TestSerialize;
+import org.apache.axiom.ts.om.document.TestDigest;
 import org.apache.axiom.ts.om.element.TestFindNamespaceURIWithPrefixUndeclaring;
 import org.apache.axiom.ts.om.element.TestGetAllDeclaredNamespacesRemove;
 import org.apache.axiom.ts.om.element.TestGetChildrenWithName4;
@@ -32,6 +33,7 @@ import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
+import org.apache.axiom.ts.xpath.TestAXIOMXPath;
 
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;
@@ -59,6 +61,13 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestFindNamespaceURIWithPrefixUndeclaring.class);
         builder.exclude(TestStandaloneConfiguration.class);
         builder.exclude(TestGetAllDeclaredNamespacesRemove.class);
+        
+        // TODO: caused by incorrect code in axiom-api
+        builder.exclude(TestDigest.class, "(|(file=digest3.xml)(file=digest4.xml))");
+
+        // TODO: problem with DTDs
+        builder.exclude(TestAXIOMXPath.class, "(|(test=VariableLookup)(test=AttributeParent)(test=AttributeAsContext))");
+        
         return builder.build();
     }
 }

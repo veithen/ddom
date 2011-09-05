@@ -30,6 +30,8 @@ import org.apache.axiom.ts.soap.fault.TestSetRole;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
 import org.apache.axiom.ts.soap.faulttext.TestSetLang;
 import org.apache.axiom.ts.soap12.envelope.TestAddElementAfterBody;
+import org.apache.axiom.ts.soap12.envelope.TestBuildWithAttachments;
+import org.apache.axiom.ts.soap12.envelope.TestMTOMForwardStreaming;
 import org.apache.axiom.ts.soap12.fault.TestGetNode;
 import org.apache.axiom.ts.soap12.fault.TestMoreChildrenAddition;
 import org.apache.axiom.ts.soap12.fault.TestSetNode;
@@ -74,6 +76,10 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.soap12.header.TestExamineMustUnderstandHeaderBlocks.class);
         builder.exclude(org.apache.axiom.ts.soap12.header.TestExamineMustUnderstandHeaderBlocksWithParser.class);
         builder.exclude(org.apache.axiom.ts.soap.header.TestExtractAllHeaderBlocks.class);
+        
+        // TODO: no MTOM support yet
+        builder.exclude(TestBuildWithAttachments.class);
+        builder.exclude(TestMTOMForwardStreaming.class);
         
         return builder.build();
     }

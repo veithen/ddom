@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,13 @@ package com.googlecode.ddom.frontend.axiom.mixin;
 import org.apache.axiom.om.OMElement;
 
 import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomDocument;
+import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements AxiomDocument {
@@ -71,7 +74,23 @@ public abstract class DocumentSupport implements AxiomDocument {
         }
     }
     
-    public void setOMDocumentElement(@SuppressWarnings("unused") OMElement rootElement) {
-        throw new UnsupportedOperationException("This operation is unsupported because it is ill-defined in the Axiom API");
+    public final void setOMDocumentElement(OMElement documentElement) {
+        if (documentElement == null) {
+            throw new IllegalArgumentException("documentElement must not be null");
+        }
+        try {
+            CoreElement existingDocumentElement = coreGetDocumentElement();
+            if (existingDocumentElement == null) {
+                coreAppendChild((AxiomElement)documentElement, Policies.NODE_MIGRATION_POLICY);
+            } else {
+                existingDocumentElement.coreReplaceWith((AxiomElement)documentElement);
+            }
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public void close(boolean build) {
+        // TODO: this should be implemented by a common mixin
     }
 }

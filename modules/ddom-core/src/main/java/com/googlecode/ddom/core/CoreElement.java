@@ -226,6 +226,8 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * @throws IllegalArgumentException
      *             if <code>namespaceURI</code> is <code>null</code>
      */
+    // TODO: wrong Javadoc: null vs. empty string
+    // TODO: we can support default namespaces!
     String coreLookupPrefix(String namespaceURI, boolean strict) throws DeferredParsingException;
     
     /**

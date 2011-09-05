@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,28 @@ package com.googlecode.ddom.frontend.axiom.mixin;
 import org.apache.axiom.om.OMNode;
 
 import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomComment;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
 @Mixin(CoreComment.class)
-// TODO: getValue/setValue methods???
 public abstract class CommentSupport implements AxiomComment {
     public final int getType() {
         return OMNode.COMMENT_NODE;
+    }
+
+    public final String getValue() {
+        try {
+            return coreGetTextContent(TextCollectorPolicy.DEFAULT);
+        } catch (DeferredParsingException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public void setValue(String text) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

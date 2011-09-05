@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.frontend.axiom.mixin.dom;
 
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
@@ -27,6 +28,15 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
         try {
             return coreGetLocalName();
         } catch (DeferredParsingException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public final String getNamespaceURI() {
+        try {
+            String namespaceURI = coreGetNamespaceURI();
+            return namespaceURI.length() == 0 ? null : namespaceURI;
+        } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
     }

@@ -24,6 +24,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.soap.SOAPFactory;
 import org.apache.axiom.soap.SOAPModelBuilder;
+import org.apache.axiom.util.stax.xop.MimePartProvider;
 import org.xml.sax.InputSource;
 
 import com.googlecode.ddom.model.Model;
@@ -80,5 +81,11 @@ public final class OMMetaFactoryImpl implements OMMetaFactory {
 
     public SOAPModelBuilder createStAXSOAPModelBuilder(XMLStreamReader reader) {
         return metaFactory.createStAXSOAPModelBuilder(reader);
+    }
+
+    public SOAPModelBuilder createSOAPModelBuilder(StAXParserConfiguration configuration,
+            SOAPFactory soapFactory, InputSource rootPart, MimePartProvider mimePartProvider) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }
