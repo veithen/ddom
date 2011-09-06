@@ -73,8 +73,8 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
     }
     
     public void buildWithAttachments() {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: right now we do a simple build since we don't support attachments yet
+        build();
     }
     
     public void discard() {
