@@ -61,7 +61,20 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMAttribute createOMAttribute(String localName, OMNamespace ns, String value) {
-        AxiomAttribute attr = (AxiomAttribute)nodeFactory.createAttribute(null, NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns), value, "CDATA");
+        String namespaceURI;
+        String prefix;
+        if (ns == null) {
+            namespaceURI = "";
+            prefix = "";
+        } else {
+            namespaceURI = ns.getNamespaceURI();
+            prefix = ns.getPrefix();
+            // TODO: what if prefix == null ??
+            if (namespaceURI.length() == 0 && prefix.length() > 0) {
+                throw new IllegalArgumentException("Cannot create a prefixed attribute with an empty namespace name");
+            }
+        }
+        AxiomAttribute attr = (AxiomAttribute)nodeFactory.createAttribute(null, namespaceURI, localName, prefix, value, "CDATA");
         attr.setOMFactory(this);
         return attr;
     }
