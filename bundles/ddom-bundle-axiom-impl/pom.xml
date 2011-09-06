@@ -62,7 +62,7 @@
                                 <frontend>axiom-soap</frontend>
                                 <frontend>dom</frontend>
                             </frontends>
-                            <outputPackage>com.googlecode.model.axiom_dom</outputPackage>
+                            <outputPackage>com.googlecode.ddom.model.axiom_dom</outputPackage>
                         </configuration>
                     </execution>
                 </executions>
