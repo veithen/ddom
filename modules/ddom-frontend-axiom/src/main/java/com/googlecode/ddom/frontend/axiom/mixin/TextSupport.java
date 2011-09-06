@@ -56,7 +56,7 @@ public abstract class TextSupport implements AxiomText {
     
     public boolean isOptimized() {
         // TODO
-        throw new UnsupportedOperationException();
+        return false;
     }
     
     public void setOptimize(boolean optimize) {
@@ -66,7 +66,7 @@ public abstract class TextSupport implements AxiomText {
     
     public boolean isBinary() {
         // TODO
-        throw new UnsupportedOperationException();
+        return false;
     }
     
     public void setBinary(boolean binary) {
