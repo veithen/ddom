@@ -240,8 +240,9 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public final OMText createOMText(OMContainer parent, OMText source) {
-        // TODO
-        throw new UnsupportedOperationException();
+        // TODO: implementation is incorrect for MTOM
+        // TODO: there are no test cases for this method in Axiom (technical debt caused by AXIOM-343)
+        return createOMText(source.getText());
     }
 
     public final OMText createOMText(OMContainer parent, QName text) {
