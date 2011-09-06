@@ -45,6 +45,7 @@ import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.frontend.axiom.support.NSUtil;
@@ -120,9 +121,19 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return createSOAPElement(null, soapVersion.getSOAPEnvelopeClass(), SOAPConstants.SOAPENVELOPE_LOCAL_NAME);
     }
 
-    public SOAPEnvelope createSOAPEnvelope(OMNamespace ns) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final SOAPEnvelope createSOAPEnvelope(OMNamespace ns) {
+        try {
+            String prefix = ns.getPrefix();
+            if (prefix == null) {
+                prefix = SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;
+            }
+            AxiomSOAPEnvelope envelope = nodeFactory.createElement(null, soapVersion.getSOAPEnvelopeClass(), soapVersion.getEnvelopeURI(), SOAPConstants.SOAPENVELOPE_LOCAL_NAME, prefix);
+            envelope.setOMFactory(this);
+            envelope.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, soapVersion.getEnvelopeURI());
+            return envelope;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     public final SOAPHeader createSOAPHeader() throws SOAPProcessingException {
