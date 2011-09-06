@@ -189,13 +189,19 @@ public abstract class DocumentSupport implements DOMDocument {
                     Attr attr = (Attr)node;
                     String localName = attr.getLocalName();
                     DOMAttribute importedAttr;
-                    // TODO: namespace declarations
                     if (localName == null) {
                         importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, attr.getName(), null, null);
                     } else {
                         String namespaceURI = attr.getNamespaceURI();
                         String prefix = attr.getPrefix();
-                        importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, namespaceURI == null ? "" : namespaceURI, localName, prefix == null ? "" : prefix, null, null);
+                        if (prefix == null) {
+                            prefix = "";
+                        }
+                        if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
+                            importedAttr = (DOMAttribute)nodeFactory.createNamespaceDeclaration(this, NSUtil.getDeclaredPrefix(localName, prefix), null);
+                        } else {
+                            importedAttr = (DOMAttribute)nodeFactory.createAttribute(this, namespaceURI == null ? "" : namespaceURI, localName, prefix, null, null);
+                        }
                     }
                     // Children of attributes are always imported, regardless of the value of the "deep" parameter
                     importChildren(attr, importedAttr);

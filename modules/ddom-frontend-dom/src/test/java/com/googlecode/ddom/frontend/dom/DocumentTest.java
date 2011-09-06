@@ -15,15 +15,18 @@
  */
 package com.googlecode.ddom.frontend.dom;
 
-import javax.xml.XMLConstants;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
-import junit.framework.Assert;
+import javax.xml.XMLConstants;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestResource;
@@ -44,14 +47,14 @@ public class DocumentTest {
         Document doc = DDOMUtil.INSTANCE.parse(false, "<p:root xmlns:p='urn:ns'/>");
         
         Element element = doc.getDocumentElement();
-        Assert.assertTrue(element instanceof CoreNSUnawareElement);
-        Assert.assertNull(element.getLocalName());
-        Assert.assertEquals("p:root", element.getTagName());
+        assertTrue(element instanceof CoreNSUnawareElement);
+        assertNull(element.getLocalName());
+        assertEquals("p:root", element.getTagName());
         
         Attr attr = (Attr)element.getAttributes().item(0);
-        Assert.assertTrue(attr instanceof CoreNSUnawareAttribute);
-        Assert.assertNull(attr.getLocalName());
-        Assert.assertEquals("xmlns:p", attr.getName());
+        assertTrue(attr instanceof CoreNSUnawareAttribute);
+        assertNull(attr.getLocalName());
+        assertEquals("xmlns:p", attr.getName());
     }
     
     /**
@@ -103,14 +106,14 @@ public class DocumentTest {
     public void testCreateElementNSWithEmptyNamespaceURI() {
         Document doc = domUtil.newDocument();
         Element element = doc.createElementNS("", "test");
-        Assert.assertNull(element.getNamespaceURI());
+        assertNull(element.getNamespaceURI());
     }
     
     @Validated @Test
     public void testCreateAttributeNSWithEmptyNamespaceURI() {
         Document doc = domUtil.newDocument();
         Attr attr = doc.createAttributeNS("", "test");
-        Assert.assertNull(attr.getNamespaceURI());
+        assertNull(attr.getNamespaceURI());
     }
     
     /**
@@ -123,8 +126,8 @@ public class DocumentTest {
         Attr attr = doc.createAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p");
         attr.setValue("urn:ns");
         element.setAttributeNodeNS(attr);
-        Assert.assertEquals("urn:ns", element.lookupNamespaceURI("p"));
-        Assert.assertEquals("p", element.lookupPrefix("urn:ns"));
+        assertEquals("urn:ns", element.lookupNamespaceURI("p"));
+        assertEquals("p", element.lookupPrefix("urn:ns"));
     }
     
     @Validated @Test
@@ -134,6 +137,36 @@ public class DocumentTest {
         element1.setAttributeNS(null, "attr", "test");
         Document doc2 = domUtil.newDocument();
         Element element2 = (Element)doc2.importNode(element1, false);
-        Assert.assertEquals("test", element2.getAttributeNS(null, "attr"));
+        assertEquals("test", element2.getAttributeNS(null, "attr"));
+    }
+    
+    /**
+     * Test that {@link Document#importNode(Node, boolean)} correctly imports attributes that
+     * represent namespace declarations. This test covers the case where the namespace declaration
+     * declares a prefix.
+     */
+    @Validated @Test
+    public void testImportElementWithNamespaceDeclaration() {
+        Document doc1 = domUtil.newDocument();
+        Element element1 = doc1.createElementNS(null, "test");
+        element1.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p", "urn:test");
+        Document doc2 = domUtil.newDocument();
+        Element element2 = (Element)doc2.importNode(element1, false);
+        assertEquals("urn:test", element2.lookupNamespaceURI("p"));
+    }
+    
+    /**
+     * Test that {@link Document#importNode(Node, boolean)} correctly imports attributes that
+     * represent namespace declarations. This test covers the case where the namespace declaration
+     * declares a default namespace.
+     */
+    @Validated @Test
+    public void testImportElementWithDefaultNamespaceDeclaration() {
+        Document doc1 = domUtil.newDocument();
+        Element element1 = doc1.createElementNS("urn:ns1", "p:test");
+        element1.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns", "urn:ns2");
+        Document doc2 = domUtil.newDocument();
+        Element element2 = (Element)doc2.importNode(element1, false);
+        assertEquals("urn:ns2", element2.lookupNamespaceURI(null));
     }
 }
