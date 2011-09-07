@@ -399,6 +399,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
                         Document foreignDocument = (Document)newChild.coreGetOwnerDocument(false);
                         if (foreignDocument != null) {
                             List<Builder> builders = null;
+                            // TODO: avoid using an iterator here
                             for (Builder builder : foreignDocument.getBuilders()) {
                                 if (builder.isBuilderForTree((LLParentNode)newChild)) {
                                     if (builders == null) {
