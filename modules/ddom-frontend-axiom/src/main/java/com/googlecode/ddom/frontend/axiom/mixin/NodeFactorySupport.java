@@ -32,8 +32,10 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomParserSource;
 import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
 import com.googlecode.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
 import com.googlecode.ddom.stream.SimpleXmlSource;
+import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.dom.DOMSource;
+import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
 import com.googlecode.ddom.stream.sax.SAXInput;
 import com.googlecode.ddom.stream.stax.StAXPullInput;
 
@@ -62,7 +64,9 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
 
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
         // TODO: we have currently no way to set the OMFactory!
-        return createBuilder(new SimpleXmlSource(new StAXPullInput(parser)));
+        XmlInput input = new StAXPullInput(parser);
+        input.addFilter(new NamespaceRepairingFilter());
+        return createBuilder(new SimpleXmlSource(input));
     }
 
     public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Source source) {
