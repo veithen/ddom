@@ -63,11 +63,11 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
         "well-formed" };
     
     // List of parameters forced to false when the infoset parameter is set to true 
-    private int[] infoSetParamsFalse = { PARAM_VALIDATE_IF_SCHEMA, PARAM_ENTITIES,
+    private static final int[] infoSetParamsFalse = { PARAM_VALIDATE_IF_SCHEMA, PARAM_ENTITIES,
             PARAM_DATATYPE_NORMALIZATION, PARAM_CDATA_SECTIONS };
     
     // List of parameters forced to true when the infoset parameter is set to true 
-    private int[] infoSetParamsTrue = { PARAM_NAMESPACE_DECLARATIONS, PARAM_WELL_FORMED,
+    private static final int[] infoSetParamsTrue = { PARAM_NAMESPACE_DECLARATIONS, PARAM_WELL_FORMED,
             PARAM_ELEMENT_CONTENT_WHITESPACE, PARAM_COMMENTS, PARAM_NAMESPACES }; 
     
     private static final DOMStringList parameterList =

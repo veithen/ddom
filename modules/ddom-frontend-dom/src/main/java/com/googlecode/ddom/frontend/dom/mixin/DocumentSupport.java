@@ -68,7 +68,7 @@ import com.googlecode.ddom.symbols.Symbols;
 @Mixin(CoreDocument.class)
 public abstract class DocumentSupport implements DOMDocument {
     private DOMImplementationImpl domImplementation;
-    private final DOMConfigurationImpl domConfig = new DOMConfigurationImpl();
+    private DOMConfigurationImpl domConfig;
     private Map<DOMCoreNode,Map<String,UserData>> userDataMap;
     
     public final DOMImplementation getImplementation() {
@@ -284,6 +284,9 @@ public abstract class DocumentSupport implements DOMDocument {
     }
 
     public final DOMConfiguration getDomConfig() {
+        if (domConfig == null) {
+            domConfig = new DOMConfigurationImpl();
+        }
         return domConfig;
     }
 
