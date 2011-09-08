@@ -15,7 +15,7 @@
  */
 package com.googlecode.ddom.backend.linkedlist;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.Inject;
@@ -398,9 +398,10 @@ public abstract class ParentNode extends Node implements LLParentNode {
                         // parsing will be broken
                         Document foreignDocument = (Document)newChild.coreGetOwnerDocument(false);
                         if (foreignDocument != null) {
-                            List<Builder> builders = null;
-                            // TODO: avoid using an iterator here
-                            for (Builder builder : foreignDocument.getBuilders()) {
+                            ArrayList<Builder> foreignBuilders = foreignDocument.getBuilders();
+                            ArrayList<Builder> builders = null;
+                            for (int i=0, l=foreignBuilders.size(); i<l; i++) {
+                                Builder builder = foreignBuilders.get(i);
                                 if (builder.isBuilderForTree((LLParentNode)newChild)) {
                                     if (builders == null) {
                                         builders = ((Document)internalGetOwnerDocument(true)).getBuilders();

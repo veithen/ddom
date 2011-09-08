@@ -15,8 +15,7 @@
  */
 package com.googlecode.ddom.backend.linkedlist;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +43,7 @@ public class Document extends ParentNode implements LLDocument {
     
     private final ModelExtension modelExtension;
     private final Symbols symbols;
-    private List<Builder> builders = new LinkedList<Builder>();
+    private final ArrayList<Builder> builders = new ArrayList<Builder>();
     private int children;
     private String inputEncoding;
     private boolean xmlVersionSet;
@@ -65,7 +64,9 @@ public class Document extends ParentNode implements LLDocument {
         return DOCUMENT_NODE;
     }
 
-    final List<Builder> getBuilders() {
+    // The return type is intentionally specified as ArrayList to indicate that it
+    // is faster to iterate over the list using direct access than using an Iterator
+    final ArrayList<Builder> getBuilders() {
         return builders;
     }
 
@@ -81,8 +82,8 @@ public class Document extends ParentNode implements LLDocument {
     }
     
     public final InputContext internalGetInputContext(LLParentNode target) {
-        for (Builder builder : builders) {
-            InputContext context = builder.getInputContext(target);
+        for (int i=0, l=builders.size(); i<l; i++) {
+            InputContext context = builders.get(i).getInputContext(target);
             if (context != null) {
                 return context;
             }
@@ -99,8 +100,8 @@ public class Document extends ParentNode implements LLDocument {
     }
 
     public final void dispose() {
-        for (Builder builder : builders) {
-            builder.dispose();
+        for (int i=0, l=builders.size(); i<l; i++) {
+            builders.get(i).dispose();
         }
     }
 
