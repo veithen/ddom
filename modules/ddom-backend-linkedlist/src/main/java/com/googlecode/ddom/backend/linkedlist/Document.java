@@ -42,7 +42,7 @@ public class Document extends ParentNode implements LLDocument {
     private static final Log log = LogFactory.getLog(Document.class);
     
     private final ModelExtension modelExtension;
-    private final Symbols symbols;
+    private Symbols symbols;
     private final ArrayList<Builder> builders = new ArrayList<Builder>();
     private int children;
     private String inputEncoding;
@@ -57,7 +57,6 @@ public class Document extends ParentNode implements LLDocument {
     public Document(ModelExtension modelExtension) {
         super(Flags.STATE_EXPANDED);
         this.modelExtension = modelExtension;
-        symbols = new SymbolHashTable();
     }
 
     public final int coreGetNodeType() {
@@ -92,6 +91,10 @@ public class Document extends ParentNode implements LLDocument {
     }
     
     public final Symbols getSymbols() {
+        // TODO: need to allow getting the symbol table from the parser
+        if (symbols == null) {
+            symbols = new SymbolHashTable();
+        }
         return symbols;
     }
 
