@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,10 @@ import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.Selector;
 
-public class TestCoreGetChildrenByTypeAndRemove extends BackendTestCase {
-    public TestCoreGetChildrenByTypeAndRemove(BackendTestSuiteConfig config) {
+public class TestCoreGetNodesRemove extends BackendTestCase {
+    public TestCoreGetNodesRemove(BackendTestSuiteConfig config) {
         super(config);
     }
 
@@ -33,7 +34,7 @@ public class TestCoreGetChildrenByTypeAndRemove extends BackendTestCase {
         CoreComment comment = parent.coreAppendComment("comment1");
         CoreElement element1 = parent.coreAppendElement("element1");
         CoreElement element2 = parent.coreAppendElement("element2");
-        ChildIterator<CoreElement> it = parent.coreGetChildrenByType(Axis.CHILDREN, CoreElement.class);
+        ChildIterator<CoreElement> it = parent.coreGetNodes(Axis.CHILDREN, Selector.ELEMENT, CoreElement.class);
         assertTrue(it.hasNext());
         assertSame(element1, it.next());
         it.remove();

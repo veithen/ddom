@@ -21,6 +21,7 @@ import org.w3c.dom.Node;
 
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ElementMatcher;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.dom.intf.DOMDocument;
 import com.googlecode.ddom.frontend.dom.intf.DOMElement;
 import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
@@ -38,7 +39,7 @@ public class ElementsByTagName extends ElementsBy {
     @Override
     protected Iterator<? extends Node> createIterator() {
         if (tagname.equals("*")) {
-            return node.coreGetChildrenByType(Axis.DESCENDANTS, DOMElement.class);
+            return node.coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class);
         } else {
             return node.coreGetElements(Axis.DESCENDANTS, DOMElement.class, ElementMatcher.BY_NAME, null, tagname);
         }

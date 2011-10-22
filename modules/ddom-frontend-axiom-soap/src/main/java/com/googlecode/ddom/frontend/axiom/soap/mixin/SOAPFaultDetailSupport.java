@@ -21,6 +21,7 @@ import org.apache.axiom.om.OMElement;
 
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
@@ -37,7 +38,7 @@ public abstract class SOAPFaultDetailSupport implements AxiomSOAPFaultDetail {
         }
     }
 
-    public final Iterator getAllDetailEntries() {
-        return coreGetChildrenByType(Axis.CHILDREN, AxiomElement.class);
+    public final Iterator<OMElement> getAllDetailEntries() {
+        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, OMElement.class);
     }
 }

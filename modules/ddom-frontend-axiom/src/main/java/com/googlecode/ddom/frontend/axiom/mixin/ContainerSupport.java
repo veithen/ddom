@@ -29,6 +29,7 @@ import javax.xml.transform.sax.SAXSource;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
+import org.apache.axiom.om.OMSerializable;
 import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 
 import com.googlecode.ddom.core.Axis;
@@ -37,6 +38,7 @@ import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ElementMatcher;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomContainer;
@@ -63,8 +65,8 @@ public abstract class ContainerSupport implements AxiomContainer {
         }
     }
     
-    public final Iterator getChildren() {
-        return coreGetChildrenByType(Axis.CHILDREN, AxiomChildNode.class);
+    public final Iterator<OMNode> getChildren() {
+        return coreGetNodes(Axis.CHILDREN, Selector.ANY, OMNode.class);
     }
     
     public final Iterator getChildrenWithName(QName qname) {
@@ -78,6 +80,10 @@ public abstract class ContainerSupport implements AxiomContainer {
     public Iterator getChildrenWithNamespaceURI(String uri) {
         // TODO
         throw new UnsupportedOperationException();
+    }
+    
+    public final Iterator<OMSerializable> getDescendants(boolean includeSelf) {
+        return coreGetNodes(includeSelf ? Axis.DESCENDANTS_OR_SELF : Axis.DESCENDANTS, Selector.ANY, OMSerializable.class);
     }
     
     public final OMElement getFirstChildWithName(QName qname) {

@@ -33,6 +33,7 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.IdentityMapper;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
@@ -317,7 +318,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
     
     public final Iterator getChildElements() {
-        return getChildElements(coreGetChildrenByType(Axis.CHILDREN, CoreChildNode.class));
+        return getChildElements(coreGetNodes(Axis.CHILDREN, Selector.ANY, CoreChildNode.class));
     }
 
     public final Iterator getChildElements(Name name) {

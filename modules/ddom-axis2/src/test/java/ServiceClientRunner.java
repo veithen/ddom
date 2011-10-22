@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
-import com.googlecode.ddom.axiom.OMMetaFactoryImpl;
-
 public class ServiceClientRunner {
     private static OMElement createPayLoad() {
         OMFactory fac = OMAbstractFactory.getOMFactory();
@@ -37,7 +35,6 @@ public class ServiceClientRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        OMAbstractFactory.setMetaFactory(new OMMetaFactoryImpl());
         ConfigurationContext configContext = ConfigurationContextFactory.createConfigurationContextFromFileSystem(null, null);
         ServiceClient client = new ServiceClient(configContext, null);
         Options options = new Options();

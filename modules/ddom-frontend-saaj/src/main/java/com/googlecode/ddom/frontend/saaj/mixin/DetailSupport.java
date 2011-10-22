@@ -25,6 +25,7 @@ import javax.xml.soap.SOAPException;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDetail;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDetailEntry;
@@ -51,6 +52,6 @@ public abstract class DetailSupport implements SAAJDetail {
     }
 
     public final Iterator getDetailEntries() {
-        return new ReifyingIterator(coreGetChildrenByType(Axis.CHILDREN, CoreNSAwareElement.class), SAAJDetailEntry.class);
+        return new ReifyingIterator(coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, CoreNSAwareElement.class), SAAJDetailEntry.class);
     }
 }

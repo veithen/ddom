@@ -23,36 +23,37 @@ import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 
-public abstract class AbstractNodeIterator<T extends CoreChildNode> implements ChildIterator<T> {
+public abstract class AbstractNodeIterator<T> implements ChildIterator<T> {
     private final CoreParentNode startNode;
-    private final Class<T> type;
     private final Axis axis;
-    private CoreChildNode currentNode;
+    private final Class<T> type;
+    private CoreNode currentNode;
     
     /**
      * The parent of the current node. This is used to detect concurrent modifications.
      */
     private CoreParentNode currentParent;
     
-    private CoreChildNode nextNode;
+    private CoreNode nextNode;
     private boolean hasNext;
     private int depth;
     
-    public AbstractNodeIterator(CoreParentNode startNode, Class<T> type, Axis axis) {
+    public AbstractNodeIterator(CoreParentNode startNode, Axis axis, Class<T> type) {
         this.startNode = startNode;
-        this.type = type;
         this.axis = axis;
+        this.type = type;
     }
 
-    protected abstract boolean matches(T node);
+    protected abstract boolean matches(CoreNode node);
 
     public final boolean hasNext() {
         if (!hasNext) {
-            CoreChildNode node = currentNode;
-            if (node != null && node.coreGetParent() != currentParent) {
+            CoreNode node = currentNode;
+            if (node instanceof CoreChildNode && ((CoreChildNode)node).coreGetParent() != currentParent) {
                 throw new ConcurrentModificationException("The current node has been removed using a method other than Iterator#remove()");
             }
             do {
@@ -63,15 +64,22 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
                             if (node == null) {
                                 node = startNode.coreGetFirstChild();
                             } else {
-                                node = node.coreGetNextSibling();
+                                node = ((CoreChildNode)node).coreGetNextSibling();
                             }
                             break;
                         case DESCENDANTS:
+                        case DESCENDANTS_OR_SELF:
                             if (node == null) {
-                                node = startNode.coreGetFirstChild();
+                                if (axis == Axis.DESCENDANTS) {
+                                    node = startNode.coreGetFirstChild();
+                                    depth++;
+                                } else {
+                                    node = startNode;
+                                }
                             } else {
                                 boolean visitChildren = true;
                                 while (true) {
+                                    // TODO: test for CoreContainer instead????
                                     if (visitChildren && node instanceof CoreElement) {
                                         CoreChildNode firstChild = ((CoreElement)node).coreGetFirstChild();
                                         if (firstChild != null) {
@@ -80,19 +88,18 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
                                             break;
                                         }
                                     }
-                                    CoreChildNode nextSibling = node.coreGetNextSibling();
+                                    if (depth == 0) {
+                                        node = null;
+                                        break;
+                                    }
+                                    CoreChildNode nextSibling = ((CoreChildNode)node).coreGetNextSibling();
                                     if (nextSibling != null) {
                                         node = nextSibling;
                                         break;
                                     }
-                                    if (depth > 0) {
-                                        depth--;
-                                        node = (CoreChildNode)node.coreGetParent();
-                                        visitChildren = false;
-                                    } else {
-                                        node = null;
-                                        break;
-                                    }
+                                    depth--;
+                                    node = ((CoreChildNode)node).coreGetParent();
+                                    visitChildren = false;
                                 }
                             }
                     }
@@ -100,7 +107,7 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
                     // TODO
                     throw new RuntimeException(ex);
                 }
-            } while (node != null && (!type.isInstance(node) || !matches(type.cast(node))));
+            } while (node != null && !matches(node));
             nextNode = node;
             hasNext = true;
         }
@@ -110,7 +117,7 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
     public final T next() {
         if (hasNext()) {
             currentNode = nextNode;
-            currentParent = currentNode.coreGetParent();
+            currentParent = currentNode instanceof CoreChildNode ? ((CoreChildNode)currentNode).coreGetParent() : null;
             hasNext = false;
             return type.cast(currentNode);
         } else {
@@ -124,11 +131,13 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
         }
         // Move to next node before replacing the current one
         hasNext();
-        try {
-            currentNode.coreDetach();
-        } catch (DeferredParsingException ex) {
-            // TODO
-            throw new RuntimeException(ex);
+        if (currentNode instanceof CoreChildNode) {
+            try {
+                ((CoreChildNode)currentNode).coreDetach();
+            } catch (DeferredParsingException ex) {
+                // TODO
+                throw new RuntimeException(ex);
+            }
         }
         currentNode = null;
     }
@@ -136,6 +145,6 @@ public abstract class AbstractNodeIterator<T extends CoreChildNode> implements C
     public final void replace(CoreChildNode newNode) throws CoreModelException {
         // Move to next node before replacing the current one
         hasNext();
-        currentNode.coreReplaceWith(newNode);
+        ((CoreChildNode)currentNode).coreReplaceWith(newNode);
     }
 }

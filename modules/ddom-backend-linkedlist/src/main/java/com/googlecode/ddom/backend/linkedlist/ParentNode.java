@@ -52,6 +52,7 @@ import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.NodeNotFoundException;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.core.ext.ModelExtension;
@@ -604,8 +605,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return child;
     }
     
-    public final <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type) {
-        return new ChildrenByTypeIterator<T>(this, axis, type);
+    public final <T> ChildIterator<T> coreGetNodes(Axis axis, Selector selector, Class<T> type) {
+        return new ChildrenByTypeIterator<T>(this, axis, selector, type);
     }
 
     public <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name) {

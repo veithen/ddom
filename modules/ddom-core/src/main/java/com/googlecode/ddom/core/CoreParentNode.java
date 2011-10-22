@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.core;
 
+import java.util.Iterator;
+
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
@@ -260,7 +262,31 @@ public interface CoreParentNode extends CoreNode {
 
     CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredParsingException;
     
-    <T extends CoreChildNode> ChildIterator<T> coreGetChildrenByType(Axis axis, Class<T> type);
+    /**
+     * Get an iterator over the node-set corresponding to the given axis and node type. Nodes are
+     * filtered using a {@link Selector}. The supplied {@link Class} parameter is not used for
+     * filtering but only to cast the node reference to the expected type. This enables efficient
+     * processing for back-ends that support deferred instantiation of node objects in addition to
+     * deferred parsing (such as table based back-ends).
+     * <p>
+     * This means that the <code>type</code> must be chosen such that it is compatible with the
+     * given <code>selector</code>. An incompatible <code>type</code> may cause
+     * {@link Iterator#next()} to throw a {@link ClassCastException}.
+     * 
+     * @param <T>
+     *            The item type for the returned iterator. Note that the type is not required to
+     *            extend {@link CoreNode}, so that this method can be used to create iterators
+     *            suitable for front-ends (where <code>T</code> is an interface defined by the API
+     *            implemented by the front-end and that in general doesn't extend {@link CoreNode}).
+     * @param axis
+     *            the axis
+     * @param selector
+     *            the node type selector
+     * @param type
+     *            the item type for the returned iterator
+     * @return an iterator over the node-set
+     */
+    <T> ChildIterator<T> coreGetNodes(Axis axis, Selector selector, Class<T> type);
     
     <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name);
     

@@ -44,7 +44,7 @@ public class ReifyingIterator implements Iterator<CoreChildNode> {
 
     public CoreChildNode next() {
         try {
-            CoreChildNode child = parent.next();
+            CoreChildNode child = (CoreChildNode)parent.next();
             if (child instanceof CoreNSAwareElement) {
                 CoreNSAwareElement element = (CoreNSAwareElement)child;
                 SAAJSOAPElement reifiedElement = SAAJUtil.reify(element, childType);

@@ -76,8 +76,6 @@ public class BackendTestSuiteBuilder {
         // TODO
 //        suite.addTest(new com.google.code.ddom.backend.testsuite.element.TestCoreCoalesce(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetAttributeInStateSourceSet(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeAndRemove(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetChildrenByTypeWithConcurrentModification(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstAttributeInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstAttributeInStateSourceSetWithPushInput(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstChildInStateSourceSetWithPushInput(config));
@@ -92,6 +90,8 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetLastAttributeInStateSourceSet(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetNodesRemove(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetNodesWithConcurrentModification(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnEmptyElement(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnIncompleteElement(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetAttributeAlreadyOwnedByElement(config));

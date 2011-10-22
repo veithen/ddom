@@ -17,6 +17,7 @@ package com.googlecode.ddom.backend.linkedlist.support;
 
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementMatcher;
@@ -27,16 +28,17 @@ public class ElementsIterator<T extends CoreElement> extends AbstractNodeIterato
     private final String name;
 
     public ElementsIterator(CoreParentNode startNode, Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name) {
-        super(startNode, type, axis);
+        super(startNode, axis, type);
         this.matcher = matcher;
         this.namespaceURI = namespaceURI;
         this.name = name;
     }
 
     @Override
-    protected final boolean matches(T node) {
+    protected final boolean matches(CoreNode node) {
         try {
-            return matcher.matches(node, namespaceURI, name);
+            // TODO: unchecked cast
+            return node instanceof CoreElement && matcher.matches((T)node, namespaceURI, name);
         } catch (DeferredParsingException ex) {
             // TODO
             throw new RuntimeException(ex);

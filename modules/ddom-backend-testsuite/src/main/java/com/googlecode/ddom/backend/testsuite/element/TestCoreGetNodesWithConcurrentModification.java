@@ -22,9 +22,10 @@ import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.Selector;
 
-public class TestCoreGetChildrenByTypeWithConcurrentModification extends BackendTestCase {
-    public TestCoreGetChildrenByTypeWithConcurrentModification(BackendTestSuiteConfig config) {
+public class TestCoreGetNodesWithConcurrentModification extends BackendTestCase {
+    public TestCoreGetNodesWithConcurrentModification(BackendTestSuiteConfig config) {
         super(config);
     }
 
@@ -33,7 +34,7 @@ public class TestCoreGetChildrenByTypeWithConcurrentModification extends Backend
         CoreElement parent = nodeFactory.createElement(null, "root");
         CoreElement element1 = parent.coreAppendElement("element1");
         parent.coreAppendElement("element2");
-        ChildIterator<CoreElement> it = parent.coreGetChildrenByType(Axis.CHILDREN, CoreElement.class);
+        ChildIterator<CoreElement> it = parent.coreGetNodes(Axis.CHILDREN, Selector.ELEMENT, CoreElement.class);
         assertTrue(it.hasNext());
         assertSame(element1, it.next());
         element1.coreDetach();

@@ -27,6 +27,7 @@ import com.google.code.ddom.collections.FilteredIterator;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
@@ -49,8 +50,8 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
     }
 
     // TODO: is remove supposed to work?
-    public final Iterator examineAllHeaderBlocks() {
-        return coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class);
+    public final Iterator<SOAPHeaderBlock> examineAllHeaderBlocks() {
+        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, SOAPHeaderBlock.class);
     }
 
     // TODO: is remove supposed to work?
@@ -60,7 +61,7 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
             return examineAllHeaderBlocks();
         } else {
             return new FilteredIterator<AxiomSOAPHeaderBlock>(
-                    coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class), new RoleFilter(role));
+                    coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, AxiomSOAPHeaderBlock.class), new RoleFilter(role));
         }
     }
 
@@ -95,7 +96,7 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
 
     public final Iterator getHeadersToProcess(RolePlayer rolePlayer, String namespace) {
         return new FilteredIterator<AxiomSOAPHeaderBlock>(
-                coreGetChildrenByType(Axis.CHILDREN, AxiomSOAPHeaderBlock.class), new RolePlayerFilter(rolePlayer, namespace));
+                coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, AxiomSOAPHeaderBlock.class), new RolePlayerFilter(rolePlayer, namespace));
     }
 
     public Iterator extractAllHeaderBlocks() {

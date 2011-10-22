@@ -21,6 +21,7 @@ import org.w3c.dom.Node;
 
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ElementMatcher;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.dom.intf.DOMDocument;
 import com.googlecode.ddom.frontend.dom.intf.DOMElement;
 import com.googlecode.ddom.frontend.dom.intf.DOMNSAwareElement;
@@ -45,7 +46,7 @@ public class ElementsByTagNameNS extends ElementsBy {
         boolean localNameWildcard = localName.equals("*");
         if (nsWildcard && localNameWildcard) {
             // TODO: there seems to be no unit test checking whether the iterator should return DOM1 elements!
-            return node.coreGetChildrenByType(Axis.DESCENDANTS, DOMElement.class);
+            return node.coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class);
         } else if (nsWildcard) {
             return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_LOCAL_NAME, null, localName);
         } else if (localNameWildcard) {

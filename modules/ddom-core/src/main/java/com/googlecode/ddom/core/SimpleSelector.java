@@ -15,22 +15,14 @@
  */
 package com.googlecode.ddom.core;
 
-/**
- * Identifies a node-set relative to a given node.
- */
-public enum Axis {
-    /**
-     * The children of the node.
-     */
-    CHILDREN,
-    
-    /**
-     * The descendants of the node.
-     */
-    DESCENDANTS,
-    
-    /**
-     * The descendants of the node and the node itself.
-     */
-    DESCENDANTS_OR_SELF
+final class SimpleSelector implements Selector {
+    private final int nodeType;
+
+    SimpleSelector(int nodeType) {
+        this.nodeType = nodeType;
+    }
+
+    public boolean select(int nodeType) {
+        return nodeType == this.nodeType;
+    }
 }

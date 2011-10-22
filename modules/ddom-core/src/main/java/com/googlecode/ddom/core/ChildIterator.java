@@ -35,6 +35,15 @@ import java.util.Iterator;
  * @author Andreas Veithen
  */
 // TODO: specify what exception is thrown if a deferred parsing error occurs
-public interface ChildIterator<T extends CoreChildNode> extends Iterator<T> {
+public interface ChildIterator<T> extends Iterator<T> {
+    /**
+     * Replace the current node.
+     * 
+     * This method only has an effect if the current node is a {@link CoreChildNode}.
+     * 
+     * @param newNode
+     * @throws CoreModelException
+     */
+    // TODO: the meaning of this method is not clear for Axis.DESCENDANTS
     void replace(CoreChildNode newNode) throws CoreModelException;
 }

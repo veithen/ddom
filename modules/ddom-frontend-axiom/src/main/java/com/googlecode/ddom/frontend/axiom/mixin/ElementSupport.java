@@ -36,6 +36,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.IdentityMapper;
+import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomAttribute;
@@ -91,8 +92,8 @@ public abstract class ElementSupport implements AxiomElement {
         throw new UnsupportedOperationException();
     }
     
-    public final Iterator getChildElements() {
-        return coreGetChildrenByType(Axis.CHILDREN, AxiomElement.class);
+    public final Iterator<OMElement> getChildElements() {
+        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, OMElement.class);
     }
     
     private static final IdentityMapper<AxiomAttribute> attributeIdentityMapper = new IdentityMapper<AxiomAttribute>();

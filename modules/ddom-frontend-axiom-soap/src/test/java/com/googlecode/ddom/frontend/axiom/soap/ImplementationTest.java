@@ -20,6 +20,7 @@ import junit.framework.TestSuite;
 
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.ts.SOAPTestSuiteBuilder;
+import org.apache.axiom.ts.soap.builder.BadInputTest;
 import org.apache.axiom.ts.soap.envelope.TestAddHeaderToIncompleteEnvelope;
 import org.apache.axiom.ts.soap.envelope.TestBodyHeaderOrder;
 import org.apache.axiom.ts.soap.envelope.TestDiscardHeader;
@@ -80,6 +81,8 @@ public class ImplementationTest extends TestCase {
         // TODO: no MTOM support yet
         builder.exclude(TestBuildWithAttachments.class);
         builder.exclude(TestMTOMForwardStreaming.class);
+        
+        builder.exclude(BadInputTest.class);
         
         return builder.build();
     }
