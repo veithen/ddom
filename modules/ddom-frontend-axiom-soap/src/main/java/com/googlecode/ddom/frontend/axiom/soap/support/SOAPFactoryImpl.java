@@ -232,6 +232,28 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return internalCreateSOAPFaultValue(parent);
     }
 
+    private SOAPFaultSubCode internalCreateSOAPFaultSubCode(SOAPFaultClassifier parent) {
+        return createSOAPElement(parent, soapVersion.getSOAPFaultSubCodeClass(), soapVersion.getFaultSubCodeQName());
+    }
+    
+    public SOAPFaultSubCode createSOAPFaultSubCode() throws SOAPProcessingException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    public final SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultCode parent) throws SOAPProcessingException {
+        return internalCreateSOAPFaultSubCode(parent);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultSubCode(org.apache.axiom.soap.SOAPFaultSubCode)
+     */
+    public SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultSubCode parent)
+            throws SOAPProcessingException {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
     public final SOAPFaultText createSOAPFaultText() throws SOAPProcessingException {
         return createSOAPFaultText(null);
     }
@@ -252,32 +274,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultNode(org.apache.axiom.soap.SOAPFault)
      */
     public SOAPFaultNode createSOAPFaultNode(SOAPFault parent) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultSubCode()
-     */
-    public SOAPFaultSubCode createSOAPFaultSubCode() throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultSubCode(org.apache.axiom.soap.SOAPFaultCode)
-     */
-    public SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultCode parent)
-            throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultSubCode(org.apache.axiom.soap.SOAPFaultSubCode)
-     */
-    public SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultSubCode parent)
-            throws SOAPProcessingException {
         // TODO
         throw new UnsupportedOperationException();
     }
