@@ -224,6 +224,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         return internalCreateSOAPFaultValue(null);
     }
 
+    // TODO: Axiom 1.3 roadmap: there should be a single method taking a SOAPFaultClassifier argument
     public final SOAPFaultValue createSOAPFaultValue(SOAPFaultCode parent) throws SOAPProcessingException {
         return internalCreateSOAPFaultValue(parent);
     }
@@ -241,6 +242,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
 
+    // TODO: Axiom 1.3 roadmap: there should be a single method taking a SOAPFaultClassifier argument
     public final SOAPFaultSubCode createSOAPFaultSubCode(SOAPFaultCode parent) throws SOAPProcessingException {
         return internalCreateSOAPFaultSubCode(parent);
     }
