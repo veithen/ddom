@@ -89,7 +89,7 @@ public abstract class SOAPVersionEx {
 
         @Override
         public QName getFaultTextQName() {
-            throw null;
+            return null;
         }
 
         @Override

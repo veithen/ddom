@@ -261,7 +261,11 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     }
 
     public final SOAPFaultText createSOAPFaultText(SOAPFaultReason parent) throws SOAPProcessingException {
-        return createSOAPElement(parent, soapVersion.getSOAPFaultTextClass(), soapVersion.getFaultTextQName());
+        QName qname = soapVersion.getFaultTextQName();
+        if (qname == null) {
+            throw new UnsupportedOperationException("SOAPFaultText is not supported by this SOAP version");
+        }
+        return createSOAPElement(parent, soapVersion.getSOAPFaultTextClass(), qname);
     }
 
     /* (non-Javadoc)

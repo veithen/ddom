@@ -68,7 +68,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestSetRole.class);
         
         // TODO: fault text is a SOAP 1.2 concept
-        builder.exclude(org.apache.axiom.ts.soap11.faultreason.TestAddSOAPText.class);
         builder.exclude(org.apache.axiom.ts.soap11.faultreason.TestGetFirstSOAPText.class);
         builder.exclude(TestSetLang.class, "(spec=soap11)");
         
