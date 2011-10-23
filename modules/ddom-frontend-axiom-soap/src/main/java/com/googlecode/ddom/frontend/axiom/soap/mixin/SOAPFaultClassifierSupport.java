@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.soap.SOAPFaultSubCode;
 import org.apache.axiom.soap.SOAPFaultValue;
 import org.apache.axiom.soap.SOAPProcessingException;
@@ -43,6 +45,19 @@ public abstract class SOAPFaultClassifierSupport implements AxiomSOAPFaultClassi
     public final void setValue(SOAPFaultValue value) throws SOAPProcessingException {
         // TODO
         throw new SOAPProcessingException("Not supported");
+    }
+
+    public final void setValue(QName value) {
+        Sequence seq = getSOAPVersionEx().getFaultClassifierSequence();
+        if (seq == null) {
+            setText(value);
+        } else {
+            try {
+                ((SOAPFaultValue)coreGetElementFromSequence(seq, 0, true)).setText(value);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
+        }
     }
 
     public final SOAPFaultSubCode getSubCode() {
