@@ -15,8 +15,13 @@
  */
 package com.googlecode.ddom.frontend.axiom.mixin;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -28,12 +33,17 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
+import org.apache.axiom.util.namespace.MapBasedNamespaceContext;
 
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.Axis;
+import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.Selector;
@@ -49,11 +59,12 @@ import com.googlecode.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceIterator;
 import com.googlecode.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
+import com.googlecode.ddom.frontend.axiom.support.PrefixIterator;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 
 @Mixin(CoreNSAwareElement.class)
-public abstract class ElementSupport implements AxiomElement {
+public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     private int lineNumber;
     
     public final void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException {
@@ -356,7 +367,85 @@ public abstract class ElementSupport implements AxiomElement {
         }
     }
 
-    public final Iterator getNamespacesInScope() {
+    public final Iterator<OMNamespace> getNamespacesInScope() {
         return new NamespaceIterator(this);
+    }
+
+    public final NamespaceContext getNamespaceContext(boolean detached) {
+        if (detached) {
+            Map<String,String> namespaces = new HashMap<String,String>();
+            try {
+                CoreElement element = this;
+                while (true) {
+                    CoreAttribute attr = element.coreGetFirstAttribute();
+                    while (attr != null) {
+                        if (attr instanceof CoreNamespaceDeclaration) {
+                            CoreNamespaceDeclaration nsDeclaration = (CoreNamespaceDeclaration)attr;
+                            String prefix = nsDeclaration.coreGetDeclaredPrefix();
+                            if (!namespaces.containsKey(prefix)) {
+                                namespaces.put(prefix, nsDeclaration.coreGetDeclaredNamespaceURI());
+                            }
+                        }
+                        attr = attr.coreGetNextAttribute();
+                    }
+                    CoreParentNode parent = element.coreGetParent();
+                    if (parent instanceof CoreElement) {
+                        element = (CoreElement)parent;
+                    } else {
+                        break;
+                    }
+                }
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
+            return new MapBasedNamespaceContext(namespaces);
+        } else {
+            return this;
+        }
+    }
+
+    public final String getNamespaceURI(String prefix) {
+        if (prefix == null) {
+            throw new IllegalArgumentException("prefix can't be null");
+        } else if (prefix.equals(XMLConstants.XML_NS_PREFIX)) {
+            return XMLConstants.XML_NS_URI;
+        } else if (prefix.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
+            return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+        } else {
+            try {
+                String namespaceURI = coreLookupNamespaceURI(prefix, true);
+                return namespaceURI == null ? XMLConstants.NULL_NS_URI : namespaceURI;
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
+        }
+    }
+
+    public final String getPrefix(String namespaceURI) {
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("namespaceURI can't be null");
+        } else if (namespaceURI.equals(XMLConstants.XML_NS_URI)) {
+            return XMLConstants.XML_NS_PREFIX;
+        } else if (namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+            return XMLConstants.XMLNS_ATTRIBUTE;
+        } else {
+            try {
+                return coreLookupPrefix(namespaceURI, true);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionUtil.translate(ex);
+            }
+        }
+    }
+
+    public final Iterator<String> getPrefixes(String namespaceURI) {
+        if (namespaceURI == null) {
+            throw new IllegalArgumentException("namespaceURI can't be null");
+        } else if (namespaceURI.equals(XMLConstants.XML_NS_URI)) {
+            return Collections.singleton(XMLConstants.XML_NS_PREFIX).iterator();
+        } else if (namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+            return Collections.singleton(XMLConstants.XMLNS_ATTRIBUTE).iterator();
+        } else {
+            return new PrefixIterator(this, namespaceURI);
+        }
     }
 }

@@ -15,14 +15,12 @@
  */
 package com.googlecode.ddom.util.namespace;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
 
-public final class ScopedNamespaceContext implements NamespaceContext {
+public final class ScopedNamespaceContext extends AbstractNamespaceContext {
     private String[] namespaceStack = new String[32];
     private int bindings;
     private int[] scopeStack = new int[8];
@@ -94,92 +92,71 @@ public final class ScopedNamespaceContext implements NamespaceContext {
         return namespaceStack[i*2+1];
     }
 
-    public String getPrefix(String namespaceURI) {
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("namespaceURI can't be null");
-        } else if (namespaceURI.equals(XMLConstants.XML_NS_URI)) {
-            return XMLConstants.XML_NS_PREFIX;
-        } else if (namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-            return XMLConstants.XMLNS_ATTRIBUTE;
-        } else {
-            outer: for (int i=(bindings-1)*2; i>=0; i-=2) {
-                if (namespaceURI.equals(namespaceStack[i+1])) {
-                    String prefix = namespaceStack[i];
-                    // Now check that the prefix is not masked
-                    for (int j=i+2; j<bindings*2; j+=2) {
-                        if (prefix.equals(namespaceStack[j])) {
-                            continue outer;
-                        }
+    @Override
+    protected String doGetPrefix(String namespaceURI) {
+        outer: for (int i=(bindings-1)*2; i>=0; i-=2) {
+            if (namespaceURI.equals(namespaceStack[i+1])) {
+                String prefix = namespaceStack[i];
+                // Now check that the prefix is not masked
+                for (int j=i+2; j<bindings*2; j+=2) {
+                    if (prefix.equals(namespaceStack[j])) {
+                        continue outer;
                     }
-                    return prefix;
                 }
+                return prefix;
             }
-            return null;
         }
+        return null;
     }
 
-    public Iterator<String> getPrefixes(final String namespaceURI) {
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("namespaceURI can't be null");
-        } else if (namespaceURI.equals(XMLConstants.XML_NS_URI)) {
-            return Collections.singleton(XMLConstants.XML_NS_PREFIX).iterator();
-        } else if (namespaceURI.equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-            return Collections.singleton(XMLConstants.XMLNS_ATTRIBUTE).iterator();
-        } else {
-            return new Iterator<String>() {
-                private int binding = bindings;
-                private String next;
-    
-                public boolean hasNext() {
-                    if (next == null) {
-                        outer: while (--binding >= 0) {
-                            if (namespaceURI.equals(namespaceStack[binding*2+1])) {
-                                String prefix = namespaceStack[binding*2];
-                                // Now check that the prefix is not masked
-                                for (int j=binding+1; j<bindings; j++) {
-                                    if (prefix.equals(namespaceStack[j*2])) {
-                                        continue outer;
-                                    }
+    @Override
+    protected Iterator<String> doGetPrefixes(final String namespaceURI) {
+        return new Iterator<String>() {
+            private int binding = bindings;
+            private String next;
+
+            public boolean hasNext() {
+                if (next == null) {
+                    outer: while (--binding >= 0) {
+                        if (namespaceURI.equals(namespaceStack[binding*2+1])) {
+                            String prefix = namespaceStack[binding*2];
+                            // Now check that the prefix is not masked
+                            for (int j=binding+1; j<bindings; j++) {
+                                if (prefix.equals(namespaceStack[j*2])) {
+                                    continue outer;
                                 }
-                                next = prefix;
-                                break;
                             }
+                            next = prefix;
+                            break;
                         }
                     }
-                    return next != null;
                 }
-    
-                public String next() {
-                    if (hasNext()) {
-                        String result = next;
-                        next = null;
-                        return result;
-                    } else {
-                        throw new NoSuchElementException();
-                    }
-                }
-    
-                public void remove() {
-                    throw new UnsupportedOperationException();
-                }
-            };
-        }
-    }
+                return next != null;
+            }
 
-    public String getNamespaceURI(String prefix) {
-        if (prefix == null) {
-            throw new IllegalArgumentException("prefix can't be null");
-        } else if (prefix.equals(XMLConstants.XML_NS_PREFIX)) {
-            return XMLConstants.XML_NS_URI;
-        } else if (prefix.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
-            return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-        } else {
-            for (int i=(bindings-1)*2; i>=0; i-=2) {
-                if (prefix.equals(namespaceStack[i])) {
-                    return namespaceStack[i+1];
+            public String next() {
+                if (hasNext()) {
+                    String result = next;
+                    next = null;
+                    return result;
+                } else {
+                    throw new NoSuchElementException();
                 }
             }
-            return XMLConstants.NULL_NS_URI;
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    @Override
+    protected String doGetNamespaceURI(String prefix) {
+        for (int i=(bindings-1)*2; i>=0; i-=2) {
+            if (prefix.equals(namespaceStack[i])) {
+                return namespaceStack[i+1];
+            }
         }
+        return XMLConstants.NULL_NS_URI;
     }
 }

@@ -15,28 +15,29 @@
  */
 package com.googlecode.ddom.frontend.axiom.support;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMNamespace;
-
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
-import com.googlecode.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
+import com.googlecode.ddom.core.DeferredParsingException;
 
-/**
- * Iterator implementation used by {@link OMElement#getNamespacesInScope()}.
- */
-public class NamespaceIterator extends AbstractNamespaceIterator<OMNamespace> {
-    public NamespaceIterator(CoreElement element) {
+public class PrefixIterator extends AbstractNamespaceIterator<String> {
+    private final String namespaceURI;
+    
+    public PrefixIterator(CoreElement element, String namespaceURI) {
         super(element);
+        this.namespaceURI = namespaceURI;
     }
 
     @Override
     protected boolean matches(CoreNamespaceDeclaration nsDeclaration) {
-        return true;
+        try {
+            return nsDeclaration.coreGetDeclaredNamespaceURI().equals(namespaceURI);
+        } catch (DeferredParsingException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
 
     @Override
-    protected OMNamespace getValue(CoreNamespaceDeclaration nsDeclaration) {
-        return ((AxiomNamespaceDeclaration)nsDeclaration).getOMNamespace();
+    protected String getValue(CoreNamespaceDeclaration nsDeclaration) {
+        return nsDeclaration.coreGetDeclaredPrefix();
     }
 }
