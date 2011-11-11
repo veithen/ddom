@@ -94,6 +94,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetNodesWithConcurrentModification(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnEmptyElement(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreIsEmptyOnIncompleteElement(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreLookupPrefixMasked(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetAttributeAlreadyOwnedByElement(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetContentLaziness(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSource(config));

@@ -288,7 +288,6 @@ public abstract class Element extends Container implements LLElement {
                 return prefix;
             }
         }
-        // TODO: this is not entirely correct because the namespace declaration for this prefix may be hidden by a namespace declaration in a nested scope; need to check if this is covered by the DOM3 test suite
         for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
             if (attr instanceof CoreNamespaceDeclaration) {
                 CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
@@ -299,7 +298,18 @@ public abstract class Element extends Container implements LLElement {
         }
         CoreElement parentElement = coreGetParentElement();
         if (parentElement != null) {
-            return parentElement.coreLookupPrefix(namespaceURI, strict);
+            String prefix = parentElement.coreLookupPrefix(namespaceURI, strict);
+            // The prefix declared on one of the ancestors may be masked by another
+            // namespace declaration on this element (or one of its descendants).
+            for (CoreAttribute attr = coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
+                if (attr instanceof CoreNamespaceDeclaration) {
+                    CoreNamespaceDeclaration decl = (CoreNamespaceDeclaration)attr;
+                    if (decl.coreGetDeclaredPrefix().equals(prefix)) {
+                        return null;
+                    }
+                }
+            }
+            return prefix;
         } else {
             return null;
         }
