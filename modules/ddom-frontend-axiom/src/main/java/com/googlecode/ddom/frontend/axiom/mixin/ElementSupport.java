@@ -15,6 +15,7 @@
  */
 package com.googlecode.ddom.frontend.axiom.mixin;
 
+import java.io.Reader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,6 +61,7 @@ import com.googlecode.ddom.frontend.axiom.support.NamespaceIterator;
 import com.googlecode.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
 import com.googlecode.ddom.frontend.axiom.support.PrefixIterator;
+import com.googlecode.ddom.frontend.axiom.support.TextFromElementReader;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 
@@ -207,6 +209,10 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
+    }
+
+    public final Reader getTextAsStream(boolean cache) {
+        return new TextFromElementReader(coreGetInput(cache));
     }
 
     // This method is overridden by the SOAPFaultCode implementation for SOAP 1.2.
