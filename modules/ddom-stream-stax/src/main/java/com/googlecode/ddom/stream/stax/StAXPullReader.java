@@ -26,10 +26,15 @@ import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlReader;
 
 final class StAXPullReader implements XmlReader {
+    private static final int STATE_START = 0;
+    private static final int STATE_ITERATING = 1;
+    private static final int STATE_FRAGMENT_END = 2;
+    
     private final XmlHandler handler;
     private final XMLStreamReader reader;
     private final boolean parserIsNamespaceAware;
-    private boolean callNext;
+    private int state = STATE_START;
+    private int depth;
 
     StAXPullReader(XmlHandler handler, XMLStreamReader reader) {
         this.handler = handler;
@@ -49,14 +54,26 @@ final class StAXPullReader implements XmlReader {
     }
     
     public void proceed(boolean flush) throws StreamException {
-        if (callNext) {
-            try {
-                reader.next();
-            } catch (XMLStreamException ex) {
-                throw StAXExceptionUtil.toStreamException(ex);
+        try {
+            switch (state) {
+                case STATE_START:
+                    // If we are at the beginning of the stream, we must not call next().
+                    // Simply change the state and continue.
+                    state = STATE_ITERATING;
+                    break;
+                case STATE_ITERATING:
+                    reader.next();
+                    break;
+                case STATE_FRAGMENT_END:
+                    // The StAXPullInput contract requires us to position the reader
+                    // on the event immediately following the END_ELEMENT event for the
+                    // fragment.
+                    handler.completed();
+                    reader.next();
+                    return;
             }
-        } else {
-            callNext = true;
+        } catch (XMLStreamException ex) {
+            throw StAXExceptionUtil.toStreamException(ex);
         }
         try {
             switch (reader.getEventType()) {
@@ -68,9 +85,11 @@ final class StAXPullReader implements XmlReader {
                     }
                     handler.startEntity(false, encoding);
                     handler.processXmlDeclaration(reader.getVersion(), reader.getCharacterEncodingScheme(), reader.standaloneSet() ? reader.isStandalone() : null);
+                    depth++;
                     break;
                 case XMLStreamReader.END_DOCUMENT:
                     handler.completed();
+                    depth--;
                     break;
                 case XMLStreamReader.DTD:
                     if (reader instanceof DTDInfo) {
@@ -114,9 +133,14 @@ final class StAXPullReader implements XmlReader {
                         }
                         handler.attributesCompleted();
                     }
+                    depth++;
                     break;
                 case XMLStreamReader.END_ELEMENT:
                     handler.endElement();
+                    depth--;
+                    if (depth == 0) {
+                        state = STATE_FRAGMENT_END;
+                    }
                     break;
                 case XMLStreamReader.PROCESSING_INSTRUCTION:
                     handler.startProcessingInstruction(reader.getPITarget());

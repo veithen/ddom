@@ -19,9 +19,11 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
+import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
+import org.apache.axiom.util.stax.XMLEventUtils;
 import org.xml.sax.InputSource;
 
 import com.googlecode.ddom.core.NodeFactory;
@@ -63,6 +65,12 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
     }
 
     public final OMXMLParserWrapper createStAXOMBuilder(OMFactory omFactory, XMLStreamReader parser) {
+        // TODO: need to do the same check for SOAP!
+        int eventType = parser.getEventType();
+        if (eventType != XMLStreamReader.START_DOCUMENT && eventType != XMLStreamReader.START_ELEMENT) {
+            throw new OMException("The supplied XMLStreamReader is in an unexpected state ("
+                    + XMLEventUtils.getEventTypeString(eventType) + ")");
+        }
         // TODO: we have currently no way to set the OMFactory!
         XmlInput input = new StAXPullInput(parser);
         input.addFilter(new NamespaceRepairingFilter());

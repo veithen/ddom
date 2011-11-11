@@ -49,7 +49,7 @@ public class ImplementationTest extends TestCase {
     public static TestSuite suite() throws Exception {
         ModelRegistry modelRegistry = ModelRegistry.getInstance(ImplementationTest.class.getClassLoader());
         Model model = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("axiom"));
-        OMTestSuiteBuilder builder = new OMTestSuiteBuilder((OMMetaFactory)model.getNodeFactory());
+        OMTestSuiteBuilder builder = new OMTestSuiteBuilder((OMMetaFactory)model.getNodeFactory(), true);
         // TODO
         builder.exclude(TestBase64Streaming.class);
         builder.exclude(org.apache.axiom.ts.om.document.TestIsCompleteAfterAddingIncompleteChild.class);
