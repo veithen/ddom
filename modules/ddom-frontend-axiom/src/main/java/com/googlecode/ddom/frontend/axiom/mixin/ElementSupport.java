@@ -46,6 +46,7 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomNode;
 import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
+import com.googlecode.ddom.frontend.axiom.support.NamespaceIterator;
 import com.googlecode.ddom.frontend.axiom.support.OMNamespaceImpl;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
 import com.googlecode.ddom.stream.SimpleXmlSource;
@@ -353,5 +354,9 @@ public abstract class ElementSupport implements AxiomElement {
             // TODO
             throw new UnsupportedOperationException();
         }
+    }
+
+    public final Iterator getNamespacesInScope() {
+        return new NamespaceIterator(this);
     }
 }

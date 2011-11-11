@@ -30,10 +30,6 @@ import org.apache.axiom.ts.om.document.TestDigest;
 import org.apache.axiom.ts.om.element.TestFindNamespaceURIWithPrefixUndeclaring;
 import org.apache.axiom.ts.om.element.TestGetAllDeclaredNamespacesRemove;
 import org.apache.axiom.ts.om.element.TestGetChildrenWithName4;
-import org.apache.axiom.ts.om.element.TestGetNamespacesInScope;
-import org.apache.axiom.ts.om.element.TestGetNamespacesInScopeWithDefaultNamespace;
-import org.apache.axiom.ts.om.element.TestGetNamespacesInScopeWithMaskedDefaultNamespace;
-import org.apache.axiom.ts.om.element.TestGetNamespacesInScopeWithMaskedNamespace;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderWithPreserveNamespaceContext;
@@ -76,10 +72,6 @@ public class ImplementationTest extends TestCase {
         
         // TODO: recent changes in the Axiom API
         builder.exclude(TestGetDocumentElementWithIllFormedDocument.class);
-        builder.exclude(TestGetNamespacesInScope.class);
-        builder.exclude(TestGetNamespacesInScopeWithDefaultNamespace.class);
-        builder.exclude(TestGetNamespacesInScopeWithMaskedDefaultNamespace.class);
-        builder.exclude(TestGetNamespacesInScopeWithMaskedNamespace.class);
         builder.exclude(TestGetXMLStreamReaderWithPreserveNamespaceContext.class);
         
         return builder.build();
