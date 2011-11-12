@@ -36,6 +36,8 @@ import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderWithPreserveNamespaceContext;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
+import org.apache.axiom.ts.om.sourcedelement.TestName1DefaultPrefix;
+import org.apache.axiom.ts.om.sourcedelement.TestName1QualifiedPrefix;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 import org.apache.axiom.ts.xpath.TestAXIOMXPath;
 
@@ -81,6 +83,10 @@ public class ImplementationTest extends TestCase {
         
         // TODO: missing optimization
         builder.exclude(TestGetTextAsStreamWithSingleTextNode.class);
+        
+        // TODO: DDOM doesn't support updating the prefix of an OMSourcedElement on the fly (AXIOM-254)
+        builder.exclude(TestName1DefaultPrefix.class);
+        builder.exclude(TestName1QualifiedPrefix.class);
         
         return builder.build();
     }
