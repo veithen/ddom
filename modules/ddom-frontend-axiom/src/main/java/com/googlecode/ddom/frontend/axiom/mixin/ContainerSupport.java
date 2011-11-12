@@ -77,9 +77,8 @@ public abstract class ContainerSupport implements AxiomContainer {
         return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_LOCAL_NAME, null, localName);
     }
     
-    public Iterator getChildrenWithNamespaceURI(String uri) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final Iterator getChildrenWithNamespaceURI(String uri) {
+        return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_NAMESPACE_URI, uri, null);
     }
     
     public final Iterator<OMSerializable> getDescendants(boolean includeSelf) {
