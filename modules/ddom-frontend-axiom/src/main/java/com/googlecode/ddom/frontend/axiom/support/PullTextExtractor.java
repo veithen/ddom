@@ -36,7 +36,7 @@ public class PullTextExtractor extends XmlPivot {
             }
             int textLen = text.length();
             int c = Math.min(len, textLen-pos);
-            text.getChars(pos, textLen, cbuf, off);
+            text.getChars(pos, pos+c, cbuf, off);
             pos += c;
             if (pos == textLen) {
                 text = null;
