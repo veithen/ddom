@@ -275,6 +275,12 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     
     private void addNamespaceDeclaration(String uri, String prefix) {
         try {
+            String elementPrefix = coreGetPrefix();
+            String elementNamespaceURI = coreGetNamespaceURI();
+            if (elementPrefix.equals(prefix) && !elementNamespaceURI.equals(uri)) {
+                throw new OMException("Attempt to add a namespace declaration that conflicts with " +
+                        "the namespace information of the element");
+            }
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
@@ -317,12 +323,17 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         addNamespaceDeclaration("", prefix);
     }
 
-    public OMNamespace getDefaultNamespace() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final OMNamespace getDefaultNamespace() {
+        try {
+            String namespaceURI = coreLookupNamespaceURI("", true);
+            // TODO: should we also return null if namespaceURI is the empty string???
+            return namespaceURI == null ? null : new OMNamespaceImpl(namespaceURI, "");
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
     }
     
-    public OMNamespace findNamespace(String queryUri, String queryPrefix) {
+    public final OMNamespace findNamespace(String queryUri, String queryPrefix) {
         try {
             if (queryUri == null) {
                 String uri = coreLookupNamespaceURI(queryPrefix, true);
