@@ -326,8 +326,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     public final OMNamespace getDefaultNamespace() {
         try {
             String namespaceURI = coreLookupNamespaceURI("", true);
-            // TODO: should we also return null if namespaceURI is the empty string???
-            return namespaceURI == null ? null : new OMNamespaceImpl(namespaceURI, "");
+            return namespaceURI == null || namespaceURI.length() == 0 ? null : new OMNamespaceImpl(namespaceURI, "");
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

@@ -32,6 +32,15 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
         }
     }
 
+    public final String getPrefix() {
+        try {
+            String prefix = coreGetPrefix();
+            return prefix.length() == 0 ? null : prefix;
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+    
     public final String getNamespaceURI() {
         try {
             String namespaceURI = coreGetNamespaceURI();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2011 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,40 +15,9 @@
  */
 package com.googlecode.ddom.frontend.axiom.intf;
 
-import javax.xml.namespace.QName;
-
-import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNamedInformationItem;
 
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 
-/**
- * Defines methods common to {@link org.apache.axiom.om.OMElement} and
- * {@link org.apache.axiom.om.OMAttribute}.
- * 
- * @author Andreas Veithen
- */
-public interface AxiomNamedNode extends CoreNSAwareNamedNode, AxiomInformationItem {
-    /**
-     * @see org.apache.axiom.om.OMElement#getLocalName()
-     * @see org.apache.axiom.om.OMAttribute#getLocalName()
-     */
-    String getLocalName();
-
-    /**
-     * @see org.apache.axiom.om.OMElement#setLocalName(String)
-     * @see org.apache.axiom.om.OMAttribute#setLocalName(String)
-     */
-    void setLocalName(String localName);
-
-    /**
-     * @see org.apache.axiom.om.OMElement#getNamespace()
-     * @see org.apache.axiom.om.OMAttribute#getNamespace()
-     */
-    OMNamespace getNamespace();
-
-    /**
-     * @see org.apache.axiom.om.OMElement#getQName()
-     * @see org.apache.axiom.om.OMAttribute#getQName()
-     */
-    QName getQName();
+public interface AxiomNamedNode extends CoreNSAwareNamedNode, AxiomInformationItem, OMNamedInformationItem {
 }

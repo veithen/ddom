@@ -24,6 +24,8 @@ import org.apache.axiom.ts.om.builder.TestCreateOMBuilderFromDOMSource;
 import org.apache.axiom.ts.om.builder.TestGetDocumentElementWithIllFormedDocument;
 import org.apache.axiom.ts.om.builder.TestIOExceptionInGetText;
 import org.apache.axiom.ts.om.builder.TestInvalidXML;
+import org.apache.axiom.ts.om.builder.TestReadAttachmentBeforeRootPartComplete;
+import org.apache.axiom.ts.om.builder.TestRootPartStreaming;
 import org.apache.axiom.ts.om.builder.TestStandaloneConfiguration;
 import org.apache.axiom.ts.om.container.TestSerialize;
 import org.apache.axiom.ts.om.document.TestDigest;
@@ -67,6 +69,8 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestFindNamespaceURIWithPrefixUndeclaring.class);
         builder.exclude(TestStandaloneConfiguration.class);
         builder.exclude(TestGetAllDeclaredNamespacesRemove.class);
+        builder.exclude(TestReadAttachmentBeforeRootPartComplete.class);
+        builder.exclude(TestRootPartStreaming.class);
         
         // TODO: caused by incorrect code in axiom-api
         builder.exclude(TestDigest.class, "(|(file=digest3.xml)(file=digest4.xml))");
