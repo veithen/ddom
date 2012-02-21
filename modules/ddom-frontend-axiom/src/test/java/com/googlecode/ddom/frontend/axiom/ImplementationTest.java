@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ import org.apache.axiom.ts.om.element.TestGetTextAsStreamWithSingleTextNode;
 import org.apache.axiom.ts.om.element.TestGetTextAsStreamWithoutCaching;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
-import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderWithPreserveNamespaceContext;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.sourcedelement.TestName1DefaultPrefix;
 import org.apache.axiom.ts.om.sourcedelement.TestName1QualifiedPrefix;
@@ -87,7 +86,6 @@ public class ImplementationTest extends TestCase {
         
         // TODO: recent changes in the Axiom API
         builder.exclude(TestGetDocumentElementWithIllFormedDocument.class);
-        builder.exclude(TestGetXMLStreamReaderWithPreserveNamespaceContext.class);
         
         // TODO: issue in the parser
         builder.exclude(TestGetTextAsStreamWithoutCaching.class);

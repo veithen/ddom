@@ -15,23 +15,27 @@
  */
 package com.googlecode.ddom.stream.filter;
 
+import java.util.Map;
+
 import com.googlecode.ddom.stream.XmlFilter;
 import com.googlecode.ddom.stream.XmlHandler;
 
 /**
- * Filter that performs namespace repairing. This filter does two things:
- * <ol>
- * <li>It generates additional namespace declarations where they are missing. This occurs if a
- * prefix-URI binding is used for which no namespace declaration is in scope.
- * <li>It removes redundant namespace declarations. A namespace declaration is redundant if there is
- * another equivalent namespace declaration already in scope.
- * </ol>
+ * Filter that adds a given set of namespace declarations to the document element. This filter can
+ * be use to correct the namespace context if the document is actually a fragment extracted from a
+ * larger document.
  * 
  * @author Andreas Veithen
  */
-public class NamespaceRepairingFilter extends XmlFilter {
+public class NamespaceContextFilter extends XmlFilter {
+    private final Map<String,String> namespaces;
+    
+    public NamespaceContextFilter(Map<String,String> namespaces) {
+        this.namespaces = namespaces;
+    }
+
     @Override
     protected XmlHandler createXmlHandler(XmlHandler target) {
-        return new NamespaceRepairingFilterHandler(target);
+        return new NamespaceContextFilterHandler(target, namespaces);
     }
 }
