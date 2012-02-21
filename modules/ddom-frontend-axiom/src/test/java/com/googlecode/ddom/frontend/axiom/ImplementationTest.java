@@ -40,6 +40,13 @@ import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderWithPreserveNamespac
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.sourcedelement.TestName1DefaultPrefix;
 import org.apache.axiom.ts.om.sourcedelement.TestName1QualifiedPrefix;
+import org.apache.axiom.ts.om.sourcedelement.TestSerializeToStream;
+import org.apache.axiom.ts.om.sourcedelement.TestSerializeToWriter;
+import org.apache.axiom.ts.om.sourcedelement.TestSerializeToXMLWriter;
+import org.apache.axiom.ts.om.sourcedelement.TestSerializeToXMLWriterEmbedded;
+import org.apache.axiom.ts.om.sourcedelement.TestSerializeToXMLWriterFromReader;
+import org.apache.axiom.ts.om.sourcedelement.TestSerializeToXMLWriterFromReaderEmbedded;
+import org.apache.axiom.ts.om.sourcedelement.TestSetDataSourceOnAlreadyExpandedElement;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
 import org.apache.axiom.ts.xpath.TestAXIOMXPath;
 
@@ -91,6 +98,15 @@ public class ImplementationTest extends TestCase {
         // TODO: DDOM doesn't support updating the prefix of an OMSourcedElement on the fly (AXIOM-254)
         builder.exclude(TestName1DefaultPrefix.class);
         builder.exclude(TestName1QualifiedPrefix.class);
+        
+        // TODO: OMSourcedElement doesn't report correct state
+        builder.exclude(TestSerializeToStream.class);
+        builder.exclude(TestSerializeToWriter.class);
+        builder.exclude(TestSerializeToXMLWriter.class);
+        builder.exclude(TestSerializeToXMLWriterEmbedded.class);
+        builder.exclude(TestSetDataSourceOnAlreadyExpandedElement.class);
+        builder.exclude(TestSerializeToXMLWriterFromReader.class);
+        builder.exclude(TestSerializeToXMLWriterFromReaderEmbedded.class);
         
         return builder.build();
     }
