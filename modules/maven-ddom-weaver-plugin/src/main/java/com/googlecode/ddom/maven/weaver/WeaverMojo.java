@@ -135,7 +135,7 @@ public class WeaverMojo extends AbstractMojo {
         try {
             // Attempt to load and initialize the node factory to detect issues early
             Class.forName(weaver.getNodeFactoryClassName(), true, cl);
-        } catch (ClassNotFoundException ex) {
+        } catch (Throwable ex) {
             throw new MojoExecutionException("Failed to load the node factory class after weaving", ex);
         }
         
