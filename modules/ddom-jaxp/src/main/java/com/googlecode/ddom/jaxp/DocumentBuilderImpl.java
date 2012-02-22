@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import org.xml.sax.SAXParseException;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.dom.intf.DOMNodeFactory;
-import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.stream.LocationAwareStreamException;
 import com.googlecode.ddom.stream.Options;
 import com.googlecode.ddom.stream.StreamException;
@@ -44,15 +43,15 @@ import com.googlecode.ddom.stream.filter.ValidationFilter;
 public class DocumentBuilderImpl extends DocumentBuilder {
     private static final StreamFactory streamFactory = StreamFactory.getInstance(DocumentBuilderImpl.class.getClassLoader());
     
-    private final Model model;
+    private final DOMNodeFactory nodeFactory;
     private final Options options;
     private final boolean ignoringComments;
     private final boolean sortAttributes;
     private final Schema schema;
     private ErrorHandler errorHandler;
 
-    DocumentBuilderImpl(Model model, Options options, boolean ignoringComments, boolean sortAttributes, Schema schema) {
-        this.model = model;
+    DocumentBuilderImpl(DOMNodeFactory nodeFactory, Options options, boolean ignoringComments, boolean sortAttributes, Schema schema) {
+        this.nodeFactory = nodeFactory;
         this.options = options;
         this.ignoringComments = ignoringComments;
         this.sortAttributes = sortAttributes;
@@ -66,7 +65,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 
     @Override
     public DOMImplementation getDOMImplementation() {
-        return ((DOMNodeFactory)model.getNodeFactory()).getDOMImplementation();
+        return nodeFactory.getDOMImplementation();
     }
 
     @Override
@@ -100,7 +99,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 
     @Override
     public Document newDocument() {
-        return (Document)model.getNodeFactory().createDocument();
+        return (Document)nodeFactory.createDocument();
     }
     
     void applyFilters(XmlInput input) {
@@ -125,7 +124,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
         } catch (StreamException ex) {
             throw toSAXException(ex);
         }
-        CoreDocument document = model.getNodeFactory().createDocument();
+        CoreDocument document = nodeFactory.createDocument();
         document.coreSetContent(new XmlSource() {
             public XmlInput getInput(Hints hints) {
                 XmlInput input = source.getInput(hints);

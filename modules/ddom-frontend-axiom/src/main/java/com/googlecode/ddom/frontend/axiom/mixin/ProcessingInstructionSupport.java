@@ -28,7 +28,7 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
  * 
  * 
  * Note that {@link AxiomProcessingInstruction#getTarget()} is defined by
- * {@link com.googlecode.ddom.frontend.axiom.mixin.dom.ProcessingInstructionSupport}.
+ * {@link com.googlecode.ddom.frontend.axiom.mixin.dom.compat.ProcessingInstructionSupport}.
  * 
  * @author Andreas Veithen
  */

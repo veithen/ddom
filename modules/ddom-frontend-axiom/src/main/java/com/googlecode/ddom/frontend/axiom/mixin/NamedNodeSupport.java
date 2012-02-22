@@ -29,7 +29,7 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
  * 
  * 
  * Note that {@link AxiomNamedNode#getLocalName()} is defined by
- * {@link com.googlecode.ddom.frontend.axiom.mixin.dom.NamedNodeSupport}.
+ * {@link com.googlecode.ddom.frontend.axiom.mixin.dom.compat.NamedNodeSupport}.
  * 
  * @author Andreas Veithen
  */

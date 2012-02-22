@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,10 @@ public class AxiomFrontend implements Frontend {
         Module module = Module.forClass(AxiomFrontend.class);
         aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin"));
         aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin.nosoap"));
-        if (!frontends.containsKey("dom")) {
-            aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin.dom"));
+        if (frontends.containsKey("dom")) {
+            aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin.dom.feature"));
+        } else {
+            aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin.dom.compat"));
         }
         return aggregate;
     }

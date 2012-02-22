@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009-2011 Andreas Veithen
+  ~ Copyright 2009-2012 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -37,6 +37,14 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>ddom-stream-stax</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <!-- This dependency is required if the Axiom front-end is used together with the
+                 DOM front-end. In this case, we need to support the Axiom DOM feature. -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ddom-jaxp</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

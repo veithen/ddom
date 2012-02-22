@@ -84,4 +84,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <resources>
+            <!-- TODO: these resources should probably be moved to a JAXP bundle -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>META-INF/services/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
 </project>

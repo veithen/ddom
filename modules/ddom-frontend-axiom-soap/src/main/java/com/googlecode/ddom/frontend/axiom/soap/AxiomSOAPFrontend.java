@@ -32,8 +32,10 @@ public class AxiomSOAPFrontend extends AxiomFrontend {
         ClassCollectionAggregate aggregate = new ClassCollectionAggregate();
         Module module = Module.forClass(AxiomFrontend.class);
         aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin"));
-        if (!frontends.containsKey("dom")) {
-            aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin.dom"));
+        if (frontends.containsKey("dom")) {
+            aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin.dom.feature"));
+        } else {
+            aggregate.add(module.getPackage("com.googlecode.ddom.frontend.axiom.mixin.dom.compat"));
         }
         aggregate.add(Module.forClass(AxiomSOAPFrontend.class).getPackage("com.googlecode.ddom.frontend.axiom.soap.mixin"));
         return aggregate;
