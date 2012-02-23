@@ -30,6 +30,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.OMSerializable;
+import org.apache.axiom.om.OMXMLStreamReaderConfiguration;
 import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 
 import com.googlecode.ddom.core.Axis;
@@ -37,6 +38,7 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
@@ -50,6 +52,7 @@ import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlOutput;
+import com.googlecode.ddom.stream.filter.NamespaceContextFilter;
 import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
 import com.googlecode.ddom.stream.sax.SAXSourceAdapter;
 import com.googlecode.ddom.stream.serializer.Serializer;
@@ -211,6 +214,19 @@ public abstract class ContainerSupport implements AxiomContainer {
     public final XMLStreamReader getXMLStreamReader(boolean cache) {
         StAXPivot pivot = new StAXPivot();
         new Stream(coreGetInput(cache), pivot);
+        return pivot;
+    }
+
+    public final XMLStreamReader getXMLStreamReader(boolean cache, OMXMLStreamReaderConfiguration configuration) {
+        StAXPivot pivot = new StAXPivot();
+        XmlInput input = coreGetInput(cache);
+        if (configuration.isPreserveNamespaceContext() && this instanceof CoreChildNode) {
+            CoreParentNode parent = ((CoreChildNode)this).coreGetParent();
+            if (parent instanceof AxiomElement) {
+                input.addFilter(new NamespaceContextFilter(((AxiomElement)parent).getNamespaceContextMap()));
+            }
+        }
+        new Stream(input, pivot);
         return pivot;
     }
 

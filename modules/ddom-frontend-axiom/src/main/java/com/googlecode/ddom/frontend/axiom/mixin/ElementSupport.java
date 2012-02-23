@@ -27,7 +27,6 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMAttribute;
@@ -69,9 +68,6 @@ import com.googlecode.ddom.frontend.axiom.support.TextFromElementReader;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
-import com.googlecode.ddom.stream.XmlInput;
-import com.googlecode.ddom.stream.filter.NamespaceContextFilter;
-import com.googlecode.ddom.stream.stax.StAXPivot;
 
 @Mixin(CoreNSAwareElement.class)
 public abstract class ElementSupport implements AxiomElement, NamespaceContext {
@@ -484,18 +480,5 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         } else {
             return new PrefixIterator(this, namespaceURI);
         }
-    }
-
-    public final XMLStreamReader getXMLStreamReader(boolean cache, boolean preserveNamespaceContext) {
-        StAXPivot pivot = new StAXPivot();
-        XmlInput input = coreGetInput(cache);
-        if (preserveNamespaceContext) {
-            CoreParentNode parent = coreGetParent();
-            if (parent instanceof AxiomElement) {
-                input.addFilter(new NamespaceContextFilter(((AxiomElement)parent).getNamespaceContextMap()));
-            }
-        }
-        new Stream(input, pivot);
-        return pivot;
     }
 }
