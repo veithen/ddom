@@ -54,6 +54,7 @@ import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlOutput;
 import com.googlecode.ddom.stream.filter.NamespaceContextFilter;
 import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
+import com.googlecode.ddom.stream.filter.NamespaceURIInterningFilter;
 import com.googlecode.ddom.stream.sax.SAXSourceAdapter;
 import com.googlecode.ddom.stream.serializer.Serializer;
 import com.googlecode.ddom.stream.stax.StAXPivot;
@@ -225,6 +226,9 @@ public abstract class ContainerSupport implements AxiomContainer {
             if (parent instanceof AxiomElement) {
                 input.addFilter(new NamespaceContextFilter(((AxiomElement)parent).getNamespaceContextMap()));
             }
+        }
+        if (configuration.isNamespaceURIInterning()) {
+            input.addFilter(new NamespaceURIInterningFilter());
         }
         new Stream(input, pivot);
         return pivot;

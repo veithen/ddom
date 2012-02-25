@@ -35,7 +35,6 @@ import org.apache.axiom.ts.om.element.TestGetChildrenWithName4;
 import org.apache.axiom.ts.om.element.TestGetTextAsStreamWithSingleTextNode;
 import org.apache.axiom.ts.om.element.TestGetTextAsStreamWithoutCaching;
 import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderCommentEvent;
-import org.apache.axiom.ts.om.element.TestGetXMLStreamReaderNextTag;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.sourcedelement.TestName1DefaultPrefix;
 import org.apache.axiom.ts.om.sourcedelement.TestName1QualifiedPrefix;
@@ -64,7 +63,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.element.TestIsCompleteAfterAddingIncompleteChild.class);
         builder.exclude(TestCreateOMTextFromDataHandlerProvider.class);
         builder.exclude(TestGetXMLStreamReaderCommentEvent.class);
-        builder.exclude(TestGetXMLStreamReaderNextTag.class);
         builder.exclude(TestInvalidXML.class);
         builder.exclude(TestSerialize.class, "(&(file=spaces.xml)(container=document))");
         builder.exclude(TestSerialize.class, "(&(file=iso-8859-1.xml)(container=document))");

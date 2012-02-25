@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,28 @@ import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
 public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_COALESCE = 1;
+    
+    /**
+     * Indicates that all character data should be collected until a non character event is
+     * encountered. This state is used to implement CDATA section processing as well as
+     * {@link XMLStreamReader#getElementText()}.
+     */
     private static final int STATE_COLLECT_TEXT = 2;
-    private static final int STATE_SKIP_COMMENT = 3;
+    
+    /**
+     * Indicates that all events should be skipped until a start or end element event is
+     * encountered. This state is used to implement {@link XMLStreamReader#nextTag()}.
+     */
+    private static final int STATE_NEXT_TAG = 3;
+    
+    /**
+     * Indicates that all content (character data) in a comment or processing instruction should be
+     * skipped. This state is used when comment or processing instruction is encountered in states
+     * {@link #STATE_COLLECT_TEXT} or {@link #STATE_NEXT_TAG}. The {@link #previousState} attribute
+     * is used to store the previous state, so that the state can be restored when the end of the
+     * comment or processing instruction is reached.
+     */
+    private static final int STATE_SKIP_CONTENT = 4;
     
     private static final int INITIAL_ELEMENT_STACK_SIZE = 8;
     private static final int INITIAL_ATTRIBUTE_STACK_SIZE = 8;
@@ -56,6 +76,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private int attributeCount;
     private String declaredPrefix;
     private int state = STATE_DEFAULT;
+    private int previousState = -1;
     private final StringAccumulator accumulator = new StringAccumulator();
     private String data;
     
@@ -107,6 +128,9 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     @Override
     protected boolean startElement(String namespaceURI, String localName, String prefix) {
         eventType = START_ELEMENT;
+        if (state == STATE_NEXT_TAG) {
+            state = STATE_DEFAULT;
+        }
         if (namespaceURI.length() == 0) {
             namespaceURI = null;
         }
@@ -196,7 +220,10 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
             case STATE_COLLECT_TEXT:
                 accumulator.append(data);
                 return true;
-            case STATE_SKIP_COMMENT:
+            case STATE_NEXT_TAG:
+                // TODO: check that the character data only contains whitespace!
+                return true;
+            case STATE_SKIP_CONTENT:
                 return true;
             default:
                 throw new IllegalStateException();
@@ -205,37 +232,64 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean startProcessingInstruction(String target) {
-        eventType = PROCESSING_INSTRUCTION;
-        localName = target;
-        state = STATE_COALESCE;
-        return true;
+        switch (state) {
+            case STATE_DEFAULT:
+                eventType = PROCESSING_INSTRUCTION;
+                localName = target;
+                state = STATE_COALESCE;
+                return true;
+            case STATE_COLLECT_TEXT:
+            case STATE_NEXT_TAG:
+                previousState = state;
+                state = STATE_SKIP_CONTENT;
+                return true;
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     @Override
     protected boolean endProcessingInstruction() {
-        data = stopCoalescing();
-        return false;
+        switch (state) {
+            case STATE_COALESCE:
+                data = stopCoalescing();
+                return false;
+            case STATE_SKIP_CONTENT:
+                state = previousState;
+                return true;
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     @Override
     protected boolean startComment() {
-        if (state == STATE_COLLECT_TEXT) {
-            state = STATE_SKIP_COMMENT;
-        } else {
-            eventType = COMMENT;
-            state = STATE_COALESCE;
+        switch (state) {
+            case STATE_DEFAULT:
+                eventType = COMMENT;
+                state = STATE_COALESCE;
+                return true;
+            case STATE_COLLECT_TEXT:
+            case STATE_NEXT_TAG:
+                previousState = state;
+                state = STATE_SKIP_CONTENT;
+                return true;
+            default:
+                throw new IllegalStateException();
         }
-        return true;
     }
 
     @Override
     protected boolean endComment() {
-        if (state == STATE_SKIP_COMMENT) {
-            state = STATE_COLLECT_TEXT;
-            return true;
-        } else {
-            data = stopCoalescing();
-            return false;
+        switch (state) {
+            case STATE_COALESCE:
+                data = stopCoalescing();
+                return false;
+            case STATE_SKIP_CONTENT:
+                state = previousState;
+                return true;
+            default:
+                throw new IllegalStateException();
         }
     }
 
@@ -623,12 +677,9 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         return eventType;
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamReader#nextTag()
-     */
     public int nextTag() throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+        state = STATE_NEXT_TAG;
+        return next();
     }
 
     /* (non-Javadoc)
