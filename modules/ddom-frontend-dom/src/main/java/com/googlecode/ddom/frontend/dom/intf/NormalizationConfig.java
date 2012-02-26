@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,17 @@ public interface NormalizationConfig {
         public DOMErrorHandler getErrorHandler() { return null; }
         public boolean isKeepCDATASections() { return true; }
         public boolean isKeepComments() { return true; }
-        public boolean isProcessNamespaces() { return false; }
+        public boolean isNormalizeNamespaces() { return false; }
         public boolean isSplitCDataSections() { return false; }
         public boolean isNamespaceDeclarations() { return false; }
+        public boolean isCheckWellFormed() { return false; }
     };
     
     DOMErrorHandler getErrorHandler();
     boolean isKeepCDATASections();
     boolean isKeepComments();
-    boolean isProcessNamespaces();
+    boolean isNormalizeNamespaces();
     boolean isSplitCDataSections();
     boolean isNamespaceDeclarations();
+    boolean isCheckWellFormed();
 }

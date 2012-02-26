@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,6 +89,7 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
     private boolean namespaces = true;
     private boolean namespaceDeclarations = true;
     private boolean splitCDataSections = true;
+    private boolean wellFormed = true;
     
     public DOMErrorHandler getErrorHandler() {
         return errorHandler;
@@ -102,7 +103,7 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
         return comments;
     }
     
-    public boolean isProcessNamespaces() {
+    public boolean isNormalizeNamespaces() {
         return namespaces;
     }
 
@@ -112,6 +113,10 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
 
     public boolean isSplitCDataSections() {
         return splitCDataSections;
+    }
+
+    public boolean isCheckWellFormed() {
+        return wellFormed;
     }
 
     private int getParameterId(String name) {
@@ -129,6 +134,7 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
             case PARAM_NAMESPACES:
             case PARAM_NAMESPACE_DECLARATIONS:
             case PARAM_SPLIT_CDATA_SECTIONS:
+            case PARAM_WELL_FORMED:
                 return value instanceof Boolean;
             case PARAM_ERROR_HANDLER:
                 return value == null || value instanceof DOMErrorHandler;
@@ -139,8 +145,6 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
             case PARAM_VALIDATE:
             case PARAM_VALIDATE_IF_SCHEMA:
                 return Boolean.FALSE.equals(value);
-            case PARAM_WELL_FORMED:
-                return Boolean.TRUE.equals(value);
             default:
                 return false;
         }
@@ -176,6 +180,8 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
                 return namespaceDeclarations;
             case PARAM_SPLIT_CDATA_SECTIONS:
                 return splitCDataSections;
+            case PARAM_WELL_FORMED:
+                return wellFormed;
             case PARAM_CANONICAL_FORM:
             case PARAM_CHECK_CHARACTER_NORMALIZATION:
             case PARAM_DATATYPE_NORMALIZATION:
@@ -183,8 +189,6 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
             case PARAM_VALIDATE:
             case PARAM_VALIDATE_IF_SCHEMA:
                 return Boolean.FALSE;
-            case PARAM_WELL_FORMED:
-                return Boolean.TRUE;
             default:
                 throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         }
@@ -230,6 +234,9 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
             case PARAM_SPLIT_CDATA_SECTIONS:
                 splitCDataSections = (Boolean)value;
                 break;
+            case PARAM_WELL_FORMED:
+                wellFormed = (Boolean)value;
+                break;
             case PARAM_CANONICAL_FORM:
             case PARAM_CHECK_CHARACTER_NORMALIZATION:
             case PARAM_DATATYPE_NORMALIZATION:
@@ -237,11 +244,6 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
             case PARAM_VALIDATE:
             case PARAM_VALIDATE_IF_SCHEMA:
                 if (!Boolean.FALSE.equals(value)) {
-                    throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
-                }
-                break;
-            case PARAM_WELL_FORMED:
-                if (!Boolean.TRUE.equals(value)) {
                     throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
                 }
                 break;
