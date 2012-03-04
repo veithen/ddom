@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package com.googlecode.ddom.frontend.dom;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
@@ -38,7 +40,7 @@ public class NodeTest {
         Document foreignDocument = CrimsonDOMUtil.INSTANCE.newDocument();
         ProcessingInstruction pi = document.createProcessingInstruction("target", "data");
         ProcessingInstruction foreignPi = foreignDocument.createProcessingInstruction("target", "data");
-        Assert.assertTrue(pi.isEqualNode(foreignPi));
+        assertTrue(pi.isEqualNode(foreignPi));
     }
     
     /**
@@ -52,6 +54,6 @@ public class NodeTest {
         element.appendChild(document.createCDATASection("st"));
         element.normalize();
         NodeList children = element.getChildNodes();
-        Assert.assertEquals(2, children.getLength());
+        assertEquals(2, children.getLength());
     }
 }

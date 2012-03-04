@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 package com.googlecode.ddom.frontend.dom;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.DOMImplementation;
@@ -47,6 +48,6 @@ public class DocumentTypeTest {
     public void testIsSupportedBeforeDocumentCreation() {
         DOMImplementation domImpl = domUtil.getDOMImplementation();
         DocumentType documentType = domImpl.createDocumentType("root", null, null);
-        Assert.assertTrue(documentType.isSupported("Core", "2.0"));
+        assertTrue(documentType.isSupported("Core", "2.0"));
     }
 }

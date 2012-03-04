@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 package com.googlecode.ddom.frontend.dom;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +40,6 @@ public class CDATASectionTest {
     @Validated @Test
     public void testEmptyCDATASectionsAreRemovedByParser() {
         Document document = domUtil.parse(true, "<root><![CDATA[]]></root>");
-        Assert.assertNull(document.getDocumentElement().getFirstChild());
+        assertNull(document.getDocumentElement().getFirstChild());
     }
 }

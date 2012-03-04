@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package com.googlecode.ddom.frontend.dom;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,14 +43,14 @@ public class AttributeTest {
         element.setAttribute("attr2", "val");
         Attr attr = (Attr)element.getAttributes().item(0);
         // The attributes of an element are not siblings of each other, so getNextSibling must return null
-        Assert.assertNull(attr.getNextSibling());
+        assertNull(attr.getNextSibling());
     }
     
     @Validated @Test
     public void testGetLocalNameAfterCreateAttributeWithPrefix() {
         Document doc = domUtil.newDocument();
         Attr attr = doc.createAttribute("p:name");
-        Assert.assertNull(attr.getLocalName());
+        assertNull(attr.getLocalName());
     }
     
     @Validated @Test
@@ -57,9 +59,9 @@ public class AttributeTest {
         Attr attr = doc.createAttribute("name");
         try {
             attr.setPrefix("p");
-            Assert.fail("Exception expected");
+            fail("Exception expected");
         } catch (DOMException ex) {
-            Assert.assertEquals(DOMException.NAMESPACE_ERR, ex.code);
+            assertEquals(DOMException.NAMESPACE_ERR, ex.code);
         }
     }
     
@@ -69,6 +71,6 @@ public class AttributeTest {
         Attr attr = doc.createAttribute("name");
         attr.setValue("te");
         attr.appendChild(doc.createTextNode("st"));
-        Assert.assertEquals("test", attr.getValue());
+        assertEquals("test", attr.getValue());
     }
 }

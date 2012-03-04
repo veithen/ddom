@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 package com.googlecode.ddom.frontend.dom;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertSame;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.DOMImplementation;
@@ -39,7 +40,7 @@ public class DOMImplementationTest {
         DOMImplementation domImpl = domUtil.getDOMImplementation();
         DocumentType doctype = domImpl.createDocumentType("root", null, null);
         Document doc = domImpl.createDocument(null, "root", doctype);
-        Assert.assertSame(doc, doctype.getOwnerDocument());
-        Assert.assertSame(doc, doctype.getParentNode());
+        assertSame(doc, doctype.getOwnerDocument());
+        assertSame(doc, doctype.getParentNode());
     }
 }
