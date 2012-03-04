@@ -374,14 +374,14 @@ public abstract class ParentNode extends Node implements LLParentNode {
         } while (current != null);
     }
     
-    public final void internalImportBuilder(Document foreignDocument, LLParentNode node) {
+    public final void internalImportBuilder(LLDocument foreignDocument, LLParentNode node) {
         ArrayList<Builder> foreignBuilders = foreignDocument.getBuilders();
         ArrayList<Builder> builders = null;
         for (int i=0, l=foreignBuilders.size(); i<l; i++) {
             Builder builder = foreignBuilders.get(i);
             if (builder.isBuilderForTree(node)) {
                 if (builders == null) {
-                    builders = ((Document)internalGetOwnerDocument(true)).getBuilders();
+                    builders = internalGetOwnerDocument(true).getBuilders();
                 }
                 builders.add(builder);
             }

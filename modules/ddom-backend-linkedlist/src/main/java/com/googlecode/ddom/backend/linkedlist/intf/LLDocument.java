@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,15 @@
  */
 package com.googlecode.ddom.backend.linkedlist.intf;
 
+import java.util.ArrayList;
+
+import com.googlecode.ddom.backend.linkedlist.Builder;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.XmlInput;
 
 public interface LLDocument extends LLParentNode, CoreDocument {
+    ArrayList<Builder> getBuilders();
     InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredParsingException;
     InputContext internalGetInputContext(LLParentNode target);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@
  */
 package com.googlecode.ddom.frontend.dom;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.XMLConstants;
 
@@ -168,5 +169,17 @@ public class DocumentTest {
         Document doc2 = domUtil.newDocument();
         Element element2 = (Element)doc2.importNode(element1, false);
         assertEquals("urn:ns2", element2.lookupNamespaceURI(null));
+    }
+    
+    @Validated @Test
+    public void testAdoptNode() {
+        Document sourceDocument = domUtil.parse(true, "<root><child/></root>");
+        Document targetDocument = domUtil.newDocument();
+        Element root = sourceDocument.getDocumentElement();
+        assertSame(root, targetDocument.adoptNode(root));
+        assertSame(targetDocument, root.getOwnerDocument());
+        Node child = root.getFirstChild();
+        assertTrue(child instanceof Element);
+        assertEquals("child", child.getNodeName());
     }
 }

@@ -15,7 +15,6 @@
  */
 package com.googlecode.ddom.backend.linkedlist.intf;
 
-import com.googlecode.ddom.backend.linkedlist.Document;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreParentNode;
@@ -59,7 +58,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
 
     InputContext internalGetOrCreateInputContext() throws DeferredParsingException;
     
-    void internalImportBuilder(Document foreignDocument, LLParentNode node);
+    void internalImportBuilder(LLDocument foreignDocument, LLParentNode node);
     
     // Type safe variant of core model method
     LLChildNode internalGetFirstChild() throws DeferredParsingException;

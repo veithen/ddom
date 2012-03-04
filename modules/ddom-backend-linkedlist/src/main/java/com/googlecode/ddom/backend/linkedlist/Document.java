@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ public class Document extends ParentNode implements LLDocument {
 
     // The return type is intentionally specified as ArrayList to indicate that it
     // is faster to iterate over the list using direct access than using an Iterator
-    final ArrayList<Builder> getBuilders() {
+    public final ArrayList<Builder> getBuilders() {
         return builders;
     }
 
