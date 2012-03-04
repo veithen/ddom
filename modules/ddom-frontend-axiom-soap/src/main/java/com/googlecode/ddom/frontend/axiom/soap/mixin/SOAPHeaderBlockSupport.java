@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,10 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     private boolean processed;
     
+    public final SOAPVersion getVersion() {
+        return getSOAPVersionEx().getSOAPVersion();
+    }
+
     private void setAttributeValue(QName qname, String value) {
         try {
             coreSetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
@@ -99,11 +103,6 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     }
 
     public boolean getRelay() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public SOAPVersion getVersion() {
         // TODO
         throw new UnsupportedOperationException();
     }
