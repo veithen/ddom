@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -374,6 +374,20 @@ public abstract class ParentNode extends Node implements LLParentNode {
         } while (current != null);
     }
     
+    public final void internalImportBuilder(Document foreignDocument, LLParentNode node) {
+        ArrayList<Builder> foreignBuilders = foreignDocument.getBuilders();
+        ArrayList<Builder> builders = null;
+        for (int i=0, l=foreignBuilders.size(); i<l; i++) {
+            Builder builder = foreignBuilders.get(i);
+            if (builder.isBuilderForTree(node)) {
+                if (builders == null) {
+                    builders = ((Document)internalGetOwnerDocument(true)).getBuilders();
+                }
+                builders.add(builder);
+            }
+        }
+    }
+
     public LLChildNode internalPrepareNewChild(CoreChildNode newChild, NodeMigrationPolicy policy) throws NodeMigrationException, CyclicRelationshipException {
         boolean hasParent = newChild.coreHasParent();
         boolean isForeignDocument = !coreIsSameOwnerDocument(newChild);
@@ -397,19 +411,9 @@ public abstract class ParentNode extends Node implements LLParentNode {
                         // If we are moving the node from another document, then we need to register
                         // the relevant builders in the target node's document. Otherwise deferred
                         // parsing will be broken
-                        Document foreignDocument = (Document)newChild.coreGetOwnerDocument(false);
+                        Document foreignDocument = (Document)newChild.coreGetOwnerDocument(false); // TODO: avoid cast here
                         if (foreignDocument != null) {
-                            ArrayList<Builder> foreignBuilders = foreignDocument.getBuilders();
-                            ArrayList<Builder> builders = null;
-                            for (int i=0, l=foreignBuilders.size(); i<l; i++) {
-                                Builder builder = foreignBuilders.get(i);
-                                if (builder.isBuilderForTree((LLParentNode)newChild)) {
-                                    if (builders == null) {
-                                        builders = ((Document)internalGetOwnerDocument(true)).getBuilders();
-                                    }
-                                    builders.add(builder);
-                                }
-                            }
+                            internalImportBuilder(foreignDocument, (LLParentNode)newChild);
                         }
                         break;
                     } else {
@@ -440,6 +444,10 @@ public abstract class ParentNode extends Node implements LLParentNode {
         LLChildNode result = (LLChildNode)newChild;
         if (hasParent) {
             result.internalDetach();
+            // The new parent will be set by the caller; however, we still need to unset it here
+            // to avoid confusing the builder if the node is not complete and deferred parsing
+            // occurs before the new parent is set.
+            result.internalUnsetParent(null);
         }
         return result;
     }

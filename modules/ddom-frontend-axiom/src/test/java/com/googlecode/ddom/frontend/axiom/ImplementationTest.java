@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.axiom.om.OMMetaFactory;
-import org.apache.axiom.ts.OMTestSuiteBuilder;
+import org.apache.axiom.ts.om.OMTestSuiteBuilder;
 import org.apache.axiom.ts.om.builder.TestCreateOMBuilderFromDOMSource;
 import org.apache.axiom.ts.om.builder.TestGetDocumentElementWithIllFormedDocument;
 import org.apache.axiom.ts.om.builder.TestIOExceptionInGetText;
@@ -46,7 +46,7 @@ import org.apache.axiom.ts.om.sourcedelement.TestSerializeToXMLWriterFromReader;
 import org.apache.axiom.ts.om.sourcedelement.TestSerializeToXMLWriterFromReaderEmbedded;
 import org.apache.axiom.ts.om.sourcedelement.TestSetDataSourceOnAlreadyExpandedElement;
 import org.apache.axiom.ts.om.text.TestBase64Streaming;
-import org.apache.axiom.ts.xpath.TestAXIOMXPath;
+import org.apache.axiom.ts.om.xpath.TestAXIOMXPath;
 
 import com.googlecode.ddom.model.Model;
 import com.googlecode.ddom.model.ModelDefinitionBuilder;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.OMSerializable;
 import org.apache.axiom.om.OMXMLStreamReaderConfiguration;
-import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -42,7 +41,6 @@ import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
-import com.googlecode.ddom.frontend.axiom.intf.AxiomChildNode;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomContainer;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -218,9 +218,18 @@ public final class LLChildNodeHelper {
     }
     
     public static void coreDetach(LLChildNode that, CoreDocument document) throws DeferredParsingException {
-        that.internalDetach();
-        // TODO: there is probably something more to do here if the node is not complete
-        that.internalUnsetParent((LLDocument)document);
+        if (that instanceof LLParentNode) {
+            LLDocument oldDocument = that.internalGetOwnerDocument(false);
+            that.internalDetach();
+            that.internalUnsetParent((LLDocument)document);
+            if (oldDocument != null) {
+                // TODO: we only need this if the new document is not the same as the old one!
+                ((LLParentNode)that).internalImportBuilder((Document)oldDocument, (LLParentNode)that);
+            }
+        } else {
+            that.internalDetach();
+            that.internalUnsetParent((LLDocument)document);
+        }
     }
     
     public static void internalDetach(LLChildNode that) {

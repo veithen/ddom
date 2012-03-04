@@ -232,7 +232,8 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     public QName getTextAsQName() {
         try {
             // TODO: need unit tests to determine expected behavior if the node has children with unexpected types
-            return resolveQName(coreGetTextContent(TextCollectorPolicy.DEFAULT));
+            String trimmedText = coreGetTextContent(TextCollectorPolicy.DEFAULT).trim();
+            return trimmedText.length() == 0 ? null : resolveQName(trimmedText);
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }

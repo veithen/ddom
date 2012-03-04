@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.cdata.TestCoreClone(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetach(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetachIncomplete(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetachIncompleteToNewDocument(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterFromWrongDocument(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnChild(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnOrphan(config));
@@ -71,6 +72,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.document.TestXmlDeclaration3(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreAppendChildForeignDocumentIncomplete(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreAppendChildForeignDocumentIncompleteDescendant(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreAppendChildSameParentIncomplete(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreClearIncomplete(config));
 //        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreClone(config));
         // TODO

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.dom.DOMSource;
 import com.googlecode.ddom.stream.parser.Parser;
 
-public class BackendTestCase extends TestCase {
+public abstract class BackendTestCase extends TestCase {
     // We define constants for this so that we can easily locate tests that depend on the builder type
     public static final int BUILDER_TYPE_1 = 1;
     public static final int BUILDER_TYPE_2 = 2;
@@ -101,4 +101,7 @@ public class BackendTestCase extends TestCase {
         fragment.coreSetContent(new SimpleXmlSource(new Parser(new StringReader(xml), true)));
         return fragment;
     }
+
+    @Override
+    protected abstract void runTest() throws Throwable;
 }
