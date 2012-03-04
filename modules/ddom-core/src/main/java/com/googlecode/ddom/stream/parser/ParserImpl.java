@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,7 +188,7 @@ final class ParserImpl implements XmlReader {
                     eventProduced = parseAttributeContent(flush);
                     break;
                 case STATE_COMMENT_CONTENT: {
-                    int result = parseDelimitedContent("-->", 2, 0);
+                    int result = parseDelimitedContent("-->", 2, 0, flush);
                     eventProduced = (result & 1) != 0;
                     if ((result & 2) != 0) {
                         state = STATE_END_COMMENT;
@@ -200,7 +200,7 @@ final class ParserImpl implements XmlReader {
                     state = STATE_ELEMENT_CONTENT;
                     break;
                 case STATE_PI_CONTENT: {
-                    int result = parseDelimitedContent("?>", -1, 0);
+                    int result = parseDelimitedContent("?>", -1, 0, flush);
                     eventProduced = (result & 1) != 0;
                     if ((result & 2) != 0) {
                         state = STATE_END_PI;
@@ -212,7 +212,7 @@ final class ParserImpl implements XmlReader {
                     state = STATE_ELEMENT_CONTENT;
                     break;
                 case STATE_CDATA_SECTION_CONTENT: {
-                    int result = parseDelimitedContent("]]>", -1, 2);
+                    int result = parseDelimitedContent("]]>", -1, 2, flush);
                     eventProduced = (result & 1) != 0;
                     if ((result & 2) != 0) {
                         state = STATE_END_CDATA_SECTION;
@@ -378,7 +378,9 @@ final class ParserImpl implements XmlReader {
                     if (peek() == 0xA) {
                         consume();
                     }
-                    processCharacterData(0xA);
+                    if (processCharacterData(0xA) && !flush) {
+                        return true;
+                    }
                     break;
                 case '&':
                     consume();
@@ -390,7 +392,9 @@ final class ParserImpl implements XmlReader {
                     consume();
                     // TODO: The character sequence "]]>" must not appear in content unless used to mark the end of a CDATA section.
                     // CharData ::= [^<&]* - ([^<&]* ']]>' [^<&]*)
-                    processCharacterData(c);
+                    if (processCharacterData(c) && !flush) {
+                        return true;
+                    }
             }
         }
     }
@@ -408,12 +412,17 @@ final class ParserImpl implements XmlReader {
                     if (peek() == 0xA) {
                         consume();
                     }
-                    processCharacterData(0x20); // TODO: actually code unit;
+                    // TODO: actually code unit;
+                    if (processCharacterData(0x20) && !flush) {
+                        return true;
+                    }
                     break;
                 case 0xA:
                 case 0x9:
                     consume();
-                    processCharacterData(0x20);
+                    if (processCharacterData(0x20) && !flush) {
+                        return true;
+                    }
                     break;
                 case '&':
                     consume();
@@ -432,16 +441,22 @@ final class ParserImpl implements XmlReader {
                         }
                     } else {
                         consume();
-                        processCharacterData(c);
+                        if (processCharacterData(c) && !flush) {
+                            return true;
+                        }
                     }
             }
         }
     }
     
-    private void processCharacterData(int c) {
-        // TODO: check buffer overflow
+    private boolean processCharacterData(int c) throws StreamException {
         // TODO: handle supplemental characters
         textBuffer[textLength++] = (char)c;
+        if (textLength == textBuffer.length) {
+            return flushText(false);
+        } else {
+            return false;
+        }
     }
     
     private boolean parseEntityRef(boolean attributeContent, boolean flush) throws StreamException {
@@ -460,8 +475,7 @@ final class ParserImpl implements XmlReader {
                         ref = (ref << 4) + c - 'A' + 10;
                     }
                 }
-                processCharacterData(ref);
-                return false; // TODO
+                return processCharacterData(ref);
             } else {
                 int ref = 0;
                 int c;
@@ -471,8 +485,7 @@ final class ParserImpl implements XmlReader {
                     }
                     ref = ref*10 + c - '0';
                 }
-                processCharacterData(ref);
-                return false; // TODO
+                return processCharacterData(ref);
             }
         } else {
             parseName();
@@ -480,20 +493,15 @@ final class ParserImpl implements XmlReader {
                 throw new StreamException("Expected ';'");
             }
             if (checkName("lt")) {
-                processCharacterData('<');
-                return false; // TODO
+                return processCharacterData('<');
             } else if (checkName("gt")) {
-                processCharacterData('>');
-                return false; // TODO
+                return processCharacterData('>');
             } else if (checkName("amp")) {
-                processCharacterData('&');
-                return false; // TODO
+                return processCharacterData('&');
             } else if (checkName("apos")) {
-                processCharacterData('\'');
-                return false; // TODO
+                return processCharacterData('\'');
             } else if (checkName("quot")) {
-                processCharacterData('"');
-                return false; // TODO
+                return processCharacterData('"');
             } else {
                 if (flushText(attributeContent) && !flush) {
                     state = STATE_ENTITY_REF_PENDING;
@@ -679,10 +687,10 @@ final class ParserImpl implements XmlReader {
         state = STATE_DOCUMENT_CONTENT;
     }
     
-    // 1 = An even has been produced, but the end has not been reached
+    // 1 = An event has been produced, but the end has not been reached
     // 2 = The end has been reached without producing any event
     // 3 = The end has been reached and an event has been produced
-    private int parseDelimitedContent(String delimiter, int matchThreshold, int fuzziness) throws StreamException {
+    private int parseDelimitedContent(String delimiter, int matchThreshold, int fuzziness, boolean flush) throws StreamException {
         int matchLength = 0;
         while (true) {
             int c = peek();
@@ -724,9 +732,10 @@ final class ParserImpl implements XmlReader {
                     if (peek() == 0xA) {
                         consume();
                     }
-                    processCharacterData(0xA);
-                } else {
-                    processCharacterData(c);
+                    c = 0xA;
+                }
+                if (processCharacterData(c) && !flush) {
+                    return 1;
                 }
             }
         }
