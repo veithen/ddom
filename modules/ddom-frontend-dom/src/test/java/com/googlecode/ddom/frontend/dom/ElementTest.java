@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 package com.googlecode.ddom.frontend.dom;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.XMLConstants;
 
@@ -183,6 +187,18 @@ public class ElementTest {
         element.setAttributeNodeNS(attr1);
         element.setAttributeNodeNS(attr2);
         Assert.assertEquals(1, element.getAttributes().getLength());
+    }
+    
+    @Validated @Test
+    public void testSetIdAttributeNSWithoutNamespace() {
+        Document doc = domUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.setAttributeNS(null, "id", "#myId");
+        element.setIdAttributeNS(null, "id", true);
+        Attr attr = (Attr)element.getAttributes().item(0);
+        assertTrue(attr.isId());
+        assertEquals("id", attr.getLocalName());
+        assertNull(attr.getNamespaceURI());
     }
     
     @Validated @Test(expected=NullPointerException.class)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -207,7 +207,7 @@ public abstract class ElementSupport implements DOMElement {
     public final void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
         try {
             // Here, we assume that a namespace declaration can never be an ID attribute
-            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
+            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, NSUtil.normalizeNamespaceURI(namespaceURI), localName);
             if (attr == null) {
                 throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
             } else {
