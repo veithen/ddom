@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -489,22 +489,6 @@ public abstract class DocumentSupport implements DOMDocument {
         } catch (CoreModelException ex) {
             throw DOMExceptionUtil.translate(ex);
         }
-    }
-    
-    public final String getNamespaceURI() {
-        return null;
-    }
-
-    public final String getPrefix() {
-        return null;
-    }
-
-    public final void setPrefix(String prefix) throws DOMException {
-        // Ignored
-    }
-
-    public final String getLocalName() {
-        return null;
     }
     
     public final void normalizeDocument() {

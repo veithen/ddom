@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2012 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,22 +73,6 @@ public abstract class LeafNodeSupport implements DOMLeafNode {
         throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
-    public final String getNamespaceURI() {
-        return null;
-    }
-
-    public final String getPrefix() {
-        return null;
-    }
-
-    public final void setPrefix(String prefix) throws DOMException {
-        // Ignored
-    }
-
-    public final String getLocalName() {
-        return null;
-    }
-    
     public final void normalize(NormalizationConfig config) throws AbortNormalizationException {
         
     }
