@@ -53,10 +53,12 @@ import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
 
 public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     private final SOAPVersionEx soapVersion;
+    private final OMNamespace namespace;
 
     public SOAPFactoryImpl(AxiomNodeFactory nodeFactory, SOAPVersionEx soapVersionEx) {
         super(nodeFactory);
         this.soapVersion = soapVersionEx;
+        this.namespace = createOMNamespace(soapVersionEx.getEnvelopeURI(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX);
     }
 
     public final SOAPVersion getSOAPVersion() {
@@ -65,6 +67,10 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
     
     public final String getSoapVersionURI() {
         return soapVersion.getEnvelopeURI();
+    }
+
+    public final OMNamespace getNamespace() {
+        return namespace;
     }
 
     public final SOAPEnvelope getDefaultEnvelope() throws SOAPProcessingException {
@@ -296,14 +302,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPMessage(org.apache.axiom.soap.SOAPEnvelope, org.apache.axiom.om.OMXMLParserWrapper)
      */
     public SOAPMessage createSOAPMessage(SOAPEnvelope envelope, OMXMLParserWrapper parserWrapper) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#getNamespace()
-     */
-    public OMNamespace getNamespace() {
         // TODO
         throw new UnsupportedOperationException();
     }
