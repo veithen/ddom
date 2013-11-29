@@ -38,10 +38,6 @@ public abstract class DocumentFragmentSupport implements DOMDocumentFragment {
         return null;
     }
 
-    public final Node cloneNode(boolean deep) {
-        return deep ? deepClone() : shallowClone();
-    }
-
     public final Node shallowClone() {
         return (Node)coreGetNodeFactory().createDocumentFragment(coreGetOwnerDocument(true));
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -223,14 +223,6 @@ public abstract class ElementSupport implements DOMElement {
             throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
             ((CoreTypedAttribute)idAttr).coreSetType(isId ? "ID" : "CDATA");
-        }
-    }
-
-    public final Node cloneNode(boolean deep) {
-        try {
-            return deep ? deepClone() : shallowClone();
-        } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -335,11 +335,6 @@ public abstract class DocumentSupport implements DOMDocument {
         throw new UnsupportedOperationException();
     }
 
-    public final Node cloneNode(boolean deep) {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-    
     public final Node shallowClone() {
         // TODO
         throw new UnsupportedOperationException();
