@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,16 @@
  */
 package com.googlecode.ddom.frontend.dom.mixin;
 
-import org.w3c.dom.Node;
-
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMNSAwareAttribute;
+import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
 
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class NSAwareAttributeSupport implements DOMNSAwareAttribute {
-    public final Node shallowClone() throws DeferredParsingException {
-        return (Node)coreGetNodeFactory().createAttribute(coreGetOwnerDocument(true), coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
+    public final DOMParentNode shallowClone() throws DeferredParsingException {
+        return (DOMNSAwareAttribute)coreGetNodeFactory().createAttribute(coreGetOwnerDocument(true), coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
     
     public final String getName() {

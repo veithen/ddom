@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,18 @@
  */
 package com.googlecode.ddom.frontend.dom.mixin;
 
-import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSUnawareElement;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.dom.intf.DOMElement;
 import com.googlecode.ddom.frontend.dom.intf.DOMNSUnawareElement;
 import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
 
 @Mixin(CoreNSUnawareElement.class)
 public abstract class NSUnawareElementSupport implements DOMNSUnawareElement {
-    public final CoreElement shallowCloneWithoutAttributes() throws DeferredParsingException {
-        return coreGetNodeFactory().createElement(coreGetOwnerDocument(true), coreGetName());
+    public final DOMElement shallowCloneWithoutAttributes() throws DeferredParsingException {
+        return (DOMNSUnawareElement)coreGetNodeFactory().createElement(coreGetOwnerDocument(true), coreGetName());
     }
     
     public final String getTagName() {

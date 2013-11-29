@@ -15,7 +15,6 @@
  */
 package com.googlecode.ddom.frontend.dom.intf;
 
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.ddom.core.CoreParentNode;
@@ -28,7 +27,7 @@ import com.googlecode.ddom.core.DeferredParsingException;
  * @author Andreas Veithen
  */
 public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
-    Node shallowClone() throws DeferredParsingException;
-    Node deepClone();
+    DOMParentNode shallowClone() throws DeferredParsingException;
+    DOMParentNode deepClone();
     void normalizeChildren(NormalizationConfig config) throws AbortNormalizationException;
 }

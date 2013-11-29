@@ -35,6 +35,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.googlecode.ddom.frontend.dom.intf.DOMAttribute;
 import com.googlecode.ddom.frontend.dom.intf.DOMElement;
+import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
 import com.googlecode.ddom.frontend.dom.support.AttributesNamedNodeMap;
 import com.googlecode.ddom.frontend.dom.support.DOM1AttributeMatcher;
@@ -226,16 +227,15 @@ public abstract class ElementSupport implements DOMElement {
         }
     }
 
-    // TODO: review return type (should be DOMNode)
-    public final Node shallowClone() throws DeferredParsingException {
-        CoreElement clone = shallowCloneWithoutAttributes();
+    public final DOMParentNode shallowClone() throws DeferredParsingException {
+        DOMElement clone = shallowCloneWithoutAttributes();
         CoreAttribute attr = coreGetFirstAttribute();
         while (attr != null) {
             // TODO: this could be optimized
-            ((DOMElement)clone).setAttributeNode((Attr)((Attr)attr).cloneNode(false));
+            clone.setAttributeNode((Attr)((Attr)attr).cloneNode(false));
             attr = attr.coreGetNextAttribute();
         }
-        return (Node)clone;
+        return clone;
     }
     
     public final String getTextContent() {

@@ -38,8 +38,8 @@ public abstract class DocumentFragmentSupport implements DOMDocumentFragment {
         return null;
     }
 
-    public final Node shallowClone() {
-        return (Node)coreGetNodeFactory().createDocumentFragment(coreGetOwnerDocument(true));
+    public final DOMParentNode shallowClone() {
+        return (DOMDocumentFragment)coreGetNodeFactory().createDocumentFragment(coreGetOwnerDocument(true));
     }
 
     public final Document getOwnerDocument() {

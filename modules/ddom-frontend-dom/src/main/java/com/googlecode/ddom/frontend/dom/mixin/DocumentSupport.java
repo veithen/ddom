@@ -335,7 +335,7 @@ public abstract class DocumentSupport implements DOMDocument {
         throw new UnsupportedOperationException();
     }
 
-    public final Node shallowClone() {
+    public final DOMParentNode shallowClone() {
         // TODO
         throw new UnsupportedOperationException();
     }

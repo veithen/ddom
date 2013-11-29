@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package com.googlecode.ddom.frontend.dom.mixin;
 import javax.xml.XMLConstants;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
 
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
+import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
 import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
 
 @Mixin(CoreNamespaceDeclaration.class)
@@ -31,8 +31,8 @@ public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclara
         return false;
     }
 
-    public final Node shallowClone() {
-        return (Node)coreGetNodeFactory().createNamespaceDeclaration(coreGetOwnerDocument(true), coreGetDeclaredPrefix(), null);
+    public final DOMParentNode shallowClone() {
+        return (DOMNamespaceDeclaration)coreGetNodeFactory().createNamespaceDeclaration(coreGetOwnerDocument(true), coreGetDeclaredPrefix(), null);
     }
 
     public final String getNamespaceURI() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -190,9 +190,9 @@ public abstract class ParentNodeSupport implements DOMParentNode {
         }
     }
 
-    public final Node deepClone() {
+    public final DOMParentNode deepClone() {
         try {
-            Node clone = shallowClone();
+            DOMParentNode clone = shallowClone();
             DOMCoreChildNode child = (DOMCoreChildNode)coreGetFirstChild();
             while (child != null) {
                 clone.appendChild(child.cloneNode(true));
