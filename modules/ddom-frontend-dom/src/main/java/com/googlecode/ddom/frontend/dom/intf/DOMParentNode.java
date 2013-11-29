@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,12 @@ import org.w3c.dom.NodeList;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 
+/**
+ * Interface implemented by all nodes that are parent nodes in the sense of DOM: {@link Document},
+ * {@link DocumentFragment}, {@link Element} and {@link Attribute}.
+ * 
+ * @author Andreas Veithen
+ */
 public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
     Node shallowClone() throws DeferredParsingException;
     Node deepClone();
