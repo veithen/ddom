@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,6 @@ public abstract class DocumentFragmentSupport implements DOMDocumentFragment {
     }
 
     public final Node cloneNode(boolean deep) {
-        // TODO: check this (maybe a fragment is always deeply cloned?)
         return deep ? deepClone() : shallowClone();
     }
 
