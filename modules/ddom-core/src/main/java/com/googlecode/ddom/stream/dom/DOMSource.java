@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,20 @@ import com.googlecode.ddom.stream.XmlSource;
 
 public final class DOMSource implements XmlSource {
     private final Node node;
+    private final boolean expandEntityReferences;
 
+    // TODO: should disappear
     public DOMSource(Node node) {
+        this(node, false);
+    }
+    
+    public DOMSource(Node node, boolean expandEntityReferences) {
         this.node = node;
+        this.expandEntityReferences = expandEntityReferences;
     }
 
     public XmlInput getInput(Hints hints) {
-        return new DOMInput(node);
+        return new DOMInput(node, expandEntityReferences);
     }
 
     public boolean isDestructive() {

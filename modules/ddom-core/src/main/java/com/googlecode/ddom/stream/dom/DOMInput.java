@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public class DOMInput extends XmlInput {
     private final Node rootNode;
     private final boolean expandEntityReferences;
     
+    // TODO: should disappear
     public DOMInput(Node rootNode) {
         this(rootNode, false);
     }
