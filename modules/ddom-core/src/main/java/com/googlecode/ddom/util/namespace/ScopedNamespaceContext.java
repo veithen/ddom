@@ -19,7 +19,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 
+/**
+ * {@link NamespaceContext} implementation that supports nested scopes. A scope is typically
+ * associated with a start tag&nbsp;/ end tag pair. The implementation takes care of correctly
+ * handling masked namespace bindings. Masking occurs when the same prefix is bound to a different
+ * namespace URI in a nested scope.
+ */
 public final class ScopedNamespaceContext extends AbstractNamespaceContext {
     private String[] namespaceStack = new String[32];
     private int bindings;
@@ -44,6 +51,7 @@ public final class ScopedNamespaceContext extends AbstractNamespaceContext {
             int len = namespaceStack.length;
             String[] newNamespaceStack = new String[len*2];
             System.arraycopy(namespaceStack, 0, newNamespaceStack, 0, len);
+            namespaceStack = newNamespaceStack;
         }
         namespaceStack[bindings*2] = prefix;
         namespaceStack[bindings*2+1] = namespaceURI;
