@@ -466,14 +466,6 @@ public abstract class DocumentSupport implements DOMDocument {
         return Node.DOCUMENT_NODE;
     }
 
-    public final String getNodeValue() throws DOMException {
-        return null;
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // Setting the node value has no effect
-    }
-
     public final String getNodeName() {
         return "#document";
     }

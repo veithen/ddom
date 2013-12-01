@@ -15,7 +15,6 @@
  */
 package com.googlecode.ddom.frontend.dom.mixin;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -73,14 +72,6 @@ public abstract class DocumentFragmentSupport implements DOMDocumentFragment {
 
     public final short getNodeType() {
         return Node.DOCUMENT_FRAGMENT_NODE;
-    }
-
-    public final String getNodeValue() throws DOMException {
-        return null;
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // Setting the node value has no effect
     }
 
     public final String getNodeName() {

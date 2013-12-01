@@ -258,14 +258,6 @@ public abstract class ElementSupport implements DOMElement {
         return Node.ELEMENT_NODE;
     }
 
-    public final String getNodeValue() throws DOMException {
-        return null;
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // Setting the node value has no effect
-    }
-
     public final String getNodeName() {
         return getTagName();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,16 +43,6 @@ public abstract class EntityReferenceSupport implements DOMEntityReference {
         return Node.ENTITY_REFERENCE_NODE;
     }
     
-    public final String getNodeValue() throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public final void setNodeValue(String nodeValue) throws DOMException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
     public final String getNodeName() {
         return coreGetName();
     }
