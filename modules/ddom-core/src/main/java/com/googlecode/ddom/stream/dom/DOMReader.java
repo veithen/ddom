@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,15 @@ import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.XmlReader;
 
 final class DOMReader implements XmlReader {
+    private static final int START = 0;
+    private static final int NOT_VISITED = 1;
+    private static final int VISITED = 2;
+    
     private final XmlHandler handler;
     private final Node rootNode;
     private final boolean expandEntityReferences;
     private Node currentNode;
-    private boolean visited;
+    private int state = START;
     
     DOMReader(XmlHandler handler, Node rootNode, boolean expandEntityReferences) {
         this.handler = handler;
@@ -48,39 +52,44 @@ final class DOMReader implements XmlReader {
     
     public void proceed(boolean flush) throws StreamException {
         Node currentNode = this.currentNode;
-        boolean visited = this.visited;
+        int state = this.state;
         loop: while (true) {
-            if (visited) {
-                if (currentNode == null || currentNode instanceof Document) {
-                    throw new IllegalStateException();
-                } else {
-                    Node node = currentNode.getNextSibling();
-                    if (node == null) {
-                        if (currentNode == rootNode) {
-                            currentNode = null;
+            switch (state) {
+                case START:
+                    if (rootNode instanceof Document) {
+                        currentNode = rootNode;
+                    }
+                    state = NOT_VISITED;
+                    break;
+                case NOT_VISITED:
+                    if (currentNode == null) {
+                        currentNode = rootNode;
+                    } else {
+                        Node node = currentNode.getFirstChild();
+                        if (node == null) {
+                            state = VISITED;
                         } else {
-                            currentNode = currentNode.getParentNode();
+                            currentNode = node;
                         }
-                        visited = true;
-                    } else {
-                        currentNode = node;
-                        visited = false;
                     }
-                }
-            } else {
-                if (currentNode == null) {
-                    currentNode = rootNode;
-                } else {
-                    Node node = currentNode.getFirstChild();
-                    if (node == null) {
-                        visited = true;
+                    break;
+                case VISITED:
+                    if (currentNode == null || currentNode instanceof Document) {
+                        throw new IllegalStateException();
+                    } else if (currentNode == rootNode) {
+                        currentNode = null;
                     } else {
-                        currentNode = node;
+                        Node node = currentNode.getNextSibling();
+                        if (node == null) {
+                            currentNode = currentNode.getParentNode();
+                        } else {
+                            currentNode = node;
+                            state = NOT_VISITED;
+                        }
                     }
-                }
             }
             int nodeType = currentNode == null ? Node.DOCUMENT_NODE : currentNode.getNodeType();
-            if (visited) {
+            if (state == VISITED) {
                 // In the future, there may be other node types that generate events here
                 switch (nodeType) {
                     case Node.ELEMENT_NODE:
@@ -155,7 +164,7 @@ final class DOMReader implements XmlReader {
                     case Node.ENTITY_REFERENCE_NODE:
                         if (!expandEntityReferences) {
                             handler.processEntityReference(currentNode.getNodeName());
-                            visited = true;
+                            state = VISITED;
                             break loop;
                         } else {
                             // No event has been generated, so loop again
@@ -168,6 +177,6 @@ final class DOMReader implements XmlReader {
             }
         }
         this.currentNode = currentNode;
-        this.visited = visited;
+        this.state = state;
     }
 }
