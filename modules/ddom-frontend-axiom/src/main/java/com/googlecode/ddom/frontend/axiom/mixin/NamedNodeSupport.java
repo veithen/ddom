@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,14 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
     public final QName getQName() {
         try {
             return coreGetQName();
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
+    public boolean hasName(QName name) {
+        try {
+            return coreGetLocalName().equals(name.getLocalPart()) && coreGetNamespaceURI().equals(name.getNamespaceURI());
         } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
