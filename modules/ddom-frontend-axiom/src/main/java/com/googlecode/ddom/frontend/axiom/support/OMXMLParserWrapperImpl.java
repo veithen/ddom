@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,11 @@ public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
         }
     }
 
+    public boolean isCompleted() {
+        // TODO: not sure if this is always correct
+        return document.coreIsComplete();
+    }
+
     public void discard(OMElement el) throws OMException {
         // TODO
         throw new UnsupportedOperationException();
@@ -79,11 +84,6 @@ public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
     }
 
     public boolean isCache() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean isCompleted() {
         // TODO
         throw new UnsupportedOperationException();
     }
