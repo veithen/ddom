@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.util.stax.XMLEventUtils;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 import com.googlecode.ddom.core.NodeFactory;
@@ -77,15 +78,26 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
         return createBuilder(new SimpleXmlSource(input));
     }
 
-    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Source source) {
-        // TODO: we have currently no way to set the OMFactory!
+    public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Source source) {
         if (source instanceof SAXSource) {
-            return createBuilder(new SimpleXmlSource(new SAXInput((SAXSource)source)));
+            // TODO: document the expandEntityReferences default value in the Axiom Javadoc
+            return createOMBuilder(omFactory, (SAXSource)source, true);
         } else if (source instanceof javax.xml.transform.dom.DOMSource) {
-            return createBuilder(new DOMSource(((javax.xml.transform.dom.DOMSource)source).getNode()));
+            // TODO: document the expandEntityReferences default value in the Axiom Javadoc
+            return createOMBuilder(omFactory, ((javax.xml.transform.dom.DOMSource)source).getNode(), true);
         } else {
             // TODO: should support StreamSource as well
             throw new UnsupportedOperationException();
         }
+    }
+
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, Node node, boolean expandEntityReferences) {
+        // TODO: we have currently no way to set the OMFactory!
+        return createBuilder(new DOMSource(node, expandEntityReferences));
+    }
+
+    public OMXMLParserWrapper createOMBuilder(OMFactory omFactory, SAXSource source, boolean expandEntityReferences) {
+        // TODO: we have currently no way to set the OMFactory!
+        return createBuilder(new SimpleXmlSource(new SAXInput((SAXSource)source)));
     }
 }
