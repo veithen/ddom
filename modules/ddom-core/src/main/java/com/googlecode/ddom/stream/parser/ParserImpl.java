@@ -242,6 +242,10 @@ final class ParserImpl implements XmlReader {
                 // TODO: the document may also start with a processing instruction that is not an XML declaration
                 parseXmlDeclaration(flush);
             } else {
+                if (inputEncoding == null) {
+                    // TODO: not always correct (e.g. UTF-16 without XML declaration)
+                    inputEncoding = "UTF-8";
+                }
                 handler.startEntity(false, inputEncoding);
                 state = STATE_MARKUP;
             }
