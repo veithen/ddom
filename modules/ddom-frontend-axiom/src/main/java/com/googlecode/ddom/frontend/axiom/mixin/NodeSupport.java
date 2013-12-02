@@ -49,8 +49,9 @@ public abstract class NodeSupport implements AxiomNode {
         serialize(xmlWriter, false);
     }
     
-    public final void serialize(XMLStreamWriter xmlWriter, boolean cache) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
+    // TODO: already implemented for containers; need to implement it for leaf nodes
+//    public final void serialize(XMLStreamWriter xmlWriter, boolean cache) throws XMLStreamException {
+//        // TODO
+//        throw new UnsupportedOperationException();
+//    }
 }

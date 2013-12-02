@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.sax.SAXSource;
 
 import org.apache.axiom.om.OMElement;
@@ -55,6 +56,7 @@ import com.googlecode.ddom.stream.filter.NamespaceRepairingFilter;
 import com.googlecode.ddom.stream.filter.NamespaceURIInterningFilter;
 import com.googlecode.ddom.stream.sax.SAXSourceAdapter;
 import com.googlecode.ddom.stream.serializer.Serializer;
+import com.googlecode.ddom.stream.stax.StAXOutput;
 import com.googlecode.ddom.stream.stax.StAXPivot;
 
 @Mixin({CoreDocument.class, CoreNSAwareElement.class})
@@ -124,6 +126,14 @@ public abstract class ContainerSupport implements AxiomContainer {
         new Stream(input, output).flush();
     }
     
+    public void serialize(XMLStreamWriter writer, boolean cache) throws XMLStreamException {
+        try {
+            serialize(new StAXOutput(writer), cache);
+        } catch (StreamException ex) {
+            throw AxiomExceptionUtil.translate(ex);
+        }
+    }
+
     public String toString(boolean preserve) throws StreamException {
         StringWriter sw = new StringWriter();
         serialize(new Serializer(sw), preserve);
