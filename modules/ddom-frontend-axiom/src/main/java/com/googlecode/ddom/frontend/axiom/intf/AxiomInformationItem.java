@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,11 @@
 package com.googlecode.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.OMInformationItem;
 
 import com.googlecode.ddom.core.CoreNode;
 
-public interface AxiomInformationItem extends CoreNode {
-    /**
-     * @see org.apache.axiom.om.OMSerializable#getOMFactory()
-     * @see org.apache.axiom.om.OMAttribute#getOMFactory()
-     */
-    OMFactory getOMFactory();
-
+public interface AxiomInformationItem extends CoreNode, OMInformationItem {
     /**
      * Get the default {@link OMFactory} for this information item. This instance will be returned
      * by {@link #getOMFactory()} if none has been set explicitly using
