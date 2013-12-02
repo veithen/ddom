@@ -134,7 +134,7 @@ final class DOMReader implements XmlReader {
                                 if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
                                     handler.startNamespaceDeclaration(attrLocalName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : attrLocalName);
                                 } else {
-                                    handler.startAttribute(nullToEmptyString(namespaceURI), attrLocalName, nullToEmptyString(attr.getPrefix()), null);
+                                    handler.startAttribute(nullToEmptyString(namespaceURI), attrLocalName, nullToEmptyString(attr.getPrefix()), "CDATA");
                                 }
                             }
                             handler.processCharacterData(attr.getValue(), false);
