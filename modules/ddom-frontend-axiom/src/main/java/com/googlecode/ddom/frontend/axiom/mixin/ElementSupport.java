@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
@@ -41,7 +40,6 @@ import org.apache.axiom.util.namespace.MapBasedNamespaceContext;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreAttribute;
-import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
@@ -55,7 +53,6 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
-import com.googlecode.ddom.frontend.axiom.intf.AxiomNode;
 import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
@@ -373,27 +370,6 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             return toString(true);
         } catch (StreamException ex) {
             throw new OMException(ex);
-        }
-    }
-
-    public final void internalSerialize(XMLStreamWriter writer, boolean cache) throws XMLStreamException {
-        if (cache) {
-            // TODO: we should use our own (optimized) code here
-            OMSerializerUtil.serializeStartpart(this, writer);
-            try {
-                // TODO: check first if the element is expanded; otherwise just serialize the content directly
-                CoreChildNode child = coreGetFirstChild();
-                while (child != null) {
-                    ((AxiomNode)child).internalSerialize(writer, cache);
-                    child = child.coreGetNextSibling();
-                }
-            } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
-            }
-            OMSerializerUtil.serializeEndpart(writer);
-        } else {
-            // TODO
-            throw new UnsupportedOperationException();
         }
     }
 
