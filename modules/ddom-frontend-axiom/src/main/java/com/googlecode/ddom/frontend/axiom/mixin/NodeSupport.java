@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNode;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
 
-@Mixin(CoreChildNode.class)
+@Mixin({CoreDocument.class, CoreChildNode.class})
 public abstract class NodeSupport implements AxiomNode {
-    public void close(boolean build) {
+    public final void close(boolean build) {
         CoreDocument document = coreGetOwnerDocument(true);
         if (build) {
             try {
@@ -41,15 +41,15 @@ public abstract class NodeSupport implements AxiomNode {
 //        document.dispose();
     }
 
-    public void serialize(XMLStreamWriter xmlWriter) throws XMLStreamException {
+    public final void serialize(XMLStreamWriter xmlWriter) throws XMLStreamException {
         serialize(xmlWriter, true);
     }
 
-    public void serializeAndConsume(XMLStreamWriter xmlWriter) throws XMLStreamException {
+    public final void serializeAndConsume(XMLStreamWriter xmlWriter) throws XMLStreamException {
         serialize(xmlWriter, false);
     }
     
-    public void serialize(XMLStreamWriter xmlWriter, boolean cache) throws XMLStreamException {
+    public final void serialize(XMLStreamWriter xmlWriter, boolean cache) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
     }
