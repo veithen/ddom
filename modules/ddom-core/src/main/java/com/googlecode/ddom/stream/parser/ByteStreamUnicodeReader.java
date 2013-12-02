@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public abstract class ByteStreamUnicodeReader implements UnicodeReader {
         len = other.len;
     }
     
-    protected int readByte() throws IOException {
+    protected final int readByte() throws IOException {
         if (pos == len) {
             pos = 0;
             int count = in.read(buffer);
