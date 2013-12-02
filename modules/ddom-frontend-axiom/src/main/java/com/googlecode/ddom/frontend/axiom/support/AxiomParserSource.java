@@ -18,6 +18,7 @@ package com.googlecode.ddom.frontend.axiom.support;
 import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.xml.sax.InputSource;
 
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 import com.googlecode.ddom.stream.filter.CDATASectionFilter;
@@ -32,7 +33,7 @@ public class AxiomParserSource implements XmlSource {
         this.configuration = configuration;
     }
 
-    public XmlInput getInput(Hints hints) {
+    public XmlInput getInput(Hints hints) throws StreamException {
         XmlInput input = delegate.getInput(hints);
         // TODO: doesn't cover all cases yet
         if (configuration != StAXParserConfiguration.PRESERVE_CDATA_SECTIONS) {

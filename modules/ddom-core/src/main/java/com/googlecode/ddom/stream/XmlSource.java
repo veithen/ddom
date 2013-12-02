@@ -27,6 +27,6 @@ public interface XmlSource {
         // TODO: add a method that provides a namespace context
     }
     
-    XmlInput getInput(Hints hints);
+    XmlInput getInput(Hints hints) throws StreamException;
     boolean isDestructive();
 }

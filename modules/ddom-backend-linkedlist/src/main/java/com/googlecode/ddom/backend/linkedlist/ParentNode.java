@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@ import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.stream.NullXmlHandler;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
@@ -294,7 +295,11 @@ public abstract class ParentNode extends Node implements LLParentNode {
             XmlSource source = (XmlSource)content;
             content = null;
             LLDocument document = internalGetOwnerDocument(true);
-            inputContext = document.internalCreateInputContext(source.getInput(XmlSource.Hints.DEFAULTS), this, state == Flags.STATE_SOURCE_SET);
+            try {
+                inputContext = document.internalCreateInputContext(source.getInput(XmlSource.Hints.DEFAULTS), this, state == Flags.STATE_SOURCE_SET);
+            } catch (StreamException ex) {
+                throw new DeferredParsingException(ex);
+            }
         } else {
             LLDocument document = internalGetOwnerDocument(false);
             if (document == null) {

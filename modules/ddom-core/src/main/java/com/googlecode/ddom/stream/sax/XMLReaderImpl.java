@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,13 +44,13 @@ final class XMLReaderImpl extends AbstractXMLReader {
     }
     
     private void parse() throws SAXException {
-        XmlInput input = source.getInput(new Hints() {
-            public boolean isPreferPush() {
-                return true;
-            }
-        });
-        XmlOutput output = new SAXOutput(contentHandler, lexicalHandler);
         try {
+            XmlInput input = source.getInput(new Hints() {
+                public boolean isPreferPush() {
+                    return true;
+                }
+            });
+            XmlOutput output = new SAXOutput(contentHandler, lexicalHandler);
             new Stream(input, output).flush();
         } catch (StreamException ex) {
             throw new SAXException(ex);

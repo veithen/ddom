@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,37 +15,58 @@
  */
 package com.googlecode.ddom.stream.parser;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.xml.sax.InputSource;
 
+import com.googlecode.ddom.stream.SimpleXmlSource;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
-// TODO: allow specifying namespace awareness
-public class ParserSource implements XmlSource {
-    private final InputStream byteStream;
-    private final String encoding;
-    private final Reader characterStream;
+public final class ParserSource implements XmlSource {
+    private final XmlSource delegate;
     
     public ParserSource(InputSource is) {
-        byteStream = is.getByteStream();
-        encoding = is.getEncoding();
-        characterStream = is.getCharacterStream();
-        // TODO: handle InputSource objects specified by systemId
+        this(is, true);
     }
-
-    public XmlInput getInput(Hints hints) {
+    
+    public ParserSource(InputSource is, final boolean namespaceAware) {
+        InputStream byteStream = is.getByteStream();
+        Reader characterStream = is.getCharacterStream();
         if (byteStream != null) {
-            return new Parser(byteStream, encoding, true);
+            delegate = new SimpleXmlSource(new Parser(byteStream, is.getEncoding(), namespaceAware));
+        } else if (characterStream != null) {
+            delegate = new SimpleXmlSource(new Parser(characterStream, namespaceAware));
         } else {
-            return new Parser(characterStream, true);
+            final String systemId = is.getSystemId();
+            delegate = new XmlSource() {
+                public XmlInput getInput(Hints hints) throws StreamException {
+                    try {
+                        URLConnection connection = new URL(systemId).openConnection();
+                        // TODO: extract encoding from content type
+                        return new Parser(connection.getInputStream(), null, namespaceAware);
+                    } catch (IOException ex) {
+                        throw new StreamException("Unable to open " + systemId, ex);
+                    }
+                }
+                
+                public boolean isDestructive() {
+                    return false;
+                }
+            };
         }
     }
 
+    public XmlInput getInput(Hints hints) throws StreamException {
+        return delegate.getInput(hints);
+    }
+
     public boolean isDestructive() {
-        // TODO
-        return true;
+        return delegate.isDestructive();
     }
 }

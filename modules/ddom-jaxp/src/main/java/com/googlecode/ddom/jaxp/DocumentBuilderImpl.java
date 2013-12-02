@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,7 +126,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
         }
         CoreDocument document = nodeFactory.createDocument();
         document.coreSetContent(new XmlSource() {
-            public XmlInput getInput(Hints hints) {
+            public XmlInput getInput(Hints hints) throws StreamException {
                 XmlInput input = source.getInput(hints);
                 applyFilters(input);
                 return input;

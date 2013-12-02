@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -294,7 +294,7 @@ final class TreeWalkerImpl implements XmlReader {
         }
     }
 
-    private Stream createStream(CoreParentNode node, final boolean flush, XmlHandler handler) {
+    private Stream createStream(CoreParentNode node, final boolean flush, XmlHandler handler) throws StreamException {
         XmlSource source = (XmlSource)node.coreGetContent(); // TODO: should be an internal method
         if (log.isDebugEnabled()) {
             log.debug("Starting to stream content from " + source);
