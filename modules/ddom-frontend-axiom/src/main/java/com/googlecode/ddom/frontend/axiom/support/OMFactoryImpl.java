@@ -75,8 +75,12 @@ public class OMFactoryImpl implements OMFactory {
                 } else if (prefix.length() > 0) {
                     throw new IllegalArgumentException("Cannot create a prefixed attribute with an empty namespace name");
                 }
-            } else if (prefix == null) {
-                prefix = OMSerializerUtil.getNextNSPrefix();
+            } else {
+                if (prefix == null) {
+                    prefix = OMSerializerUtil.getNextNSPrefix();
+                } else if (prefix.length() == 0) {
+                    throw new IllegalArgumentException("Cannot create an unprefixed attribute with a namespace");
+                }
             }
         }
         AxiomAttribute attr = (AxiomAttribute)nodeFactory.createAttribute(null, namespaceURI, localName, prefix, value, "CDATA");
