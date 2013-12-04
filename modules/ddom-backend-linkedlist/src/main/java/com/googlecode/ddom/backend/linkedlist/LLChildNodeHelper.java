@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NoParentException;
@@ -180,7 +181,7 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingsBefore(LLChildNode that, CoreDocumentFragment coreFragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+    public static void coreInsertSiblingsBefore(LLChildNode that, CoreDocumentFragment coreFragment) throws HierarchyException, NodeMigrationException, DeferredBuildingException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {

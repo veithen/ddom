@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,13 @@
 package com.googlecode.ddom.core;
 
 /**
- * Represents a namespace declaration information item.
+ * Indicates that a requested node has been consumed and is no longer available.
  * 
  * @author Andreas Veithen
  */
-public interface CoreNamespaceDeclaration extends CoreAttribute {
-    /**
-     * Get the prefix declared by this namespace declaration.
-     * 
-     * @return the prefix, or <code>null</code> if this namespace declaration defines the default
-     *         namespace
-     */
-    String coreGetDeclaredPrefix();
-    
-    String coreGetDeclaredNamespaceURI() throws DeferredBuildingException;
+public class NodeConsumedException extends DeferredBuildingException {
+    private static final long serialVersionUID = 7042630105687582211L;
+
+    public NodeConsumedException() {
+    }
 }

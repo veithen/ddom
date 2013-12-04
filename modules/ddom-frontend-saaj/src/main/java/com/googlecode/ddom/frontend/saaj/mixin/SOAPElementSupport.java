@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.Selector;
@@ -253,7 +252,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     public final String getNamespaceURI(String prefix) {
         try {
             return coreLookupNamespaceURI(prefix, true);
-        } catch (DeferredParsingException ex) {
+        } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }
     }

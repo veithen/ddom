@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,8 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetAttributeInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstAttributeInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstAttributeInStateSourceSetWithPushInput(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstChildInStateConsumedFull(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstChildInStateConsumedPartial(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetFirstChildInStateSourceSetWithPushInput(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, false, true));

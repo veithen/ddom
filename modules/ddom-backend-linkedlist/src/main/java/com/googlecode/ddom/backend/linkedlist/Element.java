@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.Mapper;
 import com.googlecode.ddom.core.NodeInUseException;
@@ -136,7 +137,7 @@ public abstract class Element extends Container implements LLElement {
             try {
                 // TODO: need a better way to clone the children
                 return new NSAwareAttribute(null, org.coreGetNamespaceURI(), org.coreGetLocalName(), org.coreGetPrefix(), org.coreGetTextContent(TextCollectorPolicy.DEFAULT), org.coreGetType());
-            } catch (DeferredParsingException ex) {
+            } catch (DeferredBuildingException ex) {
                 // TODO
                 throw new RuntimeException(ex);
             }
@@ -251,7 +252,7 @@ public abstract class Element extends Container implements LLElement {
 
     protected abstract String getImplicitNamespaceURI(String prefix);
     
-    public final String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredParsingException {
+    public final String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredBuildingException {
         if (!strict) {
             String namespaceURI = getImplicitNamespaceURI(prefix);
             if (namespaceURI != null) {
@@ -278,7 +279,7 @@ public abstract class Element extends Container implements LLElement {
 
     protected abstract String getImplicitPrefix(String namespaceURI);
     
-    public final String coreLookupPrefix(String namespaceURI, boolean strict) throws DeferredParsingException {
+    public final String coreLookupPrefix(String namespaceURI, boolean strict) throws DeferredBuildingException {
         if (namespaceURI == null) {
             throw new IllegalArgumentException("namespaceURI must not be null");
         }
@@ -315,7 +316,7 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
-    public final void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException {
+    public final void coreCoalesce(boolean includeCDATASections) throws DeferredBuildingException {
         // TODO: clean up local variable names (text --> characterData)
         CoreDocument document = internalGetOwnerDocument(false);
         // TODO: using a collection here is very bad!!

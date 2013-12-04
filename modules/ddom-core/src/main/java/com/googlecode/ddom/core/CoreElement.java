@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -204,9 +204,9 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * @return the namespace URI or <code>null</code> if the prefix is not bound; if the prefix is
      *         the empty string and no default namespace declaration exists, then an empty string is
      *         returned
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException 
      */
-    String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredParsingException;
+    String coreLookupNamespaceURI(String prefix, boolean strict) throws DeferredBuildingException;
     
     /**
      * Find a prefix associated to the given namespace URI. Default namespaces are not taken into
@@ -222,13 +222,13 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            {@link CoreNSAwareElement}), even if no explicit namespace declarations exists for
      *            these prefixes.
      * @return a prefix bound to the given namespace URI or <code>null</code> if none is found
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      * @throws IllegalArgumentException
      *             if <code>namespaceURI</code> is <code>null</code>
      */
     // TODO: wrong Javadoc: null vs. empty string
     // TODO: we can support default namespaces!
-    String coreLookupPrefix(String namespaceURI, boolean strict) throws DeferredParsingException;
+    String coreLookupPrefix(String namespaceURI, boolean strict) throws DeferredBuildingException;
     
     /**
      * Coalesce child text nodes, and optionally CDATA sections. This method replaces groups of
@@ -237,9 +237,9 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * 
      * @param includeCDATASections
      *            <code>true</code> if CDATA sections should also be coalesced
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      */
-    void coreCoalesce(boolean includeCDATASections) throws DeferredParsingException;
+    void coreCoalesce(boolean includeCDATASections) throws DeferredBuildingException;
     
     <T extends CoreAttribute,S> Iterator<S> coreGetAttributesByType(Class<T> type, Mapper<T,S> mapper);
 }

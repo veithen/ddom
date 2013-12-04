@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,7 @@ public final class DOMExceptionUtil {
         }
     }
     
+    // TODO: handle NodeConsumedException
     public static RuntimeException translate(CoreModelException ex) {
         if (ex instanceof NodeNotFoundException) {
             return newDOMException(DOMException.NOT_FOUND_ERR);

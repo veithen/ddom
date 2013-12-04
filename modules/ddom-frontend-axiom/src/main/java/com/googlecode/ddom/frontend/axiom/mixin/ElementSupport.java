@@ -45,7 +45,6 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.core.TextCollectorPolicy;
@@ -156,7 +155,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     public OMElement getFirstElement() {
         try {
             return coreGetFirstChildByType(AxiomElement.class);
-        } catch (DeferredParsingException ex) {
+        } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,14 +75,14 @@ public interface CoreDocument extends CoreParentNode {
     
     String coreGetDocumentURI() throws DeferredParsingException;
     void coreSetDocumentURI(String documentURI) throws DeferredParsingException;
-    CoreDocumentTypeDeclaration coreGetDocumentTypeDeclaration() throws DeferredParsingException;
+    CoreDocumentTypeDeclaration coreGetDocumentTypeDeclaration() throws DeferredBuildingException;
     
     /**
      * Get the document element.
      * 
      * @return the document element, or <code>null</code> if the document doesn't have a child
      *         element
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      */
-    CoreElement coreGetDocumentElement() throws DeferredParsingException;
+    CoreElement coreGetDocumentElement() throws DeferredBuildingException;
 }

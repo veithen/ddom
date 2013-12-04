@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,17 +114,17 @@ public interface CoreParentNode extends CoreNode {
      *            the policy to use when collecting the text content; must not be <code>null</code>
      * @return the text content of the node; if the node has no text content, then an empty string
      *         is returned
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs during deferred parsing.
      */
-    String coreGetTextContent(TextCollectorPolicy policy) throws DeferredParsingException;
+    String coreGetTextContent(TextCollectorPolicy policy) throws DeferredBuildingException;
     
     // TODO: specify behavior if the element neither has children nor a value
     // TODO: maybe this is no longer required since we have coreHasValue
     boolean coreIsExpanded();
     
-    CoreChildNode coreGetFirstChild() throws DeferredParsingException;
-    CoreChildNode coreGetLastChild() throws DeferredParsingException;
+    CoreChildNode coreGetFirstChild() throws DeferredBuildingException;
+    CoreChildNode coreGetLastChild() throws DeferredBuildingException;
     
     /**
      * Determine if this node has any children. In contrast to {@link #coreGetChildCount()}, this
@@ -138,7 +138,7 @@ public interface CoreParentNode extends CoreNode {
     boolean coreIsEmpty() throws DeferredParsingException;
     
     // TODO: specify behavior if node is unexpanded
-    int coreGetChildCount() throws DeferredParsingException;
+    int coreGetChildCount() throws DeferredBuildingException;
 
     /**
      * Get an {@link XmlInput} object for this node. This object can be used to serialize the
@@ -199,7 +199,7 @@ public interface CoreParentNode extends CoreNode {
      * @throws WrongDocumentException
      *             if <code>newChild</code> belongs to a different document
      */
-    void coreAppendChild(CoreChildNode newChild, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException;
+    void coreAppendChild(CoreChildNode newChild, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredBuildingException;
     
     /**
      * 
@@ -210,7 +210,7 @@ public interface CoreParentNode extends CoreNode {
      */
     void coreAppendChildren(CoreDocumentFragment newChildren) throws CoreModelException;
     
-    CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredParsingException;
+    CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredBuildingException;
     
     /**
      * Create a namespace unaware element and append it to this parent node. For the precise
@@ -221,13 +221,13 @@ public interface CoreParentNode extends CoreNode {
      * @return the newly created node
      * @throws ChildNotAllowedException
      *             If an attempt is made to insert a child node where it is not allowed.
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs during deferred parsing.
      * 
      * @see NodeFactory#createElement(CoreDocument, String)
      * @see #coreAppendChild(CoreChildNode, NodeMigrationPolicy)
      */
-    CoreNSUnawareElement coreAppendElement(String tagName) throws ChildNotAllowedException, DeferredParsingException;
+    CoreNSUnawareElement coreAppendElement(String tagName) throws ChildNotAllowedException, DeferredBuildingException;
 
     /**
      * Create a namespace aware element and append it to this parent node. For the precise semantics
@@ -242,25 +242,25 @@ public interface CoreParentNode extends CoreNode {
      * @return the newly created node
      * @throws ChildNotAllowedException
      *             If an attempt is made to insert a child node where it is not allowed.
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs during deferred parsing.
      * 
      * @see NodeFactory#createElement(CoreDocument, String, String, String)
      * @see #coreAppendChild(CoreChildNode, NodeMigrationPolicy)
      */
-    CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException;
+    CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredBuildingException;
     
-    <T extends CoreNSAwareElement> T coreAppendElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException;
+    <T extends CoreNSAwareElement> T coreAppendElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredBuildingException;
     
-    CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredParsingException;
+    CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredBuildingException;
     
-    CoreCharacterData coreAppendCharacterData(String data) throws ChildNotAllowedException, DeferredParsingException;
+    CoreCharacterData coreAppendCharacterData(String data) throws ChildNotAllowedException, DeferredBuildingException;
 
-    CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredParsingException;
+    CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredBuildingException;
 
-    CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredParsingException;
+    CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredBuildingException;
 
-    CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredParsingException;
+    CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredBuildingException;
     
     /**
      * Get an iterator over the node-set corresponding to the given axis and node type. Nodes are
@@ -290,5 +290,5 @@ public interface CoreParentNode extends CoreNode {
     
     <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name);
     
-    <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredParsingException;
+    <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredBuildingException;
 }

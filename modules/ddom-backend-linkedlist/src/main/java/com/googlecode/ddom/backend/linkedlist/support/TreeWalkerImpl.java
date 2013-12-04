@@ -29,6 +29,7 @@ import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.stream.IncludeXmlOutput;
 import com.googlecode.ddom.stream.Stream;
@@ -291,6 +292,9 @@ final class TreeWalkerImpl implements XmlReader {
             node = nextNode;
         } catch (DeferredParsingException ex) {
             throw ex.getStreamException();
+        } catch (DeferredBuildingException ex) {
+            // We get here if part of the tree has been consumed
+            throw new StreamException(ex);
         }
     }
 

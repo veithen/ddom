@@ -45,9 +45,11 @@ import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.core.CyclicRelationshipException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.core.HierarchyException;
+import com.googlecode.ddom.core.NodeConsumedException;
 import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
@@ -170,7 +172,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         internalSetState(Flags.STATE_EXPANDED);
     }
 
-    public final String coreGetTextContent(TextCollectorPolicy policy) throws DeferredParsingException {
+    public final String coreGetTextContent(TextCollectorPolicy policy) throws DeferredBuildingException {
         if (content instanceof String) {
             return (String)content;
         } else {
@@ -284,7 +286,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return content == null;
     }
 
-    public final CoreChildNode coreGetFirstChild() throws DeferredParsingException {
+    public final CoreChildNode coreGetFirstChild() throws DeferredBuildingException {
         return internalGetFirstChild();
     }
     
@@ -311,7 +313,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return inputContext;
     }
     
-    public final LLChildNode internalGetFirstChild() throws DeferredParsingException {
+    public final LLChildNode internalGetFirstChild() throws DeferredBuildingException {
         InputContext context = null;
         while (true) {
             switch (internalGetState()) {
@@ -337,6 +339,12 @@ public abstract class ParentNode extends Node implements LLParentNode {
                     }
                 case Flags.STATE_EXPANDED:
                     return (LLChildNode)content;
+                case Flags.STATE_CONSUMED:
+                    if (content != null) {
+                        return (LLChildNode)content;
+                    } else {
+                        throw new NodeConsumedException();
+                    }
                 case Flags.STATE_VALUE_SET:
                     // TODO: no cast here
                     LLChildNode firstChild = new CharacterData((Document)internalGetOwnerDocument(false), (String)content, false);
@@ -350,7 +358,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
     }
     
-    public final CoreChildNode coreGetLastChild() throws DeferredParsingException {
+    public final CoreChildNode coreGetLastChild() throws DeferredBuildingException {
         CoreChildNode previousChild = null;
         CoreChildNode child = coreGetFirstChild();
         while (child != null) {
@@ -534,7 +542,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
     }
 
-    public final void coreAppendChild(CoreChildNode coreChild, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+    public final void coreAppendChild(CoreChildNode coreChild, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredBuildingException {
         internalValidateChildType(coreChild, null);
         LLChildNode child = internalPrepareNewChild(coreChild, policy);
         LLChildNode lastChild = (LLChildNode)coreGetLastChild(); // TODO: avoid cast here
@@ -552,7 +560,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         merge(newChildren, null, false);
     }
     
-    private void appendNewlyCreatedChild(LLChildNode child) throws ChildNotAllowedException, DeferredParsingException {
+    private void appendNewlyCreatedChild(LLChildNode child) throws ChildNotAllowedException, DeferredBuildingException {
         internalValidateChildType(child, null);
         LLChildNode lastChild = (LLChildNode)coreGetLastChild(); // TODO: avoid cast here
         if (lastChild == null) {
@@ -564,55 +572,55 @@ public abstract class ParentNode extends Node implements LLParentNode {
         internalNotifyChildrenModified(1);
     }
 
-    public final CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreDocumentTypeDeclaration coreAppendDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws ChildNotAllowedException, DeferredBuildingException {
         DocumentTypeDeclaration child = new DocumentTypeDeclaration(null, rootName, publicId, systemId);
         appendNewlyCreatedChild(child);
         return child;
     }
     
-    public final CoreNSUnawareElement coreAppendElement(String tagName) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreNSUnawareElement coreAppendElement(String tagName) throws ChildNotAllowedException, DeferredBuildingException {
         NSUnawareElement child = new NSUnawareElement(null, tagName, true);
         appendNewlyCreatedChild(child);
         return child;
     }
     
-    public final CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreNSAwareElement coreAppendElement(String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredBuildingException {
         NSAwareElement child = nsAwareElementFactory.create(modelExtension == null ? null : modelExtension.mapElement(namespaceURI, localName), null, namespaceURI, localName, prefix, true);
         appendNewlyCreatedChild(child);
         return child;
     }
     
-    public final <T extends CoreNSAwareElement> T coreAppendElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredParsingException {
+    public final <T extends CoreNSAwareElement> T coreAppendElement(Class<T> extensionInterface, String namespaceURI, String localName, String prefix) throws ChildNotAllowedException, DeferredBuildingException {
         NSAwareElement child = nsAwareElementFactory.create(extensionInterface, null, namespaceURI, localName, prefix, true);
         appendNewlyCreatedChild(child);
         return extensionInterface.cast(child);
     }
     
-    public final CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreProcessingInstruction coreAppendProcessingInstruction(String target, String data) throws ChildNotAllowedException, DeferredBuildingException {
         ProcessingInstruction child = new ProcessingInstruction(null, target, data);
         appendNewlyCreatedChild(child);
         return child;
     }
     
-    public final CoreCharacterData coreAppendCharacterData(String data) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreCharacterData coreAppendCharacterData(String data) throws ChildNotAllowedException, DeferredBuildingException {
         CharacterData child = new CharacterData(null, data, false);
         appendNewlyCreatedChild(child);
         return child;
     }
 
-    public final CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreComment coreAppendComment(String data) throws ChildNotAllowedException, DeferredBuildingException {
         Comment child = new Comment(null, data);
         appendNewlyCreatedChild(child);
         return child;
     }
 
-    public final CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreCDATASection coreAppendCDATASection(String data) throws ChildNotAllowedException, DeferredBuildingException {
         CDATASection child = new CDATASection(null, data);
         appendNewlyCreatedChild(child);
         return child;
     }
 
-    public final CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredParsingException {
+    public final CoreEntityReference coreAppendEntityReference(String name) throws ChildNotAllowedException, DeferredBuildingException {
         EntityReference child = new EntityReference(null, name);
         appendNewlyCreatedChild(child);
         return child;
@@ -626,7 +634,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return new ElementsIterator<T>(this, axis, type, matcher, namespaceURI, name);
     }
 
-    public <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredParsingException {
+    public <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredBuildingException {
         CoreChildNode child = coreGetFirstChild();
         while (true) {
             if (child == null) {

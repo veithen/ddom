@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NodeMigrationException;
@@ -130,7 +131,7 @@ public abstract class Container extends ParentNode implements LLChildNode {
         LLChildNodeHelper.coreInsertSiblingBefore(this, sibling, policy);
     }
 
-    public final void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+    public final void coreInsertSiblingsBefore(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredBuildingException {
         LLChildNodeHelper.coreInsertSiblingsBefore(this, fragment);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.stream.StreamException;
@@ -46,7 +47,7 @@ public class NamespaceDeclaration extends Attribute implements CoreNamespaceDecl
         return declaredPrefix;
     }
     
-    public final String coreGetDeclaredNamespaceURI() throws DeferredParsingException {
+    public final String coreGetDeclaredNamespaceURI() throws DeferredBuildingException {
         return coreGetTextContent(TextCollectorPolicy.DEFAULT);
     }
 

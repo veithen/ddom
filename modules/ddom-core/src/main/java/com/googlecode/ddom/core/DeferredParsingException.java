@@ -26,7 +26,7 @@ import com.googlecode.ddom.stream.StreamException;
  * 
  * @author Andreas Veithen
  */
-public class DeferredParsingException extends CoreModelException {
+public class DeferredParsingException extends DeferredBuildingException {
     private static final long serialVersionUID = 5510092282617307847L;
 
     /**

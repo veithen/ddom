@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.CyclicRelationshipException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
@@ -61,7 +62,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     void internalImportBuilder(LLDocument foreignDocument, LLParentNode node);
     
     // Type safe variant of core model method
-    LLChildNode internalGetFirstChild() throws DeferredParsingException;
+    LLChildNode internalGetFirstChild() throws DeferredBuildingException;
 
     void internalGenerateStartEvent(XmlHandler handler) throws StreamException;
     void internalGenerateEndEvent(XmlHandler handler) throws StreamException;

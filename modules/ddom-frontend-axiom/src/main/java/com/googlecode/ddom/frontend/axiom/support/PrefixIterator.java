@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package com.googlecode.ddom.frontend.axiom.support;
 
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
-import com.googlecode.ddom.core.DeferredParsingException;
 
 public class PrefixIterator extends AbstractNamespaceIterator<String> {
     private final String namespaceURI;
@@ -31,7 +31,7 @@ public class PrefixIterator extends AbstractNamespaceIterator<String> {
     protected boolean matches(CoreNamespaceDeclaration nsDeclaration) {
         try {
             return nsDeclaration.coreGetDeclaredNamespaceURI().equals(namespaceURI);
-        } catch (DeferredParsingException ex) {
+        } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
     }

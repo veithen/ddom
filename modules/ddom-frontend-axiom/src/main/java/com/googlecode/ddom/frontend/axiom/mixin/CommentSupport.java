@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.googlecode.ddom.frontend.axiom.mixin;
 import org.apache.axiom.om.OMNode;
 
 import com.googlecode.ddom.core.CoreComment;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomComment;
@@ -33,7 +33,7 @@ public abstract class CommentSupport implements AxiomComment {
     public final String getValue() {
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
-        } catch (DeferredParsingException ex) {
+        } catch (CoreModelException ex) {
             throw AxiomExceptionUtil.translate(ex);
         }
     }

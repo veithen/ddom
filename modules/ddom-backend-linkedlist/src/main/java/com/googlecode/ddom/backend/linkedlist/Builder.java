@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@ public class Builder extends XmlOutput {
             if (this.passThroughHandler != null) {
                 throw new IllegalStateException("A pass-through handler has already been set for this context");
             }
+            targetNode.internalSetState(Flags.STATE_CONSUMED);
             this.passThroughHandler = passThroughHandler;
             targetNode = null;
         }

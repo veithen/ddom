@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocumentTypeDeclaration;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.stream.Stream;
@@ -125,14 +126,22 @@ public class Document extends ParentNode implements LLDocument {
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild) throws ChildNotAllowedException, DeferredParsingException {
         // TODO: character data is also not allowed in DOM, but is allowed in Axiom; need to handle this somewhere!
-        if (newChild instanceof CoreDocumentTypeDeclaration) {
-            if (!(replacedChild instanceof CoreDocumentTypeDeclaration || coreGetDocumentTypeDeclaration() == null)) {
-                throw new ChildNotAllowedException("The document already has a document type node");
+        try {
+            if (newChild instanceof CoreDocumentTypeDeclaration) {
+                if (!(replacedChild instanceof CoreDocumentTypeDeclaration || coreGetDocumentTypeDeclaration() == null)) {
+                    throw new ChildNotAllowedException("The document already has a document type node");
+                }
+            } else if (newChild instanceof CoreElement) {
+                if (!(replacedChild instanceof CoreElement || coreGetDocumentElement() == null)) {
+                    throw new ChildNotAllowedException("The document already has a document element");
+                }
             }
-        } else if (newChild instanceof CoreElement) {
-            if (!(replacedChild instanceof CoreElement || coreGetDocumentElement() == null)) {
-                throw new ChildNotAllowedException("The document already has a document element");
-            }
+        } catch (DeferredParsingException ex) {
+            throw ex;
+        } catch (DeferredBuildingException ex) {
+            // If we get here, the exception must be a NodeConsumedException. Don't do anything right now;
+            // the caller will get another NodeConsumedException when it tries to add the new node or
+            // there will be an exception when the document is serialized.
         }
     }
 
@@ -142,7 +151,13 @@ public class Document extends ParentNode implements LLDocument {
     }
 
     private void ensureDocumentInfoReceived() throws DeferredParsingException {
-        coreGetFirstChild();
+        try {
+            coreGetFirstChild();
+        } catch (DeferredParsingException ex) {
+            throw ex;
+        } catch (DeferredBuildingException ex) {
+            throw new RuntimeException("Unexpected exception", ex);
+        }
     }
     
     public final String coreGetInputEncoding() throws DeferredParsingException {
@@ -183,7 +198,7 @@ public class Document extends ParentNode implements LLDocument {
     
     public final String coreGetXmlVersion() throws DeferredParsingException {
         if (!xmlVersionSet && internalGetState() == Flags.STATE_CONTENT_SET) {
-            coreGetFirstChild();
+            ensureDocumentInfoReceived();
         }
         return xmlVersion;
     }
@@ -195,7 +210,7 @@ public class Document extends ParentNode implements LLDocument {
 
     public final String coreGetXmlEncoding() throws DeferredParsingException {
         if (!xmlEncodingSet && internalGetState() == Flags.STATE_CONTENT_SET) {
-            coreGetFirstChild();
+            ensureDocumentInfoReceived();
         }
         return xmlEncoding;
     }
@@ -207,7 +222,7 @@ public class Document extends ParentNode implements LLDocument {
 
     public final Boolean coreGetStandalone() throws DeferredParsingException {
         if (!standaloneSet && internalGetState() == Flags.STATE_CONTENT_SET) {
-            coreGetFirstChild();
+            ensureDocumentInfoReceived();
         }
         return standalone;
     }
@@ -228,7 +243,7 @@ public class Document extends ParentNode implements LLDocument {
         this.documentURI = documentURI;
     }
 
-    public final CoreElement coreGetDocumentElement() throws DeferredParsingException {
+    public final CoreElement coreGetDocumentElement() throws DeferredBuildingException {
         CoreChildNode child = coreGetFirstChild();
         while (child != null && !(child instanceof CoreElement)) {
             child = child.coreGetNextSibling();
@@ -236,7 +251,7 @@ public class Document extends ParentNode implements LLDocument {
         return (CoreElement)child;
     }
 
-    public final CoreDocumentTypeDeclaration coreGetDocumentTypeDeclaration() throws DeferredParsingException {
+    public final CoreDocumentTypeDeclaration coreGetDocumentTypeDeclaration() throws DeferredBuildingException {
         // TODO: we know that the document type node must appear before the document element; use this to avoid expansion of the complete document
         CoreChildNode child = coreGetFirstChild();
         while (child != null && !(child instanceof CoreDocumentTypeDeclaration)) {
