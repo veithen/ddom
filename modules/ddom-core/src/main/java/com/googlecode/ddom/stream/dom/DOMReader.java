@@ -102,6 +102,7 @@ final class DOMReader implements XmlReader {
             } else {
                 switch (nodeType) {
                     case Node.DOCUMENT_NODE:
+                        // TODO: handler.startEntity(true, null) ??
                         if (currentNode != null) {
                             Document document = (Document)currentNode;
                             handler.startEntity(false, document.getInputEncoding());
