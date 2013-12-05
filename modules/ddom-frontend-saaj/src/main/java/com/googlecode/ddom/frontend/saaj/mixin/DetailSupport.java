@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDetail;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDetailEntry;
 import com.googlecode.ddom.frontend.saaj.support.NameUtil;
@@ -52,6 +53,6 @@ public abstract class DetailSupport implements SAAJDetail {
     }
 
     public final Iterator getDetailEntries() {
-        return new ReifyingIterator(coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, CoreNSAwareElement.class), SAAJDetailEntry.class);
+        return new ReifyingIterator(coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, CoreNSAwareElement.class, DOMExceptionTranslator.INSTANCE), SAAJDetailEntry.class);
     }
 }

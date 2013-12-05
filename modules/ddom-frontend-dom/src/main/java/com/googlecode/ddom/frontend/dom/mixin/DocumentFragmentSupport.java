@@ -24,7 +24,7 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.*;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.Policies;
 
 @Mixin(CoreDocumentFragment.class)
@@ -53,7 +53,7 @@ public abstract class DocumentFragmentSupport implements DOMDocumentFragment {
         try {
             return coreGetTextContent(Policies.GET_TEXT_CONTENT);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 

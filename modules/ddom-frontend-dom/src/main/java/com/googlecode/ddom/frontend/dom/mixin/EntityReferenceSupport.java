@@ -22,7 +22,7 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreEntityReference;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMEntityReference;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreEntityReference.class)
 public abstract class EntityReferenceSupport implements DOMEntityReference {
@@ -36,7 +36,7 @@ public abstract class EntityReferenceSupport implements DOMEntityReference {
     }
 
     public final void setTextContent(@SuppressWarnings("unused") String textContent) {
-        throw DOMExceptionUtil.newDOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR);
     }
 
     public final short getNodeType() {

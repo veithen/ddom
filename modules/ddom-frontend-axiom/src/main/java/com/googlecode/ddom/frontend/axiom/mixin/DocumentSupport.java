@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomDocument;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(CoreDocument.class)
@@ -32,7 +32,7 @@ public abstract class DocumentSupport implements AxiomDocument {
         try {
             return coreGetXmlVersion();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -45,7 +45,7 @@ public abstract class DocumentSupport implements AxiomDocument {
             // TODO: need to check that this is the right property!
             return coreGetXmlEncoding();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -58,7 +58,7 @@ public abstract class DocumentSupport implements AxiomDocument {
         try {
             return coreGetStandalone() ? "yes" : "no";
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -70,7 +70,7 @@ public abstract class DocumentSupport implements AxiomDocument {
         try {
             return (OMElement)coreGetDocumentElement();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -86,7 +86,7 @@ public abstract class DocumentSupport implements AxiomDocument {
                 existingDocumentElement.coreReplaceWith((AxiomElement)documentElement);
             }
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

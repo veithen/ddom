@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,13 @@ public class ElementsByTagNameNS extends ElementsBy {
         boolean localNameWildcard = localName.equals("*");
         if (nsWildcard && localNameWildcard) {
             // TODO: there seems to be no unit test checking whether the iterator should return DOM1 elements!
-            return node.coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class);
+            return node.coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class, DOMExceptionTranslator.INSTANCE);
         } else if (nsWildcard) {
-            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_LOCAL_NAME, null, localName);
+            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_LOCAL_NAME, null, localName, DOMExceptionTranslator.INSTANCE);
         } else if (localNameWildcard) {
-            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_NAMESPACE_URI, namespaceURI, null);
+            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_NAMESPACE_URI, namespaceURI, null, DOMExceptionTranslator.INSTANCE);
         } else {
-            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_QNAME, namespaceURI, localName);
+            return node.coreGetElements(Axis.DESCENDANTS, DOMNSAwareElement.class, ElementMatcher.BY_QNAME, namespaceURI, localName, DOMExceptionTranslator.INSTANCE);
         }
     }
 }

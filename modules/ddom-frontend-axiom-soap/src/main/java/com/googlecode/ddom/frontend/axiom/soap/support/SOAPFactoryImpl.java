@@ -47,7 +47,7 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.NSUtil;
 import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
 
@@ -111,7 +111,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
                 return element;
             }
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -138,7 +138,7 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
             envelope.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, soapVersion.getEnvelopeURI());
             return envelope;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 

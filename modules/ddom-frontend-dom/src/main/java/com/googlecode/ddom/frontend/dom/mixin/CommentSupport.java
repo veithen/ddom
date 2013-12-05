@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMComment;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreComment.class)
 // TODO: there is probably some code here that can be combined with the mixins for CoreProcessingInstruction and CoreCDATASection
@@ -36,7 +36,7 @@ public abstract class CommentSupport implements DOMComment {
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -44,7 +44,7 @@ public abstract class CommentSupport implements DOMComment {
         try {
             coreSetValue(data);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     

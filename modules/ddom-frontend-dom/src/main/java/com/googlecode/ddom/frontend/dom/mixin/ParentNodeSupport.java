@@ -34,7 +34,7 @@ import com.googlecode.ddom.frontend.dom.intf.DOMDocumentType;
 import com.googlecode.ddom.frontend.dom.intf.DOMDocumentTypeDeclaration;
 import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.ElementsByTagName;
 import com.googlecode.ddom.frontend.dom.support.ElementsByTagNameNS;
 import com.googlecode.ddom.frontend.dom.support.NodeUtil;
@@ -51,7 +51,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
         try {
             return NodeUtil.toDOM(coreGetFirstChild());
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -59,7 +59,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
         try {
             return (Node)coreGetLastChild();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -71,7 +71,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
         try {
             return coreGetChildCount();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -85,7 +85,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
             }
             return NodeUtil.toDOM(node);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -113,10 +113,10 @@ public abstract class ParentNodeSupport implements DOMParentNode {
             } else if (coreNewChild instanceof CoreDocumentFragment) {
                 coreAppendChildren((CoreDocumentFragment)coreNewChild);
             } else {
-                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
         return newChild;
     }
@@ -134,16 +134,16 @@ public abstract class ParentNodeSupport implements DOMParentNode {
             if (refChild == null) {
                 appendChild(newChild);
             } else if (refChild.getParentNode() != this) {
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
             } else if (newChild instanceof CoreChildNode) {
                 ((CoreChildNode)toCore(refChild)).coreInsertSiblingBefore((CoreChildNode)toCore(newChild), Policies.NODE_MIGRATION_POLICY);
             } else if (newChild instanceof CoreDocumentFragment) {
                 ((CoreChildNode)toCore(refChild)).coreInsertSiblingsBefore((CoreDocumentFragment)newChild);
             } else {
-                throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
         return newChild;
     }
@@ -156,11 +156,11 @@ public abstract class ParentNodeSupport implements DOMParentNode {
             try {
                 ((CoreChildNode)toCore(oldChild)).coreDetach();
             } catch (CoreModelException ex) {
-                throw DOMExceptionUtil.translate(ex);
+                throw DOMExceptionTranslator.translate(ex);
             }
             return oldChild;
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         }
     }
 
@@ -179,14 +179,14 @@ public abstract class ParentNodeSupport implements DOMParentNode {
                 } else if (coreNewChild instanceof CoreDocumentFragment) {
                     ((CoreChildNode)toCore(oldChild)).coreReplaceWith((CoreDocumentFragment)coreNewChild);
                 } else {
-                    throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+                    throw DOMExceptionTranslator.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
                 }
             } catch (CoreModelException ex) {
-                throw DOMExceptionUtil.translate(ex);
+                throw DOMExceptionTranslator.translate(ex);
             }
             return oldChild;
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         }
     }
 
@@ -200,7 +200,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
             }
             return clone;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -220,7 +220,7 @@ public abstract class ParentNodeSupport implements DOMParentNode {
                 child = child.coreGetNextSibling();
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 }

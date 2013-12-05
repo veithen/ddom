@@ -40,7 +40,7 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultNode;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(AxiomSOAPFault.class)
 public abstract class SOAPFaultSupport implements AxiomSOAPFault {
@@ -49,7 +49,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             return (AxiomSOAPFaultCode)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultCodeIndex(), false);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             coreInsertElementInSequence(version.getFaultSequence(), version.getFaultCodeIndex(), (AxiomSOAPFaultCode)soapFaultCode);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -67,7 +67,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             return (AxiomSOAPFaultReason)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultReasonIndex(), false);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -76,7 +76,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             coreInsertElementInSequence(version.getFaultSequence(), version.getFaultReasonIndex(), (AxiomSOAPFaultReason)reason);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -85,7 +85,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             return (AxiomSOAPFaultNode)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultNodeIndex(), false);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -94,7 +94,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             coreInsertElementInSequence(version.getFaultSequence(), version.getFaultNodeIndex(), (AxiomSOAPFaultNode)node);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -103,7 +103,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             return (AxiomSOAPFaultRole)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultRoleIndex(), false);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -112,7 +112,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             coreInsertElementInSequence(version.getFaultSequence(), version.getFaultRoleIndex(), (AxiomSOAPFaultRole)role);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -121,7 +121,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             return (AxiomSOAPFaultDetail)coreGetElementFromSequence(version.getFaultSequence(), version.getFaultDetailIndex(), false);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -130,7 +130,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             SOAPVersionEx version = getSOAPVersionEx();
             coreInsertElementInSequence(version.getFaultSequence(), version.getFaultDetailIndex(), (AxiomSOAPFaultDetail)detail);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -160,7 +160,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
             CoreNSAwareElement entry = detail.coreAppendElement("", SOAPConstants.SOAP_FAULT_DETAIL_EXCEPTION_ENTRY, "");
             entry.coreAppendCharacterData(sw.toString());
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

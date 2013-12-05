@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMNamespaceDeclaration;
 import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreNamespaceDeclaration.class)
 public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclaration {
@@ -46,7 +46,7 @@ public abstract class NamespaceDeclarationSupport implements DOMNamespaceDeclara
     public final void setPrefix(String prefix) throws DOMException {
         // Other DOM implementations allow changing the prefix, but this means that a namespace
         // declaration is transformed into a normal attribute. We don't support this.
-        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NAMESPACE_ERR);
     }
 
     public final String getLocalName() {

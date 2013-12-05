@@ -25,7 +25,7 @@ import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.util.lang.ObjectUtils;
 
 @Mixin(CoreNSAwareAttribute.class)
@@ -34,7 +34,7 @@ public abstract class AttributeSupport implements AxiomAttribute {
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -42,7 +42,7 @@ public abstract class AttributeSupport implements AxiomAttribute {
         try {
             coreSetValue(value);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -74,7 +74,7 @@ public abstract class AttributeSupport implements AxiomAttribute {
                         && ObjectUtils.equals(getNamespace(), other.getNamespace())
                         && getAttributeValue().equals(other.getAttributeValue());
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         } else {
             return false;
@@ -89,7 +89,7 @@ public abstract class AttributeSupport implements AxiomAttribute {
             return coreGetLocalName().hashCode() ^ (value != null ? value.hashCode() : 0) ^
                     (namespace != null ? namespace.hashCode() : 0);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

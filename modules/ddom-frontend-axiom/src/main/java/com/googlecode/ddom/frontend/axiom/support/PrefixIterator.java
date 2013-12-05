@@ -32,7 +32,7 @@ public class PrefixIterator extends AbstractNamespaceIterator<String> {
         try {
             return nsDeclaration.coreGetDeclaredNamespaceURI().equals(namespaceURI);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 

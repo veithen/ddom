@@ -190,7 +190,7 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
             case PARAM_VALIDATE_IF_SCHEMA:
                 return Boolean.FALSE;
             default:
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         }
     }
 
@@ -244,11 +244,11 @@ public class DOMConfigurationImpl implements DOMConfiguration, NormalizationConf
             case PARAM_VALIDATE:
             case PARAM_VALIDATE_IF_SCHEMA:
                 if (!Boolean.FALSE.equals(value)) {
-                    throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+                    throw DOMExceptionTranslator.newDOMException(DOMException.NOT_SUPPORTED_ERR);
                 }
                 break;
             default:
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         }
     }
 

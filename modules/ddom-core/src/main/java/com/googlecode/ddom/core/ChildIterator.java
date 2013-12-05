@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ import java.util.Iterator;
  * <li>A {@link ConcurrentModificationException} MUST be thrown when the iterator is used after the
  * last node returned by {@link Iterator#next()} has been removed using a method other than
  * {@link Iterator#remove()} (e.g. {@link CoreChildNode#coreDetach()}).
+ * <li>If a {@link CoreModelException} occurs inside {@link Iterator#hasNext()},
+ * {@link Iterator#next()} or {@link Iterator#remove()}, then the implementation MUST use the
+ * supplied {@link ExceptionTranslator} to translate that checked exception into an unchecked
+ * exception.
  * </ol>
  * 
  * @author Andreas Veithen
  */
-// TODO: specify what exception is thrown if a deferred parsing error occurs
 // TODO: rename this to NodeIterator since its use is not limited to iterating over child nodes
 public interface ChildIterator<T> extends Iterator<T> {
     /**

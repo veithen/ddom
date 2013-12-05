@@ -124,7 +124,7 @@ public class OMFactoryImpl implements OMFactory {
             try {
                 element.coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         }
         element.setOMFactory(this);
@@ -153,7 +153,7 @@ public class OMFactoryImpl implements OMFactory {
             element.setOMFactory(this);
             return element;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -213,7 +213,7 @@ public class OMFactoryImpl implements OMFactory {
             comment.setOMFactory(this);
             return comment;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -228,7 +228,7 @@ public class OMFactoryImpl implements OMFactory {
             pi.setOMFactory(this);
             return pi;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -244,7 +244,7 @@ public class OMFactoryImpl implements OMFactory {
             text.setOMFactory(this);
             return text;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -296,7 +296,7 @@ public class OMFactoryImpl implements OMFactory {
                     throw new UnsupportedOperationException();
             }
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
         node.setOMFactory(this);
         return node;

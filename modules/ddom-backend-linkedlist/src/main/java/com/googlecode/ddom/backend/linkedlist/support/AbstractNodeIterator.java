@@ -25,13 +25,13 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.core.DeferredBuildingException;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.ExceptionTranslator;
 
 public abstract class AbstractNodeIterator<T> implements ChildIterator<T> {
     private final CoreParentNode startNode;
     private final Axis axis;
     private final Class<T> type;
+    private final ExceptionTranslator exceptionTranslator;
     private CoreNode currentNode;
     
     /**
@@ -43,13 +43,14 @@ public abstract class AbstractNodeIterator<T> implements ChildIterator<T> {
     private boolean hasNext;
     private int depth;
     
-    public AbstractNodeIterator(CoreParentNode startNode, Axis axis, Class<T> type) {
+    public AbstractNodeIterator(CoreParentNode startNode, Axis axis, Class<T> type, ExceptionTranslator exceptionTranslator) {
         this.startNode = startNode;
         this.axis = axis;
         this.type = type;
+        this.exceptionTranslator = exceptionTranslator;
     }
 
-    protected abstract boolean matches(CoreNode node);
+    protected abstract boolean matches(CoreNode node) throws CoreModelException;
 
     public final boolean hasNext() {
         if (!hasNext) {
@@ -57,8 +58,8 @@ public abstract class AbstractNodeIterator<T> implements ChildIterator<T> {
             if (node instanceof CoreChildNode && ((CoreChildNode)node).coreGetParent() != currentParent) {
                 throw new ConcurrentModificationException("The current node has been removed using a method other than Iterator#remove()");
             }
-            do {
-                try {
+            try {
+                do {
                     // Get to the next node
                     switch (axis) {
                         case CHILDREN:
@@ -104,11 +105,10 @@ public abstract class AbstractNodeIterator<T> implements ChildIterator<T> {
                                 }
                             }
                     }
-                } catch (DeferredBuildingException ex) {
-                    // TODO
-                    throw new RuntimeException(ex);
-                }
-            } while (node != null && !matches(node));
+                } while (node != null && !matches(node));
+            } catch (CoreModelException ex) {
+                throw exceptionTranslator.toUncheckedException(ex);
+            }
             nextNode = node;
             hasNext = true;
         }
@@ -135,9 +135,8 @@ public abstract class AbstractNodeIterator<T> implements ChildIterator<T> {
         if (currentNode instanceof CoreChildNode) {
             try {
                 ((CoreChildNode)currentNode).coreDetach();
-            } catch (DeferredParsingException ex) {
-                // TODO
-                throw new RuntimeException(ex);
+            } catch (CoreModelException ex) {
+                throw exceptionTranslator.toUncheckedException(ex);
             }
         }
         currentNode = null;

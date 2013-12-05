@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.ChildIterator;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.ExceptionTranslator;
 import com.googlecode.ddom.core.Selector;
 
 public class TestCoreGetNodesWithConcurrentModification extends BackendTestCase {
@@ -34,7 +35,7 @@ public class TestCoreGetNodesWithConcurrentModification extends BackendTestCase 
         CoreElement parent = nodeFactory.createElement(null, "root");
         CoreElement element1 = parent.coreAppendElement("element1");
         parent.coreAppendElement("element2");
-        ChildIterator<CoreElement> it = parent.coreGetNodes(Axis.CHILDREN, Selector.ELEMENT, CoreElement.class);
+        ChildIterator<CoreElement> it = parent.coreGetNodes(Axis.CHILDREN, Selector.ELEMENT, CoreElement.class, ExceptionTranslator.DEFAULT);
         assertTrue(it.hasNext());
         assertSame(element1, it.next());
         element1.coreDetach();

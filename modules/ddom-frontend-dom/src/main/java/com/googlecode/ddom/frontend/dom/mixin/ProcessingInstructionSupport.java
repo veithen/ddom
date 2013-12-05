@@ -24,7 +24,7 @@ import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMProcessingInstruction;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreProcessingInstruction.class)
 public abstract class ProcessingInstructionSupport implements DOMProcessingInstruction {
@@ -32,7 +32,7 @@ public abstract class ProcessingInstructionSupport implements DOMProcessingInstr
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -40,7 +40,7 @@ public abstract class ProcessingInstructionSupport implements DOMProcessingInstr
         try {
             coreSetValue(data);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 

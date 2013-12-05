@@ -48,6 +48,7 @@ import com.googlecode.ddom.core.CyclicRelationshipException;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementMatcher;
+import com.googlecode.ddom.core.ExceptionTranslator;
 import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NodeConsumedException;
 import com.googlecode.ddom.core.NodeInUseException;
@@ -626,12 +627,12 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return child;
     }
     
-    public final <T> ChildIterator<T> coreGetNodes(Axis axis, Selector selector, Class<T> type) {
-        return new ChildrenByTypeIterator<T>(this, axis, selector, type);
+    public final <T> ChildIterator<T> coreGetNodes(Axis axis, Selector selector, Class<T> type, ExceptionTranslator exceptionTranslator) {
+        return new ChildrenByTypeIterator<T>(this, axis, selector, type, exceptionTranslator);
     }
 
-    public <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name) {
-        return new ElementsIterator<T>(this, axis, type, matcher, namespaceURI, name);
+    public <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name, ExceptionTranslator exceptionTranslator) {
+        return new ElementsIterator<T>(this, axis, type, matcher, namespaceURI, name, exceptionTranslator);
     }
 
     public <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredBuildingException {

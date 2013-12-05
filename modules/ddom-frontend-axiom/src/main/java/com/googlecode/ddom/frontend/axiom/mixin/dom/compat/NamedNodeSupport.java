@@ -20,7 +20,7 @@ import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamedNode;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(CoreNSAwareNamedNode.class)
 public abstract class NamedNodeSupport implements AxiomNamedNode {
@@ -28,7 +28,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
         try {
             return coreGetLocalName();
         } catch (DeferredParsingException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -37,7 +37,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
             String prefix = coreGetPrefix();
             return prefix.length() == 0 ? null : prefix;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -46,7 +46,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
             String namespaceURI = coreGetNamespaceURI();
             return namespaceURI.length() == 0 ? null : namespaceURI;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

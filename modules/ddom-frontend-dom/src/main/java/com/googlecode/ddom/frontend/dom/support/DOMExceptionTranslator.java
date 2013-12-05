@@ -25,14 +25,17 @@ import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CyclicRelationshipException;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.ExceptionTranslator;
 import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeNotFoundException;
 import com.googlecode.ddom.core.WrongDocumentException;
 import com.googlecode.ddom.frontend.dom.DOMDeferredParsingException;
 
-public final class DOMExceptionUtil {
+public final class DOMExceptionTranslator implements ExceptionTranslator {
+    public static final DOMExceptionTranslator INSTANCE = new DOMExceptionTranslator();
+    
     private static final ResourceBundle messages =
-            PropertyResourceBundle.getBundle(DOMExceptionUtil.class.getName());
+            PropertyResourceBundle.getBundle(DOMExceptionTranslator.class.getName());
     
     private static final String[] codeStrings = {
         "INDEX_SIZE_ERR",
@@ -54,7 +57,7 @@ public final class DOMExceptionUtil {
         "TYPE_MISMATCH_ERR"
     };
     
-    private DOMExceptionUtil() {}
+    private DOMExceptionTranslator() {}
     
     public static DOMException newDOMException(short code) {
         String key = codeStrings[code-1];
@@ -86,5 +89,9 @@ public final class DOMExceptionUtil {
         } else {
             throw new IllegalArgumentException("Don't know how to translate " + ex.getClass().getName());
         }
+    }
+
+    public RuntimeException toUncheckedException(CoreModelException ex) {
+        return translate(ex);
     }
 }

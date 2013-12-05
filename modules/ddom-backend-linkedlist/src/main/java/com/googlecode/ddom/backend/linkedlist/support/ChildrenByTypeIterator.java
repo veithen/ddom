@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@ package com.googlecode.ddom.backend.linkedlist.support;
 import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreNode;
 import com.googlecode.ddom.core.CoreParentNode;
+import com.googlecode.ddom.core.ExceptionTranslator;
 import com.googlecode.ddom.core.Selector;
 
 public class ChildrenByTypeIterator<T> extends AbstractNodeIterator<T> {
     private final Selector selector;
     
-    public ChildrenByTypeIterator(CoreParentNode startNode, Axis axis, Selector selector, Class<T> type) {
-        super(startNode, axis, type);
+    public ChildrenByTypeIterator(CoreParentNode startNode, Axis axis, Selector selector, Class<T> type, ExceptionTranslator exceptionTranslator) {
+        super(startNode, axis, type, exceptionTranslator);
         this.selector = selector;
     }
 

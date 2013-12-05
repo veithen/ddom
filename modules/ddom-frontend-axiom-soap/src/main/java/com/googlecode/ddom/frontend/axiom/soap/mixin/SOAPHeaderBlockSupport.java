@@ -28,7 +28,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(AxiomSOAPHeaderBlock.class)
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
@@ -42,7 +42,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
         try {
             coreSetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -70,7 +70,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
                 }
             }
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -81,7 +81,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
             coreSetAttribute(AxiomAttributeMatcher.INSTANCE, version.getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
                     SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, version.formatMustUnderstand(mustUnderstand));
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -95,7 +95,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
                 coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
                         SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, mustUnderstand);
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         } else {
             throw new SOAPProcessingException("mustUndertand must be one of \"true\", \"false\", \"0\" or \"1\"");

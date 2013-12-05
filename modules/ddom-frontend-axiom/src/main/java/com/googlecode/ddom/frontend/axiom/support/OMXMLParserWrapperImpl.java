@@ -49,7 +49,7 @@ public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
             }
             return element;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 

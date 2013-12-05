@@ -21,7 +21,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.OMNamespaceImpl;
 
 @Mixin(CoreNamespaceDeclaration.class)
@@ -32,7 +32,7 @@ public abstract class NamespaceDeclarationSupport implements AxiomNamespaceDecla
             // TODO: handle null namespaces/prefixes
             return new OMNamespaceImpl(coreGetDeclaredNamespaceURI(), coreGetDeclaredPrefix());
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

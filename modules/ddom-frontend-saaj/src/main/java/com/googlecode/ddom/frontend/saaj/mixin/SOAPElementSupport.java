@@ -36,6 +36,7 @@ import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.frontend.saaj.SAAJModelExtension;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJNSAwareAttribute;
@@ -317,15 +318,15 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     }
     
     public final Iterator getChildElements() {
-        return getChildElements(coreGetNodes(Axis.CHILDREN, Selector.ANY, CoreChildNode.class));
+        return getChildElements(coreGetNodes(Axis.CHILDREN, Selector.ANY, CoreChildNode.class, DOMExceptionTranslator.INSTANCE));
     }
 
     public final Iterator getChildElements(Name name) {
-        return getChildElements(coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, name.getURI(), name.getLocalName()));
+        return getChildElements(coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, name.getURI(), name.getLocalName(), DOMExceptionTranslator.INSTANCE));
     }
 
     public final Iterator getChildElements(QName qname) {
-        return getChildElements(coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, qname.getNamespaceURI(), qname.getLocalPart()));
+        return getChildElements(coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, qname.getNamespaceURI(), qname.getLocalPart(), DOMExceptionTranslator.INSTANCE));
     }
 
     public void setEncodingStyle(String encodingStyle) throws SOAPException {

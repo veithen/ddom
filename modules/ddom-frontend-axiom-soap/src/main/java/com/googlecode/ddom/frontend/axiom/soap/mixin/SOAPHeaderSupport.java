@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeader;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.googlecode.ddom.frontend.axiom.soap.support.RoleFilter;
 import com.googlecode.ddom.frontend.axiom.soap.support.RolePlayerFilter;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.NSUtil;
 
 @Mixin(AxiomSOAPHeader.class)
@@ -45,13 +45,13 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
         try {
             return coreAppendElement(getSOAPVersionEx().getSOAPHeaderBlockClass(), NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
     // TODO: is remove supposed to work?
     public final Iterator<SOAPHeaderBlock> examineAllHeaderBlocks() {
-        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, SOAPHeaderBlock.class);
+        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, SOAPHeaderBlock.class, AxiomExceptionTranslator.INSTANCE);
     }
 
     // TODO: is remove supposed to work?
@@ -61,7 +61,7 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
             return examineAllHeaderBlocks();
         } else {
             return new FilteredIterator<AxiomSOAPHeaderBlock>(
-                    coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, AxiomSOAPHeaderBlock.class), new RoleFilter(role));
+                    coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, AxiomSOAPHeaderBlock.class, AxiomExceptionTranslator.INSTANCE), new RoleFilter(role));
         }
     }
 
@@ -86,7 +86,7 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
             }
             return result;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -96,7 +96,7 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
 
     public final Iterator getHeadersToProcess(RolePlayer rolePlayer, String namespace) {
         return new FilteredIterator<AxiomSOAPHeaderBlock>(
-                coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, AxiomSOAPHeaderBlock.class), new RolePlayerFilter(rolePlayer, namespace));
+                coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, AxiomSOAPHeaderBlock.class, AxiomExceptionTranslator.INSTANCE), new RolePlayerFilter(rolePlayer, namespace));
     }
 
     public Iterator extractAllHeaderBlocks() {

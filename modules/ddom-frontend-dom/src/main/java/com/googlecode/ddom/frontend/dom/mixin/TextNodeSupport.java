@@ -26,7 +26,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMTextNode;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.Policies;
 
 @Mixin({CoreCharacterData.class, CoreCDATASection.class})
@@ -34,7 +34,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
     public final Text splitText(int offset) throws DOMException {
         String text = getData();
         if (offset < 0 || offset > text.length()) {
-            throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         setData(text.substring(0, offset));
         DOMTextNode newNode = createNewTextNode(text.substring(offset));
@@ -43,7 +43,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
             try {
                 coreInsertSiblingAfter(newNode, Policies.NODE_MIGRATION_POLICY);
             } catch (CoreModelException ex) {
-                throw DOMExceptionUtil.translate(ex);
+                throw DOMExceptionTranslator.translate(ex);
             }
         }
         return newNode;
@@ -68,7 +68,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
                 }
                 return buffer.toString();
             } catch (CoreModelException ex) {
-                throw DOMExceptionUtil.translate(ex);
+                throw DOMExceptionTranslator.translate(ex);
             }
         }
     }
@@ -86,7 +86,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
             }
             return first;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -103,7 +103,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
             }
             return last;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -129,7 +129,7 @@ public abstract class TextNodeSupport implements DOMTextNode {
                     current = next;
                 } while (next != null);
             } catch (CoreModelException ex) {
-                throw DOMExceptionUtil.translate(ex);
+                throw DOMExceptionTranslator.translate(ex);
             }
         }
         return newText;

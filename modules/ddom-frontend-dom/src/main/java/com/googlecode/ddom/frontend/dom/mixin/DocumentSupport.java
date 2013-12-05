@@ -58,7 +58,7 @@ import com.googlecode.ddom.frontend.dom.intf.DOMElement;
 import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
 import com.googlecode.ddom.frontend.dom.support.DOMConfigurationImpl;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.DOMImplementationImpl;
 import com.googlecode.ddom.frontend.dom.support.NSUtil;
 import com.googlecode.ddom.frontend.dom.support.NodeUtil;
@@ -84,7 +84,7 @@ public abstract class DocumentSupport implements DOMDocument {
             String xmlVersion = coreGetXmlVersion();
             return xmlVersion == null ? "1.0" : xmlVersion;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -93,7 +93,7 @@ public abstract class DocumentSupport implements DOMDocument {
         if (xmlVersion.equals("1.0") || xmlVersion.equals("1.1")) {
             coreSetXmlVersion(xmlVersion);
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_SUPPORTED_ERR);
         }
     }
 
@@ -101,7 +101,7 @@ public abstract class DocumentSupport implements DOMDocument {
         try {
             return coreGetInputEncoding();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -109,7 +109,7 @@ public abstract class DocumentSupport implements DOMDocument {
         try {
             return coreGetXmlEncoding();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -118,7 +118,7 @@ public abstract class DocumentSupport implements DOMDocument {
             Boolean standalone = coreGetStandalone();
             return standalone != null && standalone.booleanValue();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -131,7 +131,7 @@ public abstract class DocumentSupport implements DOMDocument {
         try {
             return coreGetDocumentURI();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -139,7 +139,7 @@ public abstract class DocumentSupport implements DOMDocument {
         try {
             coreSetDocumentURI(documentURI);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -155,7 +155,7 @@ public abstract class DocumentSupport implements DOMDocument {
         try {
             return (Element)coreGetDocumentElement();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -163,7 +163,7 @@ public abstract class DocumentSupport implements DOMDocument {
         try {
             return NodeUtil.toDOM(coreGetDocumentTypeDeclaration());
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -226,10 +226,10 @@ public abstract class DocumentSupport implements DOMDocument {
                 case Node.ENTITY_REFERENCE_NODE:
                     return (Node)nodeFactory.createEntityReference(this, node.getNodeName());
                 default:
-                    throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+                    throw DOMExceptionTranslator.newDOMException(DOMException.NOT_SUPPORTED_ERR);
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -250,7 +250,7 @@ public abstract class DocumentSupport implements DOMDocument {
 
     public final Element getElementById(String elementId) {
         try {
-            for (Iterator<DOMElement> it = coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class); it.hasNext(); ) {
+            for (Iterator<DOMElement> it = coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class, DOMExceptionTranslator.INSTANCE); it.hasNext(); ) {
                 DOMElement element = it.next();
                 for (CoreAttribute attr = element.coreGetFirstAttribute(); attr != null; attr = attr.coreGetNextAttribute()) {
                     if (((Attr)attr).isId() && elementId.equals(attr.coreGetTextContent(TextCollectorPolicy.DEFAULT))) {
@@ -260,14 +260,14 @@ public abstract class DocumentSupport implements DOMDocument {
             }
             return null;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
     public final Node adoptNode(Node source) throws DOMException {
         switch (source.getNodeType()) {
             case Node.DOCUMENT_NODE:
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.NOT_SUPPORTED_ERR);
             case Node.DOCUMENT_FRAGMENT_NODE:
                 ((DOMDocumentFragment)source).coreSetOwnerDocument(this);
                 return source;
@@ -279,7 +279,7 @@ public abstract class DocumentSupport implements DOMDocument {
                     ((DOMCoreChildNode)source).coreDetach(this);
                     return source;
                 } catch (CoreModelException ex) {
-                    throw DOMExceptionUtil.translate(ex);
+                    throw DOMExceptionTranslator.translate(ex);
                 }
         }
     }
@@ -302,7 +302,7 @@ public abstract class DocumentSupport implements DOMDocument {
             CoreNSAwareNamedNode namedNode = (CoreNSAwareNamedNode)node;
             
             if (namedNode.coreGetOwnerDocument(true) != this) {
-                throw DOMExceptionUtil.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.WRONG_DOCUMENT_ERR);
             }
             
             int i = NSUtil.validateQualifiedName(qualifiedName);
@@ -326,7 +326,7 @@ public abstract class DocumentSupport implements DOMDocument {
             namedNode.coreSetPrefix(prefix);
             return node;
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_SUPPORTED_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_SUPPORTED_ERR);
         }
     }
 
@@ -474,7 +474,7 @@ public abstract class DocumentSupport implements DOMDocument {
         try {
             return coreGetDocumentElement();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     

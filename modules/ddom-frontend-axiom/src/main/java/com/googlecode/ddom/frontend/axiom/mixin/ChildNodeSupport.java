@@ -22,7 +22,7 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomChildNode;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(CoreChildNode.class)
@@ -35,7 +35,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
         try {
             return (OMNode)coreGetPreviousSibling();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -43,7 +43,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
         try {
             return (OMNode)coreGetNextSibling();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -51,7 +51,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
         try {
             coreInsertSiblingBefore((CoreChildNode)sibling, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -59,7 +59,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
         try {
             coreInsertSiblingAfter((CoreChildNode)sibling, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -68,7 +68,7 @@ public abstract class ChildNodeSupport implements AxiomChildNode {
             coreDetach();
             return this;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     

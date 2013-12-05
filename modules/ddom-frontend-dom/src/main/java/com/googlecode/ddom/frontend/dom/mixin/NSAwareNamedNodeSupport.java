@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.*;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.NSUtil;
 
 @Mixin(CoreNSAwareNamedNode.class)
@@ -33,7 +33,7 @@ public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
             String namespaceURI = coreGetNamespaceURI();
             return namespaceURI.length() == 0 ? null : namespaceURI;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -42,7 +42,7 @@ public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
             String prefix = coreGetPrefix();
             return prefix.length() == 0 ? null : prefix;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -53,14 +53,14 @@ public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
             String namespaceURI = getNamespaceURI();
             if (namespaceURI == null) {
                 // The null namespace can't be bound to a prefix
-                throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.NAMESPACE_ERR);
             } else {
                 NSUtil.validatePrefix(prefix);
                 if (XMLConstants.XML_NS_PREFIX.equals(prefix) && !XMLConstants.XML_NS_URI.equals(namespaceURI)) {
-                    throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+                    throw DOMExceptionTranslator.newDOMException(DOMException.NAMESPACE_ERR);
                 }
                 if (XMLConstants.XMLNS_ATTRIBUTE.equals(prefix) && !XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
-                    throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+                    throw DOMExceptionTranslator.newDOMException(DOMException.NAMESPACE_ERR);
                 }
                 coreSetPrefix(prefix);
             }
@@ -71,7 +71,7 @@ public abstract class NSAwareNamedNodeSupport implements DOMNSAwareNamedNode {
         try {
             return coreGetLocalName();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultDetail;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(AxiomSOAPFaultDetail.class)
@@ -34,11 +34,11 @@ public abstract class SOAPFaultDetailSupport implements AxiomSOAPFaultDetail {
         try {
             coreAppendChild((AxiomElement)detailElement, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
     public final Iterator<OMElement> getAllDetailEntries() {
-        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, OMElement.class);
+        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, OMElement.class, AxiomExceptionTranslator.INSTANCE);
     }
 }

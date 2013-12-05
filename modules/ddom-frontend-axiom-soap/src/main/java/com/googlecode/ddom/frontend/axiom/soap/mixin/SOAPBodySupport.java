@@ -27,7 +27,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPBody;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFault;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(AxiomSOAPBody.class)
@@ -41,7 +41,7 @@ public abstract class SOAPBodySupport implements AxiomSOAPBody {
             // TODO: fill fault with exception data
             return fault;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -49,7 +49,7 @@ public abstract class SOAPBodySupport implements AxiomSOAPBody {
         try {
             coreAppendChild((AxiomSOAPFault)soapFault, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class SOAPBodySupport implements AxiomSOAPBody {
             CoreElement firstElement = coreGetFirstChildByType(CoreElement.class);
             return firstElement instanceof SOAPFault ? (SOAPFault)firstElement : null;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 

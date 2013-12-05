@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultText;
 import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(AxiomSOAPFaultText.class)
 public abstract class SOAPFaultTextSupport implements AxiomSOAPFaultText {
@@ -33,7 +33,7 @@ public abstract class SOAPFaultTextSupport implements AxiomSOAPFaultText {
                     SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_LOCAL_NAME);
             return attr == null ? null : attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -42,7 +42,7 @@ public abstract class SOAPFaultTextSupport implements AxiomSOAPFaultText {
             coreSetAttribute(AxiomAttributeMatcher.INSTANCE, SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_NS_URI,
                     SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_LOCAL_NAME, SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_NS_PREFIX, lang);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

@@ -20,7 +20,7 @@ import org.w3c.dom.DOMException;
 import com.googlecode.ddom.core.CoreNSUnawareNamedNode;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMNSUnawareNamedNode;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreNSUnawareNamedNode.class)
 public abstract class NSUnawareNamedNodeSupport implements DOMNSUnawareNamedNode {
@@ -33,7 +33,7 @@ public abstract class NSUnawareNamedNodeSupport implements DOMNSUnawareNamedNode
     }
     
     public final void setPrefix(String prefix) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NAMESPACE_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NAMESPACE_ERR);
     }
     
     public final String getLocalName() {

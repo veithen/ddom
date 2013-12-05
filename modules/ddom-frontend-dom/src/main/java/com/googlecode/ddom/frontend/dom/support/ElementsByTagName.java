@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,9 @@ public class ElementsByTagName extends ElementsBy {
     @Override
     protected Iterator<? extends Node> createIterator() {
         if (tagname.equals("*")) {
-            return node.coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class);
+            return node.coreGetNodes(Axis.DESCENDANTS, Selector.ELEMENT, DOMElement.class, DOMExceptionTranslator.INSTANCE);
         } else {
-            return node.coreGetElements(Axis.DESCENDANTS, DOMElement.class, ElementMatcher.BY_NAME, null, tagname);
+            return node.coreGetElements(Axis.DESCENDANTS, DOMElement.class, ElementMatcher.BY_NAME, null, tagname, DOMExceptionTranslator.INSTANCE);
         }
     }
 }

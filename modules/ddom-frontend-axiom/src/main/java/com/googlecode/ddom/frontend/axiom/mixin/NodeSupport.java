@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNode;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin({CoreDocument.class, CoreChildNode.class})
 public abstract class NodeSupport implements AxiomNode {
@@ -34,7 +34,7 @@ public abstract class NodeSupport implements AxiomNode {
                 // TODO: not sure if the document or only the node should be built
                 document.coreBuild();
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         }
         // TODO

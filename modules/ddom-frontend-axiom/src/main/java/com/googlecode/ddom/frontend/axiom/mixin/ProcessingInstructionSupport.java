@@ -22,7 +22,7 @@ import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 /**
  * 
@@ -42,7 +42,7 @@ public abstract class ProcessingInstructionSupport implements AxiomProcessingIns
         try {
             coreSetValue(value);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -50,7 +50,7 @@ public abstract class ProcessingInstructionSupport implements AxiomProcessingIns
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     

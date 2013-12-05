@@ -42,7 +42,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
             }
             return length;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -55,7 +55,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
             }
             return (Node)attr;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -71,7 +71,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
         if (arg instanceof CoreTypedAttribute) {
             return element.setAttributeNode((Attr)arg);
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         }
     }
 
@@ -79,7 +79,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
         if (arg instanceof CoreTypedAttribute) {
             return element.setAttributeNodeNS((Attr)arg);
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
         }
     }
 
@@ -90,7 +90,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
             element.removeAttributeNode(attr);
             return attr;
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         }
     }
 
@@ -101,7 +101,7 @@ public class AttributesNamedNodeMap implements NamedNodeMap {
             element.removeAttributeNode(attr);
             return attr;
         } else {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         }
     }
 }

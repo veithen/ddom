@@ -284,11 +284,13 @@ public interface CoreParentNode extends CoreNode {
      *            the node type selector
      * @param type
      *            the item type for the returned iterator
+     * @param exceptionTranslator
+     *            the exception translator to be used by the returned {@link ChildIterator}
      * @return an iterator over the node-set
      */
-    <T> ChildIterator<T> coreGetNodes(Axis axis, Selector selector, Class<T> type);
+    <T> ChildIterator<T> coreGetNodes(Axis axis, Selector selector, Class<T> type, ExceptionTranslator exceptionTranslator);
     
-    <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name);
+    <T extends CoreElement> ChildIterator<T> coreGetElements(Axis axis, Class<T> type, ElementMatcher<? super T> matcher, String namespaceURI, String name, ExceptionTranslator exceptionTranslator);
     
     <T extends CoreChildNode> T coreGetFirstChildByType(Class<T> type) throws DeferredBuildingException;
 }

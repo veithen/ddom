@@ -28,7 +28,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.googlecode.ddom.frontend.dom.intf.DOMLeafNode;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.EmptyNodeList;
 
 @Mixin({CoreLeafNode.class, CoreProcessingInstruction.class, CoreComment.class, CoreCDATASection.class})
@@ -58,19 +58,19 @@ public abstract class LeafNodeSupport implements DOMLeafNode {
     }
 
     public final Node appendChild(@SuppressWarnings("unused") Node newChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
     }
 
     public final Node insertBefore(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node refChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
     public final Node removeChild(@SuppressWarnings("unused") Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
     public final Node replaceChild(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
     public final void normalize(NormalizationConfig config) throws AbortNormalizationException {

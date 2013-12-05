@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamedNode;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 /**
  * 
@@ -44,7 +44,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
             String namespaceURI = coreGetNamespaceURI();
             return namespaceURI.length() == 0 ? null : getOMFactory().createOMNamespace(namespaceURI, coreGetPrefix());
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -52,7 +52,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
         try {
             return coreGetQName();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -60,7 +60,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
         try {
             return coreGetLocalName().equals(name.getLocalPart()) && coreGetNamespaceURI().equals(name.getNamespaceURI());
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

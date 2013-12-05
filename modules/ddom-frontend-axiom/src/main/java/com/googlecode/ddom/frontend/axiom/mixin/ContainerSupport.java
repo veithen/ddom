@@ -44,7 +44,7 @@ import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomContainer;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.Policies;
 import com.googlecode.ddom.frontend.axiom.support.XmlSourceImpl;
 import com.googlecode.ddom.stream.Stream;
@@ -65,33 +65,33 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             return (OMNode)coreGetFirstChild();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
     public final Iterator<OMNode> getChildren() {
-        return coreGetNodes(Axis.CHILDREN, Selector.ANY, OMNode.class);
+        return coreGetNodes(Axis.CHILDREN, Selector.ANY, OMNode.class, AxiomExceptionTranslator.INSTANCE);
     }
     
     public final Iterator getChildrenWithName(QName qname) {
-        return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, qname.getNamespaceURI(), qname.getLocalPart());
+        return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, qname.getNamespaceURI(), qname.getLocalPart(), AxiomExceptionTranslator.INSTANCE);
     }
     
     public final Iterator getChildrenWithLocalName(String localName) {
-        return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_LOCAL_NAME, null, localName);
+        return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_LOCAL_NAME, null, localName, AxiomExceptionTranslator.INSTANCE);
     }
     
     public final Iterator getChildrenWithNamespaceURI(String uri) {
-        return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_NAMESPACE_URI, uri, null);
+        return coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_NAMESPACE_URI, uri, null, AxiomExceptionTranslator.INSTANCE);
     }
     
     public final Iterator<OMSerializable> getDescendants(boolean includeSelf) {
-        return coreGetNodes(includeSelf ? Axis.DESCENDANTS_OR_SELF : Axis.DESCENDANTS, Selector.ANY, OMSerializable.class);
+        return coreGetNodes(includeSelf ? Axis.DESCENDANTS_OR_SELF : Axis.DESCENDANTS, Selector.ANY, OMSerializable.class, AxiomExceptionTranslator.INSTANCE);
     }
     
     public final OMElement getFirstChildWithName(QName qname) {
         // TODO: we should avoid usage of an iterator here; this would also improve error reporting (because the iterator can only throw unchecked exceptions)
-        Iterator<CoreNSAwareElement> it = coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, qname.getNamespaceURI(), qname.getLocalPart());
+        Iterator<CoreNSAwareElement> it = coreGetElements(Axis.CHILDREN, CoreNSAwareElement.class, ElementMatcher.BY_QNAME, qname.getNamespaceURI(), qname.getLocalPart(), AxiomExceptionTranslator.INSTANCE);
         return it.hasNext() ? (AxiomElement)it.next() : null;
     }
     
@@ -99,7 +99,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             coreAppendChild((CoreChildNode)omNode, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -111,7 +111,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             coreBuild();
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -130,7 +130,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             serialize(new StAXOutput(writer), cache);
         } catch (StreamException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -146,7 +146,7 @@ public abstract class ContainerSupport implements AxiomContainer {
             // TODO: correct choice of encoding?
             serialize(new Serializer(output, "UTF-8"), preserve);
         } catch (StreamException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         } catch (UnsupportedEncodingException ex) {
             throw new XMLStreamException(ex);
         }
@@ -157,7 +157,7 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             serialize(new Serializer(writer), preserve);
         } catch (StreamException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -172,7 +172,7 @@ public abstract class ContainerSupport implements AxiomContainer {
             }
             serialize(new Serializer(output, encoding), preserve);
         } catch (StreamException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         } catch (UnsupportedEncodingException ex) {
             throw new XMLStreamException(ex);
         }

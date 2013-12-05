@@ -21,7 +21,7 @@ import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMElement;
 import com.googlecode.ddom.frontend.dom.intf.DOMNSUnawareElement;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreNSUnawareElement.class)
 public abstract class NSUnawareElementSupport implements DOMNSUnawareElement {
@@ -33,7 +33,7 @@ public abstract class NSUnawareElementSupport implements DOMNSUnawareElement {
         try {
             return coreGetName();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 }

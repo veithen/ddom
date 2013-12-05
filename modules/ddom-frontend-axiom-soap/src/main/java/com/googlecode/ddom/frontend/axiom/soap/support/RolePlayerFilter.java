@@ -22,7 +22,7 @@ import org.apache.axiom.soap.RolePlayer;
 import com.google.code.ddom.collections.Filter;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 public class RolePlayerFilter implements Filter<AxiomSOAPHeaderBlock> {
     private final RolePlayer rolePlayer;
@@ -57,7 +57,7 @@ public class RolePlayerFilter implements Filter<AxiomSOAPHeaderBlock> {
             }
             return false;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 }

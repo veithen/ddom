@@ -53,7 +53,7 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
 import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceIterator;
 import com.googlecode.ddom.frontend.axiom.support.OMNamespaceImpl;
@@ -97,7 +97,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             coreSetPrefix(prefix);
             ensureNamespaceIsDeclared(prefix, namespaceURI);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -107,7 +107,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     }
     
     public final Iterator<OMElement> getChildElements() {
-        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, OMElement.class);
+        return coreGetNodes(Axis.CHILDREN, Selector.NS_AWARE_ELEMENT, OMElement.class, AxiomExceptionTranslator.INSTANCE);
     }
     
     private static final IdentityMapper<AxiomAttribute> attributeIdentityMapper = new IdentityMapper<AxiomAttribute>();
@@ -120,7 +120,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         try {
             return (AxiomAttribute)coreGetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -139,7 +139,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             }
             return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.ADDED_ATTRIBUTE);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -156,7 +156,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         try {
             return coreGetFirstChildByType(AxiomElement.class);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -169,7 +169,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             clone.coreBuild();
             return clone;
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -185,7 +185,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         try {
             return coreGetTextContent(Policies.GET_TEXT_POLICY);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -193,7 +193,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         try {
             coreSetValue(text);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -207,7 +207,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             ensureNamespaceIsDeclared(prefix, namespaceURI);
             coreSetValue(prefix.length() > 0 ? prefix + ":" + qname.getLocalPart() : qname.getLocalPart());
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -231,7 +231,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             String trimmedText = coreGetTextContent(TextCollectorPolicy.DEFAULT).trim();
             return trimmedText.length() == 0 ? null : resolveQName(trimmedText);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -258,7 +258,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
                 return new QName(namespaceURI, localName, prefix);
             }
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -280,7 +280,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             }
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, uri);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -325,7 +325,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             String namespaceURI = coreLookupNamespaceURI("", true);
             return namespaceURI == null || namespaceURI.length() == 0 ? null : new OMNamespaceImpl(namespaceURI, "");
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -339,7 +339,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
                 return prefix == null ? null : new OMNamespaceImpl(queryUri, prefix);
             }
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
     
@@ -360,7 +360,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         try {
             return toString(false);
         } catch (StreamException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 
@@ -400,7 +400,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
                 }
             }
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
         return namespaces;
     }
@@ -425,7 +425,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
                 String namespaceURI = coreLookupNamespaceURI(prefix, true);
                 return namespaceURI == null ? XMLConstants.NULL_NS_URI : namespaceURI;
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         }
     }
@@ -441,7 +441,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             try {
                 return coreLookupPrefix(namespaceURI, true);
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         }
     }

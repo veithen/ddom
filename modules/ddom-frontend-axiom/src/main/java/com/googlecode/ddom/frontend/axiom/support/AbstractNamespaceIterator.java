@@ -74,7 +74,7 @@ public abstract class AbstractNamespaceIterator<T> implements Iterator<T> {
                     }
                 }
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
             hasNextCalled = true;
         }

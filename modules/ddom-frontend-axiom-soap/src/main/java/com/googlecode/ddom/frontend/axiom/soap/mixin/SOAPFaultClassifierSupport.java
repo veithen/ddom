@@ -25,7 +25,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultClassifier;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(AxiomSOAPFaultClassifier.class)
 public abstract class SOAPFaultClassifierSupport implements AxiomSOAPFaultClassifier {
@@ -37,7 +37,7 @@ public abstract class SOAPFaultClassifierSupport implements AxiomSOAPFaultClassi
             try {
                 return (SOAPFaultValue)coreGetElementFromSequence(seq, 0, false);
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         }
     }
@@ -55,7 +55,7 @@ public abstract class SOAPFaultClassifierSupport implements AxiomSOAPFaultClassi
             try {
                 ((SOAPFaultValue)coreGetElementFromSequence(seq, 0, true)).setText(value);
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         }
     }
@@ -68,7 +68,7 @@ public abstract class SOAPFaultClassifierSupport implements AxiomSOAPFaultClassi
             try {
                 return (SOAPFaultSubCode)coreGetElementFromSequence(seq, 1, false);
             } catch (CoreModelException ex) {
-                throw AxiomExceptionUtil.translate(ex);
+                throw AxiomExceptionTranslator.translate(ex);
             }
         }
     }

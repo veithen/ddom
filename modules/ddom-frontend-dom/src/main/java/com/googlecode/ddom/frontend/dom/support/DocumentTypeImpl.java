@@ -137,7 +137,7 @@ public class DocumentTypeImpl implements DOMDocumentType {
             DOMDocumentTypeDeclaration declaration = getDeclaration();
             return declaration == null ? null : NodeUtil.toDOM(declaration.coreGetNextSibling());
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -146,7 +146,7 @@ public class DocumentTypeImpl implements DOMDocumentType {
             DOMDocumentTypeDeclaration declaration = getDeclaration();
             return declaration == null ? null : NodeUtil.toDOM(declaration.coreGetPreviousSibling());
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -195,19 +195,19 @@ public class DocumentTypeImpl implements DOMDocumentType {
     }
 
     public final Node appendChild(@SuppressWarnings("unused") Node newChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.HIERARCHY_REQUEST_ERR);
     }
 
     public final Node insertBefore(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node refChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
     public final Node removeChild(@SuppressWarnings("unused") Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
     public final Node replaceChild(@SuppressWarnings("unused") Node newChild, @SuppressWarnings("unused") Node oldChild) throws DOMException {
-        throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+        throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
     }
 
     public final String getNamespaceURI() {

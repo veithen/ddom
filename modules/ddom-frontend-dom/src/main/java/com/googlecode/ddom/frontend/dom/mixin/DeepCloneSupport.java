@@ -24,7 +24,7 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 /**
  * Implements the {@link Node#cloneNode(boolean)} for {@link Element}, {@link Document} and
@@ -39,7 +39,7 @@ public abstract class DeepCloneSupport implements DOMParentNode {
         try {
             return deep ? deepClone() : shallowClone();
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 }

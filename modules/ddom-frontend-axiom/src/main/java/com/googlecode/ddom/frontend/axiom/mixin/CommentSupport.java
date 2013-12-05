@@ -22,7 +22,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomComment;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(CoreComment.class)
 public abstract class CommentSupport implements AxiomComment {
@@ -34,7 +34,7 @@ public abstract class CommentSupport implements AxiomComment {
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 

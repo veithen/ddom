@@ -22,7 +22,7 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMCoreChildNode;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.NodeUtil;
 
 @Mixin(CoreChildNode.class)
@@ -39,7 +39,7 @@ public abstract class CoreChildNodeSupport implements DOMCoreChildNode {
         try {
             return NodeUtil.toDOM(coreGetNextSibling());
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -47,7 +47,7 @@ public abstract class CoreChildNodeSupport implements DOMCoreChildNode {
         try {
             return NodeUtil.toDOM(coreGetPreviousSibling());
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 }

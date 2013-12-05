@@ -29,6 +29,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
@@ -109,7 +110,7 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
     
     private Iterator examineHeaderElements(ElementMatcher<SAAJSOAPHeaderElement> matcher, String param) {
         // TODO: we may potentially have an issue with elements that have not been reified yet (i.e. that have been created using plain DOM methods)
-        return coreGetElements(Axis.CHILDREN, SAAJSOAPHeaderElement.class, matcher, null, param);
+        return coreGetElements(Axis.CHILDREN, SAAJSOAPHeaderElement.class, matcher, null, param, DOMExceptionTranslator.INSTANCE);
     }
 
     private <T> Iterator<T> extract(Iterator<T> elements) {

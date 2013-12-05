@@ -30,7 +30,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.googlecode.ddom.frontend.dom.intf.DOMAttribute;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreAttribute.class)
 public abstract class AttributeSupport implements DOMAttribute {
@@ -46,7 +46,7 @@ public abstract class AttributeSupport implements DOMAttribute {
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -54,7 +54,7 @@ public abstract class AttributeSupport implements DOMAttribute {
         try {
             coreSetValue(value);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -85,7 +85,7 @@ public abstract class AttributeSupport implements DOMAttribute {
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -93,7 +93,7 @@ public abstract class AttributeSupport implements DOMAttribute {
         try {
             coreSetValue(textContent);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 

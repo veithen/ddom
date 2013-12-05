@@ -29,7 +29,7 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.AbortNormalizationException;
 import com.googlecode.ddom.frontend.dom.intf.DOMNode;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.UserData;
 import com.googlecode.ddom.util.lang.ObjectUtils;
 
@@ -129,7 +129,7 @@ public abstract class NodeSupport implements DOMNode {
                 return namespaceURI == null || namespaceURI.length() == 0 ? null : namespaceURI;
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -146,7 +146,7 @@ public abstract class NodeSupport implements DOMNode {
                     return prefix == null || prefix.length() == 0 ? null : prefix;
                 }
             } catch (CoreModelException ex) {
-                throw DOMExceptionUtil.translate(ex);
+                throw DOMExceptionTranslator.translate(ex);
             }
         }
     }
@@ -159,7 +159,7 @@ public abstract class NodeSupport implements DOMNode {
             CoreElement contextElement = getNamespaceContext();
             return contextElement == null ? false : namespaceURI.equals(contextElement.coreLookupNamespaceURI("", false));
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 

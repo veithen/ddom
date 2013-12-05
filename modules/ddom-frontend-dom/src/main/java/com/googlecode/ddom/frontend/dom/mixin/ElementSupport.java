@@ -40,7 +40,7 @@ import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
 import com.googlecode.ddom.frontend.dom.support.AttributesNamedNodeMap;
 import com.googlecode.ddom.frontend.dom.support.DOM1AttributeMatcher;
 import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.NSUtil;
 import com.googlecode.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.symbols.Symbols;
@@ -51,7 +51,7 @@ public abstract class ElementSupport implements DOMElement {
         try {
             return coreGetFirstAttribute() != null;
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -63,7 +63,7 @@ public abstract class ElementSupport implements DOMElement {
         try {
             return (DOMAttribute)coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class ElementSupport implements DOMElement {
                 return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -102,7 +102,7 @@ public abstract class ElementSupport implements DOMElement {
         try {
             coreSetAttribute(DOM1AttributeMatcher.INSTANCE, null, name, null, value);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -128,7 +128,7 @@ public abstract class ElementSupport implements DOMElement {
                 coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
     
@@ -155,7 +155,7 @@ public abstract class ElementSupport implements DOMElement {
             try {
                 return (DOMAttribute)coreSetAttribute(matcher, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.REPLACED_ATTRIBUTE);
             } catch (CoreModelException ex) {
-                throw DOMExceptionUtil.translate(ex);
+                throw DOMExceptionTranslator.translate(ex);
             }
         }
     }
@@ -163,7 +163,7 @@ public abstract class ElementSupport implements DOMElement {
     public final Attr removeAttributeNode(Attr oldAttr) throws DOMException {
         DOMAttribute attr = (DOMAttribute)oldAttr;
         if (attr.coreGetOwnerElement() != this) {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
             attr.coreRemove();
         }
@@ -175,7 +175,7 @@ public abstract class ElementSupport implements DOMElement {
         try {
             coreRemoveAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -188,7 +188,7 @@ public abstract class ElementSupport implements DOMElement {
                 coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -196,12 +196,12 @@ public abstract class ElementSupport implements DOMElement {
         try {
             CoreAttribute attr = coreGetAttribute(DOM1AttributeMatcher.INSTANCE, null, name);
             if (attr == null) {
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
             } else {
                 ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -210,18 +210,18 @@ public abstract class ElementSupport implements DOMElement {
             // Here, we assume that a namespace declaration can never be an ID attribute
             CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, NSUtil.normalizeNamespaceURI(namespaceURI), localName);
             if (attr == null) {
-                throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+                throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
             } else {
                 ((CoreTypedAttribute)attr).coreSetType(isId ? "ID" : "CDATA");
             }
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
     public final void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
         if (idAttr.getOwnerElement() != this) {
-            throw DOMExceptionUtil.newDOMException(DOMException.NOT_FOUND_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
         } else {
             ((CoreTypedAttribute)idAttr).coreSetType(isId ? "ID" : "CDATA");
         }
@@ -242,7 +242,7 @@ public abstract class ElementSupport implements DOMElement {
         try {
             return coreGetTextContent(Policies.GET_TEXT_CONTENT);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -250,7 +250,7 @@ public abstract class ElementSupport implements DOMElement {
         try {
             coreSetValue(textContent);
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
     }
 
@@ -270,7 +270,7 @@ public abstract class ElementSupport implements DOMElement {
         try {
             coreCoalesce(!config.isKeepCDATASections());
         } catch (CoreModelException ex) {
-            throw DOMExceptionUtil.translate(ex);
+            throw DOMExceptionTranslator.translate(ex);
         }
         normalizeChildren(config);
     }

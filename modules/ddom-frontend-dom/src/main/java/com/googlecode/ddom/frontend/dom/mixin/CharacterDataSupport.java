@@ -23,7 +23,7 @@ import com.googlecode.ddom.core.CoreComment;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMCharacterData;
-import com.googlecode.ddom.frontend.dom.support.DOMExceptionUtil;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin({CoreCharacterData.class, CoreComment.class, CoreCDATASection.class})
 public abstract class CharacterDataSupport implements DOMCharacterData {
@@ -38,7 +38,7 @@ public abstract class CharacterDataSupport implements DOMCharacterData {
     public final void deleteData(int offset, int count) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length() || count < 0) {
-            throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         setData(data.substring(0, offset) + data.substring(Math.min(offset + count, data.length())));
     }
@@ -46,7 +46,7 @@ public abstract class CharacterDataSupport implements DOMCharacterData {
     public final void insertData(int offset, String arg) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length()) {
-            throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         setData(data.substring(0, offset) + arg + data.substring(offset));
     }
@@ -54,7 +54,7 @@ public abstract class CharacterDataSupport implements DOMCharacterData {
     public final void replaceData(int offset, int count, String arg) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length() || count < 0) {
-            throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         setData(data.substring(0, offset) + arg + data.substring(Math.min(offset + count, data.length())));
     }
@@ -62,7 +62,7 @@ public abstract class CharacterDataSupport implements DOMCharacterData {
     public final String substringData(int offset, int count) throws DOMException {
         String data = getData();
         if (offset < 0 || offset > data.length() || count < 0) {
-            throw DOMExceptionUtil.newDOMException(DOMException.INDEX_SIZE_ERR);
+            throw DOMExceptionTranslator.newDOMException(DOMException.INDEX_SIZE_ERR);
         }
         return data.substring(offset, Math.min(offset + count, data.length()));
     }

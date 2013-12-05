@@ -24,7 +24,7 @@ import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultText;
-import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionUtil;
+import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(AxiomSOAPFaultReason.class)
 public abstract class SOAPFaultReasonSupport implements AxiomSOAPFaultReason {
@@ -41,7 +41,7 @@ public abstract class SOAPFaultReasonSupport implements AxiomSOAPFaultReason {
         try {
             return coreGetFirstChildByType(AxiomSOAPFaultText.class);
         } catch (DeferredParsingException ex) {
-            throw AxiomExceptionUtil.translate(ex);
+            throw AxiomExceptionTranslator.translate(ex);
         }
     }
 

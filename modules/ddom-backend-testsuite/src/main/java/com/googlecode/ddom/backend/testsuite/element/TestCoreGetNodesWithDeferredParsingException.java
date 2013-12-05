@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,34 @@
  */
 package com.googlecode.ddom.backend.testsuite.element;
 
+import java.util.Iterator;
+
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.core.Axis;
-import com.googlecode.ddom.core.ChildIterator;
-import com.googlecode.ddom.core.CoreComment;
+import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelRuntimeException;
+import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ExceptionTranslator;
 import com.googlecode.ddom.core.Selector;
 
-public class TestCoreGetNodesRemove extends BackendTestCase {
-    public TestCoreGetNodesRemove(BackendTestSuiteConfig config) {
+public class TestCoreGetNodesWithDeferredParsingException extends BackendTestCase {
+    public TestCoreGetNodesWithDeferredParsingException(BackendTestSuiteConfig config) {
         super(config);
     }
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement parent = nodeFactory.createElement(null, "root");
-        CoreComment comment = parent.coreAppendComment("comment1");
-        CoreElement element1 = parent.coreAppendElement("element1");
-        CoreElement element2 = parent.coreAppendElement("element2");
-        ChildIterator<CoreElement> it = parent.coreGetNodes(Axis.CHILDREN, Selector.ELEMENT, CoreElement.class, ExceptionTranslator.DEFAULT);
-        assertTrue(it.hasNext());
-        assertSame(element1, it.next());
-        it.remove();
-        assertTrue(it.hasNext());
-        assertSame(element2, it.next());
-        assertSame(element2, comment.coreGetNextSibling());
+        CoreElement element = parse("<root><a></invalid></root>").coreGetDocumentElement();
+        Iterator<CoreChildNode> it = element.coreGetNodes(Axis.CHILDREN, Selector.ANY, CoreChildNode.class, ExceptionTranslator.DEFAULT);
+        try {
+            while (it.hasNext()) {
+                it.next();
+            }
+            fail("Expected CoreModelRuntimeException");
+        } catch (CoreModelRuntimeException ex) {
+            assertTrue(ex.getCoreModelException() instanceof DeferredParsingException);
+        }
     }
 }
