@@ -31,6 +31,7 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.NodeConsumedException;
 import com.googlecode.ddom.stream.IncludeXmlOutput;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
@@ -183,6 +184,9 @@ final class TreeWalkerImpl implements XmlReader {
                     LLChildNode child = parent.internalGetFirstChildIfMaterialized();
                     if (child == null) {
                         nextNode = parent;
+                        if (nodeState == Flags.STATE_CONSUMED) {
+                            throw new NodeConsumedException();
+                        }
                         inputContext = getDocument().internalGetInputContext(parent);
                         inputContext.setPassThroughHandler(handler);
                         state = STATE_PASS_THROUGH;
