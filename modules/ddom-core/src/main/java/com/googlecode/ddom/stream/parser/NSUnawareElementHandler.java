@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@ import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.symbols.Symbols;
 
 final class NSUnawareElementHandler extends ElementHandler {
+    private String[] nameStack = new String[16];
+    private int depth;
+    
     public NSUnawareElementHandler(Symbols symbols, XmlHandler handler) {
         super(symbols, handler);
     }
@@ -31,7 +34,14 @@ final class NSUnawareElementHandler extends ElementHandler {
 
     @Override
     boolean handleStartElement(char[] name, int len) throws StreamException {
-        handler.startElement(symbols.getSymbol(name, 0, len));
+        String n = symbols.getSymbol(name, 0, len);
+        if (depth == nameStack.length) {
+            String[] newNameStack = new String[nameStack.length*2];
+            System.arraycopy(nameStack, 0, newNameStack, 0, nameStack.length);
+            nameStack = newNameStack;
+        }
+        nameStack[depth++] = n;
+        handler.startElement(n);
         return true;
     }
 
@@ -60,7 +70,13 @@ final class NSUnawareElementHandler extends ElementHandler {
 
     @Override
     void handleEndElement(char[] name, int len) throws StreamException {
-        // TODO: check that element name matches
+        depth--;
+        if (name != null) {
+            String n = nameStack[depth];
+            if (len != n.length() || !Utils.equals(n, name, 0)) {
+                throw new XmlSyntaxException("The element type \"" + n + "\" must be terminated by the matching end-tag \"</" + n + ">\"");
+            }
+        }
         handler.endElement();
     }
 }

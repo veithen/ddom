@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -181,7 +181,7 @@ final class ParserImpl implements XmlReader {
                     eventProduced = parseAttribute();
                     break;
                 case STATE_EMPTY_ELEMENT:
-                    elementHandler.handleEndElement(null, 0); // TODO
+                    elementHandler.handleEndElement(null, 0);
                     state = STATE_ELEMENT_CONTENT; // TODO: not always correct
                     break;
                 case STATE_ATTRIBUTE_CONTENT:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.googlecode.ddom.stream.NullXmlOutput;
 import com.googlecode.ddom.stream.Stream;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.dom.DOMOutput;
@@ -44,6 +45,10 @@ public class ParserTest {
         Document document = documentBuilder.newDocument();
         new Stream(new Parser(new StringReader(xml), true), new DOMOutput(document)).flush();
         return document.getDocumentElement();
+    }
+    
+    private static void parse(String xml, boolean namespaceAware) throws StreamException {
+        new Stream(new Parser(new StringReader(xml), namespaceAware), new NullXmlOutput()).flush();
     }
     
     @Test
@@ -64,5 +69,20 @@ public class ParserTest {
     @Test
     public void testEOLNormalizationInCDATASection() throws StreamException {
         assertEquals("a\nb", toDOM("<root><![CDATA[a\r\nb]]></root>").getTextContent());
+    }
+    
+    @Test(expected=XmlSyntaxException.class)
+    public void testEndTagMismatch1() throws StreamException {
+        parse("<root></invalid>", false);
+    }
+    
+    @Test(expected=XmlSyntaxException.class)
+    public void testEndTagMismatch2() throws StreamException {
+        parse("<root></invalid>", true);
+    }
+    
+    @Test(expected=XmlSyntaxException.class)
+    public void testEndTagMismatch3() throws StreamException {
+        parse("<p:root xmlns:p='urn:test'></p:invalid>", true);
     }
 }

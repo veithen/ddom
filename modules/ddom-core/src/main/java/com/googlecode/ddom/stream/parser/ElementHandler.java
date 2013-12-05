@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,5 +34,17 @@ abstract class ElementHandler {
     abstract boolean handleCharacterData(String data) throws StreamException;
     abstract boolean handleEndAttribute() throws StreamException;
     abstract void attributesCompleted() throws StreamException;
+    
+    /**
+     * Notify the handler that the end of an element has been reached. The handler is expected to
+     * check that the tag name is correct.
+     * 
+     * @param name
+     *            the buffer containing the tag name of the element (at offset 0), or
+     *            <code>null</code> if the element was empty and no name check needs to be performed
+     * @param len
+     *            the length of the tag name; only meaningful if <code>name</code> is not null
+     * @throws StreamException
+     */
     abstract void handleEndElement(char[] name, int len) throws StreamException;
 }

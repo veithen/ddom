@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,8 @@ final class NSAwareElementHandler extends ElementHandler {
     private int attributeCount;
     private int attribute;
     private int state = STATE_NONE;
+    private String[] nameStack = new String[16];
+    private int nameStackIndex;
     
     NSAwareElementHandler(Symbols symbols, XmlHandler handler) {
         super(symbols, handler);
@@ -104,6 +106,14 @@ final class NSAwareElementHandler extends ElementHandler {
         }
         attributeCount = 0;
         context.startScope();
+        if (nameStackIndex == nameStack.length) {
+            String[] newNameStack = new String[nameStack.length*2];
+            System.arraycopy(nameStack, 0, newNameStack, 0, nameStack.length);
+            nameStack = newNameStack;
+        }
+        nameStack[nameStackIndex] = prefix;
+        nameStack[nameStackIndex+1] = localName;
+        nameStackIndex += 2;
         return false;
     }
 
@@ -185,7 +195,20 @@ final class NSAwareElementHandler extends ElementHandler {
 
     @Override
     void handleEndElement(char[] name, int len) throws StreamException {
-        // TODO: check that element name matches
+        nameStackIndex -= 2;
+        if (name != null) {
+            String prefix = nameStack[nameStackIndex];
+            String localName = nameStack[nameStackIndex+1];
+            if (prefix.length() == 0) {
+                if (len != localName.length() || !Utils.equals(localName, name, 0)) {
+                    throw new XmlSyntaxException("The element type \"" + localName + "\" must be terminated by the matching end-tag \"</" + localName + ">\"");
+                }
+            } else {
+                if (len != prefix.length() + localName.length() + 1 || !Utils.equals(prefix, name, 0) || !Utils.equals(localName, name, prefix.length()+1)) {
+                    throw new XmlSyntaxException("The element type \"" + prefix + ":" + localName + "\" must be terminated by the matching end-tag \"</" + prefix + ":" + localName + ">\"");
+                }
+            }
+        }
         handler.endElement();
         context.endScope();
     }
