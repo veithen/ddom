@@ -35,6 +35,7 @@ import java.util.Iterator;
  * @author Andreas Veithen
  */
 // TODO: specify what exception is thrown if a deferred parsing error occurs
+// TODO: rename this to NodeIterator since its use is not limited to iterating over child nodes
 public interface ChildIterator<T> extends Iterator<T> {
     /**
      * Replace the current node.
