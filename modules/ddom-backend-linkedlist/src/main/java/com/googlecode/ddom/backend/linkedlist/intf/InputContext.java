@@ -28,7 +28,7 @@ import com.googlecode.ddom.stream.XmlHandler;
  * @author Andreas Veithen
  */
 public interface InputContext {
-    void next() throws DeferredParsingException;
+    void next(boolean expand) throws DeferredParsingException;
 
     /**
      * Set a new target node for this context. This method is used if the content of a node needs to

@@ -261,7 +261,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         if (!coreIsComplete()) {
             InputContext context = internalGetOrCreateInputContext();
             do {
-                context.next();
+                context.next(false);
             } while (!coreIsComplete());
         }
     }
@@ -271,7 +271,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
             // TODO: should use internalGetOrCreateInputContext here
             InputContext context = internalGetOwnerDocument(false).internalGetInputContext(this);
             do {
-                context.next();
+                context.next(false);
             } while (content == null && !coreIsComplete());
         }
         return content instanceof String;
@@ -281,7 +281,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         if (content == null && !coreIsComplete()) {
             InputContext context = internalGetOwnerDocument(false).internalGetInputContext(this);
             do {
-                context.next();
+                context.next(false);
             } while (content == null && !coreIsComplete());
         }
         return content == null;
@@ -329,8 +329,8 @@ public abstract class ParentNode extends Node implements LLParentNode {
                             context = internalGetOrCreateInputContext();
                         }
                         do {
-                            // TODO: we could inform the builder that we don't want compact parent nodes here
-                            context.next();
+                            // TODO: this also expands attributes, which is not what we want
+                            context.next(true);
                         } while (content == null && !coreIsComplete());
                         // After calling the builder, the node may be in state "Value set".
                         // Just loop to dispatch to the correct case.

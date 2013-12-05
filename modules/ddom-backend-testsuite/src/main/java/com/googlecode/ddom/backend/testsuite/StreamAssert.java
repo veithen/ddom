@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,65 +22,42 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.pivot.XmlPivot;
 
 public class StreamAssert extends XmlPivot {
-    // TODO: renumber constants
-    private static final int START_DOCUMENT = 1;
-    private static final int START_FRAGMENT = 2;
-    private static final int XML_DECLARATION = 3;
-    private static final int START_DOCUMENT_TYPE_DECLARATION = 4;
-    private static final int END_DOCUMENT_TYPE_DECLARATION = 21;
-    private static final int START_NS_UNAWARE_ELEMENT = 5;
-    private static final int START_NS_AWARE_ELEMENT = 6;
-    private static final int END_ELEMENT = 7;
-    private static final int START_NS_UNAWARE_ATTRIBUTE = 8;
-    private static final int START_NS_AWARE_ATTRIBUTE = 9;
-    private static final int START_NAMESPACE_DECLARATION = 10;
-    private static final int END_ATTRIBUTE = 11;
-    private static final int CHARACTER_DATA = 12;
-    private static final int START_PROCESSING_INSTRUCTION = 13;
-    private static final int END_PROCESSING_INSTRUCTION = 14;
-    private static final int START_COMMENT = 15;
-    private static final int END_COMMENT = 16;
-    private static final int START_CDATA_SECTION = 17;
-    private static final int END_CDATA_SECTION = 18;
-    private static final int ENTITY_REFERENCE = 19;
-    private static final int COMPLETED = 20;
-    
     private final StringAccumulator buffer = new StringAccumulator();
-    private int expectedEvent;
+    private Event expectedEvent;
     private String expectedNamespaceURI;
     private String expectedName;
     private String expectedPrefix;
     private String expectedData;
     
     protected boolean startEntity(boolean fragment, String inputEncoding) {
-        assertEquals(expectedEvent, fragment ? START_FRAGMENT : START_DOCUMENT);
+        assertEquals(expectedEvent, fragment ? Event.START_FRAGMENT : Event.START_DOCUMENT);
         return false;
     }
     
     @Override
     protected boolean processXmlDeclaration(String version, String encoding, Boolean standalone) {
-        assertEquals(expectedEvent, XML_DECLARATION);
+        assertEquals(expectedEvent, Event.XML_DECLARATION);
         // TODO: check XML declaration info
         return false;
     }
 
     protected boolean startDocumentTypeDeclaration(String rootName, String publicId, String systemId) {
-        assertEquals(expectedEvent, START_DOCUMENT_TYPE_DECLARATION);
+        assertEquals(expectedEvent, Event.START_DOCUMENT_TYPE_DECLARATION);
         return false;
     }
 
     protected boolean endDocumentTypeDeclaration() {
-        assertEquals(expectedEvent, END_DOCUMENT_TYPE_DECLARATION);
+        assertEquals(expectedEvent, Event.END_DOCUMENT_TYPE_DECLARATION);
         return false;
     }
 
     protected boolean startElement(String tagName) {
-        assertEquals(expectedEvent, START_NS_UNAWARE_ELEMENT);
+        assertEquals(expectedEvent, Event.START_NS_UNAWARE_ELEMENT);
         return false;
     }
     
     protected boolean startElement(String namespaceURI, String localName, String prefix) {
-        assertEquals(expectedEvent, START_NS_AWARE_ELEMENT);
+        assertEquals(expectedEvent, Event.START_NS_AWARE_ELEMENT);
         assertEquals(expectedNamespaceURI, namespaceURI);
         assertEquals(expectedName, localName);
         assertEquals(expectedPrefix, prefix);
@@ -88,36 +65,37 @@ public class StreamAssert extends XmlPivot {
     }
     
     protected boolean endElement() {
-        assertEquals(expectedEvent, END_ELEMENT);
+        assertEquals(expectedEvent, Event.END_ELEMENT);
         return false;
     }
     
     protected boolean startAttribute(String name, String type) {
-        assertEquals(expectedEvent, START_NS_UNAWARE_ATTRIBUTE);
+        assertEquals(expectedEvent, Event.START_NS_UNAWARE_ATTRIBUTE);
         return false;
     }
     
     protected boolean startAttribute(String namespaceURI, String localName, String prefix, String type) {
-        assertEquals(expectedEvent, START_NS_AWARE_ATTRIBUTE);
+        assertEquals(expectedEvent, Event.START_NS_AWARE_ATTRIBUTE);
         return false;
     }
     
     protected boolean startNamespaceDeclaration(String prefix) {
-        assertEquals(expectedEvent, START_NAMESPACE_DECLARATION);
+        assertEquals(expectedEvent, Event.START_NAMESPACE_DECLARATION);
         return false;
     }
     
     protected boolean endAttribute() {
-        assertEquals(expectedEvent, END_ATTRIBUTE);
+        assertEquals(expectedEvent, Event.END_ATTRIBUTE);
         return false;
     }
     
     protected boolean attributesCompleted() {
-        return true;
+        assertEquals(expectedEvent, Event.ATTRIBUTES_COMPLETED);
+        return false;
     }
     
     protected boolean processCharacterData(String data, boolean ignorable) {
-        assertEquals(expectedEvent, CHARACTER_DATA);
+        assertEquals(expectedEvent, Event.CHARACTER_DATA);
         buffer.append(data);
         if (buffer.length() < expectedData.length()) {
             return true;
@@ -129,56 +107,56 @@ public class StreamAssert extends XmlPivot {
     }
     
     protected boolean startProcessingInstruction(String target) {
-        assertEquals(expectedEvent, START_PROCESSING_INSTRUCTION);
+        assertEquals(expectedEvent, Event.START_PROCESSING_INSTRUCTION);
         return false;
     }
     
     protected boolean endProcessingInstruction() {
-        assertEquals(expectedEvent, END_PROCESSING_INSTRUCTION);
+        assertEquals(expectedEvent, Event.END_PROCESSING_INSTRUCTION);
         return false;
     }
     
     protected boolean startComment() {
-        assertEquals(expectedEvent, START_COMMENT);
+        assertEquals(expectedEvent, Event.START_COMMENT);
         return false;
     }
     
     protected boolean endComment() {
-        assertEquals(expectedEvent, END_COMMENT);
+        assertEquals(expectedEvent, Event.END_COMMENT);
         return false;
     }
     
     protected boolean startCDATASection() {
-        assertEquals(expectedEvent, START_CDATA_SECTION);
+        assertEquals(expectedEvent, Event.START_CDATA_SECTION);
         return false;
     }
     
     protected boolean endCDATASection() {
-        assertEquals(expectedEvent, END_CDATA_SECTION);
+        assertEquals(expectedEvent, Event.END_CDATA_SECTION);
         return false;
     }
     
     protected boolean processEntityReference(String name) {
-        assertEquals(expectedEvent, ENTITY_REFERENCE);
+        assertEquals(expectedEvent, Event.ENTITY_REFERENCE);
         return false;
     }
     
     protected void completed() {
-        assertEquals(expectedEvent, COMPLETED);
+        assertEquals(expectedEvent, Event.COMPLETED);
     }
     
     public void assertStartEntity(boolean fragment) throws StreamException {
-        expectedEvent = fragment ? START_FRAGMENT : START_DOCUMENT;
+        expectedEvent = fragment ? Event.START_FRAGMENT : Event.START_DOCUMENT;
         nextEvent();
     }
     
     public void assertXmlDeclaration() throws StreamException {
-        expectedEvent = XML_DECLARATION;
+        expectedEvent = Event.XML_DECLARATION;
         nextEvent();
     }
     
     public void assertStartElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        expectedEvent = START_NS_AWARE_ELEMENT;
+        expectedEvent = Event.START_NS_AWARE_ELEMENT;
         expectedNamespaceURI = namespaceURI;
         expectedName = localName;
         expectedPrefix = prefix;
@@ -186,12 +164,17 @@ public class StreamAssert extends XmlPivot {
     }
     
     public void assertEndElement() throws StreamException {
-        expectedEvent = END_ELEMENT;
+        expectedEvent = Event.END_ELEMENT;
+        nextEvent();
+    }
+    
+    public void assertAttributesCompleted() throws StreamException {
+        expectedEvent = Event.ATTRIBUTES_COMPLETED;
         nextEvent();
     }
     
     public void assertCharacterData(String data) throws StreamException {
-        expectedEvent = CHARACTER_DATA;
+        expectedEvent = Event.CHARACTER_DATA;
         expectedData = data;
         nextEvent();
     }

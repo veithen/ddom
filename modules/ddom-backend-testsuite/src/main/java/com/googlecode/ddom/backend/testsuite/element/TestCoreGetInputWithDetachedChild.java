@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,10 +37,13 @@ public class TestCoreGetInputWithDetachedChild extends BackendTestCase {
         new Stream(element.coreGetInput(preserve), output);
         output.assertStartEntity(true);
         output.assertStartElement("", "parent", "");
+        output.assertAttributesCompleted();
         output.assertStartElement("", "a", "");
+        output.assertAttributesCompleted();
         output.assertCharacterData("a");
         output.assertEndElement();
         output.assertStartElement("", "c", "");
+        output.assertAttributesCompleted();
         output.assertCharacterData("c");
         output.assertEndElement();
         output.assertEndElement();

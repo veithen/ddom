@@ -270,7 +270,7 @@ final class TreeWalkerImpl implements XmlReader {
                     }
                     break;
                 case STATE_PASS_THROUGH:
-                    inputContext.next();
+                    inputContext.next(false);
                     if (!inputContext.isPassThroughEnabled()) {
                         state = STATE_VISITED;
                         inputContext = null;

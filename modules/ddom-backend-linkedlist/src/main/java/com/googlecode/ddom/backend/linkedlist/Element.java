@@ -75,7 +75,7 @@ public abstract class Element extends Container implements LLElement {
         if (firstAttribute == null && !attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
             while (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
-                context.next();
+                context.next(false);
             }
         }
         return firstAttribute;
@@ -89,7 +89,7 @@ public abstract class Element extends Container implements LLElement {
         if (!attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
             while (internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
-                context.next();
+                context.next(false);
             }
         }
         Attribute previousAttribute = null;

@@ -43,8 +43,8 @@ public class Builder extends XmlOutput {
             this.targetNode = targetNode;
         }
         
-        public void next() throws DeferredParsingException {
-            Builder.this.next();
+        public void next(boolean expand) throws DeferredParsingException {
+            Builder.this.next(expand);
         }
 
         LLParentNode getTargetNode() {
@@ -196,7 +196,7 @@ public class Builder extends XmlOutput {
             if (passThroughHandler == null) {
                 // If the character data is ignorable whitespace, then we know that there will
                 // be (very likely) at least one child element in addition to the text node
-                if (lastSibling == null && pendingText == null && !ignorable) {
+                if (!expand && lastSibling == null && pendingText == null && !ignorable) {
                     pendingText = data;
                 } else {
                     appendNode(new CharacterData(document, data, ignorable));
@@ -302,6 +302,8 @@ public class Builder extends XmlOutput {
      * Tracks the nesting depth when pass-through is enabled.
      */
     private int passThroughDepth;
+    
+    private boolean expand;
 
     public Builder(XmlInput input, ModelExtension modelExtension, Document document, LLParentNode target, boolean unwrap) {
         this.input = input;
@@ -367,14 +369,15 @@ public class Builder extends XmlOutput {
         // The context stack will be empty if unwrap == true
         if (sourcedNode != null) {
             while (sourcedNode != null && contextStack.isEmpty()) {
-                next();
+                next(false);
             }
         }
         return contextStack.get(0);
     }
     
-    final void next() throws DeferredParsingException {
+    final void next(boolean expand) throws DeferredParsingException {
         if (streamException == null) {
+            this.expand = expand;
             try {
                 // TODO: review the node appended stuff
 //                nodeAppended = false; 
@@ -384,6 +387,7 @@ public class Builder extends XmlOutput {
             } catch (StreamException ex) {
                 streamException = ex;
             }
+            this.expand = false;
         }
         if (streamException != null) {
             throw new DeferredParsingException(streamException);

@@ -83,7 +83,7 @@ public final class LLChildNodeHelper {
             if (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete()) {
                 InputContext context = that.internalGetOwnerDocument(false).internalGetInputContext(parent);
                 do {
-                    context.next();
+                    context.next(false);
                 } while (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete());
             }
             return that.internalGetNextSiblingIfMaterialized();
