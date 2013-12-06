@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,11 @@
  */
 package com.googlecode.ddom.backend.testsuite;
 
-import java.io.IOException;
 import java.io.StringReader;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
 import org.junit.Assert;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
@@ -35,8 +27,8 @@ import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.stream.SimpleXmlSource;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.StreamFactory;
+import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
-import com.googlecode.ddom.stream.dom.DOMSource;
 import com.googlecode.ddom.stream.parser.Parser;
 
 public abstract class BackendTestCase extends TestCase {
@@ -65,23 +57,19 @@ public abstract class BackendTestCase extends TestCase {
         return toXmlSource(xml, true);
     }
     
-    protected final XmlSource toXmlSource(String xml, boolean destructive) throws StreamException {
+    protected final XmlSource toXmlSource(final String xml, boolean destructive) throws StreamException {
         if (destructive) {
             return new SimpleXmlSource(new Parser(new StringReader(xml), true));
         } else {
-            try {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                factory.setNamespaceAware(true);
-                DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-                Document document = documentBuilder.parse(new InputSource(new StringReader(xml)));
-                return new DOMSource(document);
-            } catch (IOException ex) {
-                throw new StreamException(ex);
-            } catch (SAXException ex) {
-                throw new StreamException(ex);
-            } catch (ParserConfigurationException ex) {
-                throw new StreamException(ex);
-            }
+            return new XmlSource() {
+                public boolean isDestructive() {
+                    return false;
+                }
+                
+                public XmlInput getInput(Hints hints) throws StreamException {
+                    return new Parser(new StringReader(xml), true);
+                }
+            };
         }
     }
     
