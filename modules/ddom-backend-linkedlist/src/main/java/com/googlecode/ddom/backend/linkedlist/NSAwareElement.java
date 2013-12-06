@@ -24,8 +24,10 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementAlreadyExistsException;
+import com.googlecode.ddom.core.ElementNameMismatchException;
 import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.SequenceItem;
 import com.googlecode.ddom.stream.StreamException;
@@ -49,24 +51,24 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.prefix = prefix;
     }
 
-    void initName(String namespaceURI, String localName, String prefix) throws StreamException {
+    void initName(String namespaceURI, String localName, String prefix) throws ElementNameMismatchException {
         if (this.namespaceURI != null) {
             if (!this.namespaceURI.equals(namespaceURI)) {
-                throw new StreamException("Unexpected namespace URI");
+                throw new ElementNameMismatchException("Unexpected namespace URI");
             }
         } else {
             this.namespaceURI = namespaceURI;
         }
         if (this.localName != null) {
             if (!this.localName.equals(localName)) {
-                throw new StreamException("Unexpected local name");
+                throw new ElementNameMismatchException("Unexpected local name");
             }
         } else {
             this.localName = localName;
         }
         if (this.prefix != null) {
             if (!this.prefix.equals(prefix)) {
-                throw new StreamException("Unexpected prefix");
+                throw new ElementNameMismatchException("Unexpected prefix");
             }
         } else {
             this.prefix = prefix;
@@ -77,7 +79,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         return NS_AWARE_ELEMENT_NODE;
     }
 
-    public final String coreGetNamespaceURI() throws DeferredParsingException {
+    public final String coreGetNamespaceURI() throws DeferredBuildingException {
         if (namespaceURI == null && internalGetState() == Flags.STATE_SOURCE_SET) {
             internalGetOrCreateInputContext();
         }
@@ -88,7 +90,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.namespaceURI = namespaceURI;
     }
     
-    public final String coreGetPrefix() throws DeferredParsingException {
+    public final String coreGetPrefix() throws DeferredBuildingException {
         if (prefix == null && internalGetState() == Flags.STATE_SOURCE_SET) {
             internalGetOrCreateInputContext();
         }
@@ -99,7 +101,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.prefix = prefix;
     }
     
-    public final String coreGetLocalName() throws DeferredParsingException {
+    public final String coreGetLocalName() throws DeferredBuildingException {
         if (localName == null && internalGetState() == Flags.STATE_SOURCE_SET) {
             internalGetOrCreateInputContext();
         }
@@ -110,7 +112,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         this.localName = localName;
     }
 
-    public final QName coreGetQName() throws DeferredParsingException {
+    public final QName coreGetQName() throws DeferredBuildingException {
         return NSAwareNamedNodeHelper.coreGetQName(this);
     }
 
@@ -202,7 +204,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         }
     }
     
-    private boolean matches(CoreNSAwareElement element, Sequence sequence, int index) throws DeferredParsingException {
+    private boolean matches(CoreNSAwareElement element, Sequence sequence, int index) throws DeferredBuildingException {
         SequenceItem item = sequence.item(index);
         if (sequence.isMatchByInterface()) {
             return item.getExtensionInterface().isInstance(element);

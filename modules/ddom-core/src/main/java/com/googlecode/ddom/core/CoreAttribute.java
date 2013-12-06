@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,9 +59,9 @@ public interface CoreAttribute extends CoreParentNode {
      * 
      * @return the next attribute, or <code>null</code> if the attribute is the last attribute of
      *         its owner element or if the attribute has no owner element
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      */
-    CoreAttribute coreGetNextAttribute() throws DeferredParsingException;
+    CoreAttribute coreGetNextAttribute() throws DeferredBuildingException;
     
     /**
      * Get the attribute immediately preceding the current attribute.

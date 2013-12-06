@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,10 +90,10 @@ public interface AttributeMatcher {
      * @param name
      *            see above
      * @return <code>true</code> if the attribute matches, <code>false</code> otherwise
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If a parsing error occurs while accessing the attribute.
      */
-    boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredParsingException;
+    boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredBuildingException;
 
     /**
      * Get the <tt>namespaceURI</tt> parameter for an existing attribute. This method is used by
@@ -102,10 +102,10 @@ public interface AttributeMatcher {
      * 
      * @param attr the attribute
      * @return the <tt>namespaceURI</tt> parameter to be passed to {@link #matches(CoreAttribute, String, String)}
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If a parsing error occurs while accessing the attribute.
      */
-    String getNamespaceURI(CoreAttribute attr) throws DeferredParsingException;
+    String getNamespaceURI(CoreAttribute attr) throws DeferredBuildingException;
     
     /**
      * Get the <tt>name</tt> parameter for an existing attribute. This method is used by
@@ -114,10 +114,10 @@ public interface AttributeMatcher {
      * 
      * @param attr the attribute
      * @return the <tt>name</tt> parameter to be passed to {@link #matches(CoreAttribute, String, String)}
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If a parsing error occurs while accessing the attribute.
      */
-    String getName(CoreAttribute attr) throws DeferredParsingException;
+    String getName(CoreAttribute attr) throws DeferredBuildingException;
     
     /**
      * Create a new attribute node. The values of the <code>namespaceURI</code>, <code>name</code>,

@@ -36,7 +36,7 @@ public interface CoreParentNode extends CoreNode {
      */
     boolean coreIsComplete();
     
-    void coreBuild() throws DeferredParsingException;
+    void coreBuild() throws DeferredBuildingException;
     
     /**
      * 
@@ -68,12 +68,12 @@ public interface CoreParentNode extends CoreNode {
      * <code>true</code>.
      * 
      * @return <code>true</code> if the node has a value; <code>false</code> otherwise
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs during deferred parsing. This may happen because the method
      *             needs to check if in the underlying stream, the node has a single child
      *             information item of type text.
      */
-    boolean coreHasValue() throws DeferredParsingException;
+    boolean coreHasValue() throws DeferredBuildingException;
     
     // Temporarily marked as deprecated. In most cases coreGetTextContent should be used.
     // However, this method may later be changed to return objects (e.g. QNames).
@@ -134,10 +134,10 @@ public interface CoreParentNode extends CoreNode {
      * 
      * @return <code>true</code> if this node doesn't have any children; <code>false</code> if this
      *         node has at least one child or if it is unexpanded and a value is set
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs during deferred parsing.
      */
-    boolean coreIsEmpty() throws DeferredParsingException;
+    boolean coreIsEmpty() throws DeferredBuildingException;
     
     // TODO: specify behavior if node is unexpanded
     int coreGetChildCount() throws DeferredBuildingException;

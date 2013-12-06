@@ -24,7 +24,7 @@ import com.googlecode.ddom.stream.XmlInput;
  * 
  * @author Andreas Veithen
  */
-public class CoreModelStreamException extends RuntimeException {
+public class CoreModelStreamException extends StreamException {
     private static final long serialVersionUID = -7324484352634407874L;
 
     public CoreModelStreamException(CoreModelException cause) {

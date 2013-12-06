@@ -137,7 +137,7 @@ public final class LLChildNodeHelper {
         }
     }
     
-    public static void coreInsertSiblingsAfter(LLChildNode that, CoreDocumentFragment coreFragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+    public static void coreInsertSiblingsAfter(LLChildNode that, CoreDocumentFragment coreFragment) throws HierarchyException, NodeMigrationException, DeferredBuildingException {
         DocumentFragment fragment = (DocumentFragment)coreFragment;
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {

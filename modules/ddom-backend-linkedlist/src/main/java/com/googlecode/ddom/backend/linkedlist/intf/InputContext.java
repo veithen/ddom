@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.ddom.backend.linkedlist.intf;
 
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 /**
@@ -28,7 +28,7 @@ import com.googlecode.ddom.stream.XmlHandler;
  * @author Andreas Veithen
  */
 public interface InputContext {
-    void next(boolean expand) throws DeferredParsingException;
+    void next(boolean expand) throws DeferredBuildingException;
 
     /**
      * Set a new target node for this context. This method is used if the content of a node needs to

@@ -61,7 +61,7 @@ public abstract class Container extends ParentNode implements LLChildNode {
         children = 0;
     }
 
-    public final int coreGetChildCount() throws DeferredParsingException {
+    public final int coreGetChildCount() throws DeferredBuildingException {
         coreBuild();
         return children;
     }
@@ -123,7 +123,7 @@ public abstract class Container extends ParentNode implements LLChildNode {
         LLChildNodeHelper.coreInsertSiblingAfter(this, sibling, policy);
     }
 
-    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredBuildingException {
         LLChildNodeHelper.coreInsertSiblingsAfter(this, fragment);
     }
 

@@ -37,7 +37,6 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.DeferredBuildingException;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.Mapper;
 import com.googlecode.ddom.core.NodeInUseException;
 import com.googlecode.ddom.core.NodeMigrationException;
@@ -71,7 +70,7 @@ public abstract class Element extends Container implements LLElement {
         return state != Flags.STATE_SOURCE_SET && state != Flags.STATE_ATTRIBUTES_PENDING;
     }
     
-    public final CoreAttribute coreGetFirstAttribute() throws DeferredParsingException {
+    public final CoreAttribute coreGetFirstAttribute() throws DeferredBuildingException {
         if (firstAttribute == null && !attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
             while (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
@@ -85,11 +84,11 @@ public abstract class Element extends Container implements LLElement {
         return firstAttribute;
     }
     
-    public final CoreAttribute coreGetLastAttribute() throws DeferredParsingException {
+    public final CoreAttribute coreGetLastAttribute() throws DeferredBuildingException {
         return internalGetLastAttribute();
     }
     
-    private Attribute internalGetLastAttribute() throws DeferredParsingException {
+    private Attribute internalGetLastAttribute() throws DeferredBuildingException {
         if (!attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
             while (internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
@@ -105,7 +104,7 @@ public abstract class Element extends Container implements LLElement {
         return previousAttribute;
     }
 
-    public final CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException {
+    public final CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredBuildingException {
         // TODO: can optimize this when attribute creation is deferred (get InputContext only once)
         CoreAttribute attr = coreGetFirstAttribute();
         while (attr != null && !matcher.matches(attr, namespaceURI, name)) {
@@ -114,7 +113,7 @@ public abstract class Element extends Container implements LLElement {
         return attr;
     }
 
-    public final void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) throws DeferredParsingException {
+    public final void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) throws DeferredBuildingException {
         Attribute attr = firstAttribute; // TODO: coreGetFirstAttribute() ??
         Attribute previousAttr = null;
         while (attr != null && !matcher.matches(attr, namespaceURI, name)) {
@@ -187,7 +186,7 @@ public abstract class Element extends Container implements LLElement {
         }
     }
     
-    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredParsingException {
+    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredBuildingException {
         if (coreAttr.coreGetOwnerElement() == this) {
             // TODO: document this and add assertion
             // TODO: take returnValue into account
@@ -228,12 +227,12 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
-    public final void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException, DeferredParsingException {
+    public final void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException, DeferredBuildingException {
         // TODO: we should probably check if the attribute is already owned by the element
         internalAppendAttribute(accept(attr, policy));
     }
 
-    private void internalAppendAttribute(Attribute attr) throws DeferredParsingException {
+    private void internalAppendAttribute(Attribute attr) throws DeferredBuildingException {
         // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
         attr.setOwnerElement(this);
         Attribute lastAttribute = internalGetLastAttribute();
@@ -244,7 +243,7 @@ public abstract class Element extends Container implements LLElement {
         }
     }
 
-    public final boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException {
+    public final boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredBuildingException {
         CoreAttribute att = coreGetAttribute(matcher, namespaceURI, name);
         if (att != null) {
             att.coreRemove();

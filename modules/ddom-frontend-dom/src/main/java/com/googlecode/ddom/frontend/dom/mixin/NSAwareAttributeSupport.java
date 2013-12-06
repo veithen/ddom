@@ -16,14 +16,14 @@
 package com.googlecode.ddom.frontend.dom.mixin;
 
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMNSAwareAttribute;
 import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
 
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class NSAwareAttributeSupport implements DOMNSAwareAttribute {
-    public final DOMParentNode shallowClone() throws DeferredParsingException {
+    public final DOMParentNode shallowClone() throws DeferredBuildingException {
         return (DOMNSAwareAttribute)coreGetNodeFactory().createAttribute(coreGetOwnerDocument(true), coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix(), null, coreGetType());
     }
     

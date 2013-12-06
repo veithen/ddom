@@ -57,7 +57,7 @@ public interface LLParentNode extends LLNode, CoreParentNode {
     
     void internalSetValue(String value);
 
-    InputContext internalGetOrCreateInputContext() throws DeferredParsingException;
+    InputContext internalGetOrCreateInputContext() throws DeferredBuildingException;
     
     void internalImportBuilder(LLDocument foreignDocument, LLParentNode node);
     

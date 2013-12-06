@@ -15,18 +15,19 @@
  */
 package com.googlecode.ddom.core;
 
-public abstract class DeferredBuildingException extends CoreModelException {
-    private static final long serialVersionUID = 1663609128329569656L;
+import com.googlecode.ddom.stream.XmlSource;
 
-    public DeferredBuildingException() {
-        super();
-    }
+/**
+ * Indicates that there is a mismatch between the element name specified at construction time and
+ * the actual name returned by the {@link XmlSource} set with
+ * {@link CoreElement#coreSetSource(XmlSource)}.
+ * 
+ * @author Andreas Veithen
+ */
+public class ElementNameMismatchException extends DeferredBuildingException {
+    private static final long serialVersionUID = 2806120524411278142L;
 
-    public DeferredBuildingException(String message) {
+    public ElementNameMismatchException(String message) {
         super(message);
-    }
-
-    public DeferredBuildingException(Throwable cause) {
-        super(cause);
     }
 }

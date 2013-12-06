@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNSUnawareAttribute;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.dom.intf.DOMAttribute;
@@ -48,7 +49,7 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
     
     private DOM2AttributeMatcher() {}
     
-    public boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredParsingException {
+    public boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredBuildingException {
         if (attr instanceof CoreNSAwareAttribute) {
             CoreNSAwareAttribute nsAwareAttr = (CoreNSAwareAttribute)attr;
             // Optimization: first compare the local names because they are in general
@@ -62,11 +63,11 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
         }
     }
 
-    public String getNamespaceURI(CoreAttribute attr) throws DeferredParsingException {
+    public String getNamespaceURI(CoreAttribute attr) throws DeferredBuildingException {
         return ((CoreNSAwareAttribute)attr).coreGetNamespaceURI();
     }
 
-    public String getName(CoreAttribute attr) throws DeferredParsingException {
+    public String getName(CoreAttribute attr) throws DeferredBuildingException {
         return ((CoreNSAwareAttribute)attr).coreGetLocalName();
     }
 

@@ -29,6 +29,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.googlecode.ddom.core.CoreDocument;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.dom.intf.DOMNodeFactory;
 import com.googlecode.ddom.stream.LocationAwareStreamException;
@@ -140,6 +141,8 @@ public class DocumentBuilderImpl extends DocumentBuilder {
             document.coreBuild();
         } catch (DeferredParsingException ex) {
             throw toSAXException(ex.getStreamException());
+        } catch (DeferredBuildingException ex) {
+            throw new SAXException(ex);
         }
         // TODO: close the reader and the underlying stream
         return (Document)document;

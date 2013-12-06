@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public interface CoreNSAwareNamedNode extends CoreNode {
      * {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * 
      * @return The namespace URI of the node, or the empty string if the node has no namespace.
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs while processing the source object of this node set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * @throws IllegalStateException
@@ -38,7 +38,7 @@ public interface CoreNSAwareNamedNode extends CoreNode {
      *             no source object has been set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      */
-    String coreGetNamespaceURI() throws DeferredParsingException;
+    String coreGetNamespaceURI() throws DeferredBuildingException;
     
     void coreSetNamespaceURI(String namespaceURI);
     
@@ -49,7 +49,7 @@ public interface CoreNSAwareNamedNode extends CoreNode {
      * 
      * @return The namespace prefix, or the empty string if the node has no prefix, i.e. if the node
      *         has no namespace or is in the default namespace.
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs while processing the source object of this node set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * @throws IllegalStateException
@@ -57,7 +57,7 @@ public interface CoreNSAwareNamedNode extends CoreNode {
      *             source object has been set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      */
-    String coreGetPrefix() throws DeferredParsingException;
+    String coreGetPrefix() throws DeferredBuildingException;
     
     void coreSetPrefix(String prefix);
 
@@ -68,7 +68,7 @@ public interface CoreNSAwareNamedNode extends CoreNode {
      * {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * 
      * @return The local part of the node name. The return value is never <code>null</code>.
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs while processing the source object of this node set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * @throws IllegalStateException
@@ -76,9 +76,9 @@ public interface CoreNSAwareNamedNode extends CoreNode {
      *             no source object has been set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      */
-    String coreGetLocalName() throws DeferredParsingException;
+    String coreGetLocalName() throws DeferredBuildingException;
     
     void coreSetLocalName(String localName);
     
-    QName coreGetQName() throws DeferredParsingException;
+    QName coreGetQName() throws DeferredBuildingException;
 }

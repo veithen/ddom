@@ -64,7 +64,7 @@ public interface CoreChildNode extends CoreNode {
      */
     void coreInsertSiblingAfter(CoreChildNode sibling, NodeMigrationPolicy policy) throws HierarchyException, NodeMigrationException, DeferredParsingException;
     
-    void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException;
+    void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredBuildingException;
     
     /**
      * 

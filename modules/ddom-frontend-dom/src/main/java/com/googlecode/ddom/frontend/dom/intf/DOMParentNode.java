@@ -22,7 +22,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 
 /**
  * Interface implemented by all nodes that are parent nodes in the sense of DOM: {@link Document},
@@ -31,7 +31,7 @@ import com.googlecode.ddom.core.DeferredParsingException;
  * @author Andreas Veithen
  */
 public interface DOMParentNode extends CoreParentNode, NodeList, DOMCoreNode {
-    DOMParentNode shallowClone() throws DeferredParsingException;
+    DOMParentNode shallowClone() throws DeferredBuildingException;
     DOMParentNode deepClone();
     void normalizeChildren(NormalizationConfig config) throws AbortNormalizationException;
 }

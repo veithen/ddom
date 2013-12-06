@@ -18,8 +18,8 @@ package com.googlecode.ddom.frontend.dom.intf;
 import org.w3c.dom.Element;
 
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 
 public interface DOMElement extends CoreElement, Element, DOMParentNode, DOMCoreChildNode {
-    DOMElement shallowCloneWithoutAttributes() throws DeferredParsingException;
+    DOMElement shallowCloneWithoutAttributes() throws DeferredBuildingException;
 }

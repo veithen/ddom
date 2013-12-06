@@ -61,7 +61,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
         }
     }
     
-    public final CoreAttribute coreGetNextAttribute() throws DeferredParsingException {
+    public final CoreAttribute coreGetNextAttribute() throws DeferredBuildingException {
         if (nextAttribute != null) {
             return nextAttribute;
         } else if (owner instanceof Element) {

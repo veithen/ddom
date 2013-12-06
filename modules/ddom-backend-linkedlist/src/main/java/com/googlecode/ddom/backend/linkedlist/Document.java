@@ -70,7 +70,7 @@ public class Document extends ParentNode implements LLDocument {
         return builders;
     }
 
-    public final InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredParsingException {
+    public final InputContext internalCreateInputContext(XmlInput input, LLParentNode target, boolean unwrap) throws DeferredBuildingException {
         if (log.isDebugEnabled()) {
             log.debug("Creating builder for " + input);
         }
@@ -145,7 +145,7 @@ public class Document extends ParentNode implements LLDocument {
         }
     }
 
-    public final int coreGetChildCount() throws DeferredParsingException {
+    public final int coreGetChildCount() throws DeferredBuildingException {
         coreBuild();
         return children;
     }

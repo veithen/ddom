@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreElement;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.Mapper;
 
 public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> implements Iterator<S> {
@@ -48,7 +48,7 @@ public abstract class AbstractAttributeIterator<T extends CoreAttribute,S> imple
                     } else {
                         attribute = attribute.coreGetNextAttribute();
                     }
-                } catch (DeferredParsingException ex) {
+                } catch (DeferredBuildingException ex) {
                     throw new RuntimeException(ex); // TODO
                 }
             } while (attribute != null && (!type.isInstance(attribute) || !matches(type.cast(attribute))));

@@ -30,6 +30,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.CoreNamespaceDeclaration;
 import com.googlecode.ddom.core.CoreTypedAttribute;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.AbortNormalizationException;
@@ -227,7 +228,7 @@ public abstract class ElementSupport implements DOMElement {
         }
     }
 
-    public final DOMParentNode shallowClone() throws DeferredParsingException {
+    public final DOMParentNode shallowClone() throws DeferredBuildingException {
         DOMElement clone = shallowCloneWithoutAttributes();
         CoreAttribute attr = coreGetFirstAttribute();
         while (attr != null) {

@@ -258,7 +258,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return state == Flags.STATE_EXPANDED || state == Flags.STATE_VALUE_SET;
     }
     
-    public final void coreBuild() throws DeferredParsingException {
+    public final void coreBuild() throws DeferredBuildingException {
         if (!coreIsComplete()) {
             InputContext context = internalGetOrCreateInputContext();
             do {
@@ -267,7 +267,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         }
     }
     
-    public final boolean coreHasValue() throws DeferredParsingException {
+    public final boolean coreHasValue() throws DeferredBuildingException {
         if (content == null && !coreIsComplete()) {
             // TODO: should use internalGetOrCreateInputContext here
             InputContext context = internalGetOwnerDocument(false).internalGetInputContext(this);
@@ -278,7 +278,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return content instanceof String;
     }
 
-    public final boolean coreIsEmpty() throws DeferredParsingException {
+    public final boolean coreIsEmpty() throws DeferredBuildingException {
         if (content == null && !coreIsComplete()) {
             InputContext context = internalGetOwnerDocument(false).internalGetInputContext(this);
             do {
@@ -292,7 +292,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         return internalGetFirstChild();
     }
     
-    public final InputContext internalGetOrCreateInputContext() throws DeferredParsingException {
+    public final InputContext internalGetOrCreateInputContext() throws DeferredBuildingException {
         InputContext inputContext;
         int state = internalGetState();
         if (state == Flags.STATE_CONTENT_SET || state == Flags.STATE_SOURCE_SET) {

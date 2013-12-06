@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -73,7 +73,7 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
         this.localName = localName;
     }
 
-    public final QName coreGetQName() throws DeferredParsingException {
+    public final QName coreGetQName() throws DeferredBuildingException {
         return NSAwareNamedNodeHelper.coreGetQName(this);
     }
 

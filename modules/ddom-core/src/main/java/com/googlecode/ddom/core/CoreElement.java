@@ -76,17 +76,17 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * Get the first attribute of this element.
      * 
      * @return the first attribute, or <code>null</code> if this element has no attributes
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      */
-    CoreAttribute coreGetFirstAttribute() throws DeferredParsingException;
+    CoreAttribute coreGetFirstAttribute() throws DeferredBuildingException;
     
     /**
      * Get the last attribute of this element.
      * 
      * @return the last attribute, or <code>null</code> if this element has no attributes
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      */
-    CoreAttribute coreGetLastAttribute() throws DeferredParsingException;
+    CoreAttribute coreGetLastAttribute() throws DeferredBuildingException;
     
     /**
      * Get the first attribute selected by a given {@link AttributeMatcher}.
@@ -101,10 +101,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
      * @return the (first) matching attribute, or <code>null</code> if no matching attribute was
      *         found
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs during deferred parsing.
      */
-    CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException;
+    CoreAttribute coreGetAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredBuildingException;
     
     /**
      * Create or update an attribute based on a given {@link AttributeMatcher}.
@@ -127,10 +127,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            the <code>value</code> parameter to pass to
      *            {@link AttributeMatcher#createAttribute(NodeFactory, CoreDocument, String, String, String, String)}
      *            and {@link AttributeMatcher#update(CoreAttribute, String, String)}
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      *             If an error occurs during deferred parsing.
      */
-    void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) throws DeferredParsingException;
+    void coreSetAttribute(AttributeMatcher matcher, String namespaceURI, String name, String prefix, String value) throws DeferredBuildingException;
     
     /**
      * Add a new attribute or replace an existing attribute based on a given
@@ -150,10 +150,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            specifies the expected return value of the method
      * @return the attribute as specified by the <code>returnValue</code> parameter
      * @throws NodeMigrationException 
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      *             If an error occurs during deferred parsing.
      */
-    CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredParsingException;
+    CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredBuildingException;
     
     /**
      * Append an attribute to this element. The attribute is simply added at the end of the list of
@@ -167,9 +167,9 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            different document
      * @throws NodeMigrationException
      *             if appending the attribute was rejected by the policy
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException 
      */
-    void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException, DeferredParsingException;
+    void coreAppendAttribute(CoreAttribute attr, NodeMigrationPolicy policy) throws NodeMigrationException, DeferredBuildingException;
     
     /**
      * Remove an attribute based on a given {@link AttributeMatcher}.
@@ -184,10 +184,10 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      *            {@link AttributeMatcher#matches(CoreAttribute, String, String)}
      * @return <code>true</code> if a matching attribute was found (and has been removed),
      *         <code>false</code> if no matching attribute was found
-     * @throws DeferredParsingException 
+     * @throws DeferredBuildingException
      *             If an error occurs during deferred parsing.
      */
-    boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredParsingException;
+    boolean coreRemoveAttribute(AttributeMatcher matcher, String namespaceURI, String name) throws DeferredBuildingException;
     
     /**
      * Look up the namespace URI associated to the given prefix.

@@ -104,7 +104,7 @@ public abstract class LeafNode extends Node implements LLLeafNode {
         LLChildNodeHelper.coreInsertSiblingAfter(this, sibling, policy);
     }
 
-    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredParsingException {
+    public final void coreInsertSiblingsAfter(CoreDocumentFragment fragment) throws HierarchyException, NodeMigrationException, DeferredBuildingException {
         LLChildNodeHelper.coreInsertSiblingsAfter(this, fragment);
     }
 

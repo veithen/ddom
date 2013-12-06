@@ -20,7 +20,11 @@ import com.googlecode.ddom.backend.ExtensionFactoryLocator;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
+import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreModelStreamException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.ElementNameMismatchException;
 import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.core.ext.ModelExtensionMapper;
 import com.googlecode.ddom.stream.StreamException;
@@ -43,7 +47,7 @@ public class Builder extends XmlOutput {
             this.targetNode = targetNode;
         }
         
-        public void next(boolean expand) throws DeferredParsingException {
+        public void next(boolean expand) throws DeferredBuildingException {
             Builder.this.next(expand);
         }
 
@@ -128,7 +132,11 @@ public class Builder extends XmlOutput {
             // TODO: also implement the context == null case for the other XmlOutput methods
             if (context == null) {
                 // TODO: probably we should check the node type here
-                ((NSAwareElement)sourcedNode).initName(namespaceURI, localName, prefix);
+                try {
+                    ((NSAwareElement)sourcedNode).initName(namespaceURI, localName, prefix);
+                } catch (ElementNameMismatchException ex) {
+                    throw new CoreModelStreamException(ex);
+                }
                 newContext(sourcedNode);
                 sourcedNode = null;
             } else {
@@ -366,7 +374,7 @@ public class Builder extends XmlOutput {
         return false;
     }
     
-    public final InputContext getRootInputContext() throws DeferredParsingException {
+    public final InputContext getRootInputContext() throws DeferredBuildingException {
         // The context stack will be empty if unwrap == true
         if (sourcedNode != null) {
             while (sourcedNode != null && contextStack.isEmpty()) {
@@ -376,7 +384,7 @@ public class Builder extends XmlOutput {
         return contextStack.get(0);
     }
     
-    final void next(boolean expand) throws DeferredParsingException {
+    final void next(boolean expand) throws DeferredBuildingException {
         if (streamException == null) {
             this.expand = expand;
             try {
@@ -391,6 +399,13 @@ public class Builder extends XmlOutput {
             this.expand = false;
         }
         if (streamException != null) {
+            if (streamException instanceof CoreModelStreamException) {
+                CoreModelException cause = ((CoreModelStreamException)streamException).getCoreModelException();
+                if (cause instanceof DeferredBuildingException) {
+                    // Typically we get here if an ElementNameMismatchException is thrown
+                    throw (DeferredBuildingException)cause;
+                }
+            }
             throw new DeferredParsingException(streamException);
         }
     }

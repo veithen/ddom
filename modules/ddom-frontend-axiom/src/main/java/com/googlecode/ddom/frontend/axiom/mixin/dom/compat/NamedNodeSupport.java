@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.googlecode.ddom.frontend.axiom.mixin.dom.compat;
 
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
-import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamedNode;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
@@ -27,7 +26,7 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
     public final String getLocalName() {
         try {
             return coreGetLocalName();
-        } catch (DeferredParsingException ex) {
+        } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
     }
