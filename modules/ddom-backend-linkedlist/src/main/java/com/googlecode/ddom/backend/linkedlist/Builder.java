@@ -184,6 +184,7 @@ public class Builder extends XmlOutput {
         public void attributesCompleted() throws StreamException {
             XmlHandler passThroughHandler = context.getPassThroughHandler();
             if (passThroughHandler == null) {
+                lastAttribute = null;
                 context.getTargetNode().internalSetState(Flags.STATE_CHILDREN_PENDING);
                 nodeAppended = true;
             } else {
@@ -445,7 +446,6 @@ public class Builder extends XmlOutput {
         } else {
             nodeAppended = true;
         }
-        lastAttribute = null;
     }
     
     private void appendAttribute(Attribute attr) {

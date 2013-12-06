@@ -34,6 +34,7 @@ public class BackendTestSuiteBuilder {
     public static TestSuite suite(NodeFactory nodeFactory, int builderType) {
         BackendTestSuiteConfig config = new BackendTestSuiteConfig(nodeFactory, builderType);
         TestSuite suite = new TestSuite();
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.attribute.TestCoreGetFirstChildDeferred(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.cdata.TestCoreClone(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetach(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetachIncomplete(config));
@@ -100,6 +101,8 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateSourceSet(config, false, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithDetachedChild(config, false));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithMultipleAttributes(config, true));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithMultipleAttributes(config, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetLastAttributeInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetNodesRemove(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetNodesWithConcurrentModification(config));

@@ -55,6 +55,7 @@ public class TestCoreGetInputWithChildInStateSourceSet extends BackendTestCase {
         output.assertCharacterData("text");
         output.assertEndElement();
         output.assertEndElement();
+        output.assertCompleted();
         if (preserve && destructive) {
             assertTrue(child.coreIsComplete());
         } else {

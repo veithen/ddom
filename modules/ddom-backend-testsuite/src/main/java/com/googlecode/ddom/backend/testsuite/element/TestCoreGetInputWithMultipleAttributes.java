@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,34 +19,38 @@ import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.backend.testsuite.StreamAssert;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.stream.Stream;
 
-public class TestCoreGetInputWithDetachedChild extends BackendTestCase {
+/**
+ * Tests {@link CoreParentNode#coreGetInput(boolean)} on an element with multiple attributes where
+ * deferred building is in effect.
+ * 
+ * @author Andreas Veithen
+ */
+public class TestCoreGetInputWithMultipleAttributes extends BackendTestCase {
     private final boolean preserve;
     
-    public TestCoreGetInputWithDetachedChild(BackendTestSuiteConfig config, boolean preserve) {
+    public TestCoreGetInputWithMultipleAttributes(BackendTestSuiteConfig config, boolean preserve) {
         super(config, "preserve=" + preserve);
         this.preserve = preserve;
     }
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<parent><a>a</a><b>b</b><c>c</c></parent>", true).coreGetDocumentElement();
-        element.coreGetFirstChild().coreGetNextSibling().coreDetach();
+        // Use namespace unaware parsing to make sure that attributes are built lazily
+        CoreElement element = parse("<root a=\'val1\' b=\'val2\'/>", false).coreGetDocumentElement();
         StreamAssert output = new StreamAssert();
         new Stream(element.coreGetInput(preserve), output);
         output.assertStartEntity(true);
-        output.assertStartElement("", "parent", "");
+        output.assertStartElement("root");
+        output.assertStartAttribute("a");
+        output.assertCharacterData("val1");
+        output.assertEndAttribute();
+        output.assertStartAttribute("b");
+        output.assertCharacterData("val2");
+        output.assertEndAttribute();
         output.assertAttributesCompleted();
-        output.assertStartElement("", "a", "");
-        output.assertAttributesCompleted();
-        output.assertCharacterData("a");
         output.assertEndElement();
-        output.assertStartElement("", "c", "");
-        output.assertAttributesCompleted();
-        output.assertCharacterData("c");
-        output.assertEndElement();
-        output.assertEndElement();
-        output.assertCompleted();
     }
 }

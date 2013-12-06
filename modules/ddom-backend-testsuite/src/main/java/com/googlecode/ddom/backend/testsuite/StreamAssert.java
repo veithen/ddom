@@ -53,6 +53,7 @@ public class StreamAssert extends XmlPivot {
 
     protected boolean startElement(String tagName) {
         assertEquals(expectedEvent, Event.START_NS_UNAWARE_ELEMENT);
+        assertEquals(expectedName, tagName);
         return false;
     }
     
@@ -71,6 +72,7 @@ public class StreamAssert extends XmlPivot {
     
     protected boolean startAttribute(String name, String type) {
         assertEquals(expectedEvent, Event.START_NS_UNAWARE_ATTRIBUTE);
+        assertEquals(expectedName, name);
         return false;
     }
     
@@ -155,6 +157,12 @@ public class StreamAssert extends XmlPivot {
         nextEvent();
     }
     
+    public void assertStartElement(String name) throws StreamException {
+        expectedEvent = Event.START_NS_UNAWARE_ELEMENT;
+        expectedName = name;
+        nextEvent();
+    }
+    
     public void assertStartElement(String namespaceURI, String localName, String prefix) throws StreamException {
         expectedEvent = Event.START_NS_AWARE_ELEMENT;
         expectedNamespaceURI = namespaceURI;
@@ -168,6 +176,17 @@ public class StreamAssert extends XmlPivot {
         nextEvent();
     }
     
+    public void assertStartAttribute(String name) throws StreamException {
+        expectedEvent = Event.START_NS_UNAWARE_ATTRIBUTE;
+        expectedName = name;
+        nextEvent();
+    }
+    
+    public void assertEndAttribute() throws StreamException {
+        expectedEvent = Event.END_ATTRIBUTE;
+        nextEvent();
+    }
+    
     public void assertAttributesCompleted() throws StreamException {
         expectedEvent = Event.ATTRIBUTES_COMPLETED;
         nextEvent();
@@ -176,6 +195,11 @@ public class StreamAssert extends XmlPivot {
     public void assertCharacterData(String data) throws StreamException {
         expectedEvent = Event.CHARACTER_DATA;
         expectedData = data;
+        nextEvent();
+    }
+    
+    public void assertCompleted() throws StreamException {
+        expectedEvent = Event.COMPLETED;
         nextEvent();
     }
 }
