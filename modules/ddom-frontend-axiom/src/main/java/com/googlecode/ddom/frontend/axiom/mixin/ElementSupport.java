@@ -199,13 +199,17 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
 
     public void setText(QName qname) {
         try {
-            String namespaceURI = qname.getNamespaceURI();
-            String prefix = qname.getPrefix();
-            if (prefix.length() == 0 && namespaceURI.length() > 0) {
-                prefix = OMSerializerUtil.getNextNSPrefix();
+            if (qname == null) {
+                coreClear();
+            } else {
+                String namespaceURI = qname.getNamespaceURI();
+                String prefix = qname.getPrefix();
+                if (prefix.length() == 0 && namespaceURI.length() > 0) {
+                    prefix = OMSerializerUtil.getNextNSPrefix();
+                }
+                ensureNamespaceIsDeclared(prefix, namespaceURI);
+                coreSetValue(prefix.length() > 0 ? prefix + ":" + qname.getLocalPart() : qname.getLocalPart());
             }
-            ensureNamespaceIsDeclared(prefix, namespaceURI);
-            coreSetValue(prefix.length() > 0 ? prefix + ":" + qname.getLocalPart() : qname.getLocalPart());
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
