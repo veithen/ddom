@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,7 @@ public class TestCoreAppendChildSameParentIncomplete extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = nodeFactory.createDocument();
-        document.coreSetContent(toXmlSource("<parent><a/><b/><c/></parent>"));
+        CoreDocument document = parse("<parent><a/><b/><c/></parent>");
         CoreNSAwareElement parent = (CoreNSAwareElement)document.coreGetDocumentElement();
         CoreNSAwareElement a = (CoreNSAwareElement)parent.coreGetFirstChild();
         CoreNSAwareElement b = (CoreNSAwareElement)a.coreGetNextSibling();

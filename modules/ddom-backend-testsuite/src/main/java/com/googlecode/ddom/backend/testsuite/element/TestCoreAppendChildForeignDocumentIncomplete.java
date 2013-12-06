@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,7 @@ public class TestCoreAppendChildForeignDocumentIncomplete extends BackendTestCas
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument foreignDocument = nodeFactory.createDocument();
-        foreignDocument.coreSetContent(toXmlSource("<imported>text</imported>"));
+        CoreDocument foreignDocument = parse("<imported>text</imported>");
         CoreElement element = nodeFactory.createElement(null, "", "root", "");
         element.coreAppendChild(foreignDocument.coreGetDocumentElement(), Policies.MOVE);
         CoreNSAwareElement firstChild = (CoreNSAwareElement)element.coreGetFirstChild();
