@@ -86,6 +86,10 @@ public abstract class Element extends Container implements LLElement {
     }
     
     public final CoreAttribute coreGetLastAttribute() throws DeferredParsingException {
+        return internalGetLastAttribute();
+    }
+    
+    private Attribute internalGetLastAttribute() throws DeferredParsingException {
         if (!attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
             while (internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
@@ -229,14 +233,14 @@ public abstract class Element extends Container implements LLElement {
         internalAppendAttribute(accept(attr, policy));
     }
 
-    final void internalAppendAttribute(Attribute attr) throws DeferredParsingException {
+    private void internalAppendAttribute(Attribute attr) throws DeferredParsingException {
         // TODO: throw exception if attribute already has an owner (see also coreInsertAttributeAfter)
         attr.setOwnerElement(this);
-        if (firstAttribute == null) {
+        Attribute lastAttribute = internalGetLastAttribute();
+        if (lastAttribute == null) {
             firstAttribute = attr;
         } else {
-            // TODO: avoid cast here
-            ((Attribute)coreGetLastAttribute()).insertAttributeAfter(attr);
+            lastAttribute.insertAttributeAfter(attr);
         }
     }
 
