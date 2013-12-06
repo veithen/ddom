@@ -160,6 +160,8 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.parent.TestCoreAppendChildrenFromWrongDocument(config, parentNodeFactory));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.parent.TestCoreClear(config, parentNodeFactory));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.parent.TestCoreSetValue(config, parentNodeFactory));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.parent.TestCoreSetValueEmptyString(config, parentNodeFactory));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.parent.TestCoreSetValueNull(config, parentNodeFactory));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.parent.TestCoreSetValueOnNodeWithChildren(config, parentNodeFactory));
     }
 }

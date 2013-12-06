@@ -136,11 +136,12 @@ public abstract class ParentNode extends Node implements LLParentNode {
     }
 
     public final void coreSetValue(String value) throws DeferredParsingException {
-        // TODO: what if arg is null?
         coreClear();
-        content = value;
-        internalSetState(Flags.STATE_VALUE_SET);
-        internalNotifyChildrenModified(1);
+        if (value != null && value.length() > 0) {
+            content = value;
+            internalSetState(Flags.STATE_VALUE_SET);
+            internalNotifyChildrenModified(1);
+        }
     }
     
     public final void internalSetValue(String value) {

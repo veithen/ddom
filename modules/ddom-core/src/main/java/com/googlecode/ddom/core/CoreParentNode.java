@@ -82,7 +82,8 @@ public interface CoreParentNode extends CoreNode {
     
     /**
      * Set the content of this node to the given value. This will remove all children previously
-     * owned by this element.
+     * owned by this element. If the value is the empty string or <code>null</code>, then this
+     * method has the same effect as {@link #coreClear()}.
      * 
      * @param value
      *            the value to set
