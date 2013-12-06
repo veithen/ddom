@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class TestCoreSetContentLaziness extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        XmlSource orgSource = toXmlSource("<test/>");
+        XmlSource orgSource = toXmlSource("<test/>", true, true);
         SimpleXmlSource simpleSource = new SimpleXmlSource(orgSource.getInput(XmlSource.Hints.DEFAULTS));
         CoreElement parent = nodeFactory.createElement(null, "parent");
         parent.coreSetContent(simpleSource);

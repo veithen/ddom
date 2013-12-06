@@ -43,7 +43,7 @@ public class TestCoreGetInputInStateConsumed extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<root>A<!--B-->C</root>").coreGetDocumentElement();
+        CoreElement element = parse("<root>A<!--B-->C</root>", true).coreGetDocumentElement();
         if (partial) {
             element.coreGetFirstChild();
         }

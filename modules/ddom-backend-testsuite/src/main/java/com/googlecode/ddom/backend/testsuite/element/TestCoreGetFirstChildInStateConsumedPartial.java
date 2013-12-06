@@ -36,7 +36,7 @@ public class TestCoreGetFirstChildInStateConsumedPartial extends BackendTestCase
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<root>test<a/>test</root>").coreGetDocumentElement();
+        CoreElement element = parse("<root>test<a/>test</root>", true).coreGetDocumentElement();
         CoreChildNode firstChild = element.coreGetFirstChild();
         // Consume the content of the element
         new Stream(element.coreGetInput(false), new NullXmlOutput()).flush();

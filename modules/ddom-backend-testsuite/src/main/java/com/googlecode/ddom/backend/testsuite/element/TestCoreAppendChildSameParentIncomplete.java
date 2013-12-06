@@ -38,7 +38,7 @@ public class TestCoreAppendChildSameParentIncomplete extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = parse("<parent><a/><b/><c/></parent>");
+        CoreDocument document = parse("<parent><a/><b/><c/></parent>", true);
         CoreNSAwareElement parent = (CoreNSAwareElement)document.coreGetDocumentElement();
         CoreNSAwareElement a = (CoreNSAwareElement)parent.coreGetFirstChild();
         CoreNSAwareElement b = (CoreNSAwareElement)a.coreGetNextSibling();

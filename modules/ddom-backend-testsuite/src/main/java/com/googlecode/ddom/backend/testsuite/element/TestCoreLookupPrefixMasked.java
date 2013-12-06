@@ -26,7 +26,7 @@ public class TestCoreLookupPrefixMasked extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement root = parse("<root xmlns:p='urn:ns1'><child xmlns:p='urn:ns2'/></root>").coreGetDocumentElement();
+        CoreElement root = parse("<root xmlns:p='urn:ns1'><child xmlns:p='urn:ns2'/></root>", true).coreGetDocumentElement();
         CoreElement child = (CoreElement)root.coreGetFirstChild();
         assertNull(child.coreLookupPrefix("urn:ns1", true));
     }

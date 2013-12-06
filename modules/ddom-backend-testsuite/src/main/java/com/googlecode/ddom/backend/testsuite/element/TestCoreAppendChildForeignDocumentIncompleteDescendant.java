@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public class TestCoreAppendChildForeignDocumentIncompleteDescendant extends Back
         CoreDocument foreignDocument = nodeFactory.createDocument();
         CoreNSAwareElement wrapper = nodeFactory.createElement(foreignDocument, "urn:test", "test", "p");
         CoreNSAwareElement descendant = wrapper.coreAppendElement(null, null, null);
-        descendant.coreSetSource(toXmlSource("<imported>text</imported>"));
+        descendant.coreSetSource(toXmlSource("<imported>text</imported>", true, true));
         // This will make sure that the descendant node transitions from state source set to incomplete
         assertEquals("imported", descendant.coreGetLocalName());
         CoreElement element = nodeFactory.createElement(null, "", "root", "");

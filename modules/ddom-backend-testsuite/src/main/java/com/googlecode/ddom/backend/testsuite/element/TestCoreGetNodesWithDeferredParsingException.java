@@ -34,7 +34,7 @@ public class TestCoreGetNodesWithDeferredParsingException extends BackendTestCas
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<root><a></invalid></root>").coreGetDocumentElement();
+        CoreElement element = parse("<root><a></invalid></root>", true).coreGetDocumentElement();
         Iterator<CoreChildNode> it = element.coreGetNodes(Axis.CHILDREN, Selector.ANY, CoreChildNode.class, ExceptionTranslator.DEFAULT);
         try {
             while (it.hasNext()) {

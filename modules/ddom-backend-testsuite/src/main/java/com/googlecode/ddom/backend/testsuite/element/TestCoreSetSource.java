@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class TestCoreSetSource extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreNSAwareElement element = nodeFactory.createElement(null, null, null, null);
-        element.coreSetSource(toXmlSource("<p:test xmlns:p='urn:ns'>text</p:test>"));
+        element.coreSetSource(toXmlSource("<p:test xmlns:p='urn:ns'>text</p:test>", true, true));
         assertEquals("urn:ns", element.coreGetNamespaceURI());
         assertEquals("test", element.coreGetLocalName());
         assertEquals("p", element.coreGetPrefix());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class TestCoreGetFirstAttributeInStateSourceSet extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreElement element = nodeFactory.createElement(null, "", "test", "");
-        element.coreSetSource(toXmlSource("<test attr='value'>text</test>"));
+        element.coreSetSource(toXmlSource("<test attr='value'>text</test>", true, true));
         CoreAttribute attr = element.coreGetFirstAttribute();
         assertNotNull(attr);
         assertEquals("value", attr.coreGetTextContent(TextCollectorPolicy.DEFAULT));

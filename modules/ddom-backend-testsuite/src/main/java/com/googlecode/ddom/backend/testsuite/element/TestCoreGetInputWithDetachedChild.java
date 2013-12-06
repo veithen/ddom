@@ -31,7 +31,7 @@ public class TestCoreGetInputWithDetachedChild extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<parent><a>a</a><b>b</b><c>c</c></parent>").coreGetDocumentElement();
+        CoreElement element = parse("<parent><a>a</a><b>b</b><c>c</c></parent>", true).coreGetDocumentElement();
         element.coreGetFirstChild().coreGetNextSibling().coreDetach();
         StreamAssert output = new StreamAssert();
         new Stream(element.coreGetInput(preserve), output);

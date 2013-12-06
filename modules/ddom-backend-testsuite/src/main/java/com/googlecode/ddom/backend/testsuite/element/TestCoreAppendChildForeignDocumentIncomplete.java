@@ -39,7 +39,7 @@ public class TestCoreAppendChildForeignDocumentIncomplete extends BackendTestCas
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument foreignDocument = parse("<imported>text</imported>");
+        CoreDocument foreignDocument = parse("<imported>text</imported>", true);
         CoreElement element = nodeFactory.createElement(null, "", "root", "");
         element.coreAppendChild(foreignDocument.coreGetDocumentElement(), Policies.MOVE);
         CoreNSAwareElement firstChild = (CoreNSAwareElement)element.coreGetFirstChild();

@@ -36,7 +36,7 @@ public class TestCoreGetFirstChildInStateConsumedFull extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<root>test<a/>test</root>").coreGetDocumentElement();
+        CoreElement element = parse("<root>test<a/>test</root>", true).coreGetDocumentElement();
         // Consume the content of the element
         new Stream(element.coreGetInput(false), new NullXmlOutput()).flush();
         try {

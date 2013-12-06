@@ -34,7 +34,7 @@ public class TestCoreClearIncomplete extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<parent><a>a</a><b>b</b><c>c</c></parent>").coreGetDocumentElement();
+        CoreElement element = parse("<parent><a>a</a><b>b</b><c>c</c></parent>", true).coreGetDocumentElement();
         CoreElement b = (CoreElement)element.coreGetFirstChild().coreGetNextSibling();
         assertFalse(element.coreIsComplete());
         assertFalse(b.coreIsComplete());

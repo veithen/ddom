@@ -26,7 +26,7 @@ public class TestCoreIsEmptyOnIncompleteElement extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement element = parse("<root>test</root>").coreGetDocumentElement();
+        CoreElement element = parse("<root>test</root>", true).coreGetDocumentElement();
         assertFalse(element.coreIsComplete());
         assertFalse(element.coreIsEmpty());
     }

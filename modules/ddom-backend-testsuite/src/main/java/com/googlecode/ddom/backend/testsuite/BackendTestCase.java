@@ -19,8 +19,6 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
-import org.junit.Assert;
-
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.NodeFactory;
@@ -53,13 +51,9 @@ public abstract class BackendTestCase extends TestCase {
         setName(getClass().getName() + " [" + nameQualifier + "]");
     }
     
-    protected final XmlSource toXmlSource(String xml) throws StreamException {
-        return toXmlSource(xml, true);
-    }
-    
-    protected final XmlSource toXmlSource(final String xml, boolean destructive) throws StreamException {
+    protected final XmlSource toXmlSource(final String xml, final boolean namespaceAware, boolean destructive) {
         if (destructive) {
-            return new SimpleXmlSource(new Parser(new StringReader(xml), true));
+            return new SimpleXmlSource(new Parser(new StringReader(xml), namespaceAware));
         } else {
             return new XmlSource() {
                 public boolean isDestructive() {
@@ -67,26 +61,21 @@ public abstract class BackendTestCase extends TestCase {
                 }
                 
                 public XmlInput getInput(Hints hints) throws StreamException {
-                    return new Parser(new StringReader(xml), true);
+                    return new Parser(new StringReader(xml), namespaceAware);
                 }
             };
         }
     }
     
-    protected final CoreDocument parse(String xml) {
+    protected final CoreDocument parse(String xml, boolean namespaceAware) {
         CoreDocument document = nodeFactory.createDocument();
-        try {
-            document.coreSetContent(toXmlSource(xml));
-        } catch (StreamException ex) {
-            Assert.fail(ex.getMessage());
-            return null;
-        }
+        document.coreSetContent(toXmlSource(xml, namespaceAware, true));
         return document;
     }
     
-    protected final CoreDocumentFragment parse(CoreDocument document, String xml) {
+    protected final CoreDocumentFragment parse(CoreDocument document, String xml, boolean namespaceAware) {
         CoreDocumentFragment fragment = document.coreGetNodeFactory().createDocumentFragment(document);
-        fragment.coreSetContent(new SimpleXmlSource(new Parser(new StringReader(xml), true)));
+        fragment.coreSetContent(toXmlSource(xml, namespaceAware, true));
         return fragment;
     }
 

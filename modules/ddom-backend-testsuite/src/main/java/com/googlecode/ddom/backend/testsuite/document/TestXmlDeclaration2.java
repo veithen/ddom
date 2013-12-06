@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class TestXmlDeclaration2 extends BackendTestCase {
         document.coreSetXmlVersion("1.1");
         document.coreSetXmlEncoding("UTF-8");
         document.coreSetStandalone(null);
-        document.coreSetContent(toXmlSource("<?xml version='1.0' standalone='yes'?><root/>"));
+        document.coreSetContent(toXmlSource("<?xml version='1.0' standalone='yes'?><root/>", true, true));
         assertEquals("1.0", document.coreGetXmlVersion());
         assertNull(document.coreGetXmlEncoding());
         assertEquals(Boolean.TRUE, document.coreGetStandalone());

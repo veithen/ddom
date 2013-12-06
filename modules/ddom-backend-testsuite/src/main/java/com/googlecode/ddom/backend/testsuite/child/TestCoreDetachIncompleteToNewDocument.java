@@ -35,7 +35,7 @@ public class TestCoreDetachIncompleteToNewDocument extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreDocument document = parse("<root><a>test</a></root>");
+        CoreDocument document = parse("<root><a>test</a></root>", true);
         CoreElement root = document.coreGetDocumentElement();
         CoreElement a = (CoreElement)root.coreGetFirstChild();
         assertFalse(a.coreIsComplete());

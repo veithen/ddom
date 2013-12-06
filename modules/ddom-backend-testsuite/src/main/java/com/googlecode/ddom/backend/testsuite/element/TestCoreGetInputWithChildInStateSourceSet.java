@@ -44,7 +44,7 @@ public class TestCoreGetInputWithChildInStateSourceSet extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreElement parent = nodeFactory.createElement(null, "", "parent", "");
         CoreElement child = parent.coreAppendElement("", "child", "");
-        child.coreSetSource(toXmlSource("<child>text</child>", destructive));
+        child.coreSetSource(toXmlSource("<child>text</child>", true, destructive));
         StreamAssert output = new StreamAssert();
         new Stream(parent.coreGetInput(preserve), output);
         output.assertStartEntity(true);

@@ -26,7 +26,7 @@ public class TestXmlDeclaration1 extends BackendTestCase {
 
     @Override
     protected void runTest() throws Exception {
-        CoreDocument document = parse("<?xml version='1.0' encoding='iso-8859-1' standalone='no'?><root/>");
+        CoreDocument document = parse("<?xml version='1.0' encoding='iso-8859-1' standalone='no'?><root/>", true);
         assertEquals("1.0", document.coreGetXmlVersion());
         assertEquals("iso-8859-1", document.coreGetXmlEncoding());
         assertEquals(Boolean.FALSE, document.coreGetStandalone());

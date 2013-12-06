@@ -37,7 +37,7 @@ public class TestCoreInsertSiblingsAfterWithIncomplete extends BackendTestCase {
         element.coreAppendChild(comment, Policies.REJECT);
         // TODO: this doesn't work with our parser
 //        CoreDocumentFragment fragment = parse(document, "<?pi?><a>test</a>");
-        CoreDocumentFragment fragment = parse(document, "<!--comment--><a>test</a>");
+        CoreDocumentFragment fragment = parse(document, "<!--comment--><a>test</a>", true);
         comment.coreInsertSiblingsAfter(fragment);
         if (builderType >= BUILDER_TYPE_2) {
             assertFalse(element.coreIsComplete());
