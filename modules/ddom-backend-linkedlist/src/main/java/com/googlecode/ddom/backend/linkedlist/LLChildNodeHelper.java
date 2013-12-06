@@ -28,6 +28,7 @@ import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.HierarchyException;
 import com.googlecode.ddom.core.NoParentException;
+import com.googlecode.ddom.core.NodeConsumedException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.SelfRelationshipException;
@@ -75,18 +76,30 @@ public final class LLChildNodeHelper {
         that.internalSetFlag(Flags.HAS_PARENT, false);
     }
     
-    public static LLChildNode internalGetNextSibling(LLChildNode that) throws DeferredParsingException {
+    public static LLChildNode internalGetNextSibling(LLChildNode that) throws DeferredBuildingException {
         LLParentNode parent = that.internalGetParent();
         if (parent == null) {
             return null;
         } else {
-            if (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete()) {
-                InputContext context = that.internalGetOwnerDocument(false).internalGetInputContext(parent);
-                do {
-                    context.next(false);
-                } while (that.internalGetNextSiblingIfMaterialized() == null && !parent.coreIsComplete());
+            InputContext context = null;
+            while (true) {
+                LLChildNode sibling = that.internalGetNextSiblingIfMaterialized();
+                if (sibling != null) {
+                    return sibling;
+                }
+                switch (parent.internalGetState()) {
+                    case Flags.STATE_CHILDREN_PENDING:
+                        if (context == null) {
+                            context = parent.internalGetOrCreateInputContext();
+                        }
+                        context.next(false);
+                        break;
+                    case Flags.STATE_CONSUMED:
+                        throw new NodeConsumedException();
+                    default:
+                        return null;
+                }
             }
-            return that.internalGetNextSiblingIfMaterialized();
         }
     }
     

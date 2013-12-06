@@ -68,7 +68,7 @@ public abstract class LeafNode extends Node implements LLLeafNode {
         this.nextSibling = nextSibling;
     }
     
-    public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {
+    public final CoreChildNode coreGetNextSibling() throws DeferredBuildingException {
         return internalGetNextSibling();
     }
     
@@ -92,7 +92,7 @@ public abstract class LeafNode extends Node implements LLLeafNode {
         LLChildNodeHelper.internalUnsetParent(this, newOwnerDocument);
     }
     
-    public final LLChildNode internalGetNextSibling() throws DeferredParsingException {
+    public final LLChildNode internalGetNextSibling() throws DeferredBuildingException {
         return LLChildNodeHelper.internalGetNextSibling(this);
     }
 

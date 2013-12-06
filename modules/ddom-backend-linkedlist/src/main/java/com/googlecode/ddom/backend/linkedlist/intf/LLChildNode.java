@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.googlecode.ddom.backend.linkedlist.intf;
 
 import com.googlecode.ddom.backend.linkedlist.Flags;
 import com.googlecode.ddom.core.CoreChildNode;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 
 public interface LLChildNode extends LLNode, CoreChildNode {
     /**
@@ -38,7 +38,7 @@ public interface LLChildNode extends LLNode, CoreChildNode {
     void internalSetNextSibling(LLChildNode nextSibling);
     
     // Type safe variants of several core model methods
-    LLChildNode internalGetNextSibling() throws DeferredParsingException;
+    LLChildNode internalGetNextSibling() throws DeferredBuildingException;
     LLChildNode internalGetPreviousSibling();
     
     void internalDetach();

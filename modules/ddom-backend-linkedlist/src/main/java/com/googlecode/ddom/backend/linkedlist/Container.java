@@ -87,7 +87,7 @@ public abstract class Container extends ParentNode implements LLChildNode {
         this.nextSibling = nextSibling;
     }
     
-    public final CoreChildNode coreGetNextSibling() throws DeferredParsingException {
+    public final CoreChildNode coreGetNextSibling() throws DeferredBuildingException {
         return internalGetNextSibling();
     }
     
@@ -111,7 +111,7 @@ public abstract class Container extends ParentNode implements LLChildNode {
         LLChildNodeHelper.internalUnsetParent(this, newOwnerDocument);
     }
     
-    public final LLChildNode internalGetNextSibling() throws DeferredParsingException {
+    public final LLChildNode internalGetNextSibling() throws DeferredBuildingException {
         return LLChildNodeHelper.internalGetNextSibling(this);
     }
 

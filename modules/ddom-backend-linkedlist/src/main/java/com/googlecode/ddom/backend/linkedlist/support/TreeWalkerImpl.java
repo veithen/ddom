@@ -211,8 +211,11 @@ final class TreeWalkerImpl implements XmlReader {
                     if (sibling == null) {
                         LLParentNode parent = previousChildNode.internalGetParent();
                         nextNode = parent;
-                        if (parent.coreIsComplete()) {
+                        int nodeState = parent.internalGetState();
+                        if (nodeState == Flags.STATE_EXPANDED) {
                             state = STATE_VISITED;
+                        } else if (nodeState == Flags.STATE_CONSUMED) {
+                            throw new NodeConsumedException();
                         } else {
                             inputContext = getDocument().internalGetInputContext(parent);
                             inputContext.setPassThroughHandler(handler);

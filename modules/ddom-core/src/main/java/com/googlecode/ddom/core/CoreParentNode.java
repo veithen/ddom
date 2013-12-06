@@ -77,7 +77,7 @@ public interface CoreParentNode extends CoreNode {
     // Temporarily marked as deprecated. In most cases coreGetTextContent should be used.
     // However, this method may later be changed to return objects (e.g. QNames).
     @Deprecated
-    String coreGetValue() throws DeferredParsingException;
+    String coreGetValue() throws DeferredBuildingException;
     
     /**
      * Set the content of this node to the given value. This will remove all children previously

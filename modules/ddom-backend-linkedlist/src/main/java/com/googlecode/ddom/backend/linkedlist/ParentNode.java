@@ -118,7 +118,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
     protected void contentReset() {
     }
 
-    public final String coreGetValue() throws DeferredParsingException {
+    public final String coreGetValue() throws DeferredBuildingException {
         // TODO: this should also be applicable for other OptimizedParentNodes
         if (internalGetState() == Flags.STATE_VALUE_SET) {
             return (String)content;

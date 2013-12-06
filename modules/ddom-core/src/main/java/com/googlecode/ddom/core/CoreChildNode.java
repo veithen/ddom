@@ -43,7 +43,7 @@ public interface CoreChildNode extends CoreNode {
      */
     CoreElement coreGetParentElement();
     
-    CoreChildNode coreGetNextSibling() throws DeferredParsingException;
+    CoreChildNode coreGetNextSibling() throws DeferredBuildingException;
     CoreChildNode coreGetPreviousSibling() throws DeferredParsingException;
     
     /**

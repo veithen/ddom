@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Andreas Veithen
+ * Copyright 2009,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,18 @@ package com.googlecode.ddom.backend.testsuite;
 import org.junit.Assert;
 
 import com.googlecode.ddom.core.CoreChildNode;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 
 public class CoreAssert {
     private CoreAssert() {}
     
-    public static void assertOrphan(CoreChildNode node) throws DeferredParsingException {
+    public static void assertOrphan(CoreChildNode node) throws DeferredBuildingException {
         Assert.assertNull(node.coreGetParent());
         Assert.assertNull(node.coreGetPreviousSibling());
         Assert.assertNull(node.coreGetNextSibling());
     }
     
-    public static void assertSiblings(CoreChildNode node1, CoreChildNode node2) throws DeferredParsingException {
+    public static void assertSiblings(CoreChildNode node1, CoreChildNode node2) throws DeferredBuildingException {
         Assert.assertSame(node2, node1.coreGetNextSibling());
         Assert.assertSame(node1, node2.coreGetPreviousSibling());
     }

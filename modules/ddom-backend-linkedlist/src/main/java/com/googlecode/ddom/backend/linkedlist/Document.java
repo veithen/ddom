@@ -75,7 +75,7 @@ public class Document extends ParentNode implements LLDocument {
             log.debug("Creating builder for " + input);
         }
         Builder builder = new Builder(input, modelExtension, this, target, unwrap);
-        target.internalSetState(target instanceof LLElement ? Flags.STATE_ATTRIBUTES_PENDING : Flags.STATE_CHILDREN_PENDING);
+        target.internalSetState(unwrap ? Flags.STATE_ATTRIBUTES_PENDING : Flags.STATE_CHILDREN_PENDING);
         new Stream(input, builder);
         builders.add(builder);
         return builder.getRootInputContext();
