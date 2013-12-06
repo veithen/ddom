@@ -15,6 +15,10 @@
  */
 package com.googlecode.ddom.frontend.dom.intf;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.ddom.core.CoreParentNode;
@@ -22,7 +26,7 @@ import com.googlecode.ddom.core.DeferredParsingException;
 
 /**
  * Interface implemented by all nodes that are parent nodes in the sense of DOM: {@link Document},
- * {@link DocumentFragment}, {@link Element} and {@link Attribute}.
+ * {@link DocumentFragment}, {@link Element} and {@link Attr}.
  * 
  * @author Andreas Veithen
  */
