@@ -17,6 +17,7 @@ package com.googlecode.ddom.core;
 
 import java.util.Iterator;
 
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
 
@@ -173,6 +174,11 @@ public interface CoreParentNode extends CoreNode {
      * method is invoked. In particular this means that the event sequence is not necessarily well
      * formed with respect to namespaces. Therefore, depending on the use case, it may be necessary
      * to transform this event sequence using a namespace repairing filter.
+     * <p>
+     * If a {@link DeferredParsingException} is triggered while accessing the nodes in the tree,
+     * then the exception will be unwrapped and the underlying {@link StreamException} will be
+     * thrown. Any other {@link CoreModelException} (usually {@link NodeConsumedException}) will be
+     * wrapped in a {@link CoreModelStreamException}.
      * 
      * @param preserve
      *            Determines whether the content (descendants) of this node should be preserved. The

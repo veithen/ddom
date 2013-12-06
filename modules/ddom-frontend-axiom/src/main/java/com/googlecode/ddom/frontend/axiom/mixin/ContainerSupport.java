@@ -37,6 +37,7 @@ import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreModelStreamException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.ElementMatcher;
@@ -120,21 +121,23 @@ public abstract class ContainerSupport implements AxiomContainer {
         throw new UnsupportedOperationException();
     }
     
-    private final void serialize(XmlOutput output, boolean preserve) throws StreamException {
+    private final void serialize(XmlOutput output, boolean preserve) throws XMLStreamException {
         XmlInput input = coreGetInput(preserve);
         input.addFilter(new NamespaceRepairingFilter());
-        new Stream(input, output).flush();
-    }
-    
-    public void serialize(XMLStreamWriter writer, boolean cache) throws XMLStreamException {
         try {
-            serialize(new StAXOutput(writer), cache);
+            new Stream(input, output).flush();
+        } catch (CoreModelStreamException ex) {
+            throw AxiomExceptionTranslator.translate(ex.getCoreModelException());
         } catch (StreamException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
     }
+    
+    public void serialize(XMLStreamWriter writer, boolean cache) throws XMLStreamException {
+        serialize(new StAXOutput(writer), cache);
+    }
 
-    public String toString(boolean preserve) throws StreamException {
+    public String toString(boolean preserve) throws XMLStreamException {
         StringWriter sw = new StringWriter();
         serialize(new Serializer(sw), preserve);
         return sw.toString();
@@ -145,8 +148,6 @@ public abstract class ContainerSupport implements AxiomContainer {
         try {
             // TODO: correct choice of encoding?
             serialize(new Serializer(output, "UTF-8"), preserve);
-        } catch (StreamException ex) {
-            throw AxiomExceptionTranslator.translate(ex);
         } catch (UnsupportedEncodingException ex) {
             throw new XMLStreamException(ex);
         }
@@ -154,11 +155,7 @@ public abstract class ContainerSupport implements AxiomContainer {
 
     private void serialize(Writer writer, boolean preserve) throws XMLStreamException {
         // TODO: close output?
-        try {
-            serialize(new Serializer(writer), preserve);
-        } catch (StreamException ex) {
-            throw AxiomExceptionTranslator.translate(ex);
-        }
+        serialize(new Serializer(writer), preserve);
     }
     
     private void serialize(OutputStream output, OMOutputFormat format, boolean preserve) throws XMLStreamException {
@@ -171,8 +168,6 @@ public abstract class ContainerSupport implements AxiomContainer {
                 encoding = "UTF-8";
             }
             serialize(new Serializer(output, encoding), preserve);
-        } catch (StreamException ex) {
-            throw AxiomExceptionTranslator.translate(ex);
         } catch (UnsupportedEncodingException ex) {
             throw new XMLStreamException(ex);
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
  */
 package com.googlecode.ddom.frontend.axiom.intf;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.axiom.om.OMContainer;
 
 import com.googlecode.ddom.core.CoreParentNode;
-import com.googlecode.ddom.stream.StreamException;
 
 public interface AxiomContainer extends CoreParentNode, OMContainer, AxiomNode {
-    String toString(boolean preserve) throws StreamException;
+    String toString(boolean preserve) throws XMLStreamException;
 }

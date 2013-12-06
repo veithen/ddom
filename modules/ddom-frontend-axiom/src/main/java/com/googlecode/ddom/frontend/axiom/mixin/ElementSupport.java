@@ -357,17 +357,13 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     }
     
     public final String toStringWithConsume() throws XMLStreamException {
-        try {
-            return toString(false);
-        } catch (StreamException ex) {
-            throw AxiomExceptionTranslator.translate(ex);
-        }
+        return toString(false);
     }
 
     public final String toString() {
         try {
             return toString(true);
-        } catch (StreamException ex) {
+        } catch (XMLStreamException ex) {
             throw new OMException(ex);
         }
     }

@@ -18,11 +18,11 @@ package com.googlecode.ddom.backend.testsuite.element;
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.core.CoreElement;
+import com.googlecode.ddom.core.CoreModelStreamException;
 import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.NodeConsumedException;
 import com.googlecode.ddom.stream.NullXmlOutput;
 import com.googlecode.ddom.stream.Stream;
-import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlInput;
 
 /**
@@ -54,8 +54,8 @@ public class TestCoreGetInputInStateConsumed extends BackendTestCase {
         try {
             new Stream(input, new NullXmlOutput()).flush();
             fail("Expected StreamException");
-        } catch (StreamException ex) {
-            assertTrue(ex.getCause() instanceof NodeConsumedException);
+        } catch (CoreModelStreamException ex) {
+            assertTrue(ex.getCoreModelException() instanceof NodeConsumedException);
         }
     }
 }
