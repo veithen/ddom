@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import org.apache.axiom.ts.soap.SOAPTestSuiteBuilder;
 import org.apache.axiom.ts.soap.builder.BadInputTest;
 import org.apache.axiom.ts.soap.envelope.TestAddHeaderToIncompleteEnvelope;
 import org.apache.axiom.ts.soap.envelope.TestBodyHeaderOrder;
-import org.apache.axiom.ts.soap.envelope.TestDiscardHeader;
 import org.apache.axiom.ts.soap.envelope.TestGetSOAPBodyFirstElementLocalNameAndNSWithParser;
 import org.apache.axiom.ts.soap.fault.TestSetCode;
 import org.apache.axiom.ts.soap.fault.TestSetDetail;
@@ -31,6 +30,8 @@ import org.apache.axiom.ts.soap.fault.TestSetReason;
 import org.apache.axiom.ts.soap.fault.TestSetRole;
 import org.apache.axiom.ts.soap.faultdetail.TestGetAllDetailEntriesWithParser;
 import org.apache.axiom.ts.soap.faulttext.TestSetLang;
+import org.apache.axiom.ts.soap.header.TestDiscardIncomplete;
+import org.apache.axiom.ts.soap.header.TestDiscardPartiallyBuilt;
 import org.apache.axiom.ts.soap12.envelope.TestAddElementAfterBody;
 import org.apache.axiom.ts.soap12.envelope.TestBuildWithAttachments;
 import org.apache.axiom.ts.soap12.envelope.TestMTOMForwardStreaming;
@@ -46,11 +47,12 @@ public class ImplementationTest extends TestCase {
     public static TestSuite suite() throws Exception {
         ModelRegistry modelRegistry = ModelRegistry.getInstance(ImplementationTest.class.getClassLoader());
         Model model = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("axiom-soap"));
-        SOAPTestSuiteBuilder builder = new SOAPTestSuiteBuilder((OMMetaFactory)model.getNodeFactory());
+        SOAPTestSuiteBuilder builder = new SOAPTestSuiteBuilder((OMMetaFactory)model.getNodeFactory(), true, false);
 
         // TODO
         builder.exclude(TestAddHeaderToIncompleteEnvelope.class);
-        builder.exclude(TestDiscardHeader.class);
+        builder.exclude(TestDiscardIncomplete.class);
+        builder.exclude(TestDiscardPartiallyBuilt.class);
         builder.exclude(TestGetAllDetailEntriesWithParser.class);
         
         // TODO: this requires some more thinking

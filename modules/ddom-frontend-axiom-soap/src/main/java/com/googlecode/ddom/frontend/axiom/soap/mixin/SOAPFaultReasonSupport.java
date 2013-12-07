@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.List;
 import org.apache.axiom.soap.SOAPFaultText;
 import org.apache.axiom.soap.SOAPProcessingException;
 
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultText;
@@ -40,7 +40,7 @@ public abstract class SOAPFaultReasonSupport implements AxiomSOAPFaultReason {
     public final SOAPFaultText getFirstSOAPText() {
         try {
             return coreGetFirstChildByType(AxiomSOAPFaultText.class);
-        } catch (DeferredParsingException ex) {
+        } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
     }
