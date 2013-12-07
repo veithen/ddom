@@ -92,6 +92,8 @@ import org.apache.axiom.ts.om.sourcedelement.TestRemoveChildrenUnexpanded;
 import org.apache.axiom.ts.om.sourcedelement.TestSetDataSourceOnAlreadyExpandedElement;
 import org.apache.axiom.ts.om.text.TestBase64StreamingWithGetSAXSource;
 import org.apache.axiom.ts.om.text.TestBase64StreamingWithSerialize;
+import org.apache.axiom.ts.om.text.TestGetTextCharactersFromDataHandler;
+import org.apache.axiom.ts.om.xop.XOPRoundtripTest;
 import org.apache.axiom.ts.om.xpath.TestAXIOMXPath;
 
 import com.googlecode.ddom.model.Model;
@@ -103,6 +105,11 @@ public class ImplementationTest extends TestCase {
         ModelRegistry modelRegistry = ModelRegistry.getInstance(ImplementationTest.class.getClassLoader());
         Model model = modelRegistry.getModel(ModelDefinitionBuilder.buildModelDefinition("axiom"));
         OMTestSuiteBuilder builder = new OMTestSuiteBuilder((OMMetaFactory)model.getNodeFactory(), true);
+        
+        // OMText#getNamespace() is deprecated; we don't support it
+        builder.exclude(org.apache.axiom.ts.om.text.TestGetNamespace.class);
+        builder.exclude(org.apache.axiom.ts.om.text.TestGetNamespaceNoNamespace.class);
+        
         // TODO
         builder.exclude(TestBase64StreamingWithGetSAXSource.class);
         builder.exclude(TestBase64StreamingWithSerialize.class);
@@ -146,6 +153,8 @@ public class ImplementationTest extends TestCase {
         builder.exclude(org.apache.axiom.ts.om.sourcedelement.sr.TestCloseWithoutCaching.class);
         builder.exclude(org.apache.axiom.ts.om.xop.TestSerialize.class);
         builder.exclude(TestRemoveChildrenUnexpanded.class);
+        builder.exclude(TestGetTextCharactersFromDataHandler.class);
+        builder.exclude(XOPRoundtripTest.class);
         
         // TODO: caused by incorrect code in axiom-api
         builder.exclude(TestDigest.class, "(|(file=digest3.xml)(file=digest4.xml))");
