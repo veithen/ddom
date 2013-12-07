@@ -26,7 +26,6 @@ public interface ExceptionTranslator {
      * instances.
      */
     ExceptionTranslator DEFAULT = new ExceptionTranslator() {
-        @Override
         public RuntimeException toUncheckedException(CoreModelException ex) {
             return new CoreModelRuntimeException(ex);
         }
