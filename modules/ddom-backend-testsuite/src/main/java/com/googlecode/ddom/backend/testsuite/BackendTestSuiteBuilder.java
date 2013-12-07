@@ -91,6 +91,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputInStateConsumed(config, true, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputInStateConsumed(config, false, false));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputInStateConsumed(config, true, false));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputInStateSourceSetWithUnknownName(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, false, true));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreGetInputWithChildInStateContentSet(config, true, false));

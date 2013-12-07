@@ -83,6 +83,7 @@ public class StreamAssert extends XmlPivot {
     
     protected boolean startNamespaceDeclaration(String prefix) {
         assertEquals(expectedEvent, Event.START_NAMESPACE_DECLARATION);
+        assertEquals(expectedPrefix, prefix);
         return false;
     }
     
@@ -182,9 +183,21 @@ public class StreamAssert extends XmlPivot {
         nextEvent();
     }
     
+    public void assertStartNamespaceDeclaration(String prefix) throws StreamException {
+        expectedEvent = Event.START_NAMESPACE_DECLARATION;
+        expectedPrefix = prefix;
+        nextEvent();
+    }
+    
     public void assertEndAttribute() throws StreamException {
         expectedEvent = Event.END_ATTRIBUTE;
         nextEvent();
+    }
+    
+    public void assertNamespaceDeclaration(String prefix, String namespaceURI) throws StreamException {
+        assertStartNamespaceDeclaration(prefix);
+        assertCharacterData(namespaceURI);
+        assertEndAttribute();
     }
     
     public void assertAttributesCompleted() throws StreamException {

@@ -23,6 +23,7 @@ import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreModelStreamException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.ElementAlreadyExistsException;
@@ -32,6 +33,7 @@ import com.googlecode.ddom.core.SequenceItem;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
+// TODO: some methods access namespaceURI/localName/prefix directly; they should use the corresponding coreGetXxx methods
 @Implementation(factory=NSAwareElementFactory.class)
 public class NSAwareElement extends Element implements CoreNSAwareElement {
     private static final int SEQOP_GET = 1;
@@ -214,7 +216,11 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
-        handler.startElement(namespaceURI, localName, prefix);
+        try {
+            handler.startElement(coreGetNamespaceURI(), coreGetLocalName(), coreGetPrefix());
+        } catch (DeferredBuildingException ex) {
+            throw new CoreModelStreamException(ex);
+        }
     }
 
     @Override
