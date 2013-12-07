@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,11 @@ import junit.framework.TestSuite;
 
 import org.apache.axiom.ts.dom.DOMTestSuiteBuilder;
 import org.apache.axiom.ts.dom.document.TestAllowedChildren;
+import org.apache.axiom.ts.dom.document.TestCloneNode;
 import org.apache.axiom.ts.dom.document.TestNormalizeDocumentNamespace;
+import org.apache.axiom.ts.dom.document.TestTransformerWithIdentityStylesheet;
+import org.apache.axiom.ts.dom.documenttype.TestWithParser1;
+import org.apache.axiom.ts.dom.documenttype.TestWithParser2;
 import org.apache.axiom.ts.dom.element.TestGetElementsByTagName;
 import org.apache.axiom.ts.dom.element.TestGetTextContent;
 import org.apache.axiom.ts.dom.text.TestSetPrefix;
@@ -31,8 +35,7 @@ public class ImplementationTest extends TestCase {
     public static TestSuite suite() {
         DocumentBuilderFactory dbf = new DocumentBuilderFactoryImpl();
         dbf.setNamespaceAware(true);
-        // TODO: in Axiom we should make a clear distinction between DOM and OMDOM test cases
-        DOMTestSuiteBuilder builder = new DOMTestSuiteBuilder(dbf, false);
+        DOMTestSuiteBuilder builder = new DOMTestSuiteBuilder(dbf);
         
         // TODO
         builder.exclude(TestAllowedChildren.class);
@@ -40,6 +43,10 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetElementsByTagName.class);
         builder.exclude(TestGetTextContent.class);
         builder.exclude(TestSetPrefix.class);
+        builder.exclude(TestCloneNode.class);
+        builder.exclude(TestTransformerWithIdentityStylesheet.class);
+        builder.exclude(TestWithParser1.class);
+        builder.exclude(TestWithParser2.class);
         
         return builder.build();
     }

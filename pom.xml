@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009-2011 Andreas Veithen
+  ~ Copyright 2009-2011,2013 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <asm.version>3.3</asm.version>
         <cxf.version>2.4.0</cxf.version>
-        <axiom.version>1.2.13-SNAPSHOT</axiom.version>
+        <axiom.version>1.2.15-SNAPSHOT</axiom.version>
         <axis2.version>1.7.0-SNAPSHOT</axis2.version>
         <jetty.version>7.3.0.v20110203</jetty.version>
     </properties>

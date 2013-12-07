@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.apache.axiom.om.OMDataSource;
 import org.apache.axiom.om.OMDocType;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMEntityReference;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMMetaFactory;
 import org.apache.axiom.om.OMNamespace;
@@ -181,6 +182,9 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     private OMSourcedElement createOMElement(OMDataSource dataSource, String namespaceURI, String localName, String prefix) {
+        if (dataSource == null) {
+            throw new IllegalArgumentException("OMDataSource can't be null");
+        }
         AxiomSourcedElement element = nodeFactory.createElement(null, AxiomSourcedElement.class, namespaceURI, localName, prefix);
         element.setOMFactory(this);
         element.setDataSource(dataSource);
@@ -332,15 +336,18 @@ public class OMFactoryImpl implements OMFactory {
         throw new UnsupportedOperationException();
     }
 
-    //
-    // Methods used by StAXBuilder and StAXOMBuilder.
-    //
-    
-    public final OMDocument createOMDocument(OMXMLParserWrapper builder) {
+    public OMDocType createOMDocType(OMContainer parent, String rootName, String publicId, String systemId, String internalSubset) {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException();
     }
 
-    public final OMElement createOMElement(String localName, OMNamespace ns, OMContainer parent, OMXMLParserWrapper builder) {
+    public OMSourcedElement createOMElement(OMDataSource source) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException();
+    }
+
+    public OMEntityReference createOMEntityReference(OMContainer parent, String name) {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException();
     }
 }
