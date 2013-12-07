@@ -24,6 +24,7 @@ public final class Policies {
     
     public static final NodeMigrationPolicy ATTRIBUTE_MIGRATION_POLICY = new NodeMigrationPolicy() {
         public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
+            // TODO: doesn't look correct for foreign documents
             return Action.CLONE;
         }
     };
