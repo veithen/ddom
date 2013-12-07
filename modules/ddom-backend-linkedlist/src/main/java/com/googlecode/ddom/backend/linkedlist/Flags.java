@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.googlecode.ddom.backend.linkedlist;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.CoreCharacterData;
+import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 
 public class Flags {
     private Flags() {}
@@ -53,4 +54,22 @@ public class Flags {
      * Used to store the information returned by {@link CoreCharacterData#coreIsIgnorable()}.
      */
     public static final int IGNORABLE = 16;
+    
+    /**
+     * Used by {@link NSAwareElement} to indicate that the namespace URI has been set using
+     * {@link CoreNSAwareNamedNode#coreSetNamespaceURI(String)}.
+     */
+    public static final int NAMESPACE_URI_SET = 16;
+    
+    /**
+     * Used by {@link NSAwareElement} to indicate that the local name has been set using
+     * {@link CoreNSAwareNamedNode#coreSetLocalName(String)}.
+     */
+    public static final int LOCAL_NAME_SET = 32;
+    
+    /**
+     * Used by {@link NSAwareElement} to indicate that the prefix has been set using
+     * {@link CoreNSAwareNamedNode#coreSetPrefix(String)}.
+     */
+    public static final int PREFIX_SET = 64;
 }

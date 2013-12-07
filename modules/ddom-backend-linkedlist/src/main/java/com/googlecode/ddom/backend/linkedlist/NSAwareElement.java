@@ -53,21 +53,29 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     void initName(String namespaceURI, String localName, String prefix) throws ElementNameMismatchException {
-        if (this.namespaceURI != null) {
+        if (internalGetFlag(Flags.NAMESPACE_URI_SET)) {
+            // Do nothing; keep the overridden namespace URI
+        } else if (this.namespaceURI != null) {
             if (!this.namespaceURI.equals(namespaceURI)) {
                 throw new ElementNameMismatchException("Unexpected namespace URI");
             }
         } else {
             this.namespaceURI = namespaceURI;
         }
-        if (this.localName != null) {
+
+        if (internalGetFlag(Flags.LOCAL_NAME_SET)) {
+            // Do nothing; keep the overridden local name
+        } else if (this.localName != null) {
             if (!this.localName.equals(localName)) {
                 throw new ElementNameMismatchException("Unexpected local name");
             }
         } else {
             this.localName = localName;
         }
-        if (this.prefix != null) {
+        
+        if (internalGetFlag(Flags.PREFIX_SET)) {
+            // Do nothing; keep the overridden prefix
+        } else if (this.prefix != null) {
             if (!this.prefix.equals(prefix)) {
                 throw new ElementNameMismatchException("Unexpected prefix");
             }
@@ -89,6 +97,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
 
     public final void coreSetNamespaceURI(String namespaceURI) {
         this.namespaceURI = namespaceURI;
+        internalSetFlag(Flags.NAMESPACE_URI_SET, true);
     }
     
     public final String coreGetPrefix() throws DeferredBuildingException {
@@ -100,6 +109,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
 
     public final void coreSetPrefix(String prefix) {
         this.prefix = prefix;
+        internalSetFlag(Flags.PREFIX_SET, true);
     }
     
     public final String coreGetLocalName() throws DeferredBuildingException {
@@ -111,6 +121,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     
     public final void coreSetLocalName(String localName) {
         this.localName = localName;
+        internalSetFlag(Flags.LOCAL_NAME_SET, true);
     }
 
     public final QName coreGetQName() throws DeferredBuildingException {
