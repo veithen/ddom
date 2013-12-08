@@ -228,7 +228,7 @@ public final class LLChildNodeHelper {
     
     public static void coreDetach(LLChildNode that) throws DeferredParsingException {
         that.internalDetach();
-        that.internalUnsetParent(internalGetOwnerDocument(that, false));
+        that.internalUnsetParent(internalGetOwnerDocument(that, true));
     }
     
     public static void coreDetach(LLChildNode that, CoreDocument document) throws DeferredParsingException {

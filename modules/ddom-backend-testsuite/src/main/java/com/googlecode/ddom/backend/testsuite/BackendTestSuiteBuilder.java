@@ -39,6 +39,7 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetach(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetachIncomplete(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetachIncompleteToNewDocument(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreDetachWithLazyOwnerDocument(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreGetNextSiblingWithConsumedParent(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterFromWrongDocument(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.child.TestCoreInsertSiblingAfterOnChild(config));
