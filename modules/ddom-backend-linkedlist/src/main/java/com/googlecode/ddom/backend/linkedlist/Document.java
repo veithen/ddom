@@ -22,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
-import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.ChildNotAllowedException;
 import com.googlecode.ddom.core.ClonePolicy;
