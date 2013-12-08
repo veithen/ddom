@@ -28,7 +28,6 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
     /**
      * Specifies the value that should be returned by
      * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, CoreAttribute, NodeMigrationPolicy, ReturnValue)}.
-     * .
      */
     public enum ReturnValue {
         /**

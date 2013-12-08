@@ -100,7 +100,7 @@ public interface CoreChildNode extends CoreNode {
      * will always be changed, even if the node has no parent.
      * 
      * @param document
-     *            the new owner document, or <code>null</code> if the node will have it's own owner
+     *            the new owner document, or <code>null</code> if the node will have its own owner
      *            document (which may be created lazily at a later moment)
      * @throws DeferredParsingException
      */
