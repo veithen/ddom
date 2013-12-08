@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,11 @@ package com.googlecode.ddom.frontend.axiom.soap.mixin;
 import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.frontend.Mixin;
-import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultCode;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP11FaultCode;
 
-@Mixin(AxiomSOAP12FaultCode.class)
-public abstract class SOAP12FaultCodeSupport implements AxiomSOAP12FaultCode {
-    public QName getTextAsQName() {
-        return getValue().getTextAsQName();
-    }
-
+@Mixin(AxiomSOAP11FaultCode.class)
+public abstract class SOAP11FaultCodeSupport implements AxiomSOAP11FaultCode {
     public final QName getValueAsQName() {
-        return getValue().getTextAsQName();
+        return getTextAsQName();
     }
 }
