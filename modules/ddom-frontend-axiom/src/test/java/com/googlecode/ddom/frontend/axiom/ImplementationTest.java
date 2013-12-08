@@ -179,12 +179,12 @@ public class ImplementationTest extends TestCase {
         // TODO: We handle this case differently: instead of expanding the element, events are buffered in the StAXPivot
         builder.exclude(org.apache.axiom.ts.om.sourcedelement.TestSerialize.class, "(&(push=true)(serializationStrategy=XMLStreamReader))");
         
-        // TODO: OMSourcedElement with unknown name
-        builder.exclude(TestGetLocalName.class, "(|(variant=qname-aware-source)(variant=unknown-name))");
-        builder.exclude(TestGetNamespace.class, "(|(variant=qname-aware-source)(variant=unknown-name)(variant=lossy-prefix)(variant=unknown-prefix))");
-        builder.exclude(TestGetPrefix.class, "(|(variant=qname-aware-source)(variant=unknown-name)(variant=lossy-prefix)(variant=unknown-prefix))");
-        builder.exclude(TestGetNamespaceURI.class, "(|(variant=qname-aware-source)(variant=unknown-name))");
-        builder.exclude(TestHasName.class, "(|(variant=qname-aware-source)(variant=unknown-name))");
+        // TODO: QName awareness not supported yet
+        builder.exclude(TestGetLocalName.class, "(variant=qname-aware-source)");
+        builder.exclude(TestGetNamespace.class, "(|(variant=qname-aware-source)(variant=lossy-prefix))");
+        builder.exclude(TestGetPrefix.class, "(|(variant=qname-aware-source)(variant=lossy-prefix)(variant=unknown-prefix))");
+        builder.exclude(TestGetNamespaceURI.class, "(variant=qname-aware-source)");
+        builder.exclude(TestHasName.class, "(variant=qname-aware-source)");
         
         // TODO: we don't handle the discardDocument=true case correctly
         builder.exclude(TestGetDocumentElement.class, "(discardDocument=true)");

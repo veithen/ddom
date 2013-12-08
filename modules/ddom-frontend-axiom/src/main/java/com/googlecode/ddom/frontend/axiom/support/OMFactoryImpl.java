@@ -191,6 +191,10 @@ public class OMFactoryImpl implements OMFactory {
         return element;
     }
     
+    public OMSourcedElement createOMElement(OMDataSource source) {
+        return createOMElement(source, null, null, null);
+    }
+
     public final OMSourcedElement createOMElement(OMDataSource source, QName qname) {
         return createOMElement(source, qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
     }
@@ -337,11 +341,6 @@ public class OMFactoryImpl implements OMFactory {
     }
 
     public OMDocType createOMDocType(OMContainer parent, String rootName, String publicId, String systemId, String internalSubset) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    public OMSourcedElement createOMElement(OMDataSource source) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException();
     }
