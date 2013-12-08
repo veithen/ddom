@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -231,7 +231,10 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
                 log.debug("Weaving " + weavableClass + "; mixins: " + mixins);
             }
             SourceMapper sourceMapper = new SourceMapper();
-            sourceMapper.addSourceInfo(weavableClass.get(SourceInfo.class));
+            SourceInfo sourceInfo = weavableClass.get(SourceInfo.class);
+            if (sourceInfo != null) {
+                sourceMapper.addSourceInfo(sourceInfo);
+            }
             for (MixinInfo mixin : mixins) {
                 sourceMapper.addSourceInfo(mixin.get(SourceInfo.class));
             }
@@ -239,7 +242,7 @@ public class Reactor implements ClassRealm, WeavableClassInjector {
                 out = t.adapt(out);
             }
             out = new MergeAdapter(out, mixins, sourceMapper, SimpleErrorHandler.INSTANCE);
-            out = sourceMapper.getClassAdapter(out);
+            out = sourceMapper.adapt(out);
             for (ClassTransformation t : preTransforms) {
                 out = t.adapt(out);
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,6 @@ import org.objectweb.asm.MethodVisitor;
 // TODO: In addition to JSR-45 we should support some convention like AspectJ [1] that enables the developer to easily interpret stack traces on environments that don't support JSR-45
 //       [1] http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html
 public class SourceMapper {
-    static class Mapping {
-        SourceInfo sourceInfo;
-        int lineOffset;
-    }
-    
     private final List<Mapping> mappings = new ArrayList<Mapping>();
     private int nextLineOffset;
     
@@ -52,41 +47,8 @@ public class SourceMapper {
      * @param cv
      * @return
      */
-    public ClassAdapter getClassAdapter(ClassVisitor cv) {
-        final Mapping[] mappings = this.mappings.toArray(new Mapping[this.mappings.size()]);
-        return new ClassAdapter(cv) {
-            @Override
-            public void visitSource(String source, String debug) {
-                StringBuilder smap = new StringBuilder();
-                smap.append("SMAP\n");
-                smap.append(source);
-                smap.append("\nWeaver\n*S Weaver\n*F\n");
-                for (int i = 0; i<mappings.length; i++) {
-                    Mapping mapping = mappings[i];
-                    // TODO: we should only use absolute file names if necessary
-                    smap.append("+ ");
-                    smap.append(i+1);
-                    smap.append(' ');
-                    smap.append(mapping.sourceInfo.getSourceFile());
-                    smap.append('\n');
-                    smap.append(mapping.sourceInfo.getAbsoluteSourceFile());
-                    smap.append('\n');
-                }
-                smap.append("*L\n");
-                for (int i = 0; i<mappings.length; i++) {
-                    Mapping mapping = mappings[i];
-                    smap.append("1#");
-                    smap.append(i+1);
-                    smap.append(',');
-                    smap.append(mapping.sourceInfo.getMaxLine());
-                    smap.append(':');
-                    smap.append(mapping.lineOffset+1);
-                    smap.append('\n');
-                }
-                smap.append("*E\n");
-                super.visitSource(source, smap.toString());
-            }
-        };
+    public ClassVisitor adapt(ClassVisitor cv) {
+        return mappings.isEmpty() ? cv : new SourceMapperClassAdapter(cv, mappings.toArray(new Mapping[mappings.size()]));
     }
     
     public MethodAdapter getMethodAdapter(SourceInfo sourceInfo, MethodVisitor mv) {

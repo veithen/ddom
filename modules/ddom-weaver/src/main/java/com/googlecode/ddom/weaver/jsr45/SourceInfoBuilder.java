@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.weaver.jsr45;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -32,9 +34,10 @@ import com.googlecode.ddom.weaver.realm.ClassRealm;
  * calculates the maximum line number.
  */
 public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableClassInfoBuilderCollaborator, MixinInfoBuilderCollaborator {
+    private static final Log log = LogFactory.getLog(SourceInfoBuilder.class);
+    
     private String name;
     private String source;
-    private String debug;
     int maxLine;
     private SourceInfo sourceInfo;
     
@@ -46,7 +49,9 @@ public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableC
     @Override
     public void visitSource(String source, String debug) {
         this.source = source;
-        this.debug = debug;
+        if (debug != null && log.isWarnEnabled()) {
+            log.warn("Ignoring existing additional debug information on class " + name);
+        }
     }
 
     @Override
@@ -63,14 +68,20 @@ public class SourceInfoBuilder extends AbstractClassVisitor implements WeavableC
 
     @Override
     public void visitEnd() {
-        sourceInfo = new SourceInfo(name.substring(0, name.lastIndexOf('/')+1) + source, maxLine);
+        if (source != null) {
+            sourceInfo = new SourceInfo(name.substring(0, name.lastIndexOf('/')+1) + source, maxLine);
+        }
     }
 
     public void process(ClassRealm realm, WeavableClassInfo classInfo, Extensions classInfoExtensions) {
-        classInfoExtensions.set(sourceInfo);
+        if (sourceInfo != null) {
+            classInfoExtensions.set(sourceInfo);
+        }
     }
 
     public void process(ClassRealm realm, MixinInfo mixinInfo, Extensions mixinInfoExtensions) {
-        mixinInfoExtensions.set(sourceInfo);
+        if (sourceInfo != null) {
+            mixinInfoExtensions.set(sourceInfo);
+        }
     }
 }
