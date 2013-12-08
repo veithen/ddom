@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
-import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.soap.SOAPBody;
@@ -29,10 +28,20 @@ import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 
 @Mixin(AxiomSOAPEnvelope.class)
 public abstract class SOAPEnvelopeSupport implements AxiomSOAPEnvelope {
-    public SOAPHeader getHeader() throws OMException {
-        // TODO
-        OMElement firstElement = getFirstElement();
-        return firstElement instanceof SOAPHeader ? (SOAPHeader)firstElement : null;
+    public final SOAPHeader getHeader() throws OMException {
+        try {
+            return (SOAPHeader)coreGetElementFromSequence(getSOAPVersionEx().getEnvelopeSequence(), 0, false);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionTranslator.translate(ex);
+        }
+    }
+
+    public final SOAPHeader getOrCreateHeader() {
+        try {
+            return (SOAPHeader)coreGetElementFromSequence(getSOAPVersionEx().getEnvelopeSequence(), 0, true);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionTranslator.translate(ex);
+        }
     }
 
     public final SOAPBody getBody() throws OMException {
