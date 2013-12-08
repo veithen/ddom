@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.axiom.soap.support;
+package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
 import org.apache.axiom.soap.SOAPEnvelope;
-import org.apache.axiom.soap.SOAPModelBuilder;
+import org.apache.axiom.soap.SOAPProcessingException;
 
+import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPMessage;
-import com.googlecode.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
 
-public class SOAPModelBuilderImpl extends OMXMLParserWrapperImpl implements SOAPModelBuilder {
-    public SOAPModelBuilderImpl(AxiomSOAPMessage message) {
-        super(message);
+@Mixin(AxiomSOAPMessage.class)
+public abstract class SOAPMessageSupport implements AxiomSOAPMessage {
+    public final SOAPEnvelope getSOAPEnvelope() throws SOAPProcessingException {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
-    public final SOAPEnvelope getSOAPEnvelope() {
-        return (SOAPEnvelope)getDocumentElement();
+    public final void setSOAPEnvelope(SOAPEnvelope envelope) {
+        // TODO
+        throw new UnsupportedOperationException();
     }
 }

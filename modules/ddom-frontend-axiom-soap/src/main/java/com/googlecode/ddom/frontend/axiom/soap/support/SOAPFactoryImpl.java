@@ -47,6 +47,7 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPEnvelope;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPMessage;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.NSUtil;
 import com.googlecode.ddom.frontend.axiom.support.OMFactoryImpl;
@@ -93,6 +94,10 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         }
         createSOAPFaultDetail(fault);
         return defaultEnvelope;
+    }
+
+    public final SOAPMessage createSOAPMessage() {
+        return nodeFactory.createDocument(AxiomSOAPMessage.class);
     }
 
     public final SOAPMessage createSOAPMessage(OMXMLParserWrapper builder) {
@@ -291,14 +296,6 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
      * @see org.apache.axiom.soap.SOAPFactory#createSOAPFaultNode(org.apache.axiom.soap.SOAPFault)
      */
     public SOAPFaultNode createSOAPFaultNode(SOAPFault parent) throws SOAPProcessingException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axiom.soap.SOAPFactory#createSOAPMessage()
-     */
-    public SOAPMessage createSOAPMessage() {
         // TODO
         throw new UnsupportedOperationException();
     }

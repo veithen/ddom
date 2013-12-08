@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.xml.sax.InputSource;
 
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.Mixin;
-import com.googlecode.ddom.frontend.axiom.intf.AxiomDocument;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPMessage;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPNodeFactory;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPFactoryImpl;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPModelBuilderImpl;
@@ -48,9 +48,9 @@ public abstract class NodeFactorySupport implements AxiomSOAPNodeFactory {
     }
 
     private SOAPModelBuilder createBuilder(XmlSource source) {
-        AxiomDocument document = (AxiomDocument)createDocument();
-        document.coreSetContent(source);
-        return new SOAPModelBuilderImpl(document);
+        AxiomSOAPMessage message = createDocument(AxiomSOAPMessage.class);
+        message.coreSetContent(source);
+        return new SOAPModelBuilderImpl(message);
     }
     
     public final SOAPModelBuilder createSOAPModelBuilder(StAXParserConfiguration configuration, InputSource is) {

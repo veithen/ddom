@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
@@ -38,6 +39,7 @@ import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.symbols.SymbolHashTable;
 import com.googlecode.ddom.symbols.Symbols;
 
+@Implementation(factory=DocumentFactory.class)
 public class Document extends ParentNode implements LLDocument {
     private static final Log log = LogFactory.getLog(Document.class);
     

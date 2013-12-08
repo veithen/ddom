@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.googlecode.ddom.core.ext.ModelExtension;
 public class NodeFactoryImpl implements NodeFactory {
     public static final NodeFactory INSTANCE = new NodeFactoryImpl();
     
+    private static final DocumentFactory documentFactory = ExtensionFactoryLocator.locate(DocumentFactory.class);
     private static final NSAwareElementFactory nsAwareElementFactory = ExtensionFactoryLocator.locate(NSAwareElementFactory.class);
     
     @Inject
@@ -45,6 +46,10 @@ public class NodeFactoryImpl implements NodeFactory {
     
     public final CoreDocument createDocument() {
         return new Document(modelExtension == null ? ModelExtension.NULL : modelExtension);
+    }
+
+    public final <T extends CoreDocument> T createDocument(Class<T> extensionInterface) {
+        return extensionInterface.cast(documentFactory.create(extensionInterface, modelExtension == null ? ModelExtension.NULL : modelExtension));
     }
 
     public final CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId) {

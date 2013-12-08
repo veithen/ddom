@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ package com.googlecode.ddom.core;
  */
 public interface NodeFactory {
     CoreDocument createDocument();
+    
+    <T extends CoreDocument> T createDocument(Class<T> extensionInterface);
 
     /**
      * 

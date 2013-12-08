@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.google.code.ddom.commons.cl.ClassRef;
 import com.googlecode.ddom.backend.Backend;
+import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.core.ext.ModelExtension;
@@ -143,6 +144,7 @@ public class ModelWeaver {
         Reactor reactor = new Reactor(classLoader);
         reactor.addPlugin(new JSR45Plugin());
         ModelExtensionPlugin modelExtensionPlugin = new ModelExtensionPlugin();
+        modelExtensionPlugin.addRequiredImplementation(new ClassRef(CoreDocument.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreCDATASection.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreComment.class));
 //        implementationPlugin.addRequiredImplementation(new ClassRef(CoreDocumentTypeDeclaration.class)); 
