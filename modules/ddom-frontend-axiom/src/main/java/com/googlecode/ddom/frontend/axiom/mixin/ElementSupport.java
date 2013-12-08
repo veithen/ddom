@@ -173,10 +173,6 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         }
     }
 
-    public void setBuilder(OMXMLParserWrapper wrapper) {
-        throw new UnsupportedOperationException();
-    }
-    
     public OMXMLParserWrapper getBuilder() {
         return null;
     }
