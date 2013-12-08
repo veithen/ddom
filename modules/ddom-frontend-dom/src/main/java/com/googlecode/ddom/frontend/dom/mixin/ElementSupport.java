@@ -154,7 +154,7 @@ public abstract class ElementSupport implements DOMElement {
                 matcher = DOM1AttributeMatcher.INSTANCE;
             }
             try {
-                return (DOMAttribute)coreSetAttribute(matcher, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.REPLACED_ATTRIBUTE);
+                return (DOMAttribute)coreSetAttribute(matcher, newAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, false, null, ReturnValue.REPLACED_ATTRIBUTE);
             } catch (CoreModelException ex) {
                 throw DOMExceptionTranslator.translate(ex);
             }
