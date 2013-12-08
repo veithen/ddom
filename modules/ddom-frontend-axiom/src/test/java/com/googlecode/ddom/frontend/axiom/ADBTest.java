@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,8 @@ public class ADBTest {
         query.setMaxResults(20);
         query.setAuthor("Karl Marx");
         OMElement element = query.getOMElement(Query.MY_QNAME, factory);
-        OMAttribute attr = element.getAttribute(new QName("maxResults"));
+        // TODO: bug in Axis2: the attribute should actually be unqualified
+        OMAttribute attr = element.getAttribute(new QName("http://ddom.googlecode.com/frontend/axiom/bookshop/search", "maxResults"));
         assertNotNull(attr);
         assertEquals("20", attr.getAttributeValue());
     }
