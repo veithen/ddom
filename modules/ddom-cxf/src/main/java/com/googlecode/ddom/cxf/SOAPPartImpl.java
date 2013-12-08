@@ -25,7 +25,7 @@ import org.apache.cxf.phase.Phase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.NodeFactory;
 import com.googlecode.ddom.frontend.saaj.impl.AbstractSOAPPartImpl;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJDocument;
@@ -80,7 +80,7 @@ public class SOAPPartImpl extends AbstractSOAPPartImpl {
             return saajDocument;
         } catch (SOAPException ex) {
             throw new RuntimeException(ex);
-        } catch (DeferredParsingException ex) {
+        } catch (DeferredBuildingException ex) {
             throw new RuntimeException(ex);
         }
     }
