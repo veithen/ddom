@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@ import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.backend.testsuite.NSAwareAttributeMatcher;
 import com.googlecode.ddom.backend.testsuite.Policies;
+import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreElement.ReturnValue;
+import com.googlecode.ddom.core.NodeMigrationPolicy;
 
 /**
  * Tests that
- * {@link CoreElement#coreSetAttribute(com.googlecode.ddom.core.AttributeMatcher, String, String, CoreAttribute, com.googlecode.ddom.core.NodeMigrationPolicy)}
+ * {@link CoreElement#coreSetAttribute(AttributeMatcher, String, String, CoreAttribute, NodeMigrationPolicy)}
  * is a no-op if the specified attribute is already owned by the element.
  */
 public class TestCoreSetAttributeAlreadyOwnedByElement extends BackendTestCase {

@@ -36,13 +36,15 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
         NONE,
         
         /**
-         * The method will return the attribute that was effectively added to the element.
+         * The method will return the attribute that was effectively added to the element (which may
+         * be a clone of the attribute requested to be added if
+         * {@link NodeMigrationPolicy.Action#CLONE} is used).
          */
         ADDED_ATTRIBUTE,
         
         /**
          * The method will return the attribute that was replaced by the new attribute, or
-         * <code>null</code> if no matching attribute existed
+         * <code>null</code> if no matching attribute existed.
          */
         REPLACED_ATTRIBUTE,
     }
