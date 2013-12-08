@@ -18,6 +18,8 @@ package com.googlecode.ddom.frontend.axiom.soap.mixin;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.soap.RolePlayer;
@@ -44,6 +46,17 @@ public abstract class SOAPHeaderSupport implements AxiomSOAPHeader {
         }
         try {
             return coreAppendElement(getSOAPVersionEx().getSOAPHeaderBlockClass(), NSUtil.getNamespaceURI(ns), localName, NSUtil.getPrefix(ns));
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionTranslator.translate(ex);
+        }
+    }
+
+    public final SOAPHeaderBlock addHeaderBlock(QName qname) throws OMException {
+        if (qname.getNamespaceURI().length() == 0) {
+            throw new OMException("SOAP header blocks must be namespace qualified");
+        }
+        try {
+            return coreAppendElement(getSOAPVersionEx().getSOAPHeaderBlockClass(), qname.getNamespaceURI(), qname.getLocalPart(), qname.getPrefix());
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
