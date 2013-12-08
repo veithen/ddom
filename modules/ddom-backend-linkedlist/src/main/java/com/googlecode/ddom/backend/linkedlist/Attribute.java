@@ -44,7 +44,7 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
     
     public Attribute(Document document, boolean complete) {
-        super(complete ? Flags.STATE_EXPANDED : Flags.STATE_CHILDREN_PENDING);
+        super(complete ? STATE_EXPANDED : STATE_CHILDREN_PENDING);
         owner = document;
     }
     
@@ -65,9 +65,9 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
             return nextAttribute;
         } else if (owner instanceof Element) {
             Element ownerElement = (Element)owner;
-            if (ownerElement.internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
+            if (ownerElement.internalGetState() == STATE_ATTRIBUTES_PENDING) {
                 InputContext context = ownerElement.internalGetOrCreateInputContext();
-                while (nextAttribute == null && ownerElement.internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
+                while (nextAttribute == null && ownerElement.internalGetState() == STATE_ATTRIBUTES_PENDING) {
                     context.next(false);
                 }
             }

@@ -24,6 +24,7 @@ import com.googlecode.ddom.core.CoreChildNode;
 import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.CoreModelException;
+import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.HierarchyException;
@@ -88,13 +89,13 @@ public final class LLChildNodeHelper {
                     return sibling;
                 }
                 switch (parent.internalGetState()) {
-                    case Flags.STATE_CHILDREN_PENDING:
+                    case CoreParentNode.STATE_CHILDREN_PENDING:
                         if (context == null) {
                             context = parent.internalGetOrCreateInputContext();
                         }
                         context.next(false);
                         break;
-                    case Flags.STATE_CONSUMED:
+                    case CoreParentNode.STATE_CONSUMED:
                         throw new NodeConsumedException();
                     default:
                         return null;

@@ -56,7 +56,7 @@ public class Document extends ParentNode implements LLDocument {
     private String documentURI;
 
     public Document(ModelExtension modelExtension) {
-        super(Flags.STATE_EXPANDED);
+        super(STATE_EXPANDED);
         this.modelExtension = modelExtension;
     }
 
@@ -75,7 +75,7 @@ public class Document extends ParentNode implements LLDocument {
             log.debug("Creating builder for " + input);
         }
         Builder builder = new Builder(input, modelExtension, this, target, unwrap);
-        target.internalSetState(unwrap ? Flags.STATE_ATTRIBUTES_PENDING : Flags.STATE_CHILDREN_PENDING);
+        target.internalSetState(unwrap ? STATE_ATTRIBUTES_PENDING : STATE_CHILDREN_PENDING);
         new Stream(input, builder);
         builders.add(builder);
         return builder.getRootInputContext();
@@ -197,7 +197,7 @@ public class Document extends ParentNode implements LLDocument {
     }
     
     public final String coreGetXmlVersion() throws DeferredParsingException {
-        if (!xmlVersionSet && internalGetState() == Flags.STATE_CONTENT_SET) {
+        if (!xmlVersionSet && internalGetState() == STATE_CONTENT_SET) {
             ensureDocumentInfoReceived();
         }
         return xmlVersion;
@@ -209,7 +209,7 @@ public class Document extends ParentNode implements LLDocument {
     }
 
     public final String coreGetXmlEncoding() throws DeferredParsingException {
-        if (!xmlEncodingSet && internalGetState() == Flags.STATE_CONTENT_SET) {
+        if (!xmlEncodingSet && internalGetState() == STATE_CONTENT_SET) {
             ensureDocumentInfoReceived();
         }
         return xmlEncoding;
@@ -221,7 +221,7 @@ public class Document extends ParentNode implements LLDocument {
     }
 
     public final Boolean coreGetStandalone() throws DeferredParsingException {
-        if (!standaloneSet && internalGetState() == Flags.STATE_CONTENT_SET) {
+        if (!standaloneSet && internalGetState() == STATE_CONTENT_SET) {
             ensureDocumentInfoReceived();
         }
         return standalone;

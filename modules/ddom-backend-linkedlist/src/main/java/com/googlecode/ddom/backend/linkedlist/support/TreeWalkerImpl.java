@@ -18,7 +18,6 @@ package com.googlecode.ddom.backend.linkedlist.support;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.googlecode.ddom.backend.linkedlist.Flags;
 import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLDocument;
@@ -165,8 +164,8 @@ final class TreeWalkerImpl implements XmlReader {
             } else if (state == STATE_NOT_VISITED || state == STATE_ATTRIBUTES_VISITED) {
                 final LLParentNode parent = (LLParentNode)previousNode;
                 int nodeState = parent.internalGetState();
-                if (preserve && !(nodeState == Flags.STATE_CONTENT_SET && !((XmlSource)parent.coreGetContent()).isDestructive())
-                        || nodeState == Flags.STATE_EXPANDED || nodeState == Flags.STATE_VALUE_SET) {
+                if (preserve && !(nodeState == CoreParentNode.STATE_CONTENT_SET && !((XmlSource)parent.coreGetContent()).isDestructive())
+                        || nodeState == CoreParentNode.STATE_EXPANDED || nodeState == CoreParentNode.STATE_VALUE_SET) {
                     // TODO: bad because it will expand the node if the state is "Value set"
                     LLChildNode child = parent.internalGetFirstChild();
                     if (child == null) {
@@ -176,7 +175,7 @@ final class TreeWalkerImpl implements XmlReader {
                         nextNode = child;
                         state = STATE_NOT_VISITED;
                     }
-                } else if (nodeState == Flags.STATE_CONTENT_SET) {
+                } else if (nodeState == CoreParentNode.STATE_CONTENT_SET) {
                     stream = createStream(parent, flush, handler);
                     state = STATE_STREAMING_CONTENT;
                     // TODO: update node state
@@ -185,7 +184,7 @@ final class TreeWalkerImpl implements XmlReader {
                     LLChildNode child = parent.internalGetFirstChildIfMaterialized();
                     if (child == null) {
                         nextNode = parent;
-                        if (nodeState == Flags.STATE_CONSUMED) {
+                        if (nodeState == CoreParentNode.STATE_CONSUMED) {
                             throw new NodeConsumedException();
                         }
                         inputContext = getDocument().internalGetInputContext(parent);
@@ -213,9 +212,9 @@ final class TreeWalkerImpl implements XmlReader {
                         LLParentNode parent = previousChildNode.internalGetParent();
                         nextNode = parent;
                         int nodeState = parent.internalGetState();
-                        if (nodeState == Flags.STATE_EXPANDED) {
+                        if (nodeState == CoreParentNode.STATE_EXPANDED) {
                             state = STATE_VISITED;
-                        } else if (nodeState == Flags.STATE_CONSUMED) {
+                        } else if (nodeState == CoreParentNode.STATE_CONSUMED) {
                             throw new NodeConsumedException();
                         } else {
                             inputContext = getDocument().internalGetInputContext(parent);
@@ -245,7 +244,7 @@ final class TreeWalkerImpl implements XmlReader {
             if (state == STATE_NOT_VISITED) {
                 if (nextNode instanceof LLElement) {
                     LLElement element = (LLElement)nextNode;
-                    if (element.internalGetState() == Flags.STATE_SOURCE_SET
+                    if (element.internalGetState() == CoreParentNode.STATE_SOURCE_SET
                             && !(preserve && ((XmlSource)element.coreGetContent()).isDestructive())) {
                         // TODO: this may give an unexpected result if the source contains other information items than the element
                         // TODO: should we also compare the name of the element from the source with what is specified in the CoreElement node?

@@ -22,6 +22,7 @@ import com.googlecode.ddom.backend.linkedlist.intf.LLChildNode;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreModelStreamException;
+import com.googlecode.ddom.core.CoreParentNode;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.ElementNameMismatchException;
@@ -56,8 +57,8 @@ public class Builder extends XmlOutput {
         }
 
         public void setTargetNode(LLParentNode targetNode) {
-            this.targetNode.internalSetState(Flags.STATE_EXPANDED);
-            targetNode.internalSetState(Flags.STATE_CHILDREN_PENDING);
+            this.targetNode.internalSetState(CoreParentNode.STATE_EXPANDED);
+            targetNode.internalSetState(CoreParentNode.STATE_CHILDREN_PENDING);
             this.targetNode = targetNode;
         }
 
@@ -69,7 +70,7 @@ public class Builder extends XmlOutput {
             if (this.passThroughHandler != null) {
                 throw new IllegalStateException("A pass-through handler has already been set for this context");
             }
-            targetNode.internalSetState(Flags.STATE_CONSUMED);
+            targetNode.internalSetState(CoreParentNode.STATE_CONSUMED);
             this.passThroughHandler = passThroughHandler;
             targetNode = null;
         }
@@ -193,7 +194,7 @@ public class Builder extends XmlOutput {
             XmlHandler passThroughHandler = context.getPassThroughHandler();
             if (passThroughHandler == null) {
                 lastAttribute = null;
-                context.getTargetNode().internalSetState(Flags.STATE_CHILDREN_PENDING);
+                context.getTargetNode().internalSetState(CoreParentNode.STATE_CHILDREN_PENDING);
                 nodeAppended = true;
             } else {
                 passThroughHandler.attributesCompleted();
@@ -487,14 +488,14 @@ public class Builder extends XmlOutput {
                 if (lastSibling == null) {
                     parent.internalSetValue(pendingText);
                     parent.internalNotifyChildrenModified(1);
-                    parent.internalSetState(Flags.STATE_VALUE_SET);
+                    parent.internalSetState(CoreParentNode.STATE_VALUE_SET);
                     pendingText = null;
                 } else {
                     flushPendingText();
-                    parent.internalSetState(Flags.STATE_EXPANDED);
+                    parent.internalSetState(CoreParentNode.STATE_EXPANDED);
                 }
             } else {
-                parent.internalSetState(Flags.STATE_EXPANDED);
+                parent.internalSetState(CoreParentNode.STATE_EXPANDED);
             }
             // TODO: this only applies to namespace aware elements!
             if (nodeType == ELEMENT) {

@@ -29,12 +29,23 @@ import com.googlecode.ddom.stream.XmlSource;
  * @author Andreas Veithen
  */
 public interface CoreParentNode extends CoreNode {
+    public static final int STATE_EXPANDED = 0;
+    public static final int STATE_VALUE_SET = 1;
+    public static final int STATE_CONTENT_SET = 2;
+    public static final int STATE_SOURCE_SET = 3;
+    public static final int STATE_ATTRIBUTES_PENDING = 4;
+    public static final int STATE_CHILDREN_PENDING = 5;
+    public static final int STATE_CONSUMED = 6;
+
     /**
      * Determine if this parent node is complete.
      * 
      * @return <code>true</code> if the node is complete, <code>false</code> otherwise
      */
+    // TODO: do we still need this now that we have coreGetState?
     boolean coreIsComplete();
+    
+    int coreGetState();
     
     void coreBuild() throws DeferredBuildingException;
     

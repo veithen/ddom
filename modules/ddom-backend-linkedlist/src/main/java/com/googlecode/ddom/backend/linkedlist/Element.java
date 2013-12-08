@@ -51,7 +51,7 @@ public abstract class Element extends Container implements LLElement {
     private Attribute firstAttribute;
 
     public Element(Document document, boolean complete) {
-        super(document, complete ? Flags.STATE_EXPANDED : Flags.STATE_ATTRIBUTES_PENDING);
+        super(document, complete ? STATE_EXPANDED : STATE_ATTRIBUTES_PENDING);
     }
 
     final void setFirstAttribute(Attribute firstAttribute) {
@@ -67,13 +67,13 @@ public abstract class Element extends Container implements LLElement {
 
     private boolean attributesBuilt() {
         int state = internalGetState();
-        return state != Flags.STATE_SOURCE_SET && state != Flags.STATE_ATTRIBUTES_PENDING;
+        return state != STATE_SOURCE_SET && state != STATE_ATTRIBUTES_PENDING;
     }
     
     public final CoreAttribute coreGetFirstAttribute() throws DeferredBuildingException {
         if (firstAttribute == null && !attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
-            while (firstAttribute == null && internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
+            while (firstAttribute == null && internalGetState() == STATE_ATTRIBUTES_PENDING) {
                 context.next(false);
             }
         }
@@ -91,7 +91,7 @@ public abstract class Element extends Container implements LLElement {
     private Attribute internalGetLastAttribute() throws DeferredBuildingException {
         if (!attributesBuilt()) {
             InputContext context = internalGetOrCreateInputContext();
-            while (internalGetState() == Flags.STATE_ATTRIBUTES_PENDING) {
+            while (internalGetState() == STATE_ATTRIBUTES_PENDING) {
                 context.next(false);
             }
         }

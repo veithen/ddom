@@ -89,7 +89,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     public final String coreGetNamespaceURI() throws DeferredBuildingException {
-        if (namespaceURI == null && internalGetState() == Flags.STATE_SOURCE_SET) {
+        if (namespaceURI == null && internalGetState() == STATE_SOURCE_SET) {
             internalGetOrCreateInputContext();
         }
         return namespaceURI;
@@ -101,7 +101,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
     
     public final String coreGetPrefix() throws DeferredBuildingException {
-        if (prefix == null && internalGetState() == Flags.STATE_SOURCE_SET) {
+        if (prefix == null && internalGetState() == STATE_SOURCE_SET) {
             internalGetOrCreateInputContext();
         }
         return prefix;
@@ -113,7 +113,7 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
     
     public final String coreGetLocalName() throws DeferredBuildingException {
-        if (localName == null && internalGetState() == Flags.STATE_SOURCE_SET) {
+        if (localName == null && internalGetState() == STATE_SOURCE_SET) {
             internalGetOrCreateInputContext();
         }
         return localName;

@@ -23,20 +23,6 @@ import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 public class Flags {
     private Flags() {}
     
-    public static final int STATE_EXPANDED = 0;
-    
-    public static final int STATE_VALUE_SET = 1;
-    
-    public static final int STATE_CONTENT_SET = 2;
-    
-    public static final int STATE_SOURCE_SET = 3;
-    
-    public static final int STATE_ATTRIBUTES_PENDING = 4;
-    
-    public static final int STATE_CHILDREN_PENDING = 5;
-    
-    public static final int STATE_CONSUMED = 6;
-    
     /**
      * Defines the bit mask for the part of the flags that indicate the state of a
      * {@link LLParentNode}.

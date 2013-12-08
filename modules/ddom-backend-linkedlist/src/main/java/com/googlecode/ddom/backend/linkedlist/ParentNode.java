@@ -79,15 +79,19 @@ public abstract class ParentNode extends Node implements LLParentNode {
     
     public ParentNode(String value) {
         if (value == null) {
-            internalSetState(Flags.STATE_EXPANDED);
+            internalSetState(STATE_EXPANDED);
         } else {
-            internalSetState(Flags.STATE_VALUE_SET);
+            internalSetState(STATE_VALUE_SET);
             content = value;
         }
     }
 
     public ParentNode(int state) {
         internalSetState(state);
+    }
+
+    public final int coreGetState() {
+        return internalGetState();
     }
 
     public final Object coreGetContent() {
@@ -100,7 +104,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final void coreSetContent(XmlSource source) {
         // TODO: need to clear any existing content!
-        internalSetState(Flags.STATE_CONTENT_SET);
+        internalSetState(STATE_CONTENT_SET);
         content = source;
         // TODO: need to decide how to handle symbol tables in a smart way here
 //        symbols = producer.getSymbols();
@@ -109,7 +113,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final void coreSetSource(XmlSource source) {
         // TODO: need to clear any existing content!
-        internalSetState(Flags.STATE_SOURCE_SET);
+        internalSetState(STATE_SOURCE_SET);
         content = source;
         contentReset();
     }
@@ -120,7 +124,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final String coreGetValue() throws DeferredBuildingException {
         // TODO: this should also be applicable for other OptimizedParentNodes
-        if (internalGetState() == Flags.STATE_VALUE_SET) {
+        if (internalGetState() == STATE_VALUE_SET) {
             return (String)content;
         } else {
             // TODO: get the getTextContent feature back into the core model
@@ -139,7 +143,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
         coreClear();
         if (value != null && value.length() > 0) {
             content = value;
-            internalSetState(Flags.STATE_VALUE_SET);
+            internalSetState(STATE_VALUE_SET);
             internalNotifyChildrenModified(1);
         }
     }
@@ -150,13 +154,13 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final void coreClear() throws DeferredParsingException {
         switch (internalGetState()) {
-            case Flags.STATE_ATTRIBUTES_PENDING:
+            case STATE_ATTRIBUTES_PENDING:
                 // TODO
                 throw new UnsupportedOperationException();
-            case Flags.STATE_CHILDREN_PENDING:
+            case STATE_CHILDREN_PENDING:
                 internalGetOwnerDocument(false).internalGetInputContext(this).setPassThroughHandler(NullXmlHandler.INSTANCE);
                 // Fall through
-            case Flags.STATE_EXPANDED:
+            case STATE_EXPANDED:
                 LLChildNode child = (LLChildNode)content;
                 while (child != null) {
                     LLChildNode next = child.internalGetNextSiblingIfMaterialized();
@@ -165,13 +169,13 @@ public abstract class ParentNode extends Node implements LLParentNode {
                     child = next;
                 };
                 break;
-            case Flags.STATE_CONSUMED:
+            case STATE_CONSUMED:
                 // TODO
                 throw new UnsupportedOperationException();
         }
         content = null;
         internalNotifyChildrenCleared();
-        internalSetState(Flags.STATE_EXPANDED);
+        internalSetState(STATE_EXPANDED);
     }
 
     public final String coreGetTextContent(TextCollectorPolicy policy) throws DeferredBuildingException {
@@ -255,7 +259,7 @@ public abstract class ParentNode extends Node implements LLParentNode {
 
     public final boolean coreIsComplete() {
         int state = internalGetState();
-        return state == Flags.STATE_EXPANDED || state == Flags.STATE_VALUE_SET;
+        return state == STATE_EXPANDED || state == STATE_VALUE_SET;
     }
     
     public final void coreBuild() throws DeferredBuildingException {
@@ -295,12 +299,12 @@ public abstract class ParentNode extends Node implements LLParentNode {
     public final InputContext internalGetOrCreateInputContext() throws DeferredBuildingException {
         InputContext inputContext;
         int state = internalGetState();
-        if (state == Flags.STATE_CONTENT_SET || state == Flags.STATE_SOURCE_SET) {
+        if (state == STATE_CONTENT_SET || state == STATE_SOURCE_SET) {
             XmlSource source = (XmlSource)content;
             content = null;
             LLDocument document = internalGetOwnerDocument(true);
             try {
-                inputContext = document.internalCreateInputContext(source.getInput(XmlSource.Hints.DEFAULTS), this, state == Flags.STATE_SOURCE_SET);
+                inputContext = document.internalCreateInputContext(source.getInput(XmlSource.Hints.DEFAULTS), this, state == STATE_SOURCE_SET);
             } catch (StreamException ex) {
                 throw new DeferredParsingException(ex);
             }
@@ -319,12 +323,12 @@ public abstract class ParentNode extends Node implements LLParentNode {
         InputContext context = null;
         while (true) {
             switch (internalGetState()) {
-                case Flags.STATE_CONTENT_SET:
-                case Flags.STATE_SOURCE_SET:
+                case STATE_CONTENT_SET:
+                case STATE_SOURCE_SET:
                     context = internalGetOrCreateInputContext();
                     break;
-                case Flags.STATE_ATTRIBUTES_PENDING:
-                case Flags.STATE_CHILDREN_PENDING:
+                case STATE_ATTRIBUTES_PENDING:
+                case STATE_CHILDREN_PENDING:
                     if (content == null) {
                         if (context == null) {
                             context = internalGetOrCreateInputContext();
@@ -339,20 +343,20 @@ public abstract class ParentNode extends Node implements LLParentNode {
                     } else {
                         return (LLChildNode)content;
                     }
-                case Flags.STATE_EXPANDED:
+                case STATE_EXPANDED:
                     return (LLChildNode)content;
-                case Flags.STATE_CONSUMED:
+                case STATE_CONSUMED:
                     if (content != null) {
                         return (LLChildNode)content;
                     } else {
                         throw new NodeConsumedException();
                     }
-                case Flags.STATE_VALUE_SET:
+                case STATE_VALUE_SET:
                     // TODO: no cast here
                     LLChildNode firstChild = new CharacterData((Document)internalGetOwnerDocument(false), (String)content, false);
                     firstChild.internalSetParent(this);
                     content = firstChild;
-                    internalSetState(Flags.STATE_EXPANDED);
+                    internalSetState(STATE_EXPANDED);
                     return firstChild;
                 default:
                     throw new IllegalStateException(); // TODO: consumed??

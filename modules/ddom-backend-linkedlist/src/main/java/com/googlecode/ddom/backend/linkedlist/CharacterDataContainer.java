@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ public abstract class CharacterDataContainer extends Container {
     }
     
     public CharacterDataContainer(Document document, boolean complete) {
-        super(document, complete ? Flags.STATE_EXPANDED : Flags.STATE_CHILDREN_PENDING);
+        super(document, complete ? STATE_EXPANDED : STATE_CHILDREN_PENDING);
     }
 
     public final void internalValidateChildType(CoreChildNode newChild, CoreChildNode replacedChild)
