@@ -147,9 +147,12 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         return addAttribute(getOMFactory().createOMAttribute(attributeName, ns, value));
     }
     
-    public void removeAttribute(OMAttribute attr) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void removeAttribute(OMAttribute attr) {
+        if (attr.getOwner() == this) {
+            ((AxiomAttribute)attr).coreRemove(null);
+        } else {
+            throw new OMException("Attribute not owned by this element");
+        }
     }
     
     public OMElement getFirstElement() {

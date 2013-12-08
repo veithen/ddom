@@ -57,8 +57,6 @@ import org.apache.axiom.ts.om.element.TestGetSAXSourceIdentityTransform;
 import org.apache.axiom.ts.om.element.TestGetSAXSourceIdentityTransformOnFragment;
 import org.apache.axiom.ts.om.element.TestGetTextAsStreamWithSingleTextNode;
 import org.apache.axiom.ts.om.element.TestGetTextAsStreamWithoutCaching;
-import org.apache.axiom.ts.om.element.TestRemoveAttribute;
-import org.apache.axiom.ts.om.element.TestRemoveAttributeNotOwner;
 import org.apache.axiom.ts.om.element.sr.TestClose;
 import org.apache.axiom.ts.om.element.sr.TestCloseAndContinueBuilding;
 import org.apache.axiom.ts.om.element.sr.TestCommentEvent;
@@ -134,8 +132,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestDTDReader.class);
         builder.exclude(TestDTDReaderFromParser.class);
         builder.exclude(TestCloseWithoutCaching.class);
-        builder.exclude(TestRemoveAttribute.class);
-        builder.exclude(TestRemoveAttributeNotOwner.class);
         builder.exclude(org.apache.axiom.ts.om.element.TestRemoveChildren.class);
         builder.exclude(TestClose.class);
         builder.exclude(TestCloseAndContinueBuilding.class);
