@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.googlecode.ddom.frontend.axiom.soap.intf;
 
 import com.googlecode.ddom.core.ext.ModelExtensionInterface;
 
-@ModelExtensionInterface(parent=AxiomSOAP12FaultClassifier.class)
-public interface AxiomSOAP12FaultCode extends AxiomSOAP12FaultClassifier, AxiomSOAPFaultCode {
+@ModelExtensionInterface(isAbstract=true, parent=AxiomSOAPFaultClassifier.class)
+public interface AxiomSOAP12FaultClassifier extends AxiomSOAPFaultClassifier {
 
 }

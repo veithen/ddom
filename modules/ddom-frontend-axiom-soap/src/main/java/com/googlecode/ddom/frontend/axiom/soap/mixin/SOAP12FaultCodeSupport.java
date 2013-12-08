@@ -25,8 +25,4 @@ public abstract class SOAP12FaultCodeSupport implements AxiomSOAP12FaultCode {
     public QName getTextAsQName() {
         return getValue().getTextAsQName();
     }
-
-    public final QName getValueAsQName() {
-        return getValue().getTextAsQName();
-    }
 }

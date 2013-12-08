@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.axiom.soap.intf;
+package com.googlecode.ddom.frontend.axiom.soap.mixin;
 
-import com.googlecode.ddom.core.ext.ModelExtensionInterface;
+import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAP12FaultSubCode;
 
-@ModelExtensionInterface(parent=AxiomSOAP12FaultClassifier.class)
-public interface AxiomSOAP12FaultCode extends AxiomSOAP12FaultClassifier, AxiomSOAPFaultCode {
+@Mixin(AxiomSOAP12FaultSubCode.class)
+public abstract class SOAP12FaultSubCodeSupport implements AxiomSOAP12FaultSubCode {
 
 }
