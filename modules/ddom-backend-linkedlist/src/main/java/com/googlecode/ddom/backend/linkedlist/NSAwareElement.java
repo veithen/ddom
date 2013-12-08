@@ -28,6 +28,7 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.ElementAlreadyExistsException;
 import com.googlecode.ddom.core.ElementNameMismatchException;
+import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.Sequence;
 import com.googlecode.ddom.core.SequenceItem;
 import com.googlecode.ddom.stream.StreamException;
@@ -143,18 +144,18 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     public final CoreNSAwareElement coreGetElementFromSequence(Sequence sequence, int index, boolean create) throws CoreModelException {
-        return querySequence(sequence, index, null, create ? SEQOP_GET_OR_CREATE : SEQOP_GET);
+        return querySequence(sequence, index, null, create ? SEQOP_GET_OR_CREATE : SEQOP_GET, null);
     }
 
     public final CoreNSAwareElement coreCreateElementInSequence(Sequence sequence, int index) throws CoreModelException {
-        return querySequence(sequence, index, null, SEQOP_CREATE);
+        return querySequence(sequence, index, null, SEQOP_CREATE, null);
     }
 
-    public final void coreInsertElementInSequence(Sequence sequence, int index, CoreNSAwareElement element) throws CoreModelException {
-        querySequence(sequence, index, element, SEQOP_INSERT);
+    public final void coreInsertElementInSequence(Sequence sequence, int index, CoreNSAwareElement element, NodeMigrationPolicy policy) throws CoreModelException {
+        querySequence(sequence, index, element, SEQOP_INSERT, policy);
     }
 
-    private final CoreNSAwareElement querySequence(Sequence sequence, int index, CoreNSAwareElement newElement, int operation) throws CoreModelException {
+    private final CoreNSAwareElement querySequence(Sequence sequence, int index, CoreNSAwareElement newElement, int operation, NodeMigrationPolicy policy) throws CoreModelException {
         int ptr = 0;
         CoreChildNode child = coreGetFirstChild();
         CoreNSAwareElement previousElement = null;
@@ -206,11 +207,11 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
                 }
             }
             if (previousElement != null) {
-                previousElement.coreInsertSiblingAfter(element, null); // TODO: don't use null here
+                previousElement.coreInsertSiblingAfter(element, policy);
             } else if (nextElement != null) {
-                nextElement.coreInsertSiblingBefore(element, null); // TODO: don't use null here
+                nextElement.coreInsertSiblingBefore(element, policy);
             } else {
-                coreAppendChild(element, null); // TODO: don't use null here
+                coreAppendChild(element, policy);
             }
             return element;
         }

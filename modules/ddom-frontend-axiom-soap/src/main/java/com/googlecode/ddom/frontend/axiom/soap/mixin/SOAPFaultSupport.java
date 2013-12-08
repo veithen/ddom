@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultReason;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultRole;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
+import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(AxiomSOAPFault.class)
 public abstract class SOAPFaultSupport implements AxiomSOAPFault {
@@ -56,7 +57,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
     public final void setCode(SOAPFaultCode soapFaultCode) throws SOAPProcessingException {
         try {
             SOAPVersionEx version = getSOAPVersionEx();
-            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultCodeIndex(), (AxiomSOAPFaultCode)soapFaultCode);
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultCodeIndex(), (AxiomSOAPFaultCode)soapFaultCode, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
@@ -74,7 +75,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
     public final void setReason(SOAPFaultReason reason) throws SOAPProcessingException {
         try {
             SOAPVersionEx version = getSOAPVersionEx();
-            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultReasonIndex(), (AxiomSOAPFaultReason)reason);
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultReasonIndex(), (AxiomSOAPFaultReason)reason, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
@@ -92,7 +93,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
     public final void setNode(SOAPFaultNode node) throws SOAPProcessingException {
         try {
             SOAPVersionEx version = getSOAPVersionEx();
-            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultNodeIndex(), (AxiomSOAPFaultNode)node);
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultNodeIndex(), (AxiomSOAPFaultNode)node, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
@@ -110,7 +111,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
     public final void setRole(SOAPFaultRole role) throws SOAPProcessingException {
         try {
             SOAPVersionEx version = getSOAPVersionEx();
-            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultRoleIndex(), (AxiomSOAPFaultRole)role);
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultRoleIndex(), (AxiomSOAPFaultRole)role, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
@@ -128,7 +129,7 @@ public abstract class SOAPFaultSupport implements AxiomSOAPFault {
     public final void setDetail(SOAPFaultDetail detail) throws SOAPProcessingException {
         try {
             SOAPVersionEx version = getSOAPVersionEx();
-            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultDetailIndex(), (AxiomSOAPFaultDetail)detail);
+            coreInsertElementInSequence(version.getFaultSequence(), version.getFaultDetailIndex(), (AxiomSOAPFaultDetail)detail, Policies.NODE_MIGRATION_POLICY);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }

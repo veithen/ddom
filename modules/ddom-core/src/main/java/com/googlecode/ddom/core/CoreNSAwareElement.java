@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,5 +39,5 @@ public interface CoreNSAwareElement extends CoreElement, CoreNSAwareNamedNode {
     
     CoreNSAwareElement coreCreateElementInSequence(Sequence sequence, int index) throws CoreModelException;
 
-    void coreInsertElementInSequence(Sequence sequence, int index, CoreNSAwareElement element) throws CoreModelException;
+    void coreInsertElementInSequence(Sequence sequence, int index, CoreNSAwareElement element, NodeMigrationPolicy policy) throws CoreModelException;
 }
