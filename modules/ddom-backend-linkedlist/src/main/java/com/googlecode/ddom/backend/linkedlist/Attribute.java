@@ -26,6 +26,7 @@ import com.googlecode.ddom.core.CoreElement;
 import com.googlecode.ddom.core.CoreEntityReference;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
@@ -134,7 +135,13 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
 
     public final LLDocument internalGetOwnerDocument(boolean create) {
         if (owner == null) {
-            return null;
+            if (create) {
+                LLDocument document = new Document(ModelExtension.NULL);
+                owner = document;
+                return document;
+            } else {
+                return null;
+            }
         } else if (owner instanceof Document) {
             return (Document)owner;
         } else {
