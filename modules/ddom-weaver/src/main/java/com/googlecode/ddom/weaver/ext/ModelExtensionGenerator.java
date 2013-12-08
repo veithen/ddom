@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,6 +62,10 @@ class ModelExtensionGenerator {
 
     void addModelExtensionInterface(ModelExtensionInterfaceInfo modelExtensionInterface) {
         modelExtensionInterfaces.add(modelExtensionInterface);
+        if (log.isDebugEnabled()) {
+            log.debug("Added model extension interface " + modelExtensionInterface.getClassInfo() + " (abstract=" + modelExtensionInterface.isAbstract()
+                    + "; parent=" + modelExtensionInterface.getParent() + "; root=" + modelExtensionInterface.getRoot() + ")");
+        }
     }
 
     void validate() {

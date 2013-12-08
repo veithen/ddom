@@ -45,4 +45,9 @@ class ModelExtensionInterfaceInfo {
         ModelExtensionInterfaceInfo parentInfo = parent.get(ModelExtensionInterfaceInfo.class);
         return parentInfo == null ? parent : parentInfo.getRoot();
     }
+
+    @Override
+    public String toString() {
+        return classInfo.toString();
+    }
 }
