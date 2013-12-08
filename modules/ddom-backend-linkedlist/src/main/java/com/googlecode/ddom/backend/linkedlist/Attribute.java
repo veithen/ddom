@@ -53,12 +53,11 @@ public abstract class Attribute extends ParentNode implements CoreAttribute {
     }
     
     final void setOwnerElement(CoreElement newOwner) {
-        if (newOwner == null) {
-            // TODO: owner could already be a document!
-            owner = ((Element)owner).internalGetOwnerDocument(true);
-        } else {
-            owner = newOwner;
-        }
+        owner = newOwner;
+    }
+    
+    final void unsetOwnerElement(CoreDocument newOwnerDocument) {
+        owner = newOwnerDocument;
     }
     
     public final CoreAttribute coreGetNextAttribute() throws DeferredBuildingException {

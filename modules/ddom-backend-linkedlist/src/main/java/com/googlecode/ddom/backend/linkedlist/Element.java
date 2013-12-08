@@ -186,7 +186,7 @@ public abstract class Element extends Container implements LLElement {
         }
     }
     
-    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute coreAttr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredBuildingException {
+    public final CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute coreAttr, NodeMigrationPolicy policy, boolean changeDocumentOfReplacedAttribute, CoreDocument newDocument, ReturnValue returnValue) throws NodeMigrationException, DeferredBuildingException {
         if (coreAttr.coreGetOwnerElement() == this) {
             // TODO: document this and add assertion
             // TODO: take returnValue into account
@@ -215,7 +215,7 @@ public abstract class Element extends Container implements LLElement {
             } else {
                 previousAttr.setNextAttribute(attr);
             }
-            existingAttr.setOwnerElement(null);
+            existingAttr.unsetOwnerElement(changeDocumentOfReplacedAttribute ? newDocument : coreGetOwnerDocument(true));
             // TODO: get rid of cast here!
             attr.setNextAttribute((Attribute)existingAttr.coreGetNextAttribute());
             existingAttr.setNextAttribute(null);

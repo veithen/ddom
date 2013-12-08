@@ -147,6 +147,14 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * @param policy
      *            the policy to apply if the attribute already has an owner element or belongs to a
      *            different document
+     * @param changeDocumentOfReplacedAttribute
+     *            specifies if the owner document of the replaced attribute (if any) should be
+     *            changed
+     * @param newDocument
+     *            the new owner document for the replaced attribute, or <code>null</code> if the
+     *            attribute will have its own owner document (which may be created lazily at a later
+     *            moment); only meaningful if <code>changeDocumentOfReplacedAttribute</code> is
+     *            <code>true</code
      * @param returnValue
      *            specifies the expected return value of the method
      * @return the attribute as specified by the <code>returnValue</code> parameter
@@ -154,7 +162,7 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * @throws DeferredBuildingException 
      *             If an error occurs during deferred parsing.
      */
-    CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute attr, NodeMigrationPolicy policy, ReturnValue returnValue) throws NodeMigrationException, DeferredBuildingException;
+    CoreAttribute coreSetAttribute(AttributeMatcher matcher, CoreAttribute attr, NodeMigrationPolicy policy, boolean changeDocumentOfReplacedAttribute, CoreDocument newDocument, ReturnValue returnValue) throws NodeMigrationException, DeferredBuildingException;
     
     /**
      * Append an attribute to this element. The attribute is simply added at the end of the list of

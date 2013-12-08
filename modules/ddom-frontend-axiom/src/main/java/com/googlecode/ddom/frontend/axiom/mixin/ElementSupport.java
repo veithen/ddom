@@ -137,7 +137,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             if (prefix.length() > 0) {
                 ensureNamespaceIsDeclared(prefix, axiomAttr.coreGetNamespaceURI());
             }
-            return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, ReturnValue.ADDED_ATTRIBUTE);
+            return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, true, null, ReturnValue.ADDED_ATTRIBUTE);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }

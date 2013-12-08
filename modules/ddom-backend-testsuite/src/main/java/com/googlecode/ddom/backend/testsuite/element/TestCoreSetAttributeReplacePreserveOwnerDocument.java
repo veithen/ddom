@@ -42,7 +42,7 @@ public class TestCoreSetAttributeReplacePreserveOwnerDocument extends BackendTes
         element.coreSetAttribute(NSAwareAttributeMatcher.INSTANCE, "", "attr", "", "old");
         CoreAttribute orgAttribute = element.coreGetFirstAttribute();
         CoreAttribute newAttribute = nodeFactory.createAttribute(null, "", "attr", "", "new", "CDATA");
-        CoreAttribute replacedAttribute = element.coreSetAttribute(NSAwareAttributeMatcher.INSTANCE, newAttribute, Policies.MOVE, ReturnValue.REPLACED_ATTRIBUTE);
+        CoreAttribute replacedAttribute = element.coreSetAttribute(NSAwareAttributeMatcher.INSTANCE, newAttribute, Policies.MOVE, false, null, ReturnValue.REPLACED_ATTRIBUTE);
         assertSame(orgAttribute, replacedAttribute);
         assertSame(element.coreGetOwnerDocument(true), orgAttribute.coreGetOwnerDocument(true));
     }
