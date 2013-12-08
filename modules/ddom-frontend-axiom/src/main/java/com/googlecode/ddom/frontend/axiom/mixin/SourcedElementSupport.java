@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,18 +25,17 @@ import com.googlecode.ddom.frontend.axiom.support.OMDataSourceAdapter;
 public abstract class SourcedElementSupport implements AxiomSourcedElement {
     private OMDataSource dataSource;
 
-    public OMDataSource getDataSource() {
+    public final OMDataSource getDataSource() {
         return dataSource;
     }
 
-    public OMDataSource setDataSource(OMDataSource dataSource) {
+    public final OMDataSource setDataSource(OMDataSource dataSource) {
         this.dataSource = dataSource;
         coreSetSource(new OMDataSourceAdapter(dataSource));
         return null; // TODO
     }
 
-    public boolean isExpanded() {
-        // TODO Auto-generated method stub
-        return false;
+    public final boolean isExpanded() {
+        return coreGetState() != STATE_SOURCE_SET;
     }
 }

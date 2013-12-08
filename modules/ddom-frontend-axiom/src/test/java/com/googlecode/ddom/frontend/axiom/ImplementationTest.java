@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,12 +84,10 @@ import org.apache.axiom.ts.om.sourcedelement.TestGetPrefix;
 import org.apache.axiom.ts.om.sourcedelement.TestGetReaderException;
 import org.apache.axiom.ts.om.sourcedelement.TestGetSAXSourceWithPushOMDataSource;
 import org.apache.axiom.ts.om.sourcedelement.TestHasName;
-import org.apache.axiom.ts.om.sourcedelement.TestInputStreamDS;
 import org.apache.axiom.ts.om.sourcedelement.TestName1DefaultPrefix;
 import org.apache.axiom.ts.om.sourcedelement.TestName1QualifiedPrefix;
 import org.apache.axiom.ts.om.sourcedelement.TestPushOMDataSourceExpansion;
 import org.apache.axiom.ts.om.sourcedelement.TestRemoveChildrenUnexpanded;
-import org.apache.axiom.ts.om.sourcedelement.TestSetDataSourceOnAlreadyExpandedElement;
 import org.apache.axiom.ts.om.text.TestBase64StreamingWithGetSAXSource;
 import org.apache.axiom.ts.om.text.TestBase64StreamingWithSerialize;
 import org.apache.axiom.ts.om.text.TestGetTextCharactersFromDataHandler;
@@ -175,10 +173,11 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestName1DefaultPrefix.class);
         builder.exclude(TestName1QualifiedPrefix.class);
         
-        // TODO: OMSourcedElement doesn't report correct state
-        builder.exclude(org.apache.axiom.ts.om.sourcedelement.TestSerialize.class);
-        builder.exclude(TestSetDataSourceOnAlreadyExpandedElement.class);
-        builder.exclude(TestInputStreamDS.class);
+        // TODO: We don't close the underlying XMLStreamReader
+        builder.exclude(org.apache.axiom.ts.om.sourcedelement.TestSerialize.class, "(push=false)");
+        
+        // TODO: We handle this case differently: instead of expanding the element, events are buffered in the StAXPivot
+        builder.exclude(org.apache.axiom.ts.om.sourcedelement.TestSerialize.class, "(&(push=true)(serializationStrategy=XMLStreamReader))");
         
         // TODO: OMSourcedElement with unknown name
         builder.exclude(TestGetLocalName.class, "(|(variant=qname-aware-source)(variant=unknown-name))");
