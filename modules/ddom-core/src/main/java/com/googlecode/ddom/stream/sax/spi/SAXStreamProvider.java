@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import com.googlecode.ddom.stream.spi.StreamProvider;
 public class SAXStreamProvider implements StreamProvider {
     public XmlSource getSource(Object object, OptionsTracker options, boolean preserve) throws StreamException {
         if (object instanceof SAXSource) {
-            return new SimpleXmlSource(new SAXInput((SAXSource)object));
+            return new SimpleXmlSource(new SAXInput((SAXSource)object, false)); // TODO: expandEntityReferences?
         } else {
             return null;
         }

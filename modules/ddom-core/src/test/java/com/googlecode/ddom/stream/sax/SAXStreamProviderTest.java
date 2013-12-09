@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class SAXStreamProviderTest extends TestCase {
         DocumentBuilder domBuilder = domFactory.newDocumentBuilder();
         
         Document actual = domBuilder.newDocument();
-        new Stream(new SAXInput(source), new DOMOutput(actual)).flush();
+        new Stream(new SAXInput(source, true), new DOMOutput(actual)).flush();
         XMLConformanceTestUtils.coalesceTextNodes(actual);
         
         Document expected = domBuilder.parse(test.getSystemId());

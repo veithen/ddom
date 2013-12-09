@@ -269,6 +269,15 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         }
     }
 
+    public void writeEntityRef(String name) throws XMLStreamException {
+        try {
+            flushAttributes();
+            handler.processEntityReference(name);
+        } catch (StreamException ex) {
+            throw StAXExceptionUtil.toXMLStreamException(ex);
+        }
+    }
+
     /* (non-Javadoc)
      * @see javax.xml.stream.XMLStreamWriter#writeDTD(java.lang.String)
      */
@@ -281,14 +290,6 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
      * @see javax.xml.stream.XMLStreamWriter#writeEmptyElement(java.lang.String)
      */
     public void writeEmptyElement(String arg0) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeEntityRef(java.lang.String)
-     */
-    public void writeEntityRef(String arg0) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
     }

@@ -98,6 +98,6 @@ public abstract class NodeFactorySupport implements AxiomNodeFactory {
 
     public final OMXMLParserWrapper createOMBuilder(OMFactory omFactory, SAXSource source, boolean expandEntityReferences) {
         // TODO: we have currently no way to set the OMFactory!
-        return createBuilder(new SimpleXmlSource(new SAXInput((SAXSource)source)));
+        return createBuilder(new SimpleXmlSource(new SAXInput((SAXSource)source, expandEntityReferences)));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ public class DocumentTypeDeclaration extends LeafNode implements CoreDocumentTyp
 
     public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
         handler.startDocumentTypeDeclaration(rootName, publicId, systemId);
+        handler.endDocumentTypeDeclaration();
     }
 
     public final CoreNode coreClone(ClonePolicy policy) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -323,8 +323,14 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
 
     @Override
     protected boolean processEntityReference(String name) {
-        // TODO
-        throw new UnsupportedOperationException();
+        switch (state) {
+            case STATE_DEFAULT:
+                eventType = ENTITY_REFERENCE;
+                localName = name;
+                return false;
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     @Override
@@ -409,7 +415,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public String getLocalName() {
-        if (eventType == START_ELEMENT || eventType == END_ELEMENT) {
+        if (eventType == START_ELEMENT || eventType == END_ELEMENT || eventType == ENTITY_REFERENCE) {
             return localName;
         } else {
             throw new IllegalStateException();
@@ -558,7 +564,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     }
 
     public boolean hasText() {
-        return eventType == CHARACTERS || eventType == CDATA || eventType == COMMENT || eventType == DTD || eventType == SPACE;
+        return eventType == CHARACTERS || eventType == CDATA || eventType == COMMENT || eventType == DTD || eventType == SPACE || eventType == ENTITY_REFERENCE;
     }
 
     public String getText() {

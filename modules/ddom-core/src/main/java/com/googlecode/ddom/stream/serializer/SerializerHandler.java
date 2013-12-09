@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,8 +69,23 @@ final class SerializerHandler implements XmlHandler {
     }
 
     public void startDocumentTypeDeclaration(String rootName, String publicId, String systemId) throws StreamException {
-        // TODO
-//        throw new UnsupportedOperationException();
+        try {
+            writer.write("<!DOCTYPE ");
+            writer.write(rootName);
+            if (publicId != null) {
+                writer.write(" PUBLIC \"");
+                writer.write(publicId);
+                writer.write('"');
+            }
+            if (systemId != null) {
+                writer.write(" SYSTEM \"");
+                writer.write(systemId);
+                writer.write('"');
+            }
+            writer.write(">");
+        } catch (IOException ex) {
+            throw new StreamException(ex);
+        }
     }
 
     public void endDocumentTypeDeclaration() throws StreamException {
@@ -299,12 +314,14 @@ final class SerializerHandler implements XmlHandler {
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.googlecode.ddom.stream.SimpleXmlOutput#processEntityReference(java.lang.String)
-     */
-    public void processEntityReference(String name) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void processEntityReference(String name) throws StreamException {
+        try {
+            writer.write('&');
+            writer.write(name);
+            writer.write(';');
+        } catch (IOException ex) {
+            throw new StreamException(ex);
+        }
     }
 
     public void completed() throws StreamException {

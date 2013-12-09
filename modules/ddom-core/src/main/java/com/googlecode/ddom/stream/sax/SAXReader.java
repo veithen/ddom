@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,17 @@ import com.googlecode.ddom.stream.XmlReader;
 final class SAXReader implements XmlReader {
     private final XmlHandler handler;
     private final SAXSource source;
+    private final boolean expandEntityReference;
 
-    SAXReader(XmlHandler handler, SAXSource source) {
+    SAXReader(XmlHandler handler, SAXSource source, boolean expandEntityReference) {
         this.handler = handler;
         this.source = source;
+        this.expandEntityReference = expandEntityReference;
     }
 
     public void proceed(boolean flush) throws StreamException {
         XMLReader xmlReader = source.getXMLReader();
-        ContentHandlerAdapter contentHandler = new ContentHandlerAdapter(handler);
+        ContentHandlerAdapter contentHandler = new ContentHandlerAdapter(handler, expandEntityReference);
         xmlReader.setContentHandler(contentHandler);
         try {
             xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", contentHandler);

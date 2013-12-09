@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class ValidationFilter extends XmlFilter {
     protected XmlHandler createXmlHandler(XmlHandler target) {
         ValidatorHandler vh = schema.newValidatorHandler();
         // TODO: set error handler
-        vh.setContentHandler(new ContentHandlerAdapter(target));
+        vh.setContentHandler(new ContentHandlerAdapter(target, false));
         if (errorHandler != null) {
             vh.setErrorHandler(errorHandler);
         }

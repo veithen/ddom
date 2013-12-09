@@ -62,8 +62,6 @@ import org.apache.axiom.ts.om.element.sr.TestCloseAndContinueBuilding;
 import org.apache.axiom.ts.om.element.sr.TestCommentEvent;
 import org.apache.axiom.ts.om.element.sr.TestGetDataHandlerFromElement;
 import org.apache.axiom.ts.om.factory.TestCreateOMDocTypeWithoutParent;
-import org.apache.axiom.ts.om.factory.TestCreateOMEntityReference;
-import org.apache.axiom.ts.om.factory.TestCreateOMEntityReferenceWithNullParent;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextFromDataHandlerProvider;
 import org.apache.axiom.ts.om.factory.TestCreateOMTextWithNullParent;
 import org.apache.axiom.ts.om.node.TestGetNextOMSiblingAfterDiscard;
@@ -141,8 +139,8 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetDocumentFromBuilder.class);
         builder.exclude(TestGetNextOMSiblingIncomplete.class);
         builder.exclude(TestGetReaderException.class);
-        builder.exclude(TestGetSAXSourceWithPushOMDataSource.class, "(|(scenario=writeDataHandler*)(scenario=writeEntityRef)(scenario=getNamespaceContext))");
-        builder.exclude(TestPushOMDataSourceExpansion.class, "(|(scenario=writeDataHandler*)(scenario=writeEntityRef)(scenario=getNamespaceContext))");
+        builder.exclude(TestGetSAXSourceWithPushOMDataSource.class, "(|(scenario=writeDataHandler*)(scenario=getNamespaceContext))");
+        builder.exclude(TestPushOMDataSourceExpansion.class, "(|(scenario=writeDataHandler*)(scenario=getNamespaceContext))");
         builder.exclude(TestGetObject.class);
         builder.exclude(org.apache.axiom.ts.om.sourcedelement.sr.TestCloseWithoutCaching.class);
         builder.exclude(org.apache.axiom.ts.om.xop.TestSerialize.class);
@@ -186,9 +184,13 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetDocumentElement.class, "(discardDocument=true)");
         builder.exclude(TestGetDocumentElementWithDiscardDocumentIllFormedEpilog.class);
         
-        // TODO: we don't support entity references yet
-        builder.exclude(TestCreateOMBuilderFromDOM.class, "(|(file=entity-reference-*.xml)(file=dtd.xml))");
-        builder.exclude(TestCreateOMBuilderFromSAXSource.class, "(|(file=entity-reference-*.xml)(file=dtd.xml))");
+        // TODO: we don't fully support DTDs yet:
+        //  * we don't store internal subsets
+        //  * we don't provide replacement texts for entity references
+        //  * we don't parse public/system IDs correctly
+        builder.exclude(TestCreateOMDocTypeWithoutParent.class);
+        builder.exclude(TestCreateOMBuilderFromDOM.class, "(&(|(file=entity-reference-internal-subset.xml)(file=entity-reference-with-markup.xml)(file=entity-reference-nested.xml))(expandEntityReferences=false))");
+        builder.exclude(TestCreateOMBuilderFromSAXSource.class, "(|(file=entity-reference-internal-subset.xml)(file=entity-reference-with-markup.xml)(file=entity-reference-nested.xml))");
         builder.exclude(TestGetXMLStreamReader.class, "(|(file=entity-reference-*.xml)(file=dtd.xml))");
         builder.exclude(TestSerialize.class, "(|(file=entity-reference-*.xml)(file=dtd.xml))");
         
@@ -206,13 +208,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetSAXResultWithDTD.class);
         builder.exclude(TestGetSAXSourceIdentityTransform.class);
         builder.exclude(TestGetSAXSourceIdentityTransformOnFragment.class);
-        
-        // TODO: implement OMDocType
-        builder.exclude(TestCreateOMDocTypeWithoutParent.class);
-        
-        // TODO: implement OMEntityReference
-        builder.exclude(TestCreateOMEntityReference.class);
-        builder.exclude(TestCreateOMEntityReferenceWithNullParent.class);
         
         // TODO: clone
         builder.exclude(TestClone.class);

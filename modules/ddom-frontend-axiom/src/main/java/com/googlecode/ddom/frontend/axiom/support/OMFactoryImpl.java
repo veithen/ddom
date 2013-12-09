@@ -44,7 +44,9 @@ import com.googlecode.ddom.frontend.axiom.intf.AxiomCharacterData;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomComment;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomContainer;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomDocument;
+import com.googlecode.ddom.frontend.axiom.intf.AxiomDocumentTypeDeclaration;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
+import com.googlecode.ddom.frontend.axiom.intf.AxiomEntityReference;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNodeFactory;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomProcessingInstruction;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomSourcedElement;
@@ -92,6 +94,18 @@ public class OMFactoryImpl implements OMFactory {
     public final OMDocType createOMDocType(OMContainer parent, String content) {
         // TODO
         throw new UnsupportedOperationException();
+    }
+
+    public final OMDocType createOMDocType(OMContainer parent, String rootName, String publicId, String systemId, String internalSubset) {
+        if (parent == null) {
+            return (AxiomDocumentTypeDeclaration)nodeFactory.createDocumentTypeDeclaration(null, rootName, publicId, systemId);
+        } else {
+            try {
+                return (AxiomDocumentTypeDeclaration)((AxiomDocument)parent).coreAppendDocumentTypeDeclaration(rootName, publicId, systemId);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionTranslator.translate(ex);
+            }
+        }
     }
 
     public final OMDocument createOMDocument() {
@@ -340,13 +354,15 @@ public class OMFactoryImpl implements OMFactory {
         throw new UnsupportedOperationException();
     }
 
-    public OMDocType createOMDocType(OMContainer parent, String rootName, String publicId, String systemId, String internalSubset) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    public OMEntityReference createOMEntityReference(OMContainer parent, String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+    public final OMEntityReference createOMEntityReference(OMContainer parent, String name) {
+        if (parent == null) {
+            return (AxiomEntityReference)nodeFactory.createEntityReference(null, name);
+        } else {
+            try {
+                return (AxiomEntityReference)((AxiomContainer)parent).coreAppendEntityReference(name);
+            } catch (CoreModelException ex) {
+                throw AxiomExceptionTranslator.translate(ex);
+            }
+        }
     }
 }

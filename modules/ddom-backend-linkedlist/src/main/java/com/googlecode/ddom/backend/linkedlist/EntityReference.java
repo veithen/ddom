@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreEntityReference;
 import com.googlecode.ddom.core.CoreNode;
+import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
@@ -38,8 +39,8 @@ public class EntityReference extends LeafNode implements CoreEntityReference {
         return name;
     }
 
-    public final void internalGenerateEvents(XmlHandler handler) {
-        // TODO
+    public final void internalGenerateEvents(XmlHandler handler) throws StreamException {
+        handler.processEntityReference(name);
     }
 
     public final CoreNode coreClone(ClonePolicy policy) {

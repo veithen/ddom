@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,16 @@ import com.googlecode.ddom.stream.XmlReader;
 
 public class SAXInput extends XmlInput {
     private final SAXSource source;
+    private final boolean expandEntityReference;
 
-    public SAXInput(SAXSource source) {
+    public SAXInput(SAXSource source, boolean expandEntityReference) {
         this.source = source;
+        this.expandEntityReference = expandEntityReference;
     }
 
     @Override
     protected XmlReader createReader(XmlHandler handler) {
-        return new SAXReader(handler, source);
+        return new SAXReader(handler, source, expandEntityReference);
     }
 
     public void dispose() {
