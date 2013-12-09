@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.stream.stax;
 
+import static com.googlecode.ddom.stream.stax.Utils.nullToEmptyString;
+
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -108,20 +110,42 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
     }
 
     public void writeStartElement(String namespaceURI, String localName) throws XMLStreamException {
+        writeElement(namespaceURI, localName, false);
+    }
+    
+    public void writeEmptyElement(String namespaceURI, String localName) throws XMLStreamException {
+        writeElement(namespaceURI, localName, true);
+    }
+    
+    private void writeElement(String namespaceURI, String localName, boolean empty) throws XMLStreamException {
+        namespaceURI = nullToEmptyString(namespaceURI);
         String prefix = context.getPrefix(namespaceURI);
         if (prefix == null) {
             throw new XMLStreamException("Unbound namespace URI '" + namespaceURI + "'");
         } else {
-            writeStartElement(prefix, localName, namespaceURI);
+            writeElement(prefix, localName, namespaceURI, empty);
         }
     }
 
     public void writeStartElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
+        writeElement(prefix, localName, namespaceURI, false);
+    }
+    
+    public void writeEmptyElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
+        writeElement(prefix, localName, namespaceURI, true);
+    }
+    
+    private void writeElement(String prefix, String localName, String namespaceURI, boolean empty) throws XMLStreamException {
         try {
             flushAttributes();
-            handler.startElement(namespaceURI, localName, prefix);
-            isNamespaceAwareElement = true;
-            attributesPending = true;
+            handler.startElement(nullToEmptyString(namespaceURI), localName, nullToEmptyString(prefix));
+            if (empty) {
+                handler.attributesCompleted();
+                handler.endElement();
+            } else {
+                isNamespaceAwareElement = true;
+                attributesPending = true;
+            }
         } catch (StreamException ex) {
             throw StAXExceptionUtil.toXMLStreamException(ex);
         }
@@ -154,6 +178,7 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
     }
 
     public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
+        namespaceURI = nullToEmptyString(namespaceURI);
         String prefix = context.getPrefix(namespaceURI);
         if (prefix == null) {
             throw new XMLStreamException("Unbound namespace URI '" + namespaceURI + "'");
@@ -164,7 +189,7 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
 
     public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
         try {
-            handler.startAttribute(namespaceURI, localName, prefix, "CDATA");
+            handler.startAttribute(nullToEmptyString(namespaceURI), localName, nullToEmptyString(prefix), "CDATA");
             handler.processCharacterData(value, false);
             handler.endAttribute();
         } catch (StreamException ex) {
@@ -173,12 +198,11 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
     }
 
     public void writeNamespace(String prefix, String namespaceURI) throws XMLStreamException {
-        if (prefix == null) {
-            prefix = "";
-        }
         try {
-            handler.startNamespaceDeclaration(prefix);
-            handler.processCharacterData(namespaceURI, false);
+            handler.startNamespaceDeclaration(nullToEmptyString(prefix));
+            if (namespaceURI != null && namespaceURI.length() > 0) {
+                handler.processCharacterData(namespaceURI, false);
+            }
             handler.endAttribute();
         } catch (StreamException ex) {
             throw StAXExceptionUtil.toXMLStreamException(ex);
@@ -198,28 +222,51 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
         }
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeCharacters(char[], int, int)
-     */
-    public void writeCharacters(char[] arg0, int arg1, int arg2) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void writeCharacters(char[] text, int start, int len) throws XMLStreamException {
+        writeCharacters(new String(text, start, len));
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeCData(java.lang.String)
-     */
-    public void writeCData(String arg0) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void writeCData(String data) throws XMLStreamException {
+        try {
+            flushAttributes();
+            handler.startCDATASection();
+            handler.processCharacterData(data, false);
+            handler.endCDATASection();
+        } catch (StreamException ex) {
+            throw StAXExceptionUtil.toXMLStreamException(ex);
+        }
     }
 
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeComment(java.lang.String)
-     */
-    public void writeComment(String arg0) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
+    public void writeComment(String data) throws XMLStreamException {
+        try {
+            flushAttributes();
+            handler.startComment();
+            handler.processCharacterData(data, false);
+            handler.endComment();
+        } catch (StreamException ex) {
+            throw StAXExceptionUtil.toXMLStreamException(ex);
+        }
+    }
+
+    public void writeProcessingInstruction(String target) throws XMLStreamException {
+        try {
+            flushAttributes();
+            handler.startProcessingInstruction(target);
+            handler.endProcessingInstruction();
+        } catch (StreamException ex) {
+            throw StAXExceptionUtil.toXMLStreamException(ex);
+        }
+    }
+
+    public void writeProcessingInstruction(String target, String data) throws XMLStreamException {
+        try {
+            flushAttributes();
+            handler.startProcessingInstruction(target);
+            handler.processCharacterData(data, false);
+            handler.endProcessingInstruction();
+        } catch (StreamException ex) {
+            throw StAXExceptionUtil.toXMLStreamException(ex);
+        }
     }
 
     /* (non-Javadoc)
@@ -239,41 +286,9 @@ public final class XmlHandlerStreamWriter implements XMLStreamWriter {
     }
 
     /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeEmptyElement(java.lang.String, java.lang.String)
-     */
-    public void writeEmptyElement(String arg0, String arg1) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeEmptyElement(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void writeEmptyElement(String arg0, String arg1, String arg2) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
      * @see javax.xml.stream.XMLStreamWriter#writeEntityRef(java.lang.String)
      */
     public void writeEntityRef(String arg0) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeProcessingInstruction(java.lang.String)
-     */
-    public void writeProcessingInstruction(String arg0) throws XMLStreamException {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.stream.XMLStreamWriter#writeProcessingInstruction(java.lang.String, java.lang.String)
-     */
-    public void writeProcessingInstruction(String arg0, String arg1) throws XMLStreamException {
         // TODO
         throw new UnsupportedOperationException();
     }

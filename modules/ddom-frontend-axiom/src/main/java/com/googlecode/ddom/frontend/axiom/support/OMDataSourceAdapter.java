@@ -22,6 +22,7 @@ import org.apache.axiom.om.OMDataSource;
 import org.apache.axiom.om.OMDataSourceExt;
 import org.apache.axiom.om.ds.AbstractPullOMDataSource;
 import org.apache.axiom.om.ds.AbstractPushOMDataSource;
+import org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper;
 
 import com.googlecode.ddom.stream.XmlInput;
 import com.googlecode.ddom.stream.XmlSource;
@@ -56,7 +57,37 @@ public class OMDataSourceAdapter implements XmlSource {
             return new StAXPushInput() {
                 @Override
                 protected void serialize(XMLStreamWriter out) throws XMLStreamException {
-                    ds.serialize(out);
+                    ds.serialize(new XMLStreamWriterWrapper(out) {
+                        @Override
+                        public void writeStartDocument() throws XMLStreamException {
+                            throw new UnsupportedOperationException();
+                        }
+
+                        @Override
+                        public void writeStartDocument(String encoding, String version) throws XMLStreamException {
+                            throw new UnsupportedOperationException();
+                        }
+
+                        @Override
+                        public void writeStartDocument(String version) throws XMLStreamException {
+                            throw new UnsupportedOperationException();
+                        }
+
+                        @Override
+                        public void writeEndDocument() throws XMLStreamException {
+                            throw new UnsupportedOperationException();
+                        }
+
+                        @Override
+                        public void writeStartElement(String localName) throws XMLStreamException {
+                            throw new UnsupportedOperationException();
+                        }
+
+                        @Override
+                        public void close() throws XMLStreamException {
+                            throw new UnsupportedOperationException();
+                        }
+                    });
                 }
                 
                 @Override

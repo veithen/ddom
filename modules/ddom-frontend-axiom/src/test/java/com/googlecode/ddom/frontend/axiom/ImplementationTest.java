@@ -141,9 +141,9 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetDocumentFromBuilder.class);
         builder.exclude(TestGetNextOMSiblingIncomplete.class);
         builder.exclude(TestGetReaderException.class);
-        builder.exclude(TestGetSAXSourceWithPushOMDataSource.class);
+        builder.exclude(TestGetSAXSourceWithPushOMDataSource.class, "(|(scenario=writeDataHandler*)(scenario=writeEntityRef)(scenario=getNamespaceContext))");
+        builder.exclude(TestPushOMDataSourceExpansion.class, "(|(scenario=writeDataHandler*)(scenario=writeEntityRef)(scenario=getNamespaceContext))");
         builder.exclude(TestGetObject.class);
-        builder.exclude(TestPushOMDataSourceExpansion.class);
         builder.exclude(org.apache.axiom.ts.om.sourcedelement.sr.TestCloseWithoutCaching.class);
         builder.exclude(org.apache.axiom.ts.om.xop.TestSerialize.class);
         builder.exclude(TestRemoveChildrenUnexpanded.class);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
     private static final int ATT_NAMESPACE_DECLARATION = 3;
     
     private final XMLStreamWriter writer;
+    private boolean fragment;
     private boolean coalescing;
     private final StringAccumulator buffer = new StringAccumulator();
     private int attType;
@@ -52,8 +53,7 @@ public class XMLStreamWriterHandler implements XmlHandler {
     }
     
     public void startEntity(boolean fragment, String inputEncoding) {
-        // TODO
-//        throw new UnsupportedOperationException();
+        this.fragment = fragment;
     }
 
     public void processXmlDeclaration(String version, String encoding, Boolean standalone) {
@@ -195,10 +195,12 @@ public class XMLStreamWriterHandler implements XmlHandler {
     }
     
     public void completed() throws StreamException {
-        try {
-            writer.writeEndDocument();
-        } catch (XMLStreamException ex) {
-            throw StAXExceptionUtil.toStreamException(ex);
+        if (!fragment) {
+            try {
+                writer.writeEndDocument();
+            } catch (XMLStreamException ex) {
+                throw StAXExceptionUtil.toStreamException(ex);
+            }
         }
     }
 }
