@@ -197,6 +197,12 @@ final class SerializerHandler implements XmlHandler {
         }
     }
 
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+    }
+
     public void attributesCompleted() throws StreamException {
         state = STATE_EMPTY_ELEMENT;
     }

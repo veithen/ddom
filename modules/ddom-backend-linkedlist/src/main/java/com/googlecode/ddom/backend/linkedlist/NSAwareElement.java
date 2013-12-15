@@ -18,6 +18,7 @@ package com.googlecode.ddom.backend.linkedlist;
 import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
 import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -54,14 +55,8 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
     }
 
     void initName(String namespaceURI, String localName, String prefix) throws ElementNameMismatchException {
-        if (internalGetFlag(Flags.NAMESPACE_URI_SET)) {
-            // Do nothing; keep the overridden namespace URI
-        } else if (this.namespaceURI != null) {
-            if (!this.namespaceURI.equals(namespaceURI)) {
-                throw new ElementNameMismatchException("Unexpected namespace URI");
-            }
-        } else {
-            this.namespaceURI = namespaceURI;
+        if (namespaceURI != null) {
+            resolveNamespace(namespaceURI);
         }
 
         if (internalGetFlag(Flags.LOCAL_NAME_SET)) {
@@ -85,13 +80,43 @@ public class NSAwareElement extends Element implements CoreNSAwareElement {
         }
     }
     
+    void resolveNamespace(String namespaceURI) throws ElementNameMismatchException {
+        if (internalGetFlag(Flags.NAMESPACE_URI_SET)) {
+            // Do nothing; keep the overridden namespace URI
+        } else if (this.namespaceURI != null) {
+            if (namespaceURI != null && !this.namespaceURI.equals(namespaceURI)) {
+                throw new ElementNameMismatchException("Unexpected namespace URI");
+            }
+        } else {
+            this.namespaceURI = namespaceURI;
+        }
+    }
+        
     public final int coreGetNodeType() {
         return NS_AWARE_ELEMENT_NODE;
     }
 
     public final String coreGetNamespaceURI() throws DeferredBuildingException {
-        if (namespaceURI == null && internalGetState() == STATE_SOURCE_SET) {
-            internalGetOrCreateInputContext();
+        if (namespaceURI == null) {
+            switch (internalGetState()) {
+                case STATE_SOURCE_SET:
+                    // Requesting the input context in this state will result
+                    // in a call to initName so that the namespace URI gets
+                    // initialized, except if the namespace is resolved lazily.
+                    internalGetOrCreateInputContext();
+                    if (namespaceURI != null) {
+                        break;
+                    }
+                    // Otherwise, fall through
+                case STATE_ATTRIBUTES_PENDING:
+                    // In this state namespaceURI is null because the namespace
+                    // has not yet been resolved. Proceed with the attributes
+                    // until the parser reports the namespace.
+                    InputContext inputContext = internalGetOrCreateInputContext();
+                    do {
+                        inputContext.next(false);
+                    } while (namespaceURI == null && internalGetState() == STATE_ATTRIBUTES_PENDING);
+            }
         }
         return namespaceURI;
     }

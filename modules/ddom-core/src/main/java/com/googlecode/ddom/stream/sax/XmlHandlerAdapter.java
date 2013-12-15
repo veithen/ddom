@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,10 @@ public class XmlHandlerAdapter implements XmlHandler, Attributes {
     private int depth;
     private int elementStackSize = INITIAL_ELEMENT_STACK_SIZE;
     private String[] elementStack = new String[INITIAL_ELEMENT_STACK_SIZE*3];
+    private String elementPrefix;
     private final ScopedNamespaceContext namespaceContext = new ScopedNamespaceContext();
     private int attributeStackSize = INITIAL_ATTRIBUTE_STACK_SIZE;
-    private String[] attributeStack = new String[INITIAL_ATTRIBUTE_STACK_SIZE*5];
+    private String[] attributeStack = new String[INITIAL_ATTRIBUTE_STACK_SIZE*6];
     private int attributeCount;
     private String declaredPrefix;
     private String piTarget;
@@ -78,14 +79,14 @@ public class XmlHandlerAdapter implements XmlHandler, Attributes {
     }
 
     public void startElement(String tagName) throws StreamException {
-        startElement("", "", tagName);
+        internalStartElement("", "", null, tagName);
     }
 
     public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        internalStartElement(namespaceURI, localName, prefix.length() == 0 ? localName : (prefix + ":" + localName));
+        internalStartElement(namespaceURI, localName, prefix, prefix.length() == 0 ? localName : (prefix + ":" + localName));
     }
     
-    private void internalStartElement(String uri, String localName, String qName) {
+    private void internalStartElement(String uri, String localName, String prefix, String qName) {
         attributeCount = 0;
         if (depth == elementStackSize) {
             elementStackSize *= 2;
@@ -96,6 +97,7 @@ public class XmlHandlerAdapter implements XmlHandler, Attributes {
         elementStack[depth*3] = uri;
         elementStack[depth*3+1] = localName;
         elementStack[depth*3+2] = qName;
+        elementPrefix = prefix;
         namespaceContext.startScope();
     }
 
@@ -113,11 +115,12 @@ public class XmlHandlerAdapter implements XmlHandler, Attributes {
     }
 
     public void startAttribute(String name, String type) throws StreamException {
-        internalStartAttribute("", "", name, type);
+        internalStartAttribute("", "", null, name, type);
     }
 
     public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
-        internalStartAttribute(namespaceURI, localName, prefix.length() == 0 ? localName : (prefix + ":" + localName), type);
+        // We pass null as qName so that it will be calculated lazily
+        internalStartAttribute(namespaceURI, localName, prefix, null, type);
     }
     
     public void startNamespaceDeclaration(String prefix) throws StreamException {
@@ -126,18 +129,21 @@ public class XmlHandlerAdapter implements XmlHandler, Attributes {
         state = STATE_COALESCE;
     }
 
-    public void internalStartAttribute(String uri, String localName, String qName, String type) {
+    private void internalStartAttribute(String uri, String localName, String prefix, String qName, String type) {
         state = STATE_COALESCE;
         if (attributeCount == attributeStackSize) {
             attributeStackSize *= 2;
-            String[] newStack = new String[attributeStackSize*5];
-            System.arraycopy(attributeStack, 0, newStack, 0, attributeCount*5);
+            String[] newStack = new String[attributeStackSize*6];
+            System.arraycopy(attributeStack, 0, newStack, 0, attributeCount*6);
             attributeStack = newStack;
         }
-        attributeStack[attributeCount*5] = uri;
-        attributeStack[attributeCount*5+1] = localName;
-        attributeStack[attributeCount*5+2] = qName;
-        attributeStack[attributeCount*5+3] = type;
+        attributeStack[attributeCount*6] = uri;
+        attributeStack[attributeCount*6+1] = localName;
+        // SAX doesn't give access to the prefix, but we need it to resolve namespaces and to calculate
+        // the qName on demand
+        attributeStack[attributeCount*6+2] = prefix;
+        attributeStack[attributeCount*6+3] = qName;
+        attributeStack[attributeCount*6+4] = type;
     }
 
     public void endAttribute() throws StreamException {
@@ -148,12 +154,20 @@ public class XmlHandlerAdapter implements XmlHandler, Attributes {
                 contentHandler.startPrefixMapping(declaredPrefix, namespaceURI);
                 declaredPrefix = null;
             } else {
-                attributeStack[attributeCount*5+4] = stopCoalescing();
+                attributeStack[attributeCount*6+5] = stopCoalescing();
                 attributeCount++;
             }
         } catch (SAXException ex) {
             throw new StreamException(ex);
         }
+    }
+
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
+        elementStack[depth*3] = namespaceURI;
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+        attributeStack[index*6] = namespaceURI;
     }
 
     public void attributesCompleted() throws StreamException {
@@ -264,23 +278,30 @@ public class XmlHandlerAdapter implements XmlHandler, Attributes {
     }
 
     public String getURI(int index) {
-        return attributeStack[index*5];
+        return attributeStack[index*6];
     }
 
     public String getLocalName(int index) {
-        return attributeStack[index*5+1];
+        return attributeStack[index*6+1];
     }
 
     public String getQName(int index) {
-        return attributeStack[index*5+2];
+        String qName = attributeStack[index*6+3];
+        if (qName == null) {
+            String prefix = attributeStack[index*6+2];
+            String localName = attributeStack[index*6+1];
+            qName = prefix.length() == 0 ? localName : (prefix + ":" + localName);
+            attributeStack[index*6+2] = qName;
+        }
+        return qName;
     }
 
     public String getType(int index) {
-        return attributeStack[index*5+3];
+        return attributeStack[index*6+4];
     }
 
     public String getValue(int index) {
-        return attributeStack[index*5+4];
+        return attributeStack[index*6+5];
     }
 
     public String getType(String uri, String localName) {

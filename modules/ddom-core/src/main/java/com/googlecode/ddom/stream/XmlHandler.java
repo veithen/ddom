@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,11 +68,15 @@ public interface XmlHandler {
     void startElement(String tagName) throws StreamException;
     
     /**
-     * Notify the handler of the beginning of an element in namespace aware mode.
+     * Notify the handler of the beginning of an element in namespace aware mode. Since this method
+     * is invoked before all attributes have been processed, the namespace may be unresolved. In
+     * that case, <code>null</code> is passed to the <code>namespaceURI</code> parameter and
+     * {@link #resolveElementNamespace(String)} is invoked before the next call to
+     * {@link #attributesCompleted()}.
      * 
      * @param namespaceURI
-     *            the namespace URI of the element, or the empty string if the element has no
-     *            namespace
+     *            the namespace URI of the element, the empty string if the element has no
+     *            namespace, or <code>null</code> if the namespace has not been resolved yet
      * @param localName
      *            the local part of the element's name
      * @param prefix
@@ -101,11 +105,23 @@ public interface XmlHandler {
     void startAttribute(String name, String type) throws StreamException;
     
     /**
-     * Notify the handler of the beginning of an attribute in namespace aware mode.
+     * Notify the handler of the beginning of an attribute in namespace aware mode. Since this
+     * method is invoked before all attributes have been processed, the namespace may be unresolved.
+     * In that case, <code>null</code> is passed to the <code>namespaceURI</code> parameter and
+     * {@link #resolveAttributeNamespace(String, String)} is invoked before the next call to
+     * {@link #attributesCompleted()}.
+     * <p>
+     * Since unprefixed attributes have no namespace (and therefore namespace resolution is
+     * trivial), this method MUST NOT be called with an empty prefix and a <code>null</code>
+     * <code>namespaceURI</code>.
      * 
      * @param namespaceURI
+     *            the namespace URI of the attribute, the empty string if the attribute has no
+     *            namespace, or <code>null</code> if the namespace has not been resolved yet
      * @param localName
+     *            the local part of the attribute's name
      * @param prefix
+     *            the prefix of the attribute, or the empty string if the element has no prefix
      * @param type
      * @throws StreamException
      *             if an error occurs when processing the event
@@ -130,6 +146,36 @@ public interface XmlHandler {
      *             if an error occurs when processing the event
      */
     void endAttribute() throws StreamException;
+    
+    /**
+     * Notify the handler that the namespace of the current element has been resolved. This method
+     * MUST be called once and only once between invocations of
+     * {@link #startElement(String, String, String)} and {@link #attributesCompleted()} if the
+     * namespace URI passed to the {@link #startElement(String, String, String)} method was
+     * <code>null</code>.
+     * 
+     * @param namespaceURI
+     *            the namespace URI of the current element; never <code>null</code>
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void resolveElementNamespace(String namespaceURI) throws StreamException;
+    
+    /**
+     * Notify the handler that the namespace of an attribute has been resolved. This method MUST be
+     * called once and only once for each attribute with unresolved prefix, i.e. for each invocation
+     * of {@link #startAttribute(String, String, String, String)} with a <code>null</code> value for
+     * the <code>namespaceURI</code> parameter. The call MUST occur before the call to
+     * {@link #attributesCompleted()}.
+     * 
+     * @param index
+     *            the index of the attribute
+     * @param namespaceURI
+     *            the namespace URI bound to the prefix
+     * @throws StreamException
+     *             if an error occurs when processing the event
+     */
+    void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException;
     
     void attributesCompleted() throws StreamException;
     

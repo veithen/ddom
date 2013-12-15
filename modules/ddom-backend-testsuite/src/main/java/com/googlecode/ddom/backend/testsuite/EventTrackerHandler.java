@@ -83,6 +83,16 @@ final class EventTrackerHandler implements XmlHandler {
         target.endAttribute();
     }
 
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
+        // TODO: should we track this event?
+        target.resolveElementNamespace(namespaceURI);
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+        // TODO: should we track this event?
+        target.resolveAttributeNamespace(index, namespaceURI);
+    }
+
     public void attributesCompleted() throws StreamException {
         tracker.lastEvent = Event.ATTRIBUTES_COMPLETED;
         target.attributesCompleted();

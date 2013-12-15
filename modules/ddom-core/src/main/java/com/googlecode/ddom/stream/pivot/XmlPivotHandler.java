@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,15 @@ final class XmlPivotHandler implements XmlHandler {
     private static final int END_DOCUMENT_TYPE_DECLARATION = 21;
     private static final int START_NS_UNAWARE_ELEMENT = 3;
     private static final int START_NS_AWARE_ELEMENT = 4;
+    private static final int START_NS_AWARE_ELEMENT_UNRESOLVED = 22;
     private static final int END_ELEMENT = 5;
     private static final int START_NS_UNAWARE_ATTRIBUTE = 6;
     private static final int START_NS_AWARE_ATTRIBUTE = 7;
+    private static final int START_NS_AWARE_ATTRIBUTE_UNRESOLVED = 23;
     private static final int START_NAMESPACE_DECLARATION = 8;
     private static final int END_ATTRIBUTE = 9;
+    private static final int RESOLVE_ELEMENT_NAMESPACE = 24;
+    private static final int RESOLVE_ATTRIBUTE_NAMESPACE = 25;
     private static final int ATTRIBUTES_COMPLETED = 10;
     private static final int TEXT = 11;
     private static final int IGNORABLE_TEXT = 12;
@@ -47,67 +51,67 @@ final class XmlPivotHandler implements XmlHandler {
     private final Stream stream;
     private boolean passThrough = true;
     
-    private int[] events = new int[16];
-    private int currentEventIndex;
-    private int nextEventIndex;
+    private int[] intTokens = new int[16];
+    private int currentIntTokenIndex;
+    private int nextIntTokenIndex;
 
-    private String[] tokens = new String[16];
-    private int currentTokenIndex;
-    private int nextTokenIndex;
+    private String[] stringTokens = new String[16];
+    private int currentStringTokenIndex;
+    private int nextStringTokenIndex;
     
     XmlPivotHandler(XmlPivot pivot, Stream stream) {
         this.pivot = pivot;
         this.stream = stream;
     }
     
-    private void addEvent(int event) {
-        events[nextEventIndex] = event;
-        nextEventIndex++;
-        int currentSize = events.length;
-        if (nextEventIndex == currentSize) {
-            nextEventIndex = 0;
+    private void addIntToken(int event) {
+        intTokens[nextIntTokenIndex] = event;
+        nextIntTokenIndex++;
+        int currentSize = intTokens.length;
+        if (nextIntTokenIndex == currentSize) {
+            nextIntTokenIndex = 0;
         }
-        if (nextEventIndex == currentEventIndex) {
+        if (nextIntTokenIndex == currentIntTokenIndex) {
             int[] newBuffer = new int[currentSize*2];
-            System.arraycopy(events, 0, newBuffer, 0, currentEventIndex);
-            System.arraycopy(events, currentEventIndex, newBuffer, currentEventIndex+currentSize, currentSize-currentEventIndex);
-            currentEventIndex += currentSize;
-            events = newBuffer;
+            System.arraycopy(intTokens, 0, newBuffer, 0, currentIntTokenIndex);
+            System.arraycopy(intTokens, currentIntTokenIndex, newBuffer, currentIntTokenIndex+currentSize, currentSize-currentIntTokenIndex);
+            currentIntTokenIndex += currentSize;
+            intTokens = newBuffer;
         }
     }
     
     private void addToken(String token) {
-        tokens[nextTokenIndex] = token;
-        nextTokenIndex++;
-        int currentSize = tokens.length;
-        if (nextTokenIndex == currentSize) {
-            nextTokenIndex = 0;
+        stringTokens[nextStringTokenIndex] = token;
+        nextStringTokenIndex++;
+        int currentSize = stringTokens.length;
+        if (nextStringTokenIndex == currentSize) {
+            nextStringTokenIndex = 0;
         }
-        if (nextTokenIndex == currentTokenIndex) {
+        if (nextStringTokenIndex == currentStringTokenIndex) {
             String[] newBuffer = new String[currentSize*2];
-            System.arraycopy(tokens, 0, newBuffer, 0, currentTokenIndex);
-            System.arraycopy(tokens, currentTokenIndex, newBuffer, currentTokenIndex+currentSize, currentSize-currentTokenIndex);
-            currentTokenIndex += currentSize;
-            tokens = newBuffer;
+            System.arraycopy(stringTokens, 0, newBuffer, 0, currentStringTokenIndex);
+            System.arraycopy(stringTokens, currentStringTokenIndex, newBuffer, currentStringTokenIndex+currentSize, currentSize-currentStringTokenIndex);
+            currentStringTokenIndex += currentSize;
+            stringTokens = newBuffer;
         }
     }
     
     private boolean hasEvents() {
-        return currentEventIndex != nextEventIndex;
+        return currentIntTokenIndex != nextIntTokenIndex;
     }
     
-    private int getEvent() {
-        int event = events[currentEventIndex++];
-        if (currentEventIndex == events.length) {
-            currentEventIndex = 0;
+    private int getIntToken() {
+        int event = intTokens[currentIntTokenIndex++];
+        if (currentIntTokenIndex == intTokens.length) {
+            currentIntTokenIndex = 0;
         }
         return event;
     }
     
-    private String getToken() {
-        String token = tokens[currentTokenIndex++];
-        if (currentTokenIndex == tokens.length) {
-            currentTokenIndex = 0;
+    private String getStringToken() {
+        String token = stringTokens[currentStringTokenIndex++];
+        if (currentStringTokenIndex == stringTokens.length) {
+            currentStringTokenIndex = 0;
         }
         return token;
     }
@@ -124,7 +128,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.processXmlDeclaration(version, encoding, standalone);
         } else {
-            addEvent(XML_DECLARATION);
+            addIntToken(XML_DECLARATION);
             addToken(version);
             addToken(encoding);
             addToken(standalone == null ? null : standalone.toString());
@@ -135,7 +139,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startDocumentTypeDeclaration(rootName, publicId, systemId);
         } else {
-            addEvent(START_DOCUMENT_TYPE_DECLARATION);
+            addIntToken(START_DOCUMENT_TYPE_DECLARATION);
             addToken(rootName);
             addToken(publicId);
             addToken(systemId);
@@ -146,7 +150,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.endDocumentTypeDeclaration();
         } else {
-            addEvent(END_DOCUMENT_TYPE_DECLARATION);
+            addIntToken(END_DOCUMENT_TYPE_DECLARATION);
         }
     }
     
@@ -154,7 +158,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startElement(tagName);
         } else {
-            addEvent(START_NS_UNAWARE_ELEMENT);
+            addIntToken(START_NS_UNAWARE_ELEMENT);
             addToken(tagName);
         }
     }
@@ -163,8 +167,12 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startElement(namespaceURI, localName, prefix);
         } else {
-            addEvent(START_NS_AWARE_ELEMENT);
-            addToken(namespaceURI);
+            if (namespaceURI == null) {
+                addIntToken(START_NS_AWARE_ELEMENT_UNRESOLVED);
+            } else {
+                addIntToken(START_NS_AWARE_ELEMENT);
+                addToken(namespaceURI);
+            }
             addToken(localName);
             addToken(prefix);
         }
@@ -174,7 +182,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.endElement();
         } else {
-            addEvent(END_ELEMENT);
+            addIntToken(END_ELEMENT);
         }
     }
 
@@ -182,7 +190,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startAttribute(name, type);
         } else {
-            addEvent(START_NS_UNAWARE_ATTRIBUTE);
+            addIntToken(START_NS_UNAWARE_ATTRIBUTE);
             addToken(name);
             addToken(type);
         }
@@ -192,8 +200,12 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startAttribute(namespaceURI, localName, prefix, type);
         } else {
-            addEvent(START_NS_AWARE_ATTRIBUTE);
-            addToken(namespaceURI);
+            if (namespaceURI == null) {
+                addIntToken(START_NS_AWARE_ATTRIBUTE_UNRESOLVED);
+            } else {
+                addIntToken(START_NS_AWARE_ATTRIBUTE);
+                addToken(namespaceURI);
+            }
             addToken(localName);
             addToken(prefix);
             addToken(type);
@@ -204,7 +216,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startNamespaceDeclaration(prefix);
         } else {
-            addEvent(START_NAMESPACE_DECLARATION);
+            addIntToken(START_NAMESPACE_DECLARATION);
             addToken(prefix);
         }
     }
@@ -213,7 +225,26 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.endAttribute();
         } else {
-            addEvent(END_ATTRIBUTE);
+            addIntToken(END_ATTRIBUTE);
+        }
+    }
+
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
+        if (passThrough) {
+            passThrough = pivot.resolveElementNamespace(namespaceURI);
+        } else {
+            addIntToken(RESOLVE_ELEMENT_NAMESPACE);
+            addToken(namespaceURI);
+        }
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+        if (passThrough) {
+            passThrough = pivot.resolveAttributeNamespace(index, namespaceURI);
+        } else {
+            addIntToken(RESOLVE_ATTRIBUTE_NAMESPACE);
+            addIntToken(index);
+            addToken(namespaceURI);
         }
     }
 
@@ -221,7 +252,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.attributesCompleted();
         } else {
-            addEvent(ATTRIBUTES_COMPLETED);
+            addIntToken(ATTRIBUTES_COMPLETED);
         }
     }
 
@@ -229,7 +260,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.processCharacterData(data, ignorable);
         } else {
-            addEvent(ignorable ? IGNORABLE_TEXT : TEXT);
+            addIntToken(ignorable ? IGNORABLE_TEXT : TEXT);
             addToken(data);
         }
     }
@@ -238,7 +269,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startProcessingInstruction(target);
         } else {
-            addEvent(START_PROCESSING_INSTRUCTION);
+            addIntToken(START_PROCESSING_INSTRUCTION);
             addToken(target);
         }
     }
@@ -247,7 +278,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.endProcessingInstruction();
         } else {
-            addEvent(END_PROCESSING_INSTRUCTION);
+            addIntToken(END_PROCESSING_INSTRUCTION);
         }
     }
 
@@ -255,7 +286,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startComment();
         } else {
-            addEvent(START_COMMENT);
+            addIntToken(START_COMMENT);
         }
     }
 
@@ -263,7 +294,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.endComment();
         } else {
-            addEvent(END_COMMENT);
+            addIntToken(END_COMMENT);
         }
     }
 
@@ -271,7 +302,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.startCDATASection();
         } else {
-            addEvent(START_CDATA_SECTION);
+            addIntToken(START_CDATA_SECTION);
         }
     }
 
@@ -279,7 +310,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.endCDATASection();
         } else {
-            addEvent(END_CDATA_SECTION);
+            addIntToken(END_CDATA_SECTION);
         }
     }
 
@@ -287,7 +318,7 @@ final class XmlPivotHandler implements XmlHandler {
         if (passThrough) {
             passThrough = pivot.processEntityReference(name);
         } else {
-            addEvent(ENTITY_REFERENCE);
+            addIntToken(ENTITY_REFERENCE);
             addToken(name);
         }
     }
@@ -297,58 +328,70 @@ final class XmlPivotHandler implements XmlHandler {
             pivot.completed();
             passThrough = false;
         } else {
-            addEvent(COMPLETED);
+            addIntToken(COMPLETED);
         }
     }
     
     void next() throws StreamException {
         while (hasEvents()) {
             boolean result;
-            switch (getEvent()) {
+            switch (getIntToken()) {
                 case XML_DECLARATION:
-                    String version = getToken();
-                    String encoding = getToken();
-                    String standalone = getToken();
+                    String version = getStringToken();
+                    String encoding = getStringToken();
+                    String standalone = getStringToken();
                     result = pivot.processXmlDeclaration(version, encoding, standalone == null ? null : Boolean.valueOf(standalone));
                     break;
                 case START_DOCUMENT_TYPE_DECLARATION:
-                    result = pivot.startDocumentTypeDeclaration(getToken(), getToken(), getToken());
+                    result = pivot.startDocumentTypeDeclaration(getStringToken(), getStringToken(), getStringToken());
                     break;
                 case END_DOCUMENT_TYPE_DECLARATION:
                     result = pivot.endDocumentTypeDeclaration();
                     break;
                 case START_NS_UNAWARE_ELEMENT:
-                    result = pivot.startElement(getToken());
+                    result = pivot.startElement(getStringToken());
                     break;
                 case START_NS_AWARE_ELEMENT:
-                    result = pivot.startElement(getToken(), getToken(), getToken());
+                    result = pivot.startElement(getStringToken(), getStringToken(), getStringToken());
+                    break;
+                case START_NS_AWARE_ELEMENT_UNRESOLVED:
+                    result = pivot.startElement(null, getStringToken(), getStringToken());
                     break;
                 case END_ELEMENT:
                     result = pivot.endElement();
                     break;
                 case START_NS_UNAWARE_ATTRIBUTE:
-                    result = pivot.startAttribute(getToken(), getToken());
+                    result = pivot.startAttribute(getStringToken(), getStringToken());
                     break;
                 case START_NS_AWARE_ATTRIBUTE:
-                    result = pivot.startAttribute(getToken(), getToken(), getToken(), getToken());
+                    result = pivot.startAttribute(getStringToken(), getStringToken(), getStringToken(), getStringToken());
+                    break;
+                case START_NS_AWARE_ATTRIBUTE_UNRESOLVED:
+                    result = pivot.startAttribute(null, getStringToken(), getStringToken(), getStringToken());
                     break;
                 case START_NAMESPACE_DECLARATION:
-                    result = pivot.startNamespaceDeclaration(getToken());
+                    result = pivot.startNamespaceDeclaration(getStringToken());
                     break;
                 case END_ATTRIBUTE:
                     result = pivot.endAttribute();
+                    break;
+                case RESOLVE_ELEMENT_NAMESPACE:
+                    result = pivot.resolveElementNamespace(getStringToken());
+                    break;
+                case RESOLVE_ATTRIBUTE_NAMESPACE:
+                    result = pivot.resolveAttributeNamespace(getIntToken(), getStringToken());
                     break;
                 case ATTRIBUTES_COMPLETED:
                     result = pivot.attributesCompleted();
                     break;
                 case TEXT:
-                    result = pivot.processCharacterData(getToken(), false);
+                    result = pivot.processCharacterData(getStringToken(), false);
                     break;
                 case IGNORABLE_TEXT:
-                    result = pivot.processCharacterData(getToken(), true);
+                    result = pivot.processCharacterData(getStringToken(), true);
                     break;
                 case START_PROCESSING_INSTRUCTION:
-                    result = pivot.startProcessingInstruction(getToken());
+                    result = pivot.startProcessingInstruction(getStringToken());
                     break;
                 case END_PROCESSING_INSTRUCTION:
                     result = pivot.endProcessingInstruction();
@@ -366,7 +409,7 @@ final class XmlPivotHandler implements XmlHandler {
                     result = pivot.endCDATASection();
                     break;
                 case ENTITY_REFERENCE:
-                    result = pivot.processEntityReference(getToken());
+                    result = pivot.processEntityReference(getStringToken());
                     break;
                 case COMPLETED:
                     pivot.completed();

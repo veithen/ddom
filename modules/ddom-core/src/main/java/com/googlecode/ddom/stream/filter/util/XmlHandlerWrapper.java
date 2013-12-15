@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,6 +73,14 @@ public class XmlHandlerWrapper implements XmlHandler {
 
     public void endAttribute() throws StreamException {
         parent.endAttribute();
+    }
+
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
+        parent.resolveElementNamespace(namespaceURI);
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+        parent.resolveAttributeNamespace(index, namespaceURI);
     }
 
     public void attributesCompleted() throws StreamException {

@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.stream.stax;
 
+import static com.googlecode.ddom.stream.stax.Utils.emptyStringToNull;
+
 import java.util.NoSuchElementException;
 
 import javax.xml.namespace.NamespaceContext;
@@ -26,6 +28,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.StreamException;
+import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.stream.pivot.XmlPivot;
 import com.googlecode.ddom.util.lang.ObjectUtils;
 import com.googlecode.ddom.util.namespace.ScopedNamespaceContext;
@@ -73,12 +76,30 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     private String namespaceURI;
     private String localName;
     private String prefix;
+    
+    /**
+     * The number of attributes on the current element, excluding namespace declaration.
+     */
     private int attributeCount;
+    
     private String declaredPrefix;
     private int state = STATE_DEFAULT;
     private int previousState = -1;
     private final StringAccumulator accumulator = new StringAccumulator();
     private String data;
+    
+    /**
+     * The number of attributes reported by the source for the current element. This includes
+     * namespace declarations.
+     */
+    private int orgAttributeCount;
+    
+    /**
+     * Array mapping attribute indexes as reported by
+     * {@link XmlHandler#resolveAttributeNamespace(int, String)} to indexes used for
+     * {@link #attributeStack}.
+     */
+    private int[] unresolvedAttributeRefs;
     
     private String stopCoalescing() {
         String data = accumulator.toString();
@@ -131,25 +152,13 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
         if (state == STATE_NEXT_TAG) {
             state = STATE_DEFAULT;
         }
-        if (namespaceURI.length() == 0) {
-            namespaceURI = null;
+        if (namespaceURI != null) {
+            this.namespaceURI = emptyStringToNull(namespaceURI);
         }
-        if (prefix.length() == 0) {
-            prefix = null;
-        }
-        this.namespaceURI = namespaceURI;
         this.localName = localName;
-        this.prefix = prefix;
+        this.prefix = emptyStringToNull(prefix);
         attributeCount = 0;
-        if (depth == elementStackSize) {
-            elementStackSize *= 2;
-            String[] newElementStack = new String[elementStackSize*3];
-            System.arraycopy(elementStack, 0, newElementStack, 0, depth*3);
-            elementStack = newElementStack;
-        }
-        elementStack[depth*3] = namespaceURI;
-        elementStack[depth*3+1] = localName;
-        elementStack[depth*3+2] = prefix;
+        orgAttributeCount = 0;
         namespaceContext.startScope();
         return true;
     }
@@ -178,10 +187,24 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
             System.arraycopy(attributeStack, 0, newStack, 0, attributeCount*5);
             attributeStack = newStack;
         }
-        attributeStack[attributeCount*5] = namespaceURI.length() == 0 ? null : namespaceURI;
+        attributeStack[attributeCount*5] = namespaceURI == null || namespaceURI.length() == 0 ? null : namespaceURI;
         attributeStack[attributeCount*5+1] = localName;
         attributeStack[attributeCount*5+2] = prefix.length() == 0 ? null : prefix;
         attributeStack[attributeCount*5+3] = type;
+        if (namespaceURI == null) {
+            int size = unresolvedAttributeRefs == null ? INITIAL_ATTRIBUTE_STACK_SIZE : unresolvedAttributeRefs.length;
+            while (size <= orgAttributeCount) {
+                size *= 2;
+            }
+            if (unresolvedAttributeRefs == null) {
+                unresolvedAttributeRefs = new int[size];
+            } else if (size != unresolvedAttributeRefs.length) {
+                int[] newArray = new int[size];
+                System.arraycopy(unresolvedAttributeRefs, 0, newArray, 0, unresolvedAttributeRefs.length);
+                unresolvedAttributeRefs = newArray;
+            }
+            unresolvedAttributeRefs[orgAttributeCount] = attributeCount;
+        }
         return true;
     }
 
@@ -189,6 +212,7 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
     protected boolean startNamespaceDeclaration(String prefix) {
         declaredPrefix = prefix;
         state = STATE_COALESCE;
+        orgAttributeCount++;
         return true;
     }
 
@@ -201,11 +225,34 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
             attributeStack[attributeCount*5+4] = stopCoalescing();
             attributeCount++;
         }
+        orgAttributeCount++;
+        return true;
+    }
+
+    @Override
+    protected boolean resolveElementNamespace(String namespaceURI) {
+        this.namespaceURI = emptyStringToNull(namespaceURI);
+        return true;
+    }
+
+    @Override
+    protected boolean resolveAttributeNamespace(int index, String namespaceURI) {
+        attributeStack[unresolvedAttributeRefs[index]*5] = emptyStringToNull(namespaceURI);
         return true;
     }
 
     @Override
     protected boolean attributesCompleted() {
+        if (depth == elementStackSize) {
+            elementStackSize *= 2;
+            String[] newElementStack = new String[elementStackSize*3];
+            System.arraycopy(elementStack, 0, newElementStack, 0, depth*3);
+            elementStack = newElementStack;
+        }
+        elementStack[depth*3] = namespaceURI;
+        elementStack[depth*3+1] = localName;
+        elementStack[depth*3+2] = prefix;
+        depth++;
         return false;
     }
 
@@ -666,9 +713,6 @@ public class StAXPivot extends XmlPivot implements XMLStreamReader {
                 nextEvent();
             }
             switch (eventType) {
-                case START_ELEMENT:
-                    depth++;
-                    break;
                 case END_ELEMENT:
                     namespaceContext.endScope();
                     break;

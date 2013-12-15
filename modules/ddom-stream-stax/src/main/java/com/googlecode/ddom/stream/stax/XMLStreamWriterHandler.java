@@ -21,8 +21,17 @@ import javax.xml.stream.XMLStreamWriter;
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
+import com.googlecode.ddom.util.collection.ObjectRingBuffer;
 
 public class XMLStreamWriterHandler implements XmlHandler {
+    static class Attribute {
+        int type;
+        String namespaceURI;
+        String name;
+        String prefix;
+        String value;
+    }
+    
     private static final int ATT_NS_AWARE = 1;
     private static final int ATT_NS_UNAWARE = 2;
     private static final int ATT_NAMESPACE_DECLARATION = 3;
@@ -30,11 +39,26 @@ public class XMLStreamWriterHandler implements XmlHandler {
     private final XMLStreamWriter writer;
     private boolean fragment;
     private boolean coalescing;
+    private String unresolvedElementPrefix;
+    private String unresolvedElementLocalName;
     private final StringAccumulator buffer = new StringAccumulator();
-    private int attType;
-    private String attNamespaceURI;
-    private String attName;
-    private String attPrefix;
+    private final ObjectRingBuffer<Attribute> attributes = new ObjectRingBuffer<Attribute>() {
+        @Override
+        protected Attribute createObject() {
+            return new Attribute();
+        }
+
+        @Override
+        protected void recycleObject(Attribute attribute) {
+            attribute.type = 0;
+            attribute.namespaceURI = null;
+            attribute.name = null;
+            attribute.prefix = null;
+            attribute.value = null;
+        }
+    };
+    private Attribute currentAttribute;
+    private int firstAttributeIndex;
     private String piTarget;
 
     public XMLStreamWriterHandler(XMLStreamWriter writer) {
@@ -80,10 +104,15 @@ public class XMLStreamWriterHandler implements XmlHandler {
     }
 
     public void startElement(String namespaceURI, String localName, String prefix) throws StreamException {
-        try {
-            writer.writeStartElement(prefix, localName, namespaceURI);
-        } catch (XMLStreamException ex) {
-            throw StAXExceptionUtil.toStreamException(ex);
+        if (namespaceURI == null) {
+            unresolvedElementPrefix = prefix;
+            unresolvedElementLocalName = localName;
+        } else {
+            try {
+                writer.writeStartElement(prefix, localName, namespaceURI);
+            } catch (XMLStreamException ex) {
+                throw StAXExceptionUtil.toStreamException(ex);
+            }
         }
     }
 
@@ -95,49 +124,85 @@ public class XMLStreamWriterHandler implements XmlHandler {
         }
     }
 
-    public void startAttribute(String name, String type) throws StreamException {
-        attType = ATT_NS_UNAWARE;
-        attName = name;
+    private void flushAttributes() throws StreamException {
+        if (unresolvedElementLocalName == null) {
+            while (!attributes.isEmpty()) {
+                Attribute attribute = attributes.peek();
+                try {
+                    switch (attribute.type) {
+                        case ATT_NS_AWARE:
+                            if (attribute.namespaceURI == null) {
+                                return;
+                            }
+                            writer.writeAttribute(attribute.prefix, attribute.namespaceURI, attribute.name, attribute.value);
+                            break;
+                        case ATT_NS_UNAWARE:
+                            writer.writeAttribute(attribute.name, attribute.value);
+                            break;
+                        case ATT_NAMESPACE_DECLARATION:
+                            writer.writeNamespace(attribute.prefix, attribute.value);
+                            break;
+                    }
+                } catch (XMLStreamException ex) {
+                    throw StAXExceptionUtil.toStreamException(ex);
+                }
+                attributes.pop();
+                firstAttributeIndex++;
+            }
+        }
+    }
+    
+    private Attribute newAttribute() {
         startCoalescing();
+        return currentAttribute = attributes.allocate();
+    }
+    
+    public void startAttribute(String name, String type) throws StreamException {
+        Attribute attribute = newAttribute();
+        attribute.type = ATT_NS_UNAWARE;
+        attribute.name = name;
     }
 
     public void startAttribute(String namespaceURI, String localName, String prefix, String type) throws StreamException {
-        attType = ATT_NS_AWARE;
-        attNamespaceURI = namespaceURI;
-        attName = localName;
-        attPrefix = prefix;
-        startCoalescing();
+        Attribute attribute = newAttribute();
+        attribute.type = ATT_NS_AWARE;
+        attribute.namespaceURI = namespaceURI;
+        attribute.name = localName;
+        attribute.prefix = prefix;
     }
 
     public void startNamespaceDeclaration(String prefix) throws StreamException {
-        attType = ATT_NAMESPACE_DECLARATION;
-        attPrefix = prefix;
-        startCoalescing();
+        Attribute attribute = newAttribute();
+        attribute.type = ATT_NAMESPACE_DECLARATION;
+        attribute.prefix = prefix;
     }
 
     public void endAttribute() throws StreamException {
+        currentAttribute.value = endCoalescing();
+        flushAttributes();
+    }
+
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
         try {
-            switch (attType) {
-                case ATT_NS_AWARE:
-                    writer.writeAttribute(attPrefix, attNamespaceURI, attName, endCoalescing());
-                    break;
-                case ATT_NS_UNAWARE:
-                    writer.writeAttribute(attName, endCoalescing());
-                    break;
-                case ATT_NAMESPACE_DECLARATION:
-                    writer.writeNamespace(attPrefix, endCoalescing());
-                    break;
-            }
+            writer.writeStartElement(unresolvedElementPrefix, unresolvedElementLocalName, namespaceURI);
         } catch (XMLStreamException ex) {
             throw StAXExceptionUtil.toStreamException(ex);
         }
-        attNamespaceURI = null;
-        attName = null;
-        attPrefix = null;
+        unresolvedElementPrefix = null;
+        unresolvedElementLocalName = null;
+        flushAttributes();
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+        attributes.peek(index-firstAttributeIndex).namespaceURI = namespaceURI;
+        flushAttributes();
     }
 
     public void attributesCompleted() {
-        // Nothing special to do here
+        if (!attributes.isEmpty()) {
+            throw new IllegalStateException();
+        }
+        firstAttributeIndex = 0;
     }
 
     public void processCharacterData(String data, boolean ignorable) throws StreamException {

@@ -19,21 +19,16 @@ import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 import com.googlecode.ddom.symbols.Symbols;
 
-final class NSUnawareElementHandler extends ElementHandler {
+final class NSUnawareOutputHandler extends OutputHandler {
     private String[] nameStack = new String[16];
     private int depth;
     
-    public NSUnawareElementHandler(Symbols symbols, XmlHandler handler) {
+    public NSUnawareOutputHandler(Symbols symbols, XmlHandler handler) {
         super(symbols, handler);
     }
 
     @Override
-    boolean pushPendingEvent() throws StreamException {
-        return false;
-    }
-
-    @Override
-    boolean handleStartElement(char[] name, int len) throws StreamException {
+    void startElement(char[] name, int len) throws StreamException {
         String n = symbols.getSymbol(name, 0, len);
         if (depth == nameStack.length) {
             String[] newNameStack = new String[nameStack.length*2];
@@ -42,25 +37,21 @@ final class NSUnawareElementHandler extends ElementHandler {
         }
         nameStack[depth++] = n;
         handler.startElement(n);
-        return true;
     }
 
     @Override
-    boolean handleStartAttribute(char[] name, int len) throws StreamException {
+    void startAttribute(char[] name, int len) throws StreamException {
         handler.startAttribute(symbols.getSymbol(name, 0, len), "CDATA");
-        return true;
     }
     
     @Override
-    boolean handleCharacterData(String data) throws StreamException {
+    void processCharacterData(String data) throws StreamException {
         handler.processCharacterData(data, false);
-        return true;
     }
 
     @Override
-    boolean handleEndAttribute() throws StreamException {
+    void endAttribute() throws StreamException {
         handler.endAttribute();
-        return true;
     }
 
     @Override
@@ -69,7 +60,7 @@ final class NSUnawareElementHandler extends ElementHandler {
     }
 
     @Override
-    void handleEndElement(char[] name, int len) throws StreamException {
+    void endElement(char[] name, int len) throws StreamException {
         depth--;
         if (name != null) {
             String n = nameStack[depth];

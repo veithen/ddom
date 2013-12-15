@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,13 @@ import com.googlecode.ddom.stream.XmlHandler;
 // TODO: what about ID attributes???
 final class DOMOutputHandler implements XmlHandler {
     private final Document document;
+    private Node elementParent;
+    private Element element;
+    private String unresolvedElementPrefix;
+    private String unresolvedElementLocalName;
     private Node node;
+    private Attr[] attributes = new Attr[16];
+    private int attributeCount;
     private boolean coalescing;
     private final StringAccumulator buffer = new StringAccumulator();
     private String piTarget;
@@ -74,48 +80,78 @@ final class DOMOutputHandler implements XmlHandler {
     }
     
     public void startElement(String tagName) {
-        Element element = document.createElement(tagName);
+        elementParent = node;
+        element = document.createElement(tagName);
         node.appendChild(element);
         node = element;
     }
 
     public void startElement(String namespaceURI, String localName, String prefix) {
-        Element element = document.createElementNS(emptyStringToNull(namespaceURI), getQualifiedName(localName, prefix));
-        node.appendChild(element);
-        node = element;
+        elementParent = node;
+        if (namespaceURI != null) {
+            element = document.createElementNS(emptyStringToNull(namespaceURI), getQualifiedName(localName, prefix));
+            elementParent.appendChild(element);
+        } else {
+            unresolvedElementPrefix = prefix;
+            unresolvedElementLocalName = localName;
+        }
+        node = null;
     }
 
     public void endElement() {
         node = node.getParentNode();
     }
 
-    public void startAttribute(String name, String type) {
-        Attr attr = document.createAttribute(name);
-        ((Element)node).setAttributeNode(attr);
+    private void addAttribute(Attr attr) {
+        if (attributeCount == attributes.length) {
+            Attr[] newAttributes = new Attr[attributes.length*2];
+            System.arraycopy(attributes, 0, newAttributes, 0, attributes.length);
+            attributes = newAttributes;
+        }
+        attributes[attributeCount++] = attr;
         node = attr;
+    }
+    
+    public void startAttribute(String name, String type) {
+        addAttribute(document.createAttribute(name));
     }
 
     public void startAttribute(String namespaceURI, String localName, String prefix, String type) {
-        Attr attr = document.createAttributeNS(emptyStringToNull(namespaceURI), getQualifiedName(localName, prefix));
-        ((Element)node).setAttributeNodeNS(attr);
-        node = attr;
+        addAttribute(document.createAttributeNS(emptyStringToNull(namespaceURI), getQualifiedName(localName, prefix)));
     }
 
     public void startNamespaceDeclaration(String prefix) {
-        Attr attr = document.createAttributeNS(
+        addAttribute(document.createAttributeNS(
                 XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
                 prefix.length() == 0 ? XMLConstants.XMLNS_ATTRIBUTE
-                                     : XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix);
-        ((Element)node).setAttributeNodeNS(attr);
-        node = attr;
+                                     : XMLConstants.XMLNS_ATTRIBUTE + ":" + prefix));
     }
 
     public void endAttribute() {
-        node = ((Attr)node).getOwnerElement();
+        node = null;
+    }
+
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
+        element = document.createElementNS(emptyStringToNull(namespaceURI), getQualifiedName(unresolvedElementLocalName, unresolvedElementPrefix));
+        elementParent.appendChild(element);
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+        Attr attr = attributes[index];
+        String prefix = attr.getPrefix();
+        String localName = attr.getLocalName();
+        attributes[index] = (Attr)document.renameNode(attr, emptyStringToNull(namespaceURI), prefix == null ? localName : prefix + ":" + localName);
     }
 
     public void attributesCompleted() {
-        // Nothing special to do here
+        for (int i=0; i<attributeCount; i++) {
+            element.setAttributeNodeNS(attributes[i]);
+            attributes[i] = null;
+        }
+        node = element;
+        element = null;
+        elementParent = null;
+        attributeCount = 0;
     }
 
     public void completed() {

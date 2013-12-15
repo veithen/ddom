@@ -18,8 +18,10 @@ package com.googlecode.ddom.backend.linkedlist;
 import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.backend.Implementation;
+import com.googlecode.ddom.backend.linkedlist.intf.InputContext;
 import com.googlecode.ddom.backend.linkedlist.intf.LLParentNode;
 import com.googlecode.ddom.core.ClonePolicy;
+import com.googlecode.ddom.core.CoreModelStreamException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.stream.StreamException;
@@ -45,11 +47,29 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
         this.prefix = prefix;
     }
 
+    void resolveNamespace(String namespaceURI) {
+        if (this.namespaceURI == null) {
+            this.namespaceURI = namespaceURI;
+        }
+    }
+    
     public final int coreGetNodeType() {
         return NS_AWARE_ATTRIBUTE_NODE;
     }
 
-    public final String coreGetNamespaceURI() {
+    public final String coreGetNamespaceURI() throws DeferredBuildingException {
+        if (namespaceURI == null) {
+            // namespaceURI should only be null if not all attributes have been
+            // parsed and the namespace is still unresolved. Continue processing
+            // the attributes until the namespace is resolved.
+            Element element = (Element)coreGetOwnerElement();
+            if (element.internalGetState() == STATE_ATTRIBUTES_PENDING) {
+                InputContext inputContext = element.internalGetOrCreateInputContext();
+                do {
+                    inputContext.next(false);
+                } while (namespaceURI == null && element.internalGetState() == STATE_ATTRIBUTES_PENDING);
+            }
+        }
         return namespaceURI;
     }
 
@@ -78,7 +98,13 @@ public class NSAwareAttribute extends TypedAttribute implements CoreNSAwareAttri
     }
 
     public final void internalGenerateStartEvent(XmlHandler handler) throws StreamException {
-        handler.startAttribute(namespaceURI, localName, prefix, coreGetType());
+        try {
+            // TODO: probably we need to call coreGetNamespaceURI() elsewhere as well
+            // TODO: calling coreGetNamespaceURI is only necessary if preserve=true
+            handler.startAttribute(coreGetNamespaceURI(), localName, prefix, coreGetType());
+        } catch (DeferredBuildingException ex) {
+            throw new CoreModelStreamException(ex);
+        }
     }
 
     @Override

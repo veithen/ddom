@@ -190,10 +190,32 @@ public class Builder extends XmlOutput {
             nodeCompleted(ATTRIBUTE);
         }
 
+        public void resolveElementNamespace(String namespaceURI) throws StreamException {
+            XmlHandler passThroughHandler = context.getPassThroughHandler();
+            if (passThroughHandler == null) {
+                try {
+                    ((NSAwareElement)context.getTargetNode()).resolveNamespace(namespaceURI);
+                } catch (ElementNameMismatchException ex) {
+                    throw new CoreModelStreamException(ex);
+                }
+            } else {
+                passThroughHandler.resolveElementNamespace(namespaceURI);
+            }
+        }
+
+        public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+            XmlHandler passThroughHandler = context.getPassThroughHandler();
+            if (passThroughHandler == null) {
+                ((NSAwareAttribute)attributes[index]).resolveNamespace(namespaceURI);
+            } else {
+                passThroughHandler.resolveAttributeNamespace(index, namespaceURI);
+            }
+        }
+
         public void attributesCompleted() throws StreamException {
             XmlHandler passThroughHandler = context.getPassThroughHandler();
             if (passThroughHandler == null) {
-                lastAttribute = null;
+                attributeCount = 0;
                 context.getTargetNode().internalSetState(CoreParentNode.STATE_CHILDREN_PENDING);
                 nodeAppended = true;
             } else {
@@ -304,7 +326,8 @@ public class Builder extends XmlOutput {
     private Context context;
     
     private LLChildNode lastSibling; // The last child of the current node
-    private Attribute lastAttribute;
+    private Attribute[] attributes = new Attribute[16];
+    private int attributeCount;
     private String pendingText; // Text that has not yet been added to the tree
     private boolean nodeAppended;
     
@@ -465,15 +488,20 @@ public class Builder extends XmlOutput {
     }
     
     private void appendAttribute(Attribute attr) {
+        if (attributes.length == attributeCount) {
+            Attribute[] newAttributes = new Attribute[attributes.length*2];
+            System.arraycopy(attributes, 0, newAttributes, 0, attributes.length);
+            attributes = newAttributes;
+        }
         Element element = (Element)context.getTargetNode();
         attr.setOwnerElement(element);
-        if (lastAttribute == null) {
+        if (attributeCount == 0) {
             element.setFirstAttribute(attr);
         } else {
-            lastAttribute.setNextAttribute(attr);
+            attributes[attributeCount-1].setNextAttribute(attr);
         }
+        attributes[attributeCount++] = attr;
         newContext(attr);
-        lastAttribute = attr;
     }
     
     private void nodeCompleted(int nodeType) throws StreamException {

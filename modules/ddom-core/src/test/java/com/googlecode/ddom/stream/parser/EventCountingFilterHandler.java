@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,16 @@ final class EventCountingFilterHandler implements XmlHandler {
     public void endAttribute() throws StreamException {
         filter.increment("endAttribute");
         parent.endAttribute();
+    }
+
+    public void resolveElementNamespace(String namespaceURI) throws StreamException {
+        // TODO: should we count?
+        parent.resolveElementNamespace(namespaceURI);
+    }
+
+    public void resolveAttributeNamespace(int index, String namespaceURI) throws StreamException {
+        // TODO: should we count?
+        parent.resolveAttributeNamespace(index, namespaceURI);
     }
 
     public void attributesCompleted() throws StreamException {

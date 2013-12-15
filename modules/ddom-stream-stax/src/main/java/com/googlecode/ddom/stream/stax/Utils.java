@@ -21,4 +21,8 @@ final class Utils {
     static String nullToEmptyString(String value) {
         return value == null ? "" : value;
     }
+    
+    static String emptyStringToNull(String value) {
+        return value.length() == 0 ? null : value;
+    }
 }

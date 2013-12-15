@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,10 @@ public abstract class XmlPivot extends XmlOutput {
     protected abstract boolean startNamespaceDeclaration(String prefix);
     
     protected abstract boolean endAttribute();
+    
+    protected abstract boolean resolveElementNamespace(String namespaceURI);
+    
+    protected abstract boolean resolveAttributeNamespace(int index, String namespaceURI);
     
     protected abstract boolean attributesCompleted();
     

@@ -15,7 +15,8 @@
  */
 package com.googlecode.ddom.backend.testsuite;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.google.code.ddom.commons.lang.StringAccumulator;
 import com.googlecode.ddom.stream.StreamException;
@@ -28,6 +29,7 @@ public class StreamAssert extends XmlPivot {
     private String expectedName;
     private String expectedPrefix;
     private String expectedData;
+    private String unresolvedElementNamespaceURI;
     
     protected boolean startEntity(boolean fragment, String inputEncoding) {
         assertEquals(expectedEvent, fragment ? Event.START_FRAGMENT : Event.START_DOCUMENT);
@@ -59,7 +61,11 @@ public class StreamAssert extends XmlPivot {
     
     protected boolean startElement(String namespaceURI, String localName, String prefix) {
         assertEquals(expectedEvent, Event.START_NS_AWARE_ELEMENT);
-        assertEquals(expectedNamespaceURI, namespaceURI);
+        if (namespaceURI == null) {
+            unresolvedElementNamespaceURI = expectedNamespaceURI;
+        } else {
+            assertEquals(expectedNamespaceURI, namespaceURI);
+        }
         assertEquals(expectedName, localName);
         assertEquals(expectedPrefix, prefix);
         return false;
@@ -92,6 +98,18 @@ public class StreamAssert extends XmlPivot {
         return false;
     }
     
+    protected boolean resolveElementNamespace(String namespaceURI) {
+        assertNotNull(unresolvedElementNamespaceURI);
+        assertEquals(unresolvedElementNamespaceURI, namespaceURI);
+        unresolvedElementNamespaceURI = null;
+        return true;
+    }
+
+    protected boolean resolveAttributeNamespace(int index, String namespaceURI) {
+        // TODO
+        return true;
+    }
+
     protected boolean attributesCompleted() {
         assertEquals(expectedEvent, Event.ATTRIBUTES_COMPLETED);
         return false;
