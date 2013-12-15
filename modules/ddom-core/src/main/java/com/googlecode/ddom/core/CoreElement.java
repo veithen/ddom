@@ -52,14 +52,25 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
     /**
      * Set the source of this element. The effect of this method is similar to
      * {@link CoreParentNode#coreSetContent(XmlSource)}, except that the provided {@link XmlSource}
-     * object is expected to describe the element itself, not its content. When the source is
-     * expanded, the name (tag name for a namespace unaware element; namespace URI, local name and
-     * prefix for a namespace aware element) of the root element information item are checked for
-     * consistency with the corresponding values set during the construction of this node.
+     * object is expected to describe the element itself, not its content.
+     * <p>
+     * The provided {@link XmlSource} must produce a single root element with the correct namespace
+     * awareness. If this is a {@link CoreNSAwareElement} (resp. {@link CoreNSUnawareElement} and
+     * the {@link XmlSource} produces a namespace unaware (resp. namespace aware) element, then this
+     * will result in a {@link ElementNamespaceAwarenessMismatchException}.
+     * <p>
+     * In addition, when the source is expanded, the name (tag name for a namespace unaware element;
+     * namespace URI, local name and prefix for a namespace aware element) of the root element
+     * information item are checked for consistency with the corresponding values set during the
+     * construction of this node. If there is a mismatch, then a
+     * {@link ElementNameMismatchException} will be thrown.
      * <p>
      * If during construction of this element, the name (or one or more of its components) was left
      * unspecified, then it will be determined lazily by expanding the source of the element set
      * with this method.
+     * <p>
+     * XML declarations, comments, processing instructions and ignorable character data produced by
+     * the {@link XmlSource} before or after the root element will be ignored.
      * 
      * @param source
      *            the source for the element

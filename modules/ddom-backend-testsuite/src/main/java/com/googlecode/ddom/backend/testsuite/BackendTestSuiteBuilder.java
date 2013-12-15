@@ -119,10 +119,15 @@ public class BackendTestSuiteBuilder {
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetLocalNameInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetNamespaceURIInStateSourceSet(config));
         suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetPrefixInStateSourceSet(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSource(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceWithUnexpectedLocalName(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceWithUnexpectedNamespaceURI(config));
-        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceWithUnexpectedPrefix(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNamespaceAwarenessMismatch1(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNamespaceAwarenessMismatch2(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNSAware(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNSAwareWithLocalNameMismatch(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNSAwareWithNamespaceURIMismatch(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNSAwareWithPrefixMismatch(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNSUnaware(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceNSUnawareWithNameMismatch(config));
+        suite.addTest(new com.googlecode.ddom.backend.testsuite.element.TestCoreSetSourceWithExtraContent(config));
         addNSAwareNamedNodeTests(suite, nodeFactory, new NSAwareNamedNodeFactory() {
             public Class<? extends CoreNSAwareNamedNode> getNodeClass() {
                 return CoreNSAwareElement.class;

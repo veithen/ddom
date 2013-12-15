@@ -20,15 +20,15 @@ import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 import com.googlecode.ddom.core.ElementNameMismatchException;
 
-public class TestCoreSetSourceWithUnexpectedLocalName extends BackendTestCase {
-    public TestCoreSetSourceWithUnexpectedLocalName(BackendTestSuiteConfig config) {
+public class TestCoreSetSourceNSAwareWithPrefixMismatch extends BackendTestCase {
+    public TestCoreSetSourceNSAwareWithPrefixMismatch(BackendTestSuiteConfig config) {
         super(config);
     }
 
     @Override
     protected void runTest() throws Throwable {
         CoreNSAwareElement element = nodeFactory.createElement(null, "urn:ns", "test", "p");
-        element.coreSetSource(toXmlSource("<p:other xmlns:p='urn:ns'>text</p:test>", true, true));
+        element.coreSetSource(toXmlSource("<other:test xmlns:other='urn:ns'>text</other:test>", true, true));
         try {
             element.coreGetFirstChild();
             fail("Expected ElementNameMismatchException");

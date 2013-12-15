@@ -17,18 +17,18 @@ package com.googlecode.ddom.backend.testsuite.element;
 
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.googlecode.ddom.core.CoreNSAwareElement;
+import com.googlecode.ddom.core.CoreNSUnawareElement;
 import com.googlecode.ddom.core.ElementNameMismatchException;
 
-public class TestCoreSetSourceWithUnexpectedPrefix extends BackendTestCase {
-    public TestCoreSetSourceWithUnexpectedPrefix(BackendTestSuiteConfig config) {
+public class TestCoreSetSourceNSUnawareWithNameMismatch extends BackendTestCase {
+    public TestCoreSetSourceNSUnawareWithNameMismatch(BackendTestSuiteConfig config) {
         super(config);
     }
 
     @Override
     protected void runTest() throws Throwable {
-        CoreNSAwareElement element = nodeFactory.createElement(null, "urn:ns", "test", "p");
-        element.coreSetSource(toXmlSource("<other:test xmlns:other='urn:ns'>text</other:test>", true, true));
+        CoreNSUnawareElement element = nodeFactory.createElement(null, "test");
+        element.coreSetSource(toXmlSource("<other>text</other>", false, true));
         try {
             element.coreGetFirstChild();
             fail("Expected ElementNameMismatchException");

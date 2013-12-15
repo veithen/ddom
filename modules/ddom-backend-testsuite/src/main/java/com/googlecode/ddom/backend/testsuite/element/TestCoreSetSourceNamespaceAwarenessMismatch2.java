@@ -17,22 +17,22 @@ package com.googlecode.ddom.backend.testsuite.element;
 
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.googlecode.ddom.core.CoreNSAwareElement;
-import com.googlecode.ddom.core.ElementNameMismatchException;
+import com.googlecode.ddom.core.CoreNSUnawareElement;
+import com.googlecode.ddom.core.ElementNamespaceAwarenessMismatchException;
 
-public class TestCoreSetSourceWithUnexpectedNamespaceURI extends BackendTestCase {
-    public TestCoreSetSourceWithUnexpectedNamespaceURI(BackendTestSuiteConfig config) {
+public class TestCoreSetSourceNamespaceAwarenessMismatch2 extends BackendTestCase {
+    public TestCoreSetSourceNamespaceAwarenessMismatch2(BackendTestSuiteConfig config) {
         super(config);
     }
 
     @Override
     protected void runTest() throws Throwable {
-        CoreNSAwareElement element = nodeFactory.createElement(null, "urn:ns", "test", "p");
-        element.coreSetSource(toXmlSource("<p:test xmlns:p='urn:other'>text</p:test>", true, true));
+        CoreNSUnawareElement element = nodeFactory.createElement(null, null);
+        element.coreSetSource(toXmlSource("<p:test xmlns:p='urn:ns'>text</p:test>", true, true));
         try {
             element.coreGetFirstChild();
-            fail("Expected ElementNameMismatchException");
-        } catch (ElementNameMismatchException ex) {
+            fail("Expected ElementNamespaceAwarenessMismatchException");
+        } catch (ElementNamespaceAwarenessMismatchException ex) {
             // Expected
         }
     }

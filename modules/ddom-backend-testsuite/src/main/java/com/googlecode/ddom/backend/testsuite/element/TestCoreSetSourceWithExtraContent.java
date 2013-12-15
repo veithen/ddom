@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,29 @@ import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
 import com.googlecode.ddom.core.CoreCharacterData;
 import com.googlecode.ddom.core.CoreChildNode;
+import com.googlecode.ddom.core.CoreDocument;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 
-public class TestCoreSetSource extends BackendTestCase {
-    public TestCoreSetSource(BackendTestSuiteConfig config) {
+public class TestCoreSetSourceWithExtraContent extends BackendTestCase {
+    public TestCoreSetSourceWithExtraContent(BackendTestSuiteConfig config) {
         super(config);
     }
 
     @Override
     protected void runTest() throws Throwable {
-        CoreNSAwareElement element = nodeFactory.createElement(null, null, null, null);
-        element.coreSetSource(toXmlSource("<p:test xmlns:p='urn:ns'>text</p:test>", true, true));
-        assertEquals("urn:ns", element.coreGetNamespaceURI());
-        assertEquals("test", element.coreGetLocalName());
-        assertEquals("p", element.coreGetPrefix());
+        CoreDocument document = nodeFactory.createDocument();
+        document.coreSetXmlVersion("1.1");
+        document.coreSetXmlEncoding("utf-8");
+        document.coreSetStandalone(Boolean.FALSE);
+        CoreNSAwareElement element = document.coreAppendElement("urn:ns", "test", "p");
+        element.coreSetSource(toXmlSource("<?xml version='1.0' encoding='ascii'?> <!--comment--> <?pi test?> <p:test xmlns:p='urn:ns'>text</p:test> <!--comment-->", true, true));
         CoreChildNode child = element.coreGetFirstChild();
         assertTrue(child instanceof CoreCharacterData);
         assertEquals("text", ((CoreCharacterData)child).coreGetData());
+        assertNull(child.coreGetNextSibling());
+        // coreSetSource should not have messed with the properties of the document
+        assertEquals("1.1", document.coreGetXmlVersion());
+        assertEquals("utf-8", document.coreGetXmlEncoding());
+        assertEquals(Boolean.FALSE, document.coreGetStandalone());
     }
 }
