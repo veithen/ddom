@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,17 @@ public final class Policies {
      */
     public static final TextCollectorPolicy GET_TEXT_CONTENT = new TextCollectorPolicy() {
         public Action getAction(int nodeType, boolean textSeen) {
-            // TODO: need to make sure that we have enough unit test coverage for this
-            return nodeType == CoreNode.CDATA_SECTION_NODE ? Action.RECURSE : Action.SKIP;
+            switch (nodeType) {
+                case CoreNode.PROCESSING_INSTRUCTION_NODE:
+                case CoreNode.COMMENT_NODE:
+                    return Action.SKIP;
+                case CoreNode.NS_UNAWARE_ELEMENT_NODE:
+                case CoreNode.NS_AWARE_ELEMENT_NODE:
+                case CoreNode.CDATA_SECTION_NODE:
+                    return Action.RECURSE;
+                default:
+                    throw new IllegalStateException("Unexpected node type " + nodeType);
+            }
         }
     };
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -248,6 +248,16 @@ public class ElementTest {
         assertEquals("test", element.getTextContent());
     }
     
+    @Validated @Test
+    public void testGetTextContentWithCommentChild() {
+        Document doc = domUtil.newDocument();
+        Element element = doc.createElementNS(null, "test");
+        element.appendChild(doc.createTextNode("a"));
+        element.appendChild(doc.createComment("b"));
+        element.appendChild(doc.createTextNode("c"));
+        assertEquals("ac", element.getTextContent());
+    }
+    
     /**
      * Test that invoking {@link Element#removeAttribute(String)} has no effect if there is no
      * attribute with the given name. This is not covered by the DOM Conformance Test Suite.
@@ -277,5 +287,11 @@ public class ElementTest {
         element.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:p", "urn:test");
         Element clone = (Element)element.cloneNode(true);
         assertEquals("urn:test", clone.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "p"));
+    }
+    
+    @Validated @Test
+    public void testGetElementsByTagNameWithNSUnawareElements() {
+        Document doc = domUtil.parse(false, "<root><a/><b><a/></b><a/></root>");
+        assertEquals(3, doc.getElementsByTagName("a").getLength());
     }
 }

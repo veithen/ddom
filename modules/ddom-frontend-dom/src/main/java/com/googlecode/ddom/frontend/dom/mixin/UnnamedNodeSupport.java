@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.googlecode.ddom.core.CoreDocumentFragment;
 import com.googlecode.ddom.core.CoreLeafNode;
 import com.googlecode.ddom.core.CoreProcessingInstruction;
 import com.googlecode.ddom.frontend.Mixin;
+import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 /**
  * Provides implementations for {@link Node#getNamespaceURI()}, {@link Node#getPrefix()},
@@ -43,7 +44,11 @@ public abstract class UnnamedNodeSupport implements Node {
     }
 
     public final void setPrefix(String prefix) throws DOMException {
-        // Ignored
+        // The DOM spec says that "When [the namespace prefix] is defined to be null, setting it 
+        // has no effect". However, Xerces throws an exception instead of just ignoring the call.
+        // This makes more sense because setting the namespace prefix of a node that is not
+        // and element or an attribute doesn't make sense and always indicates a programming error.
+        throw DOMExceptionTranslator.newDOMException(DOMException.NAMESPACE_ERR);
     }
 
     public final String getLocalName() {

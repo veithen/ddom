@@ -55,7 +55,7 @@ public interface ElementMatcher<T extends CoreElement> {
     ElementMatcher<CoreElement> BY_NAME = new ElementMatcher<CoreElement>() {
         public boolean matches(CoreElement element, String namespaceURI, String name) throws DeferredBuildingException {
             if (element instanceof CoreNSUnawareElement) {
-                return name.equals((CoreNSUnawareElement)element);
+                return name.equals(((CoreNSUnawareElement)element).coreGetName());
             } else {
                 CoreNSAwareElement nsAwareElement = (CoreNSAwareElement)element;
                 String prefix = nsAwareElement.coreGetPrefix();

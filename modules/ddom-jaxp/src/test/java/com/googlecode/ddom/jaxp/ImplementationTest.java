@@ -27,9 +27,6 @@ import org.apache.axiom.ts.dom.document.TestNormalizeDocumentNamespace;
 import org.apache.axiom.ts.dom.document.TestTransformerWithIdentityStylesheet;
 import org.apache.axiom.ts.dom.documenttype.TestWithParser1;
 import org.apache.axiom.ts.dom.documenttype.TestWithParser2;
-import org.apache.axiom.ts.dom.element.TestGetElementsByTagName;
-import org.apache.axiom.ts.dom.element.TestGetTextContent;
-import org.apache.axiom.ts.dom.text.TestSetPrefix;
 
 public class ImplementationTest extends TestCase {
     public static TestSuite suite() {
@@ -40,9 +37,6 @@ public class ImplementationTest extends TestCase {
         // TODO
         builder.exclude(TestAllowedChildren.class);
         builder.exclude(TestNormalizeDocumentNamespace.class);
-        builder.exclude(TestGetElementsByTagName.class);
-        builder.exclude(TestGetTextContent.class);
-        builder.exclude(TestSetPrefix.class);
         builder.exclude(TestCloneNode.class);
         builder.exclude(TestTransformerWithIdentityStylesheet.class);
         builder.exclude(TestWithParser1.class);
