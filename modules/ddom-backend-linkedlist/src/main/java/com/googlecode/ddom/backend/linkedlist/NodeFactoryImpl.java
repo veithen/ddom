@@ -45,11 +45,11 @@ public class NodeFactoryImpl implements NodeFactory {
     private NodeFactoryImpl() {}
     
     public final CoreDocument createDocument() {
-        return new Document(modelExtension == null ? ModelExtension.NULL : modelExtension);
+        return new Document(modelExtension);
     }
 
     public final <T extends CoreDocument> T createDocument(Class<T> extensionInterface) {
-        return extensionInterface.cast(documentFactory.create(extensionInterface, modelExtension == null ? ModelExtension.NULL : modelExtension));
+        return extensionInterface.cast(documentFactory.create(extensionInterface, modelExtension));
     }
 
     public final CoreDocumentTypeDeclaration createDocumentTypeDeclaration(CoreDocument document, String rootName, String publicId, String systemId) {

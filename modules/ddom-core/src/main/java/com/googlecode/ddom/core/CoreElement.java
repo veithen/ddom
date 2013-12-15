@@ -69,8 +69,9 @@ public interface CoreElement extends CoreChildNode, CoreParentNode {
      * unspecified, then it will be determined lazily by expanding the source of the element set
      * with this method.
      * <p>
-     * XML declarations, comments, processing instructions and ignorable character data produced by
-     * the {@link XmlSource} before or after the root element will be ignored.
+     * XML declarations, document type declarations, comments, processing instructions and ignorable
+     * character data produced by the {@link XmlSource} before or after the root element will be
+     * ignored.
      * 
      * @param source
      *            the source for the element

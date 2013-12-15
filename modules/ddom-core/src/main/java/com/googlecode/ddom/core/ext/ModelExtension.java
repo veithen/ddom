@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,6 @@
 package com.googlecode.ddom.core.ext;
 
 public interface ModelExtension {
-    ModelExtension NULL = new ModelExtension() {
-        public Class<?> mapElement(String namespaceURI, String localName) {
-            return null;
-        }
-
-        public ModelExtensionMapper newMapper() {
-            return ModelExtensionMapper.NULL;
-        }
-    };
-    
     Class<?> mapElement(String namespaceURI, String localName);
     
     ModelExtensionMapper newMapper();

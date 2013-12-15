@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,40 @@ import com.googlecode.ddom.backend.Implementation;
 import com.googlecode.ddom.backend.linkedlist.intf.LLElement;
 import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreNSUnawareElement;
+import com.googlecode.ddom.core.DeferredBuildingException;
+import com.googlecode.ddom.core.ElementNameMismatchException;
 import com.googlecode.ddom.stream.StreamException;
 import com.googlecode.ddom.stream.XmlHandler;
 
 // @Implementation
 public class NSUnawareElement extends Element implements CoreNSUnawareElement {
-    private final String tagName;
+    private String tagName;
 
     public NSUnawareElement(Document document, String tagName, boolean complete) {
         super(document, complete);
         this.tagName = tagName;
     }
 
+    void initName(String tagName) throws ElementNameMismatchException {
+        if (internalGetFlag(Flags.LOCAL_NAME_SET)) {
+            // Do nothing; keep the overridden name
+        } else if (this.tagName != null) {
+            if (!this.tagName.equals(tagName)) {
+                throw new ElementNameMismatchException("Unexpected name");
+            }
+        } else {
+            this.tagName = tagName;
+        }
+    }
+    
     public final int coreGetNodeType() {
         return NS_UNAWARE_ELEMENT_NODE;
     }
 
-    public final String coreGetName() {
+    public final String coreGetName() throws DeferredBuildingException {
+        if (tagName == null && internalGetState() == STATE_SOURCE_SET) {
+            internalGetOrCreateInputContext();
+        }
         return tagName;
     }
 

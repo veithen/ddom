@@ -37,7 +37,7 @@ public class TestCoreGetNextSiblingWithConsumedParent extends BackendTestCase {
 
     @Override
     protected void runTest() throws Throwable {
-        CoreElement parent = parse("<root><!--A--><!--B--><!--C-->", true).coreGetDocumentElement();
+        CoreElement parent = parse("<root><!--A--><!--B--><!--C--></root>", true).coreGetDocumentElement();
         CoreChildNode firstChild = parent.coreGetFirstChild();
         new Stream(parent.coreGetInput(false), new NullXmlOutput()).flush();
         try {

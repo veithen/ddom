@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2013 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package com.googlecode.ddom.core;
  * 
  * @author Andreas Veithen
  */
+// TODO: we are missing coreSetName here!
 public interface CoreNSUnawareNamedNode extends CoreNode {
     /**
      * Get the name of this node. If the node is an element whose name was left unspecified during
@@ -27,7 +28,7 @@ public interface CoreNSUnawareNamedNode extends CoreNode {
      * {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * 
      * @return the name of the node
-     * @throws DeferredParsingException
+     * @throws DeferredBuildingException
      *             If an error occurs while processing the source object of this node set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      * @throws IllegalStateException
@@ -35,5 +36,5 @@ public interface CoreNSUnawareNamedNode extends CoreNode {
      *             object has been set with
      *             {@link CoreElement#coreSetSource(com.googlecode.ddom.stream.XmlSource)}.
      */
-    String coreGetName() throws DeferredParsingException;
+    String coreGetName() throws DeferredBuildingException;
 }

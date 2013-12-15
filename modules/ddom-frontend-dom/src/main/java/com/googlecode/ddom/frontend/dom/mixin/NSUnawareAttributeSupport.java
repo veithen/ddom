@@ -17,7 +17,7 @@ package com.googlecode.ddom.frontend.dom.mixin;
 
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSUnawareAttribute;
-import com.googlecode.ddom.core.DeferredParsingException;
+import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.dom.intf.DOMNSUnawareAttribute;
 import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
@@ -25,7 +25,7 @@ import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 
 @Mixin(CoreNSUnawareAttribute.class)
 public abstract class NSUnawareAttributeSupport implements DOMNSUnawareAttribute {
-    public final DOMParentNode shallowClone() throws DeferredParsingException {
+    public final DOMParentNode shallowClone() throws DeferredBuildingException {
         return (DOMNSUnawareAttribute)coreGetNodeFactory().createAttribute(coreGetOwnerDocument(true), coreGetName(), null, coreGetType());
     }
     

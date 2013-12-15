@@ -33,7 +33,6 @@ import com.googlecode.ddom.core.NodeConsumedException;
 import com.googlecode.ddom.core.NodeMigrationException;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.SelfRelationshipException;
-import com.googlecode.ddom.core.ext.ModelExtension;
 
 public final class LLChildNodeHelper {
     private LLChildNodeHelper() {}
@@ -47,7 +46,7 @@ public final class LLChildNodeHelper {
             LLChildNode rootChildNode = (LLChildNode)root;
             LLDocument document = (LLDocument)rootChildNode.internalGetOwner();
             if (document == null && create) {
-                document = new Document(ModelExtension.NULL); // TODO: model extension???
+                document = new Document(null); // TODO: model extension???
                 rootChildNode.internalSetOwner(document);
             }
             return document;
