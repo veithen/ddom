@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.googlecode.ddom.frontend.axiom.soap.support;
 
 import org.apache.axiom.soap.SOAPEnvelope;
+import org.apache.axiom.soap.SOAPMessage;
 import org.apache.axiom.soap.SOAPModelBuilder;
 
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPMessage;
@@ -24,6 +25,10 @@ import com.googlecode.ddom.frontend.axiom.support.OMXMLParserWrapperImpl;
 public class SOAPModelBuilderImpl extends OMXMLParserWrapperImpl implements SOAPModelBuilder {
     public SOAPModelBuilderImpl(AxiomSOAPMessage message) {
         super(message);
+    }
+
+    public final SOAPMessage getSOAPMessage() {
+        return (SOAPMessage)getDocument();
     }
 
     public final SOAPEnvelope getSOAPEnvelope() {
