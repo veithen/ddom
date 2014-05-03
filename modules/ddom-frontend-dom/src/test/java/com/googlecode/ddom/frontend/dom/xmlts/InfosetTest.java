@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@
  */
 package com.googlecode.ddom.frontend.dom.xmlts;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.axiom.testutils.suite.MatrixTestCase;
+import org.apache.axiom.testutils.suite.MatrixTestSuiteBuilder;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.w3c.dom.Document;
 
@@ -30,12 +31,12 @@ import com.googlecode.ddom.frontend.dom.DDOMUtil;
 import com.googlecode.ddom.frontend.dom.DOMUtil;
 import com.googlecode.ddom.frontend.dom.XercesDOMUtil;
 
-public class InfosetTest extends TestCase {
+public class InfosetTest extends MatrixTestCase {
     private final XMLConformanceTest test;
     
     public InfosetTest(XMLConformanceTest test) {
-        super(test.getName());
         this.test = test;
+        addTestParameter("id", test.getId());
     }
 
     private Document loadDocument(DOMUtil domUtil) {
@@ -60,10 +61,14 @@ public class InfosetTest extends TestCase {
     }
 
     public static TestSuite suite() {
-        TestSuite suite = new TestSuite();
-        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests(new AndFilter<XMLConformanceTest>(Filters.DEFAULT, Filters.XERCES_2_9_1_FILTER))) {
-            suite.addTest(new InfosetTest(test));
-        }
-        return suite;
+        MatrixTestSuiteBuilder builder = new MatrixTestSuiteBuilder() {
+            @Override
+            protected void addTests() {
+                for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests(new AndFilter<XMLConformanceTest>(Filters.DEFAULT, Filters.XERCES_2_9_1_FILTER))) {
+                    addTest(new InfosetTest(test));
+                }
+            }
+        };
+        return builder.build();
     }
 }
