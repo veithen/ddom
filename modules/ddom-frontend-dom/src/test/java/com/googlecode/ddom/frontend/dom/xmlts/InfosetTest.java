@@ -31,6 +31,7 @@ import com.googlecode.ddom.frontend.dom.DDOMUtil;
 import com.googlecode.ddom.frontend.dom.DOMUtil;
 import com.googlecode.ddom.frontend.dom.XercesDOMUtil;
 
+// TODO: this test should use the DDOM parser, not Woodstox
 public class InfosetTest extends MatrixTestCase {
     private final XMLConformanceTest test;
     
