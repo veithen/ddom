@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -148,23 +148,11 @@ public class OMFactoryImpl implements OMFactory {
 
     private OMElement createOMElement(String localName, String namespaceURI, String prefix, AxiomContainer parent) {
         try {
-            if (prefix == null) {
-                if (namespaceURI.length() == 0) {
-                    prefix = "";
-                } else {
-                    if (parent instanceof AxiomElement) {
-                        prefix = ((AxiomElement)parent).coreLookupPrefix(namespaceURI, true);
-                    }
-                    if (prefix == null) {
-                        prefix = OMSerializerUtil.getNextNSPrefix();
-                    }
-                }
-            } else if (prefix.length() > 0 && namespaceURI.length() == 0) {
+            if (prefix != null && prefix.length() > 0 && namespaceURI.length() == 0) {
                 throw new IllegalArgumentException("Cannot create a prefixed element with an empty namespace name");
             }
-            AxiomElement element = (AxiomElement)parent.coreAppendElement(namespaceURI, localName, prefix);
-            // TODO: optimization: if we got the prefix from coreLookupPrefix, then there is no need for this
-            element.ensureNamespaceIsDeclared(prefix, namespaceURI);
+            AxiomElement element = (AxiomElement)parent.coreAppendElement(namespaceURI, localName, null);
+            element.coreSetPrefix(element.ensureNamespaceIsDeclared(prefix, namespaceURI));
             element.setOMFactory(this);
             return element;
         } catch (CoreModelException ex) {

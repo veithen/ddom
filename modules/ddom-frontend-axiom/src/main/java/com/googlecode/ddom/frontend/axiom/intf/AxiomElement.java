@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2012,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,20 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareElement;
 
 public interface AxiomElement extends CoreNSAwareElement, OMElement, AxiomContainer, AxiomChildNode, AxiomNamedNode {
-    void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException;
+    /**
+     * Check if a namespace declaration for the given namespace is in scope on this element and
+     * create one if no such namespace declaration is found.
+     * 
+     * @param prefix
+     *            the namespace prefix, or <code>null</code> if any existing prefix bound to the
+     *            given namespace URI should be used or a new one generated
+     * @param namespaceURI
+     *            the namespace URI
+     * @return the actual prefix: the value of <code>prefix</code> if it is not <code>null</code> or
+     *         the existing/generated prefix if <code>prefix</code> is <code>null</code>
+     * @throws CoreModelException
+     */
+    String ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException;
+    
     Map<String,String> getNamespaceContextMap();
 }

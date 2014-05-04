@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Andreas Veithen
+ * Copyright 2009-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,11 +69,29 @@ import com.googlecode.ddom.stream.StreamException;
 public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     private int lineNumber;
     
-    public final void ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException {
-        String existingNamespaceURI = coreLookupNamespaceURI(prefix, true);
-        if (!namespaceURI.equals(existingNamespaceURI)) {
+    public final String ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException {
+        boolean declare;
+        if (prefix == null) {
+            if (namespaceURI.length() == 0) {
+                prefix = "";
+                declare = false;
+            } else {
+                prefix = coreLookupPrefix(namespaceURI, true);
+                if (prefix != null) {
+                    declare = false;
+                } else {
+                    prefix = OMSerializerUtil.getNextNSPrefix();
+                    declare = true;
+                }
+            }
+        } else {
+            String existingNamespaceURI = coreLookupNamespaceURI(prefix, true);
+            declare = !namespaceURI.equals(existingNamespaceURI);
+        }
+        if (declare) {
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
         }
+        return prefix;
     }
 
     public final void setNamespace(OMNamespace namespace) {
@@ -142,8 +160,36 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         }
     }
     
-    public OMAttribute addAttribute(String attributeName, String value, OMNamespace ns) {
-        return addAttribute(getOMFactory().createOMAttribute(attributeName, ns, value));
+    public OMAttribute addAttribute(String localName, String value, OMNamespace ns) {
+        try {
+            String namespaceURI;
+            String prefix;
+            if (ns == null) {
+                namespaceURI = "";
+                prefix = "";
+            } else {
+                namespaceURI = ns.getNamespaceURI();
+                prefix = ns.getPrefix();
+                if (namespaceURI.length() == 0) {
+                    if (prefix == null) {
+                        prefix = "";
+                    } else if (prefix.length() > 0) {
+                        throw new IllegalArgumentException("Cannot create a prefixed attribute with an empty namespace name");
+                    }
+                } else {
+                    if (prefix == null || prefix.length() > 0) {
+                        prefix = ensureNamespaceIsDeclared(prefix, namespaceURI);
+                    } else {
+                        throw new IllegalArgumentException("Cannot create an unprefixed attribute with a namespace");
+                    }
+                }
+            }
+            AxiomAttribute attr = (AxiomAttribute)coreGetNodeFactory().createAttribute(null, namespaceURI, localName, prefix, value, "CDATA");
+            attr.setOMFactory(getOMFactory());
+            return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, attr, Policies.ATTRIBUTE_MIGRATION_POLICY, true, null, ReturnValue.ADDED_ATTRIBUTE);
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionTranslator.translate(ex);
+        }
     }
     
     public final void removeAttribute(OMAttribute attr) {
