@@ -132,7 +132,6 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     public final OMAttribute addAttribute(OMAttribute attr) {
         AxiomAttribute axiomAttr = (AxiomAttribute)attr;
         try {
-            // TODO: what if one creates an attribute with a namespace URI but no prefix???
             String prefix = axiomAttr.coreGetPrefix();
             if (prefix.length() > 0) {
                 ensureNamespaceIsDeclared(prefix, axiomAttr.coreGetNamespaceURI());
