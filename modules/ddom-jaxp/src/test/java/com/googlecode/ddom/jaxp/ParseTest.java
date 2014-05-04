@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@ package com.googlecode.ddom.jaxp;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.axiom.testutils.suite.MatrixTestCase;
+import org.apache.axiom.testutils.suite.MatrixTestSuiteBuilder;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.w3c.dom.Document;
@@ -30,12 +31,12 @@ import com.google.code.ddom.xmlts.XMLConformanceTest;
 import com.google.code.ddom.xmlts.XMLConformanceTestSuite;
 import com.google.code.ddom.xmlts.XMLConformanceTestUtils;
 
-public class ParseTest extends TestCase {
+public class ParseTest extends MatrixTestCase {
     private final XMLConformanceTest test;
 
     public ParseTest(XMLConformanceTest test) {
-        super(test.getName());
         this.test = test;
+        addTestParameter("id", test.getId());
     }
     
     private Document parse(DocumentBuilderFactory factory) throws Exception {
@@ -60,10 +61,14 @@ public class ParseTest extends TestCase {
     }
     
     public static TestSuite suite() {
-        TestSuite suite = new TestSuite();
-        for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests(new AndFilter<XMLConformanceTest>(Filters.DEFAULT, Filters.XERCES_2_9_1_FILTER))) {
-            suite.addTest(new ParseTest(test));
-        }
-        return suite;
+        MatrixTestSuiteBuilder builder = new MatrixTestSuiteBuilder() {
+            @Override
+            protected void addTests() {
+                for (XMLConformanceTest test : XMLConformanceTestSuite.load().getTests(new AndFilter<XMLConformanceTest>(Filters.DEFAULT, Filters.XERCES_2_9_1_FILTER))) {
+                    addTest(new ParseTest(test));
+                }
+            }
+        };
+        return builder.build();
     }
 }
