@@ -23,6 +23,10 @@
     <parameter name="disableREST">false</parameter>
     <parameter name="disableSOAP12">false</parameter>
     
+    <deployer extension=".aar" directory="services" class="org.apache.axis2.deployment.ServiceDeployer">
+        <serviceBuilderExtension name="wsdlServiceBuilderExtension" class="org.apache.axis2.deployment.WSDLServiceBuilderExtension"/>
+    </deployer>
+    
     <messageBuilders>
         <messageBuilder contentType="application/xml"
                         class="org.apache.axis2.builder.ApplicationXMLBuilder"/>
