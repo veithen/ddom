@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Andreas Veithen
+ * Copyright 2009-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,6 +86,7 @@ import org.apache.axiom.ts.om.sourcedelement.TestPushOMDataSourceExpansion;
 import org.apache.axiom.ts.om.sourcedelement.TestRemoveChildrenUnexpanded;
 import org.apache.axiom.ts.om.text.TestBase64StreamingWithGetSAXSource;
 import org.apache.axiom.ts.om.text.TestBase64StreamingWithSerialize;
+import org.apache.axiom.ts.om.text.TestCloneBinary;
 import org.apache.axiom.ts.om.text.TestGetTextCharactersFromDataHandler;
 import org.apache.axiom.ts.om.xop.XOPRoundtripTest;
 import org.apache.axiom.ts.om.xpath.TestAXIOMXPath;
@@ -147,6 +148,7 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestRemoveChildrenUnexpanded.class);
         builder.exclude(TestGetTextCharactersFromDataHandler.class);
         builder.exclude(XOPRoundtripTest.class);
+        builder.exclude(TestCloneBinary.class);
         
         // TODO: caused by incorrect code in axiom-api
         builder.exclude(TestDigest.class, "(|(file=digest3.xml)(file=digest4.xml))");
