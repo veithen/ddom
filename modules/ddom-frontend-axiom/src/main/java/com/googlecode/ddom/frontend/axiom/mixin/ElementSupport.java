@@ -69,24 +69,22 @@ import com.googlecode.ddom.stream.StreamException;
 public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     private int lineNumber;
     
-    public final String ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException {
-        boolean declare;
+    public final String checkNamespaceIsDeclared(String prefix, String namespaceURI, boolean allowDefaultNamespace, boolean declare) throws CoreModelException {
         if (prefix == null) {
-            if (namespaceURI.length() == 0) {
+            if (namespaceURI.isEmpty()) {
                 prefix = "";
                 declare = false;
             } else {
                 prefix = coreLookupPrefix(namespaceURI, true);
-                if (prefix != null) {
+                if (prefix != null && (allowDefaultNamespace || !prefix.isEmpty())) {
                     declare = false;
                 } else {
                     prefix = OMSerializerUtil.getNextNSPrefix();
-                    declare = true;
                 }
             }
         } else {
             String existingNamespaceURI = coreLookupNamespaceURI(prefix, true);
-            declare = !namespaceURI.equals(existingNamespaceURI);
+            declare = declare && !namespaceURI.equals(existingNamespaceURI);
         }
         if (declare) {
             coreSetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, prefix, null, namespaceURI);
@@ -94,34 +92,19 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         return prefix;
     }
 
-    public final void setNamespace(OMNamespace namespace) {
-        try {
-            String namespaceURI;
-            String prefix;
-            if (namespace == null) {
-                namespaceURI = "";
-                prefix = "";
-            } else {
-                namespaceURI = namespace.getNamespaceURI();
-                prefix = namespace.getPrefix();
-                if (prefix == null) {
-                    prefix = OMSerializerUtil.getNextNSPrefix();
-                }
-                if (prefix.length() > 0 && namespaceURI.length() == 0) {
-                    throw new IllegalArgumentException("Cannot bind a prefix to the empty namespace name");
-                }
-            }
-            coreSetNamespaceURI(namespaceURI);
-            coreSetPrefix(prefix);
-            ensureNamespaceIsDeclared(prefix, namespaceURI);
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionTranslator.translate(ex);
+    public final String prepareSetNamespace(String prefix, String namespaceURI, boolean declare) throws CoreModelException {
+        if (prefix != null && !prefix.isEmpty() && namespaceURI.isEmpty()) {
+            throw new IllegalArgumentException("Cannot bind a prefix to the empty namespace name");
         }
+        return checkNamespaceIsDeclared(prefix, namespaceURI, true, declare);
     }
 
-    public void setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setNamespace(OMNamespace namespace) {
+        setNamespace(namespace, true);
+    }
+
+    public final void setNamespaceWithNoFindInCurrentScope(OMNamespace namespace) {
+        setNamespace(namespace, false);
     }
     
     public final Iterator<OMElement> getChildElements() {
@@ -152,7 +135,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
         try {
             String prefix = axiomAttr.coreGetPrefix();
             if (prefix.length() > 0) {
-                ensureNamespaceIsDeclared(prefix, axiomAttr.coreGetNamespaceURI());
+                checkNamespaceIsDeclared(prefix, axiomAttr.coreGetNamespaceURI(), false, true);
             }
             return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, true, null, ReturnValue.ADDED_ATTRIBUTE);
         } catch (CoreModelException ex) {
@@ -178,7 +161,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
                     }
                 } else {
                     if (prefix == null || prefix.length() > 0) {
-                        prefix = ensureNamespaceIsDeclared(prefix, namespaceURI);
+                        prefix = checkNamespaceIsDeclared(prefix, namespaceURI, false, true);
                     } else {
                         throw new IllegalArgumentException("Cannot create an unprefixed attribute with a namespace");
                     }
@@ -251,7 +234,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
                 if (prefix.length() == 0 && namespaceURI.length() > 0) {
                     prefix = OMSerializerUtil.getNextNSPrefix();
                 }
-                ensureNamespaceIsDeclared(prefix, namespaceURI);
+                checkNamespaceIsDeclared(prefix, namespaceURI, true, true);
                 coreSetValue(prefix.length() > 0 ? prefix + ":" + qname.getLocalPart() : qname.getLocalPart());
             }
         } catch (CoreModelException ex) {

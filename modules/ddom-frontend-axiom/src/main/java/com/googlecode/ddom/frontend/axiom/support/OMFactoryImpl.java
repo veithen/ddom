@@ -72,18 +72,10 @@ public class OMFactoryImpl implements OMFactory {
         } else {
             namespaceURI = ns.getNamespaceURI();
             prefix = ns.getPrefix();
-            if (namespaceURI.length() == 0) {
-                if (prefix == null) {
-                    prefix = "";
-                } else if (prefix.length() > 0) {
-                    throw new IllegalArgumentException("Cannot create a prefixed attribute with an empty namespace name");
-                }
+            if (prefix == null) {
+                prefix = namespaceURI.isEmpty() ? "" : OMSerializerUtil.getNextNSPrefix();
             } else {
-                if (prefix == null) {
-                    prefix = OMSerializerUtil.getNextNSPrefix();
-                } else if (prefix.length() == 0) {
-                    throw new IllegalArgumentException("Cannot create an unprefixed attribute with a namespace");
-                }
+                NSUtil.validateAttributeNamespace(prefix, namespaceURI);
             }
         }
         AxiomAttribute attr = (AxiomAttribute)nodeFactory.createAttribute(null, namespaceURI, localName, prefix, value, "CDATA");
@@ -152,7 +144,7 @@ public class OMFactoryImpl implements OMFactory {
                 throw new IllegalArgumentException("Cannot create a prefixed element with an empty namespace name");
             }
             AxiomElement element = (AxiomElement)parent.coreAppendElement(namespaceURI, localName, null);
-            element.coreSetPrefix(element.ensureNamespaceIsDeclared(prefix, namespaceURI));
+            element.coreSetPrefix(element.checkNamespaceIsDeclared(prefix, namespaceURI, true, true));
             element.setOMFactory(this);
             return element;
         } catch (CoreModelException ex) {

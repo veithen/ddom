@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,5 +27,17 @@ public class NSUtil {
     
     public static String getPrefix(OMNamespace ns) {
         return ns == null ? "" : ns.getPrefix();
+    }
+    
+    public static void validateAttributeNamespace(String prefix, String namespaceURI) {
+        if (namespaceURI.isEmpty()) {
+            if (!prefix.isEmpty()) {
+                throw new IllegalArgumentException("Cannot create a prefixed attribute with an empty namespace name");
+            }
+        } else {
+            if (prefix.isEmpty()) {
+                throw new IllegalArgumentException("Cannot create an unprefixed attribute with a namespace");
+            }
+        }
     }
 }

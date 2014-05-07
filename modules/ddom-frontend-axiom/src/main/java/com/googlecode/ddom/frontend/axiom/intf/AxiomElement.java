@@ -25,18 +25,24 @@ import com.googlecode.ddom.core.CoreNSAwareElement;
 public interface AxiomElement extends CoreNSAwareElement, OMElement, AxiomContainer, AxiomChildNode, AxiomNamedNode {
     /**
      * Check if a namespace declaration for the given namespace is in scope on this element and
-     * create one if no such namespace declaration is found.
+     * optionally create one if no such namespace declaration is found.
      * 
      * @param prefix
      *            the namespace prefix, or <code>null</code> if any existing prefix bound to the
      *            given namespace URI should be used or a new one generated
      * @param namespaceURI
      *            the namespace URI
+     * @param allowDefaultNamespace
+     *            specifies whether it is allowed to reuse an existing namespace declaration for the
+     *            default namespace; only taken into account if <code>prefix</code> is
+     *            <code>null</code>
+     * @param declare
+     *            specifies whether a namespace declaration should be generated if necessary
      * @return the actual prefix: the value of <code>prefix</code> if it is not <code>null</code> or
      *         the existing/generated prefix if <code>prefix</code> is <code>null</code>
      * @throws CoreModelException
      */
-    String ensureNamespaceIsDeclared(String prefix, String namespaceURI) throws CoreModelException;
+    String checkNamespaceIsDeclared(String prefix, String namespaceURI, boolean allowDefaultNamespace, boolean declare) throws CoreModelException;
     
     Map<String,String> getNamespaceContextMap();
 }

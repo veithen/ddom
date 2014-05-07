@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@ package com.googlecode.ddom.frontend.axiom.intf;
 
 import org.apache.axiom.om.OMNamedInformationItem;
 
+import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareNamedNode;
 
 public interface AxiomNamedNode extends CoreNSAwareNamedNode, AxiomInformationItem, OMNamedInformationItem {
+    String prepareSetNamespace(String prefix, String namespaceURI, boolean declare) throws CoreModelException;
 }

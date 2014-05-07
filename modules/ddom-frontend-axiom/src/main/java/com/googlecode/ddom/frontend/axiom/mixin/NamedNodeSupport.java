@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,24 @@ public abstract class NamedNodeSupport implements AxiomNamedNode {
     public boolean hasName(QName name) {
         try {
             return coreGetLocalName().equals(name.getLocalPart()) && coreGetNamespaceURI().equals(name.getNamespaceURI());
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionTranslator.translate(ex);
+        }
+    }
+
+    public final void setNamespace(OMNamespace namespace, boolean declare) {
+        try {
+            String namespaceURI;
+            String prefix;
+            if (namespace == null) {
+                namespaceURI = "";
+                prefix = "";
+            } else {
+                namespaceURI = namespace.getNamespaceURI();
+                prefix = namespace.getPrefix();
+            }
+            coreSetPrefix(prepareSetNamespace(prefix, namespaceURI, declare));
+            coreSetNamespaceURI(namespaceURI);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }

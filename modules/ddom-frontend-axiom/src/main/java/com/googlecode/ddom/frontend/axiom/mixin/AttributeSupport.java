@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.googlecode.ddom.frontend.axiom.mixin;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
@@ -26,10 +27,24 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
+import com.googlecode.ddom.frontend.axiom.support.NSUtil;
 import com.googlecode.ddom.util.lang.ObjectUtils;
 
 @Mixin(CoreNSAwareAttribute.class)
 public abstract class AttributeSupport implements AxiomAttribute {
+    public final String prepareSetNamespace(String prefix, String namespaceURI, boolean declare) throws CoreModelException {
+        if (prefix != null) {
+            NSUtil.validateAttributeNamespace(prefix, namespaceURI);
+        }
+        AxiomElement ownerElement = (AxiomElement)coreGetOwnerElement();
+        if (ownerElement != null) {
+            prefix = ownerElement.checkNamespaceIsDeclared(prefix, namespaceURI, false, declare);
+        } else if (prefix == null) {
+            prefix = namespaceURI.isEmpty() ? "" : OMSerializerUtil.getNextNSPrefix();
+        }
+        return prefix;
+    }
+
     public final String getAttributeValue() {
         try {
             return coreGetTextContent(TextCollectorPolicy.DEFAULT);
