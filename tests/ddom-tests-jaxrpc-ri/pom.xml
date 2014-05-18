@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009-2011 Andreas Veithen
+  ~ Copyright 2009-2011,2014 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -121,10 +121,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <mkdir dir="${project.build.directory}/tool"/>
-                                <javac srcdir="src/tool/java" destdir="${project.build.directory}/tool" classpathref="maven.plugin.classpath" includeantruntime="false"/>
                                 <path id="tool.classpath">
-                                    <pathelement location="${project.build.directory}/tool"/>
                                     <path refid="maven.compile.classpath"/>
                                 </path>
                                 <taskdef name="wscompile" classname="com.sun.xml.rpc.tools.ant.Wscompile" classpathref="tool.classpath"/>
