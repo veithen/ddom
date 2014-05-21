@@ -17,7 +17,7 @@ package com.googlecode.ddom.saaj;
 
 import java.io.InputStream;
 
-import com.github.veithen.ddom.SOAPSpec;
+import com.github.veithen.ddom.ts.saaj.SOAPSpec;
 
 public abstract class MessageSet {
     public static final MessageSet SOAP11 = new MessageSet("soap11", SOAPSpec.SOAP11) {
