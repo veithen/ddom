@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,17 @@ package com.googlecode.ddom.saaj;
 
 import java.io.InputStream;
 
-import com.googlecode.ddom.frontend.saaj.support.SOAPVersion;
+import com.github.veithen.ddom.SOAPSpec;
 
 public abstract class MessageSet {
-    public static final MessageSet SOAP11 = new MessageSet("soap11", SOAPVersion.SOAP11) {
+    public static final MessageSet SOAP11 = new MessageSet("soap11", SOAPSpec.SOAP11) {
         @Override
         public MessageSet getAltMessageSet() {
             return SOAP12;
         }
     };
     
-    public static final MessageSet SOAP12 = new MessageSet("soap12", SOAPVersion.SOAP12) {
+    public static final MessageSet SOAP12 = new MessageSet("soap12", SOAPSpec.SOAP12) {
         @Override
         public MessageSet getAltMessageSet() {
             return SOAP11;
@@ -35,14 +35,14 @@ public abstract class MessageSet {
     };
     
     private final String pkg;
-    private final SOAPVersion version;
+    private final SOAPSpec version;
     
-    public MessageSet(String pkg, SOAPVersion version) {
+    public MessageSet(String pkg, SOAPSpec version) {
         this.pkg = pkg;
         this.version = version;
     }
 
-    public final SOAPVersion getVersion() {
+    public final SOAPSpec getVersion() {
         return version;
     }
 
