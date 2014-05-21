@@ -32,6 +32,7 @@ import javax.xml.soap.SOAPMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.github.veithen.ddom.ts.saaj.MessageSet;
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
 

@@ -17,6 +17,7 @@ package com.googlecode.ddom.saaj;
 
 import javax.xml.soap.MessageFactory;
 
+import com.github.veithen.ddom.ts.saaj.MessageSet;
 import com.google.code.ddom.utils.test.ValidatedTestResource;
 import com.sun.xml.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl;
 

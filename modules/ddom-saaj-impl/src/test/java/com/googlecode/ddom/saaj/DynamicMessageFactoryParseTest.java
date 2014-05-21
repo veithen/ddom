@@ -25,6 +25,7 @@ import javax.xml.soap.SOAPMessage;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.github.veithen.ddom.ts.saaj.MessageSet;
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestResource;
 import com.sun.xml.messaging.saaj.soap.dynamic.SOAPMessageFactoryDynamicImpl;

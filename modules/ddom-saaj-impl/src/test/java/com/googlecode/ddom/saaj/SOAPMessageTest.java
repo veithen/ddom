@@ -52,6 +52,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.github.veithen.ddom.ts.saaj.MessageSet;
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
 

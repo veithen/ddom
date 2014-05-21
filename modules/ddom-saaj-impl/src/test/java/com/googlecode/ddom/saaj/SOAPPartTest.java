@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
 
+import com.github.veithen.ddom.ts.saaj.MessageSet;
 import com.google.code.ddom.utils.test.Validated;
 import com.google.code.ddom.utils.test.ValidatedTestResource;
 import com.google.code.ddom.utils.test.ValidatedTestRunner;
@@ -109,7 +110,7 @@ public class SOAPPartTest {
     public void testGetContent() throws Exception {
         MimeHeaders headers = new MimeHeaders();
         headers.addHeader("Content-Type", "text/xml; charset=utf-8");
-        InputStream in = SOAPPartTest.class.getResourceAsStream("soap11/message.xml");
+        InputStream in = MessageSet.SOAP11.getTestMessage("message.xml");
         byte[] orgContent = IOUtils.toByteArray(in);
         SOAPMessage message = factory.createMessage(headers, new ByteArrayInputStream(orgContent));
         

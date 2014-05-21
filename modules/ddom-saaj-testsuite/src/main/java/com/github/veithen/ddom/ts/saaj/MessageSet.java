@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.saaj;
+package com.github.veithen.ddom.ts.saaj;
 
 import java.io.InputStream;
-
-import com.github.veithen.ddom.ts.saaj.SOAPSpec;
 
 public abstract class MessageSet {
     public static final MessageSet SOAP11 = new MessageSet("soap11", SOAPSpec.SOAP11) {

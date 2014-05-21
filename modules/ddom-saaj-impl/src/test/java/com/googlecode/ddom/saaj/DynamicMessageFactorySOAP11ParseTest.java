@@ -15,6 +15,8 @@
  */
 package com.googlecode.ddom.saaj;
 
+import com.github.veithen.ddom.ts.saaj.MessageSet;
+
 public class DynamicMessageFactorySOAP11ParseTest extends DynamicMessageFactoryParseTest {
     public DynamicMessageFactorySOAP11ParseTest() {
         super(MessageSet.SOAP11);
