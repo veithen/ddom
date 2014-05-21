@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009-2011 Andreas Veithen
+  ~ Copyright 2009-2011,2014 Andreas Veithen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@
         <module>ddom-frontend-saaj</module>
         <module>ddom-jaxp</module>
         <module>ddom-model-dom</module>
+        <module>ddom-saaj-testsuite</module>
         <module>ddom-saaj-impl</module>
         <module>ddom-saaj-ri-compat</module>
         <module>ddom-spring-ws</module>
