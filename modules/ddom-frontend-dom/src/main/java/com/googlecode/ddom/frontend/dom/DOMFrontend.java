@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class DOMFrontend implements Frontend {
         return Module.forClass(DOMFrontend.class).getPackage("com.googlecode.ddom.frontend.dom.mixin");
     }
 
-    public ModelExtension getModelExtension() {
+    public Class<? extends ModelExtension> getModelExtension() {
         return null;
     }
 }

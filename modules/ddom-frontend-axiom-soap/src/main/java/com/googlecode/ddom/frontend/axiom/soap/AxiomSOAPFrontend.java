@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public class AxiomSOAPFrontend extends AxiomFrontend {
     }
 
     @Override
-    public ModelExtension getModelExtension() {
-        return new AxiomSOAPModelExtension();
+    public Class<? extends ModelExtension> getModelExtension() {
+        return AxiomSOAPModelExtension.class;
     }
 }

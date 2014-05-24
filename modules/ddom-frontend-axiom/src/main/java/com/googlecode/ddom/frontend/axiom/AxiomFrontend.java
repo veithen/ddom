@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2012,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class AxiomFrontend implements Frontend {
         return aggregate;
     }
 
-    public ModelExtension getModelExtension() {
+    public Class<? extends ModelExtension> getModelExtension() {
         return null;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,13 +162,8 @@ public class ModelWeaver {
         reactor.addPlugin(modelExtensionPlugin);
         InjectionPlugin injectionPlugin = new InjectionPlugin();
         // TODO: clean this up
-        ModelExtension modelExtension = frontends.values().iterator().next().getModelExtension();
-        if (modelExtension == null) {
-            injectionPlugin.addBinding(ModelExtension.class.getName(), null);
-        } else {
-            String modelExtensionClass = modelExtension.getClass().getName();
-            injectionPlugin.addBinding(ModelExtension.class.getName(), new PrototypeInjector(modelExtensionClass));
-        }
+        Class<? extends ModelExtension> modelExtension = frontends.values().iterator().next().getModelExtension();
+        injectionPlugin.addBinding(ModelExtension.class.getName(), modelExtension == null ? null : new PrototypeInjector(modelExtension.getName()));
         reactor.addPlugin(injectionPlugin);
         if (outputPackage != null) {
             reactor.addPlugin(new RemapperPlugin(backend.getWeavableClasses().getRootPackageName(), outputPackage));
