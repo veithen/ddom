@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.veithen.ddom.ts.saaj;
+package com.googlecode.ddom.saaj;
 
-import javax.xml.soap.SAAJMetaFactory;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
-import com.github.veithen.rbeans.RBean;
-import com.github.veithen.rbeans.TargetClass;
+import com.github.veithen.ddom.ts.saaj.SAAJTestSuiteBuilder;
 
-@TargetClass(SAAJMetaFactory.class)
-interface SAAJMetaFactoryRBean extends SAAJImplementation, RBean {
+public class ImplementationTest extends TestCase {
+    public static TestSuite suite() throws Exception {
+        return new SAAJTestSuiteBuilder(new SAAJMetaFactoryImpl()).build();
+    }
 }

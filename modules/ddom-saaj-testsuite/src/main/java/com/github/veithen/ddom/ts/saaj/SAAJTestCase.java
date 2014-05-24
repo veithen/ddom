@@ -15,11 +15,12 @@
  */
 package com.github.veithen.ddom.ts.saaj;
 
-import javax.xml.soap.SAAJMetaFactory;
+import org.apache.axiom.testutils.suite.MatrixTestCase;
 
-import com.github.veithen.rbeans.RBean;
-import com.github.veithen.rbeans.TargetClass;
+public abstract class SAAJTestCase extends MatrixTestCase {
+    protected final SAAJImplementation saajImplementation;
 
-@TargetClass(SAAJMetaFactory.class)
-interface SAAJMetaFactoryRBean extends SAAJImplementation, RBean {
+    public SAAJTestCase(SAAJImplementation saajImplementation) {
+        this.saajImplementation = saajImplementation;
+    }
 }

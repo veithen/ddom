@@ -16,13 +16,19 @@
 package com.github.veithen.ddom.ts.saaj;
 
 public class SOAPSpec {
-    public static final SOAPSpec SOAP11 = new SOAPSpec("text/xml");
-    public static final SOAPSpec SOAP12 = new SOAPSpec("application/soap+xml");
+    public static final SOAPSpec SOAP11 = new SOAPSpec("1.1", "text/xml");
+    public static final SOAPSpec SOAP12 = new SOAPSpec("1.2", "application/soap+xml");
     
+    private final String versionNumber;
     private final String contentType;
 
-    public SOAPSpec(String contentType) {
+    public SOAPSpec(String versionNumber, String contentType) {
+        this.versionNumber = versionNumber;
         this.contentType = contentType;
+    }
+
+    public String getVersionNumber() {
+        return versionNumber;
     }
 
     public String getContentType() {

@@ -16,6 +16,7 @@
 package com.github.veithen.ddom.ts.saaj;
 
 import javax.xml.soap.SAAJMetaFactory;
+import javax.xml.soap.SOAPConstants;
 
 import org.apache.axiom.testutils.suite.MatrixTestSuiteBuilder;
 
@@ -33,14 +34,17 @@ public class SAAJTestSuiteBuilder extends MatrixTestSuiteBuilder {
         }
     }
     
-    private final SAAJMetaFactoryRBean metaFactory;
+    private final SAAJImplementation saajImplementation;
 
     public SAAJTestSuiteBuilder(SAAJMetaFactory metaFactory) {
-        this.metaFactory = rbeanFactory.createRBean(SAAJMetaFactoryRBean.class, metaFactory);
+        saajImplementation = rbeanFactory.createRBean(SAAJMetaFactoryRBean.class, metaFactory);
     }
 
     @Override
     protected void addTests() {
-        // TODO
+        addTest(new TestExamineMustUnderstandHeaderElements(saajImplementation, SOAPConstants.SOAP_1_1_PROTOCOL, MessageSet.SOAP11));
+        addTest(new TestExamineMustUnderstandHeaderElements(saajImplementation, SOAPConstants.SOAP_1_2_PROTOCOL, MessageSet.SOAP12));
+        addTest(new TestExamineMustUnderstandHeaderElements(saajImplementation, SOAPConstants.DYNAMIC_SOAP_PROTOCOL, MessageSet.SOAP11));
+        addTest(new TestExamineMustUnderstandHeaderElements(saajImplementation, SOAPConstants.DYNAMIC_SOAP_PROTOCOL, MessageSet.SOAP12));
     }
 }

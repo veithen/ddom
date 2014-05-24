@@ -15,11 +15,13 @@
  */
 package com.github.veithen.ddom.ts.saaj;
 
-import javax.xml.soap.SAAJMetaFactory;
+import com.sun.xml.messaging.saaj.soap.SAAJMetaFactoryImpl;
 
-import com.github.veithen.rbeans.RBean;
-import com.github.veithen.rbeans.TargetClass;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
-@TargetClass(SAAJMetaFactory.class)
-interface SAAJMetaFactoryRBean extends SAAJImplementation, RBean {
+public class SAAJRITest extends TestCase {
+    public static TestSuite suite() throws Exception {
+        return new SAAJTestSuiteBuilder(new SAAJMetaFactoryImpl()).build();
+    }
 }

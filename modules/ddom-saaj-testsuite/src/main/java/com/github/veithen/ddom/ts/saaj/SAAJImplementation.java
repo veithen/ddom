@@ -15,11 +15,11 @@
  */
 package com.github.veithen.ddom.ts.saaj;
 
-import javax.xml.soap.SAAJMetaFactory;
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPFactory;
 
-import com.github.veithen.rbeans.RBean;
-import com.github.veithen.rbeans.TargetClass;
-
-@TargetClass(SAAJMetaFactory.class)
-interface SAAJMetaFactoryRBean extends SAAJImplementation, RBean {
+public interface SAAJImplementation {
+    MessageFactory newMessageFactory(String protocol) throws SOAPException;
+    SOAPFactory newSOAPFactory(String protocol) throws SOAPException;
 }
