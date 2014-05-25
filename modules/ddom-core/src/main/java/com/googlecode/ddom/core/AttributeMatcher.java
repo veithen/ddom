@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,13 +60,8 @@ public interface AttributeMatcher {
             return ((CoreNamespaceDeclaration)attr).coreGetDeclaredPrefix();
         }
 
-        public void update(CoreAttribute attr, String prefix, String value) {
-            try {
-                attr.coreSetValue(value);
-            } catch (DeferredParsingException ex) {
-                // TODO
-                throw new RuntimeException(ex);
-            }
+        public void update(CoreAttribute attr, String prefix, String value) throws DeferredParsingException {
+            attr.coreSetValue(value);
         }
     };
     
@@ -151,6 +146,7 @@ public interface AttributeMatcher {
      *            see above
      * @param value
      *            see above
+     * @throws DeferredParsingException
      */
-    void update(CoreAttribute attr, String prefix, String value);
+    void update(CoreAttribute attr, String prefix, String value) throws DeferredParsingException;
 }

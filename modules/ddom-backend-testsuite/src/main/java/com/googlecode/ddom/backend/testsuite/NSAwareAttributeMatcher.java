@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,12 +50,7 @@ public final class NSAwareAttributeMatcher implements AttributeMatcher {
         return nodeFactory.createAttribute(document, namespaceURI, name, prefix, value, null);
     }
 
-    public void update(CoreAttribute attr, String prefix, String value) {
-        try {
-            attr.coreSetValue(value);
-        } catch (DeferredParsingException ex) {
-            // TODO
-            throw new RuntimeException(ex);
-        }
+    public void update(CoreAttribute attr, String prefix, String value) throws DeferredParsingException {
+        attr.coreSetValue(value);
     }
 }
