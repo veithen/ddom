@@ -23,7 +23,6 @@ import static org.junit.Assert.assertSame;
 import org.junit.Test;
 
 import com.google.code.ddom.commons.cl.ClassRef;
-import com.googlecode.ddom.weaver.jsr45.JSR45Plugin;
 import com.googlecode.ddom.weaver.output.DynamicClassLoader;
 import com.googlecode.ddom.weaver.reactor.Reactor;
 
@@ -36,8 +35,6 @@ public class InjectionPluginTest {
         InjectionPlugin plugin = new InjectionPlugin();
         plugin.addBinding(InjectedInterface.class.getName(), new PrototypeInjector(InjectedClass.class.getName()));
         reactor.addPlugin(plugin);
-        // TODO: this should not be required; this is a bug
-        reactor.addPlugin(new JSR45Plugin());
         reactor.loadWeavableClass(new ClassRef(TargetClass.class));
         reactor.generateModel(classLoader);
         Class<? extends TargetInterface> targetClass = classLoader.loadClass(TargetClass.class.getName()).asSubclass(TargetInterface.class);
@@ -63,8 +60,6 @@ public class InjectionPluginTest {
         InjectionPlugin plugin = new InjectionPlugin();
         plugin.addBinding(InjectedInterface.class.getName(), new SingletonInjector(InjectedSingleton.class.getName(), InjectedInterface.class.getName()));
         reactor.addPlugin(plugin);
-        // TODO: this should not be required; this is a bug
-        reactor.addPlugin(new JSR45Plugin());
         reactor.loadWeavableClass(new ClassRef(TargetClass.class));
         reactor.generateModel(classLoader);
         Class<? extends TargetInterface> targetClass = classLoader.loadClass(TargetClass.class.getName()).asSubclass(TargetInterface.class);
