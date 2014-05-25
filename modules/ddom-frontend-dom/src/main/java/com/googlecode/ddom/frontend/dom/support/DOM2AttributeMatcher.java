@@ -23,7 +23,6 @@ import com.googlecode.ddom.core.CoreNSUnawareAttribute;
 import com.googlecode.ddom.core.DeferredBuildingException;
 import com.googlecode.ddom.core.DeferredParsingException;
 import com.googlecode.ddom.core.NodeFactory;
-import com.googlecode.ddom.frontend.dom.intf.DOMAttribute;
 
 /**
  * {@link AttributeMatcher} implementation that matches attributes based on their namespace URI and
@@ -36,7 +35,7 @@ import com.googlecode.ddom.frontend.dom.intf.DOMAttribute;
  * <dt><code>value</code>
  * <dd>The attribute value.
  * <dt><code>prefix</code>
- * <dd>Not used.
+ * <dd>The prefix to be used when creating a new attribute or updating an existing one.
  * </dl>
  * If the namespace URI is the emtpy string, then this class will also match namespace unaware
  * attributes. Note that the class doesn't match namespace declarations (for which
@@ -77,6 +76,8 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
 
     public void update(CoreAttribute attr, String prefix, String value) throws DeferredParsingException {
         attr.coreSetValue(value);
-        ((DOMAttribute)attr).setPrefix(prefix);
+        if (attr instanceof CoreNSAwareAttribute) {
+            ((CoreNSAwareAttribute)attr).coreSetPrefix(prefix);
+        }
     }
 }
