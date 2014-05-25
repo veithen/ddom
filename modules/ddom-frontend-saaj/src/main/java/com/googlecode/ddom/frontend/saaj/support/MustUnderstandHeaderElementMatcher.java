@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.googlecode.ddom.frontend.saaj.support;
 
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
+import com.googlecode.ddom.util.lang.ObjectUtils;
 
 public final class MustUnderstandHeaderElementMatcher implements ElementMatcher<SAAJSOAPHeaderElement> {
     public static final MustUnderstandHeaderElementMatcher INSTANCE = new MustUnderstandHeaderElementMatcher();
@@ -24,6 +25,6 @@ public final class MustUnderstandHeaderElementMatcher implements ElementMatcher<
     private MustUnderstandHeaderElementMatcher() {}
 
     public boolean matches(SAAJSOAPHeaderElement element, String namespaceURI, String name) {
-        return element.getMustUnderstand() && name.equals(element.getActor());
+        return element.getMustUnderstand() && ObjectUtils.equals(name, element.getActor());
     }
 }

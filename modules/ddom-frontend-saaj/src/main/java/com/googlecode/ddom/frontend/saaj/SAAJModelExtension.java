@@ -18,7 +18,7 @@ package com.googlecode.ddom.frontend.saaj;
 import javax.xml.soap.SOAPConstants;
 
 import com.googlecode.ddom.core.ext.ModelExtension;
-import com.googlecode.ddom.core.ext.SimpleModelExtension;
+import com.googlecode.ddom.core.ext.ModelExtensionMapper;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP11Body;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP11Envelope;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP11Fault;
@@ -28,7 +28,7 @@ import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP12Envelope;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP12Fault;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP12Header;
 
-public final class SAAJModelExtension extends SimpleModelExtension {
+public final class SAAJModelExtension implements ModelExtension {
     public static final ModelExtension INSTANCE = new SAAJModelExtension();
     
     private SAAJModelExtension() {}
@@ -69,5 +69,9 @@ public final class SAAJModelExtension extends SimpleModelExtension {
         } else {
             return null;
         }
+    }
+
+    public ModelExtensionMapper newMapper() {
+        return new SAAJModelExtensionMapper();
     }
 }
