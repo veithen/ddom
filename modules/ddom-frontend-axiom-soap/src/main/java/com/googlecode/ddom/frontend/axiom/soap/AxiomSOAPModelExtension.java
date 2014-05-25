@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,10 @@ import com.googlecode.ddom.core.ext.ModelExtension;
 import com.googlecode.ddom.core.ext.ModelExtensionMapper;
 
 public class AxiomSOAPModelExtension implements ModelExtension {
+    public static final ModelExtension INSTANCE = new AxiomSOAPModelExtension();
+    
+    private AxiomSOAPModelExtension() {}
+    
     public Class<?> mapElement(String namespaceURI, String localName) {
         // Axiom only creates SOAP specific elements if explicitly requested
         return null;

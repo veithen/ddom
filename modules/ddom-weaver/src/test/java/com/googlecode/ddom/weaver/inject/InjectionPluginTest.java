@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Andreas Veithen
+ * Copyright 2009-2010,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,11 @@
  */
 package com.googlecode.ddom.weaver.inject;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+
 import org.junit.Test;
 
 import com.google.code.ddom.commons.cl.ClassRef;
@@ -25,7 +29,7 @@ import com.googlecode.ddom.weaver.reactor.Reactor;
 
 public class InjectionPluginTest {
     @Test
-    public void test() throws Exception {
+    public void testPrototypeInjection() throws Exception {
         ClassLoader parentClassLoader = InjectionPluginTest.class.getClassLoader();
         DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
         Reactor reactor = new Reactor(parentClassLoader);
@@ -43,11 +47,29 @@ public class InjectionPluginTest {
         InjectedInterface injectedInstanceField2 = target2.getInjectedInstanceField();
         InjectedInterface injectedClassField1 = target1.getInjectedClassField();
         InjectedInterface injectedClassField2 = target2.getInjectedClassField();
-        Assert.assertNotNull(injectedInstanceField1);
-        Assert.assertEquals(InjectedClass.class, injectedInstanceField1.getClass());
-        Assert.assertNotNull(injectedClassField1);
-        Assert.assertEquals(InjectedClass.class, injectedClassField1.getClass());
-        Assert.assertNotSame(injectedInstanceField1, injectedInstanceField2);
-        Assert.assertSame(injectedClassField1, injectedClassField2);
+        assertNotNull(injectedInstanceField1);
+        assertEquals(InjectedClass.class, injectedInstanceField1.getClass());
+        assertNotNull(injectedClassField1);
+        assertEquals(InjectedClass.class, injectedClassField1.getClass());
+        assertNotSame(injectedInstanceField1, injectedInstanceField2);
+        assertSame(injectedClassField1, injectedClassField2);
+    }
+    
+    @Test
+    public void testSingletonInjection() throws Exception {
+        ClassLoader parentClassLoader = InjectionPluginTest.class.getClassLoader();
+        DynamicClassLoader classLoader = new DynamicClassLoader(parentClassLoader);
+        Reactor reactor = new Reactor(parentClassLoader);
+        InjectionPlugin plugin = new InjectionPlugin();
+        plugin.addBinding(InjectedInterface.class.getName(), new SingletonInjector(InjectedSingleton.class.getName(), InjectedInterface.class.getName()));
+        reactor.addPlugin(plugin);
+        // TODO: this should not be required; this is a bug
+        reactor.addPlugin(new JSR45Plugin());
+        reactor.loadWeavableClass(new ClassRef(TargetClass.class));
+        reactor.generateModel(classLoader);
+        Class<? extends TargetInterface> targetClass = classLoader.loadClass(TargetClass.class.getName()).asSubclass(TargetInterface.class);
+        TargetInterface target = targetClass.newInstance();
+        assertSame(InjectedSingleton.INSTANCE, target.getInjectedInstanceField());
+        assertSame(InjectedSingleton.INSTANCE, target.getInjectedClassField());
     }
 }

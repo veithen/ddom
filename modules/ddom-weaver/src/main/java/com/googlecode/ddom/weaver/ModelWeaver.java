@@ -28,7 +28,6 @@ import com.googlecode.ddom.frontend.Frontend;
 import com.googlecode.ddom.weaver.dump.DumpPlugin;
 import com.googlecode.ddom.weaver.ext.ModelExtensionPlugin;
 import com.googlecode.ddom.weaver.inject.InjectionPlugin;
-import com.googlecode.ddom.weaver.inject.PrototypeInjector;
 import com.googlecode.ddom.weaver.jsr45.JSR45Plugin;
 import com.googlecode.ddom.weaver.output.ClassDefinitionProcessor;
 import com.googlecode.ddom.weaver.output.ClassDefinitionProcessorException;
@@ -162,8 +161,7 @@ public class ModelWeaver {
         reactor.addPlugin(modelExtensionPlugin);
         InjectionPlugin injectionPlugin = new InjectionPlugin();
         // TODO: clean this up
-        Class<? extends ModelExtension> modelExtension = frontends.values().iterator().next().getModelExtension();
-        injectionPlugin.addBinding(ModelExtension.class.getName(), modelExtension == null ? null : new PrototypeInjector(modelExtension.getName()));
+        injectionPlugin.addBinding(ModelExtension.class, frontends.values().iterator().next().getModelExtension());
         reactor.addPlugin(injectionPlugin);
         if (outputPackage != null) {
             reactor.addPlugin(new RemapperPlugin(backend.getWeavableClasses().getRootPackageName(), outputPackage));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,7 @@ import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAP12Header;
 public final class SAAJModelExtension extends SimpleModelExtension {
     public static final ModelExtension INSTANCE = new SAAJModelExtension();
     
-    // TODO: this causes an issue in the weaver
-//    private SAAJModelExtension() {}
+    private SAAJModelExtension() {}
     
     public Class<?> mapElement(String namespaceURI, String localName) {
         if (localName.equals("Envelope")) {
