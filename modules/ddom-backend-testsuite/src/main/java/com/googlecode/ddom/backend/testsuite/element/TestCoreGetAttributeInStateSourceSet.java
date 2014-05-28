@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.googlecode.ddom.backend.testsuite.element;
 
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.googlecode.ddom.backend.testsuite.NSAwareAttributeMatcher;
+import com.googlecode.ddom.backend.testsuite.Policies;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreElement;
@@ -39,7 +39,7 @@ public class TestCoreGetAttributeInStateSourceSet extends BackendTestCase {
     protected void runTest() throws Throwable {
         CoreElement element = nodeFactory.createElement(null, "", "test", "");
         element.coreSetSource(toXmlSource("<test attr1='value1' attr2='value2'>text</test>", true, true));
-        CoreAttribute attr = element.coreGetAttribute(NSAwareAttributeMatcher.INSTANCE, "", "attr2");
+        CoreAttribute attr = element.coreGetAttribute(Policies.NSAWARE_ATTRIBUTE_MATCHER, "", "attr2");
         assertNotNull(attr);
         assertEquals("attr2", ((CoreNSAwareAttribute)attr).coreGetLocalName());
         assertEquals("value2", attr.coreGetTextContent(TextCollectorPolicy.DEFAULT));

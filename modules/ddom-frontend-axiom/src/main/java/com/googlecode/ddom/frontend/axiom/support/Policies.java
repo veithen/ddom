@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,19 @@
  */
 package com.googlecode.ddom.frontend.axiom.support;
 
+import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreNode;
+import com.googlecode.ddom.core.NSAwareAttributeMatcher;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 
 public final class Policies {
     private Policies() {}
     
+    public static final AttributeMatcher ATTRIBUTE_MATCHER = new NSAwareAttributeMatcher(
+            false,  // Axiom doesn't support namespace unaware attributes
+            false); // Axiom doesn't have any API to (match and) update an existing attribute
+
     public static final NodeMigrationPolicy ATTRIBUTE_MIGRATION_POLICY = new NodeMigrationPolicy() {
         public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
             // TODO: doesn't look correct for foreign documents

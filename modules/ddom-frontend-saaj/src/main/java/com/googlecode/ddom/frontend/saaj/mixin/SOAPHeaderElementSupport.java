@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.CoreNSAwareAttribute;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
-import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
+import com.googlecode.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
 import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 
@@ -29,7 +29,7 @@ import com.googlecode.ddom.frontend.saaj.support.SAAJExceptionUtil;
 public abstract class SOAPHeaderElementSupport implements SAAJSOAPHeaderElement {
     private String getSOAPAttribute(String localName) {
         try {
-            CoreNSAwareAttribute attr = (CoreNSAwareAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, getSOAPVersion().getEnvelopeNamespaceURI(), localName);
+            CoreNSAwareAttribute attr = (CoreNSAwareAttribute)coreGetAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, getSOAPVersion().getEnvelopeNamespaceURI(), localName);
             return attr == null ? null : attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);

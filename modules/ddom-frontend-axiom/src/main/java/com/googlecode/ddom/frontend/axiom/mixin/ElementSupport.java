@@ -52,7 +52,6 @@ import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomAttribute;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomElement;
 import com.googlecode.ddom.frontend.axiom.intf.AxiomNamespaceDeclaration;
-import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceDeclarationMapper;
 import com.googlecode.ddom.frontend.axiom.support.NamespaceIterator;
@@ -119,7 +118,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
     
     public final OMAttribute getAttribute(QName qname) {
         try {
-            return (AxiomAttribute)coreGetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
+            return (AxiomAttribute)coreGetAttribute(Policies.ATTRIBUTE_MATCHER, qname.getNamespaceURI(), qname.getLocalPart());
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
@@ -137,7 +136,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             if (prefix.length() > 0) {
                 checkNamespaceIsDeclared(prefix, axiomAttr.coreGetNamespaceURI(), false, true);
             }
-            return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, true, null, ReturnValue.ADDED_ATTRIBUTE);
+            return (AxiomAttribute)coreSetAttribute(Policies.ATTRIBUTE_MATCHER, axiomAttr, Policies.ATTRIBUTE_MIGRATION_POLICY, true, null, ReturnValue.ADDED_ATTRIBUTE);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
@@ -169,7 +168,7 @@ public abstract class ElementSupport implements AxiomElement, NamespaceContext {
             }
             AxiomAttribute attr = (AxiomAttribute)coreGetNodeFactory().createAttribute(null, namespaceURI, localName, prefix, value, "CDATA");
             attr.setOMFactory(getOMFactory());
-            return (AxiomAttribute)coreSetAttribute(AxiomAttributeMatcher.INSTANCE, attr, Policies.ATTRIBUTE_MIGRATION_POLICY, true, null, ReturnValue.ADDED_ATTRIBUTE);
+            return (AxiomAttribute)coreSetAttribute(Policies.ATTRIBUTE_MATCHER, attr, Policies.ATTRIBUTE_MIGRATION_POLICY, true, null, ReturnValue.ADDED_ATTRIBUTE);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }

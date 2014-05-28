@@ -13,16 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.ddom.frontend.dom.support;
+package com.googlecode.ddom.core;
 
-import com.googlecode.ddom.core.AttributeMatcher;
-import com.googlecode.ddom.core.CoreAttribute;
-import com.googlecode.ddom.core.CoreDocument;
-import com.googlecode.ddom.core.CoreNSAwareAttribute;
-import com.googlecode.ddom.core.CoreNSUnawareAttribute;
-import com.googlecode.ddom.core.DeferredBuildingException;
-import com.googlecode.ddom.core.DeferredParsingException;
-import com.googlecode.ddom.core.NodeFactory;
 
 /**
  * {@link AttributeMatcher} implementation that matches attributes based on their namespace URI and
@@ -43,10 +35,26 @@ import com.googlecode.ddom.core.NodeFactory;
  * 
  * @author Andreas Veithen
  */
-public final class DOM2AttributeMatcher implements AttributeMatcher {
-    public static final DOM2AttributeMatcher INSTANCE = new DOM2AttributeMatcher();
+public final class NSAwareAttributeMatcher implements AttributeMatcher {
+    private final boolean matchNSUnawareAttributes;
+    private final boolean updatePrefix;
     
-    private DOM2AttributeMatcher() {}
+    /**
+     * Constructor.
+     * 
+     * @param matchNSUnawareAttributes
+     *            Specifies if {@link CoreNSUnawareAttribute} instances can also be matched. Only
+     *            applies to the case where <code>namespaceURI</code> is the empty string.
+     * @param updatePrefix
+     *            Specifies if the prefix of an existing attribute should be updated (based on the
+     *            value of the <code>prefix</code> parameter. If this is <code>false</code>, then
+     *            <code>prefix</prefix> is only used when creating new attributes and prefixes of
+     * existing attributes are preserved (i.e. only their value is updated).
+     */
+    public NSAwareAttributeMatcher(boolean matchNSUnawareAttributes, boolean updatePrefix) {
+        this.matchNSUnawareAttributes = matchNSUnawareAttributes;
+        this.updatePrefix = updatePrefix;
+    }
     
     public boolean matches(CoreAttribute attr, String namespaceURI, String name) throws DeferredBuildingException {
         if (attr instanceof CoreNSAwareAttribute) {
@@ -55,7 +63,7 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
             // shorter and have higher "uniqueness"
             return name.equals(nsAwareAttr.coreGetLocalName())
                     && namespaceURI.equals(nsAwareAttr.coreGetNamespaceURI());
-        } else if (namespaceURI.length() == 0 && attr instanceof CoreNSUnawareAttribute) {
+        } else if (matchNSUnawareAttributes && namespaceURI.length() == 0 && attr instanceof CoreNSUnawareAttribute) {
             return name.equals(((CoreNSUnawareAttribute)attr).coreGetName());
         } else {
             return false;
@@ -76,7 +84,7 @@ public final class DOM2AttributeMatcher implements AttributeMatcher {
 
     public void update(CoreAttribute attr, String prefix, String value) throws DeferredParsingException {
         attr.coreSetValue(value);
-        if (attr instanceof CoreNSAwareAttribute) {
+        if (updatePrefix && attr instanceof CoreNSAwareAttribute) {
             ((CoreNSAwareAttribute)attr).coreSetPrefix(prefix);
         }
     }

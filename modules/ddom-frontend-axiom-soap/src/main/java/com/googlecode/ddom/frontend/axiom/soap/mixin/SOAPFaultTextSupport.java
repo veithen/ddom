@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,14 @@ import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPFaultText;
-import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
+import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(AxiomSOAPFaultText.class)
 public abstract class SOAPFaultTextSupport implements AxiomSOAPFaultText {
     public final String getLang() {
         try {
-            CoreAttribute attr = coreGetAttribute(AxiomAttributeMatcher.INSTANCE, SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_NS_URI,
+            CoreAttribute attr = coreGetAttribute(Policies.ATTRIBUTE_MATCHER, SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_NS_URI,
                     SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_LOCAL_NAME);
             return attr == null ? null : attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
@@ -39,7 +39,7 @@ public abstract class SOAPFaultTextSupport implements AxiomSOAPFaultText {
 
     public final void setLang(String lang) {
         try {
-            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_NS_URI,
+            coreSetAttribute(Policies.ATTRIBUTE_MATCHER, SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_NS_URI,
                     SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_LOCAL_NAME, SOAP12Constants.SOAP_FAULT_TEXT_LANG_ATTR_NS_PREFIX, lang);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);

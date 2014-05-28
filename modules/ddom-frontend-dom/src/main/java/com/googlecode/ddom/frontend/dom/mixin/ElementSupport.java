@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Andreas Veithen
+ * Copyright 2009-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ import com.googlecode.ddom.frontend.dom.intf.DOMParentNode;
 import com.googlecode.ddom.frontend.dom.intf.NormalizationConfig;
 import com.googlecode.ddom.frontend.dom.support.AttributesNamedNodeMap;
 import com.googlecode.ddom.frontend.dom.support.DOM1AttributeMatcher;
-import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.NSUtil;
 import com.googlecode.ddom.frontend.dom.support.Policies;
@@ -73,7 +72,7 @@ public abstract class ElementSupport implements DOMElement {
             if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
                 return (DOMAttribute)coreGetAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
             } else {
-                return (DOMAttribute)coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
+                return (DOMAttribute)coreGetAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, namespaceURI == null ? "" : namespaceURI, localName);
             }
         } catch (CoreModelException ex) {
             throw DOMExceptionTranslator.translate(ex);
@@ -126,7 +125,7 @@ public abstract class ElementSupport implements DOMElement {
             } else {
                 namespaceURI = NSUtil.normalizeNamespaceURI(namespaceURI);
                 NSUtil.validateAttributeName(namespaceURI, localName, prefix);
-                coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
+                coreSetAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, namespaceURI, localName, prefix, value);
             }
         } catch (CoreModelException ex) {
             throw DOMExceptionTranslator.translate(ex);
@@ -146,7 +145,7 @@ public abstract class ElementSupport implements DOMElement {
         } else {
             AttributeMatcher matcher;
             if (newAttr instanceof CoreNSAwareAttribute) {
-                matcher = DOM2AttributeMatcher.INSTANCE;
+                matcher = Policies.DOM2_ATTRIBUTE_MATCHER;
             } else if (newAttr instanceof CoreNamespaceDeclaration) {
                 matcher = AttributeMatcher.NAMESPACE_DECLARATION;
             } else {
@@ -186,7 +185,7 @@ public abstract class ElementSupport implements DOMElement {
             if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(namespaceURI)) {
                 coreRemoveAttribute(AttributeMatcher.NAMESPACE_DECLARATION, null, localName.equals(XMLConstants.XMLNS_ATTRIBUTE) ? "" : localName);
             } else {
-                coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI == null ? "" : namespaceURI, localName);
+                coreRemoveAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, namespaceURI == null ? "" : namespaceURI, localName);
             }
         } catch (CoreModelException ex) {
             throw DOMExceptionTranslator.translate(ex);
@@ -209,7 +208,7 @@ public abstract class ElementSupport implements DOMElement {
     public final void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
         try {
             // Here, we assume that a namespace declaration can never be an ID attribute
-            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, NSUtil.normalizeNamespaceURI(namespaceURI), localName);
+            CoreAttribute attr = coreGetAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, NSUtil.normalizeNamespaceURI(namespaceURI), localName);
             if (attr == null) {
                 throw DOMExceptionTranslator.newDOMException(DOMException.NOT_FOUND_ERR);
             } else {

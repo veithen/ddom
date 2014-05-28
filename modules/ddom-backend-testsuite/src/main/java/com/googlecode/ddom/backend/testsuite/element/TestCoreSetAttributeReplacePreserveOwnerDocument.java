@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Andreas Veithen
+ * Copyright 2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.googlecode.ddom.backend.testsuite.element;
 
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.googlecode.ddom.backend.testsuite.NSAwareAttributeMatcher;
 import com.googlecode.ddom.backend.testsuite.Policies;
 import com.googlecode.ddom.core.AttributeMatcher;
 import com.googlecode.ddom.core.CoreAttribute;
@@ -39,10 +38,10 @@ public class TestCoreSetAttributeReplacePreserveOwnerDocument extends BackendTes
     protected void runTest() throws Throwable {
         // Note: we don't create the owner document, because this is the interesting case
         CoreElement element = nodeFactory.createElement(null, "urn:ns", "test", "ns");
-        element.coreSetAttribute(NSAwareAttributeMatcher.INSTANCE, "", "attr", "", "old");
+        element.coreSetAttribute(Policies.NSAWARE_ATTRIBUTE_MATCHER, "", "attr", "", "old");
         CoreAttribute orgAttribute = element.coreGetFirstAttribute();
         CoreAttribute newAttribute = nodeFactory.createAttribute(null, "", "attr", "", "new", "CDATA");
-        CoreAttribute replacedAttribute = element.coreSetAttribute(NSAwareAttributeMatcher.INSTANCE, newAttribute, Policies.MOVE, false, null, ReturnValue.REPLACED_ATTRIBUTE);
+        CoreAttribute replacedAttribute = element.coreSetAttribute(Policies.NSAWARE_ATTRIBUTE_MATCHER, newAttribute, Policies.MOVE, false, null, ReturnValue.REPLACED_ATTRIBUTE);
         assertSame(orgAttribute, replacedAttribute);
         assertSame(element.coreGetOwnerDocument(true), orgAttribute.coreGetOwnerDocument(true));
     }

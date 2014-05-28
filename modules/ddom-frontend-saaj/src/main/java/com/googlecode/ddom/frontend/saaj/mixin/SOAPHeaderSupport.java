@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import com.googlecode.ddom.core.Axis;
 import com.googlecode.ddom.core.CoreModelException;
 import com.googlecode.ddom.core.ElementMatcher;
 import com.googlecode.ddom.frontend.Mixin;
-import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
+import com.googlecode.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPElement;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeader;
 import com.googlecode.ddom.frontend.saaj.intf.SAAJSOAPHeaderElement;
@@ -71,7 +71,7 @@ public abstract class SOAPHeaderSupport implements SAAJSOAPHeader {
                 prefix = "ns1";
             }
             element.ensureNamespaceIsDeclared(prefix, namespaceURI);
-            element.coreSetAttribute(DOM2AttributeMatcher.INSTANCE, "", "qname", "", prefix + ":" + name.getLocalPart());
+            element.coreSetAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, "", "qname", "", prefix + ":" + name.getLocalPart());
             return element;
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import javax.xml.namespace.QName;
 
 import com.googlecode.ddom.backend.testsuite.BackendTestCase;
 import com.googlecode.ddom.backend.testsuite.BackendTestSuiteConfig;
-import com.googlecode.ddom.backend.testsuite.NSAwareAttributeMatcher;
+import com.googlecode.ddom.backend.testsuite.Policies;
 import com.googlecode.ddom.core.ClonePolicy;
 import com.googlecode.ddom.core.CoreAttribute;
 import com.googlecode.ddom.core.CoreChildNode;
@@ -37,7 +37,7 @@ public class TestCoreClone extends BackendTestCase {
     @Override
     protected void runTest() throws Throwable {
         CoreNSAwareElement element = nodeFactory.createElement(null, "urn:test", "test", "p");
-        element.coreSetAttribute(NSAwareAttributeMatcher.INSTANCE, "", "attr", "", "value");
+        element.coreSetAttribute(Policies.NSAWARE_ATTRIBUTE_MATCHER, "", "attr", "", "value");
         element.coreAppendComment("test comment");
         element.coreAppendElement("", "child", "");
         CoreNode clone = element.coreClone(new ClonePolicy() {

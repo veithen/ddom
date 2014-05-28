@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,15 @@
  */
 package com.googlecode.ddom.backend.testsuite;
 
+import com.googlecode.ddom.core.AttributeMatcher;
+import com.googlecode.ddom.core.NSAwareAttributeMatcher;
 import com.googlecode.ddom.core.NodeMigrationPolicy;
 
 public final class Policies {
     private Policies() {}
     
+    public static final AttributeMatcher NSAWARE_ATTRIBUTE_MATCHER = new NSAwareAttributeMatcher(false, false);
+
     public static final NodeMigrationPolicy REQUIRE_SAME_DOCUMENT = new NodeMigrationPolicy() {
         public Action getAction(boolean hasParent, boolean isForeignDocument, boolean isForeignModel) {
             return isForeignDocument ? Action.REJECT : Action.MOVE;

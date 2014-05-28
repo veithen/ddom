@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Andreas Veithen
+ * Copyright 2009-2012,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
 import com.googlecode.ddom.frontend.axiom.soap.intf.AxiomSOAPHeaderBlock;
 import com.googlecode.ddom.frontend.axiom.soap.support.SOAPVersionEx;
-import com.googlecode.ddom.frontend.axiom.support.AxiomAttributeMatcher;
 import com.googlecode.ddom.frontend.axiom.support.AxiomExceptionTranslator;
+import com.googlecode.ddom.frontend.axiom.support.Policies;
 
 @Mixin(AxiomSOAPHeaderBlock.class)
 public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
@@ -40,7 +40,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
 
     private void setAttributeValue(QName qname, String value) {
         try {
-            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
+            coreSetAttribute(Policies.ATTRIBUTE_MATCHER, qname.getNamespaceURI(), qname.getLocalPart(), SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, value);
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
         }
@@ -56,7 +56,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
 
     public final boolean getMustUnderstand() throws SOAPProcessingException {
         try {
-            CoreAttribute attr = coreGetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND);
+            CoreAttribute attr = coreGetAttribute(Policies.ATTRIBUTE_MATCHER, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND);
             if (attr == null) {
                 return false;
             } else {
@@ -78,7 +78,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
         try {
             // TODO: use setAttributeValue here
             SOAPVersionEx version = getSOAPVersionEx();
-            coreSetAttribute(AxiomAttributeMatcher.INSTANCE, version.getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
+            coreSetAttribute(Policies.ATTRIBUTE_MATCHER, version.getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
                     SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, version.formatMustUnderstand(mustUnderstand));
         } catch (CoreModelException ex) {
             throw AxiomExceptionTranslator.translate(ex);
@@ -92,7 +92,7 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
                 SOAPConstants.ATTR_MUSTUNDERSTAND_1.equals(mustUnderstand)) {
             try {
                 // TODO: use setAttributeValue here
-                coreSetAttribute(AxiomAttributeMatcher.INSTANCE, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
+                coreSetAttribute(Policies.ATTRIBUTE_MATCHER, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
                         SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, mustUnderstand);
             } catch (CoreModelException ex) {
                 throw AxiomExceptionTranslator.translate(ex);

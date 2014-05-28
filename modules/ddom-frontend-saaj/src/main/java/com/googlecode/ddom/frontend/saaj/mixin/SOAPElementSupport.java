@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011,2013 Andreas Veithen
+ * Copyright 2009-2011,2013-2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import com.googlecode.ddom.core.IdentityMapper;
 import com.googlecode.ddom.core.Selector;
 import com.googlecode.ddom.core.TextCollectorPolicy;
 import com.googlecode.ddom.frontend.Mixin;
-import com.googlecode.ddom.frontend.dom.support.DOM2AttributeMatcher;
 import com.googlecode.ddom.frontend.dom.support.DOMExceptionTranslator;
 import com.googlecode.ddom.frontend.dom.support.Policies;
 import com.googlecode.ddom.frontend.saaj.SAAJModelExtension;
@@ -168,7 +167,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
 
     private SOAPElement internalAddAttribute(String namespaceURI, String localName, String prefix, String value) throws SOAPException {
         try {
-            coreSetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName, prefix, value);
+            coreSetAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, namespaceURI, localName, prefix, value);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toSOAPException(ex);
         }
@@ -188,7 +187,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
 
     public final boolean removeAttribute(Name name) {
         try {
-            return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, name.getURI(), name.getLocalName());
+            return coreRemoveAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, name.getURI(), name.getLocalName());
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }
@@ -196,7 +195,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
 
     public final boolean removeAttribute(QName qname) {
         try {
-            return coreRemoveAttribute(DOM2AttributeMatcher.INSTANCE, qname.getNamespaceURI(), qname.getLocalPart());
+            return coreRemoveAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, qname.getNamespaceURI(), qname.getLocalPart());
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
         }
@@ -222,7 +221,7 @@ public abstract class SOAPElementSupport implements SAAJSOAPElement {
     private String internalGetAttributeValue(String namespaceURI, String localName) {
         try {
             // TODO: we should really have a coreGetAttributeValue method
-            CoreAttribute attr = coreGetAttribute(DOM2AttributeMatcher.INSTANCE, namespaceURI, localName);
+            CoreAttribute attr = coreGetAttribute(Policies.DOM2_ATTRIBUTE_MATCHER, namespaceURI, localName);
             return attr == null ? null : attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
         } catch (CoreModelException ex) {
             throw SAAJExceptionUtil.toRuntimeException(ex);
