@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Andreas Veithen
+ * Copyright 2009-2011,2014 Andreas Veithen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -342,6 +342,7 @@ public abstract class SOAPVersionEx {
     private final Sequence envelopeSequence;
     private final Sequence faultSequence;
     private final Sequence faultClassifierSequence;
+    private final QName mustUnderstandQName;
     
     public SOAPVersionEx(SOAPVersion soapVersion, Sequence faultSequence, Sequence faultClassifierSequence) {
         this.soapVersion = soapVersion;
@@ -351,6 +352,7 @@ public abstract class SOAPVersionEx {
                 .enableMatchByInterface().build();
         this.faultSequence = faultSequence;
         this.faultClassifierSequence = faultClassifierSequence;
+        mustUnderstandQName = new QName(getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND);
     }
 
     public final SOAPVersion getSOAPVersion() {
@@ -413,6 +415,10 @@ public abstract class SOAPVersionEx {
     public abstract boolean isUltimateReceiverRole(String role);
     public abstract boolean isNoneRole(String role);
 
+    public final QName getMustUnderstandQName() {
+        return mustUnderstandQName;
+    }
+    
     public abstract String formatMustUnderstand(boolean mustUnderstand);
     // TODO: in the SAAJ front-end we also have a SOAP version specific parseMustUnderstand method; should we have that for Axiom too?
     

@@ -75,14 +75,8 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     }
 
     public final void setMustUnderstand(boolean mustUnderstand) {
-        try {
-            // TODO: use setAttributeValue here
-            SOAPVersionEx version = getSOAPVersionEx();
-            coreSetAttribute(Policies.ATTRIBUTE_MATCHER, version.getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
-                    SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, version.formatMustUnderstand(mustUnderstand));
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionTranslator.translate(ex);
-        }
+        SOAPVersionEx version = getSOAPVersionEx();
+        setAttributeValue(version.getMustUnderstandQName(), version.formatMustUnderstand(mustUnderstand));
     }
 
     public final void setMustUnderstand(String mustUnderstand) throws SOAPProcessingException {
@@ -90,15 +84,9 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
                 SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE.equals(mustUnderstand) ||
                 SOAPConstants.ATTR_MUSTUNDERSTAND_0.equals(mustUnderstand) ||
                 SOAPConstants.ATTR_MUSTUNDERSTAND_1.equals(mustUnderstand)) {
-            try {
-                // TODO: use setAttributeValue here
-                coreSetAttribute(Policies.ATTRIBUTE_MATCHER, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND,
-                        SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX, mustUnderstand);
-            } catch (CoreModelException ex) {
-                throw AxiomExceptionTranslator.translate(ex);
-            }
+            setAttributeValue(getSOAPVersionEx().getMustUnderstandQName(), mustUnderstand);
         } else {
-            throw new SOAPProcessingException("mustUndertand must be one of \"true\", \"false\", \"0\" or \"1\"");
+            throw new SOAPProcessingException("mustUnderstand must be one of \"true\", \"false\", \"0\" or \"1\"");
         }
     }
 
