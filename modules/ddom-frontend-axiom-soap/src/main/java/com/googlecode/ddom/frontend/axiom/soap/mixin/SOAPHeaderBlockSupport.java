@@ -46,6 +46,15 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
         }
     }
     
+    private boolean getBooleanAttributeValue(QName qname) {
+        try {
+            CoreAttribute attr = coreGetAttribute(Policies.ATTRIBUTE_MATCHER, qname.getNamespaceURI(), qname.getLocalPart());
+            return attr == null ? false : getSOAPVersionEx().parseBoolean(attr.coreGetTextContent(TextCollectorPolicy.DEFAULT));
+        } catch (CoreModelException ex) {
+            throw AxiomExceptionTranslator.translate(ex);
+        }
+    }
+    
     public final String getRole() {
         return getAttributeValue(getSOAPVersionEx().getSOAPVersion().getRoleAttributeQName());
     }
@@ -55,49 +64,38 @@ public abstract class SOAPHeaderBlockSupport implements AxiomSOAPHeaderBlock {
     }
 
     public final boolean getMustUnderstand() throws SOAPProcessingException {
-        try {
-            CoreAttribute attr = coreGetAttribute(Policies.ATTRIBUTE_MATCHER, getSOAPVersionEx().getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND);
-            if (attr == null) {
-                return false;
-            } else {
-                String value = attr.coreGetTextContent(TextCollectorPolicy.DEFAULT);
-                if (value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE) || value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_1)) {
-                    return true;
-                } else if (value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE) || value.equals(SOAPConstants.ATTR_MUSTUNDERSTAND_0)) {
-                    return false;
-                } else {
-                    throw new SOAPProcessingException("Invalid value for mustUnderstand attribute");
-                }
-            }
-        } catch (CoreModelException ex) {
-            throw AxiomExceptionTranslator.translate(ex);
-        }
+        return getBooleanAttributeValue(getSOAPVersionEx().getMustUnderstandQName());
     }
 
     public final void setMustUnderstand(boolean mustUnderstand) {
         SOAPVersionEx version = getSOAPVersionEx();
-        setAttributeValue(version.getMustUnderstandQName(), version.formatMustUnderstand(mustUnderstand));
+        setAttributeValue(version.getMustUnderstandQName(), version.formatBoolean(mustUnderstand));
     }
 
     public final void setMustUnderstand(String mustUnderstand) throws SOAPProcessingException {
-        if (SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE.equals(mustUnderstand) ||
-                SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE.equals(mustUnderstand) ||
-                SOAPConstants.ATTR_MUSTUNDERSTAND_0.equals(mustUnderstand) ||
-                SOAPConstants.ATTR_MUSTUNDERSTAND_1.equals(mustUnderstand)) {
-            setAttributeValue(getSOAPVersionEx().getMustUnderstandQName(), mustUnderstand);
+        SOAPVersionEx version = getSOAPVersionEx();
+        version.parseBoolean(mustUnderstand);
+        setAttributeValue(version.getMustUnderstandQName(), mustUnderstand);
+    }
+
+    public final boolean getRelay() {
+        SOAPVersionEx version = getSOAPVersionEx();
+        QName relayQName = version.getRelayQName();
+        if (relayQName == null) {
+            throw new UnsupportedOperationException();
         } else {
-            throw new SOAPProcessingException("mustUnderstand must be one of \"true\", \"false\", \"0\" or \"1\"");
+            return getBooleanAttributeValue(relayQName);
         }
     }
 
-    public boolean getRelay() {
-        // TODO
-        throw new UnsupportedOperationException();
-    }
-
-    public void setRelay(boolean relay) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public final void setRelay(boolean relay) {
+        SOAPVersionEx version = getSOAPVersionEx();
+        QName relayQName = version.getRelayQName();
+        if (relayQName == null) {
+            throw new UnsupportedOperationException();
+        } else {
+            setAttributeValue(version.getRelayQName(), version.formatBoolean(relay));
+        }
     }
 
     public final boolean isProcessed() {

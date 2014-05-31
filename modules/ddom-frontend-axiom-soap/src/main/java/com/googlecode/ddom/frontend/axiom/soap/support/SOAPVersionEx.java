@@ -21,6 +21,7 @@ import org.apache.axiom.soap.SOAP11Version;
 import org.apache.axiom.soap.SOAP12Constants;
 import org.apache.axiom.soap.SOAP12Version;
 import org.apache.axiom.soap.SOAPConstants;
+import org.apache.axiom.soap.SOAPProcessingException;
 import org.apache.axiom.soap.SOAPVersion;
 
 import com.googlecode.ddom.core.Sequence;
@@ -70,7 +71,8 @@ public abstract class SOAPVersionEx {
                 .addItem(AxiomSOAP11FaultRole.class, "", "faultactor")
                 .addItem(AxiomSOAP11FaultDetail.class, "", "detail")
                 .enableMatchByInterface().build(),
-            null) {
+            null,
+            false) {
         
         @Override
         public QName getFaultNodeQName() {
@@ -168,8 +170,19 @@ public abstract class SOAPVersionEx {
         }
         
         @Override
-        public String formatMustUnderstand(boolean mustUnderstand) {
-            return mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_1 : SOAPConstants.ATTR_MUSTUNDERSTAND_0;
+        public String formatBoolean(boolean value) {
+            return value ? "1" : "0";
+        }
+
+        @Override
+        public boolean parseBoolean(String literal) throws SOAPProcessingException {
+            if (literal.equals("1")) {
+                return true;
+            } else if (literal.equals("0")) {
+                return false;
+            } else {
+                throw new SOAPProcessingException("Invalid boolean literal: only \"0\" and \"1\" are allowed");
+            }
         }
 
         @Override
@@ -210,7 +223,8 @@ public abstract class SOAPVersionEx {
             new SequenceBuilder()
                 .addItem(AxiomSOAP12FaultValue.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Value")
                 .addItem(AxiomSOAP12FaultSubCode.class, SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI, "Subcode")
-                .enableMatchByInterface().build()) {
+                .enableMatchByInterface().build(),
+            true) {
         
         @Override
         public QName getFaultNodeQName() {
@@ -308,8 +322,19 @@ public abstract class SOAPVersionEx {
         }
         
         @Override
-        public String formatMustUnderstand(boolean mustUnderstand) {
-            return mustUnderstand ? SOAPConstants.ATTR_MUSTUNDERSTAND_TRUE : SOAPConstants.ATTR_MUSTUNDERSTAND_FALSE;
+        public String formatBoolean(boolean value) {
+            return value ? "true" : "false";
+        }
+
+        @Override
+        public boolean parseBoolean(String literal) throws SOAPProcessingException {
+            if (literal.equals("true") || literal.equals("1")) {
+                return true;
+            } else if (literal.equals("false") || literal.equals("0")) {
+                return false;
+            } else {
+                throw new SOAPProcessingException("Invalid boolean literal: only \"true\", \"false\", \"1\" and \"0\" are allowed");
+            }
         }
 
         @Override
@@ -343,8 +368,9 @@ public abstract class SOAPVersionEx {
     private final Sequence faultSequence;
     private final Sequence faultClassifierSequence;
     private final QName mustUnderstandQName;
+    private final QName relayQName;
     
-    public SOAPVersionEx(SOAPVersion soapVersion, Sequence faultSequence, Sequence faultClassifierSequence) {
+    public SOAPVersionEx(SOAPVersion soapVersion, Sequence faultSequence, Sequence faultClassifierSequence, boolean hasRelayAttribute) {
         this.soapVersion = soapVersion;
         envelopeSequence = new SequenceBuilder()
                 .addItem(getSOAPHeaderClass(), getEnvelopeURI(), SOAPConstants.HEADER_LOCAL_NAME)
@@ -353,6 +379,7 @@ public abstract class SOAPVersionEx {
         this.faultSequence = faultSequence;
         this.faultClassifierSequence = faultClassifierSequence;
         mustUnderstandQName = new QName(getEnvelopeURI(), SOAPConstants.ATTR_MUSTUNDERSTAND);
+        relayQName = hasRelayAttribute ? new QName(getEnvelopeURI(), SOAP12Constants.SOAP_RELAY) : null;
     }
 
     public final SOAPVersion getSOAPVersion() {
@@ -419,9 +446,13 @@ public abstract class SOAPVersionEx {
         return mustUnderstandQName;
     }
     
-    public abstract String formatMustUnderstand(boolean mustUnderstand);
-    // TODO: in the SAAJ front-end we also have a SOAP version specific parseMustUnderstand method; should we have that for Axiom too?
+    public abstract String formatBoolean(boolean value);
+    public abstract boolean parseBoolean(String literal) throws SOAPProcessingException;
     
+    public final QName getRelayQName() {
+        return relayQName;
+    }
+
     public abstract int getFaultCodeIndex();
     public abstract int getFaultReasonIndex();
     public abstract int getFaultNodeIndex();
