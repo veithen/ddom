@@ -1,0 +1,26 @@
+#summary A theoretical look at deferred parsing [DRAFT]
+
+= Definitions =
+
+  * A node is said to be "materialized" if the start event corresponding to that node has been processed.
+  * A node is said to be "built" or "complete" if all events corresponding to that node have been processed.
+
+Trivial corollaries of these definitions and the relationships between nodes and events:
+
+  * "complete" implies "materialized"
+  * A node that is of type leaf node (text, CDATA section, etc.) is always complete if it is materialized.
+  * If a node is complete, then all its descendants are complete. Note that the inverse is not true: a node can be incomplete even if all its descendants are complete. This is the case if the end event for that node has not yet been processed.
+
+= Navigation =
+
+  * Forward navigation: first child, next sibling
+  * Backward navigation: go to parent, previous sibling
+
+Backward navigation never causes nodes to become materialized. For forward navigation:
+
+  * First child: materializes the first child.
+  * Next sibling: builds the current node (and all its descendants) and materializes the next sibling
+
+= Editing a document that is not complete =
+
+One of the more interesting questions is what kind of editing operations on a document will cause additional nodes to be materialized or built. Example: what happens when an incomplete node is detached?

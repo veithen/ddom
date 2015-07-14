@@ -1,0 +1,62 @@
+#summary Lessons learned from Axiom [DRAFT]
+
+= Lesson 1: Support deferred parsing =
+
+Deferred parsing is powerful because:
+
+  * It allows to start processing a message before it has been completely received.
+
+  * If part of the document is processed using another framework, no need to build the corresponding nodes.
+
+However, two issues in Axiom:
+
+  * The builder (StAXOMBuilder) is shared by all implementations -> prevents specific optimizations for particular implementations (example: DTM like implementation)
+
+  * Once caching is disabled, it is no longer possible to reenable it (see WSCOMMONS-451); this is OK for SOAP (but implies that Axis2 never parses the message to the end; TBC), but limits the use cases in other contexts
+
+= Lesson 2: Support sourced document fragments =
+
+TODO
+
+= Lesson 3: Be document centric =
+
+APIs implementing XML object models can be classified into two categories:
+
+  * Some APIs require that a node must always be linked to a parent or at least to a document instance. In these APIs it is not possible to create a node that is completely detached from any other model object, the only exception being the root node or the document instance itself. An example is DOM where every node must be linked a single Document instance (except for DocumentType nodes created from a DOMImplementation). DOM enforces this by defining the factory methods for node instances on the Document interface, so that a node can only be created from an existing Document instance.
+  In general, in these APIs, moving or copying a node from one document to another is a different operation than moving or copying a node withing the the same document. E.g. in DOM, nodes must be "imported" or "adopted" before they can be used in a different document instance.
+
+  * Other APIs allow creation of node instances that initially are not linked to any particular document instance. This kind of node only becomes linked to a particular document instance when it is added to a parent that is part of a tree which has a document as its root node. It should be noted that a large number of operations may be carried out on the node or its descendants before this actually happens. In the extreme case, the entire content of the document is constructed before the document element is added to a particular document instance. Axiom and JDOM are examples of this type of API.
+
+One may wonder what are the advantages and drawbacks of these two approaches. Clearly,
+one advantage of the second model is that it potentially simplifies the programming model. However,
+this is only true if the API represents information items using concrete classes
+and allows their instantiation using public constructors. Since Axiom requires usage
+of a factory to create new node instances, it cannot benefit from this advantage. This
+becomes clear when trying to implement a method that needs to build and return a node from
+some non XML input: if the API uses a factory pattern, then a reference to the factory
+instance must somehow be passed to that method. This is in no way different from a
+"document centric" API (where the reference to the document instance needs to be passed
+around from one method to the other), except if one assumes that the factory is stateless
+and thread safe. Indeed, if this is the case, then one may potentially store the reference to the
+factory in a class or instance attribute.
+
+There are thus two interesting questions about the design of the Axiom API:
+
+  * Is it correct to assume that OMFactory is stateless and thread safe?
+  
+  * What are the advantages and disadvantages of using a separate factory interface, compared to a DOM like solution that assigns the factory role to the document instance?
+
+
+Why document centric is better:
+
+  * Resource lifecycle (for DataHandlers linked to OMText and OMDataSource objects linked to OMSourcedElement)
+
+  * Namespace prefix auto-generation.
+
+= Lesson 4: Don't attempt to enforce namespace well-formedness of the object model =
+
+http://people.apache.org/~veithen/axiom/apidocs/org/apache/axiom/om/OMElement.html
+
+= Lesson 5: Don't create yet another XML object model =
+
+TODO

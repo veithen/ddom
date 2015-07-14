@@ -1,0 +1,48 @@
+#summary Concepts
+
+= Core model =
+
+The core model is an abstract API that defines the interface between _frontends_ and _backends_. It is a full featured XML object model that defines interfaces for the following information items:
+  * Documents and document fragments
+  * Document type definitions
+  * Elements
+  * Attributes
+  * Text nodes and CDATA sections
+  * Entity references
+  * Comments
+  * Processing instructions
+The API is not intended for usage by client code and is thus not optimized for convenience. Instead it is designed to allow the implementation to choose the most efficient algorithm to execute a given operation.
+
+= Backend =
+
+A backend is an implementation of the _core model_ and provides the necessary data structures to store and retrieve the information items that make up an XML document. Currently, only a single backend exists and this implementation uses plain Java objects and linked lists to store the information. In the future, other backends may be implemented, for example:
+  * A backend that implements a table model similar to Xalan's DTM and that would have the capability of deferring the instantiation of individual node objects.
+  * Proxy backends that bridge between the core model and existing APIs.
+
+= Frontend =
+
+A frontend implements an existing API such as DOM, Axiom or SAAJ and mediates between this API and the core model. A frontend is defined by a set of aspects (written in AspectJ) and their supporting classes. This code is woven with the backend implementation to generate a self-containing implementation of the frontend API. This approach (in contrast to the proxy pattern) makes sure that the resulting code is as efficient as a native implementation of the API. It also has several other important advantages:
+  * It is possible to combine multiple frontends, i.e. to create an object model that implements two (or more) APIs. This is achieved by combining the aspects from the corresponding frontends during the weaving process. Since the interfaces of the two APIs must be implemented by the same classes, this is of course only possible if there are no collisions between the methods defined by the two APIs. A combination known to work is DOM and Axiom.
+  * The backend can be freely chosen: once a backend is implemented such that it conforms to the core model API, it can be used with any frontend.
+
+= Model extension =
+
+The core model (and thus the backends) only define classes for a limited set of information items. Some APIs require specialized classes to represent particular elements. For example, Axiom and SAAJ define specific classes to represent various elements defined by SOAP. Since they are not defined by the backend, these classes must be generated dynamically by the _model weaver_. The metadata that defines a set of extension classes and their relationships is called a model extension.
+
+= Model weaver =
+
+The model weaver generates code from a given _backend_ and a set of one or more _frontends_. It is this generated code that the client code will eventually interact with. The weaving process involves several steps:
+  * Loading the bytecode from the selected backend.
+  * Generating additional classes as described by any applicable _model extension_.
+  * Enhance the code using the aspects provided by the frontends. This is handled by AspectJ.
+Since the weaver works with bytecode, it can either be executed at build time or at runtime:
+  * Statically woven models are those generated at build time. A Maven plugin is provided to produce these models.
+  * Dynamically woven models are generated on demand at runtime. This process is similar to AspectJ's load time weaving (LTW) feature.
+The runtime will automatically choose between the two approaches: if a statically woven model matching the requested configuration is found in the classpath, the runtime will use it; otherwise it will weave the model dynamically.
+
+= Symbol tables =
+
+Symbol tables are used to canonicalize names, namespace URIs and prefixes. This guarantees that within
+a given document, the same String instance is used for equal values. This reduces the memory footprint
+of the object model and improves performance for comparison operations, because object identity (==)
+can be used instead of String#equals.

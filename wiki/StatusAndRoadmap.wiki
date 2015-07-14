@@ -1,0 +1,30 @@
+#summary Status and roadmap.
+
+== Core ==
+
+|| Completed || Feature ||
+|| 100% || Deferred parsing and building ||
+|| 10% || Validation support (using javax.xml.validation, msv or Xerces XNI) ||
+|| 0% || Symbol tables (namespaces, local names and prefixes) ||
+|| 30% || Abstract API for DDOM specific features (`DeferredDocumentFactory`) ||
+|| 90% || Optimization of elements that contain only character data ||
+|| 60% || WSS4J compatibility ||
+|| 0% || Incremental model upgrade (e.g. add Axiom support to a subtree of a tree initially built only with DOM support) ||
+|| 100% || Obtaining an XMLStreamReader from a node (optionally switching off tree building) ||
+|| 0% || OSGi integration (implementation discovery, generate bundles) ||
+|| 80% || SAAJ object model ||
+|| 0% || Spring-WS integration ||
+|| 0% || Samples ||
+
+== DOM frontend ==
+
+|| Completed || Feature ||
+|| 90% || DOM level 1 and 2 compliance, excluding DTD support ||
+|| 50% || DOM level 3 compliance, excluding DTD support ||
+|| 0% || DTD support (entity references, default attributes, etc.) ||
+|| 15% || JAXP integration (`DocumentBuilderFactory`) ||
+|| 99% || Xalan compatibility ||
+|| 0% || Saxon compatibility ||
+|| 0% || JAXP (XPath, validation) compatibility ||
+|| 100% || Jaxen compatibility ||
+|| 0% || E4X (ECMAScript four Java) compatibility ||

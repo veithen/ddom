@@ -1,0 +1,96 @@
+#summary Status of Apache Synapse samples tested with DDOM as Axiom implementation
+
+|| Sample || Synapse version || DDOM version || Status ||
+|| Sample 0: Introduction to Synapse || `r1165656` || `r1165` || OK ||
+|| Sample 1: Simple content based routing (CBR) of messages || `r1165656` || `r1165` || OK ||
+|| Sample 2: CBR with the Switch-case mediator, using message properties || `r1165656` || `r1165` || OK ||
+|| Sample 3: Local Registry entry definitions, reusable endpoints and sequences || `r1165656` || `r1165` || OK ||
+|| Sample 4: Introduction to error handling || `r1165656` || `r1165` || OK ||
+|| Sample 5: Creating SOAP fault messages and changing the direction of a message || `r1165656` || `r1165` || OK ||
+|| Sample 6: Manipulating SOAP headers, and filtering incoming and outgoing messages || `r1165656` || `r1165` || OK ||
+|| Sample 7: Introduction to local Registry entries and using Schema validation || `r1165656` || `r1165` || OK ||
+|| Sample 8: Introduction to static and dynamic registry resources, and using XSLT transformations || `r1165656` || `r1165` || OK ||
+|| Sample 9: Introduction to dynamic sequences with the Registry || `r1165656` || `r1165` || OK ||
+|| Sample 10: Introduction to dynamic endpoints with the Registry || || || Not tested yet ||
+|| Sample 11: A full registry based configuration, and sharing a configuration between multiple instances || || || Not tested yet ||
+|| Sample 12: One way messaging / fireAndForget through Synapse || || || Not tested yet ||
+|| Sample 13: Dual channel invocation through Synapse || `r1165656` || `r1165` || OK ||
+|| Sample 15: Message Enrichment through Synapse || `r1165656` || `r1165` || OK ||
+|| Sample 16: Introduction to dynamic and static keys || || || Not tested yet ||
+|| Sample 50: POX to SOAP conversion || || || Not tested yet ||
+|| Sample 51: MTOM and SwA optimizations and request/response correlation || || || Not tested yet ||
+|| Sample 52: Session less load balancing between 3 endpoints || || || Not tested yet ||
+|| Sample 53: Failover sending among 3 endpoints || || || Not tested yet ||
+|| Sample 54: Session affinity load balancing between 3 endpoints || || || Not tested yet ||
+|| Sample 55: Session affinity load balancing between fail over endpoints || || || Not tested yet ||
+|| Sample 56: WSDL endpoint || || || Not tested yet ||
+|| Sample 57: Dynamic load balancing between 3 nodes || || || Not tested yet ||
+|| Sample 58: Static load balancing between 3 nodes || || || Not tested yet ||
+|| Sample 59: Weighted load balancing between 3 endpoints || || || Not tested yet ||
+|| Sample 100: Using WS-Security for outgoing messages || `r1165735` || `r1181` || OK ||
+|| Sample 101: Reliable message exchange between Synapse and the back-end server using WS-!ReliableMessaging || || || Not tested yet ||
+|| Sample 150: Introduction to proxy services || || || Not tested yet ||
+|| Sample 151: Custom sequences and endpoints with proxy services || || || Not tested yet ||
+|| Sample 152: Switching transports and message format from SOAP to REST/POX || || || Not tested yet ||
+|| Sample 153: Routing the messages arrived to a proxy service without processing the security headers || || || Not tested yet ||
+|| Sample 154: Load Balancing with Proxy Service || || || Not tested yet ||
+|| Sample 155: Dual channel invocation on both client side and server side of Synapse with Proxy Services || || || Not tested yet ||
+|| Sample 156: Service Integration with specifying the receiving sequence || || || Not tested yet ||
+|| Sample 157: Conditional Router for Routing Messages based on HTTP URL, HTTP Headers and Query Parameters || || || Not tested yet ||
+|| Sample 200: Using WS-Security with policy attachments for proxy services || `r1165735` || `r1165` || OK ||
+|| Sample 201: Reliable message exchange between the client and proxy services using WS-!ReliableMessaging || `r1165735` || `r1176` || OK ||
+|| Sample 250: Introduction to switching transports - JMS to http/s || || || Not tested yet ||
+|| Sample 251: Switching from http/s to JMS || || || Not tested yet ||
+|| Sample 252: Pure text/binary and POX message support with JMS || || || Not tested yet ||
+|| Sample 253: One way bridging from JMS to http and replying with a 202 Accepted response || || || Not tested yet ||
+|| Sample 254: Using the file system as transport medium using VFS transport listener and sender || || || Not tested yet ||
+|| Sample 255: Switching from ftp transport listener to mail transport sender || || || Not tested yet ||
+|| Sample 256: Proxy services with the mail transport || || || Not tested yet ||
+|| Sample 257: Proxy services with the FIX transport || || || Not tested yet ||
+|| Sample 258: Switching from HTTP to FIX || || || Not tested yet ||
+|| Sample 259: Switching from FIX to HTTP || || || Not tested yet ||
+|| Sample 260: Switching from FIX to AMQP || || || Not tested yet ||
+|| Sample 261: Switch between FIX versions || || || Not tested yet ||
+|| Sample 262: CBR of FIX messages || || || Not tested yet ||
+|| Sample 263: Transport switching - JMS to http/s using JBoss Messaging(JBM) || || || Not tested yet ||
+|| Sample 264: Transport switching - HTTP/S to JMS two way messages || || || Not tested yet ||
+|| Sample 265: Switching from TCP to HTTP/S || || || Not tested yet ||
+|| Sample 266: Switching from UDP to HTTP/S || || || Not tested yet ||
+|| Sample 268: Proxy services with the Local transport || || || Not tested yet ||
+|| Sample 300: Introduction to tasks with simple trigger || || || Not tested yet ||
+|| Sample 350: Introduction to the script mediator using js scripts || || || Not tested yet ||
+|| Sample 351: In-line script mediation with !JavaScript || || || Not tested yet ||
+|| Sample 352: Accessing Synapse message context API methods using scripting language || || || Not tested yet ||
+|| Sample 353: Using Ruby scripts for mediation || || || Not tested yet ||
+|| Sample 354: Using In-lined Ruby scripts for mediation || || || Not tested yet ||
+|| Sample 360: Introduction to dblookup mediator || || || Not tested yet ||
+|| Sample 361: Introduction to dbreport mediator || || || Not tested yet ||
+|| Sample 362: Action of dbreport and dblookup mediators together || || || Not tested yet ||
+|| Sample 363: Reusable database connection pools || || || Not tested yet ||
+|| Sample 364: Executing database Stored Procedures || || || Not tested yet ||
+|| Sample 370: Introduction to throttle mediator and concurrency throttling || || || Not tested yet ||
+|| Sample 371: Restricting requests based on policies || || || Not tested yet ||
+|| Sample 372: Use of both concurrency throttling and request rate based throttling || || || Not tested yet ||
+|| Sample 380: Writing your own custom mediation in Java || || || Not tested yet ||
+|| Sample 381: Class mediator to CBR binary messages || || || Not tested yet ||
+|| Sample 390: Introduction to the XQuery mediator || || || Not tested yet ||
+|| Sample 391: How to use the data from an external XML document with in XQuery || || || Not tested yet ||
+|| Sample 400: Message splitting and aggregating the responses || || || Not tested yet ||
+|| Sample 420: Simple cache implemented on Synapse for the actual service || || || Not tested yet ||
+|| Sample 430: Simple Callout Mediator for synchronize web service invocation (sic) || `r1165735` || `r1176` || OK ||
+|| Sample 440: Exposing a SOAP service over JSON || `r1165735` || `r1176` || OK ||
+|| Sample 450: Introduction to the URL Rewrite mediator || || || Not tested yet ||
+|| Sample 451: Conditional URL rewriting || || || Not tested yet ||
+|| Sample 452: Conditional URL rewriting with multiple rules || || || Not tested yet ||
+|| Sample 460: How to initialize and use a Spring Bean as a Mediator || `r1165735` || `r1176` || OK ||
+|| Sample 500: Introduction to Eventing || `r1165735` || `r1176` || Failure (may be an issue with the sample) ||
+|| Sample 501: !EventSource with static subscriptions || || || Not tested yet ||
+|| Sample 502: Transform events before publish || || || Not tested yet ||
+|| Sample 600: File hierarchy based configuration builder || || || Not tested yet ||
+|| Sample 601: Using Synapse Observers || || || Not tested yet ||
+|| Sample 650: Priority based Mediation || || || Not tested yet ||
+|| Sample 651: NHTTP Transport Priority based dispatching || || || Not tested yet ||
+|| Sample 652: Distributed transaction management || || || Not tested yet ||
+|| Sample 700: Introduction to Synapse Message Store || || || Not tested yet ||
+|| Sample 701: Introduction to Synapse Message Sampling Processor || || || Not tested yet ||
+|| Sample 702: Introduction to Synapse Message Forwarding Processor || || || Not tested yet ||
