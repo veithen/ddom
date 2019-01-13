@@ -107,4 +107,9 @@ public class OMXMLParserWrapperImpl implements OMXMLParserWrapper {
         // TODO
 //        throw new UnsupportedOperationException();
     }
+
+    public void detach() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }

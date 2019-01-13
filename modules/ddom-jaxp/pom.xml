@@ -85,7 +85,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
-            <artifactId>axiom-dom-testsuite</artifactId>
+            <artifactId>dom-testsuite</artifactId>
             <version>${axiom.version}</version>
             <scope>test</scope>
         </dependency>

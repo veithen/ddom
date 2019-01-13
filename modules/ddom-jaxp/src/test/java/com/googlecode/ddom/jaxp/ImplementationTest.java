@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.axiom.ts.dom.DOMTestSuiteBuilder;
+import org.apache.axiom.ts.dom.DocumentBuilderFactoryFactory;
 import org.apache.axiom.ts.dom.document.TestAllowedChildren;
 import org.apache.axiom.ts.dom.document.TestCloneNode;
 import org.apache.axiom.ts.dom.document.TestNormalizeDocumentNamespace;
@@ -30,9 +31,11 @@ import org.apache.axiom.ts.dom.documenttype.TestWithParser2;
 
 public class ImplementationTest extends TestCase {
     public static TestSuite suite() {
-        DocumentBuilderFactory dbf = new DocumentBuilderFactoryImpl();
-        dbf.setNamespaceAware(true);
-        DOMTestSuiteBuilder builder = new DOMTestSuiteBuilder(dbf);
+        DOMTestSuiteBuilder builder = new DOMTestSuiteBuilder(new DocumentBuilderFactoryFactory() {
+            public DocumentBuilderFactory newInstance() {
+                return new DocumentBuilderFactoryImpl();
+            }
+        });
         
         // TODO
         builder.exclude(TestAllowedChildren.class);

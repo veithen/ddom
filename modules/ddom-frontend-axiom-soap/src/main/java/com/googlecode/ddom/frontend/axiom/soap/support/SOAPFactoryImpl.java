@@ -105,6 +105,11 @@ public class SOAPFactoryImpl extends OMFactoryImpl implements SOAPFactory {
         throw new UnsupportedOperationException();
     }
     
+    public SOAPMessage createDefaultSOAPMessage() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
     private <T extends AxiomElement> T createSOAPElement(OMElement parent, Class<T> extensionInterface, String namespaceURI, String localName) {
         try {
             String prefix = namespaceURI.length() == 0 ? "" : SOAPConstants.SOAP_DEFAULT_NAMESPACE_PREFIX;

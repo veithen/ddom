@@ -31,10 +31,6 @@ import org.apache.axiom.ts.soap.envelope.TestGetSOAPBodyFirstElementLocalNameAnd
 import org.apache.axiom.ts.soap.envelope.TestHasFaultWithParserOptimized;
 import org.apache.axiom.ts.soap.envelope.TestSerializeAndConsumeWithOMSEInBody;
 import org.apache.axiom.ts.soap.factory.TestCreateSOAPFaultWithParent;
-import org.apache.axiom.ts.soap.fault.TestSetCode;
-import org.apache.axiom.ts.soap.fault.TestSetDetail;
-import org.apache.axiom.ts.soap.fault.TestSetReason;
-import org.apache.axiom.ts.soap.fault.TestSetRole;
 import org.apache.axiom.ts.soap.fault.TestWrongParent1;
 import org.apache.axiom.ts.soap.fault.TestWrongParent2;
 import org.apache.axiom.ts.soap.fault.TestWrongParent3;
@@ -106,12 +102,6 @@ public class ImplementationTest extends TestCase {
         builder.exclude(TestGetNode.class);
         builder.exclude(TestSetNode.class);
         builder.exclude(TestMoreChildrenAddition.class);
-        
-        // TODO: split this test case up into two parts
-        builder.exclude(TestSetDetail.class);
-        builder.exclude(TestSetCode.class);
-        builder.exclude(TestSetReason.class);
-        builder.exclude(TestSetRole.class);
         
         // TODO: fault text is a SOAP 1.2 concept
         builder.exclude(org.apache.axiom.ts.soap11.faultreason.TestGetFirstSOAPText.class);
